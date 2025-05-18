@@ -1,0 +1,32 @@
+---
+layout: default
+---
+
+<main class="container my-5">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="mb-4">{{ page.title }}</h1>
+      
+      <div class="list-group">
+        {% for post in site.tags[page.tag] %}
+          <a href="{{ post.url | relative_url }}" class="list-group-item list-group-item-action">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">{{ post.title }}</h5>
+              <small>{{ post.date | date: "%d/%m/%Y" }}</small>
+            </div>
+            <p class="mb-1">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+            <small>{% for tag in post.tags %}
+              <span class="badge bg-primary me-1">{{ tag }}</span>
+            {% endfor %}</small>
+          </a>
+        {% endfor %}
+      </div>
+      
+      <div class="mt-4">
+        <a href="{{ '/tags' | relative_url }}" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left"></i> Ver todas as tags
+        </a>
+      </div>
+    </div>
+  </div>
+</main>

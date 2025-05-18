@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="{{ page.lang }}">
+<head>
+  {% include meta.html %}
+  {% include styles.html %}
+  
+  <!-- MathJax Configuration -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        tags: 'ams',
+        tagSide: 'right',
+        tagIndent: '0.8em',
+        multlineWidth: '85%',
+        autoload: {
+          color: [],
+          colorV2: ['color']
+        },
+        packages: {'[+]': ['noerrors']}
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      loader: {
+        load: ['[tex]/noerrors']
+      }
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+  
+  {%- if jekyll.environment == 'production' -%}
+  {%- include analytics/google-analytics.html -%}
+  {%- endif -%}
+</head>
+<body>
+  {%- include header/header.html -%}
+  {{ content }}
+  {%- include footer/footer.html -%}
+  {%- include cookiebar.html -%}
+  {%- include scripts.html -%}
+</body>
+</html>

@@ -1,0 +1,50 @@
+---
+---
+
+/* Custom styles */
+.img-responsive-wrapper {
+  img {
+    filter: none !important;
+    -webkit-filter: none !important;
+    -moz-filter: none !important;
+    -o-filter: none !important;
+    -ms-filter: none !important;
+  }
+  
+  &::after {
+    content: none !important;
+  }
+  
+  &::before {
+    content: none !important;
+  }
+}
+
+/* Hero image specific fix */
+.hero-img {
+  filter: none !important;
+  -webkit-filter: none !important;
+  -moz-filter: none !important;
+  -o-filter: none !important;
+  -ms-filter: none !important;
+}
+
+/* Remove any overlay or tint */
+.overlay,
+.tint,
+.image-tint,
+.img-overlay,
+.image-overlay {
+  display: none !important;
+  opacity: 0 !important;
+  background: none !important;
+}
+
+/* Ensure images maintain their original colors */
+img {
+  filter: none !important;
+  -webkit-filter: none !important;
+  -moz-filter: none !important;
+  -o-filter: none !important;
+  -ms-filter: none !important;
+}
