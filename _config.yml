@@ -15,8 +15,8 @@ noindex: true
 # You can find your shortname on the Settings page of your Disqus account
 disqus:
 
-# Enter your Google Analytics web tracking code (e.g. UA-000000000-0) to activate tracking
-google_analytics:
+# Enter your Google Analytics web tracking code (e.g. UA-000000000-0 or G-XXXXXXXXXX) to activate tracking
+google_analytics: G-NCGKDHE0Y6
 
 # Your website URL (e.g. http://example.github.io or http://www.example.com)
 # Used for Sitemap.xml and your RSS feed
