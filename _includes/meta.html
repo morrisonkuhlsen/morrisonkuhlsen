@@ -24,9 +24,16 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="{% if page.excerpt %}{{ page.excerpt| strip_html }}{% else %}{{ site.data.t.description[page.lang] }}{% endif %}">
+<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | truncate: 155, '...' | strip }}{% elsif page.description %}{{ page.description | strip_html | truncate: 155, '...' | strip }}{% else %}{{ site.data.t.description[page.lang] | truncate: 155, '...' | strip }}{% endif %}">
 <meta name="author" content="{{ site.data.t.author[page.lang] }}">
 <meta name="generator" content="Jekyll {{site.version}}">
+
+{% comment %} Preconnect to external domains {% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+{% comment %} Canonical URL {% endcomment %}
+<link rel="canonical" href="https://morrisonkulsenn.com{{ page.url | replace:'index.html','' }}" />
 
 {% comment %} Title {% endcomment %}
 <title>{{ meta_title }}</title>
@@ -53,21 +60,25 @@
 
 {% comment %} Twitter {% endcomment %}
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="{{ meta_title }}">
-<meta name="twitter:description" content="{{ meta_description }}">
-<meta name="twitter:image" content="{{ meta_image_social }}">
-<meta name="twitter:image:alt" content="Immagine per il sito del {{ site.name }}">
+<meta name="twitter:site" content="@morrisonkulsenn">
+<meta name="twitter:creator" content="@morrisonkulsenn">
+<meta name="twitter:title" content="{{ meta_title | strip_html | escape }}">
+<meta name="twitter:description" content="{{ meta_description | strip_html | truncate: 200 | escape }}">
+<meta name="twitter:image" content="{{ meta_image_social | absolute_url }}">
+<meta name="twitter:image:alt" content="{{ meta_title | strip_html | escape }} - {{ site.data.t.name[page.lang] }}">
 
 {% comment %} OpenGraph {% endcomment %}
-<meta property="og:url" content="{{ site.url | append: page.url }}">
-<meta property="og:title" content="{{ meta_title }}">
-<meta property="og:description" content="{{ meta_description }}">
-<meta property="og:type" content="website">
-<meta property="og:image" content="{{ meta_image_social | replace: 'https://', 'http://' }}">
-<meta property="og:image:secure_url" content="{{ meta_image_social }}">
+<meta property="og:site_name" content="{{ site.data.t.name[page.lang] }}">
+<meta property="og:url" content="{{ site.url | append: page.url | absolute_url }}">
+<meta property="og:title" content="{{ meta_title | strip_html | escape }}">
+<meta property="og:description" content="{{ meta_description | strip_html | truncate: 300 | escape }}">
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:image" content="{{ meta_image_social | absolute_url }}">
+<meta property="og:image:secure_url" content="{{ meta_image_social | absolute_url }}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:locale" content="{{ page.lang | default: 'pt_BR' }}">
 
 {% comment %} Web App Manifest {% endcomment %}
 <link rel="manifest" href="{{ site.url | append: '/assets/images/favicons/manifest.json' }}">
@@ -77,5 +88,20 @@
 
 {% comment %} Indexing {% endcomment %}
 {% if site.noindex %}<meta name="robots" content="noindex, nofollow">{% endif %}
+
+{% comment %} Schema.org markup for Google {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.data.t.name[page.lang] }}",
+  "url": "https://morrisonkulsenn.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://morrisonkulsenn.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 
 
