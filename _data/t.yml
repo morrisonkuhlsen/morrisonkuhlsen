@@ -12,13 +12,12 @@ name:
 
 ## Site description
 description:
-  en: "A website with a Jekyll theme"
-  pt: "Estatística e Probabilidade"
-
+  en: "Accessible content on Statistics and Probability with practical examples and interactive tools."
+  pt: "Conteúdos acessíveis sobre Estatística e Probabilidade com exemplos práticos e ferramentas interativas."
 ## Site author
 author:
-  en: "Digital Transformation Team"
-  pt: "Team de Transformação Digital"
+  en: "Morrison Külsenn"
+  pt: "Morrison Külsenn"
 
 ## Social
 social-links:
