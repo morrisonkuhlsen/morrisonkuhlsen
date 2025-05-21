@@ -1,11 +1,50 @@
 <div class="it-hero-wrapper it-dark it-overlay it-bottom-overlapping-content">
   <div class="img-responsive-wrapper">
     <div class="img-responsive">
-      <div class="img-wrapper">
-        <img src="assets/images/spiral.jpg" title="Spiral Image" alt="Imagem de uma espiral">
+      <div class="img-wrapper hero-slideshow">
+        <img src="assets/images/spiral.jpg" class="active" title="Espiral" alt="Imagem de uma espiral">
+        <img src="assets/images/dados.png" title="Dados" alt="Imagem de dados">
+        <img src="assets/images/office.png" title="Escritório" alt="Imagem de escritório">
+        <img src="assets/images/hourglass.png" title="Ampulheta" alt="Imagem de uma ampulheta">
+        <img src="assets/images/cartas.png" title="Cartas" alt="Imagem de cartas de baralho">
       </div>
     </div>
-  </div>  
+  </div>
+  <style>
+    .hero-slideshow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-slideshow img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+    }
+    .hero-slideshow img.active {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const images = document.querySelectorAll('.hero-slideshow img');
+      let currentIndex = 0;
+      
+      function changeImage() {
+        images[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % images.length;
+        images[currentIndex].classList.add('active');
+      }
+      
+      // Inicia a transição após 5 segundos e repete a cada 5 segundos
+      setInterval(changeImage, 5000);
+    });
+  </script>
   <div class="container">
     <div class="row">
       <div class="col-12">
