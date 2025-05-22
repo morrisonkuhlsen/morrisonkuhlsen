@@ -1,0 +1,100 @@
+/* Estilos para o container de código */
+.code-container {
+  background: #2d2d2d;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.5em 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+}
+
+/* Cabeçalho do container de código */
+.code-header {
+  background: #1e1e1e;
+  padding: 0.1em 1em;
+  border-bottom: 1px solid #444;
+  display: flex;
+  align-items: center;
+  min-height: 30px;
+}
+
+/* Idioma do código */
+.code-lang {
+  font-weight: 500;
+  color: #9cdcfe;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+  font-size: 0.9em;
+  text-transform: lowercase;
+}
+
+/* Conteúdo do código */
+.code-content {
+  padding: 1em;
+  overflow-x: auto;
+}
+
+/* Estilo para o bloco de código */
+.code-content pre {
+  margin: 0;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+  line-height: 1.5;
+  font-size: 0.9em;
+  color: #d4d4d4;
+}
+
+/* Container de saída */
+.code-output {
+  background: #1e1e1e;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1em 0;
+  padding: 1em;
+  border-left: 4px solid #9cdcfe;
+  color: #d4d4d4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Título da saída */
+.code-output-header {
+  color: #9cdcfe;
+  margin-bottom: 0.5em;
+  font-size: 0.9em;
+}
+
+/* Valor numérico destacado */
+.code-number {
+  color: #4ec9b0;
+}
+
+/* Botão de cópia */
+.copy-button {
+  background: none;
+  color: #9cdcfe;
+  border: none;
+  padding: 0.25em 0.5em;
+  font-size: 0.8em;
+  cursor: pointer;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+}
+
+/* Efeito hover no botão de cópia */
+.copy-button:hover {
+  color: #4ec9b0;
+  background: none;
+}
+
+/* Ícone do botão de cópia */
+.copy-button i {
+  transition: all 0.2s ease;
+}
+
+/* Efeito hover no ícone */
+.copy-button:hover i {
+  transform: translateY(0);
+  color: #4ec9b0;
+}

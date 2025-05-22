@@ -47,6 +47,73 @@ Onde:
 ---
 Vamos calcular a média das notas de um aluno em cinco provas:
 
+### Exemplo em Julia
+
+Aqui está como você pode calcular a média aritmética em Julia:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Definindo as notas do aluno
+notas = [7.5, 8.0, 6.5, 9.0, 7.0]
+
+# Calculando a média usando a função mean() do pacote Statistics
+using Statistics
+media = mean(notas)
+
+# Mostrando o resultado
+println("As notas são: ", notas)
+println("A média é: ", round(media, digits=2))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>As notas são: [7.5, 8.0, 6.5, 9.0, 7.0]</div>
+  <div>A média é: <span class="code-number">7.6</span></div>
+</div>
+
+#### Explicação do código:
+1. Criamos um vetor `notas` com as cinco notas do aluno
+2. Utilizamos a função `mean()` do pacote `Statistics` para calcular a média
+3. Exibimos as notas e o resultado da média
+
+Você também pode calcular a média manualmente em Julia:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia - Cálculo Manual</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Cálculo manual da média
+soma = sum(notas)
+quantidade = length(notas)
+media_manual = soma / quantidade
+
+println("Soma: ", soma)
+println("Quantidade de notas: ", quantidade)
+println("Média calculada manualmente: ", round(media_manual, digits=2))</code></pre>
+  </div>
+</div>
+
+#### Dicas úteis:
+- Certifique-se de que o pacote `Statistics` esteja carregado com `using Statistics`
+- A função `mean()` também funciona com arrays multidimensionais
+- Para dados muito grandes, considere usar `mean(skipmissing(dados))` para lidar com valores ausentes
+
+Vamos calcular a média das notas de um aluno em cinco provas:
+
 | Prova | Nota |
 |-------|------|
 | 1     | 7.5  |

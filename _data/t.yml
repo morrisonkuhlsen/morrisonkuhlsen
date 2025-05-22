@@ -71,9 +71,9 @@ author:
 ## Social
 social-links:
   en:
-    x:
-      name: "x"
-      url: "https://x.com/morrisonkulsenn"
+    twitter:
+      name: "twitter"
+      url: "https://twitter.com/morrisonkulsenn"
     facebook:
       name: "facebook"
       url: "https://facebook.com/morrisonkulsenn"
@@ -84,9 +84,9 @@ social-links:
       name: "rss"
       url: "/feed.xml"
   pt:
-    x:
-      name: "x"
-      url: "https://x.com/morrisonkulsenn"
+    twitter:
+      name: "twitter"
+      url: "https://twitter.com/morrisonkulsenn"
     facebook:
       name: "facebook"
       url: "https://facebook.com/morrisonkulsenn"

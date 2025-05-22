@@ -67,6 +67,50 @@ $$\bar{x} = 24$$
 - Alta sensibilidade a **valores atípicos** (outliers)
 - Pode **não representar bem** a centralidade em distribuições **assimétricas**
 
+### 💻 Exemplo em Julia
+
+Vamos calcular a média aritmética em Julia:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Carregando o pacote Statistics
+using Statistics
+
+# Dados do exemplo
+idades = [20, 22, 24, 26, 28]
+
+# Calculando a média
+media = mean(idades)
+println("Idades: ", idades)
+println("Média: ", media)
+
+# Cálculo manual
+soma = sum(idades)
+n = length(idades)
+media_manual = soma / n
+println("Soma: ", soma)
+println("Quantidade: ", n)
+println("Média (manual): ", media_manual)</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Idades: [20, 22, 24, 26, 28]</div>
+  <div>Média: 24.0</div>
+  <div>Soma: 120</div>
+  <div>Quantidade: 5</div>
+  <div>Média (manual): 24.0</div>
+</div>
+
 ### 💡 Curiosidade
 
 A média é muito usada em indicadores sociais, como o **PIB per capita**, mas nem sempre representa fielmente a realidade de todos os indivíduos de uma população.
@@ -191,6 +235,63 @@ $\text{Mediana} = \frac{5 + 7}{2} = 6$
 #### Importância da Mediana
 
 A **mediana** é uma medida de tendência central **robusta**. Ou seja, é menos sensível a valores extremos (**outliers**) do que a média.
+
+### 💻 Exemplo em Julia
+
+Vamos calcular a mediana em Julia:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Carregando o pacote Statistics
+using Statistics
+
+# Dados dos exemplos
+dados_impar = [1, 3, 3, 6, 7, 8, 9]
+dados_par = [3, 5, 7, 9]
+
+# Calculando a mediana
+mediana_impar = median(dados_impar)
+mediana_par = median(dados_par)
+
+
+println("Dados (ímpar): ", dados_impar)
+println("Mediana: ", mediana_impar)
+println("\nDados (par): ", dados_par)
+println("Mediana: ", mediana_par)
+
+# Cálculo manual para o caso par
+function mediana_manual(v)
+    sorted = sort(v)
+    n = length(sorted)
+    if n % 2 == 1  # Ímpar
+        return sorted[(n + 1) ÷ 2]
+    else  # Par
+        return (sorted[n ÷ 2] + sorted[n ÷ 2 + 1]) / 2
+    end
+end
+
+println("\nCálculo manual (par): ", mediana_manual(dados_par))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Dados (ímpar): [1, 3, 3, 6, 7, 8, 9]</div>
+  <div>Mediana: 6.0</div>
+  <div> </div>
+  <div>Dados (par): [3, 5, 7, 9]</div>
+  <div>Mediana: 6.0</div>
+  <div> </div>
+  <div>Cálculo manual (par): 6.0</div>
+</div>
 
 <div style="border-left: 4px solid #007BFF; padding: 0.5em; background-color: #e7f1ff;">
   <strong>🔎 Definição – Robustez:</strong> Na estatística, <strong>robustez</strong> refere-se à <em>capacidade de um estimador ou medida resistir à influência de dados atípicos (outliers)</em>.<br>
@@ -336,6 +437,76 @@ Vermelho, Azul, Azul, Verde, Vermelho, Preto, Preto, Preto
 Idades em uma turma:  
 $\{18, 19, 19, 19, 20, 21, 22, 22, 22, 23\}$  
 **Modas = 19 e 22** (ambos ocorrem 3 vezes)
+
+### 💻 Exemplo em Julia
+
+Vamos calcular a moda em Julia:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Carregando o pacote StatsBase para a função mode
+using StatsBase
+
+# Exemplo 1: Dados Numéricos Únicos
+dados1 = [1, 2, 2, 3, 4, 4, 4, 5]
+moda1 = mode(dados1)
+println("Dados 1: ", dados1)
+println("Moda: ", moda1)
+
+# Exemplo 2: Dados Categóricos
+cores = ["Vermelho", "Azul", "Azul", "Verde", "Vermelho", "Preto", "Preto", "Preto"]
+moda_cores = mode(cores)
+println("\nCores: ", cores)
+println("Moda: ", moda_cores)
+
+# Exemplo 3: Dados Bimodais
+function encontrar_modas(v)
+    contagem = countmap(v)  # Conta a frequência de cada valor
+    max_contagem = maximum(values(contagem))
+    modas = [k for (k, v) in contagem if v == max_contagem]
+    return length(modas) > 1 ? modas : modas[1]
+end
+
+idades = [18, 19, 19, 19, 20, 21, 22, 22, 22, 23]
+modas_idades = encontrar_modas(idades)
+println("\nIdades: ", idades)
+println("Moda(s): ", modas_idades)
+
+# Exemplo 4: Sem moda (todos os valores são únicos)
+sem_moda = [1, 2, 3, 4, 5]
+println("\nDados sem moda: ", sem_moda)
+println("Função mode retorna (primeiro elemento): ", mode(sem_moda))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Dados 1: [1, 2, 2, 3, 4, 4, 4, 5]</div>
+  <div>Moda: 4</div>
+  <div> </div>
+  <div>Cores: ["Vermelho", "Azul", "Azul", "Verde", "Vermelho", "Preto", "Preto", "Preto"]</div>
+  <div>Moda: Preto</div>
+  <div> </div>
+  <div>Idades: [18, 19, 19, 19, 20, 21, 22, 22, 22, 23]</div>
+  <div>Moda(s): [19, 22]</div>
+  <div> </div>
+  <div>Dados sem moda: [1, 2, 3, 4, 5]</div>
+  <div>Função mode retorna (primeiro elemento): 1</div>
+</div>
+
+#### Observações:
+- A função `mode` do pacote `StatsBase` retorna a primeira moda encontrada
+- Para conjuntos multimodais, implementamos uma função `encontrar_modas` que retorna todas as modas
+- Em conjuntos sem moda (todos os valores são únicos), a função `mode` retorna o primeiro elemento
+- Para dados categóricos, a função funciona da mesma forma que para dados numéricos
 
 ### Contexto Histórico
 
