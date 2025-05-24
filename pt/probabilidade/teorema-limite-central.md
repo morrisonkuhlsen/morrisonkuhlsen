@@ -63,82 +63,88 @@ Vamos demonstrar o TLC através de simulações com diferentes distribuições:
   </div>
   <div class="code-content">
     <pre><code>using Distributions, Plots, Random
-using StatsPlots  # Para QQ-plots
+using StatsPlots
+using Measures
 
-# Configurações para reprodutibilidade
 Random.seed!(123)
 
-# Parâmetros da simulação
-n_amostras = 1000    # Número de médias amostrais
-tamanho_amostra = 30 # Tamanho de cada amostra
+# Parâmetros
+n_amostras = 1000
+tamanho_amostra = 30
 
-# 1. Distribuição Uniforme
+# Distribuições
 dist_unif = Uniform(0, 1)
-medias_unif = [mean(rand(dist_unif, tamanho_amostra)) for _ in 1:n_amostras]
-
-# 2. Distribuição Exponencial
 dist_exp = Exponential(1)
-medias_exp = [mean(rand(dist_exp, tamanho_amostra)) for _ in 1:n_amostras]
-
-# 3. Distribuição Binomial
 dist_bin = Binomial(1, 0.5)
+
+# Geração das médias amostrais
+medias_unif = [mean(rand(dist_unif, tamanho_amostra)) for _ in 1:n_amostras]
+medias_exp = [mean(rand(dist_exp, tamanho_amostra)) for _ in 1:n_amostras]
 medias_bin = [mean(rand(dist_bin, tamanho_amostra)) for _ in 1:n_amostras]
 
-# Padronizando as médias
-function padronizar(x)
-    return (x .- mean(x)) ./ std(x)
-end
-
+# Padronização
+padronizar(x) = (x .- mean(x)) ./ std(x)
 medias_unif_pad = padronizar(medias_unif)
 medias_exp_pad = padronizar(medias_exp)
 medias_bin_pad = padronizar(medias_bin)
 
-# Criando os histogramas
-p1 = histogram(medias_unif_pad, 
-    normalize=:pdf, 
-    title="Uniforme",
-    label="Médias",
-    color=:steelblue,
-    alpha=0.6,
-    lw=0)
-
-p2 = histogram(medias_exp_pad, 
-    normalize=:pdf, 
-    title="Exponencial",
-    label="Médias",
-    color=:steelblue,
-    alpha=0.6,
-    lw=0)
-
-p3 = histogram(medias_bin_pad, 
-    normalize=:pdf, 
-    title="Binomial",
-    label="Médias",
-    color=:steelblue,
-    alpha=0.6,
-    lw=0)
-
-# Adicionando a curva normal padrão
-x = range(-4, 4, length=100)
+# Curva normal
+x = range(-4, 4, length=200)
 dist_normal = Normal(0, 1)
-for p in [p1, p2, p3]
-    plot!(p, x, pdf.(dist_normal, x), 
-        label="Normal(0,1)", 
-        color=:red, 
-        lw=2)
-end
+curva_normal = pdf.(dist_normal, x)
 
-# Combinando os plots
-plot(p1, p2, p3, 
-    layout=(1,3), 
-    size=(1200,400),
-    title="Teorema do Limite Central\nDiferentes Distribuições → Normal",
-    titlefontsize=12)</code></pre>
+# Cores distintas
+cores = [:darkorange, :seagreen, :royalblue]
+
+# Histogramas
+p1 = histogram(medias_unif_pad,
+    normalize=:pdf, bins=30,
+    title="Médias Amostrais\n(Distribuição Uniforme)",
+    xlabel="Valor Padronizado", ylabel="Densidade",
+    label="Médias Amostrais",
+    color=cores[1], alpha=0.6, linealpha=0,
+    bottom_margin=5mm, top_margin=10mm)
+
+plot!(p1, x, curva_normal, label="Normal(0,1)", color=:black, lw=2, linestyle=:dash)
+
+p2 = histogram(medias_exp_pad,
+    normalize=:pdf, bins=30,
+    title="Médias Amostrais\n(Distribuição Exponencial)",
+    xlabel="Valor Padronizado", ylabel="Densidade",
+    label="Médias Amostrais",
+    color=cores[2], alpha=0.6, linealpha=0,
+    bottom_margin=5mm, top_margin=10mm)
+
+plot!(p2, x, curva_normal, label="Normal(0,1)", color=:black, lw=2, linestyle=:dash)
+
+p3 = histogram(medias_bin_pad,
+    normalize=:pdf, bins=30,
+    title="Médias Amostrais\n(Distribuição Binomial)",
+    xlabel="Valor Padronizado", ylabel="Densidade",
+    label="Médias Amostrais",
+    color=cores[3], alpha=0.6, linealpha=0,
+    bottom_margin=5mm, top_margin=10mm)
+
+plot!(p3, x, curva_normal, label="Normal(0,1)", color=:black, lw=2, linestyle=:dash)
+
+
+# Plot final com margens ajustadas para evitar corte
+plot(p1, p2, p3,
+    layout=(1,3),
+    size=(1350, 450),
+    titlefontsize=14,
+    layout_margin=10mm,
+    left_margin=10mm,
+    right_margin=10mm,
+    top_margin=15mm,
+    bottom_margin=10mm,
+    legend=:topright,
+    grid=true)</code></pre>
   </div>
 </div>
 
-![Demonstração do TLC]({{ site.baseurl }}/assets/images/tlc_demonstracao.png)
-<div class="image-caption">Figura 1: Demonstração do TLC para diferentes distribuições</div>
+![Demonstração do TLC]({{ site.baseurl }}/assets/images/media_amostral.png)
+<div class="image-caption">Figura 1: Demonstração do Teorema do Limite Central para diferentes distribuições (Uniforme, Exponencial e Binomial)</div>
 
 ## 4. Condições e Considerações
 
@@ -202,12 +208,12 @@ end
 plot(plots..., 
     layout=(2,2), 
     size=(800,800),
-    title="Convergência do TLC\nQQ-plots para diferentes tamanhos de amostra",
+    title="Convergência do TLC",
     titlefontsize=12)</code></pre>
   </div>
 </div>
 
-![Convergência do TLC]({{ site.baseurl }}/assets/images/tlc_convergencia.png)
+![Convergência do TLC]({{ site.baseurl }}/assets/images/qq_plot.png)
 <div class="image-caption">Figura 2: Análise da convergência do TLC para diferentes tamanhos de amostra</div>
 
 ## 5. Aplicações Práticas
@@ -260,6 +266,57 @@ println("Intervalo de confiança 95%: [",
     round(ic_superior, digits=4), "] mm")</code></pre>
   </div>
 </div>
+
+#### Resolução Manual Passo a Passo
+
+Vamos resolver manualmente o exemplo acima para entender melhor o processo.
+
+**Dados do problema**:
+- Tamanho da amostra: $$n = 100$$ parafusos
+- Média desejada: $$\mu = 10.0$$ mm
+- Desvio padrão do processo: $$\sigma = 0.02$$ mm
+- Nível de confiança: 95% $$\rightarrow z_{\alpha/2} = 1.96$$
+
+**Passo 1: Calcular o Erro Padrão**
+
+O erro padrão (EP) é dado pela fórmula:
+
+$$EP = \frac{\sigma}{\sqrt{n}}$$
+
+Substituindo os valores:
+
+$$EP = \frac{0.02}{\sqrt{100}} = \frac{0.02}{10} = 0.002 \text{ mm}$$
+
+**Passo 2: Calcular o Intervalo de Confiança**
+
+Para um intervalo de confiança de 95%, utilizamos a fórmula:
+
+$$IC_{95\%} = \bar{x} \pm z_{\alpha/2} \cdot EP$$
+
+Onde:
+- $$\bar{x}$$ é a média amostral (supondo $$\bar{x} = 10.002$$ mm)
+- $$z_{\alpha/2} = 1.96$$ para 95% de confiança
+
+Substituindo os valores:
+
+$$IC_{95\%} = 10.002 \pm 1.96 \cdot 0.002$$
+
+**Limite inferior**:
+$$IC_{inferior} = 10.002 - (1.96 \cdot 0.002) = 10.002 - 0.00392 = 9.99808 \text{ mm}$$
+
+**Limite superior**:
+$$IC_{superior} = 10.002 + (1.96 \cdot 0.002) = 10.002 + 0.00392 = 10.00592 \text{ mm}$$
+
+Portanto:
+
+$$IC_{95\%} = [9.99808, 10.00592] \text{ mm}$$
+
+**Interpretação dos Resultados**:
+1. A média amostral é $$\bar{x} = 10.002 \text{ mm}$$
+2. Com 95% de confiança, o intervalo $$[9.99808, 10.00592]$$ contém a verdadeira média populacional $$\mu$$
+3. Como o intervalo de tolerância especificado é $$10 \pm 0.1 \text{ mm}$$ (ou seja, $$[9.9, 10.1] \text{ mm}$$), e $$IC_{95\%} \subset [9.9, 10.1]$$, podemos concluir que o processo está sob controle estatístico
+
+**Conclusão**: O processo de fabricação está produzindo parafusos dentro das especificações requeridas $$(10 \pm 0.1 \text{ mm})$$ com 95% de confiança. A variabilidade do processo é pequena, como evidenciado pelo intervalo de confiança estreito (aproximadamente $$\pm 0.004 \text{ mm}$$ ao redor da média).
 
 ### 5.4 Aplicações em Diferentes Áreas
 
