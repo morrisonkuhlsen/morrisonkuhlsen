@@ -180,9 +180,108 @@ plot!(p3, xlims=(-1.5,2.5), ylims=(-1.5,1.5), aspect_ratio=:equal)</code></pre>
 ![Operações com Eventos]({{ site.baseurl }}/assets/images/operacoes_eventos.png)
 <div class="image-caption">Figura 2: Representação visual das operações com eventos usando diagramas de Venn</div>
 
-## 3. Propriedades e Relações
+## 3. Cardinalidade
 
-### 3.1 Propriedades da União e Interseção
+A cardinalidade de um conjunto, denotada por $$\text{card}(A)$$ ou $$n(A)$$, representa o número de elementos desse conjunto. Este conceito é fundamental para o cálculo de probabilidades em espaços amostrais finitos.
+
+### 3.1 Definição e Notação
+
+Seja $$A$$ um conjunto qualquer:
+- Cardinalidade de $$A$$: $$\text{card}(A)$$ ou $$n(A)$$
+- Cardinalidade do espaço amostral: $$\text{card}(\Omega)$$
+- Cardinalidade do conjunto vazio: $$\text{card}(\emptyset) = 0$$
+
+Para conjuntos finitos, a cardinalidade é um número natural:
+$$\text{card}(A) \in \mathbb{N}_0 = \{0, 1, 2, ...\}$$
+
+### 3.2 Propriedades
+
+1. **Cardinalidade da União**
+   
+   Para quaisquer eventos $$A, B \subseteq \Omega$$:
+   $$\text{card}(A \cup B) = \text{card}(A) + \text{card}(B) - \text{card}(A \cap B)$$
+
+
+   Para três eventos $$A, B, C \subseteq \Omega$$:
+
+   $$\begin{align*}
+   \text{card}(A \cup B \cup C) &= \text{card}(A) + \text{card}(B) + \text{card}(C) \\
+   &- \text{card}(A \cap B) - \text{card}(B \cap C) - \text{card}(A \cap C) \\
+   &+ \text{card}(A \cap B \cap C)
+   \end{align*}$$
+
+2. **Cardinalidade do Complemento**
+   
+   Para um evento $$A \subseteq \Omega$$:
+   $$\text{card}(A^c) = \text{card}(\Omega) - \text{card}(A)$$
+
+3. **Propriedades Básicas**
+   - Se $$A \subseteq B$$, então $$\text{card}(A) \leq \text{card}(B)$$
+   - o $$\text{card}(A \cap B) \leq \min(\text{card}(A), \text{card}(B))$$
+   - o $$\text{card}(A \cup B) \leq \text{card}(A) + \text{card}(B)$$
+
+### 3.3 Exemplos Práticos
+
+1. **Lançamento de um Dado**
+   - $$\text{card}(\Omega) = 6$$ (faces do dado)
+   - Seja $$P = \{x \in \Omega : x \text{ é par}\}$$, então $$\text{card}(P) = 3$$ (faces 2, 4, 6)
+   - Seja $$M = \{x \in \Omega : x > 4\}$$, então $$\text{card}(M) = 2$$ (faces 5, 6)
+   - $$\text{card}(P \cap M) = 1$$ (face 6)
+   - $$\text{card}(P \cup M) = \text{card}(P) + \text{card}(M) - \text{card}(P \cap M) = 3 + 2 - 1 = 4$$
+
+2. **Baralho de 52 Cartas**
+   - $$\text{card}(\Omega) = 52$$ (total de cartas)
+   - Seja $$C = \{\text{cartas de copas}\}$$, então $$\text{card}(C) = 13$$
+   - Seja $$V = \{\text{cartas vermelhas}\}$$, então $$\text{card}(V) = 26$$
+   - Seja $$F = \{\text{figuras}\}$$, então $$\text{card}(F) = 12$$
+   - $$\text{card}(C \cap F) = 3$$ (J, Q, K de copas)
+
+### 3.4 Aplicação em Probabilidade
+
+Em um espaço amostral finito e equiprovável, a probabilidade de um evento $$A$$ é dada por:
+
+$$P(A) = \frac{\text{card}(A)}{\text{card}(\Omega)}$$
+
+Para eventos $$A$$ e $$B$$:
+$$P(A \cup B) = \frac{\text{card}(A \cup B)}{\text{card}(\Omega)} = \frac{\text{card}(A) + \text{card}(B) - \text{card}(A \cap B)}{\text{card}(\Omega)}$$
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random
+
+# Exemplo: Lançamento de dois dados
+function cardinalidade_soma_dados()
+    # Espaço amostral
+    Ω = [(i,j) for i in 1:6 for j in 1:6]
+    
+    # Evento A: soma igual a 7
+    A = filter(x -> sum(x) == 7, Ω)
+    
+    # Evento B: primeiro dado maior que 4
+    B = filter(x -> x[1] > 4, Ω)
+    
+    # Cardinalidades
+    println("Cardinalidade do espaço amostral: ", length(Ω))
+    println("Cardinalidade do evento A (soma = 7): ", length(A))
+    println("Cardinalidade do evento B (primeiro > 4): ", length(B))
+    println("Cardinalidade da interseção A ∩ B: ", length(intersect(A, B)))
+    println("Cardinalidade da união A ∪ B: ", length(union(A, B)))
+end
+
+cardinalidade_soma_dados()</code></pre>
+  </div>
+</div>
+
+## 4. Propriedades e Relações
+
+### 4.1 Propriedades da União e Interseção
 
 1. **Comutativa**
    $$A \cup B = B \cup A$$
@@ -196,14 +295,14 @@ plot!(p3, xlims=(-1.5,2.5), ylims=(-1.5,1.5), aspect_ratio=:equal)</code></pre>
    $$A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$$
    $$A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$$
 
-### 3.2 Leis de De Morgan
+### 4.2 Leis de De Morgan
 
 $$(A \cup B)' = A' \cap B'$$
 $$(A \cap B)' = A' \cup B'$$
 
-## 4. Aplicações Práticas
+## 5. Aplicações Práticas
 
-### 4.1 Análise de Dados
+### 5.1 Análise de Dados
 
 <div class="code-container">
   <div class="code-header">
@@ -241,7 +340,7 @@ println("P(Nota Alta ∩ Estuda Muito) = ", round(p_ambos, digits=3))</code></pr
   </div>
 </div>
 
-### 4.2 Exemplos do Mundo Real
+### 5.2 Exemplos do Mundo Real
 
 1. **Controle de Qualidade**
    - Ω = {produtos produzidos}
@@ -258,7 +357,7 @@ println("P(Nota Alta ∩ Estuda Muito) = ", round(p_ambos, digits=3))</code></pr
    - A = {retornos positivos}
    - B = {retornos acima do benchmark}
 
-## 5. Exercícios Práticos
+## 6. Exercícios Práticos
 
 1. **Lançamento de Dois Dados**
    - Descreva o espaço amostral
