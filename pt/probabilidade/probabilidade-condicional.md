@@ -724,6 +724,9 @@ analise_completa_hiv()</code></pre>
 
 ### 6.3 Exercício Resolvido: Controle de Qualidade
 
+![Ilustração de controle de qualidade]({{ site.baseurl }}/assets/images/qualidade.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+<div class="image-caption" style="text-align: center;">Figura: Processo de controle de qualidade em linha de produção</div>
+
 > **Problema**: Suponha que em uma fábrica, **2** em cada **1000** produtos `são defeituosos`. A fábrica realiza um teste de qualidade que pode resultar em `defeituoso (D)` ou em `perfeitas condições (E)`. Suponha que o teste acerte a resposta em **95% dos casos**, isto é, para um produto que é defeituoso ou não, o teste dá o resultado correto 95% das vezes.
 
 **Questões**:
@@ -838,7 +841,107 @@ analise_controle_qualidade()</code></pre>
   </div>
 </div>
 
-### 6.4 Teste Diagnóstico
+### 6.4 Exercício Resolvido: Previsão do Tempo
+
+![Ilustração de previsão do tempo]({{ site.baseurl }}/assets/images/chuva.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+<div class="image-caption" style="text-align: center;">Figura: Previsão meteorológica e probabilidade de chuva</div>
+
+> **Problema**: Suponha que, em uma determinada cidade, 1 em cada 10 dias de verão apresenta chuvas. Um meteorologista utiliza um modelo de previsão do tempo que, em média, acerta a previsão de chuvas em 80% dos casos. Isso significa que, se vai chover, o modelo tem 80% de chance de prever "chuva", e se não vai chover, ele tem 80% de chance de prever "sem chuva".
+
+**Questões**:
+- a) Qual é a probabilidade $P(S\mid C)$ de que o modelo preveja "sem chuva" dado que realmente vai chover?
+- b) Qual a probabilidade $P(C\mid S)$ de que realmente vai chover dado que o modelo previu "sem chuva"?
+
+### Dados do problema:
+- A probabilidade de chover em um dia de verão é: $P(C) = \frac{1}{10} = 0,1$
+- A probabilidade de não chover em um dia de verão é: $P(NC) = 1 - P(C) = 0,9$
+- O modelo de previsão acerta 80% dos casos:
+  - Se vai chover, a probabilidade de o modelo prever "chuva" é: $P(P_C \mid C) = 0,8$
+  - Se não vai chover, a probabilidade de o modelo prever "sem chuva" é: $P(P_{NC} \mid NC) = 0,8$
+
+Portanto:
+- A probabilidade de o modelo prever "sem chuva" quando realmente vai chover é: $P(P_{NC} \mid C) = 1 - P(P_C \mid C) = 0,2$
+- A probabilidade de o modelo prever "chuva" quando realmente não vai chover é: $P(P_C \mid NC) = 1 - P(P_{NC} \mid NC) = 0,2$
+
+### Parte (a): Probabilidade de previsão "sem chuva" dado que vai chover
+
+A probabilidade já é conhecida:
+$$
+P(S \mid C) = P(P_{NC} \mid C) = 0,2
+$$
+
+> ##### Portanto, a probabilidade de que o modelo preveja "sem chuva" dado que realmente vai chover é $P(S \mid C) = 0,2$ ou 20%.
+
+### Parte (b): Probabilidade de chover dado previsão "sem chuva"
+
+Para calcular a probabilidade de que realmente vai chover dado que o modelo previu "sem chuva", usamos o Teorema de Bayes:
+
+$$
+P(C \mid S) = \frac{P(S \mid C) \cdot P(C)}{P(S)}
+$$
+
+Onde $P(S)$ (probabilidade total de previsão "sem chuva") pode ser calculada considerando dois casos:
+1. Vai chover e o modelo erra (falso negativo)
+2. Não vai chover e o modelo acerta (verdadeiro negativo)
+
+**Cálculo de $P(S)$:**
+
+$$
+P(S) = P(S \mid C) \cdot P(C) + P(S \mid NC) \cdot P(NC)
+$$
+
+Substituindo os valores:
+
+$$
+P(S) = (0,2 \cdot 0,1) + (0,8 \cdot 0,9) = 0,02 + 0,72 = 0,74
+$$
+
+Agora, podemos aplicar o Teorema de Bayes:
+
+$$
+P(C \mid S) = \frac{0,2 \cdot 0,1}{0,74} = \frac{0,02}{0,74} \approx 0,027
+$$
+
+> ##### Portanto, a probabilidade de que realmente vai chover dado que o modelo previu "sem chuva" é aproximadamente $P(C \mid S) \approx 0,027$ ou 2,7%.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>function analise_previsao_tempo()
+    # Dados do problema
+    P_C = 1/10  # Probabilidade de chuva
+    P_NC = 1 - P_C  # Probabilidade de não chuva
+    
+    # Características do modelo
+    P_PC_C = 0.8  # Sensibilidade (acerto quando chove)
+    P_PNC_NC = 0.8  # Especificidade (acerto quando não chove)
+    
+    # Probabilidades complementares
+    P_PNC_C = 1 - P_PC_C  # Falso negativo
+    
+    # Probabilidade total de previsão "sem chuva"
+    P_S = (P_PNC_C * P_C) + (P_PNC_NC * P_NC)
+    
+    # Teorema de Bayes
+    P_C_S = (P_PNC_C * P_C) / P_S
+    
+    println("Análise da Previsão do Tempo")
+    println("---------------------------")
+    println("P(S|C) = ", round(P_PNC_C, digits=4))
+    println("P(C|S) = ", round(P_C_S, digits=4))
+end
+
+analise_previsao_tempo()</code></pre>
+  </div>
+</div>
+
+### 6.5 Teste Diagnóstico
 
 1. **Calcule a probabilidade de um paciente ter uma doença dado um teste positivo**
    - Considere diferentes valores de sensibilidade e especificidade
