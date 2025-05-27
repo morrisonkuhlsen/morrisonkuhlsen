@@ -13,8 +13,8 @@ Os **Testes de Hipótese** são procedimentos estatísticos que nos permitem tom
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
   <strong>🎯 Importante:</strong><br>
   Um teste de hipótese envolve duas hipóteses:
-  - A hipótese nula ($$H_0$$): afirmação inicial que assumimos como verdadeira
-  - A hipótese alternativa ($$H_1$$ ou $$H_a$$): afirmação que contradiz $$H_0$$
+  - A hipótese nula ($H_0$): afirmação inicial que assumimos como verdadeira
+  - A hipótese alternativa ($H_1$ ou $H_a$): afirmação que contradiz $H_0$
 </div>
 
 ## 1. Conceitos Fundamentais
@@ -24,7 +24,8 @@ Os **Testes de Hipótese** são procedimentos estatísticos que nos permitem tom
 Um teste de hipótese segue uma estrutura sistemática:
 
 1. **Formulação das Hipóteses**
-   - Hipótese nula ($$H_0$$)
+   - Hipótese nula ($H_0$)
+
    - Hipótese alternativa ($$H_1$$)
 
 2. **Nível de Significância ($$\alpha$$)**
