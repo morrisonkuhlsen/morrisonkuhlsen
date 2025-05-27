@@ -853,11 +853,22 @@ analise_controle_qualidade()</code></pre>
 - b) Qual a probabilidade $P(C\mid S)$ de que realmente vai chover dado que o modelo previu "sem chuva"?
 
 ### Dados do problema:
-- A probabilidade de chover em um dia de verão é: $P(C) = \frac{1}{10} = 0,1$
-- A probabilidade de não chover em um dia de verão é: $P(NC) = 1 - P(C) = 0,9$
+- A probabilidade de chover em um dia de verão é: 
+
+$$P(C) = \frac{1}{10} = 0,1$$
+
+- A probabilidade de não chover em um dia de verão é: 
+
+$$P(NC) = 1 - P(C) = 0,9$$
+
 - O modelo de previsão acerta 80% dos casos:
-  - Se vai chover, a probabilidade de o modelo prever "chuva" é: $P(P_C \mid C) = 0,8$
-  - Se não vai chover, a probabilidade de o modelo prever "sem chuva" é: $P(P_{NC} \mid NC) = 0,8$
+  - Se vai chover, a probabilidade de o modelo prever "chuva" é: 
+  
+  $$P(P_C \mid C) = 0,8$$
+
+  - Se não vai chover, a probabilidade de o modelo prever "sem chuva" é: 
+  
+  $$P(P_{NC} \mid NC) = 0,8$$
 
 Portanto:
 - A probabilidade de o modelo prever "sem chuva" quando realmente vai chover é: $P(P_{NC} \mid C) = 1 - P(P_C \mid C) = 0,2$
