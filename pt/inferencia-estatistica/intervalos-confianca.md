@@ -17,6 +17,181 @@ Um intervalo de confiança é uma estimativa de um parâmetro populacional basea
 
 ---
 
+## Exemplo Prático Detalhado: Intervalo de Confiança para a Média de Resistência de Tintas
+
+### Enunciado
+
+Uma empresa de tintas deseja garantir que a resistência de sua tinta, medida em horas até o desbotamento sob luz solar intensa, atenda ao padrão mínimo de qualidade. Para isso, foram testadas 12 amostras, resultando nos seguintes tempos (em horas):
+
+`[120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]`
+
+Calcule um intervalo de confiança de 95% para a média do tempo de resistência da tinta.
+
+---
+
+### 1. Fórmula do Intervalo de Confiança para a Média (σ desconhecido)
+
+Quando o desvio padrão populacional é desconhecido, usamos a distribuição t de Student:
+
+$$
+IC = \bar{x} \pm t_{\alpha/2, n-1} \cdot \frac{s}{\sqrt{n}}
+$$
+
+Onde:
+- $\bar{x}$ = média amostral
+- $t_{\alpha/2, n-1}$ = valor crítico da t de Student com $n-1$ graus de liberdade
+- $s$ = desvio padrão amostral
+- $n$ = tamanho da amostra
+
+#### Avisos Importantes
+- **O intervalo de confiança não garante que a média populacional está dentro do intervalo calculado para esta amostra específica.** Ele indica que, se repetíssemos o experimento muitas vezes, cerca de 95% dos intervalos calculados conteriam a verdadeira média populacional.
+- **A distribuição t é usada porque o desvio padrão populacional é desconhecido e o tamanho da amostra é pequeno ($n < 30$).**
+- **Os dados devem ser aproximadamente simétricos (sem outliers extremos) para a validade do método.**
+
+---
+
+### 2. Resolução Manual Passo a Passo
+
+**Dados:**
+- $n = 12$
+- Dados: $[120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]$
+
+#### a) Média amostral ($\bar{x}$):
+
+$$
+\bar{x} = \frac{120 + 130 + 125 + 128 + 122 + 127 + 126 + 124 + 129 + 123 + 128 + 125}{12} = \frac{1507}{12} = 125,5833
+$$
+
+#### b) Desvio padrão amostral ($s$):
+
+Calculando cada termo $(x_i - \bar{x})^2$:
+
+- $(120 - 125,5833)^2 = 31,195$
+- $(130 - 125,5833)^2 = 19,493$
+- $(125 - 125,5833)^2 = 0,340$
+- $(128 - 125,5833)^2 = 5,844$
+- $(122 - 125,5833)^2 = 12,841$
+- $(127 - 125,5833)^2 = 2,008$
+- $(126 - 125,5833)^2 = 0,173$
+- $(124 - 125,5833)^2 = 2,507$
+- $(129 - 125,5833)^2 = 11,687$
+- $(123 - 125,5833)^2 = 6,673$
+- $(128 - 125,5833)^2 = 5,844$
+- $(125 - 125,5833)^2 = 0,340$
+
+Somando:
+$$
+\sum (x_i - \bar{x})^2 = 98,945
+$$
+
+$$
+s = \sqrt{\frac{98,945}{11}} = \sqrt{8,9941} = 2,999
+$$
+
+#### c) Valor crítico t
+
+Graus de liberdade: $n-1 = 11$
+
+Para 95% de confiança: $t_{0,025, 11} = 2,200985$ (valor exato)
+
+#### d) Erro padrão da média (SE):
+
+$$
+SE = \frac{2,999}{\sqrt{12}} = \frac{2,999}{3,4641} = 0,8657
+$$
+
+#### e) Margem de erro (ME):
+
+$$
+ME = 2,200985 \times 0,8657 = 1,904
+$$
+
+#### f) Intervalo de confiança
+
+$$
+IC = 125,5833 \pm 1,904
+$$
+
+$$
+IC = [123,68,\ 127,49]
+$$
+
+**Interpretação:** Com 95% de confiança, a média do tempo de resistência da tinta está entre 123,68 e 127,49 horas.
+
+---
+
+### 3. Exemplo em Julia
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Statistics, Distributions, Plots
+theme(:bright)
+
+dados = [120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]
+n = length(dados)
+x̄ = mean(dados)
+s = std(dados, corrected=true)
+α = 0.05
+t = quantile(TDist(n-1), 1 - α/2)
+SE = s / sqrt(n)
+ME = t * SE
+IC_lower = x̄ - ME
+IC_upper = x̄ + ME
+
+println("IC 95%: [", round(IC_lower, digits=2), ", ", round(IC_upper, digits=2), "]")
+
+# Plot melhorado
+plot(1:n, dados, seriestype=:scatter, label="Dados", color=:steelblue,
+    xlabel="Amostra", ylabel="Resistência (horas)",
+    title="Intervalo de Confiança 95% para Resistência da Tinta",
+    legend=:bottomright, markersize=6)
+
+# Média e intervalo de confiança
+hline!([x̄], label="Média ($(round(x̄, digits=2)))", color=:darkred, linestyle=:solid, linewidth=2)
+
+# Área do intervalo de confiança (preenchimento)
+plot!([1, n], [x̄, x̄], fillrange=[IC_upper, IC_upper], 
+    fillalpha=0.1, color=:grey, label="", linewidth=0)
+plot!([1, n], [x̄, x̄], fillrange=[IC_lower, IC_lower],
+    fillalpha=0.1, color=:grey, label="IC 95%", linewidth=0)
+
+# Linhas dos limites do IC
+hline!([IC_lower, IC_upper], label="", color=:grey, linestyle=:dash, linewidth=1.5)
+
+# Margem de erro (setas + anotação)
+annotate!(n/2, x̄, text("ME: ±$(round(ME, digits=2))", 9, :center, :black))
+plot!([n/2, n/2], [x̄, IC_upper], arrow=true, color=:grey, label="", linewidth=1.5)
+plot!([n/2, n/2], [x̄, IC_lower], arrow=true, color=:grey, label="", linewidth=1.5)
+
+# Anotações extras
+annotate!(n/2, IC_upper + 0.5, text("Limite Superior: $(round(IC_upper, digits=2))", 8, :center))
+annotate!(n/2, IC_lower - 0.5, text("Limite Inferior: $(round(IC_lower, digits=2))", 8, :center))
+
+# Melhorias visuais
+plot!(grid=true, minorgrid=true, size=(800, 500), ylims=(minimum(dados)-1, maximum(dados)+1))
+</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  IC 95%: [123.68, 127.49]
+</div>
+
+![Exemplo de plot do intervalo de confiança]({{ site.baseurl }}/assets/images/intervalo_confianca_resistencia_tinta.png){:style="max-width: 800px; display: block; margin: 0 auto;"}
+
+O gráfico mostra os valores individuais, a média amostral (linha vermelha tracejada) e os limites inferior e superior do intervalo de confiança (linhas verdes pontilhadas).
+
+---
+
 ## Contribuição Histórica de Jerzy Neyman
 
 Jerzy Neyman (1894-1981) foi um matemático e estatístico polonês que revolucionou a teoria da inferência estatística com sua formulação dos intervalos de confiança em 1934. Sua contribuição representa um marco fundamental na transição da estatística clássica para a moderna teoria estatística.
