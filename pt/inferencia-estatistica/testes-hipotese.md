@@ -45,10 +45,27 @@ Um teste de hipótese segue uma estrutura sistemática:
 ![Tipos de erro em testes de hipótese]({{ site.baseurl }}/assets/images/erros-teste.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Matriz de decisão e tipos de erro em testes de hipótese</div>
 
-| Decisão vs. Realidade | $$H_0$$ Verdadeira | $$H_0$$ Falsa |
-|----------------------|-------------------|---------------|
-| Rejeitar $$H_0$$    | Erro Tipo I ($$\alpha$$) | Decisão Correta |
-| Não Rejeitar $$H_0$$| Decisão Correta | Erro Tipo II ($$\beta$$) |
+<table>
+<thead>
+<tr>
+<th>Decisão vs. Realidade</th>
+<th>$$H_0$$ Verdadeira</th>
+<th>$$H_0$$ Falsa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rejeitar $$H_0$$</td>
+<td>Erro Tipo I ($$\alpha$$)</td>
+<td>Decisão Correta</td>
+</tr>
+<tr>
+<td>Não Rejeitar $$H_0$$</td>
+<td>Decisão Correta</td>
+<td>Erro Tipo II ($$\beta$$)</td>
+</tr>
+</tbody>
+</table>
 
 ## 2. Etapas do Teste de Hipótese
 
@@ -260,10 +277,30 @@ teste_tempo_atendimento()</code></pre>
 
 > **Problema**: Em um estudo sobre a relação entre gênero e preferência por tipo de exercício físico, foram coletados os seguintes dados:
 
-|            | Musculação | Cardio | Yoga |
-|------------|------------|---------|------|
-| Masculino  | 30         | 15      | 5    |
-| Feminino   | 20         | 25      | 15   |
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Musculação</th>
+<th>Cardio</th>
+<th>Yoga</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Masculino</td>
+<td>30</td>
+<td>15</td>
+<td>5</td>
+</tr>
+<tr>
+<td>Feminino</td>
+<td>20</td>
+<td>25</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
 
 Teste se há independência entre gênero e preferência por exercício ao nível de 5% de significância.
 
@@ -562,20 +599,66 @@ teste_correlacao()</code></pre>
 
 1. **Tipo de Variável**
    
-   | Tipo de Variável | Exemplos | Testes Apropriados |
-   |------------------|----------|-------------------|
-   | Nominal | Gênero, Cor | Qui-quadrado, Teste exato de Fisher |
-   | Ordinal | Escala Likert | Mann-Whitney, Kruskal-Wallis |
-   | Intervalar/Razão | Altura, Peso | Teste t, ANOVA |
+   <table>
+   <thead>
+   <tr>
+   <th>Tipo de Variável</th>
+   <th>Exemplos</th>
+   <th>Testes Apropriados</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr>
+   <td>Nominal</td>
+   <td>Gênero, Cor</td>
+   <td>Qui-quadrado, Teste exato de Fisher</td>
+   </tr>
+   <tr>
+   <td>Ordinal</td>
+   <td>Escala Likert</td>
+   <td>Mann-Whitney, Kruskal-Wallis</td>
+   </tr>
+   <tr>
+   <td>Intervalar/Razão</td>
+   <td>Altura, Peso</td>
+   <td>Teste t, ANOVA</td>
+   </tr>
+   </tbody>
+   </table>
 
 2. **Número de Grupos**
    
-   | Número de Grupos | Paramétrico | Não-Paramétrico |
-   |-----------------|-------------|-----------------|
-   | 2 grupos independentes | Teste t independente | Mann-Whitney |
-   | 2 grupos pareados | Teste t pareado | Wilcoxon |
-   | > 2 grupos independentes | ANOVA | Kruskal-Wallis |
-   | > 2 grupos pareados | ANOVA medidas repetidas | Friedman |
+   <table>
+   <thead>
+   <tr>
+   <th>Número de Grupos</th>
+   <th>Paramétrico</th>
+   <th>Não-Paramétrico</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr>
+   <td>2 grupos independentes</td>
+   <td>Teste t independente</td>
+   <td>Mann-Whitney</td>
+   </tr>
+   <tr>
+   <td>2 grupos pareados</td>
+   <td>Teste t pareado</td>
+   <td>Wilcoxon</td>
+   </tr>
+   <tr>
+   <td>> 2 grupos independentes</td>
+   <td>ANOVA</td>
+   <td>Kruskal-Wallis</td>
+   </tr>
+   <tr>
+   <td>> 2 grupos pareados</td>
+   <td>ANOVA medidas repetidas</td>
+   <td>Friedman</td>
+   </tr>
+   </tbody>
+   </table>
 
 3. **Pressupostos dos Testes**
 
@@ -627,19 +710,72 @@ graph TD
 
 ### 11.4 Tabela de Decisão Rápida
 
-| Objetivo | Condições | Teste Recomendado |
-|----------|-----------|-------------------|
-| Comparar média com valor de referência | Normal | Teste t uma amostra |
-| Comparar média com valor de referência | Não normal | Wilcoxon uma amostra |
-| Comparar duas médias (independentes) | Normal + Variâncias iguais | Teste t independente |
-| Comparar duas médias (independentes) | Normal + Variâncias diferentes | Welch t-test |
-| Comparar duas médias (pareadas) | Normal | Teste t pareado |
-| Comparar > 2 médias | Normal + Homocedástico | ANOVA |
-| Comparar proporções | n grande | Teste Z proporções |
-| Comparar proporções | n pequeno | Teste exato de Fisher |
-| Verificar independência | Categóricas | Qui-quadrado |
-| Avaliar correlação | Normal bivariada | Pearson |
-| Avaliar correlação | Não normal | Spearman |
+<table>
+<thead>
+<tr>
+<th>Objetivo</th>
+<th>Condições</th>
+<th>Teste Recomendado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comparar média com valor de referência</td>
+<td>Normal</td>
+<td>Teste t uma amostra</td>
+</tr>
+<tr>
+<td>Comparar média com valor de referência</td>
+<td>Não normal</td>
+<td>Wilcoxon uma amostra</td>
+</tr>
+<tr>
+<td>Comparar duas médias (independentes)</td>
+<td>Normal + Variâncias iguais</td>
+<td>Teste t independente</td>
+</tr>
+<tr>
+<td>Comparar duas médias (independentes)</td>
+<td>Normal + Variâncias diferentes</td>
+<td>Welch t-test</td>
+</tr>
+<tr>
+<td>Comparar duas médias (pareadas)</td>
+<td>Normal</td>
+<td>Teste t pareado</td>
+</tr>
+<tr>
+<td>Comparar > 2 médias</td>
+<td>Normal + Homocedástico</td>
+<td>ANOVA</td>
+</tr>
+<tr>
+<td>Comparar proporções</td>
+<td>n grande</td>
+<td>Teste Z proporções</td>
+</tr>
+<tr>
+<td>Comparar proporções</td>
+<td>n pequeno</td>
+<td>Teste exato de Fisher</td>
+</tr>
+<tr>
+<td>Verificar independência</td>
+<td>Categóricas</td>
+<td>Qui-quadrado</td>
+</tr>
+<tr>
+<td>Avaliar correlação</td>
+<td>Normal bivariada</td>
+<td>Pearson</td>
+</tr>
+<tr>
+<td>Avaliar correlação</td>
+<td>Não normal</td>
+<td>Spearman</td>
+</tr>
+</tbody>
+</table>
 
 ### 11.5 Exemplos Práticos de Seleção
 
@@ -733,12 +869,37 @@ Os testes paramétricos são procedimentos estatísticos que assumem que os dado
 
 3. **Exemplos de Testes Paramétricos**
 
-   | Teste | Uso | Pressuposto Principal |
-   |-------|-----|----------------------|
-   | Teste t | Comparação de médias | Normalidade |
-   | ANOVA | Comparação de múltiplas médias | Normalidade e homocedasticidade |
-   | Correlação de Pearson | Associação linear | Normalidade bivariada |
-   | Regressão Linear | Relação entre variáveis | Normalidade dos resíduos |
+   <table>
+   <thead>
+   <tr>
+   <th>Teste</th>
+   <th>Uso</th>
+   <th>Pressuposto Principal</th>
+   </tr>
+   </thead>
+   <tbody>
+   <tr>
+   <td>Teste t</td>
+   <td>Comparação de médias</td>
+   <td>Normalidade</td>
+   </tr>
+   <tr>
+   <td>ANOVA</td>
+   <td>Comparação de múltiplas médias</td>
+   <td>Normalidade e homocedasticidade</td>
+   </tr>
+   <tr>
+   <td>Correlação de Pearson</td>
+   <td>Associação linear</td>
+   <td>Normalidade bivariada</td>
+   </tr>
+   <tr>
+   <td>Regressão Linear</td>
+   <td>Relação entre variáveis</td>
+   <td>Normalidade dos resíduos</td>
+   </tr>
+   </tbody>
+   </table>
 
 #### 12.1.2 Verificação de Pressupostos
 
