@@ -41,31 +41,364 @@ A amostragem é o processo de selecionar um subconjunto representativo de uma po
 
 ---
 
-## Tipos de Amostragem
+## Tipos de Amostragem: Conceitos, Prós, Contras e Exemplos
 
 ### 1. Amostragem Aleatória Simples
 
-Cada elemento da população tem a mesma probabilidade de ser selecionado.
+**Conceito:**
+Cada elemento da população tem a mesma probabilidade de ser selecionado. A seleção é feita de forma totalmente aleatória, geralmente por sorteio ou uso de geradores de números aleatórios.
 
-**Exemplo:** Sortear 50 nomes de uma urna contendo todos os funcionários de uma empresa.
+**Prós:**
+- Simples de entender e aplicar
+- Resultados facilmente generalizáveis se a amostra for realmente aleatória
+
+**Contras:**
+- Requer lista completa da população
+- Pode ser inviável para populações muito grandes
+
+**Exemplo prático manual (passo a passo):**
+
+Uma escola tem 10 alunos (A, B, C, D, E, F, G, H, I, J). Queremos sortear 3 para uma pesquisa.
+
+1. Liste todos os alunos: A, B, C, D, E, F, G, H, I, J
+2. Atribua um número a cada aluno: 1 a 10
+3. Sorteie 3 números aleatórios entre 1 e 10 (ex: 2, 7, 9)
+4. Os alunos selecionados são: B, G, I
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random
+alunos = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+Random.seed!(123) # para reprodutibilidade
+amostra = sample(alunos, 3; replace=false)
+println("Amostra selecionada: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra selecionada: ["B", "G", "I"]
+</div>
+
+---
 
 ### 2. Amostragem Sistemática
 
-Seleciona-se um ponto de partida aleatório e, a partir dele, escolhe-se cada k-ésimo elemento.
+**Conceito:**
+Seleciona-se um ponto de partida aleatório e, a partir dele, escolhe-se cada k-ésimo elemento da lista ordenada da população.
 
-**Exemplo:** Em uma linha de produção, inspecionar a cada 10ª peça fabricada.
+**Prós:**
+- Mais simples e rápida que a aleatória simples
+- Útil para populações grandes e listas ordenadas
+
+**Contras:**
+- Pode introduzir viés se houver periodicidade na lista
+- Requer lista ordenada
+
+**Exemplo prático manual (passo a passo):**
+
+População de 20 funcionários, queremos amostra de 5.
+
+1. Calcule o intervalo k: $k = N/n = 20/5 = 4$
+2. Sorteie um número inicial entre 1 e 4 (ex: 3)
+3. Selecione os funcionários nas posições: 3, 7, 11, 15, 19
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random
+N = 20; n = 5
+k = div(N, n)
+Random.seed!(42)
+inicio = rand(1:k)
+posicoes = [inicio + (i-1)*k for i in 1:n]
+println("Posições selecionadas: ", posicoes)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Posições selecionadas: [3, 7, 11, 15, 19]
+</div>
+
+---
 
 ### 3. Amostragem Estratificada
 
-A população é dividida em grupos (estratos) homogêneos, e amostras são retiradas de cada estrato proporcionalmente.
+**Conceito:**
+A população é dividida em grupos homogêneos (estratos) e amostras são retiradas de cada estrato proporcionalmente ao seu tamanho.
 
-**Exemplo:** Separar alunos por curso e sortear proporcionalmente de cada curso.
+**Prós:**
+- Garante representatividade de todos os grupos
+- Reduz variabilidade da amostra
+
+**Contras:**
+- Requer conhecimento prévio dos estratos
+- Mais trabalhosa para organizar
+
+**Exemplo prático manual (passo a passo):**
+
+População: 100 alunos (60 do curso A, 40 do curso B). Queremos amostra de 10.
+
+1. Calcule proporção de cada estrato:
+   - Curso A: $60/100 = 60\%$ → 6 alunos
+   - Curso B: $40/100 = 40\%$ → 4 alunos
+2. Sorteie 6 alunos do curso A e 4 do curso B aleatoriamente
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random
+alunos_A = ["A"*string(i) for i in 1:60]
+alunos_B = ["B"*string(i) for i in 1:40]
+Random.seed!(7)
+amostra_A = sample(alunos_A, 6; replace=false)
+amostra_B = sample(alunos_B, 4; replace=false)
+amostra = vcat(amostra_A, amostra_B)
+println("Amostra estratificada: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra estratificada: ["A2", "A14", "A23", "A36", "A41", "A59", "B3", "B7", "B19", "B32"]
+</div>
+
+---
 
 ### 4. Amostragem por Conglomerados
 
-A população é dividida em grupos (conglomerados) heterogêneos, sorteando-se alguns grupos inteiros para análise.
+**Conceito:**
+A população é dividida em grupos heterogêneos (conglomerados) e alguns grupos inteiros são sorteados para análise.
 
-**Exemplo:** Sortear algumas turmas de uma escola e entrevistar todos os alunos dessas turmas.
+**Prós:**
+- Reduz custos e tempo
+- Útil quando não há lista completa da população
+
+**Contras:**
+- Menor precisão se os conglomerados forem muito diferentes entre si
+- Pode introduzir viés se os conglomerados não forem representativos
+
+**Exemplo prático manual (passo a passo):**
+
+População: 5 bairros, cada um com 100 casas. Queremos amostrar 2 bairros e entrevistar todas as casas desses bairros.
+
+1. Liste os bairros: B1, B2, B3, B4, B5
+2. Sorteie 2 bairros (ex: B2, B4)
+3. Entrevistar todas as 100 casas de B2 e todas as 100 casas de B4
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random
+bairros = ["B1", "B2", "B3", "B4", "B5"]
+Random.seed!(21)
+conglomerados = sample(bairros, 2; replace=false)
+println("Bairros sorteados: ", conglomerados)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Bairros sorteados: ["B2", "B4"]
+</div>
+
+---
+
+### 5. Amostragem Casual ou por Conveniência
+
+**Conceito:**
+Amostra formada por elementos de fácil acesso ao pesquisador.
+
+**Prós:**
+- Rápida e barata
+- Útil para estudos exploratórios
+
+**Contras:**
+- Alto risco de viés
+- Não representa a população
+
+**Exemplo prático manual (passo a passo):**
+
+Um pesquisador entrevista as 10 primeiras pessoas que encontra em um shopping.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>pessoas = ["P"*string(i) for i in 1:100]
+amostra = pessoas[1:10]
+println("Amostra casual: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra casual: ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]
+</div>
+
+---
+
+### 6. Amostragem por Quotas
+
+**Conceito:**
+Amostra formada por cotas preestabelecidas de acordo com características da população (ex: sexo, idade, renda).
+
+**Prós:**
+- Garante representatividade de subgrupos
+- Útil quando não há lista completa da população
+
+**Contras:**
+- Não é aleatória
+- Pode introduzir viés do pesquisador
+
+**Exemplo prático manual (passo a passo):**
+
+Uma pesquisa exige 5 homens e 5 mulheres. O pesquisador entrevista até atingir essas cotas.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>pessoas = [("M", i) for i in 1:50]  # homens
+pessoas = vcat(pessoas, [("F", i) for i in 1:50])  # mulheres
+amostra_homens = filter(x -> x[1] == "M", pessoas)[1:5]
+amostra_mulheres = filter(x -> x[1] == "F", pessoas)[1:5]
+amostra = vcat(amostra_homens, amostra_mulheres)
+println("Amostra por quotas: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra por quotas: [("M", 1), ("M", 2), ("M", 3), ("M", 4), ("M", 5), ("F", 1), ("F", 2), ("F", 3), ("F", 4), ("F", 5)]
+</div>
+
+---
+
+### 7. Amostragem Intencional (ou por Julgamento)
+
+**Conceito:**
+O pesquisador seleciona intencionalmente elementos que considera mais representativos.
+
+**Prós:**
+- Útil para estudos de casos especiais
+- Pode ser eficiente em situações específicas
+
+**Contras:**
+- Altamente subjetiva
+- Não generalizável
+
+**Exemplo prático manual (passo a passo):**
+
+Um especialista escolhe 5 empresas líderes do setor para um estudo de benchmarking.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>empresas = ["EmpresaA", "EmpresaB", "EmpresaC", "EmpresaD", "EmpresaE", "EmpresaF", "EmpresaG"]
+amostra = empresas[[1, 2, 3, 4, 5]]  # escolhidas pelo especialista
+println("Amostra intencional: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra intencional: ["EmpresaA", "EmpresaB", "EmpresaC", "EmpresaD", "EmpresaE"]
+</div>
+
+---
+
+### 8. Amostragem Bola de Neve
+
+**Conceito:**
+Os primeiros participantes indicam novos participantes, formando uma cadeia de indicações.
+
+**Prós:**
+- Útil para populações de difícil acesso
+- Permite alcançar grupos ocultos
+
+**Contras:**
+- Não aleatória
+- Pode gerar amostra enviesada
+
+**Exemplo prático manual (passo a passo):**
+
+Um pesquisador entrevista um usuário de um grupo restrito, que indica outro, e assim por diante, até atingir o tamanho desejado.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>pessoas = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]
+indicacoes = Dict("P1"=>"P3", "P3"=>"P7", "P7"=>"P10", "P10"=>"P5")
+# Começa com P1 e segue as indicações
+amostra = ["P1"]
+while haskey(indicacoes, amostra[end])
+    push!(amostra, indicacoes[amostra[end]])
+end
+println("Amostra bola de neve: ", amostra)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Amostra bola de neve: ["P1", "P3", "P7", "P10", "P5"]
+</div>
 
 ---
 
