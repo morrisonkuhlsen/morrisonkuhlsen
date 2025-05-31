@@ -8,12 +8,184 @@ permalink: /pt/inferencia-estatistica/analise-variancia
 order: 5
 ---
 
-# Análise de Variância (ANOVA)
-
 A Análise de Variância (ANOVA) é uma técnica estatística utilizada para comparar médias de dois ou mais grupos e verificar se pelo menos um deles difere significativamente dos demais. É amplamente empregada em experimentos científicos, controle de qualidade, ciências sociais e biológicas.
 
-![Exemplo de ANOVA]({{ site.baseurl }}/assets/images/anova.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: ANOVA compara médias de diferentes grupos.</div>
+## Breve História da ANOVA
+
+A ANOVA foi desenvolvida pelo estatístico britânico Sir Ronald A. Fisher na década de 1920. Fisher introduziu a técnica em seu trabalho clássico "Statistical Methods for Research Workers" (1925), revolucionando a análise de experimentos agrícolas e, posteriormente, de diversas áreas do conhecimento.
+
+Antes da ANOVA, os métodos estatísticos para comparar mais de dois grupos eram limitados e pouco eficientes. Fisher percebeu que, ao decompor a variabilidade total dos dados em componentes atribuíveis a diferentes fontes (entre grupos e dentro dos grupos), seria possível testar hipóteses sobre médias de vários grupos simultaneamente, sem aumentar o risco de erro tipo I.
+
+A ANOVA rapidamente se tornou uma das ferramentas mais importantes da estatística experimental, sendo fundamental para o avanço do desenho de experimentos e da inferência estatística.
+
+> **Curiosidade:** O termo "variância" também foi cunhado por Fisher, que considerava a decomposição da variância uma das ideias centrais da estatística moderna.
+
+![Exemplo de ANOVA]({{ site.baseurl }}/assets/images/statistics.png){:style="max-width: 600px; display: block; margin: 0 auto;"}
+<div class="image-caption" style="text-align: center;">Figura: Estatístico mostrando os resultados</div>
+
+---
+
+## Classes de Modelos na ANOVA
+
+Existem três classes principais de modelos usados na análise de variância:
+
+### 1. Modelos de Efeitos Fixos
+- **Definição:** Os níveis dos fatores (grupos) analisados são fixos e de interesse específico do pesquisador.
+- **Exemplo:** Comparar o efeito de três fertilizantes específicos (A, B, C) sobre o crescimento de plantas. Só interessam esses fertilizantes, não outros.
+- **Interpretação:** As conclusões valem apenas para os níveis estudados.
+
+### 2. Modelos de Efeitos Aleatórios
+- **Definição:** Os níveis dos fatores são considerados uma amostra aleatória de uma população maior de possíveis níveis.
+- **Exemplo:** Avaliar a variação entre diferentes lotes de produção, onde os lotes são sorteados de uma grande população de lotes possíveis.
+- **Interpretação:** As conclusões podem ser generalizadas para toda a população de níveis.
+
+### 3. Modelos Mistos (Efeitos Fixos e Aleatórios)
+- **Definição:** Incluem simultaneamente fatores de efeitos fixos e aleatórios.
+- **Exemplo:** Testar diferentes tratamentos (fixos) em diferentes blocos ou locais (aleatórios).
+- **Interpretação:** Permite avaliar tanto o efeito específico de certos tratamentos quanto a variabilidade geral de blocos ou ambientes.
+
+> **Resumo:**
+> - **Efeitos fixos:** interesse nos níveis específicos.
+> - **Efeitos aleatórios:** interesse na variabilidade geral.
+> - **Mistos:** combinam ambos.
+
+Essas classes de modelos determinam como interpretar os resultados da ANOVA e como generalizar as conclusões do experimento.
+
+---
+
+## Visualizando a lógica da ANOVA: variabilidade entre e dentro dos grupos
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using StatsPlots
+using DataFrames, Statistics
+
+theme(:bright)
+
+# Função para criar os plots
+function criar_plot(titulo, variabilidade_entre, variabilidade_dentro)
+    # Dados simulados com diferentes variabilidades
+    df = DataFrame(grupo = repeat(["A", "B", "C"], inner=30),
+                   valor = vcat(randn(30) .* variabilidade_dentro .+ 0,
+                              randn(30) .* variabilidade_dentro .+ variabilidade_entre,
+                              randn(30) .* variabilidade_dentro .+ 2*variabilidade_entre))
+
+    # Mapeia grupos para posições numéricas
+    grupos = unique(df.grupo)
+    df.jittered_x = [findfirst(==(g), grupos) + 0.07*randn() for g in df.grupo]
+
+    # Calcula médias
+    media_geral = mean(df.valor)
+    medias_por_grupo = combine(groupby(df, :grupo), :valor => mean => :media)
+
+    # Cria o gráfico
+    p = scatter(df.jittered_x, df.valor,
+                group = df.grupo,
+                xticks = (1:length(grupos), grupos),
+                legend = :none,
+                alpha = 0.6,
+                lw = 0,
+                markersize = 7,
+                xlabel = "Grupo", ylabel = "Valor",
+                title = titulo)
+
+    # Linha da média geral
+    plot!(p, [0.5, length(grupos) + 0.5], [media_geral, media_geral],
+          lw = 2, linestyle = :dash, alpha = 0.6, color = :black, label = "Média Geral")
+
+    # Linhas das médias por grupo
+    for (i, row) in enumerate(eachrow(medias_por_grupo))
+        plot!(p, [i - 0.3, i + 0.3], [row.media, row.media],
+              lw = 3, linestyle = :dash, alpha = 0.6, color = :crimson,
+              label = i == 1 ? "Médias por Grupo" : "")
+    end
+    
+    return p
+end
+
+# Plot 1: Baixa variabilidade entre grupos - Alta variabilidade dentro dos grupos
+p1 = criar_plot("Baixa variabilidade entre grupos\nAlta variabilidade dentro dos grupos", 0, 0.2)
+
+# Plot 2: Alta variabilidade entre grupos - Baixa variabilidade dentro dos grupos
+p2 = criar_plot("Alta variabilidade entre grupos\nBaixa variabilidade dentro dos grupos", 3.0, 0.5)
+
+# Plot 3: Alguma variabilidade entre grupos - Alguma variabilidade dentro dos grupos
+p3 = criar_plot("Alguma variabilidade entre grupos\nAlguma variabilidade dentro dos grupos", 1.5, 1.0)
+
+# Exibir os plots
+display(p1)
+display(p2)
+display(p3)
+</code></pre>
+  </div>
+</div>
+
+### Exemplos visuais gerados pelo código acima:
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  <div style="text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/variabilidade_grupos.png" alt="Baixa variabilidade entre grupos, alta dentro" style="max-width: 320px;">
+    <div style="font-size: 0.95em; margin-top: 0.5em;">Provavelmente não há diferença significativa entre os grupos</div>
+  </div>
+  <div style="text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/variabilidade_grupos2.png" alt="Alta variabilidade entre grupos, baixa dentro" style="max-width: 320px;">
+    <div style="font-size: 0.95em; margin-top: 0.5em;">Diferença significativa entre grupos</div>
+  </div>
+  <div style="text-align: center;">
+    <img src="{{ site.baseurl }}/assets/images/variabilidade_grupos3.png" alt="Alguma variabilidade entre e dentro" style="max-width: 320px;">
+    <div style="font-size: 0.95em; margin-top: 0.5em;">Pode ou não ser significativa, depende da razão F</div>
+  </div>
+</div>
+
+---
+
+### Como esses gráficos ilustram a lógica da ANOVA?
+
+ANOVA é uma técnica estatística usada para comparar médias de três ou mais grupos. Ela testa a hipótese nula de que todas as médias populacionais são iguais.
+
+A ideia central da ANOVA é:
+
+Se a variabilidade entre os grupos for grande em relação à variabilidade dentro dos grupos, é provável que pelo menos um grupo tenha uma média significativamente diferente dos outros.
+
+#### 🎯 Como o exemplo ilustra isso?
+A função `criar_plot` gera gráficos com dados simulados de três grupos ("A", "B", "C"), variando os níveis de:
+
+- **variabilidade_entre**: distância entre as médias dos grupos → está relacionado à variância entre grupos;
+- **variabilidade_dentro**: espalhamento dos valores dentro de cada grupo → está relacionado à variância dentro dos grupos.
+
+#### 🔍 Interpretação dos gráficos
+1. **p1: Baixa variabilidade entre / Alta dentro**
+   - As médias dos grupos são praticamente iguais (0, 0, 0).
+   - Os dados estão bem espalhados dentro de cada grupo.
+   - Resultado esperado em uma ANOVA: provavelmente não há diferença significativa entre os grupos.
+2. **p2: Alta variabilidade entre / Baixa dentro**
+   - As médias estão bem separadas (0, 3, 6).
+   - Pouca variação dentro de cada grupo.
+   - Resultado esperado em uma ANOVA: diferença significativa entre grupos.
+3. **p3: Variabilidade moderada entre e dentro**
+   - Médias moderadamente diferentes.
+   - Espalhamento interno também moderado.
+   - Resultado esperado em uma ANOVA: pode ou não ser significativa, depende da razão F.
+
+#### ⚖️ Relação com o teste F (usado em ANOVA)
+A estatística F do teste ANOVA é:
+
+$$F = \frac{\text{Variância entre grupos}}{\text{Variância dentro dos grupos}}$$
+
+Os gráficos estão visualizando exatamente essa razão:
+
+- Se $F$ for grande → diferença significativa.
+- Se $F$ for próxima de 1 → sem diferença significativa.
+
+#### ✅ Conclusão
+Esse exemplo demonstra intuitivamente os princípios da ANOVA, sem calcular diretamente o teste. Ele é excelente para ensino, pois mostra como a diferença entre as médias dos grupos e a variabilidade interna afetam o resultado de um teste ANOVA.
 
 ---
 
