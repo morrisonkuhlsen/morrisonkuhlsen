@@ -89,7 +89,7 @@ Previsão para 14 horas de estudo: 8.702711028958717
 - **Intercepto ($a$):** Valor esperado da nota quando HorasEstudo = 0.
 - **Inclinação ($b$):** Variação esperada na nota para cada hora adicional de estudo.
 - **Valor-p:** Indica se o coeficiente é estatisticamente significativo.
-- **$R^2$ (coeficiente de determinação):** Mede o quanto da variação de Y é explicada por X (quanto mais próximo de 1, melhor o ajuste).
+- **$R^2$ (coeficiente de determinação):** Mede o quanto da variação de Y é explicida por X (quanto mais próximo de 1, melhor o ajuste).
 
 ---
 
@@ -113,14 +113,6 @@ A regressão linear pode ser visualizada como uma reta que "melhor se ajusta" ao
 - Verifique a presença de outliers e influências.
 - Não extrapole previsões para fora do intervalo observado.
 - Para múltiplas variáveis explicativas, use **regressão linear múltipla**.
-
----
-
-## Referências
-
-1. Montgomery, D. C., & Peck, E. A. (2012). Introduction to Linear Regression Analysis.
-2. Draper, N. R., & Smith, H. (1998). Applied Regression Analysis.
-3. Triola, M. F. (2017). Introdução à Estatística.
 
 ---
 
@@ -257,3 +249,36 @@ $$
 - **Inclinação ($$b$$):** Cada hora adicional de estudo aumenta a nota esperada em aproximadamente 0,24 pontos.
 - **Intercepto ($$a$$):** Nota esperada para quem não estuda ($$X=0$$) seria cerca de 5,31.
 - **Previsão:** Para 14 horas de estudo, a nota prevista é aproximadamente 8,70.
+
+---
+
+<div id="regressao-linear-calc" style="max-width:600px;margin:2em auto;padding:1.5em 2em;background:#f8f8f8;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+  <h3 style="text-align:center;margin-bottom:1em;">Calculadora de Regressão Linear</h3>
+  <form id="rl-form-adicionar" style="display:flex;gap:0.5em;flex-wrap:wrap;justify-content:center;margin-bottom:1em;">
+    <input id="rl-x" type="number" step="any" placeholder="X" required style="width:90px;padding:0.3em;">
+    <input id="rl-y" type="number" step="any" placeholder="Y" required style="width:90px;padding:0.3em;">
+    <button type="submit" style="padding:0.3em 1em;">Adicionar</button>
+  </form>
+  <table style="width:100%;margin-bottom:1em;border-collapse:collapse;">
+    <thead>
+      <tr style="background:#e0e0e0;"><th style="padding:4px 8px;">X</th><th style="padding:4px 8px;">Y</th><th></th></tr>
+    </thead>
+    <tbody id="rl-tabela-corpo"></tbody>
+  </table>
+  <div style="margin-bottom:1em;">
+    <label for="rl-prev-x"><b>Prever Y para X =</b></label>
+    <input id="rl-prev-x" type="number" step="any" style="width:90px;padding:0.3em;">
+  </div>
+  <div id="rl-resultado" style="background:#fff;border-radius:6px;padding:1em 1.2em;min-height:2.5em;font-size:1.08em;"></div>
+  <div style="font-size:0.93em;color:#888;margin-top:1em;text-align:center;">Os dados iniciais são os mesmos do exemplo acima. Você pode adicionar, remover ou prever valores.</div>
+</div>
+
+<script src="{{ site.baseurl }}/assets/js/regressao-linear-calc.js"></script>
+
+---
+
+## Referências
+
+1. Montgomery, D. C., & Peck, E. A. (2012). Introduction to Linear Regression Analysis.
+2. Draper, N. R., & Smith, H. (1998). Applied Regression Analysis.
+3. Triola, M. F. (2017). Introdução à Estatística.
