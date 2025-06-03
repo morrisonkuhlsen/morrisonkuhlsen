@@ -8,6 +8,8 @@ permalink: /pt/inferencia-estatistica/testes-hipotese
 order: 1
 ---
 
+<img src="{{ site.baseurl }}/assets/images/testedehipotese.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+
 Os **Testes de Hipótese** são procedimentos estatísticos que nos permitem tomar decisões sobre parâmetros populacionais com base em dados amostrais. São ferramentas fundamentais para a inferência estatística e tomada de decisões baseadas em evidências.
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
@@ -42,31 +44,287 @@ Um teste de hipótese segue uma estrutura sistemática:
 
 ### 1.2 Tipos de Erro
 
-![Tipos de erro em testes de hipótese]({{ site.baseurl }}/assets/images/erros-teste.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Matriz de decisão e tipos de erro em testes de hipótese</div>
+<div style="overflow-x:auto; margin: 1em 0;">
+  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
+    <thead style="background: #e3f2fd;">
+      <tr>
+        <th style="border: 1px solid #bbb; padding: 8px;">Decisão vs. Realidade</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> Verdadeira</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> Falsa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Rejeitar H<sub>0</sub></td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo I (&alpha;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Decisão Correta</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Não Rejeitar H<sub>0</sub></td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Decisão Correta</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo II (&beta;)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<table>
-<thead>
-<tr>
-<th>Decisão vs. Realidade</th>
-<th>$$H_0$$ Verdadeira</th>
-<th>$$H_0$$ Falsa</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Rejeitar $$H_0$$</td>
-<td>Erro Tipo I ($$\alpha$$)</td>
-<td>Decisão Correta</td>
-</tr>
-<tr>
-<td>Não Rejeitar $$H_0$$</td>
-<td>Decisão Correta</td>
-<td>Erro Tipo II ($$\beta$$)</td>
-</tr>
-</tbody>
-</table>
 
+### 🔴 Erro Tipo I (α)
+
+- **O que é:** Rejeitamos $H_0$ mesmo ela sendo verdadeira.
+- **Exemplo:** Suponha que um novo medicamento **não** seja mais eficaz que o atual (ou seja, $H_0$ é verdadeira), mas ao aplicar o teste, os dados indicam falsamente que ele **é mais eficaz**, levando à rejeição de $H_0$.
+- **Consequência:** Assumimos que existe um efeito ou diferença quando na realidade não há.
+- **Probabilidade:** Representada por **α**, geralmente fixada em 5% (0,05).
+
+---
+
+### ✅ Decisão Correta (quando H₀ é verdadeira e não a rejeitamos)
+
+- **O que é:** Não rejeitamos $H_0$ e ela realmente é verdadeira.
+- **Exemplo:** Um medicamento realmente não é melhor que o outro, e o teste estatístico confirma isso.
+- **Consequência:** Decisão correta, sem erro cometido.
+
+---
+
+### ✅ Decisão Correta (quando H₀ é falsa e a rejeitamos)
+
+- **O que é:** Rejeitamos $H_0$ e ela de fato é falsa.
+- **Exemplo:** Um novo tratamento realmente é mais eficaz, e o teste estatístico detecta essa diferença.
+- **Consequência:** Decisão correta, identificando corretamente o efeito.
+
+---
+
+### 🔵 Erro Tipo II (β)
+
+- **O que é:** Não rejeitamos $H_0$, mesmo ela sendo falsa.
+- **Exemplo:** Um novo método é realmente melhor que o atual, mas o teste não encontra evidências suficientes e $H_0$ não é rejeitada.
+- **Consequência:** Perdemos a chance de reconhecer uma melhoria ou efeito real.
+- **Probabilidade:** Representada por **β**. Quanto menor o β, maior o **poder do teste** (capacidade de detectar um efeito real).
+
+---
+
+<br>
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Plots
+using Distributions
+
+# Distribuições
+μ0 = 0
+μ1 = 1.5
+σ = 1
+α = 0.05
+
+dist_H0 = Normal(μ0, σ)
+dist_H1 = Normal(μ1, σ)
+
+# Valor crítico para teste unilateral (cauda direita)
+z_crit = quantile(dist_H0, 1 - α)
+
+# Cálculo do erro tipo II (β) e poder do teste
+β = cdf(dist_H1, z_crit)
+poder = 1 - β
+
+# Curvas
+x = -3:0.01:5
+y_H0 = pdf.(dist_H0, x)
+y_H1 = pdf.(dist_H1, x)
+
+# Inicia o gráfico com H0 e H1
+plot(x, y_H0, label="H₀: N(0,1)", lw=2, color=:steelblue, legend=:topright)
+plot!(x, y_H1, label="H₁: N(1.5,1)", lw=2, color=:crimson)
+
+# Área de erro tipo I (α)
+fill_x1 = x[x .>= z_crit]
+fill_y1 = pdf.(dist_H0, fill_x1)
+plot!(fill_x1, fill_y1, fillrange=0, fillalpha=0.4, label="Erro Tipo I (α)", color=:steelblue)
+
+# Área de erro tipo II (β)
+fill_x2 = x[x .<= z_crit]
+fill_y2 = pdf.(dist_H1, fill_x2)
+plot!(fill_x2, fill_y2, fillrange=0, fillalpha=0.4, label="Erro Tipo II (β)", color=:crimson)
+
+# Linha de corte
+vline!([z_crit], label="Valor crítico", lw=2, linestyle=:dash, color=:black)
+
+# Anotações
+annotate!(z_crit + 0.5, 0.05, text("Área α", :black, 10))
+annotate!(z_crit - 1.0, 0.08, text("Área β", :black, 10))
+annotate!(μ0, 0.4, text("H₀", :black, 12, :center))
+annotate!(μ1, 0.3, text("H₁", :black, 12, :center))
+
+# Adiciona os resultados como curvas invisíveis só para aparecer no legend
+plot!([NaN], [NaN], label="Valor crítico: $(round(z_crit, digits=4))")
+plot!([NaN], [NaN], label="Erro Tipo II (β): $(round(β, digits=4))")
+plot!([NaN], [NaN], label="Poder do teste: $(round(poder, digits=4))")
+
+# Eixos e título
+xlabel!("Estatística de teste")
+ylabel!("Densidade")
+title!("Visualização dos Erros Tipo I (α) e Tipo II (β)")</code></pre>
+  </div>
+</div>
+
+<img src="{{ site.baseurl }}/assets/images/erro_tipo_I_II.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+
+---
+
+### 📌 1. Valor crítico (zₐ = 1.6449)
+Esse é o ponto de corte da curva da hipótese nula (H₀) para rejeitar ou não rejeitar a hipótese.
+
+Como o teste é unilateral à direita e o nível de significância é α = 0.05, usamos:
+
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>z_crit = quantile(Normal(0,1), 1 - α) = quantile(Normal(0,1), 0.95) ≈ 1.6449</div>
+</div>
+
+**Em termos práticos:**
+Se sua estatística de teste (z-calculado) for maior que 1.6449, você rejeita H₀.
+
+---
+
+### 📌 2. Erro Tipo II (β = 0.5576)
+Esse valor representa a probabilidade de não rejeitar H₀ quando H₁ é verdadeira.
+
+Em outras palavras, é o risco de falhar em detectar um efeito real (ou seja, perder uma descoberta importante).
+
+**Aqui:**
+Existe uma probabilidade de **55,76%** de você não detectar a diferença real entre H₀ e H₁ (com μ₀ = 0 e μ₁ = 1.5).
+
+---
+
+### 📌 3. Poder do teste (1 - β = 0.4424)
+O poder do teste representa a capacidade de detectar corretamente um efeito verdadeiro.
+
+**Aqui:**
+O teste tem **44,24%** de chance de detectar corretamente que H₁ é verdadeira quando ela realmente é.
+
+<div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
+Em geral, deseja-se um poder ≥ 80% (ou seja, β ≤ 0.20), então:
+
+⚠️ Esse teste está com poder baixo, o que significa que ele não é muito eficaz para detectar a diferença especificada entre μ₀ e μ₁.</div>
+
+---
+
+### 🔎 Conclusão interpretativa
+
+<div style="overflow-x:auto; margin: 1em 0;">
+  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto; border: 1px solid #ccc;">
+    <thead style="background: #e3f2fd;">
+      <tr>
+        <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Valor</th>
+        <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Interpretação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">z_crit = 1.6449</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">Limite a partir do qual rejeitamos H₀</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">β = 0.5576</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">Alta chance de errar ao não rejeitar H₀ quando H₁ é verdadeira</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #ccc; padding: 8px;">Poder = 0.4424</td>
+        <td style="border: 1px solid #ccc; padding: 8px;">Baixa chance de detectar a verdade (poder fraco)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div style="border-left: 4px solid orange; padding: 0.5em; background-color: #fff3cd;">
+💡 O que fazer se o poder está baixo?
+</div>
+
+Você pode:
+- Aumentar o tamanho da amostra
+- Aumentar a diferença entre μ₀ e μ₁
+- Reduzir a variabilidade (σ)
+- Aceitar um nível de significância α maior (com cuidado)
+
+---
+
+<img src="{{ site.baseurl }}/assets/images/teste_erros.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+  <strong>A imagem acima ilustra, de forma didática e bem-humorada, os quatro possíveis resultados de um teste diagnóstico ou de hipótese, usando o exemplo de um teste de gravidez. Essa estrutura é chamada de matriz de decisão ou matriz de confusão, muito usada em Estatística, Machine Learning e Testes de Hipóteses.</strong>
+
+  <h4 style="margin-top:1em; color:#4361ee;">🧠 Matriz de Decisão (Confusão)</h4>
+  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
+    <thead style="background: #e3f2fd;">
+      <tr>
+        <th style="border: 1px solid #bbb; padding: 8px;">Condição Real</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">Grávida</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">Não Grávida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Teste diz grávida</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">✅ Verdadeiro Positivo (VP)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">❌ Falso Positivo (FP) - Erro Tipo I</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Teste diz não grávida</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">❌ Falso Negativo (FN) - Erro Tipo II</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">✅ Verdadeiro Negativo (VN)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ul style="margin-top:1em;">
+    <li><b>🟢 Verdadeiro Positivo (VP):</b> Pessoa está grávida e o teste detecta corretamente.<br><i>Exemplo: Mulher grávida, médico diz: “Você está grávida”. Decisão correta.</i></li>
+    <li><b>🟢 Verdadeiro Negativo (VN):</b> Pessoa não está grávida e o teste confirma isso.<br><i>Exemplo: Homem idoso, médico diz: “Você não está grávida”. Decisão correta.</i></li>
+    <li><b>🔴 Falso Positivo (FP) – Erro Tipo I:</b> Pessoa não está grávida, mas o teste diz que está.<br><i>Exemplo: Homem idoso, médico diz: “Você está grávida”.<br>Erro tipo I: Rejeita a hipótese nula quando ela é verdadeira.<br>No contexto de testes de hipótese: Concluímos que há efeito quando não há.</i></li>
+    <li><b>🔴 Falso Negativo (FN) – Erro Tipo II:</b> Pessoa está grávida, mas o teste não detecta.<br><i>Exemplo: Mulher grávida, médico diz: “Você não está grávida”.<br>Erro tipo II: Não rejeita a hipótese nula quando ela é falsa.<br>No contexto de testes de hipótese: Deixa de detectar um efeito que existe.</i></li>
+  </ul>
+
+  <h4 style="margin-top:1.5em; color:#4361ee;">📊 Relação com Testes de Hipótese</h4>
+  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
+    <thead style="background: #e3f2fd;">
+      <tr>
+        <th style="border: 1px solid #bbb; padding: 8px;">Termo Estatístico</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">Interpretação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Hipótese Nula (H₀)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Ex: “A pessoa não está grávida”</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Hipótese Alternativa (H₁)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Ex: “A pessoa está grávida”</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo I (&alpha;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Rejeitar H₀ quando H₀ é verdadeira (falso positivo)</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo II (&beta;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Não rejeitar H₀ quando H₀ é falsa (falso negativo)</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #bbb; padding: 8px;">Poder do Teste (1 - &beta;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Capacidade de detectar corretamente um verdadeiro efeito</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:1.5em;">
+    <b>✅ Conclusão:</b> <br>
+    A imagem usa um exemplo extremo e bem-humorado (testar gravidez em um homem idoso) para ilustrar a importância de considerar os erros possíveis em qualquer teste, seja diagnóstico, médico ou estatístico. A matriz de decisão nos ajuda a visualizar os acertos (VP e VN) e os erros (FP e FN), essenciais para avaliar a qualidade e validade de qualquer processo decisório baseado em testes.
+  </div>
+<br>
 ## 2. Etapas do Teste de Hipótese
 
 ### 2.1 Formulação das Hipóteses
@@ -580,14 +838,6 @@ teste_correlacao()</code></pre>
    - StatisticalTests.jl
    - Power.jl
 
-## Referências Adicionais
-
-6. Wasserman, L. **All of Statistics: A Concise Course in Statistical Inference**. Springer, 2004.
-7. Lehmann, E. L.; Romano, J. P. **Testing Statistical Hypotheses**. 3ª ed. Springer, 2005.
-8. Rice, J. A. **Mathematical Statistics and Data Analysis**. 3ª ed. Thomson Brooks/Cole, 2007.
-9. Efron, B.; Hastie, T. **Computer Age Statistical Inference**. Cambridge University Press, 2016.
-10. Good, P. I.; Hardin, J. W. **Common Errors in Statistics (and How to Avoid Them)**. 4ª ed. Wiley, 2012.
-
 ## 11. Guia para Escolha do Teste Estatístico
 
 ### 11.1 Árvore de Decisão
@@ -1068,3 +1318,23 @@ comparar_testes()</code></pre>
 4. **Cenário: Medidas Físicas, n = 100**
    - Escolha: Teste paramétrico
    - Razão: Dados contínuos, amostra grande
+
+---
+
+## Quiz Interativo: Teste seus conhecimentos!
+
+<div style="border: 2px solid #4CAF50; border-radius: 8px; padding: 16px; background: #f9f9f9; margin-top: 32px; margin-bottom: 32px;">
+  <strong>🎮 Experimente o quiz sobre Testes de Hipótese:</strong>
+  <br><br>
+  <iframe src="/assets/html/quiz.html" width="100%" height="700" style="border:none; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></iframe>
+  <br>
+  <span style="font-size: 0.95em; color: #555;">Se o quiz não carregar, <a href="/assets/html/quiz.html" target="_blank">clique aqui para abrir em nova aba</a>.</span>
+</div>
+
+## Referências Adicionais
+
+6. Wasserman, L. **All of Statistics: A Concise Course in Statistical Inference**. Springer, 2004.
+7. Lehmann, E. L.; Romano, J. P. **Testing Statistical Hypotheses**. 3ª ed. Springer, 2005.
+8. Rice, J. A. **Mathematical Statistics and Data Analysis**. 3ª ed. Thomson Brooks/Cole, 2007.
+9. Efron, B.; Hastie, T. **Computer Age Statistical Inference**. Cambridge University Press, 2016.
+10. Good, P. I.; Hardin, J. W. **Common Errors in Statistics (and How to Avoid Them)**. 4ª ed. Wiley, 2012.

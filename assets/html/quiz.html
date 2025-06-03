@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Testes Estatísticos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --success: #4cc9f0;
+            --error: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Menu de Start */
+        .start-menu {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s;
+        }
+
+        .start-menu h1 {
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .start-menu p {
+            margin-bottom: 30px;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .start-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Container do Quiz com Imagem de Fundo */
+        .quiz-container {
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), 
+                        url('https://raw.githubusercontent.com/dancartorio/public/refs/heads/main/quiz2.png');
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: none;
+        }
+
+        .quiz-container.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .quiz-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-header p {
+            opacity: 0.9;
+        }
+
+        .quiz-body {
+            padding: 25px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--success));
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .question {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.1);
+        }
+
+        .option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .option.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+            animation: pulse 0.5s;
+        }
+
+        .option.incorrect {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+            animation: shake 0.5s;
+        }
+
+        .explanation {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        button {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+        }
+
+        button:disabled {
+            background: var(--gray);
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 20px;
+            color: var(--dark);
+        }
+
+        /* Modal de resultados */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .result-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .modal-content .final-score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 15px 0;
+        }
+
+        .restart-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            margin-top: 20px;
+        }
+
+        /* Animações */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsivo */
+        @media (max-width: 600px) {
+            .quiz-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            button {
+                padding: 10px 20px;
+            }
+            
+            .start-menu {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu de Start -->
+    <div class="start-menu" id="start-menu">
+        <h1 class="animate__animated animate__fadeInDown">Quiz de Testes Estatísticos</h1>
+        <p class="animate__animated animate__fadeIn animate__delay-1s">Teste seus conhecimentos sobre testes estatísticos e escolha a opção correta para cada cenário!</p>
+        <button class="start-btn animate__animated animate__fadeInUp animate__delay-2s" id="start-btn">Começar Quiz</button>
+    </div>
+    
+    <!-- Quiz Container -->
+    <div class="quiz-container" id="quiz-container">
+        <div class="quiz-header">
+            <h1>Quiz de Testes Estatísticos</h1>
+            <p>Selecione o teste mais adequado para cada cenário</p>
+        </div>
+        
+        <div class="quiz-body">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="question" id="question"></div>
+            
+            <div class="options" id="options"></div>
+            
+            <div class="explanation" id="explanation"></div>
+            
+            <div class="controls">
+                <button id="next-btn" disabled>Próxima Pergunta</button>
+            </div>
+            
+            <div class="score-display" id="score"></div>
+            <div id="timer" style="font-size:1.1rem;margin-top:8px;"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de resultados -->
+    <div class="result-modal" id="result-modal">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <h2>Quiz Concluído!</h2>
+            <p>Você finalizou o quiz de testes estatísticos</p>
+            <div class="final-score" id="final-score"></div>
+            <p id="result-message"></p>
+            <button class="restart-btn" id="restart-btn">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <audio id="sound-correct" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1c7.mp3"></audio>
+    <audio id="sound-wrong" src="https://cdn.pixabay.com/audio/2022/07/26/audio_124bfae1c7.mp3"></audio>
+
+    <script>
+        const questions = [
+            {
+                question: "Você deseja comparar a média de um único grupo com um valor conhecido. Os dados são normalmente distribuídos. Qual teste usar?",
+                options: ["Teste t para uma amostra", "Teste de Wilcoxon", "Teste de Kruskal-Wallis", "ANOVA"],
+                answer: 0,
+                explanation_correct: "✅ Correto! O teste t para uma amostra é usado para comparar a média de um grupo com um valor de referência, desde que os dados sejam normais.",
+                explanation_incorrect: "❌ Errado! O teste t para uma amostra é o correto para comparar a média de um grupo com um valor de referência quando os dados são normais."
+            },
+            {
+                question: "Você tem dois grupos independentes e deseja comparar suas médias. Os dados são normais e as variâncias são homogêneas. Qual teste usar?",
+                options: ["Teste t independente", "Teste U de Mann-Whitney", "Teste de Friedman", "ANOVA de duas vias"],
+                answer: 0,
+                explanation_correct: "✅ Correto! O teste t independente é o mais adequado para comparar médias de dois grupos independentes com dados normais e homocedásticos.",
+                explanation_incorrect: "❌ Errado! Para dois grupos independentes com dados normais e variâncias homogêneas, o teste t independente é o mais adequado."
+            },
+            {
+                question: "Você tem três ou mais grupos independentes e os dados NÃO seguem distribuição normal. Qual teste usar?",
+                options: ["ANOVA", "Teste de Kruskal-Wallis", "Teste t pareado", "Teste de Shapiro-Wilk"],
+                answer: 1,
+                explanation_correct: "✅ Correto! O teste de Kruskal-Wallis é a alternativa não paramétrica para comparar três ou mais grupos independentes.",
+                explanation_incorrect: "❌ Errado! Quando os dados não são normais e temos três ou mais grupos independentes, o teste de Kruskal-Wallis é o mais adequado."
+            },
+            {
+                question: "Você quer verificar se há associação entre duas variáveis categóricas. Qual teste usar?",
+                options: ["Teste de correlação de Pearson", "Teste qui-quadrado", "Regressão linear", "Teste t"],
+                answer: 1,
+                explanation_correct: "✅ Correto! O teste qui-quadrado é usado para verificar associação entre variáveis categóricas.",
+                explanation_incorrect: "❌ Errado! Para verificar associação entre variáveis categóricas, o teste qui-quadrado é o mais adequado."
+            },
+            {
+                question: "Você tem medidas repetidas (mesmos sujeitos em diferentes momentos) e os dados não são normais. Qual teste usar?",
+                options: ["Teste t pareado", "Teste de Wilcoxon", "ANOVA de medidas repetidas", "Teste de Levene"],
+                answer: 1,
+                explanation_correct: "✅ Correto! O teste de Wilcoxon é a alternativa não paramétrica para medidas repetidas quando os dados não são normais.",
+                explanation_incorrect: "❌ Errado! Para medidas repetidas com dados não normais, o teste de Wilcoxon é a alternativa não paramétrica adequada."
+            },
+            {
+                question: "Você quer testar se uma amostra vem de uma distribuição normal. Qual teste usar?",
+                options: ["Teste t", "Teste de Shapiro-Wilk", "Teste qui-quadrado", "ANOVA"],
+                answer: 1,
+                explanation_correct: "✅ Correto! O teste de Shapiro-Wilk é usado para verificar normalidade dos dados.",
+                explanation_incorrect: "❌ Errado! Para testar normalidade, o teste de Shapiro-Wilk é o mais adequado."
+            },
+            {
+                question: "Você quer comparar as medianas de dois grupos relacionados (medidas repetidas) com dados não normais. Qual teste usar?",
+                options: ["Teste t pareado", "Teste de Wilcoxon", "Teste U de Mann-Whitney", "Teste de Kruskal-Wallis"],
+                answer: 1,
+                explanation_correct: "✅ Correto! O teste de Wilcoxon é usado para duas amostras relacionadas (pareadas) quando os dados não são normais.",
+                explanation_incorrect: "❌ Errado! Para grupos relacionados com dados não normais, o teste de Wilcoxon é o mais indicado."
+            },
+            {
+                question: "Você quer verificar a homogeneidade de variâncias entre grupos antes de aplicar um teste paramétrico. Qual teste usar?",
+                options: ["Teste de Levene", "Teste de Shapiro-Wilk", "Teste t", "Teste de correlação"],
+                answer: 0,
+                explanation_correct: "✅ Correto! O teste de Levene verifica a homogeneidade de variâncias entre grupos.",
+                explanation_incorrect: "❌ Errado! Para verificar homogeneidade de variâncias, o teste de Levene é o mais adequado."
+            },
+            {
+                question: "Você quer analisar a relação entre duas variáveis quantitativas. Qual teste usar?",
+                options: ["Teste qui-quadrado", "Correlação de Pearson", "ANOVA", "Teste t"],
+                answer: 1,
+                explanation_correct: "✅ Correto! A correlação de Pearson mede a relação linear entre duas variáveis quantitativas.",
+                explanation_incorrect: "❌ Errado! Para analisar relação entre variáveis quantitativas, use a correlação de Pearson."
+            },
+            {
+                question: "Você tem um desenho fatorial (dois ou mais fatores) e quer testar efeitos principais e de interação. Qual teste usar?",
+                options: ["ANOVA de uma via", "ANOVA de duas vias", "Teste t", "Teste de Kruskal-Wallis"],
+                answer: 1,
+                explanation_correct: "✅ Correto! ANOVA de duas vias é usada para analisar experimentos fatoriais com dois fatores.",
+                explanation_incorrect: "❌ Errado! Para desenhos fatoriais, ANOVA de duas vias é a escolha correta."
+            },
+             {
+        question: "Você deseja comparar as medianas de dois grupos independentes com dados não normais. Qual teste usar?",
+        options: ["Teste t independente", "Teste U de Mann-Whitney", "Teste de Wilcoxon pareado", "ANOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste U de Mann-Whitney é a alternativa não paramétrica para comparar dois grupos independentes com dados não normais.",
+        explanation_incorrect: "❌ Errado! Para grupos independentes não normais, o teste U de Mann-Whitney substitui o teste t independente."
+    },
+    {
+        question: "Você quer comparar a proporção de sucessos entre dois grupos categóricos. Qual teste usar?",
+        options: ["Teste t", "Teste exato de Fisher", "Correlação de Spearman", "Teste de Levene"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste exato de Fisher é ideal para proporções em tabelas 2x2, especialmente com amostras pequenas.",
+        explanation_incorrect: "❌ Errado! Para proporções em grupos categóricos, o teste exato de Fisher ou qui-quadrado são os mais indicados."
+    },
+    {
+        question: "Você tem três grupos pareados (medidas repetidas) e dados normais. Qual teste usar?",
+        options: ["ANOVA de medidas repetidas", "Teste de Kruskal-Wallis", "Teste t pareado", "Teste de Friedman"],
+        answer: 0,
+        explanation_correct: "✅ Correto! ANOVA de medidas repetidas é usada para três ou mais grupos pareados com dados normais.",
+        explanation_incorrect: "❌ Errado! Para grupos pareados normais, ANOVA de medidas repetidas é a escolha paramétrica."
+    },
+    {
+        question: "Você quer avaliar a concordância entre dois avaliadores para dados ordinais. Qual teste usar?",
+        options: ["Coeficiente de Pearson", "Coeficiente de Spearman", "Coeficiente Kappa", "Teste de Shapiro-Wilk"],
+        answer: 2,
+        explanation_correct: "✅ Correto! O coeficiente Kappa mede concordância para dados categóricos ou ordinais entre avaliadores.",
+        explanation_incorrect: "❌ Errado! Kappa é específico para concordância; Spearman/Pearson avaliam correlação."
+    },
+    {
+        question: "Você tem dados ordinais e quer testar a correlação entre duas variáveis. Qual teste usar?",
+        options: ["Correlação de Pearson", "Correlação de Spearman", "Teste qui-quadrado", "ANOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Spearman é usado para correlação em dados ordinais ou não lineares.",
+        explanation_incorrect: "❌ Errado! Pearson exige dados intervalares e lineares; Spearman é para ordinais."
+    },
+    {
+        question: "Você quer comparar variâncias de três ou mais grupos normais. Qual teste usar?",
+        options: ["Teste de Levene", "Teste de Bartlett", "Teste t", "ANOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste de Bartlett compara variâncias em grupos normais (homocedasticidade).",
+        explanation_incorrect: "❌ Errado! Levene é menos sensível a não normalidade, mas Bartlett é mais potente para dados normais."
+    },
+    {
+        question: "Você tem dados de sobrevivência (tempo até um evento) e quer comparar dois grupos. Qual teste usar?",
+        options: ["Teste t", "Teste de log-rank", "ANOVA", "Teste de Wilcoxon"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste de log-rank é usado para comparar curvas de sobrevivência (análise de Kaplan-Meier).",
+        explanation_incorrect: "❌ Errado! Testes tradicionais (t, ANOVA) não consideram censura; log-rank é específico para sobrevivência."
+    },
+    {
+        question: "Você quer ajustar um modelo para prever uma variável contínua com múltiplos preditores. Qual teste usar?",
+        options: ["Regressão linear múltipla", "Regressão logística", "ANOVA", "Teste qui-quadrado"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Regressão linear múltipla modela relações entre variáveis contínuas e múltiplos preditores.",
+        explanation_incorrect: "❌ Errado! Regressão logística é para variáveis binárias; linear múltipla é para contínuas."
+    },
+    {
+        question: "Seus dados são contagens (ex.: número de eventos) e você quer comparar grupos. Qual teste usar?",
+        options: ["Teste t", "Regressão de Poisson", "Correlação de Pearson", "Teste de Shapiro-Wilk"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Regressão de Poisson é usada para modelar dados de contagem com distribuição específica.",
+        explanation_incorrect: "❌ Errado! Testes paramétricos não são ideais para contagens; Poisson ou qui-quadrado são alternativas."
+    },
+    {
+        question: "Você quer testar se a mediana de um grupo é igual a um valor de referência (dados não normais). Qual teste usar?",
+        options: ["Teste t para uma amostra", "Teste de Wilcoxon para uma amostra", "Teste de Kruskal-Wallis", "ANOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste de Wilcoxon (uma amostra) compara a mediana com um valor de referência para dados não normais.",
+        explanation_incorrect: "❌ Errado! Para não normalidade, o teste de Wilcoxon substitui o teste t de uma amostra."
+    },
+     {
+        question: "Qual teste é apropriado para comparar médias de três grupos independentes com distribuição normal e homocedasticidade?",
+        options: ["Teste t pareado", "ANOVA one-way", "Teste de Mann-Whitney", "Teste de Wilcoxon"],
+        answer: 1,
+        explanation_correct: "✅ Correto! ANOVA one-way é o teste paramétrico para comparar três ou mais grupos independentes com dados normais.",
+        explanation_incorrect: "❌ Errado! Para três grupos independentes normais, use ANOVA one-way (não teste t ou testes não paramétricos)."
+    },
+    {
+        question: "Quando devemos usar o teste de Friedman?",
+        options: ["Dados normais com três grupos independentes", "Três ou mais grupos pareados com dados não normais", "Comparar duas medianas independentes", "Testar normalidade dos dados"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste de Friedman é a versão não paramétrica da ANOVA para medidas repetidas (grupos pareados).",
+        explanation_incorrect: "❌ Errado! Friedman é para grupos pareados não normais (equivalente não paramétrico da ANOVA de medidas repetidas)."
+    },
+    {
+        question: "Qual teste verifica se uma amostra vem de uma distribuição específica (ex: Poisson)?",
+        options: ["Teste de Kolmogorov-Smirnov", "Teste de Levene", "ANOVA", "Regressão linear"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Kolmogorov-Smirnov testa a aderência a qualquer distribuição especificada.",
+        explanation_incorrect: "❌ Errado! Shapiro-Wilk testa apenas normalidade; Kolmogorov-Smirnov testa qualquer distribuição."
+    },
+    {
+        question: "Em um estudo com pré-teste e pós-teste em um único grupo, qual teste usar se os dados forem normais?",
+        options: ["Teste t independente", "Teste t pareado", "Teste U de Mann-Whitney", "Teste de Kruskal-Wallis"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Teste t pareado é para medidas repetidas no mesmo grupo (dados normais).",
+        explanation_incorrect: "❌ Errado! Medidas pré/pós no mesmo grupo exigem teste pareado (não independente)."
+    },
+    {
+        question: "Qual coeficiente mede a correlação para dados em ranks?",
+        options: ["Pearson", "Spearman", "Phi", "Kappa"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Spearman é usado para dados ordinais (ranks) ou relações não lineares.",
+        explanation_incorrect: "❌ Errado! Pearson é para dados intervalares lineares; Spearman para ranks."
+    },
+    {
+        question: "Quando usar o teste de McNemar?",
+        options: ["Comparar médias de dois grupos pareados", "Testar proporções antes/depois em dados categóricos pareados", "Avaliar normalidade", "Comparar variâncias"],
+        answer: 1,
+        explanation_correct: "✅ Correto! McNemar testa mudanças em proporções para dados categóricos pareados (ex: antes/depois).",
+        explanation_incorrect: "❌ Errado! McNemar é específico para proporções em dados pareados categóricos (não contínuos)."
+    },
+    {
+        question: "Qual teste não paramétrico equivale ao teste t independente?",
+        options: ["Wilcoxon signed-rank", "Kruskal-Wallis", "Mann-Whitney U", "Friedman"],
+        answer: 2,
+        explanation_correct: "✅ Correto! Mann-Whitney U é o equivalente não paramétrico do teste t independente.",
+        explanation_incorrect: "❌ Errado! Wilcoxon é para amostras pareadas; Mann-Whitney para independentes."
+    },
+    {
+        question: "Para comparar >2 proporções independentes, qual teste usar?",
+        options: ["Teste exato de Fisher", "Qui-quadrado", "Teste t", "ANOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste qui-quadrado compara proporções em múltiplos grupos categóricos.",
+        explanation_incorrect: "❌ Errado! Fisher é para 2 grupos; qui-quadrado para >2 grupos categóricos."
+    },
+    {
+        question: "Qual teste usar para dados de contagem com excesso de zeros?",
+        options: ["Regressão linear", "Regressão de Poisson", "Regressão binomial negativa", "ANOVA"],
+        answer: 2,
+        explanation_correct: "✅ Correto! Binomial negativa lida com overdispersion (excesso de zeros) em dados de contagem.",
+        explanation_incorrect: "❌ Errado! Poisson assume média=variância; binomial negativa ajusta para overdispersion."
+    },
+    {
+        question: "O que o teste de Mauchly avalia em uma ANOVA de medidas repetidas?",
+        options: ["Normalidade", "Homocedasticidade", "Esfericidade", "Linearidade"],
+        answer: 2,
+        explanation_correct: "✅ Correto! Mauchly testa a esfericidade (condição para ANOVA de medidas repetidas).",
+        explanation_incorrect: "❌ Errado! Esfericidade é diferente de homocedasticidade e é específica para medidas repetidas."
+    },
+    {
+        question: "Qual gráfico é ideal para verificar homocedasticidade?",
+        options: ["Histograma", "Boxplot", "Gráfico Q-Q", "Resíduos vs. valores ajustados"],
+        answer: 3,
+        explanation_correct: "✅ Correto! O gráfico de resíduos vs. valores ajustados mostra padrões de heterocedasticidade.",
+        explanation_incorrect: "❌ Errado! Q-Q plots avaliam normalidade; resíduos vs. ajustados avaliam homocedasticidade."
+    },
+    {
+        question: "Quando usar o coeficiente de correlação de Kendall?",
+        options: ["Dados contínuos normais", "Poucos dados com muitos ties (empates)", "Comparar médias", "Testar variâncias"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Kendall's tau é robusto para ties e pequenas amostras (alternativa ao Spearman).",
+        explanation_incorrect: "❌ Errado! Kendall é preferido quando há muitos empates (ties) nos ranks."
+    },
+    {
+        question: "Qual teste usar para tendência em proporções ordinais?",
+        options: ["Qui-quadrado", "Teste de Cochran-Armitage", "ANOVA", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Cochran-Armitage testa tendência linear em proporções com variável ordinal.",
+        explanation_incorrect: "❌ Errado! Qui-quadrado geral não detecta tendência; Cochran-Armitage é específico."
+    },
+    {
+        question: "Para comparar curvas ROC, qual teste é apropriado?",
+        options: ["Teste t", "Teste de DeLong", "ANOVA", "Qui-quadrado"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste de DeLong compara áreas sob a curva (AUC) de duas ou mais curvas ROC.",
+        explanation_incorrect: "❌ Errado! Testes tradicionais não são adequados; DeLong é específico para curvas ROC."
+    },
+    {
+        question: "Qual modelo é usado para dados binários (ex: vivo/morto)?",
+        options: ["Regressão linear", "Regressão logística", "Regressão de Poisson", "ANCOVA"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Regressão logística modela variáveis dependentes binárias.",
+        explanation_incorrect: "❌ Errado! Linear é para contínuos; logística é para binários (0/1)."
+    },
+    {
+        question: "O que o teste de Hosmer-Lemeshow avalia?",
+        options: ["Ajuste de modelos lineares", "Qualidade do ajuste em regressão logística", "Normalidade", "Homocedasticidade"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Hosmer-Lemeshow testa o goodness-of-fit em modelos logísticos.",
+        explanation_incorrect: "❌ Errado! É específico para avaliar calibração em regressão logística (não linear)."
+    },
+    {
+        question: "Qual teste usar para dados censurados à direita?",
+        options: ["Regressão linear", "Análise de sobrevivência (Cox)", "ANOVA", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Modelos de Cox são para dados de sobrevivência com censura.",
+        explanation_incorrect: "❌ Errado! Dados censurados exigem métodos específicos como regressão de Cox."
+    },
+    {
+        question: "O que VIF (Variance Inflation Factor) diagnostica?",
+        options: ["Normalidade", "Multicolinearidade", "Homocedasticidade", "Autocorrelação"],
+        answer: 1,
+        explanation_correct: "✅ Correto! VIF > 10 indica multicolinearidade entre variáveis preditoras.",
+        explanation_incorrect: "❌ Errado! VIF avalia colinearidade (não normalidade ou heterocedasticidade)."
+    },
+    {
+        question: "Qual teste compara distribuições empíricas de duas amostras?",
+        options: ["Kolmogorov-Smirnov", "Shapiro-Wilk", "Levene", "Mauchly"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Kolmogorov-Smirnov compara distribuições cumulativas de duas amostras.",
+        explanation_incorrect: "❌ Errado! Shapiro-Wilk testa normalidade; KS compara distribuições empíricas."
+    },
+    {
+        question: "Para ajustar múltiplas comparações em testes post-hoc, qual método usar?",
+        options: ["Bonferroni", "Pearson", "Kappa", "Levene"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Bonferroni é o método mais conservador para ajustar p-valores em múltiplos testes.",
+        explanation_incorrect: "❌ Errado! Métodos como Bonferroni ou Tukey corrigem para comparações múltiplas."
+    },
+    {
+        question: "Qual teste avalia a independência entre duas variáveis categóricas em tabelas maiores que 2x2?",
+        options: ["Teste exato de Fisher", "Qui-quadrado", "McNemar", "Wilcoxon"],
+        answer: 1,
+        explanation_correct: "✅ Correto! O teste qui-quadrado avalia independência em tabelas r x c.",
+        explanation_incorrect: "❌ Errado! Fisher é para tabelas 2x2; qui-quadrado para tabelas maiores."
+    },
+    {
+        question: "O que o teste de Breusch-Pagan avalia?",
+        options: ["Normalidade", "Heterocedasticidade", "Autocorrelação", "Multicolinearidade"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Breusch-Pagan testa heterocedasticidade em modelos de regressão.",
+        explanation_incorrect: "❌ Errado! Diferente de Levene, Breusch-Pagan é usado em regressão."
+    },
+    {
+        question: "Qual modelo é adequado para dados hierárquicos (ex: alunos dentro de escolas)?",
+        options: ["Regressão linear simples", "Modelos multinível (MLM)", "ANOVA one-way", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Modelos multinível (HLM) consideram estrutura hierárquica dos dados.",
+        explanation_incorrect: "❌ Errado! Dados aninhados exigem modelos multinível para evitar erros padrão inflados."
+    },
+    {
+        question: "O que o Q-Q plot verifica?",
+        options: ["Homocedasticidade", "Normalidade", "Linearidade", "Independência"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Q-Q plots comparam quantis da amostra com uma distribuição teórica (ex: normal).",
+        explanation_incorrect: "❌ Errado! Q-Q plots são para normalidade; resíduos vs. ajustados para homocedasticidade."
+    },
+    {
+        question: "Qual teste usar para comparações pareadas após ANOVA significativa?",
+        options: ["Teste t sem correção", "Tukey HSD", "Mann-Whitney", "Kolmogorov-Smirnov"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Tukey HSD controla o erro tipo I em comparações múltiplas post-hoc.",
+        explanation_incorrect: "❌ Errado! Testes t sem correção inflam o erro tipo I; Tukey ajusta para múltiplas comparações."
+    },
+    {
+        question: "O que R² ajustado corrige em relação ao R² comum?",
+        options: ["Número de preditores no modelo", "Tamanho da amostra", "Normalidade dos resíduos", "Homocedasticidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! R² ajustado penaliza a adição de preditores não informativos ao modelo.",
+        explanation_incorrect: "❌ Errado! R² ajustado evita overfitting ao considerar o número de variáveis."
+    },
+    {
+        question: "Qual teste usar para diferenças entre grupos com variáveis de confusão?",
+        options: ["ANOVA", "ANCOVA", "Teste t", "Qui-quadrado"],
+        answer: 1,
+        explanation_correct: "✅ Correto! ANCOVA ajusta para covariáveis (variáveis de confusão) ao comparar grupos.",
+        explanation_incorrect: "❌ Errado! ANCOVA controla variáveis contínuas de confusão; ANOVA não."
+    },
+    {
+        question: "O que o teste de Durbin-Watson diagnostica?",
+        options: ["Autocorrelação serial", "Heterocedasticidade", "Multicolinearidade", "Normalidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Durbin-Watson detecta autocorrelação em resíduos (séries temporais).",
+        explanation_incorrect: "❌ Errado! Valores próximos de 2 indicam não autocorrelação; <1 ou >3 são problemáticos."
+    },
+    {
+        question: "Qual método é usado para seleção de variáveis em regressão?",
+        options: ["Stepwise", "ANOVA", "Teste t", "Shapiro-Wilk"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Stepwise (forward/backward) seleciona variáveis baseado em critérios estatísticos.",
+        explanation_incorrect: "❌ Errado! Métodos como stepwise, LASSO ou ridge são usados para seleção de variáveis."
+    },
+    {
+        question: "O que o teste de Box's M avalia?",
+        options: ["Homogeneidade de variâncias", "Homogeneidade de matrizes de covariância", "Normalidade multivariada", "Autocorrelação"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Box's M testa a igualdade de matrizes de covariância entre grupos (MANOVA).",
+        explanation_incorrect: "❌ Errado! Específico para MANOVA; diferente de Levene (homocedasticidade univariada)."
+    },
+    {
+        question: "Qual teste usar para outliers multivariados?",
+        options: ["Distância de Mahalanobis", "Teste de Grubbs", "Shapiro-Wilk", "Levene"],
+        answer: 0,
+        explanation_correct: "✅ Correto! A distância de Mahalanobis identifica outliers em espaços multivariados.",
+        explanation_incorrect: "❌ Errado! Grubbs é para univariado; Mahalanobis para multivariado."
+    },
+    {
+        question: "O que o lambda de Wilks avalia em MANOVA?",
+        options: ["Significância geral do modelo", "Efeitos de interação", "Homocedasticidade", "Normalidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Lambda de Wilks testa se há diferenças multivariadas entre grupos.",
+        explanation_incorrect: "❌ Errado! É análogo ao teste F em ANOVA, mas para múltiplas variáveis dependentes."
+    },
+    {
+        question: "Qual gráfico mostra a relação entre duas variáveis contínuas?",
+        options: ["Boxplot", "Scatterplot", "Histograma", "Barplot"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Scatterplots visualizam relações entre duas variáveis contínuas.",
+        explanation_incorrect: "❌ Errado! Boxplots mostram distribuições; scatterplots mostram relações X-Y."
+    },
+    {
+        question: "O que o teste de Cochran's Q avalia?",
+        options: ["Diferenças em proporções pareadas >2 grupos", "Normalidade", "Homocedasticidade", "Correlação"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Cochran's Q é o equivalente ao Friedman para dados binários pareados.",
+        explanation_incorrect: "❌ Errado! É uma extensão do McNemar para >2 grupos pareados binários."
+    },
+    {
+        question: "Qual modelo é usado para dados de contagem com superdispersão?",
+        options: ["Poisson", "Binomial Negativa", "Linear", "Logístico"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Binomial negativa modela contagens quando variância > média (superdispersão).",
+        explanation_incorrect: "❌ Errado! Poisson assume média=variância; binomial negativa relaxa essa suposição."
+    },
+    {
+        question: "O que o teste de Shapiro-Francia verifica?",
+        options: ["Normalidade para grandes amostras", "Homocedasticidade", "Autocorrelação", "Multicolinearidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Shapiro-Francia é uma alternativa ao Shapiro-Wilk para n > 50.",
+        explanation_incorrect: "❌ Errado! Assim como Shapiro-Wilk, testa normalidade, mas para amostras maiores."
+    },
+    {
+        question: "Qual teste usar para tendência em dados ordinais?",
+        options: ["Jonckheere-Terpstra", "ANOVA", "Teste t", "Qui-quadrado"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Jonckheere-Terpstra detecta tendências ordenadas em grupos ordinais.",
+        explanation_incorrect: "❌ Errado! ANOVA não considera ordenação; Jonckheere-Terpstra é específico para tendências."
+    },
+    {
+        question: "O que o gráfico de funnel plot detecta?",
+        options: ["Viés de publicação", "Heterocedasticidade", "Autocorrelação", "Normalidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Funnel plots identificam viés de publicação em meta-análises.",
+        explanation_incorrect: "❌ Errado! Assimetria no funnel plot sugere viés (ex: estudos pequenos com efeitos grandes não publicados)."
+    },
+    {
+        question: "Qual teste usar para dados longitudinais com medidas repetidas?",
+        options: ["ANOVA one-way", "Modelos mistos", "Teste t", "Qui-quadrado"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Modelos mistos (MLM) lidam com correlação intra-sujeitos em dados longitudinais.",
+        explanation_incorrect: "❌ Errado! ANOVA de medidas repetidas é limitada; modelos mistos são mais flexíveis."
+    },
+    {
+        question: "O que o teste de Hausman compara?",
+        options: ["Modelos fixos vs. aleatórios", "Variâncias entre grupos", "Normalidade", "Homocedasticidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Hausman testa se efeitos aleatórios são consistentes (escolha entre modelos FE e RE).",
+        explanation_incorrect: "❌ Errado! Específico para econometria/panels; compara estimadores fixos vs. aleatórios."
+    },
+    {
+        question: "Qual índice mede concordância entre classificadores para dados ordinais?",
+        options: ["Kappa ponderado", "Pearson", "Spearman", "Cronbach's alpha"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Kappa ponderado considera a magnitude dos desacordos em dados ordinais.",
+        explanation_incorrect: "❌ Errado! Kappa simples é para categóricos; o ponderado é para ordinais."
+    },
+    {
+        question: "O que o teste de Breslow-Day avalia?",
+        options: ["Homogeneidade de odds ratios", "Normalidade", "Homocedasticidade", "Autocorrelação"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Breslow-Day testa se odds ratios são homogêneos em estratos (análise de Mantel-Haenszel).",
+        explanation_incorrect: "❌ Errado! Avalia interação entre variáveis em tabelas estratificadas (não confundimento)."
+    },
+    {
+        question: "Qual modelo usa função de ligação logit?",
+        options: ["Regressão linear", "Regressão logística", "Poisson", "Binomial Negativa"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Logística usa logit para modelar probabilidades (P(Y=1|X)).",
+        explanation_incorrect: "❌ Errado! Linear usa identidade; logística usa logit; Poisson usa log."
+    },
+    {
+        question: "O que o teste de Stuart-Maxwell avalia?",
+        options: ["Simetria em tabelas quadradas", "Normalidade", "Homocedasticidade", "Correlação"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Stuart-Maxwell testa marginal homogeneity em tabelas k x k pareadas.",
+        explanation_incorrect: "❌ Errado! Extensão do McNemar para >2 categorias em dados pareados."
+    },
+    {
+        question: "Qual técnica reduz dimensionalidade preservando variância?",
+        options: ["Regressão linear", "PCA (Análise de Componentes Principais)", "ANOVA", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! PCA transforma variáveis correlacionadas em componentes ortogonais.",
+        explanation_incorrect: "❌ Errado! PCA não é modelo preditivo, mas método de redução de dimensionalidade."
+    },
+    {
+        question: "O que o teste de Bartlett's sphéricity verifica?",
+        options: ["Adequação para PCA", "Normalidade multivariada", "Homocedasticidade", "Autocorrelação"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Bartlett testa se a matriz de correlações é adequada para PCA/EFA (H0: matriz identidade).",
+        explanation_incorrect: "❌ Errado! Avalia se correlações são suficientes para análise fatorial (não normalidade)."
+    },
+    {
+        question: "Qual teste não paramétrico equivale à ANOVA two-way?",
+        options: ["Friedman", "Kruskal-Wallis", "Mann-Whitney", "Wilcoxon"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Friedman é para dois fatores com medidas repetidas (não paramétrico).",
+        explanation_incorrect: "❌ Errado! Kruskal-Wallis é one-way; Friedman é two-way não paramétrico."
+    },
+    {
+        question: "O que o coeficiente omega de McDonald mede?",
+        options: ["Confiança de questionários", "Tamanho de efeito", "Correlação", "Variância explicada"],
+        answer: 0,
+        explanation_correct: "✅ Correto! Omega é uma medida de confiabilidade mais robusta que alpha de Cronbach.",
+        explanation_incorrect: "❌ Errado! Omega considera cargas fatoriais heterogêneas, ao contrário de alpha."
+    },
+    {
+        question: "Qual teste usar para dados de proporções com amostras pequenas?",
+        options: ["Qui-quadrado", "Teste exato de Fisher", "ANOVA", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Fisher é preciso para amostras pequenas ou células com frequência <5.",
+        explanation_incorrect: "❌ Errado! Qui-quadrado requer tamanhos esperados ≥5; Fisher não tem essa restrição."
+    },
+    {
+        question: "O que o gráfico de Cook's distance identifica?",
+        options: ["Outliers influentes", "Heterocedasticidade", "Normalidade", "Multicolinearidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! A distância de Cook detecta observações que influenciam desproporcionalmente o modelo.",
+        explanation_incorrect: "❌ Errado! Valores >1 sugerem outliers influentes na regressão."
+    },
+    {
+        question: "Qual modelo é usado para dados com estrutura hierárquica?",
+        options: ["Regressão linear", "Modelos multinível (HLM)", "ANOVA", "Teste t"],
+        answer: 1,
+        explanation_correct: "✅ Correto! Modelos hierárquicos (HLM) consideram dados agrupados (ex: alunos em escolas).",
+        explanation_incorrect: "❌ Errado! Modelos tradicionais ignoram dependência entre observações agrupadas."
+    },
+    {
+        question: "O que o teste de White avalia?",
+        options: ["Heterocedasticidade em regressão", "Normalidade", "Autocorrelação", "Multicolinearidade"],
+        answer: 0,
+        explanation_correct: "✅ Correto! White testa formas gerais de heterocedasticidade em modelos de regressão.",
+        explanation_incorrect: "❌ Errado! Similar a Breusch-Pagan, mas mais geral (não especifica forma da heterocedasticidade)."
+    }
+            
+        ];
+
+        // Elementos do DOM
+        const startMenu = document.getElementById('start-menu');
+        const startBtn = document.getElementById('start-btn');
+        const quizContainer = document.getElementById('quiz-container');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const explanationElement = document.getElementById('explanation');
+        const nextButton = document.getElementById('next-btn');
+        const scoreElement = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+        const resultModal = document.getElementById('result-modal');
+        const finalScoreElement = document.getElementById('final-score');
+        const resultMessageElement = document.getElementById('result-message');
+        const restartButton = document.getElementById('restart-btn');
+
+        // Variáveis do jogo
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let timerInterval;
+        let timeLeft = 20;
+
+        // Iniciar o quiz
+        startBtn.addEventListener('click', () => {
+            startMenu.style.display = 'none';
+            quizContainer.classList.add('active');
+            loadQuestion();
+        });
+
+        // Carregar pergunta
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionElement.textContent = q.question;
+            optionsElement.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index));
+                optionsElement.appendChild(optionElement);
+            });
+            
+            explanationElement.style.display = 'none';
+            nextButton.disabled = true;
+            selectedOption = null;
+            
+            // Atualizar barra de progresso
+            progressBar.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
+            
+            // Atualizar pontuação
+            scoreElement.textContent = `Pontuação: ${score}/${questions.length}`;
+            
+            // Reiniciar temporizador
+            clearInterval(timerInterval);
+            timeLeft = 20;
+            document.getElementById('timer').textContent = `Tempo: ${timeLeft}s`;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Tempo: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    selectOption(-1); // Marca como não respondido
+                    explanationElement.textContent = "⏰ Tempo esgotado! Reveja a explicação abaixo.";
+                    explanationElement.style.display = 'block';
+                    explanationElement.style.background = "#ffe0e0";
+                }
+            }, 1000);
+        }
+
+        // Selecionar opção
+        function selectOption(index) {
+            if (selectedOption !== null) return;
+            
+            selectedOption = index;
+            const options = document.querySelectorAll('.option');
+            const correctIndex = questions[currentQuestion].answer;
+            const isCorrect = index === correctIndex;
+            
+            options.forEach((option, i) => {
+                if (i === correctIndex) {
+                    option.classList.add('correct');
+                } else if (i === index && i !== correctIndex) {
+                    option.classList.add('incorrect');
+                }
+                
+                if (i === index) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            if (isCorrect) {
+                soundCorrect.currentTime = 0; soundCorrect.play();
+                score++;
+                scoreElement.textContent = `Pontuação: ${score}/${questions.length}`;
+                explanationElement.textContent = questions[currentQuestion].explanation_correct;
+            } else {
+                soundWrong.currentTime = 0; soundWrong.play();
+                explanationElement.textContent = questions[currentQuestion].explanation_incorrect;
+            }
+            
+            explanationElement.style.display = 'block';
+            explanationElement.style.background = isCorrect ? "#e0ffe0" : "#ffe0e0";
+            nextButton.disabled = false;
+            clearInterval(timerInterval);
+        }
+
+        // Próxima pergunta
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Mostrar resultados finais
+        function showResults() {
+            const percentage = Math.round((score / questions.length) * 100);
+            finalScoreElement.textContent = `${score}/${questions.length}`;
+            
+            let message;
+            if (percentage >= 90) {
+                message = "🎉 Excelente! Você é um expert em testes estatísticos!";
+            } else if (percentage >= 70) {
+                message = "👍 Bom trabalho! Você conhece bem os principais testes!";
+            } else if (percentage >= 50) {
+                message = "💪 Continue estudando! Você está no caminho certo!";
+            } else {
+                message = "📚 Revise os conceitos e tente novamente! A prática leva à perfeição!";
+            }
+            
+            resultMessageElement.textContent = message;
+            resultModal.classList.add('active');
+        }
+
+        // Reiniciar quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedOption = null;
+            resultModal.classList.remove('active');
+            quizContainer.classList.remove('active');
+            startMenu.style.display = 'block';
+        }
+
+        // Event listeners
+        nextButton.addEventListener('click', nextQuestion);
+        restartButton.addEventListener('click', restartQuiz);
+
+        const soundCorrect = document.getElementById('sound-correct');
+        const soundWrong = document.getElementById('sound-wrong');
+    </script>
+</body>
+</html>
