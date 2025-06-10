@@ -290,6 +290,292 @@ scatter(componentes[1,:], componentes[2,:],
   </div>
 </div>
 
+### O que é PCA (Análise de Componentes Principais)?
+
+A **Análise de Componentes Principais (PCA)** é uma técnica de redução de dimensionalidade que transforma um conjunto de variáveis possivelmente correlacionadas em um conjunto menor de variáveis não correlacionadas chamadas **componentes principais**.
+
+### Formulação Matemática
+
+Seja **X** uma matriz de dados $n \times p$, onde:
+- $n$ = número de observações
+- $p$ = número de variáveis
+
+#### Passo 1: Padronização
+Os dados são padronizados para ter média zero e variância unitária:
+
+$$\mathbf{Z} = \frac{\mathbf{X} - \boldsymbol{\mu}}{\boldsymbol{\sigma}}$$
+
+onde $\boldsymbol{\mu}$ é o vetor de médias e $\boldsymbol{\sigma}$ é o vetor de desvios-padrão.
+
+#### Passo 2: Matriz de Covariância
+A matriz de covariância dos dados padronizados é:
+
+$$\mathbf{C} = \frac{1}{n-1}\mathbf{Z}^T\mathbf{Z}$$
+
+#### Passo 3: Decomposição Espectral
+Os componentes principais são obtidos através da decomposição espectral de **C**:
+
+$$\mathbf{C} = \mathbf{V}\mathbf{\Lambda}\mathbf{V}^T$$
+
+onde:
+- $\mathbf{V}$ = matriz dos autovetores (loadings)
+- $\mathbf{\Lambda}$ = matriz diagonal dos autovalores
+
+#### Passo 4: Transformação dos Dados
+Os **scores** (coordenadas dos pontos no novo espaço) são calculados como:
+
+$$\mathbf{Y} = \mathbf{Z}\mathbf{V}$$
+
+## O que é um Biplot?
+
+Um **biplot** é uma representação gráfica que mostra simultaneamente:
+
+1. **Observações** (pontos) projetadas no espaço dos componentes principais
+2. **Variáveis originais** (setas) representadas pelos seus loadings
+
+### Componentes do Biplot
+
+#### 1. Pontos (Scores)
+Cada ponto representa uma observação no espaço bidimensional PC1-PC2:
+
+$$\text{Ponto}_i = (y_{i1}, y_{i2})$$
+
+onde $y_{ij}$ é o score da observação $i$ no componente principal $j$.
+
+#### 2. Setas (Loadings)
+Cada seta representa uma variável original e mostra:
+
+$$\text{Seta}_k = (v_{k1}, v_{k2})$$
+
+onde $v_{kj}$ é o loading da variável $k$ no componente principal $j$.
+
+## Interpretação do Biplot do Dataset Iris
+
+### Informações do Gráfico
+
+**Eixos:**
+- **PC1**: Primeiro componente principal (maior variância explicada)
+- **PC2**: Segundo componente principal (segunda maior variância)
+
+**Porcentagem de Variância Explicada:**
+- PC1 ≈ 73%
+- PC2 ≈ 23%
+- **Total ≈ 96%** da variância original é preservada
+
+### Interpretação das Setas (Variáveis)
+
+As quatro setas representam as medidas das flores:
+
+1. **Sepal.Length** (Comprimento da Sépala)
+2. **Sepal.Width** (Largura da Sépala)
+3. **Petal.Length** (Comprimento da Pétala)
+4. **Petal.Width** (Largura da Pétala)
+
+#### Propriedades das Setas:
+
+**Comprimento:**
+- Setas mais longas = variáveis com maior contribuição para os componentes principais
+- Setas mais curtas = variáveis com menor contribuição
+
+**Direção:**
+- Setas apontando na **mesma direção** = variáveis **positivamente correlacionadas**
+- Setas apontando em **direções opostas** = variáveis **negativamente correlacionadas**
+- Setas **perpendiculares** = variáveis **não correlacionadas**
+
+**Ângulo com os eixos:**
+- Seta paralela ao PC1 = variável contribui principalmente para PC1
+- Seta paralela ao PC2 = variável contribui principalmente para PC2
+
+### Interpretação dos Pontos (Observações)
+
+**Cores dos Pontos:**
+- **Azul**: *Iris setosa*
+- **Laranja**: *Iris versicolor*  
+- **Verde**: *Iris virginica*
+
+**Posicionamento:**
+- Pontos próximos = observações similares
+- Pontos distantes = observações diferentes
+
+### Elipses de Confiança
+
+As elipses coloridas representam regiões de **confiança estatística** (≈68%) para cada espécie:
+
+$$\text{Elipse} = \{(\mathbf{x} - \boldsymbol{\mu})^T\mathbf{C}^{-1}(\mathbf{x} - \boldsymbol{\mu}) \leq \chi^2_{2,0.68}\}$$
+
+onde:
+- $\boldsymbol{\mu}$ = centroide do grupo
+- $\mathbf{C}$ = matriz de covariância do grupo
+- $\chi^2_{2,0.68}$ = quantil da distribuição qui-quadrado
+
+## Conclusões do Biplot Iris
+
+### Padrões Observados:
+
+1. **Separação Clara**: As três espécies formam grupos bem distintos
+2. **Setosa vs. Outras**: *Iris setosa* está claramente separada das outras duas espécies
+3. **Correlações**: 
+   - Comprimento e largura da pétala são altamente correlacionados
+   - Largura da sépala tem comportamento diferente das outras medidas
+
+### Interpretação Biológica:
+
+- **PC1** parece representar o "tamanho geral" da flor (todas as medidas exceto largura da sépala)
+- **PC2** está relacionado principalmente com a largura da sépala
+- *Iris setosa* tem características distintas (menor tamanho geral, maior largura relativa da sépala)
+- *Iris versicolor* e *virginica* são mais similares entre si, mas ainda distinguíveis
+
+### Vantagens do Biplot:
+
+1. **Redução de Dimensionalidade**: 4 variáveis → 2 dimensões (96% da variância preservada)
+2. **Visualização Completa**: Mostra relações entre variáveis E observações simultaneamente
+3. **Interpretabilidade**: Permite entender tanto a estrutura dos dados quanto as relações entre variáveis
+4. **Identificação de Padrões**: Facilita a identificação de grupos e outliers
+
+O biplot é uma ferramenta poderosa que combina a análise exploratória de dados com rigor estatístico, fornecendo insights tanto sobre a estrutura dos dados quanto sobre as relações entre as variáveis originais.
+
+### Exemplo Prático Completo em Julia
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># PCA Biplot para o Dataset Iris em Julia
+using RDatasets, MultivariateStats, Plots, StatsBase, Statistics, Distributions, LinearAlgebra
+
+# Carregar o dataset Iris
+iris = dataset("datasets", "iris")
+
+# Preparar os dados (apenas as variáveis numéricas)
+X = Matrix(iris[:, 1:4])'  # Transpor para ter variáveis nas linhas
+species = iris.Species
+
+# Padronizar os dados (centrar e escalar)
+X_std = standardize(ZScoreTransform, X, dims=2)
+
+# Realizar PCA
+pca_model = fit(PCA, X_std; maxoutdim=2)
+
+# Obter as coordenadas dos pontos (scores)
+scores = predict(pca_model, X_std)'
+
+# Obter os loadings (coeficientes das variáveis) - apenas PC1 e PC2
+loadings = projection(pca_model)  # Não transpor ainda
+loadings_2d = loadings[:, 1:2]    # Pegar apenas as 2 primeiras colunas
+
+# Nomes das variáveis
+var_names = ["Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width"]
+
+# Criar o biplot
+p = scatter(scores[:, 1], scores[:, 2], 
+           group=species,
+           xlabel="PC1 ($(round(principalvars(pca_model)[1]/sum(principalvars(pca_model))*100, digits=1))%)",
+           ylabel="PC2 ($(round(principalvars(pca_model)[2]/sum(principalvars(pca_model))*100, digits=1))%)",
+           title="",
+           legend=:topright,
+           alpha=0.7,
+           markersize=4)
+
+# Adicionar as setas dos loadings (multiplicar por fator para visualização)
+scale_factor = 3.0
+for i in 1:4
+    quiver!(p, [0], [0], 
+            quiver=([loadings_2d[i, 1] * scale_factor], [loadings_2d[i, 2] * scale_factor]),
+            color=:grey, linewidth=2, arrow=true)
+    
+    # Adicionar labels das variáveis
+    annotate!(p, loadings_2d[i, 1] * scale_factor * 1.1, 
+             loadings_2d[i, 2] * scale_factor * 1.1, 
+             text(var_names[i], 10, :grey))
+end
+
+# Função para criar elipse de confiança
+function confidence_ellipse(x, y, confidence=0.95)
+    n = length(x)
+    if n < 3
+        return x, y  # Não é possível criar elipse com menos de 3 pontos
+    end
+    
+    # Calcular centro
+    cx = mean(x)
+    cy = mean(y)
+    
+    # Calcular matriz de covariância
+    cov_matrix = cov([x y])
+    
+    # Eigendecomposition
+    eigenvals, eigenvecs = eigen(cov_matrix)
+    
+    # Fator de escala baseado na distribuição chi-quadrado
+    scale = sqrt(quantile(Chisq(2), confidence))
+    
+    # Criar pontos da elipse
+    theta = range(0, 2π, length=100)
+    ellipse_x = zeros(100)
+    ellipse_y = zeros(100)
+    
+    for i in 1:100
+        point = [cos(theta[i]), sin(theta[i])]
+        scaled_point = scale * sqrt.(eigenvals) .* point
+        rotated_point = eigenvecs * scaled_point
+        ellipse_x[i] = cx + rotated_point[1]
+        ellipse_y[i] = cy + rotated_point[2]
+    end
+    
+    return ellipse_x, ellipse_y
+end
+
+# Adicionar elipses de confiança para cada espécie
+species_unique = unique(species)
+colors = [:turquoise, :orange, :purple]  # Cores correspondentes aos grupos
+
+for (i, sp) in enumerate(species_unique)
+    mask = species .== sp
+    x_group = scores[mask, 1]
+    y_group = scores[mask, 2]
+    
+    if length(x_group) > 2  # Precisa de pelo menos 3 pontos
+        ellipse_x, ellipse_y = confidence_ellipse(x_group, y_group, 0.68)  # ~1 desvio padrão
+        plot!(p, ellipse_x, ellipse_y, 
+              linewidth=2, 
+              linestyle=:solid, 
+              color=colors[i], 
+              alpha=0.3,
+              fillalpha=0.1,
+              fillcolor=colors[i],
+              label="")
+    end
+end
+
+# Adicionar linhas de referência
+hline!(p, [0], color=:black, linestyle=:dash, alpha=0.7)
+vline!(p, [0], color=:black, linestyle=:dash, alpha=0.7)
+
+# Mostrar o gráfico
+display(p)
+
+# Imprimir informações adicionais
+println("Variância explicada:")
+println("PC1: $(round(principalvars(pca_model)[1]/sum(principalvars(pca_model))*100, digits=2))%")
+println("PC2: $(round(principalvars(pca_model)[2]/sum(principalvars(pca_model))*100, digits=2))%")
+println("Total: $(round(sum(principalvars(pca_model)[1:2])/sum(principalvars(pca_model))*100, digits=2))%")
+
+println("\nLoadings (Componentes Principais):")
+println("Variável\t\tPC1\t\tPC2")
+for i in 1:4
+    println("$(var_names[i])\t$(round(loadings_2d[i,1], digits=3))\t\t$(round(loadings_2d[i,2], digits=3))")
+end
+    </code></pre>
+  </div>
+</div>
+
+<img src="{{ site.baseurl }}/assets/images/pca_biplot_iris.png" alt="Ilustração de análise multivariada" style="max-width: 600px; display: block; margin: 1em auto;">
+
 ### Análise de Agrupamento (K-means)
 
 <div class="code-container">
