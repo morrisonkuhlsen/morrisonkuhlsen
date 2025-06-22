@@ -1,0 +1,168 @@
+body {
+            background: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0 0 32px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 600px;
+            margin: 24px auto;
+            background: #181818;
+            box-shadow: none;
+            border-radius: 0;
+            font-size: 1rem;
+        }
+
+        th, td {
+    padding: 10px 22px; /* Aumenta o espaçamento horizontal */
+    text-align: center;
+    border-bottom: 1px solid #232323;
+    background: none;
+    transition: none;
+    font-size: 1rem;
+}
+
+        th {
+            background: none;
+            color: #e0e0e0;
+            font-weight: 600;
+            border-bottom: 2px solid #444;
+            letter-spacing: 0.02em;
+        }
+
+        tr:nth-child(even) {
+            background: #161616;
+        }
+
+        tr:nth-child(odd) {
+            background: #181818;
+        }
+
+        tr:hover {
+            background: #232323;
+        }
+
+        td:first-child {
+            background: none;
+            color: #ffcc00;
+            font-weight: 600;
+            border-right: none;
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-top: 24px;
+            margin-bottom: 8px;
+            letter-spacing: 0.01em;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 32px;
+            border-top: 1px solid #232323;
+            padding-top: 12px;
+        }
+
+        /* Title style */
+        h1 {
+            text-align: center;
+            font-size: medium;
+        }
+        /* Highlight clicked row and column */
+    
+.highlight-click {
+    background-color: #27313f !important;
+}
+
+    /* Bold first column */
+        td:first-child {
+            background-color: #121212; /* Cor diferente para a primeira coluna */
+            font-weight: bold;
+        }
+
+        /* Sticky header */
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #121212; /* Cor diferente para a primeira coluna */
+            z-index: 2;
+        }
+
+        /* NOVO: Congela a fileira do Z positivo no topo ao rolar */
+        tr.sticky-z-positive th, tr.sticky-z-positive td {
+            position: sticky;
+            top: 0; /* Agora sobrepõe a fileira do Z negativo */
+            background-color: #121212;
+            z-index: 3; /* Maior que o thead */
+        }
+
+        /* logotipo*/
+        .logo {
+            margin-top: 20px;
+            text-align: center;
+            /* Ajuste conforme necessário */
+        }
+
+        .logo-image {
+            width: 240px;
+            height: 93px;
+            transition: transform 0.3s ease-in-out; /* Transição suave */
+}
+
+        .logo-image:hover {
+            transform: scale(1.05); /* Aumenta em 10% o tamanho ao passar o cursor */
+        }
+
+        /* Highlight column header and first row */
+        .highlight-header {
+            color: #ffcc00 !important;
+            background-color: #27313f !important;
+        }
+
+        /* Highlight full row and column */
+        .highlight-full-row {
+            background-color: #27313f !important;
+        }
+
+        .highlight-full-col {
+            background-color: #27313f !important;
+        }
+
+        /* Garante que a célula selecionada fique destacada mesmo com hover */
+td.highlight-click,
+td.highlight-click:hover {
+    background: #27313f !important;
+    color: #ffffff !important;
+}
+
+/* Hover padrão para qualquer célula não selecionada */
+td:hover:not(.highlight-click) {
+    background: #232323;
+    cursor: pointer;
+}
+
+/* Estado normal da célula selecionada */
+td.highlight-click {
+    background: #27313f !important;
+    color: #ffcc00 !important;
+    font-weight: bold;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Hover ESPECIAL apenas para a célula selecionada */
+td.highlight-click:hover {
+    background: #3a2e1a !important;
+    color: #ffd700 !important;
+    box-shadow: 0 0 0 2px #ffcc00 inset;
+    font-weight: bold;
+}
