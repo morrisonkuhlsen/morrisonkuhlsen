@@ -42,6 +42,24 @@ body {
             background: #181818;
         }
 
+        /* Hover effect */
+        tr.highlight-row > td {
+            background: rgba(74, 144, 226, 0.1) !important;
+        }
+
+        .highlight-col {
+            background: rgba(74, 144, 226, 0.1) !important;
+        }
+
+        .highlight-header {
+            background: rgba(74, 144, 226, 0.2) !important;
+        }
+
+        /* Mantém o hover original para linhas não selecionadas */
+        tr:not(.selected):hover > td:not(.selected) {
+            background: #232323;
+        }
+
         tr:hover {
             background: #232323;
         }
@@ -53,6 +71,16 @@ body {
             border-right: none;
             text-align: left;
         }
+        
+        /* Células não selecionadas em cinza */
+        td:not(.selected) {
+            color: #888888;
+        }
+        
+        /* Células selecionadas em branco */
+        td.selected {
+            color: #ffffff;
+        }
 
         h1 {
             font-size: 1.2rem;
@@ -61,6 +89,118 @@ body {
             margin-top: 24px;
             margin-bottom: 8px;
             letter-spacing: 0.01em;
+        }
+
+        /* Header and Controls */
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            margin: 24px auto 16px;
+            padding: 0 16px;
+            max-width: 1200px;
+            position: relative;
+        }
+
+        .header-content {
+            flex: 1;
+        }
+
+        .table-header h1 {
+            margin: 0 0 12px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            letter-spacing: 0.01em;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .selection-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(40, 40, 40, 0.8);
+            padding: 10px 16px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            margin-top: 12px;
+            position: relative;
+        }
+
+        .selection-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .selection-item .label {
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        #copyBtn {
+            background: transparent;
+            border: 1px solid #444;
+            color: #888;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        #copyBtn:hover {
+            color: #fff;
+            border-color: #666;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .divider {
+            width: 1px;
+            height: 56px;
+            background: #444;
+            margin: 0 10px;
+        }
+
+        .logo {
+            height: 56px;
+            width: auto;
+            display: block;
+            border-radius: 4px;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            font-size: 13px;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+        }
+
+        /* Table container */
+        .table-container {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 32px;
+            border-top: 1px solid #232323;
         }
 
         /* Footer styles */
@@ -79,9 +219,77 @@ body {
             font-size: medium;
         }
         /* Highlight clicked row and column */
-    
 .highlight-click {
     background-color: #27313f !important;
+}
+
+/* Selected cells */
+td.selected {
+    position: relative;
+    z-index: 10;
+    background: #2a4b8d !important;
+    color: #fff !important;
+    font-weight: bold;
+    box-shadow: 0 0 0 2px #4a90e2;
+}
+
+/* Garante que células selecionadas tenham prioridade */
+td.selected, 
+tr.highlight-row > td.selected,
+.highlight-col.selected {
+    background: #2a4b8d !important;
+    color: #fff !important;
+    position: relative;
+    z-index: 5;
+}
+
+/* Estilo para células selecionadas com hover */
+tr.highlight-row > td.selected,
+.highlight-col.selected {
+    background: #3a5b9d !important;
+    box-shadow: 0 0 0 2px #5aa0ff;
+}
+
+/* Mantém o destaque da linha/coluna quando uma célula está selecionada */
+tr.has-selected > td:not(.selected) {
+    background: rgba(74, 144, 226, 0.1) !important;
+}
+
+.has-selected-col:not(.selected) {
+    background: rgba(74, 144, 226, 0.1) !important;
+}
+
+/* Hover cruzado mais visível */
+tr:hover > td:not(.selected) {
+    background: rgba(100, 170, 255, 0.1) !important;
+}
+
+.highlight-col:not(.selected) {
+    background: rgba(100, 170, 255, 0.1) !important;
+}
+
+td.selected:first-child {
+    background: #1a3a6a !important;
+    color: #ffcc00 !important;
+}
+
+
+
+/* Tooltip */
+.tooltip {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
     /* Bold first column */
