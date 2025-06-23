@@ -365,8 +365,19 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const z = cell.getAttribute('data-z');
         const p = cell.getAttribute('data-p');
+        let tooltipText = '';
         if (z && p) {
-            tooltip.textContent = `Z = ${z}, P = ${formatNumber(p)}`;
+            tooltipText = `Z = ${z}, P = ${formatNumber(p)}`;
+            // Se já há uma célula selecionada (mas não duas), calcula o intervalo
+            if (selectedCells.length === 1 && selectedCells[0] !== cell) {
+                const selectedCell = selectedCells[0];
+                const selectedP = selectedCell.getAttribute('data-p');
+                if (selectedP && !isNaN(parseFloat(selectedP)) && !isNaN(parseFloat(p))) {
+                    const interval = Math.abs(parseFloat(selectedP) - parseFloat(p));
+                    tooltipText += `\nIntervalo: ${interval.toFixed(4)}`;
+                }
+            }
+            tooltip.textContent = tooltipText;
             tooltip.style.opacity = '1';
             tooltip.style.position = 'absolute';
             tooltip.style.background = 'rgba(0, 0, 0, 0.8)';
