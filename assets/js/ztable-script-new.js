@@ -283,17 +283,33 @@ document.addEventListener('DOMContentLoaded', function() {
             
             console.log('Valores da célula 1:', { z: cellZValue, p: cellPValue });
             
-            if (cellZValue && cellPValue) {
-                z1Value.textContent = `${cellZValue} (${cellPValue})`;
-                console.log('Z1 atualizado:', `${cellZValue} (${cellPValue})`);
+            let z1Display = '-';
+            let p1Display = '-';
+            
+            // Verifica se os valores são válidos
+            if (cellZValue && !isNaN(Number(cellZValue)) && cellPValue && !isNaN(Number(cellPValue))) {
+                z1Display = Number(cellZValue).toFixed(2);
+                p1Display = formatProbability(cellPValue);
             } else {
-                // Se não encontrar os atributos, tenta calcular
+                // Se não encontrar os atributos válidos, tenta calcular
                 const rowZ = parseFloat(row1.cells[0].textContent);
                 const colZ = (cell1.cellIndex - 1) * 0.01;
                 const z1 = rowZ + colZ;
                 const p1 = formatProbability(cell1.textContent);
-                z1Value.textContent = p1 ? `${z1.toFixed(2)} (${p1})` : z1.toFixed(2);
-                console.log('Z1 calculado:', z1Value.textContent);
+                
+                if (!isNaN(z1)) z1Display = z1.toFixed(2);
+                if (p1 !== '') p1Display = p1;
+            }
+            
+            // Monta o texto final, mostrando apenas os valores válidos
+            if (z1Display !== '-' && p1Display !== '-') {
+                z1Value.textContent = `${z1Display} (${p1Display})`;
+            } else if (z1Display !== '-') {
+                z1Value.textContent = z1Display;
+            } else if (p1Display !== '-') {
+                z1Value.textContent = `P: ${p1Display}`;
+            } else {
+                z1Value.textContent = '-';
             }
             
             // Atualizar Z2 e intervalo se existir
@@ -307,41 +323,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 console.log('Valores da célula 2:', { z: cell2ZValue, p: cell2PValue });
                 
-                if (cell2ZValue && cell2PValue) {
-                    z2Value.textContent = `${cell2ZValue} (${cell2PValue})`;
-                    
-                    // Calcular intervalo
-                    const p1 = parseFloat(cellPValue);
-                    const p2 = parseFloat(cell2PValue);
-                    
-                    if (!isNaN(p1) && !isNaN(p2)) {
-                        const interval = Math.abs(p2 - p1);
-                        intervalValue.textContent = interval.toFixed(4);
-                        console.log(`Intervalo calculado: ${p2} - ${p1} = ${interval.toFixed(4)}`);
-                    } else {
-                        intervalValue.textContent = '-';
-                    }
-                    
-                    console.log('Z2 atualizado:', z2Value.textContent);
+                let z2Display = '-';
+                let p2Display = '-';
+                
+                // Verifica se os valores são válidos
+                if (cell2ZValue && !isNaN(Number(cell2ZValue)) && cell2PValue && !isNaN(Number(cell2PValue))) {
+                    z2Display = Number(cell2ZValue).toFixed(2);
+                    p2Display = formatProbability(cell2PValue);
                 } else {
-                    // Se não encontrar os atributos, tenta calcular
+                    // Se não encontrar os atributos válidos, tenta calcular
                     const rowZ2 = parseFloat(row2.cells[0].textContent);
                     const colZ2 = (cell2.cellIndex - 1) * 0.01;
                     const z2 = rowZ2 + colZ2;
                     const p2 = formatProbability(cell2.textContent);
-                    z2Value.textContent = p2 ? `${z2.toFixed(2)} (${p2})` : z2.toFixed(2);
                     
-                    // Calcular intervalo
-                    const p1 = parseFloat(cell1.textContent);
-                    if (!isNaN(p1) && !isNaN(parseFloat(p2))) {
-                        const interval = Math.abs(parseFloat(p2) - p1);
-                        intervalValue.textContent = interval.toFixed(4);
-                        console.log(`Intervalo calculado: ${p2} - ${p1} = ${interval.toFixed(4)}`);
-                    } else {
-                        intervalValue.textContent = '-';
-                    }
-                    
-                    console.log('Z2 calculado:', z2Value.textContent);
+                    if (!isNaN(z2)) z2Display = z2.toFixed(2);
+                    if (p2 !== '') p2Display = p2;
+                }
+                
+                // Monta o texto final, mostrando apenas os valores válidos
+                if (z2Display !== '-' && p2Display !== '-') {
+                    z2Value.textContent = `${z2Display} (${p2Display})`;
+                } else if (z2Display !== '-') {
+                    z2Value.textContent = z2Display;
+                } else if (p2Display !== '-') {
+                    z2Value.textContent = `P: ${p2Display}`;
+                } else {
+                    z2Value.textContent = '-';
+                }
+                
+                // Calcular intervalo
+                const p1 = cell1.getAttribute('data-p') ? parseFloat(cell1.getAttribute('data-p')) : parseFloat(cell1.textContent);
+                const p2 = cell2.getAttribute('data-p') ? parseFloat(cell2.getAttribute('data-p')) : parseFloat(cell2.textContent);
+                
+                if (!isNaN(p1) && !isNaN(p2)) {
+                    const interval = Math.abs(p2 - p1);
+                    intervalValue.textContent = interval.toFixed(4);
+                    console.log(`Intervalo calculado: ${p2} - ${p1} = ${interval.toFixed(4)}`);
+                } else {
+                    intervalValue.textContent = '-';
                 }
             } else {
                 z2Value.textContent = '-';
@@ -366,13 +386,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const z = cell.getAttribute('data-z');
         const p = cell.getAttribute('data-p');
         let tooltipText = '';
-        if (z && p) {
-            tooltipText = `Z = ${z}, P = ${formatNumber(p)}`;
+        
+        // Verifica se os valores são válidos
+        const isValidZ = z && !isNaN(Number(z));
+        const isValidP = p && !isNaN(Number(p));
+        
+        if (isValidZ || isValidP) {
+            const parts = [];
+            if (isValidZ) parts.push(`Z = ${Number(z).toFixed(2)}`);
+            if (isValidP) parts.push(`P = ${formatNumber(p)}`);
+            
+            tooltipText = parts.join(', ');
+            
             // Se já há uma célula selecionada (mas não duas), calcula o intervalo
-            if (selectedCells.length === 1 && selectedCells[0] !== cell) {
+            if (selectedCells.length === 1 && selectedCells[0] !== cell && isValidP) {
                 const selectedCell = selectedCells[0];
                 const selectedP = selectedCell.getAttribute('data-p');
-                if (selectedP && !isNaN(parseFloat(selectedP)) && !isNaN(parseFloat(p))) {
+                if (selectedP && !isNaN(parseFloat(selectedP))) {
                     const interval = Math.abs(parseFloat(selectedP) - parseFloat(p));
                     tooltipText += `\nIntervalo: ${interval.toFixed(4)}`;
                 }
@@ -407,17 +437,43 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedCells.length === 1) {
             const z = selectedCells[0].getAttribute('data-z');
             const p = selectedCells[0].getAttribute('data-p');
-            text = `Z = ${z}, P = ${formatNumber(p)}`;
+            const isValidZ = z && !isNaN(Number(z));
+            const isValidP = p && !isNaN(Number(p));
+            
+            const parts = [];
+            if (isValidZ) parts.push(`Z = ${Number(z).toFixed(2)}`);
+            if (isValidP) parts.push(`P = ${formatNumber(p)}`);
+            
+            text = parts.join(', ');
         } else {
             const z1 = selectedCells[0].getAttribute('data-z');
             const z2 = selectedCells[1].getAttribute('data-z');
             const p1 = selectedCells[0].getAttribute('data-p');
             const p2 = selectedCells[1].getAttribute('data-p');
-            const interval = Math.abs(parseFloat(p2) - parseFloat(p1)).toFixed(4);
             
-            text = `Z1 = ${z1}, P1 = ${formatNumber(p1)}\n` +
-                   `Z2 = ${z2}, P2 = ${formatNumber(p2)}\n` +
-                   `Intervalo: ${interval}`;
+            const isValidZ1 = z1 && !isNaN(Number(z1));
+            const isValidZ2 = z2 && !isNaN(Number(z2));
+            const isValidP1 = p1 && !isNaN(Number(p1));
+            const isValidP2 = p2 && !isNaN(Number(p2));
+            
+            const line1 = [];
+            if (isValidZ1) line1.push(`Z1 = ${Number(z1).toFixed(2)}`);
+            if (isValidP1) line1.push(`P1 = ${formatNumber(p1)}`);
+            
+            const line2 = [];
+            if (isValidZ2) line2.push(`Z2 = ${Number(z2).toFixed(2)}`);
+            if (isValidP2) line2.push(`P2 = ${formatNumber(p2)}`);
+            
+            let intervalText = '';
+            if (isValidP1 && isValidP2) {
+                const interval = Math.abs(parseFloat(p2) - parseFloat(p1)).toFixed(4);
+                intervalText = `\nIntervalo: ${interval}`;
+            }
+            
+            text = '';
+            if (line1.length > 0) text += line1.join(', ');
+            if (line2.length > 0) text += (text ? '\n' : '') + line2.join(', ');
+            if (intervalText) text += intervalText;
         }
         
         navigator.clipboard.writeText(text).then(() => {
