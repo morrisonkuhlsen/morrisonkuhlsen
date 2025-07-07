@@ -424,23 +424,6 @@ Este exemplo demonstra como criar uma visualização geográfica interativa do P
 
 4. **Dados Atualizados**: Certifique-se de usar os dados mais recentes do IBGE para análises reais.
 
-## Próximos Passos
-
-Nesta série, exploraremos diversos aspectos da visualização de dados geoespaciais em Julia. Aqui está um preview do que está por vir:
-
-1. **Mapas de Calor e Densidade** - Visualizando concentrações populacionais e padrões espaciais
-2. **Séries Temporais em Mapas** - Animando a evolução de indicadores ao longo do tempo
-3. **Mapas Interativos** - Adicionando interatividade com tooltips e zoom
-4. **Análise Espacial Avançada** - Correlações espaciais e estatísticas regionais
-5. **Integração com Dados Externos** - Combinando múltiplas fontes de dados geoespaciais
-
-Fique ligado para o próximo post onde exploraremos como criar mapas de calor detalhados mostrando a distribuição populacional nas cidades brasileiras!
-
-### Melhorias para este Mapa
-- Adicionar animações mostrando a evolução do PIB ao longo dos anos
-- Incluir informações adicionais ao passar o mouse sobre cada estado
-- Comparar com outros indicadores socioeconômicos
-
 ## O Módulo GeoBR
 
 O pacote `GeoArtifacts.jl` inclui o submódulo `GeoBR`, que fornece acesso a uma variedade de dados geoespaciais do Brasil. Aqui estão as principais funções disponíveis:
