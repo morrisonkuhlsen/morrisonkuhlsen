@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Covariância — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Covariância</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Covariância interativa" style="flex-wrap: nowrap;">
+        <span class="part cov-xy" data-part="cov_xy" tabindex="0" title="Covariância entre X e Y"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="display: flex; align-items: center;">
+            <span class="part summation" data-part="summation" tabindex="0" title="Somatório"></span>
+            <span class="part x-dev" data-part="x_dev" tabindex="0" title="Desvio de X" style="white-space: nowrap;"></span>
+            <span class="part y-dev" data-part="y_dev" tabindex="0" title="Desvio de Y" style="white-space: nowrap;"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part divisor" data-part="divisor" tabindex="0" title="Número de observações"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        cov_xy: "\\displaystyle Cov(X,Y)",
+        summation: "\\displaystyle \\sum_{i=1}^{n}",
+        x_dev: "\\displaystyle (x_i - \\mu_x)",
+        y_dev: "\\displaystyle (y_i - \\mu_y)",
+        divisor: "\\displaystyle n"
+      },
+      explanations: {
+        cov_xy: {
+          title: "Covariância",
+          text: "Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa."
+        },
+        summation: {
+          title: "Somatório",
+          text: "Soma os produtos dos desvios para todas as 'n' observações do conjunto de dados."
+        },
+        x_dev: {
+          title: "Desvio de X",
+          text: "A diferença entre cada valor de X (xi) e a média de X (μx). Mostra o quanto cada ponto se afasta da média."
+        },
+        y_dev: {
+          title: "Desvio de Y",
+          text: "A diferença entre cada valor de Y (yi) e a média de Y (μy). Mostra o quanto cada ponto se afasta da média."
+        },
+        divisor: {
+          title: "Número de Observações (n)",
+          text: "O número total de pares de observações no conjunto de dados. Normaliza a soma para obter a média dos produtos dos desvios."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

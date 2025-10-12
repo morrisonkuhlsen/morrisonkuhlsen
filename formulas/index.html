@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teorema de Bayes — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Teorema de Bayes</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula de Bayes interativa">
+        <span class="part posterior" data-part="posterior" tabindex="0" title="Posterior: P(A|B)"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part likelihood" data-part="likelihood" tabindex="0" title="Likelihood: P(B|A)"></span>
+            <span class="op">·</span>
+            <span class="part prior" data-part="prior" tabindex="0" title="Prior: P(A)"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part marginal" data-part="marginal" tabindex="0" title="Marginal: P(B)"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        posterior: "\\displaystyle P(A\\mid B)",
+        likelihood: "\\displaystyle P(B\\mid A)",
+        prior: "\\displaystyle P(A)",
+        marginal: "\\displaystyle P(B)"
+      },
+      explanations: {
+        posterior: {
+          title: "Posterior",
+          text: "Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B."
+        },
+        likelihood: {
+          title: "Likelihood",
+          text: "Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B."
+        },
+        prior: {
+          title: "Prior",
+          text: "Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições."
+        },
+        marginal: {
+          title: "Marginal (Evidência)",
+          text: "Probabilidade de observar B sob todos os cenários; normaliza a equação."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

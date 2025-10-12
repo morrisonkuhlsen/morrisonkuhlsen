@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Regressão Linear — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Regressão Linear Simples</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Regressão Linear Simples interativa">
+        <span class="part y-hat" data-part="y_hat" tabindex="0" title="Valor Previsto de Y"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <span class="part beta-0" data-part="beta_0" tabindex="0" title="Intercepto"></span>
+        <span class="op">+</span>
+        <span class="part beta-1" data-part="beta_1" tabindex="0" title="Coeficiente Angular (Inclinação)"></span>
+        <span class="part x-variable" data-part="x_variable" tabindex="0" title="Variável Independente"></span>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        y_hat: "\\displaystyle \\hat{y}",
+        beta_0: "\\displaystyle \\beta_0",
+        beta_1: "\\displaystyle \\beta_1",
+        x_variable: "\\displaystyle x"
+      },
+      explanations: {
+        y_hat: {
+          title: "Valor Previsto (ŷ)",
+          text: "O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x)."
+        },
+        beta_0: {
+          title: "Intercepto (β₀)",
+          text: "O valor previsto de Y quando a variável independente (x) é igual a zero. É o ponto onde a linha de regressão cruza o eixo Y."
+        },
+        beta_1: {
+          title: "Coeficiente Angular (β₁)",
+          text: "Mede a mudança no valor previsto de Y para cada aumento de uma unidade em x. Representa a inclinação da linha de regressão."
+        },
+        x_variable: {
+          title: "Variável Independente (x)",
+          text: "A variável que é usada para prever ou explicar a variação na variável dependente (Y)."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

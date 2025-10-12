@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale-1" />
+  <title>Regra de L'Hôpital — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Regra de L'Hôpital</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Regra de L'Hôpital interativa" style="flex-wrap: nowrap; align-items: center; gap: 1.5rem;">
+        <span class="part condition" data-part="condition" tabindex="0" title="Condição Indeterminada" style="white-space: nowrap;"></span>
+        <span class="op" id="op-equals" style="cursor:pointer; font-size: 3em;" title="Resulta em">⇒</span>
+        <div style="display:flex; align-items: center;">
+            <span class="part lim" data-part="lim" tabindex="0" title="Limite"></span>
+            <div style="display:flex;flex-direction:column;align-items:center;">
+              <div>
+                <span class="part f-prime" data-part="f_prime" tabindex="0" title="Derivada do Numerador"></span>
+              </div>
+              <div class="formula-divider"></div>
+              <div>
+                <span class="part g-prime" data-part="g_prime" tabindex="0" title="Derivada do Denominador"></span>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        condition: "\\displaystyle \\lim_{x \\to c} \\frac{f(x)}{g(x)} = \\frac{0}{0} \\text{ ou } \\frac{\\infty}{\\infty}",
+        lim: "\\displaystyle \\lim_{x \\to c}",
+        f_prime: "\\displaystyle f'(x)",
+        g_prime: "\\displaystyle g'(x)"
+      },
+      explanations: {
+        condition: {
+          title: "Forma Indeterminada",
+          text: "A regra se aplica quando o limite de uma fração f(x)/g(x) resulta em uma forma indeterminada, como 0/0 ou ±∞/±∞."
+        },
+        lim: {
+          title: "Limite",
+          text: "O limite da nova fração é calculado à medida que 'x' se aproxima do mesmo ponto 'c'."
+        },
+        f_prime: {
+          title: "Derivada do Numerador",
+          text: "Calcula-se a derivada da função do numerador original, f(x), resultando em f'(x)."
+        },
+        g_prime: {
+          title: "Derivada do Denominador",
+          text: "Calcula-se a derivada da função do denominador original, g(x), resultando em g'(x). Note que não é a derivada do quociente."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distribuição de Poisson — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição de Poisson</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Distribuição de Poisson interativa">
+        <span class="part p-k" data-part="p_k" tabindex="0" title="Probabilidade de k ocorrências"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part lambda-k" data-part="lambda_k" tabindex="0" title="Lambda elevado a k"></span>
+            <span class="op" style="font-size: 1.5em;">·</span>
+            <span class="part e-lambda" data-part="e_lambda" tabindex="0" title="Exponencial de lambda negativo"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part k-factorial-poisson" data-part="k_factorial_poisson" tabindex="0" title="k Factorial"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        p_k: "\\displaystyle P(X=k)",
+        lambda_k: "\\displaystyle \\lambda^k",
+        e_lambda: "\\displaystyle e^{-\\lambda}",
+        k_factorial_poisson: "\\displaystyle k!"
+      },
+      explanations: {
+        p_k: {
+          title: "Probabilidade de k Ocorrências",
+          text: "A probabilidade de que o evento ocorra exatamente 'k' vezes em um intervalo."
+        },
+        lambda_k: {
+          title: "Taxa Média (λ) Elevada a k",
+          text: "Lambda (λ) é a taxa média de ocorrências do evento. Este termo ajusta a taxa para o número específico de ocorrências 'k'."
+        },
+        e_lambda: {
+          title: "Exponencial da Taxa Média Negativa",
+          text: "O número de Euler (e) elevado a -λ. Este termo representa a probabilidade de nenhuma ocorrência, servindo como base para o cálculo."
+        },
+        k_factorial_poisson: {
+          title: "Fatorial de k",
+          text: "O fatorial do número de ocorrências 'k'. Este termo normaliza a distribuição, ajustando para as diferentes maneiras que as 'k' ocorrências podem ser arranjadas."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

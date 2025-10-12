@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coeficiente de Pearson (r) — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Coeficiente de Correlação de Pearson (r)</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Coeficiente de Pearson interativa">
+        <span class="part r-xy" data-part="r_xy" tabindex="0" title="Coeficiente de Pearson"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part cov-xy-pearson" data-part="cov_xy_pearson" tabindex="0" title="Covariância entre X e Y"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part std-x" data-part="std_x" tabindex="0" title="Desvio Padrão de X"></span>
+            <span class="op" style="font-size: 1.5em;">·</span>
+            <span class="part std-y" data-part="std_y" tabindex="0" title="Desvio Padrão de Y"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        r_xy: "\\displaystyle r_{xy}",
+        cov_xy_pearson: "\\displaystyle Cov(X,Y)",
+        std_x: "\\displaystyle \\sigma_x",
+        std_y: "\\displaystyle \\sigma_y"
+      },
+      explanations: {
+        r_xy: {
+          title: "Coeficiente de Pearson (r)",
+          text: "Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a +1 (correlação positiva perfeita)."
+        },
+        cov_xy_pearson: {
+          title: "Covariância de X e Y",
+          text: "Mede como duas variáveis mudam juntas. É o numerador da fórmula."
+        },
+        std_x: {
+          title: "Desvio Padrão de X",
+          text: "Mede a dispersão ou variabilidade dos dados da variável X em relação à sua média."
+        },
+        std_y: {
+          title: "Desvio Padrão de Y",
+          text: "Mede a dispersão ou variabilidade dos dados da variável Y em relação à sua média."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

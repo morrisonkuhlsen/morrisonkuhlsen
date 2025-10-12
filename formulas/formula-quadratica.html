@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fórmula Quadrática — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Fórmula Quadrática</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula Quadrática interativa">
+        <span class="part x-quadratic" data-part="x_quadratic" tabindex="0" title="Solução x"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="display: flex; align-items: center;">
+            <span class="part neg-b" data-part="neg_b" tabindex="0" title="Coeficiente b negativo"></span>
+            <span class="part plus-minus" data-part="plus_minus" tabindex="0" title="Mais ou Menos"></span>
+            <span class="part discriminant" data-part="discriminant" tabindex="0" title="Discriminante"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part divisor-2a" data-part="divisor_2a" tabindex="0" title="Divisor 2a"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        x_quadratic: "\\displaystyle x",
+        neg_b: "\\displaystyle -b",
+        plus_minus: "\\displaystyle \\pm",
+        discriminant: "\\displaystyle \\sqrt{b^2-4ac}",
+        divisor_2a: "\\displaystyle 2a"
+      },
+      explanations: {
+        x_quadratic: {
+          title: "Solução (x)",
+          text: "Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0."
+        },
+        neg_b: {
+          title: "Coeficiente 'b' Negativo",
+          text: "O oposto do coeficiente 'b', que é o termo que acompanha 'x' na equação."
+        },
+        plus_minus: {
+          title: "Mais ou Menos (±)",
+          text: "Indica que a fórmula gera duas soluções: uma somando a raiz do discriminante e outra subtraindo."
+        },
+        discriminant: {
+          title: "Discriminante (Δ)",
+          text: "A expressão b²-4ac, chamada de discriminante (delta), determina a natureza das raízes (reais ou complexas)."
+        },
+        divisor_2a: {
+          title: "Divisor (2a)",
+          text: "O dobro do coeficiente 'a', que é o termo que acompanha x². Este valor normaliza a expressão."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

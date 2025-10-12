@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Coeficiente Binomial — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Coeficiente Binomial</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Coeficiente Binomial interativa">
+        <span class="part binom" data-part="binom" tabindex="0" title="Coeficiente Binomial: C(n, k)"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part n-factorial" data-part="n_factorial" tabindex="0" title="n Factorial"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part k-factorial" data-part="k_factorial" tabindex="0" title="k Factorial"></span>
+            <span class="op" style="font-size: 1.5em;">·</span>
+            <span class="part nk-factorial" data-part="nk_factorial" tabindex="0" title="(n-k) Factorial"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        binom: "\\displaystyle \\binom{n}{k}",
+        n_factorial: "\\displaystyle n!",
+        k_factorial: "\\displaystyle k!",
+        nk_factorial: "\\displaystyle (n-k)!"
+      },
+      explanations: {
+        binom: {
+          title: "Coeficiente Binomial",
+          text: "Representa o número de maneiras de escolher 'k' elementos de um conjunto de 'n' elementos, sem considerar a ordem."
+        },
+        n_factorial: {
+          title: "Total de Itens (n!)",
+          text: "O fatorial do número total de itens disponíveis no conjunto a partir do qual estamos escolhendo."
+        },
+        k_factorial: {
+          title: "Itens a Escolher (k!)",
+          text: "O fatorial do número de itens que queremos escolher do conjunto total 'n'."
+        },
+        nk_factorial: {
+          title: "Itens Não Escolhidos ((n-k)!)",
+          text: "O fatorial do número de itens que restam no conjunto após a escolha de 'k' itens."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

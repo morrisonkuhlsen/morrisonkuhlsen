@@ -1,0 +1,288 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-dark: #1c1c1c;
+  --text-dark: #616161;
+
+  /* Cores Teorema de Bayes */
+  --posterior: rgba(61, 105, 155, 0.8);
+  --likelihood: #ff9f1c;
+  --prior: rgba(79, 155, 108, 0.9);
+  --marginal: rgba(207, 79, 79, 0.9);
+
+  /* Cores Coeficiente Binomial (Padronizadas) */
+  --binom: var(--posterior);
+  --n-factorial: var(--likelihood);
+  --k-factorial: var(--prior);
+  --nk-factorial: var(--marginal);
+
+  /* Cores Distribuição de Poisson (Padronizadas) */
+  --p-k: var(--posterior);
+  --lambda-k: var(--likelihood);
+  --e-lambda: var(--prior);
+  --k-factorial-poisson: var(--marginal);
+
+  /* Cores Covariância (Padronizadas) */
+  --cov-xy: var(--posterior);
+  --summation: var(--likelihood);
+  --x-dev: var(--prior);
+  --y-dev: #1c9eff;
+  --divisor: var(--marginal);
+
+  /* Cores Regra de L'Hôpital (Padronizadas) */
+  --condition: var(--posterior);
+  --lim: var(--likelihood);
+  --f-prime: var(--prior);
+  --g-prime: var(--marginal);
+
+  /* Cores Coeficiente de Pearson (Padronizadas) */
+  --r-xy: var(--posterior);
+  --cov-xy-pearson: var(--likelihood);
+  --std-x: var(--prior);
+  --std-y: var(--marginal);
+
+  /* Cores Regressão Linear (Padronizadas) */
+  --y-hat: var(--posterior);
+  --beta-0: var(--likelihood);
+  --beta-1: var(--prior);
+  --x-variable: var(--marginal);
+
+  /* Cores Fórmula Quadrática (Padronizadas) */
+  --x-quadratic: var(--posterior);
+  --neg-b: var(--likelihood);
+  --plus-minus: #1c9eff;
+  --discriminant: var(--prior);
+  --divisor-2a: var(--marginal);
+
+  /* Cores Distribuição Normal (Padronizadas) */
+  --f-x: var(--posterior);
+  --one-over: var(--likelihood);
+  --e-power: var(--prior);
+
+  /* Cores Qui-Quadrado (Padronizadas) */
+  --chi-squared: var(--posterior);
+  --summation-chi: var(--likelihood);
+  --numerator-chi: var(--prior);
+  --denominator-chi: var(--marginal);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 1.75rem); /* 16px -> 28px */
+}
+
+.card {
+  width: 100%;
+  max-width: 980px;
+  border-radius: 14px;
+  padding: clamp(1.25rem, 5vw, 2rem); /* 20px -> 32px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 1.5rem); /* 16px -> 24px */
+}
+
+.formula-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.formula-divider {
+  width: 80%;
+  height: 2px;
+  background-color: var(--text-dark);
+  margin: 8px 0;
+}
+
+.part {
+  display: inline-block;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 10px;
+  user-select: none;
+  transition: transform .25s ease;
+  position: relative;
+}
+.part:focus-visible {
+  outline: 2px solid var(--likelihood);
+  outline-offset: 4px;
+}
+
+/* Estilos Teorema de Bayes */
+.posterior { color: var(--posterior); }
+.likelihood { color: var(--likelihood); }
+.prior { color: var(--prior); }
+.marginal { color: var(--marginal); }
+
+/* Estilos Coeficiente Binomial */
+.binom { color: var(--binom); }
+.n-factorial { color: var(--n-factorial); }
+.k-factorial { color: var(--k-factorial); }
+.nk-factorial { color: var(--nk-factorial); }
+
+/* Estilos Distribuição de Poisson */
+.p-k { color: var(--p-k); }
+.lambda-k { color: var(--lambda-k); }
+.e-lambda { color: var(--e-lambda); }
+.k-factorial-poisson { color: var(--k-factorial-poisson); }
+
+/* Estilos Covariância */
+.cov-xy { color: var(--cov-xy); }
+.summation { color: var(--summation); }
+.x-dev { color: var(--x-dev); }
+.y-dev { color: var(--y-dev); }
+.divisor { color: var(--divisor); }
+
+/* Estilos Regra de L'Hôpital */
+.condition { color: var(--condition); }
+.lim { color: var(--lim); }
+.f-prime { color: var(--f-prime); }
+.g-prime { color: var(--g-prime); }
+
+/* Estilos Coeficiente de Pearson */
+.r-xy { color: var(--r-xy); }
+.cov-xy-pearson { color: var(--cov-xy-pearson); }
+.std-x { color: var(--std-x); }
+.std-y { color: var(--std-y); }
+
+/* Estilos Regressão Linear */
+.y-hat { color: var(--y-hat); }
+.beta-0 { color: var(--beta-0); }
+.beta-1 { color: var(--beta-1); }
+.x-variable { color: var(--x-variable); }
+
+/* Estilos Fórmula Quadrática */
+.x-quadratic { color: var(--x-quadratic); }
+.neg-b { color: var(--neg-b); }
+.plus-minus { color: var(--plus-minus); }
+.discriminant { color: var(--discriminant); }
+.divisor-2a { color: var(--divisor-2a); }
+
+/* Estilos Distribuição Normal */
+.f-x { color: var(--f-x); }
+.one-over { color: var(--one-over); }
+.e-power { color: var(--e-power); }
+
+/* Estilos Qui-Quadrado */
+.chi-squared { color: var(--chi-squared); }
+.summation-chi { color: var(--summation-chi); }
+.numerator-chi { color: var(--numerator-chi); }
+.denominator-chi { color: var(--denominator-chi); }
+
+.part.selected { z-index: 10; }
+
+.op {
+  color: var(--text-dark);
+  font-weight: 700;
+  font-size: 2.05em;
+  padding: 0 6px;
+}
+
+.katex {
+  font-size: clamp(1.75rem, 7.6vw, 4.25rem); /* 28px -> 68px */
+  line-height: 1;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* modal explicativo */
+.explain-modal {
+  position: fixed;
+  font-size: 0.95rem;
+  max-width: 280px;
+  line-height: 1.4;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 1000;
+}
+
+.explain-modal.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.modal-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+/* Estilos da Página Inicial */
+.home-title {
+  color: #e0e0e0;
+  font-size: clamp(2rem, 6vw, 3rem);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.formula-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.formula-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #c0c0c0;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.formula-card:hover,
+.formula-card:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-5px);
+  color: #fff;
+  outline: none;
+}
+
+/* Link de Voltar */
+.back-link {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 2rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+  z-index: 2000;
+}
+
+.back-link:hover {
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .katex { font-size: clamp(1.375rem, 10vw, 3rem); } /* 22px -> 48px */
+  .part { padding: 6px 8px; border-radius: 8px; }
+  .explain-modal { max-width: calc(100vw - 40px); }
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distribuição Normal — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição Normal (Gaussiana)</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Distribuição Normal interativa" style="flex-wrap: nowrap;">
+        <span class="part f-x" data-part="f_x" tabindex="0" title="Função de Densidade de Probabilidade"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <span class="part one-over" data-part="one_over" tabindex="0" title="Coeficiente de Normalização"></span>
+        <span class="part e-power" data-part="e_power" tabindex="0" title="Função Exponencial"></span>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        f_x: "\\displaystyle f(x)",
+        one_over: "\\displaystyle \\frac{1}{\\sigma\\sqrt{2\\pi}}",
+        e_power: "\\displaystyle e^{-\\frac{1}{2}(\\frac{x-\\mu}{\\sigma})^2}"
+      },
+      explanations: {
+        f_x: {
+          title: "Função de Densidade (f(x))",
+          text: "Representa a probabilidade relativa de uma variável aleatória contínua assumir um valor específico 'x'."
+        },
+        one_over: {
+          title: "Coeficiente de Normalização",
+          text: "Este termo garante que a área total sob a curva da distribuição seja igual a 1. É composto pelo desvio padrão (σ) e por 2π."
+        },
+        e_power: {
+          title: "Função Exponencial",
+          text: "O coração da distribuição, onde 'e' é a base do logaritmo natural. O expoente depende da distância do valor 'x' em relação à média (μ), medida em desvios padrão (σ)."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

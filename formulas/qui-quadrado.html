@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teste Qui-Quadrado — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Teste Qui-Quadrado (χ²)</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Teste Qui-Quadrado interativa">
+        <span class="part chi-squared" data-part="chi_squared" tabindex="0" title="Estatística Qui-Quadrado"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <span class="part summation-chi" data-part="summation_chi" tabindex="0" title="Somatório"></span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part numerator-chi" data-part="numerator_chi" tabindex="0" title="Diferença Quadrática"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part denominator-chi" data-part="denominator_chi" tabindex="0" title="Frequência Esperada"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        chi_squared: "\\displaystyle \\chi^2",
+        summation_chi: "\\displaystyle \\sum",
+        numerator_chi: "\\displaystyle (O_i - E_i)^2",
+        denominator_chi: "\\displaystyle E_i"
+      },
+      explanations: {
+        chi_squared: {
+          title: "Qui-Quadrado (χ²)",
+          text: "A estatística de teste. Um valor alto indica uma grande discrepância entre os dados observados e os esperados."
+        },
+        summation_chi: {
+          title: "Somatório",
+          text: "Soma os resultados do cálculo para todas as categorias ou grupos do seu conjunto de dados."
+        },
+        numerator_chi: {
+          title: "Diferença Quadrática",
+          text: "A diferença entre a frequência observada (Oᵢ) e a frequência esperada (Eᵢ), elevada ao quadrado para evitar valores negativos."
+        },
+        denominator_chi: {
+          title: "Frequência Esperada (Eᵢ)",
+          text: "A frequência que seria esperada em uma categoria se a hipótese nula fosse verdadeira. Normaliza a diferença quadrática."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
