@@ -66,6 +66,11 @@
   --summation-chi: var(--likelihood);
   --numerator-chi: var(--prior);
   --denominator-chi: var(--marginal);
+
+  /* Cores Média Harmônica (Padronizadas) */
+  --h-mean: var(--posterior);
+  --n-total: var(--likelihood);
+  --sum-reciprocals: var(--prior);
 }
 
 html, body {
@@ -186,6 +191,11 @@ html, body {
 .summation-chi { color: var(--summation-chi); }
 .numerator-chi { color: var(--numerator-chi); }
 .denominator-chi { color: var(--denominator-chi); }
+
+/* Estilos Média Harmônica */
+.h-mean { color: var(--h-mean); }
+.n-total { color: var(--n-total); }
+.sum-reciprocals { color: var(--sum-reciprocals); }
 
 .part.selected { z-index: 10; }
 

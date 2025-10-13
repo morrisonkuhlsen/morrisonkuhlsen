@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let top, left;
       
-      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi'];
+      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals'];
       const isDenominator = denominatorKeys.includes(key);
 
       if (isDenominator) {
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
       el.classList.add("selected");
       
       const key = el.dataset.part;
-      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi'];
+      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals'];
       const isDenominator = denominatorKeys.includes(key);
       el.style.transform = isDenominator ? "translateY(10px)" : "translateY(-10px)";
 
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const { partEl, modal, width, height } = info;
               partEl.classList.add("selected");
               const key = partEl.dataset.part;
-              const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi'];
+              const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals'];
               const isDenominator = denominatorKeys.includes(key);
               partEl.style.transform = isDenominator ? "translateY(10px)" : "translateY(-10px)";
 

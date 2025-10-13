@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Média Harmônica — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Média Harmônica</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Média Harmônica interativa">
+        <span class="part h-mean" data-part="h_mean" tabindex="0" title="Média Harmônica"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part n-total" data-part="n_total" tabindex="0" title="Número Total de Observações"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part sum-reciprocals" data-part="sum_reciprocals" tabindex="0" title="Soma dos Recíprocos"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        h_mean: "\\displaystyle H",
+        n_total: "\\displaystyle n",
+        sum_reciprocals: "\\displaystyle \\sum_{i=1}^{n} \\frac{1}{x_i}"
+      },
+      explanations: {
+        h_mean: {
+          title: "Média Harmônica (H)",
+          text: "Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada observação."
+        },
+        n_total: {
+          title: "Número Total de Observações (n)",
+          text: "A contagem total de valores ou observações no conjunto de dados."
+        },
+        sum_reciprocals: {
+          title: "Soma dos Recíprocos (Σ 1/xᵢ)",
+          text: "A soma do inverso de cada valor (xᵢ) no conjunto de dados. O recíproco de um número é 1 dividido por esse número."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
