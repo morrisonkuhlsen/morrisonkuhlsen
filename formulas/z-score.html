@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Z-Score — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Z-Score</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Z-Score interativa">
+        <span class="part z-score" data-part="z_score" tabindex="0" title="Z-Score"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part observation" data-part="observation" tabindex="0" title="Valor da Observação"></span>
+            <span class="op">-</span>
+            <span class="part pop-mean-z" data-part="pop_mean_z" tabindex="0" title="Média da População"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part pop-std-dev" data-part="pop_std_dev" tabindex="0" title="Desvio Padrão da População"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        z_score: "\\displaystyle Z",
+        observation: "\\displaystyle X",
+        pop_mean_z: "\\displaystyle \\mu",
+        pop_std_dev: "\\displaystyle \\sigma"
+      },
+      explanations: {
+        z_score: {
+          title: "Z-Score (Z)",
+          text: "Mede a distância de um ponto de dados da média, em termos de desvios padrão. Um Z-score positivo indica que o ponto está acima da média, e um negativo, abaixo."
+        },
+        observation: {
+          title: "Valor da Observação (X)",
+          text: "O ponto de dados específico ou valor que você está avaliando."
+        },
+        pop_mean_z: {
+          title: "Média da População (μ)",
+          text: "A média de todos os pontos de dados na população da qual a amostra foi retirada."
+        },
+        pop_std_dev: {
+          title: "Desvio Padrão da População (σ)",
+          text: "Mede a dispersão ou variabilidade dos dados na população. É a raiz quadrada da variância."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

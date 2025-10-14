@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Correção para População Finita — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Correção para População Finita</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula de Correção para População Finita interativa">
+        <span class="part corrected-n" data-part="corrected_n" tabindex="0" title="Tamanho da Amostra Corrigido"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part initial-n-num" data-part="initial_n_num" tabindex="0" title="Tamanho da Amostra Inicial"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div style="display: flex; align-items: center;">
+            <span class="part one-plus" data-part="one_plus" tabindex="0" title="Fator de Correção"></span>
+            <div style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin-left:8px;">
+              <div>
+                <span class="part initial-n-den" data-part="initial_n_den" tabindex="0" title="Amostra Inicial Menos Um"></span>
+              </div>
+              <div class="formula-divider" style="width: 100%;"></div>
+              <div>
+                <span class="part pop-size" data-part="pop_size" tabindex="0" title="Tamanho da População"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        corrected_n: "\\displaystyle n",
+        initial_n_num: "\\displaystyle n_0",
+        one_plus: "\\displaystyle 1 +",
+        initial_n_den: "\\displaystyle (n_0 - 1)",
+        pop_size: "\\displaystyle N"
+      },
+      explanations: {
+        corrected_n: {
+          title: "Tamanho da Amostra Corrigido (n)",
+          text: "O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra necessário."
+        },
+        initial_n_num: {
+          title: "Tamanho da Amostra Inicial (n₀)",
+          text: "O tamanho da amostra calculado com a fórmula de Cochran (ou outra), que assume uma população infinita."
+        },
+        one_plus: {
+          title: "Fator de Correção",
+          text: "O início do denominador que ajusta o tamanho da amostra com base no tamanho da população."
+        },
+        initial_n_den: {
+          title: "Amostra Inicial Menos Um (n₀ - 1)",
+          text: "Parte do cálculo do fator de correção."
+        },
+        pop_size: {
+          title: "Tamanho da População (N)",
+          text: "O número total de indivíduos na população finita que você está estudando."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Alocação de Neyman — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Alocação de Neyman</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Alocação de Neyman interativa">
+        <span class="part sample-size-h" data-part="sample_size_h" tabindex="0" title="Amostra do Estrato h"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <span class="part total-sample-size" data-part="total_sample_size" tabindex="0" title="Tamanho Total da Amostra"></span>
+        <span class="op">·</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part pop-size-h" data-part="pop_size_h" tabindex="0" title="População do Estrato h"></span>
+            <span class="op">·</span>
+            <span class="part std-dev-h" data-part="std_dev_h" tabindex="0" title="Desvio Padrão do Estrato h"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part sum-neyman" data-part="sum_neyman" tabindex="0" title="Soma Ponderada dos Estratos"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        sample_size_h: "\\displaystyle n_h",
+        total_sample_size: "\\displaystyle n",
+        pop_size_h: "\\displaystyle N_h",
+        std_dev_h: "\\displaystyle \\sigma_h",
+        sum_neyman: "\\displaystyle \\sum(N_h \\cdot \\sigma_h)"
+      },
+      explanations: {
+        sample_size_h: {
+          title: "Amostra do Estrato h (nₕ)",
+          text: "O tamanho da amostra a ser retirado de um estrato específico 'h'. É o valor que a fórmula calcula."
+        },
+        total_sample_size: {
+          title: "Tamanho Total da Amostra (n)",
+          text: "O número total de indivíduos que comporão a amostra final, somando as amostras de todos os estratos."
+        },
+        pop_size_h: {
+          title: "População do Estrato h (Nₕ)",
+          text: "O número total de indivíduos no estrato 'h' específico da população."
+        },
+        std_dev_h: {
+          title: "Desvio Padrão do Estrato h (σₕ)",
+          text: "O desvio padrão da variável de interesse dentro do estrato 'h'. Estratos com maior variabilidade recebem uma amostra maior."
+        },
+        sum_neyman: {
+          title: "Soma Ponderada (Σ Nₕσₕ)",
+          text: "A soma do produto do tamanho da população (Nₕ) pelo desvio padrão (σₕ) para todos os estratos. Funciona como um fator de normalização."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

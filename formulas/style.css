@@ -71,6 +71,41 @@
   --h-mean: var(--posterior);
   --n-total: var(--likelihood);
   --sum-reciprocals: var(--prior);
+
+  /* Cores Teorema Central do Limite (Padronizadas) */
+  --sample-mean: var(--posterior);
+  --approaches: var(--text-dark);
+  --normal-dist: var(--likelihood);
+  --pop-mean: var(--prior);
+  --pop-variance: var(--marginal);
+  --sample-size: #1c9eff;
+
+  /* Cores Z-Score (Padronizadas) */
+  --z-score: var(--posterior);
+  --observation: var(--likelihood);
+  --pop-mean-z: var(--prior);
+  --pop-std-dev: var(--marginal);
+
+  /* Cores Fórmula de Cochran (Padronizadas) */
+  --sample-size-cochran: var(--posterior);
+  --z-squared: var(--likelihood);
+  --p-hat: var(--prior);
+  --q-hat: #1c9eff;
+  --e-squared: var(--marginal);
+
+  /* Cores Correção População Finita (Padronizadas) */
+  --corrected-n: var(--posterior);
+  --initial-n-num: var(--likelihood);
+  --one-plus: var(--text-dark);
+  --initial-n-den: var(--prior);
+  --pop-size: var(--marginal);
+
+  /* Cores Alocação de Neyman (Padronizadas) */
+  --sample-size-h: var(--posterior);
+  --total-sample-size: var(--likelihood);
+  --pop-size-h: var(--prior);
+  --std-dev-h: #1c9eff;
+  --sum-neyman: var(--marginal);
 }
 
 html, body {
@@ -196,6 +231,41 @@ html, body {
 .h-mean { color: var(--h-mean); }
 .n-total { color: var(--n-total); }
 .sum-reciprocals { color: var(--sum-reciprocals); }
+
+/* Estilos Teorema Central do Limite */
+.sample-mean { color: var(--sample-mean); }
+.approaches { color: var(--approaches); }
+.normal-dist { color: var(--normal-dist); }
+.pop-mean { color: var(--pop-mean); }
+.pop-variance { color: var(--pop-variance); }
+.sample-size { color: var(--sample-size); }
+
+/* Estilos Z-Score */
+.z-score { color: var(--z-score); }
+.observation { color: var(--observation); }
+.pop-mean-z { color: var(--pop-mean-z); }
+.pop-std-dev { color: var(--pop-std-dev); }
+
+/* Estilos Fórmula de Cochran */
+.sample-size-cochran { color: var(--sample-size-cochran); }
+.z-squared { color: var(--z-squared); }
+.p-hat { color: var(--p-hat); }
+.q-hat { color: var(--q-hat); }
+.e-squared { color: var(--e-squared); }
+
+/* Estilos Correção População Finita */
+.corrected-n { color: var(--corrected-n); }
+.initial-n-num { color: var(--initial-n-num); }
+.one-plus { color: var(--one-plus); }
+.initial-n-den { color: var(--initial-n-den); }
+.pop-size { color: var(--pop-size); }
+
+/* Estilos Alocação de Neyman */
+.sample-size-h { color: var(--sample-size-h); }
+.total-sample-size { color: var(--total-sample-size); }
+.pop-size-h { color: var(--pop-size-h); }
+.std-dev-h { color: var(--std-dev-h); }
+.sum-neyman { color: var(--sum-neyman); }
 
 .part.selected { z-index: 10; }
 

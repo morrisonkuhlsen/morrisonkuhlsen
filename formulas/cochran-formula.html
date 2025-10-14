@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fórmula de Cochran — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Fórmula de Cochran</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula de Cochran interativa">
+        <span class="part sample-size-cochran" data-part="sample_size_cochran" tabindex="0" title="Tamanho da Amostra"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part z-squared" data-part="z_squared" tabindex="0" title="Z-score ao Quadrado"></span>
+            <span class="op">·</span>
+            <span class="part p-hat" data-part="p_hat" tabindex="0" title="Proporção Estimada"></span>
+            <span class="op">·</span>
+            <span class="part q-hat" data-part="q_hat" tabindex="0" title="Complemento da Proporção"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part e-squared" data-part="e_squared" tabindex="0" title="Margem de Erro ao Quadrado"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        sample_size_cochran: "\\displaystyle n_0",
+        z_squared: "\\displaystyle Z^2",
+        p_hat: "\\displaystyle \\hat{p}",
+        q_hat: "\\displaystyle \\hat{q}",
+        e_squared: "\\displaystyle e^2"
+      },
+      explanations: {
+        sample_size_cochran: {
+          title: "Tamanho da Amostra (n₀)",
+          text: "O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita."
+        },
+        z_squared: {
+          title: "Z-score ao Quadrado (Z²)",
+          text: "O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96."
+        },
+        p_hat: {
+          title: "Proporção Estimada (p̂)",
+          text: "A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível."
+        },
+        q_hat: {
+          title: "Complemento da Proporção (q̂)",
+          text: "É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica."
+        },
+        e_squared: {
+          title: "Margem de Erro ao Quadrado (e²)",
+          text: "O nível de precisão desejado, também chamado de erro amostral. Representa a 'janela' em torno da estimativa (ex: ±5%)."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
