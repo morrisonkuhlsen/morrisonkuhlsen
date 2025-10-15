@@ -56,8 +56,8 @@ social-card: /assets/images/favicons/social-card.png
 
 ## Site name
 name:
-  en: "Morrison Külsenn"
-  pt: "Morrison Külsenn"
+  en: "Morrison Kühlsen"
+  pt: "Morrison Kühlsen"
 
 ## Site description
 description:
@@ -65,34 +65,34 @@ description:
   pt: "Estatística Pura"
 ## Site author
 author:
-  en: "Morrison Külsenn"
-  pt: "Morrison Külsenn"
+  en: "Morrison Kühlsen"
+  pt: "Morrison Kühlsen"
 
 ## Social
 social-links:
   en:
     twitter:
       name: "twitter"
-      url: "https://twitter.com/morrisonkulsenn"
+      url: "https://twitter.com/morrisonkuhlsen"
     facebook:
       name: "facebook"
-      url: "https://facebook.com/morrisonkulsenn"
+      url: "https://facebook.com/morrisonkuhlsen"
     instagram:
       name: "instagram"
-      url: "https://instagram.com/morrisonkulsenn"
+      url: "https://instagram.com/morrisonkuhlsen"
     rss:
       name: "rss"
       url: "/feed.xml"
   pt:
     twitter:
       name: "twitter"
-      url: "https://twitter.com/morrisonkulsenn"
+      url: "https://twitter.com/morrisonkuhlsen"
     facebook:
       name: "facebook"
-      url: "https://facebook.com/morrisonkulsenn"
+      url: "https://facebook.com/morrisonkuhlsen"
     instagram:
       name: "instagram"
-      url: "https://instagram.com/morrisonkulsenn"
+      url: "https://instagram.com/morrisonkuhlsen"
     rss:
       name: "rss"
       url: "/feed.xml"
