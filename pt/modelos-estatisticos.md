@@ -12,7 +12,7 @@ Para perguntas, sugestões ou discussões sobre projetos, utilize os canais list
 ## Canais de Contato
 
 -   **Email:** Consultas podem ser enviadas para `contato@exemplo.com`.
--   **GitHub:** Projetos e contribuições de código aberto estão disponíveis no [GitHub](https://github.com/morrisonkulsenn).
+-   **GitHub:** Projetos e contribuições de código aberto estão disponíveis no [GitHub](https://github.com/morrisonkuhlsen).
 -   **LinkedIn:** O perfil profissional pode ser visualizado no [LinkedIn](https://www.linkedin.com/in/seuperfil).
 
 Novas oportunidades e colaborações são bem-vindas.

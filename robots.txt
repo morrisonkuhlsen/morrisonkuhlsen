@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://morrisonkulsenn.com/sitemap.xml
+Sitemap: https://morrisonkuhlsen.com/sitemap.xml

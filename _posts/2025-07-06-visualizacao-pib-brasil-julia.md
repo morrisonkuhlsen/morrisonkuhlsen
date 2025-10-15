@@ -17,7 +17,7 @@ A visualização de dados geográficos é uma ferramenta poderosa para entender 
 
 Este post vem preencher essa lacuna, demonstrando que é perfeitamente possível - e até mesmo vantajoso - trabalhar com visualizações de mapas do Brasil em Julia. Utilizaremos pacotes como `CairoMakie` para visualizações de alta qualidade, `GeoArtifacts` para dados geográficos do Brasil e `DataFrames` para manipulação de dados.
 
-Os dados utilizados neste tutorial estão disponíveis no [repositório do projeto no GitHub](https://github.com/morrisonkulsenn/map-pib-1), onde você pode encontrar o conjunto de dados completo e o código-fonte utilizado.
+Os dados utilizados neste tutorial estão disponíveis no [repositório do projeto no GitHub](https://github.com/morrisonkuhlsen/map-pib-1), onde você pode encontrar o conjunto de dados completo e o código-fonte utilizado.
 
 ## Pré-requisitos
 
@@ -476,7 +476,7 @@ Cada função permite acessar dados geoespaciais oficiais do Brasil, que podem s
    - [GeoArtifacts.jl](https://github.com/JuliaEarth/GeoArtifacts.jl) - Pacote para gerenciamento de dados geoespaciais em Julia
    - [CairoMakie.jl](https://docs.makie.org/stable/) - Biblioteca de visualização de alta performance
    - [GeoBR](https://ipeagit.github.io/geobr/) - Pacote R que inspirou algumas funcionalidades (equivalente em R)
-   - [Repositório do Código Fonte](https://github.com/morrisonkulsenn/map-pib-1) - Código completo e base de dados utilizados neste tutorial
+   - [Repositório do Código Fonte](https://github.com/morrisonkuhlsen/map-pib-1) - Código completo e base de dados utilizados neste tutorial
 
 3. **Tutoriais Relacionados**
    - [Trabalhando com dados geoespaciais no R](https://blog.curso-r.com/posts/2019-02-10-sf-miojo/)
