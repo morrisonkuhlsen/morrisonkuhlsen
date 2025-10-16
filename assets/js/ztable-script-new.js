@@ -68,6 +68,63 @@ document.addEventListener('DOMContentLoaded', function() {
         setupEventListeners();
         setupTooltips();
         setupTable();
+        setupStickyPositiveHeader(); // <-- adiciona comportamento de "congelar" o cabeçalho positivo
+    }
+    
+    // Torna a fileira do Z positivo "sticky" quando atinge o topo, e oculta o thead negativo
+    function setupStickyPositiveHeader() {
+        const table = document.getElementById('myTable');
+        if (!table) return;
+
+        const thead = table.querySelector('thead');
+        // Encontra a linha que contém o cabeçalho positivo (linha com <th>Z</th> e colunas começando com "+")
+        const rows = Array.from(table.querySelectorAll('tr'));
+        const positiveRow = rows.find(tr => {
+            const ths = Array.from(tr.querySelectorAll('th'));
+            if (!ths.length) return false;
+            const first = ths[0].textContent.trim();
+            const second = ths[1] ? ths[1].textContent.trim() : '';
+            return first === 'Z' && (second.startsWith('+') || second.startsWith('+'));
+        });
+        if (!positiveRow) return;
+
+        let isSticky = false;
+
+        function getTheadHeight() {
+            return thead ? thead.getBoundingClientRect().height : 0;
+        }
+
+        function checkSticky() {
+            const rect = positiveRow.getBoundingClientRect();
+            const threshold = getTheadHeight();
+            // quando a linha positiva passar por cima do topo do viewport (considerando o thead)
+            if (rect.top <= threshold && !isSticky) {
+                positiveRow.classList.add('sticky-z-positive');
+                if (thead) thead.style.visibility = 'hidden';
+                isSticky = true;
+            } else if (rect.top > threshold && isSticky) {
+                positiveRow.classList.remove('sticky-z-positive');
+                if (thead) thead.style.visibility = 'visible';
+                isSticky = false;
+            }
+        }
+
+        // throttle simples para evitar muitas chamadas no scroll
+        function throttle(fn, wait) {
+            let last = 0;
+            return function (...args) {
+                const now = Date.now();
+                if (now - last >= wait) {
+                    last = now;
+                    fn.apply(this, args);
+                }
+            };
+        }
+
+        window.addEventListener('scroll', throttle(checkSticky, 16));
+        window.addEventListener('resize', throttle(checkSticky, 100));
+        // checa imediatamente (útil se a página já estiver rolada)
+        checkSticky();
     }
     
     // Configurar event listeners
