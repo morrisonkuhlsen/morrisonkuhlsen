@@ -1,0 +1,69 @@
+/* ...existing code... */
+.ftable-tooltip {
+  position: absolute;
+  z-index: 9999;
+  background: rgba(18,18,20,0.96);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  pointer-events: none;
+  transition: opacity 120ms ease, transform 120ms ease;
+  opacity: 0;
+  transform: translateY(4px);
+  white-space: nowrap;
+}
+.ftable-tooltip.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* vertical overlay for column highlight */
+.ftable-vline {
+  position: absolute;
+  z-index: 5; /* under tooltip but above table */
+  background: rgba(100, 140, 200, 0.08);
+  transition: background-color 120ms ease, opacity 120ms ease;
+  pointer-events: none;
+  border-left: 1px solid rgba(100,140,200,0.16);
+  border-right: 1px solid rgba(100,140,200,0.04);
+  opacity: 0;
+}
+.ftable-vline[selected],
+.ftable-vline.selected {
+  background: rgba(100, 140, 200, 0.12);
+  border-left-color: rgba(100,140,200,0.28);
+  opacity: 1;
+}
+.ftable-vline[style]{
+  /* when positioned it will be shown */
+  opacity: 1;
+}
+
+/* horizontal row highlight */
+#myTable tbody tr.ftable-hover-row td {
+  background-color: rgba(100,140,200,0.04);
+}
+#myTable tbody tr.ftable-selected-row td {
+  background-color: rgba(100,140,200,0.08);
+}
+
+/* destaque visual quando selecionada persistentemente (célula) */
+#myTable tbody td.ftable-selected {
+  background-color: rgba(100,140,200,0.12);
+  outline: 2px solid rgba(100,140,200,0.12);
+  border-radius: 3px;
+  z-index: 6;
+}
+
+/* hover normal (quando não selecionado) aplica apenas à célula, mas cross overlay provides context */
+#myTable tbody td:hover {
+  background-color: rgba(255,255,255,0.03);
+}
+
+/* ajustar em telas pequenas */
+@media (max-width: 640px) {
+  .ftable-tooltip { font-size: 0.8rem; padding: 5px 8px; max-width: 80vw; white-space: normal; pointer-events: none; }
+}
+/* ...existing code... */
