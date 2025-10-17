@@ -2,11 +2,11 @@
   <div class="img-responsive-wrapper">
     <div class="img-responsive">
       <div class="img-wrapper hero-slideshow">
-        <img src="assets/images/spiral.jpg" class="active" title="Espiral" alt="Imagem de uma espiral">
-        <img src="assets/images/dados.png" title="Dados" alt="Imagem de dados">
-        <img src="assets/images/office.png" title="Escritório" alt="Imagem de escritório">
-        <img src="assets/images/hourglass.png" title="Ampulheta" alt="Imagem de uma ampulheta">
-        <img src="assets/images/cartas.png" title="Cartas" alt="Imagem de cartas de baralho">
+        <img src="{{ site.baseurl }}/assets/images/spiral.jpg" class="active" title="Espiral" alt="Imagem de uma espiral">
+        <img src="{{ site.baseurl }}/assets/images/dados.png" title="Dados" alt="Imagem de dados">
+        <img src="{{ site.baseurl }}/assets/images/office.png" title="Escritório" alt="Imagem de escritório">
+        <img src="{{ site.baseurl }}/assets/images/hourglass.png" title="Ampulheta" alt="Imagem de uma ampulheta">
+        <img src="{{ site.baseurl }}/assets/images/cartas.png" title="Cartas" alt="Imagem de cartas de baralho">
       </div>
     </div>
   </div>
@@ -63,6 +63,8 @@
       <div class="card-wrapper card-space">
         <div class="card card-bg">
           <div class="card-body">
+
+            {% if page.lang == 'pt' %}
             <h5 class="card-title">Descubra o poder da análise estatística para tomada de decisões baseadas em dados</h5>
             <p class="card-text">A estatística é a ciência que transforma dados brutos em insights valiosos. Através de métodos estatísticos, podemos identificar padrões, testar hipóteses e fazer previsões que auxiliam na tomada de decisões estratégicas. Seja na pesquisa científica, análise de mercado ou otimização de processos, a estatística fornece as ferramentas necessárias para interpretar a complexidade do mundo através dos números.</p>
             <a class="read-more" href="#">
@@ -71,6 +73,18 @@
                 <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
               </svg>
             </a>
+
+            {% else %}
+            <h5 class="card-title">Discover the power of statistical analysis for data-driven decision making</h5>
+            <p class="card-text">Statistics is the science that turns raw data into valuable insights. Using statistical methods we can identify patterns, test hypotheses and make predictions that support strategic decisions. Whether in scientific research, market analysis or process optimization, statistics provides the tools to interpret the world's complexity through numbers.</p>
+            <a class="read-more" href="#">
+              <span class="text">Read more</span>
+              <svg class="icon">
+                <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
+              </svg>
+            </a>
+            {% endif %}
+
           </div>
         </div>
       </div>

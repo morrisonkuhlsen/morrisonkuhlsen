@@ -1,5 +1,13 @@
 <div class="pb-2">
-  <h4><a href="#" title="Ir para a página: Siga-nos em" class="">Siga-nos</a></h4>
+  <h4>
+    {% if page.lang == 'pt' %}
+      <a href="#" title="Ir para a página: Siga-nos" class="">Siga-nos</a>
+    {% elsif page.lang == 'en' %}
+      <a href="#" title="Go to the page: Follow us" class="">Follow us</a>
+    {% else %}
+      <a href="#" title="Follow us" class="">Follow us</a>
+    {% endif %}
+  </h4>
   <ul class="list-inline text-left social">
     {% for social-link in site.data.t.social-links[page.lang] %}
     <li class="list-inline-item">

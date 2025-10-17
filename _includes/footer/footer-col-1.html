@@ -1,4 +1,10 @@
-<h4>Contato</h4>
+{% if page.lang == 'pt' %}
+  <h4>Contato</h4>
+{% elsif page.lang == 'en' %}
+  <h4>Contact</h4>
+{% else %}
+  <h4>Contact</h4>
+{% endif %}
 <p class="mb-3">
   <a href="mailto:morrisonkuhlsen@gmail.com" class="text-white">
     <svg class="icon icon-sm icon-white align-middle mr-2">

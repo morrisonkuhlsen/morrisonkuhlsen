@@ -26,7 +26,13 @@ tutte le pagine del sito che:
             </div>
             <div class="it-right-zone">
               <div class="it-socials d-none d-md-flex">
-                <span>Siga-nos</span>
+                {% if page.lang == 'pt' %}
+                  <span>Siga-nos</span>
+                {% elsif page.lang == 'en' %}
+                  <span>Follow us</span>
+                {% else %}
+                  <span>Follow us</span>
+                {% endif %}
                 <ul>
                   {% for social-link in site.data.t.social-links[page.lang] %}
                   <li class="list-inline-item">
