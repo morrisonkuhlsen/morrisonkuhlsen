@@ -8,10 +8,6 @@ permalink: /pt/inferencia-estatistica/amostragem
 order: 3
 ---
 
-Conteúdo sobre técnicas de amostragem.
-
-## Introdução
-
 A amostragem é o processo de selecionar um subconjunto representativo de uma população para realizar inferências estatísticas sobre toda a população. Uma amostra bem escolhida permite estimar parâmetros populacionais com precisão e eficiência, reduzindo custos e tempo em relação ao censo completo.
 
 ![Amostragem]({{ site.baseurl }}/assets/images/amostragem.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
@@ -573,15 +569,227 @@ println("Tamanho mínimo da amostra: $n")
 
 ---
 
+## Fórmulas Adicionais para Tamanho de Amostra
+
+### Fórmula de Cochran com Correção para População Finita
+
+A fórmula de Cochran é usada para calcular o tamanho da amostra quando a população é grande ou desconhecida. Quando a população é finita ($N$), uma correção é aplicada para ajustar o tamanho da amostra, resultando em um número menor e mais eficiente.
+
+**Fórmula:**
+
+$$
+n = \frac{n_0}{1 + \frac{n_0 - 1}{N}} \quad \text{onde} \quad n_0 = \frac{Z^2 \cdot p \cdot (1-p)}{E^2}
+$$
+
+Isso é algebricamente equivalente a:
+
+$$
+n = \frac{N \cdot Z^2 \cdot p \cdot (1-p)}{E^2 \cdot (N-1) + Z^2 \cdot p \cdot (1-p)}
+$$
+
+**Exemplo prático manual (passo a passo):**
+
+Calcular o tamanho da amostra para uma população de **N = 5000**, com 95% de confiança ($Z = 1,96$), margem de erro de 5% ($E = 0,05$) e proporção estimada $p = 0,5$.
+
+1.  **Calcular o numerador:** $N \cdot Z^2 \cdot p \cdot (1-p)$
+
+$$5000 \cdot 1,96^2 \cdot 0,5 \cdot 0,5 = 5000 \cdot 3,8416 \cdot 0,25 = 4802$$
+
+2.  **Calcular o denominador:** $E^2 \cdot (N-1) + Z^2 \cdot p \cdot (1-p)$
+
+$$0,05^2 \cdot (4999) + 1,96^2 \cdot 0,5 \cdot 0,5$$
+
+$$0,0025 \cdot 4999 + 0,9604 = 12,4975 + 0,9604 = 13,4579$$
+
+3.  **Dividir:**
+
+$$n = \frac{4802}{13,4579} \approx 356,9$$
+
+Arredondando para cima, **n = 357**.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Parâmetros
+N = 5000                            # Tamanho da população
+z = quantile(Normal(), 1 - 0.05/2)  # 95% de confiança
+p̂ = 0.5                             # proporção estimada (mais conservador)
+erro = 0.05                         # erro máximo tolerável
+
+# Cálculo do tamanho da amostra com correção
+numerador = N * z^2 * p̂ * (1 - p̂)
+denominador = erro^2 * (N - 1) + z^2 * p̂ * (1 - p̂)
+n = ceil(Int, numerador / denominador)
+
+println("Tamanho mínimo da amostra (população finita): $n")
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Tamanho mínimo da amostra (população finita): 357
+</div>
+
+---
+
+### Alocação de Amostra Estratificada
+
+Após calcular o tamanho total da amostra ($n$), é preciso distribuí-lo entre os diferentes estratos. As duas abordagens mais comuns são a alocação proporcional e a alocação de Neyman.
+
+#### 1. Alocação Proporcional
+
+Distribui o tamanho da amostra proporcionalmente ao tamanho de cada estrato na população.
+
+**Fórmula:**
+
+$$
+n_h = n \cdot \frac{N_h}{N}
+$$
+
+Onde:
+- $n_h$ = tamanho da amostra do estrato $h$
+- $n$ = tamanho total da amostra
+- $N_h$ = tamanho da população do estrato $h$
+- $N$ = tamanho total da população
+
+**Exemplo prático manual (passo a passo):**
+
+Uma universidade tem 10.000 alunos ($N=10000$). O tamanho total da amostra calculado foi de $n=400$. Os alunos estão divididos em dois estratos:
+- **Estrato A (Exatas):** 6.000 alunos ($N_A = 6000$)
+- **Estrato B (Humanas):** 4.000 alunos ($N_B = 4000$)
+
+1.  **Alocação para Estrato A:**
+
+$$n_A = 400 \cdot \frac{6000}{10000} = 400 \cdot 0,6 = 240$$
+
+2.  **Alocação para Estrato B:**
+
+$$n_B = 400 \cdot \frac{4000}{10000} = 400 \cdot 0,4 = 160$$
+
+A amostra será composta por **240 alunos de Exatas** e **160 de Humanas**.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Parâmetros
+n_total = 400
+N_total = 10000
+N_estratos = Dict("Exatas" => 6000, "Humanas" => 4000)
+n_alocada = Dict()
+
+for (estrato, N_h) in N_estratos
+    n_h = n_total * (N_h / N_total)
+    n_alocada[estrato] = ceil(Int, n_h)
+end
+
+println("Alocação Proporcional: ", n_alocada)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Alocação Proporcional: Dict("Humanas" => 160, "Exatas" => 240)
+</div>
+
+---
+
+#### 2. Alocação de Neyman (Ótima)
+
+Considera tanto o tamanho do estrato quanto sua variabilidade (desvio padrão). Estratos com maior variabilidade recebem uma amostra maior para aumentar a precisão geral.
+
+**Fórmula:**
+
+$$
+n_h = n \cdot \frac{N_h \cdot \sigma_h}{\sum (N_i \cdot \sigma_i)}
+$$
+
+Onde:
+- $\sigma_h$ = desvio padrão do estrato $h$
+
+**Exemplo prático manual (passo a passo):**
+
+Usando o mesmo exemplo da universidade ($n=400, N_A=6000, N_B=4000$), suponha que um estudo piloto revelou os seguintes desvios padrão para as notas dos alunos:
+- **Estrato A (Exatas):** $\sigma_A = 10$ (notas mais homogêneas)
+- **Estrato B (Humanas):** $\sigma_B = 20$ (notas mais heterogêneas)
+
+1.  **Calcular o denominador $\sum (N_i \cdot \sigma_i)$:**
+
+$$(N_A \cdot \sigma_A) + (N_B \cdot \sigma_B) = (6000 \cdot 10) + (4000 \cdot 20) = 60000 + 80000 = 140000$$
+
+2.  **Alocação para Estrato A:**
+
+$$n_A = 400 \cdot \frac{6000 \cdot 10}{140000} = 400 \cdot \frac{60000}{140000} \approx 400 \cdot 0,4286 \approx 171,4$$
+
+3.  **Alocação para Estrato B:**
+
+$$n_B = 400 \cdot \frac{4000 \cdot 20}{140000} = 400 \cdot \frac{80000}{140000} \approx 400 \cdot 0,5714 \approx 228,6$$
+
+Arredondando, a amostra será de **171 alunos de Exatas** e **229 de Humanas**. Note como o estrato com maior variabilidade (Humanas) recebeu uma amostra maior, mesmo tendo uma população menor.
+
+**Exemplo em Julia:**
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Parâmetros
+n_total = 400
+estratos = Dict(
+    "Exatas"  => (N_h=6000, σ_h=10),
+    "Humanas" => (N_h=4000, σ_h=20)
+)
+n_alocada_neyman = Dict()
+
+# Calcular denominador
+denominador_neyman = sum(v.N_h * v.σ_h for (k, v) in estratos)
+
+for (estrato, pars) in estratos
+    numerador = pars.N_h * pars.σ_h
+    n_h = n_total * (numerador / denominador_neyman)
+    n_alocada_neyman[estrato] = round(Int, n_h)
+end
+
+println("Alocação de Neyman: ", n_alocada_neyman)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  Alocação de Neyman: Dict("Humanas" => 229, "Exatas" => 171)
+</div>
+
+---
+
 ## Referências Bibliográficas
 
 1. Montgomery, D. C., & Runger, G. C. (2010). Applied Statistics and Probability for Engineers.
 2. Morettin, P. A., & Bussab, W. O. (2017). Estatística Básica.
 3. Triola, M. F. (2017). Introdução à Estatística.
+4. Bolfarine, H. (2005). Elementos de Amostragem. Brasil: Blucher.
 
 ---
 
-## 🎧 Podcast: Aprofundando em Distribuições
+## 🎧 Podcast: Aprofundando em Amostragem
 
 Para uma discussão mais aprofundada sobre o tema, ouça o nosso podcast. Cobrimos exemplos práticos e dicas para escolher a distribuição correta para seus dados.
 
