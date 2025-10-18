@@ -578,3 +578,16 @@ println("Tamanho mínimo da amostra: $n")
 1. Montgomery, D. C., & Runger, G. C. (2010). Applied Statistics and Probability for Engineers.
 2. Morettin, P. A., & Bussab, W. O. (2017). Estatística Básica.
 3. Triola, M. F. (2017). Introdução à Estatística.
+
+---
+
+## 🎧 Podcast: Aprofundando em Distribuições
+
+Para uma discussão mais aprofundada sobre o tema, ouça o nosso podcast. Cobrimos exemplos práticos e dicas para escolher a distribuição correta para seus dados.
+
+<div style="margin-top: 1em;">
+  <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2192924015&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/morrison-kuehlsen" title="Morrison Kühlsen" target="_blank" style="color: #cccccc; text-decoration: none;">Morrison Kühlsen</a> · <a href="https://soundcloud.com/morrison-kuehlsen/amostragem-do_sorteio" title="Amostragem__Do_Sorteio_à_Bola_de_Neve_–_Guia_Essencial_dos_Méto" target="_blank" style="color: #cccccc; text-decoration: none;">Amostragem__Do_Sorteio_à_Bola_de_Neve_–_Guia_Essencial_dos_Méto</a></div>
+</div>
+
+---
+
