@@ -1,57 +1,98 @@
+{%- comment -%}
+  Define o número de posts a serem exibidos inicialmente.
+  O máximo inicial foi definido como 2.
+{%- endcomment -%}
+{% assign initial_post_limit = 2 %}
+
 {% assign posts = site.posts | where: "lang", page.lang %}
 
 <div class="container my-4">
   <div class="row g-4">
     {% for post in posts %}
-    <div class="col-12 col-lg-6">
-      <div class="card-wrapper shadow-sm rounded h-100">
-        <div class="card border-0">
-          <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="text-secondary small">
-                <svg class="icon icon-sm me-2" aria-hidden="true">
-                  <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-calendar"></use>
-                </svg>
-                {% include date.html date=post.date %}
+      {%- comment -%}
+        Se o índice do post for maior que o limite, adiciona a classe 'post-hidden'
+        e o estilo para escondê-lo.
+      {%- endcomment -%}
+      <div class="col-12 col-lg-6 {% if forloop.index > initial_post_limit %}post-hidden{% endif %}" 
+           {% if forloop.index > initial_post_limit %}style="display: none;"{% endif %}>
+        <div class="card-wrapper shadow-sm rounded h-100">
+          <div class="card border-0">
+            <div class="card-body p-4 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="text-secondary small">
+                  <svg class="icon icon-sm me-2" aria-hidden="true">
+                    <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-calendar"></use>
+                  </svg>
+                  {% include date.html date=post.date %}
+                </div>
               </div>
-            </div>
 
-            <h3 class="h5 card-title fw-bold mb-3">
-              <a href="{{ site.baseurl }}{{ post.url }}" class="text-decoration-none text-dark">{{ post.title }}</a>
-            </h3>
+              <h3 class="h5 card-title fw-bold mb-3">
+                <a href="{{ site.baseurl }}{{ post.url }}" class="text-decoration-none text-dark">{{ post.title }}</a>
+              </h3>
 
-            {% if post.categories %}
-            <div class="text-secondary small mb-3">
-              <svg class="icon icon-sm me-2" aria-hidden="true">
-                <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-folder"></use>
-              </svg>
-              {% for category in post.categories %}{{ category }}{% unless forloop.last %}, {% endunless %}{% endfor %}
-            </div>
-            {% endif %}
-
-            <div class="card-text text-muted mb-4">{{ post.excerpt | strip_html | truncatewords: 25 }}</div>
-
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              {% if post.author %}
-              <div class="d-flex align-items-center">
+              {% if post.categories %}
+              <div class="text-secondary small mb-3">
                 <svg class="icon icon-sm me-2" aria-hidden="true">
-                  <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-user"></use>
+                  <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-folder"></use>
                 </svg>
-                <span class="small fw-semibold">{{ post.author }}</span>
+                {% for category in post.categories %}{{ category }}{% unless forloop.last %}, {% endunless %}{% endfor %}
               </div>
               {% endif %}
-              
-              <a href="{{ site.baseurl }}{{ post.url }}" class="btn btn-link p-0 text-primary">
-                <span class="me-2">Leia mais</span>
-                <svg class="icon icon-sm icon-primary" aria-hidden="true">
-                  <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
-                </svg>
-              </a>
+
+              <div class="card-text text-muted mb-4">{{ post.excerpt | strip_html | truncatewords: 25 }}</div>
+
+              <div class="d-flex justify-content-between align-items-center mt-auto">
+                {% if post.author %}
+                <div class="d-flex align-items-center">
+                  <svg class="icon icon-sm me-2" aria-hidden="true">
+                    <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-user"></use>
+                  </svg>
+                  <span class="small fw-semibold">{{ post.author }}</span>
+                </div>
+                {% endif %}
+                
+                <a href="{{ site.baseurl }}{{ post.url }}" class="btn btn-link p-0 text-primary">
+                  <span class="me-2">Leia mais</span>
+                  <svg class="icon icon-sm icon-primary" aria-hidden="true">
+                    <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     {% endfor %}
   </div>
+
+  {%- comment -%}
+    Mostra o botão apenas se o número total de posts for maior que o limite inicial.
+  {%- endcomment -%}
+  {% if posts.size > initial_post_limit %}
+    <div class="text-center mt-4">
+      <button id="show-more-btn" class="btn btn-primary">Mostrar Mais</button>
+    </div>
+  {% endif %}
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const showMoreBtn = document.getElementById('show-more-btn');
+    
+    if (showMoreBtn) {
+      showMoreBtn.addEventListener('click', function() {
+        // Seleciona todos os posts que estão escondidos
+        const hiddenPosts = document.querySelectorAll('.post-hidden');
+        
+        // Itera sobre cada post escondido e o torna visível
+        hiddenPosts.forEach(function(post) {
+          post.style.display = 'block';
+        });
+        
+        // Esconde o botão "Mostrar Mais" (e seu container) após ser clicado
+        this.parentElement.style.display = 'none';
+      });
+    }
+  });
+</script>
