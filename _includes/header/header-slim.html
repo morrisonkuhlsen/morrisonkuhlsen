@@ -3,22 +3,34 @@
     <div class="row">
       <div class="col-12">
         <div class="it-header-slim-wrapper-content">
+          {%- comment -%}
+            Encontra a URL correta para o blog (pt ou en) baseada no idioma da página atual.
+            Usa a variável 'ref: blog' definida no front matter dos arquivos index.html do blog.
+          {%- endcomment -%}
+          {% assign blog_pages = site.pages | where: "ref", "blog" %}
+          {% assign blog_page_in_lang = blog_pages | where: "lang", page.lang | first %}
+          {% assign blog_url = site.baseurl | append: '/blog/' %}
+          {% if blog_page_in_lang %}
+            {% assign blog_url = blog_page_in_lang.url | relative_url %}
+          {% endif %}
+
           <a class="d-none d-lg-block navbar-brand" href="{{ site.baseurl }}/ztable.html">Standard Normal Table</a>
           <a class="d-none d-lg-block navbar-brand" href="{{ site.baseurl }}/ttable.html">Student's T Table</a>
           <a class="d-none d-lg-block navbar-brand" href="{{ site.baseurl }}/ftable.html">Snedecor F Table</a>
           <a class="d-none d-lg-block navbar-brand" href="{{ site.baseurl }}/formulas/home.html">Formulas</a>
+          <a class="d-none d-lg-block navbar-brand" href="{{ blog_url }}">Blog</a>
 
           <div class="nav-mobile">
             <nav>
-              <a class="it-opener d-lg-none" href="{{ site.baseurl }}/ztable.html">
-                <span>Standard normal table/Z Table</span>
+              <a class="it-opener d-lg-none" href="#">
+                <span>Menu</span>
                 <svg class="icon">
                   <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-expand"></use>
                 </svg>
               </a>
               <div class="link-list-wrapper collapse" id="menu1">
                 <ul class="link-list">
-                  <li><a href="{{ site.baseurl }}/blog/">Blog</a></li>
+                  <li><a href="{{ blog_url }}">Blog</a></li>
                   <li><a href="https://github.com/morrisonkuhlsen">Github</a></li>
                   <li class="d-lg-none"><a href="{{ site.baseurl }}/ztable.html">Standard Normal Table</a></li>
                   <li class="d-lg-none"><a href="{{ site.baseurl }}/ttable.html">Student's T Table</a></li>
@@ -31,12 +43,6 @@
           <div class="header-slim-right-zone">
             <!-- Language Switch -->
             {% include header/header-lang-switch.html %}
-            <!-- Account options -->
-            {% comment %}
-            <div class="it-access-top-wrapper">
-              <button class="btn btn-primary btn-sm" href="#" type="button">Accedi</button>
-            </div>
-            {% endcomment %}
           </div>
         </div>
       </div>

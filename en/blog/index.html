@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Blog
-description: Confira nossos artigos e tutoriais sobre estatística e ciência de dados.
-lang: pt
+description: Check out our articles and tutorials on statistics and data science.
+lang: en
 ref: blog
 ---
 
@@ -10,7 +10,7 @@ ref: blog
   <div class="row">
     <div class="col-12">
       <h1>Blog</h1>
-      <p class="lead">Artigos, tutoriais e novidades sobre estatística e ciência de dados.</p>
+      <p class="lead">Articles, tutorials, and news about statistics and data science.</p>
       
       <div class="row">
         {% for post in site.posts %}
@@ -25,7 +25,7 @@ ref: blog
                     <p class="card-text">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
                     <div class="card-text">
                       <small class="text-muted">
-                        {{ post.date | date: "%d/%m/%Y" }}
+                        {{ post.date | date: "%B %d, %Y" }}
                         {% if post.author %} • {{ post.author }}{% endif %}
                       </small>
                     </div>
@@ -38,7 +38,7 @@ ref: blog
       </div>
       
       <div class="mt-4">
-        <p>Assine nosso <a href="{{ "/feed.xml" | relative_url }}">feed RSS</a> para ficar por dentro das novidades!</p>
+        <p>Subscribe to our <a href="{{ "/feed.xml" | relative_url }}">RSS feed</a> to stay up to date!</p>
       </div>
     </div>
   </div>
