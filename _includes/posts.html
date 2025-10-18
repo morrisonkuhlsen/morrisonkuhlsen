@@ -81,17 +81,27 @@
     const showMoreBtn = document.getElementById('show-more-btn');
     
     if (showMoreBtn) {
+      // Define quantos posts mostrar a cada clique
+      const postsPerClick = 2;
+
       showMoreBtn.addEventListener('click', function() {
-        // Seleciona todos os posts que estão escondidos
-        const hiddenPosts = document.querySelectorAll('.post-hidden');
+        // Seleciona APENAS os posts que ainda estão escondidos
+        const hiddenPosts = document.querySelectorAll('.post-hidden[style*="display: none;"]');
         
-        // Itera sobre cada post escondido e o torna visível
-        hiddenPosts.forEach(function(post) {
-          post.style.display = 'block';
-        });
+        // Mostra o próximo lote de posts
+        for (let i = 0; i < postsPerClick; i++) {
+          if (hiddenPosts[i]) {
+            hiddenPosts[i].style.display = 'block';
+          }
+        }
         
-        // Esconde o botão "Mostrar Mais" (e seu container) após ser clicado
-        this.parentElement.style.display = 'none';
+        // Verifica se ainda existem posts escondidos após a operação
+        const remainingHidden = document.querySelectorAll('.post-hidden[style*="display: none;"]');
+        
+        // Se não houver mais posts escondidos, esconde o botão
+        if (remainingHidden.length === 0) {
+          this.parentElement.style.display = 'none';
+        }
       });
     }
   });
