@@ -391,3 +391,22 @@ Isso confirma que a chance de observar um resultado tão extremo é menor que um
     </tbody>
   </table>
 </div>
+
+  ---
+
+## 🎧 Podcast: Aprofundando em Teste Z vs Test t de Student
+
+Para uma discussão mais aprofundada sobre o tema, ouça o nosso podcast. Cobrimos exemplos práticos e dicas para escolher a distribuição correta para seus dados.
+
+<div style="margin-top: 1em;">
+<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A2193736583&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/morrison-kuehlsen" title="Morrison Kühlsen" target="_blank" style="color: #cccccc; text-decoration: none;">Morrison Kühlsen</a> · <a href="https://soundcloud.com/morrison-kuehlsen/teste-z-vs-teste-t-de-student-qual-escolher" title="Teste Z vs Teste t de Student, qual escolher?" target="_blank" style="color: #cccccc; text-decoration: none;">Teste Z vs Teste t de Student, qual escolher?</a></div>
+</div>
+
+---
+
+## Referências
+
+*   Student. (1908). The probable error of a mean. *Biometrika*, 6(1), 1–25.
+*   Wikipedia contributors. (2025). *Z-test*. Wikipedia, The Free Encyclopedia. [https://en.wikipedia.org/wiki/Z-test](https://en.wikipedia.org/wiki/Z-test)
+*   Wikipedia contributors. (2025). *Student's t-test*. Wikipedia, The Free Encyclopedia. [https://en.wikipedia.org/wiki/Student%27s_t-test](https://en.wikipedia.org/wiki/Student%27s_t-test)
+*   Montgomery, D. C., & Runger, G. C. (2018). *Applied Statistics and Probability for Engineers*. John Wiley & Sons.
