@@ -40,7 +40,7 @@ A regra de ouro para escolher entre os testes é simples:
 A distribuição t de Student é mais "achatada" e com caudas mais pesadas que a distribuição normal padrão (Z), o que reflete a incerteza adicional de ter que estimar o desvio padrão da população a partir da amostra.
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="../assets/images/z-vs-t-decision-tree.png" alt="Fluxograma de decisão para escolher entre Teste Z e Teste t." style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="../assets/images/flowchart-ztest-ttest.png" alt="Fluxograma de decisão para escolher entre Teste Z e Teste t." style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> Fluxograma para decidir entre o Teste Z e o Teste t de Student.
   </figcaption>
@@ -172,11 +172,57 @@ Ambas as abordagens levam à mesma conclusão: **falhamos em rejeitar a hipótes
 
 #### 5. Intervalo de Confiança (95%)
 
+O intervalo de confiança nos dá uma faixa de valores onde acreditamos que a verdadeira média da população se encontra, com um certo nível de confiança.
+
+##### a) Intervalo Bilateral (Two-Sided)
+
+Este é o tipo mais comum, usado para estimar que a média está entre dois valores.
+
+**Fórmula:**
+
 $$
-IC = \bar{x} \pm t_{\alpha/2, gl} \cdot \frac{s}{\sqrt{n}} = 178 \pm 2.064 \cdot \frac{8}{\sqrt{25}} = 178 \pm 2.064 \cdot 1.6 = 178 \pm 3.3024
+IC = \bar{x} \pm t_{\alpha/2, gl} \cdot \left(\frac{s}{\sqrt{n}}\right)
 $$
 
-**IC = [174.70, 181.30]**
+**Cálculo Passo a Passo (PEMDAS):**
+
+1.  **Parênteses (Calcular o Erro Padrão):** Primeiro, calculamos o erro padrão da média (o denominador da estatística t).
+
+    $$
+    \text{Erro Padrão} = \frac{s}{\sqrt{n}} = \frac{8}{\sqrt{25}} = \frac{8}{5} = 1.6
+    $$
+
+2.  **Multiplicação (Calcular a Margem de Erro):** Em seguida, multiplicamos o erro padrão pelo valor t-crítico para um teste bilateral ($t_{\alpha/2, gl} = t_{0.025, 24} = 2.064$).
+
+    $$
+    \text{Margem de Erro} = 2.064 \cdot 1.6 = 3.3024
+    $$
+
+3.  **Adição/Subtração (Encontrar os Limites):** Finalmente, subtraímos e somamos a margem de erro da média da amostra.
+    *   **Limite Inferior:** $178 - 3.3024 = 174.6976$
+    *   **Limite Superior:** $178 + 3.3024 = 181.3024$
+
+**Resultado:**
+Arredondando para duas casas decimais, o intervalo de confiança de 95% é **[174.70, 181.30]**.
+
+##### b) Intervalos Unilaterais (One-Sided)
+
+Usamos um intervalo unilateral quando nossa hipótese é direcional (apenas maior que ou apenas menor que). Para isso, usamos um t-crítico diferente, que coloca toda a área de $\alpha$ (0.05) em uma única cauda: $t_{\alpha, gl} = t_{0.05, 24} = 1.711$.
+
+*   **Unilateral à Direita (Limite Inferior):** Se quiséssemos ter 95% de confiança de que a média é **pelo menos** um certo valor.
+
+    $$
+    \text{Limite Inferior} = \bar{x} - t_{\alpha, gl} \cdot \left(\frac{s}{\sqrt{n}}\right) = 178 - 1.711 \cdot 1.6 = 178 - 2.7376 = 175.26
+    $$
+    
+    **Resultado:** Temos 95% de confiança de que a altura média é de **pelo menos 175.26 cm**, ou **[175.26, +∞)**.
+
+*   **Unilateral à Esquerda (Limite Superior):** Se quiséssemos ter 95% de confiança de que a média é **no máximo** um certo valor.
+
+    $$
+    \text{Limite Superior} = \bar{x} + t_{\alpha, gl} \cdot \left(\frac{s}{\sqrt{n}}\right) = 178 + 1.711 \cdot 1.6 = 178 + 2.7376 = 180.74
+    $$
+    **Resultado:** Temos 95% de confiança de que a altura média é de **no máximo 180.74 cm**, ou **(-∞, 180.74]**.
 
 O valor da hipótese nula (175) está dentro do intervalo de confiança, o que confirma nossa decisão de não rejeitar $H_0$.
 
