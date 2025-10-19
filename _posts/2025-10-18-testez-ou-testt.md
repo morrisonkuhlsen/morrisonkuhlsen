@@ -86,13 +86,52 @@ Ambas as abordagens levam à mesma conclusão: **rejeitamos a hipótese nula ($H
 
 #### 5. Intervalo de Confiança (95%)
 
+O intervalo de confiança nos dá uma faixa de valores onde acreditamos que a verdadeira média da população se encontra.
+
+##### a) Intervalo Bilateral (Two-Sided)
+
+**Fórmula:**
+
 $$
-IC = \bar{x} \pm Z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}} = 178 \pm 1.96 \cdot \frac{7}{\sqrt{25}} = 178 \pm 1.96 \cdot 1.4 = 178 \pm 2.744
+IC = \bar{x} \pm Z_{\alpha/2} \cdot \left(\frac{\sigma}{\sqrt{n}}\right)
 $$
 
-**IC = [175.26, 180.74]**
+**Cálculo:**
+Substituindo os valores ($\bar{x}=178$, $\sigma=7$, $n=25$) e o valor Z-crítico para um teste bilateral ($Z_{0.025} = 1.96$):
 
-Como o valor da hipótese nula (175) não está dentro do intervalo de confiança, isso reforça nossa decisão de rejeitar $H_0$.
+$$
+\begin{align*}
+IC &= 178 \pm 1.96 \cdot \left(\frac{7}{\sqrt{25}}\right) \\
+   &= 178 \pm 1.96 \cdot \left(\frac{7}{5}\right) \\
+   &= 178 \pm 1.96 \cdot (1.4) \\
+   &= 178 \pm 2.744
+\end{align*}
+$$
+
+Isso nos dá os seguintes limites:
+*   **Limite Inferior:** $178 - 2.744 = 175.256$
+*   **Limite Superior:** $178 + 2.744 = 180.744$
+
+**Resultado:**
+Arredondando, o intervalo de confiança de 95% é **[175.26, 180.74]**.
+
+##### b) Intervalos Unilaterais (One-Sided)
+
+Para hipóteses direcionais, usamos o Z-crítico que coloca toda a área de $\alpha$ (0.05) em uma única cauda: $Z_{\alpha} = Z_{0.05} = 1.645$.
+
+*   **Unilateral à Direita (Limite Inferior):**
+    $$
+    \text{Limite Inferior} = \bar{x} - Z_{\alpha} \cdot \left(\frac{\sigma}{\sqrt{n}}\right) = 178 - 1.645 \cdot 1.4 = 178 - 2.303 = 175.697
+    $$
+    **Resultado:** Temos 95% de confiança de que a altura média é de **pelo menos 175.70 cm**, ou **[175.70, +∞)**.
+
+*   **Unilateral à Esquerda (Limite Superior):**
+    $$
+    \text{Limite Superior} = \bar{x} + Z_{\alpha} \cdot \left(\frac{\sigma}{\sqrt{n}}\right) = 178 + 1.645 \cdot 1.4 = 178 + 2.303 = 180.303
+    $$
+    **Resultado:** Temos 95% de confiança de que a altura média é de **no máximo 180.30 cm**, ou **(-∞, 180.30]**.
+
+Como o valor da hipótese nula (175) não está dentro do intervalo de confiança bilateral, isso reforça nossa decisão de rejeitar $H_0$.
 
 #### 6. Resolução em Julia (Teste Z)
 <div class="code-container">
@@ -184,23 +223,21 @@ $$
 IC = \bar{x} \pm t_{\alpha/2, gl} \cdot \left(\frac{s}{\sqrt{n}}\right)
 $$
 
-**Cálculo Passo a Passo (PEMDAS):**
+**Cálculo:**
+Substituindo os valores da nossa amostra ($\bar{x}=178$, $s=8$, $n=25$) e o valor t-crítico para um teste bilateral ($t_{0.025, 24} = 2.064$):
 
-1.  **Parênteses (Calcular o Erro Padrão):** Primeiro, calculamos o erro padrão da média (o denominador da estatística t).
+$$
+\begin{align*}
+IC &= 178 \pm 2.064 \cdot \left(\frac{8}{\sqrt{25}}\right) \\
+   &= 178 \pm 2.064 \cdot \left(\frac{8}{5}\right) \\
+   &= 178 \pm 2.064 \cdot (1.6) \\
+   &= 178 \pm 3.3024
+\end{align*}
+$$
 
-    $$
-    \text{Erro Padrão} = \frac{s}{\sqrt{n}} = \frac{8}{\sqrt{25}} = \frac{8}{5} = 1.6
-    $$
-
-2.  **Multiplicação (Calcular a Margem de Erro):** Em seguida, multiplicamos o erro padrão pelo valor t-crítico para um teste bilateral ($t_{\alpha/2, gl} = t_{0.025, 24} = 2.064$).
-
-    $$
-    \text{Margem de Erro} = 2.064 \cdot 1.6 = 3.3024
-    $$
-
-3.  **Adição/Subtração (Encontrar os Limites):** Finalmente, subtraímos e somamos a margem de erro da média da amostra.
-    *   **Limite Inferior:** $178 - 3.3024 = 174.6976$
-    *   **Limite Superior:** $178 + 3.3024 = 181.3024$
+Isso nos dá os seguintes limites:
+*   **Limite Inferior:** $178 - 3.3024 = 174.6976$
+*   **Limite Superior:** $178 + 3.3024 = 181.3024$
 
 **Resultado:**
 Arredondando para duas casas decimais, o intervalo de confiança de 95% é **[174.70, 181.30]**.
