@@ -394,7 +394,7 @@ Isso confirma que a chance de observar um resultado tão extremo é menor que um
 
   ---
 
-## 🎧 Podcast: Aprofundando em Teste Z vs Test t de Student
+## 🎧 Podcast: Aprofundando em Teste Z vs Teste t de Student
 
 Para uma discussão mais aprofundada sobre o tema, ouça o nosso podcast. Cobrimos exemplos práticos e dicas para escolher a distribuição correta para seus dados.
 
