@@ -10,7 +10,7 @@ description: "Um guia completo para visualizar dados de saúde pública em níve
 
 <img src="../assets/images/dengue-mapa.jpg" alt="Mapa estilizado mostrando a incidência de dengue no estado de Pernambuco" style="max-width: 900px; display: block; margin: 1em auto; border-radius: 8px;">
 
-No nosso [post anterior](/pt/visualizacao-de-dados/visualizacao-pib-brasil-julia), criamos um mapa do PIB por estado. Agora, vamos aprofundar nossa análise geoespacial para um nível mais granular e impactante: a saúde pública municipal.
+No nosso [post anterior](https://morrisonkuhlsen.com/visualizacao-pib-brasil-julia/), criamos um mapa do PIB por estado. Agora, vamos aprofundar nossa análise geoespacial para um nível mais granular e impactante: a saúde pública municipal.
 
 Neste tutorial, vamos mapear a **incidência de internações por dengue nos municípios de Pernambuco**, utilizando dados públicos do SIH/SUS (Sistema de Informações Hospitalares do SUS). Este projeto não apenas demonstra o poder de Julia para visualização, mas também aborda um desafio comum na ciência de dados: lidar com dados governamentais que raramente vêm em formatos limpos e padronizados.
 
