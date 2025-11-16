@@ -485,3 +485,67 @@ Cada função permite acessar dados geoespaciais oficiais do Brasil, que podem s
 4. **Discussões da Comunidade**
    - [Dados de estados brasileiros em Julia](https://discourse.julialang.org/t/data-from-brazil-states-and-generic-region-using-vegadatasets/127761/2)
    - [Anúncio do GeoArtifacts.jl](https://discourse.julialang.org/t/ann-geoartifacts-jl-artifacts-for-geospatial-data-science-in-julia/114508)
+   
+---
+
+<style>
+.share-buttons {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+  text-align: center;
+}
+.share-buttons-title {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  margin: 5px;
+  border-radius: 50%;
+  text-decoration: none;
+  background-color: transparent;
+  color: #333 !important; /* Cor do ícone (cinza escuro) */
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+.share-btn:hover {
+  color: #000 !important; /* Cor do ícone ao passar o mouse */
+  transform: scale(1.1);
+}
+</style>
+
+<div class="share-buttons">
+  <p class="share-buttons-title">Gostou deste artigo? Compartilhe!</p>
+  <a href="https://api.whatsapp.com/send?text={{ page.title | url_encode }}%20-%20{{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp" title="Compartilhar no WhatsApp"><i class="bi bi-whatsapp"></i></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn facebook" title="Compartilhar no Facebook"><i class="bi bi-facebook"></i></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | url_encode }}&summary={{ page.description | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn linkedin" title="Compartilhar no LinkedIn"><i class="bi bi-linkedin"></i></a>
+  <button id="copy-link-btn" class="share-btn copy-link" title="Copiar Link"><i class="bi bi-link-45deg"></i></button>
+</div>
+
+<script>
+document.getElementById('copy-link-btn').addEventListener('click', function() {
+  navigator.clipboard.writeText(window.location.href).then(function() {
+    const button = this;
+    const originalContent = button.innerHTML;
+    button.innerHTML = 'Copiado!';
+    button.style.fontSize = '12px';
+    button.style.fontWeight = 'bold';
+    
+    setTimeout(() => {
+      button.innerHTML = originalContent;
+      button.style.fontSize = '';
+      button.style.fontWeight = '';
+    }, 2000);
+  }.bind(this), function(err) {
+    console.error('Erro ao copiar o link: ', err);
+  });
+});
+</script>
