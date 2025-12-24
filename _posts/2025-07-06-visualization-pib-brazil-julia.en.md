@@ -971,3 +971,4 @@ Each function allows access to official Brazilian geospatial data that can be ea
 4. **Community Discussions**
    - [Brazil states data in Julia](https://discourse.julialang.org/t/data-from-brazil-states-and-generic-region-using-vegadatasets/127761/2)
    - [Announcement of GeoArtifacts.jl](https://discourse.julialang.org/t/ann-geoartifacts-jl-artifacts-for-geospatial-data-science-in-julia/114508)
+   
