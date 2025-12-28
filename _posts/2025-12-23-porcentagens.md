@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Porcentagem — Guia Matemático Completo"
+title: "Porcentagem — fórmulas e exemplos resolvidos."
 categories: [MATEMÁTICA, GUIA]
 tags: [matemática, porcentagem, álgebra]
 lang: pt
@@ -227,58 +227,32 @@ $$
 $$
 
 $$
-6\%\text{ de }60:\quad 6\times6\cancel{0}=36\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 3{,}6=3{,}6
+30\%\text{ de }500:\quad 30\times5\cancel{0}\cancel{0}=150\ \Rightarrow\ \text{cortar dois zeros}\ \Rightarrow\ 150
 $$
 
 $$
-60\%\text{ de }683:\quad 6\cancel{0}\times683=4.098\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 409{,}8=409{,}8
+6\%\text{ de }60:\quad 6\times6\cancel{0}=36\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 3{,}6
 $$
 
 $$
-3\%\text{ de }240:\quad 3\times24\cancel{0}=72\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 7{,}2=7{,}2
+60\%\text{ de }683:\quad 6\cancel{0}\times683=4.098\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 409{,}8
+$$
+
+$$
+3\%\text{ de }240:\quad 3\times24\cancel{0}=72\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 7{,}2
 $$
 
 $$
 2\%\text{ de }252:\quad 2\times252=504\ \Rightarrow\ \text{como não tem zero, a vírgula anda duas casas para esquerda}\ \Rightarrow\ 5,04
 $$
 
-Agora com `\cancel{}` onde aplicável (mostrando os zeros riscados):
-
 $$
-5\%\text{ de }400:\quad 5\times400=2000\\
-\frac{2000}{100}=\frac{20\cancel{00}}{\cancel{00}}=20
+5\%\text{ de }0,43:\quad 5\times\cancel{0},43=0,0215\ \Rightarrow\ \text{como é um número decimal, a vírgula anda duas casas para esquerda}\ \Rightarrow\ 0,0215
 $$
 
-$$
-30\%\text{ de }80:\quad 30\times80=2400\\
-\frac{2400}{100}=\frac{24\cancel{00}}{\cancel{00}}=24
-$$
-
-$$
-6\%\text{ de }60:\quad 6\times60=360\\
-\frac{360}{100}=\frac{36\cancel{0}}{10\cancel{0}}=\frac{36}{10}=3{,}6
-$$
-
-$$
-3\%\text{ de }240:\quad 3\times240=720\\
-\frac{720}{100}=\frac{72\cancel{0}}{10\cancel{0}}=\frac{72}{10}=7{,}2
-$$
-
-$$
-2\%\text{ de }250:\quad 2\times250=500\\
-\frac{500}{100}=\frac{5\cancel{00}}{\cancel{00}}=5
-$$
-
-$$
-5\%\text{ de }0{,}08:\quad \frac{5}{100}\cdot\frac{8}{100}=\frac{40}{10000}
-=\frac{4\cancel{0}}{1000\cancel{0}}=\frac{4}{1000}=0{,}004
-$$
-
-Observação: quando o produto não termina em zeros, você coloca a vírgula movendo-a duas casas para a esquerda (por exemplo, $630\to6{,}30$). Esse é um atalho útil para cálculos mentais e checagens rápidas.
-
----
-
-Porcentagem — notação matemática formal • resolução passo a passo
+<div style="border-left: 4px solid #ff9800; padding: 0.5em; background-color: #fff3e0; margin: 1em 0;">
+⚠️<strong>Observação</strong>: quando o produto não termina em zeros, você coloca a vírgula movendo-a duas casas para a esquerda (por exemplo, $630\to6{,}30$). Esse é um atalho útil para cálculos mentais e checagens rápidas.
+</div>
 
 ---
 ## Conceitos adicionais e explicações
