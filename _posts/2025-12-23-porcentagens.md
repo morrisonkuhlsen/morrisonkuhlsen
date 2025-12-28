@@ -160,6 +160,122 @@ $$
 $$\boxed{\text{Perda real de } 4\%}$$
 </div>
 
+## 10. Porcentagem de outra porcentagem (ex.: $12\%$ de $95\%$)
+
+Quando queremos aplicar uma porcentagem sobre outra porcentagem (por exemplo, $12\%$ de $95\%$), convertemos cada porcentagem em sua forma decimal e multiplicamos. Em termos gerais:
+
+$$
+	ext{(p\% de q\%)} = \frac{p}{100} \cdot \frac{q}{100} = \frac{p\,q}{10000}
+$$
+
+Para expressar o resultado novamente em porcentagem, multiplicamos por $100$:
+
+$$
+	ext{(p\% de q\%) em \%} = \frac{p\,q}{100}
+$$
+
+Exemplo: calcular $12\%$ de $95\%$.
+
+Exemplo: calcular $12\%$ de $95\%$ — usando a multiplicação direta e cortando um zero:
+
+$$
+\frac{12}{100}\cdot\frac{95}{100}=\frac{12\cdot95}{10000}
+$$
+
+Primeiro calcule $12\cdot95$:
+
+$$
+12\times95=1140
+$$
+
+Então temos a fração $\dfrac{1140}{10000}$. Podemos "cortar" um zero no numerador com um zero no denominador (dividindo ambos por $10$):
+
+$$
+\frac{1140}{10000}=\frac{114\cancel{0}}{1000\cancel{0}}=\frac{114}{1000}
+$$
+
+Agora simplificamos dividindo por $2$:
+
+$$
+\frac{114}{1000}=\frac{57}{500}
+$$
+
+Convertendo para decimal e porcentagem:
+
+$$
+\frac{57}{500}=0{,}114=11{,}4\%.
+$$
+
+Portanto, $12\%$ de $95\%$ corresponde a $11{,}4\%$, mostrado com a abordagem desejada (multiplicação direta e cancelamento de um zero).
+
+## Atalho: multiplicar e "cortar 2 zeros"
+
+Regra rápida: para calcular $p\%$ de um valor $V$ você pode usar
+
+$$
+p\%\text{ de }V = \frac{p\cdot V}{100}
+$$
+
+Um atalho prático é calcular primeiro $p\cdot V$ e depois "cortar dois zeros" (ou seja, dividir por $100$, que equivale a mover a vírgula duas casas para a esquerda). Exemplos (do quadro):
+
+$$
+5\%\text{ de }400:\quad 5\times4\cancel{0}\cancel{0}=20\ \Rightarrow\ \text{cortar dois zeros}\ \Rightarrow\ 20
+$$
+
+$$
+30\%\text{ de }80:\quad 3\cancel{0}\times8\cancel{0}=24\ \Rightarrow\ \text{cortar dois zeros}\ \Rightarrow\ 24
+$$
+
+$$
+6\%\text{ de }60:\quad 6\times6\cancel{0}=36\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 3{,}6=3{,}6
+$$
+
+$$
+60\%\text{ de }683:\quad 6\cancel{0}\times683=4.098\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 409{,}8=409{,}8
+$$
+
+$$
+3\%\text{ de }240:\quad 3\times24\cancel{0}=72\ \Rightarrow\ \text{cortar um zero e anda uma vírgula para esquerda}\ \Rightarrow\ 7{,}2=7{,}2
+$$
+
+$$
+2\%\text{ de }252:\quad 2\times252=504\ \Rightarrow\ \text{como não tem zero, a vírgula anda duas casas para esquerda}\ \Rightarrow\ 5,04
+$$
+
+Agora com `\cancel{}` onde aplicável (mostrando os zeros riscados):
+
+$$
+5\%\text{ de }400:\quad 5\times400=2000\\
+\frac{2000}{100}=\frac{20\cancel{00}}{\cancel{00}}=20
+$$
+
+$$
+30\%\text{ de }80:\quad 30\times80=2400\\
+\frac{2400}{100}=\frac{24\cancel{00}}{\cancel{00}}=24
+$$
+
+$$
+6\%\text{ de }60:\quad 6\times60=360\\
+\frac{360}{100}=\frac{36\cancel{0}}{10\cancel{0}}=\frac{36}{10}=3{,}6
+$$
+
+$$
+3\%\text{ de }240:\quad 3\times240=720\\
+\frac{720}{100}=\frac{72\cancel{0}}{10\cancel{0}}=\frac{72}{10}=7{,}2
+$$
+
+$$
+2\%\text{ de }250:\quad 2\times250=500\\
+\frac{500}{100}=\frac{5\cancel{00}}{\cancel{00}}=5
+$$
+
+$$
+5\%\text{ de }0{,}08:\quad \frac{5}{100}\cdot\frac{8}{100}=\frac{40}{10000}
+=\frac{4\cancel{0}}{1000\cancel{0}}=\frac{4}{1000}=0{,}004
+$$
+
+Observação: quando o produto não termina em zeros, você coloca a vírgula movendo-a duas casas para a esquerda (por exemplo, $630\to6{,}30$). Esse é um atalho útil para cálculos mentais e checagens rápidas.
+
 ---
 
 Porcentagem — notação matemática formal • resolução passo a passo
@@ -236,4 +352,3 @@ Ex.: dois aumentos de $10\%$: $1{,}1\cdot1{,}1=1{,}21$ → aumento total $21\%$.
 1. Quanto é $18\%$ de $450$? — Resposta: $81$.
 2. Se $x$ representa $12\%$ de $V$ e $x=36$, qual é $V$? — Resposta: $300$.
 3. Uma mercadoria custa $200$; aplica-se desconto de $15\%$ e depois acréscimo de $10\%$. Qual o preço final? — Resposta: $200\cdot0{,}85\cdot1{,}10=187$.
-
