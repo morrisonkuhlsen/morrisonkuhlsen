@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Frequências Históricas na Mega-Sena"
+title: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
 tags: [matemática, probabilidade, mega-sena]
 ref: porcentagens
-description: "Frequências Históricas na Mega-Sena"
+description: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 ---
 
 <div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">

@@ -8,6 +8,8 @@ ref: porcentagens
 description: "Guia prático de porcentagens: fórmulas e exemplos resolvidos."
 ---
 
+Porcentagem é uma forma de comparar quantidades usando a ideia de “por cem” (do símbolo %). Em vez de dizer “0,25”, você pode dizer 25%, o que facilita muito interpretar descontos, aumentos, juros, impostos, probabilidades, estatísticas, gráficos e relatórios do dia a dia.
+
 <div style="text-align:center; margin-bottom:1rem;">
 	<img src="/assets/images/percentage.png" alt="Capa: porcentagem" style="max-width:560px; width:100%; height:auto;">
 </div>
