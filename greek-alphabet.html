@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Alfabeto Grego</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=GFS+Didot:ital@0;1&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/assets/css/style-ga.css" />
+</head>
+<body>
+  <main class="wrap">
+    <div class="stage">
+      <section class="chart" id="chart" aria-label="Tabela do alfabeto grego"></section>
+    </div>
+  </main>
+
+  <!-- Modal (overlay) -->
+  <div class="backdrop" id="backdrop" hidden aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" id="closeBtn" aria-label="Fechar">×</button>
+
+      <div class="modal-head">
+        <div class="big-glyph" id="bigGlyph">Αα</div>
+        <div class="head-meta">
+          <div class="modal-title" id="modalTitle">ALPHA</div>
+          <div class="modal-sub" id="modalSub">ἄλφα · [a]</div>
+        </div>
+      </div>
+
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="/assets/js/script-ga.js"></script>
+</body>
+</html>
