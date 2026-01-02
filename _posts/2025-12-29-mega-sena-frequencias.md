@@ -741,6 +741,146 @@ P(\text{não ganhar em 57})
 \end{aligned}
 $$
 
+#### 4) Uma aposta de 20 números: probabilidade de “ter Quina” (pelo menos uma)
+
+Fixe o sorteio com **6 dezenas**. Seja $\(X\)$ o número de dezenas sorteadas que aparecem dentro do seu conjunto de **20** dezenas.
+
+Então $\(X\)$ segue uma **Hipergeométrica**:
+
+$$
+X \sim \text{Hipergeométrica}(N=60,\ K=6,\ n=20),
+$$
+
+e, para $\(k=0,1,\dots,6\)$,
+
+$$
+P(X=k)=\frac{\binom{6}{k}\binom{54}{20-k}}{\binom{60}{20}}.
+$$
+
+Você “faz Quina” com a aposta de 20 números **se e somente se** $\(X\ge 5\)$, porque assim existe pelo menos uma combinação de 6 dezenas dentro da aposta que contém **5** (ou **6**) das sorteadas.
+
+Logo:
+
+$$
+p_{\ge 5}=P(X\ge 5)=P(X=5)+P(X=6).
+$$
+
+**Exatamente 5 acertos dentro dos 20:**
+
+$$
+\begin{aligned}
+P(X=5)
+&=\frac{\binom{6}{5}\binom{54}{15}}{\binom{60}{20}}\\
+&=\frac{1632}{131747}\\
+&\approx 0{,}01238738\\
+&\approx 1{,}238738\%
+\end{aligned}
+$$
+
+**Exatamente 6 acertos (Sena) dentro dos 20:**
+
+$$
+\begin{aligned}
+P(X=6)
+&=\frac{\binom{6}{6}\binom{54}{14}}{\binom{60}{20}}\\
+&=\frac{102}{131747}\\
+&\approx 0{,}000774211\\
+&\approx 0{,}0774211\%
+\end{aligned}
+$$
+
+**Portanto (Quina ou melhor, isto é, $\(X\ge 5\)$):**
+
+$$
+\begin{aligned}
+p_{\ge 5}
+&=\frac{1632+102}{131747}\\
+&=\frac{1734}{131747}\\
+&\approx 0{,}01316159\\
+&\approx 1{,}316159\%
+\end{aligned}
+$$
+
+**Observação prática importante:**
+- Se $\(X=5\)$, essa aposta de 20 números contém **15 quinas** (as 5 dezenas sorteadas + 1 das 15 “não sorteadas” dentro dos seus 20).
+- Se $\(X=6\)$, contém **84 quinas + 1 sena**.
+
+---
+
+#### 5) Com 57 apostas de 20 números: chance de sair **ao menos uma Quina** (ou até Sena)
+
+Assumindo as 57 apostas como 57 tentativas “separadas”, usamos o complemento:
+
+$$
+\begin{aligned}
+P(\ge 1\ \text{Quina em 57})
+&=1-(1-p_{\ge 5})^{57}
+\end{aligned}
+$$
+
+Substituindo $\(p_{\ge 5}\approx 0{,}01316159\)$:
+
+$$
+\begin{aligned}
+P(\ge 1)
+&=1-(1-0{,}01316159)^{57}\\
+&\approx 0{,}53007932\\
+&\approx 53{,}01\%
+\end{aligned}
+$$
+
+Uma leitura “1 em $\(x\)$” (só como referência):
+
+$$
+\begin{aligned}
+\frac{1}{0{,}53007932}\approx 1{,}89
+\end{aligned}
+$$
+
+Ou seja: aproximadamente **53%** (um pouco melhor que “cara ou coroa”) para sair **ao menos uma Quina** no pacote de 57 apostas de 20 números.
+
+---
+
+#### 6) Interpretação (por que ainda pode dar “nada”)
+
+Mesmo com muito dinheiro, ainda existe uma probabilidade relevante de **não sair nenhuma Quina**:
+
+$$
+\begin{aligned}
+P(\text{não sair Quina em 57})
+&=(1-p_{\ge 5})^{57}\\
+&\approx 1-0{,}53007932\\
+&\approx 0{,}46992068\\
+&\approx 46{,}99\%
+\end{aligned}
+$$
+
+Portanto:
+- **não** existe “garantia”;
+- existe uma chance **moderada** de Quina (≈53%), mas ainda **quase metade** das vezes não sai nada de Quina para cima.
+
+---
+
+#### 7) (Opcional) Separando “Quina sem Sena”
+
+Se você quiser separar “ganhar **Quina**, mas **não** ganhar **Sena**”:
+
+$$
+\begin{aligned}
+P(\ge 1\ \text{Quina e nenhuma Sena})
+&=(1-p_6)^{57}-(1-p_{\ge 5})^{57}\\
+&\approx 48{,}69\%
+\end{aligned}
+$$
+
+E a probabilidade de sair **ao menos uma Sena** (seu cálculo anterior) permanece:
+
+$$
+P(\ge 1\ \text{Sena em 57})
+=1-(1-p_{20})^{57}
+\approx 4{,}3186828\%.
+$$
+
 Portanto:
 - **não** existe “garantia”;
 - existe uma chance **maior**, mas ainda **baixa** para o prêmio principal.
