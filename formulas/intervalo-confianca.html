@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Intervalo de Confiança — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Intervalo de Confiança</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Intervalo de Confiança interativa">
+        <span class="part ic" data-part="ic" tabindex="0" title="Intervalo de Confiança"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <span class="part sample-mean-ic" data-part="sample_mean_ic" tabindex="0" title="Média Amostral"></span>
+        <span class="part plus-minus-ic" data-part="plus_minus_ic" tabindex="0" title="Mais ou Menos"></span>
+        <span class="part z-critical" data-part="z_critical" tabindex="0" title="Valor Crítico Z"></span>
+        <span class="op" style="font-size: 1.5em;">·</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part std-dev-ic" data-part="std_dev_ic" tabindex="0" title="Desvio Padrão"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part sqrt-n" data-part="sqrt_n" tabindex="0" title="Raiz Quadrada de n"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        ic: "\\displaystyle IC",
+        sample_mean_ic: "\\displaystyle \\bar{x}",
+        plus_minus_ic: "\\displaystyle \\pm",
+        z_critical: "\\displaystyle z_{\\alpha/2}",
+        std_dev_ic: "\\displaystyle \\sigma",
+        sqrt_n: "\\displaystyle \\sqrt{n}"
+      },
+      explanations: {
+        ic: {
+          title: "Intervalo de Confiança (IC)",
+          text: "Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro populacional. Representa a incerteza na estimativa."
+        },
+        sample_mean_ic: {
+          title: "Média Amostral (x̄)",
+          text: "A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional."
+        },
+        plus_minus_ic: {
+          title: "Mais ou Menos (±)",
+          text: "Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico."
+        },
+        z_critical: {
+          title: "Valor Crítico Z (z_{α/2})",
+          text: "O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58."
+        },
+        std_dev_ic: {
+          title: "Desvio Padrão (σ)",
+          text: "O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados."
+        },
+        sqrt_n: {
+          title: "Raiz Quadrada de n (√n)",
+          text: "O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

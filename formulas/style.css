@@ -123,6 +123,26 @@
   --summation-total: var(--likelihood);
   --p-b-given-ai: var(--prior);
   --p-ai: var(--marginal);
+
+  /* Cores Distribuição de Bernoulli (Padronizadas) */
+  --p-x-k-bernoulli: var(--posterior);
+  --p-power-k-bernoulli: var(--likelihood);
+  --q-power-1k: var(--marginal);
+
+  /* Cores Intervalo de Confiança (Padronizadas) */
+  --ic: var(--posterior);
+  --sample-mean-ic: var(--likelihood);
+  --plus-minus-ic: #1c9eff;
+  --z-critical: var(--prior);
+  --std-dev-ic: var(--marginal);
+  --sqrt-n: #1c9eff;
+
+  /* Cores Teste t de Student (Padronizadas) */
+  --t-statistic: var(--posterior);
+  --sample-mean-t: var(--likelihood);
+  --null-mean: var(--prior);
+  --sample-std: var(--marginal);
+  --sqrt-n-t: #1c9eff;
 }
 
 html, body {
@@ -329,6 +349,54 @@ html, body {
 .p-ai,
 .p-ai .katex,
 .p-ai .katex * { color: var(--p-ai) !important; }
+
+/* Estilos Distribuição de Bernoulli */
+.p-x-k-bernoulli,
+.p-x-k-bernoulli .katex,
+.p-x-k-bernoulli .katex * { color: var(--p-x-k-bernoulli) !important; }
+.p-power-k-bernoulli,
+.p-power-k-bernoulli .katex,
+.p-power-k-bernoulli .katex * { color: var(--p-power-k-bernoulli) !important; }
+.q-power-1k,
+.q-power-1k .katex,
+.q-power-1k .katex * { color: var(--q-power-1k) !important; }
+
+/* Estilos Intervalo de Confiança */
+.ic,
+.ic .katex,
+.ic .katex * { color: var(--ic) !important; }
+.sample-mean-ic,
+.sample-mean-ic .katex,
+.sample-mean-ic .katex * { color: var(--sample-mean-ic) !important; }
+.plus-minus-ic,
+.plus-minus-ic .katex,
+.plus-minus-ic .katex * { color: var(--plus-minus-ic) !important; }
+.z-critical,
+.z-critical .katex,
+.z-critical .katex * { color: var(--z-critical) !important; }
+.std-dev-ic,
+.std-dev-ic .katex,
+.std-dev-ic .katex * { color: var(--std-dev-ic) !important; }
+.sqrt-n,
+.sqrt-n .katex,
+.sqrt-n .katex * { color: var(--sqrt-n) !important; }
+
+/* Estilos Teste t de Student */
+.t-statistic,
+.t-statistic .katex,
+.t-statistic .katex * { color: var(--t-statistic) !important; }
+.sample-mean-t,
+.sample-mean-t .katex,
+.sample-mean-t .katex * { color: var(--sample-mean-t) !important; }
+.null-mean,
+.null-mean .katex,
+.null-mean .katex * { color: var(--null-mean) !important; }
+.sample-std,
+.sample-std .katex,
+.sample-std .katex * { color: var(--sample-std) !important; }
+.sqrt-n-t,
+.sqrt-n-t .katex,
+.sqrt-n-t .katex * { color: var(--sqrt-n-t) !important; }
 
 .part.selected { z-index: 10; }
 

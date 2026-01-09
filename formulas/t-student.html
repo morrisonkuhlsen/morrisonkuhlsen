@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teste t de Student — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Teste t de Student</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Teste t de Student interativa">
+        <span class="part t-statistic" data-part="t_statistic" tabindex="0" title="Estatística t"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part sample-mean-t" data-part="sample_mean_t" tabindex="0" title="Média Amostral"></span>
+            <span class="op">-</span>
+            <span class="part null-mean" data-part="null_mean" tabindex="0" title="Média Hipotética"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part sample-std" data-part="sample_std" tabindex="0" title="Desvio Padrão Amostral"></span>
+            <span class="op" style="font-size: 1.2em;">/</span>
+            <span class="part sqrt-n-t" data-part="sqrt_n_t" tabindex="0" title="Raiz Quadrada de n"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        t_statistic: "\\displaystyle t",
+        sample_mean_t: "\\displaystyle \\bar{x}",
+        null_mean: "\\displaystyle \\mu_0",
+        sample_std: "\\displaystyle s",
+        sqrt_n_t: "\\displaystyle \\sqrt{n}"
+      },
+      explanations: {
+        t_statistic: {
+          title: "Estatística t",
+          text: "A estatística de teste que mede quantos erros padrão a média amostral está distante da média hipotética. Usada quando o desvio padrão populacional é desconhecido e a amostra é pequena."
+        },
+        sample_mean_t: {
+          title: "Média Amostral (x̄)",
+          text: "A média calculada a partir da amostra. Representa a estimativa do parâmetro populacional baseada nos dados observados."
+        },
+        null_mean: {
+          title: "Média Hipotética (μ₀)",
+          text: "O valor da média sob a hipótese nula (H₀). É o valor que estamos testando se a média populacional é igual a ele."
+        },
+        sample_std: {
+          title: "Desvio Padrão Amostral (s)",
+          text: "O desvio padrão calculado a partir da amostra. É usado como estimativa do desvio padrão populacional quando este é desconhecido."
+        },
+        sqrt_n_t: {
+          title: "Raiz Quadrada de n (√n)",
+          text: "O tamanho da amostra sob raiz quadrada. Junto com o desvio padrão amostral, forma o erro padrão da média (s/√n), que mede a variabilidade da média amostral."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

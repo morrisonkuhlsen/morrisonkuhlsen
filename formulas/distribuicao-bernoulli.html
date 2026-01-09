@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distribuição de Bernoulli — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição de Bernoulli</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Distribuição de Bernoulli interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
+        <span class="part p-x-k-bernoulli" data-part="p_x_k_bernoulli" tabindex="0" title="Probabilidade de k" style="white-space: nowrap;"></span>
+        <span class="op" id="op-equals" style="cursor:pointer; white-space: nowrap;" title="Mostrar/Esconder todos">=</span>
+        <span class="part p-power-k-bernoulli" data-part="p_power_k_bernoulli" tabindex="0" title="Probabilidade de sucesso elevada a k" style="white-space: nowrap;"></span>
+        <span class="op" style="font-size: 1.5em; white-space: nowrap;">·</span>
+        <span class="part q-power-1k" data-part="q_power_1k" tabindex="0" title="Probabilidade de falha elevada a (1-k)" style="white-space: nowrap;"></span>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        p_x_k_bernoulli: "\\displaystyle P(X=k)",
+        p_power_k_bernoulli: "\\displaystyle p^k",
+        q_power_1k: "\\displaystyle (1-p)^{1-k}"
+      },
+      explanations: {
+        p_x_k_bernoulli: {
+          title: "Probabilidade de k",
+          text: "A probabilidade de obter exatamente 'k' em uma única tentativa de Bernoulli, onde k pode ser 0 (falha) ou 1 (sucesso)."
+        },
+        p_power_k_bernoulli: {
+          title: "Probabilidade de Sucesso (p^k)",
+          text: "A probabilidade 'p' de sucesso elevada à potência 'k'. Quando k=1, resulta em p (sucesso); quando k=0, resulta em 1."
+        },
+        q_power_1k: {
+          title: "Probabilidade de Falha ((1-p)^(1-k))",
+          text: "A probabilidade de falha (1-p) elevada à potência (1-k). Quando k=0, resulta em (1-p) (falha); quando k=1, resulta em 1."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
