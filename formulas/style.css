@@ -106,6 +106,12 @@
   --pop-size-h: var(--prior);
   --std-dev-h: #1c9eff;
   --sum-neyman: var(--marginal);
+
+  /* Cores Distribuição Binomial (Padronizadas) */
+  --p-x-k: var(--posterior);
+  --binom-coef: var(--likelihood);
+  --p-power-k: var(--prior);
+  --q-power-nk: var(--marginal);
 }
 
 html, body {
@@ -145,6 +151,11 @@ html, body {
   position: relative;
 }
 
+.formula-wrap[aria-label*="Distribuição Binomial"] {
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+}
+
 .formula-divider {
   width: 80%;
   height: 2px;
@@ -160,6 +171,8 @@ html, body {
   user-select: none;
   transition: transform .25s ease;
   position: relative;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .part:focus-visible {
   outline: 2px solid var(--likelihood);
@@ -266,6 +279,20 @@ html, body {
 .pop-size-h { color: var(--pop-size-h); }
 .std-dev-h { color: var(--std-dev-h); }
 .sum-neyman { color: var(--sum-neyman); }
+
+/* Estilos Distribuição Binomial */
+.p-x-k,
+.p-x-k .katex,
+.p-x-k .katex * { color: var(--p-x-k) !important; }
+.binom-coef,
+.binom-coef .katex,
+.binom-coef .katex * { color: var(--binom-coef) !important; }
+.p-power-k,
+.p-power-k .katex,
+.p-power-k .katex * { color: var(--p-power-k) !important; }
+.q-power-nk,
+.q-power-nk .katex,
+.q-power-nk .katex * { color: var(--q-power-nk) !important; }
 
 .part.selected { z-index: 10; }
 

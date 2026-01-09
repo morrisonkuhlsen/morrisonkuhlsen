@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distribuição Binomial — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição Binomial</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula da Distribuição Binomial interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
+        <span class="part p-x-k" data-part="p_x_k" tabindex="0" title="Probabilidade de k sucessos" style="white-space: nowrap;"></span>
+        <span class="op" id="op-equals" style="cursor:pointer; white-space: nowrap;" title="Mostrar/Esconder todos">=</span>
+        <span class="part binom-coef" data-part="binom_coef" tabindex="0" title="Coeficiente Binomial" style="white-space: nowrap;"></span>
+        <span class="op" style="font-size: 1.5em; white-space: nowrap;">·</span>
+        <span class="part p-power-k" data-part="p_power_k" tabindex="0" title="Probabilidade de sucesso elevada a k" style="white-space: nowrap;"></span>
+        <span class="op" style="font-size: 1.5em; white-space: nowrap;">·</span>
+        <span class="part q-power-nk" data-part="q_power_nk" tabindex="0" title="Probabilidade de falha elevada a (n-k)" style="white-space: nowrap;"></span>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        p_x_k: "\\displaystyle P(X=k)",
+        binom_coef: "\\displaystyle \\binom{n}{k}",
+        p_power_k: "\\displaystyle p^k",
+        q_power_nk: "\\displaystyle (1-p)^{n-k}"
+      },
+      explanations: {
+        p_x_k: {
+          title: "Probabilidade de k Sucessos",
+          text: "A probabilidade de obter exatamente 'k' sucessos em 'n' tentativas independentes, onde cada tentativa tem probabilidade 'p' de sucesso."
+        },
+        binom_coef: {
+          title: "Coeficiente Binomial",
+          text: "Representa o número de maneiras diferentes de escolher 'k' sucessos de 'n' tentativas. Calculado como C(n, k) = n! / (k! · (n-k)!)."
+        },
+        p_power_k: {
+          title: "Probabilidade de Sucesso (p^k)",
+          text: "A probabilidade 'p' de sucesso em cada tentativa, elevada à potência 'k'. Representa a probabilidade de obter 'k' sucessos consecutivos."
+        },
+        q_power_nk: {
+          title: "Probabilidade de Falha ((1-p)^(n-k))",
+          text: "A probabilidade de falha (1-p) elevada à potência (n-k). Representa a probabilidade de obter (n-k) falhas nas tentativas restantes."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
