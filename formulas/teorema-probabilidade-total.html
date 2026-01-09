@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teorema da Probabilidade Total — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Teorema da Probabilidade Total</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Teorema da Probabilidade Total interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
+        <span class="part p-b-total" data-part="p_b_total" tabindex="0" title="Probabilidade Total de B: P(B)" style="white-space: nowrap;"></span>
+        <span class="op" id="op-equals" style="cursor:pointer; white-space: nowrap;" title="Mostrar/Esconder todos">=</span>
+        <span class="part summation-total" data-part="summation_total" tabindex="0" title="Somatório" style="white-space: nowrap;"></span>
+        <span class="part p-b-given-ai" data-part="p_b_given_ai" tabindex="0" title="Probabilidade Condicional: P(B|Aᵢ)" style="white-space: nowrap;"></span>
+        <span class="op" style="font-size: 1.5em; white-space: nowrap;">·</span>
+        <span class="part p-ai" data-part="p_ai" tabindex="0" title="Probabilidade de Aᵢ: P(Aᵢ)" style="white-space: nowrap;"></span>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        p_b_total: "\\displaystyle P(B)",
+        summation_total: "\\displaystyle \\sum_{i=1}^{n}",
+        p_b_given_ai: "\\displaystyle P(B\\mid A_i)",
+        p_ai: "\\displaystyle P(A_i)"
+      },
+      explanations: {
+        p_b_total: {
+          title: "Probabilidade Total de B",
+          text: "A probabilidade total do evento B ocorrer, considerando todos os possíveis cenários ou partições do espaço amostral."
+        },
+        summation_total: {
+          title: "Somatório",
+          text: "Soma sobre todas as partições A₁, A₂, ..., Aₙ que formam uma partição completa e mutuamente exclusiva do espaço amostral."
+        },
+        p_b_given_ai: {
+          title: "Probabilidade Condicional P(B|Aᵢ)",
+          text: "A probabilidade de B ocorrer dado que Aᵢ ocorreu. Representa a probabilidade de B em cada cenário específico Aᵢ."
+        },
+        p_ai: {
+          title: "Probabilidade de Aᵢ",
+          text: "A probabilidade de cada partição Aᵢ ocorrer. Os eventos Aᵢ devem ser mutuamente exclusivos e exaustivos (sua união cobre todo o espaço amostral)."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const modal = document.getElementById(`modal-${key}`);
       const rect = partEl.getBoundingClientRect();
       const modalOffset = 40;
+      const denominatorOffset = 60;
 
       modal.style.visibility = 'hidden';
       modal.style.display = 'block';
@@ -60,11 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let top, left;
       
-      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman'];
+      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman', 'p_b'];
       const isDenominator = denominatorKeys.includes(key);
 
       if (isDenominator) {
-        top = rect.bottom + modalOffset;
+        top = rect.bottom + denominatorOffset;
       } else {
         top = rect.top - modalHeight - modalOffset;
       }
@@ -95,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       el.classList.add("selected");
       
       const key = el.dataset.part;
-      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman'];
+      const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman', 'p_b'];
       const isDenominator = denominatorKeys.includes(key);
       el.style.transform = isDenominator ? "translateY(10px)" : "translateY(-10px)";
 
@@ -151,16 +152,17 @@ document.addEventListener("DOMContentLoaded", () => {
               const { partEl, modal, width, height } = info;
               partEl.classList.add("selected");
               const key = partEl.dataset.part;
-              const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman'];
+              const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman', 'p_b'];
               const isDenominator = denominatorKeys.includes(key);
               partEl.style.transform = isDenominator ? "translateY(10px)" : "translateY(-10px)";
 
               const rect = partEl.getBoundingClientRect();
               const modalOffset = 40;
+              const denominatorOffset = 60;
               let top;
 
               if (isDenominator) {
-                  top = rect.bottom + modalOffset;
+                  top = rect.bottom + denominatorOffset;
               } else {
                   top = rect.top - height - modalOffset;
               }

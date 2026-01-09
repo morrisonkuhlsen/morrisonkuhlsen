@@ -112,6 +112,17 @@
   --binom-coef: var(--likelihood);
   --p-power-k: var(--prior);
   --q-power-nk: var(--marginal);
+
+  /* Cores Probabilidade Condicional (Padronizadas) */
+  --p-a-given-b: var(--posterior);
+  --p-intersection: var(--likelihood);
+  --p-b: var(--marginal);
+
+  /* Cores Teorema da Probabilidade Total (Padronizadas) */
+  --p-b-total: var(--posterior);
+  --summation-total: var(--likelihood);
+  --p-b-given-ai: var(--prior);
+  --p-ai: var(--marginal);
 }
 
 html, body {
@@ -293,6 +304,31 @@ html, body {
 .q-power-nk,
 .q-power-nk .katex,
 .q-power-nk .katex * { color: var(--q-power-nk) !important; }
+
+/* Estilos Probabilidade Condicional */
+.p-a-given-b,
+.p-a-given-b .katex,
+.p-a-given-b .katex * { color: var(--p-a-given-b) !important; }
+.p-intersection,
+.p-intersection .katex,
+.p-intersection .katex * { color: var(--p-intersection) !important; }
+.p-b,
+.p-b .katex,
+.p-b .katex * { color: var(--p-b) !important; }
+
+/* Estilos Teorema da Probabilidade Total */
+.p-b-total,
+.p-b-total .katex,
+.p-b-total .katex * { color: var(--p-b-total) !important; }
+.summation-total,
+.summation-total .katex,
+.summation-total .katex * { color: var(--summation-total) !important; }
+.p-b-given-ai,
+.p-b-given-ai .katex,
+.p-b-given-ai .katex * { color: var(--p-b-given-ai) !important; }
+.p-ai,
+.p-ai .katex,
+.p-ai .katex * { color: var(--p-ai) !important; }
 
 .part.selected { z-index: 10; }
 

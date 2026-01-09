@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Probabilidade Condicional — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Probabilidade Condicional</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula de Probabilidade Condicional interativa">
+        <span class="part p-a-given-b" data-part="p_a_given_b" tabindex="0" title="Probabilidade Condicional: P(A|B)"></span>
+        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part p-intersection" data-part="p_intersection" tabindex="0" title="Probabilidade da Interseção: P(A ∩ B)"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part p-b" data-part="p_b" tabindex="0" title="Probabilidade de B: P(B)"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        p_a_given_b: "\\displaystyle P(A\\mid B)",
+        p_intersection: "\\displaystyle P(A \\cap B)",
+        p_b: "\\displaystyle P(B)"
+      },
+      explanations: {
+        p_a_given_b: {
+          title: "Probabilidade Condicional",
+          text: "A probabilidade de A ocorrer dado que B já ocorreu. Representa como a ocorrência de B afeta a probabilidade de A."
+        },
+        p_intersection: {
+          title: "Probabilidade da Interseção",
+          text: "A probabilidade de que tanto A quanto B ocorram simultaneamente. Representa a sobreposição entre os eventos A e B."
+        },
+        p_b: {
+          title: "Probabilidade de B",
+          text: "A probabilidade do evento B ocorrer. Serve como normalizador na fórmula, garantindo que a probabilidade condicional esteja entre 0 e 1."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
