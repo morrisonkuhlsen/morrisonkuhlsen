@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Cara ou coroa — Binomial, Lei dos Grandes Números e sequências longas"
+title: "Mistérios do cara ou coroa"
 categories: [PROBABILIDADE, ESTATÍSTICA, GUIA]
 tags: [probabilidade, estatística, bernoulli, binomial, lgn]
 lang: pt
@@ -11,6 +11,13 @@ description: "cara-ou-coroa: Binomial, LGN, runs e tempos de espera."
 ## 1) Modelo probabilístico (moeda justa)
 
 Assuma uma moeda justa e lançamentos independentes.
+
+<figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
+  <img src="/assets/images/cointoss.png" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <figcaption class="img-caption-contrast">
+    <strong>Figura:</strong> A sorte está lançada.
+  </figcaption>
+</figure>
 
 ### Um lançamento
 
@@ -100,54 +107,206 @@ $$
 
 ### Exemplo A — $n=5$: probabilidade de sair exatamente $k=3$ caras
 
-$$
-P(X=3)=\frac{\binom{5}{3}}{2^5}.
-$$
-
-Agora,
+Seja $X$ o número de caras em $n=5$ lançamentos de uma moeda justa. Então $X\sim\mathrm{Bin}(5,\tfrac12)$ e:
 
 $$
-\binom{5}{3}=\frac{5!}{3!\,2!}=\frac{5\cdot4}{2\cdot1}=10,
-\qquad
-2^5=32.
+P(X=3)=\binom{5}{3}\left(\frac12\right)^3\left(1-\frac12\right)^{5-3}
+=\binom{5}{3}\left(\frac12\right)^3\left(\frac12\right)^2
+=\binom{5}{3}\left(\frac12\right)^5
+=\frac{\binom{5}{3}}{2^5}.
+$$
+
+Agora, calcule $\binom{5}{3}$:
+
+$$
+\binom{5}{3}=\frac{5!}{3!\,(5-3)!}=\frac{5!}{3!\,2!}.
+$$
+
+Expanda os fatoriais:
+
+$$
+5!=5\cdot 4\cdot 3\cdot 2\cdot 1,\qquad
+3!=3\cdot 2\cdot 1,\qquad
+2!=2\cdot 1.
+$$
+
+Substituindo:
+
+$$
+\binom{5}{3}
+=\frac{5\cdot 4\cdot 3\cdot 2\cdot 1}{(3\cdot 2\cdot 1)\,(2\cdot 1)}.
+$$
+
+Cancele o fator comum $(3\cdot 2\cdot 1)$:
+
+$$
+\binom{5}{3}
+=\frac{5\cdot 4\;\cancel{(3\cdot 2\cdot 1)}}{\cancel{(3\cdot 2\cdot 1)}\,(2\cdot 1)}
+=\frac{5\cdot 4}{2\cdot 1}.
+$$
+
+Efetue as operações:
+
+$$
+\binom{5}{3}=\frac{20}{2}=10.
+$$
+
+Agora calcule $2^5$:
+
+$$
+2^5=2\cdot 2\cdot 2\cdot 2\cdot 2=32.
+$$
+
+Substituindo em $P(X=3)$:
+
+$$
+P(X=3)=\frac{\binom{5}{3}}{2^5}=\frac{10}{32}.
+$$
+
+Simplifique a fração (dividindo por $2$):
+
+$$
+\frac{10}{32}=\frac{10\div 2}{32\div 2}=\frac{5}{16}.
+$$
+
+Converta para decimal:
+
+$$
+\frac{5}{16}
+=\frac{50}{160}
+=0{,}3125.
 $$
 
 Logo,
 
 $$
-P(X=3)=\frac{10}{32}=0{,}3125.
+P(X=3)=\frac{10}{32}=\frac{5}{16}=0{,}3125.
 $$
+
 
 ### Exemplo B — $n=3$: probabilidade de “pelo menos uma cara”
 
-Defina $A=\{\text{pelo menos uma cara}\}$. Use o complementar:
+Defina o evento:
+
+$$
+A=\{\text{pelo menos uma cara}\}.
+$$
+
+Use o complementar:
 
 $$
 A^c=\{\text{nenhuma cara}\}=\{\text{todas coroa}\}.
 $$
 
+Como os lançamentos são independentes e $P(\text{coroa})=\frac12$:
+
+$$
+P(A^c)=\left(\frac12\right)^3.
+$$
+
+Calcule:
+
+$$
+\left(\frac12\right)^3
+=\frac12\cdot\frac12\cdot\frac12
+=\frac{1\cdot 1\cdot 1}{2\cdot 2\cdot 2}
+=\frac{1}{8}.
+$$
+
 Então:
+
+$$
+P(A)=1-P(A^c)=1-\left(\frac12\right)^3=1-\frac18.
+$$
+
+Escreva $1$ com denominador $8$:
+
+$$
+1=\frac{8}{8}.
+$$
+
+Subtraia:
+
+$$
+1-\frac18=\frac{8}{8}-\frac{1}{8}=\frac{7}{8}.
+$$
+
+Converta para decimal:
+
+$$
+\frac{7}{8}=0{,}875.
+$$
+
+Logo,
 
 $$
 P(A)=1-P(A^c)=1-\left(\frac12\right)^3
 =1-\frac18=\frac78=0{,}875.
 $$
 
+
 ### Exemplo C — probabilidade de “todas caras” em $n$ lançamentos
 
-Existe apenas 1 sequência “$CCCC\ldots C$” dentre $2^n$, então:
+(1) Argumento por contagem de sequências (como no enunciado)
+
+Em $n$ lançamentos, existem $2^n$ sequências possíveis (cada lançamento tem 2 resultados).
+A sequência “todas caras” é única: “$CCCC\ldots C$”. Portanto:
 
 $$
-P(\text{todas caras})=\left(\frac12\right)^n.
+P(\text{todas caras})=\frac{1}{2^n}=\left(\frac12\right)^n.
+$$
+
+(2) Argumento por independência (produto)
+
+Seja $C_i=\{\text{cara no lançamento }i\}$. Então:
+
+$$
+P(\text{todas caras})
+=P(C_1\cap C_2\cap\cdots\cap C_n).
+$$
+
+Como os lançamentos são independentes:
+
+$$
+P(C_1\cap\cdots\cap C_n)=\prod_{i=1}^{n}P(C_i).
+$$
+
+E, para moeda justa, $P(C_i)=\frac12$ para todo $i$, logo:
+
+$$
+P(\text{todas caras})=\prod_{i=1}^{n}\frac12=\left(\frac12\right)^n.
 $$
 
 Por exemplo, em $n=10$:
 
 $$
-\left(\frac12\right)^{10}=\frac{1}{1024}\approx 0{,}0009766.
+\left(\frac12\right)^{10}=\frac{1}{2^{10}}.
 $$
 
----
+Calcule $2^{10}$:
+
+$$
+2^{10}=2\cdot 2\cdot 2\cdot 2\cdot 2\cdot 2\cdot 2\cdot 2\cdot 2\cdot 2.
+$$
+
+Agrupe como $(2^5)(2^5)$:
+
+$$
+2^{10}=(2^5)(2^5)=32\cdot 32=1024.
+$$
+
+Então:
+
+$$
+\left(\frac12\right)^{10}=\frac{1}{1024}.
+$$
+
+Em decimal:
+
+$$
+\frac{1}{1024}=0{,}0009765625\approx 0{,}0009766.
+$$
+
 
 ## 5) Fenômeno observado: por que a frequência “tende” a $1/2$, mas não fica exatamente $1/2$?
 
