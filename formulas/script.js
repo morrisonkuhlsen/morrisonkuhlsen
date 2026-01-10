@@ -1,4 +1,44 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Criar mensagem de rotação para mobile retrato
+  function createRotateMessage() {
+    const existingMessage = document.querySelector('.rotate-message');
+    if (existingMessage) return existingMessage;
+
+    const message = document.createElement('div');
+    message.className = 'rotate-message';
+    message.innerHTML = `
+      <span class="rotate-message-icon">📱</span>
+      <div class="rotate-message-text">
+        <strong>Gire seu dispositivo</strong><br>
+        Para melhor visualização, use o modo paisagem
+      </div>
+    `;
+    document.body.appendChild(message);
+    return message;
+  }
+
+  // Verificar orientação e mostrar/esconder mensagem
+  function checkOrientation() {
+    const isPortrait = window.innerWidth <= 640 && window.innerHeight > window.innerWidth;
+    const rotateMessage = createRotateMessage();
+    const card = document.querySelector('.card');
+
+    if (isPortrait && window.innerWidth <= 640) {
+      rotateMessage.classList.add('show');
+      if (card) card.style.opacity = '0.3';
+    } else {
+      rotateMessage.classList.remove('show');
+      if (card) card.style.opacity = '1';
+    }
+  }
+
+  // Verificar orientação ao carregar e ao redimensionar
+  checkOrientation();
+  window.addEventListener('resize', checkOrientation);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(checkOrientation, 100);
+  });
+
   // Função principal que inicializa a página com base nos dados da fórmula fornecidos.
   function initializeFormulaPage(formulaData) {
     if (!formulaData) {
@@ -49,8 +89,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const key = partEl.dataset.part;
       const modal = document.getElementById(`modal-${key}`);
       const rect = partEl.getBoundingClientRect();
-      const modalOffset = 40;
-      const denominatorOffset = 60;
+      const isMobile = window.innerWidth <= 640;
+      const isLandscape = window.innerWidth > window.innerHeight && isMobile;
+      const modalOffset = isMobile ? 30 : 40;
+      const denominatorOffset = isMobile ? 45 : 60;
+      const edgePadding = isMobile ? 15 : 10;
 
       modal.style.visibility = 'hidden';
       modal.style.display = 'block';
@@ -64,14 +107,33 @@ document.addEventListener("DOMContentLoaded", () => {
       const denominatorKeys = ['marginal', 'k_factorial', 'nk_factorial', 'k_factorial_poisson', 'divisor', 'g_prime', 'std_x', 'std_y', 'divisor_2a', 'denominator_chi', 'sum_reciprocals', 'sample_size', 'pop_std_dev', 'e_squared', 'pop_size', 'sum_neyman', 'p_b', 'sqrt_n', 'sample_std', 'sqrt_n_t'];
       const isDenominator = denominatorKeys.includes(key);
 
+      // Calcular posição vertical
       if (isDenominator) {
         top = rect.bottom + denominatorOffset;
+        // Se não couber abaixo, colocar acima
+        if (top + modalHeight > window.innerHeight - edgePadding) {
+          top = rect.top - modalHeight - modalOffset;
+        }
       } else {
         top = rect.top - modalHeight - modalOffset;
+        // Se não couber acima, colocar abaixo
+        if (top < edgePadding) {
+          top = rect.bottom + denominatorOffset;
+        }
       }
+
+      // Garantir que não saia da tela verticalmente
+      top = Math.max(edgePadding, Math.min(top, window.innerHeight - modalHeight - edgePadding));
       
+      // Calcular posição horizontal (centralizado no elemento)
       left = rect.left + rect.width / 2 - modalWidth / 2;
-      left = Math.max(10, Math.min(left, window.innerWidth - modalWidth - 10));
+      
+      // Ajustar se sair da tela horizontalmente
+      if (left < edgePadding) {
+        left = edgePadding;
+      } else if (left + modalWidth > window.innerWidth - edgePadding) {
+        left = window.innerWidth - modalWidth - edgePadding;
+      }
 
       modal.style.top = `${top}px`;
       modal.style.left = `${left}px`;
@@ -157,15 +219,28 @@ document.addEventListener("DOMContentLoaded", () => {
               partEl.style.transform = isDenominator ? "translateY(10px)" : "translateY(-10px)";
 
               const rect = partEl.getBoundingClientRect();
-              const modalOffset = 40;
-              const denominatorOffset = 60;
+              const isMobile = window.innerWidth <= 640;
+              const modalOffset = isMobile ? 30 : 40;
+              const denominatorOffset = isMobile ? 45 : 60;
+              const edgePadding = isMobile ? 15 : 10;
               let top;
 
               if (isDenominator) {
                   top = rect.bottom + denominatorOffset;
+                  // Se não couber abaixo, colocar acima
+                  if (top + height > window.innerHeight - edgePadding) {
+                      top = rect.top - height - modalOffset;
+                  }
               } else {
                   top = rect.top - height - modalOffset;
+                  // Se não couber acima, colocar abaixo
+                  if (top < edgePadding) {
+                      top = rect.bottom + denominatorOffset;
+                  }
               }
+
+              // Garantir que não saia da tela verticalmente
+              top = Math.max(edgePadding, Math.min(top, window.innerHeight - height - edgePadding));
 
               const finalLeft = Math.max(10, currentLeft);
               modal.style.left = `${finalLeft}px`;
