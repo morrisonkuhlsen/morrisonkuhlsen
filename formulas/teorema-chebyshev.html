@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Teorema de Chebyshev — Interativo</title>
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a href="home.html" class="back-link" title="Voltar">←</a>
+  <div class="wrap">
+    <main class="card" role="main" aria-labelledby="title">
+      <h1 id="title" style="position:absolute;left:-9999px;">Teorema de Chebyshev</h1>
+
+      <div class="formula-wrap" aria-label="Fórmula do Teorema de Chebyshev interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
+        <span class="part prob" data-part="prob" tabindex="0" title="Probabilidade" style="white-space: nowrap;"></span>
+        <span class="part paren-left" data-part="paren_left" tabindex="0" title="Parêntese Esquerdo" style="white-space: nowrap;"></span>
+        <span class="part abs-var" data-part="abs_var" tabindex="0" title="Valor Absoluto de X - μ" style="white-space: nowrap;"></span>
+        <span class="op" style="white-space: nowrap;">≥</span>
+        <span class="part k" data-part="k" tabindex="0" title="Constante k" style="white-space: nowrap;"></span>
+        <span class="part sigma" data-part="sigma" tabindex="0" title="Desvio Padrão" style="white-space: nowrap;"></span>
+        <span class="part paren-right" data-part="paren_right" tabindex="0" title="Parêntese Direito" style="white-space: nowrap;"></span>
+        <span class="op" style="white-space: nowrap;">≤</span>
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div>
+            <span class="part one" data-part="one" tabindex="0" title="Um"></span>
+          </div>
+          <div class="formula-divider"></div>
+          <div>
+            <span class="part k-squared" data-part="k_squared" tabindex="0" title="k ao Quadrado"></span>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-container"></div>
+    </main>
+  </div>
+
+  <script>
+    window.formulaConfig = {
+      parts: {
+        prob: "\\displaystyle P",
+        paren_left: "\\displaystyle \\Big(",
+        abs_var: "\\displaystyle |X - \\mu|",
+        k: "\\displaystyle k",
+        sigma: "\\displaystyle \\sigma",
+        paren_right: "\\displaystyle \\Big)",
+        one: "\\displaystyle 1",
+        k_squared: "\\displaystyle k^2"
+      },
+      explanations: {
+        prob: {
+          title: "Probabilidade (P)",
+          text: "A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a uma certa distância da média."
+        },
+        paren_left: {
+          title: "Parêntese Esquerdo",
+          text: "Parêntese que delimita a expressão de probabilidade."
+        },
+        abs_var: {
+          title: "Valor Absoluto |X - μ|",
+          text: "A distância entre a variável aleatória X e sua média μ. O valor absoluto garante que estamos medindo a distância, independentemente da direção (acima ou abaixo da média)."
+        },
+        k: {
+          title: "Constante k (k)",
+          text: "Um número real positivo (k > 0) que representa quantos desvios padrão estamos considerando. Por exemplo, k = 2 significa 2 desvios padrão da média."
+        },
+        sigma: {
+          title: "Desvio Padrão (σ)",
+          text: "O desvio padrão da variável aleatória X, que mede a dispersão dos dados em relação à média. É a raiz quadrada da variância."
+        },
+        paren_right: {
+          title: "Parêntese Direito",
+          text: "Parêntese que fecha a expressão de probabilidade."
+        },
+        one: {
+          title: "Um (1)",
+          text: "O numerador da fração que limita a probabilidade máxima."
+        },
+        k_squared: {
+          title: "k ao Quadrado (k²)",
+          text: "O denominador da fração. Quanto maior o valor de k, menor será 1/k², indicando que é menos provável encontrar valores muito distantes da média. Por exemplo, para k = 2, temos P(|X - μ| ≥ 2σ) ≤ 1/4 = 0.25, ou seja, no máximo 25% dos dados estão além de 2 desvios padrão da média."
+        }
+      }
+    };
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

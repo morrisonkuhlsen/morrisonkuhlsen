@@ -143,6 +143,15 @@
   --null-mean: var(--prior);
   --sample-std: var(--marginal);
   --sqrt-n-t: #1c9eff;
+
+  /* Cores Teorema de Chebyshev (Otimizadas) */
+  --prob-chebyshev: var(--posterior);
+  --abs-var: var(--likelihood);
+  --k-const: var(--prior);
+  --sigma-chebyshev: var(--marginal);
+  --one-num: #1c9eff;
+  --k-squared-chebyshev: var(--prior);
+  --paren-chebyshev: #7a7a7a;
 }
 
 html, body {
@@ -408,6 +417,32 @@ html, body {
 .sqrt-n-t,
 .sqrt-n-t .katex,
 .sqrt-n-t .katex * { color: var(--sqrt-n-t) !important; }
+
+/* Estilos Teorema de Chebyshev */
+.prob,
+.prob .katex,
+.prob .katex * { color: var(--prob-chebyshev) !important; }
+.paren-left,
+.paren-left .katex,
+.paren-left .katex * { color: var(--paren-chebyshev) !important; }
+.paren-right,
+.paren-right .katex,
+.paren-right .katex * { color: var(--paren-chebyshev) !important; }
+.abs-var,
+.abs-var .katex,
+.abs-var .katex * { color: var(--abs-var) !important; }
+.k,
+.k .katex,
+.k .katex * { color: var(--k-const) !important; }
+.sigma,
+.sigma .katex,
+.sigma .katex * { color: var(--sigma-chebyshev) !important; }
+.one,
+.one .katex,
+.one .katex * { color: var(--one-num) !important; }
+.k-squared,
+.k-squared .katex,
+.k-squared .katex * { color: var(--k-squared-chebyshev) !important; }
 
 .part.selected { z-index: 10; }
 
