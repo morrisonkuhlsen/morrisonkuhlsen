@@ -22,44 +22,27 @@ description: "Entenda o significado do símbolo da Estatística no Brasil e por 
 
 ## Origem do símbolo da Estatística no Brasil
 
-O símbolo oficial vinculado à profissão estatística nasceu em 1963, durante um concurso promovido pelo Diretório Acadêmico da Escola Nacional de Ciências Estatísticas (ENCE). O desenho escolhido buscava representar a importância da matemática nas ciências estatísticas.
+Nem toda profissão tem um símbolo com história. No caso da Estatística brasileira, o símbolo nasceu em 1963, durante um concurso promovido pelo Diretório Acadêmico da Escola Nacional de Ciências Estatísticas (ENCE). O objetivo era criar uma imagem que traduzisse o que a profissão faz, e a solução foi incorporar dois sinais matemáticos fundamentais: o Somatório (Σ) e a Integral (∫).
 
-A ideia foi incorporar dois sinais matemáticos fundamentais: o Somatório (Σ) e a Integral (∫). Juntos, eles mostram que a Estatística trabalha tanto com quantidades discretas quanto com quantidades contínuas.
+A escolha não foi por acaso. Juntos, eles delimitam o território da Estatística — de um lado, os dados discretos; do outro, os fenômenos contínuos.
 
 ## O que significa o Σ maiúsculo
 
-O Σ maiúsculo é o símbolo clássico do somatório. Ele representa a soma de muitos termos, de dados ou observações individuais.
+O Σ maiúsculo é o símbolo clássico do somatório: a soma de muitos termos, de observações individuais reunidas em um único resultado.
 
-No contexto da Estatística, o Σ simboliza:
-
-- contagem e agregação de valores,
-- soma de elementos de uma amostra,
-- cálculo de médias, variâncias e totais,
-- estatística discreta, onde cada unidade é um valor separado.
-
-Esse símbolo é apropriado porque grande parte do trabalho estatístico começa com dados discretos e individuais: cada pessoa, cada medição e cada observação entram no somatório para gerar resultados.
+Grande parte do trabalho estatístico começa exatamente assim. Cada pessoa entrevistada, cada medição registrada, cada observação coletada entra no somatório — e é dessa soma que surgem a média, a variância, os totais e praticamente qualquer medida descritiva que se queira calcular. O Σ é, nesse sentido, a operação mais honesta da Estatística: ela não esconde os dados, ela os soma um a um.
 
 ## O que significa a ∫ (integral)
 
-A integral aparece em matemática como operador para acumular valores continuamente sob uma curva. Em Estatística, ela lembra os conceitos de probabilidades contínuas e de área sob curvas de densidade.
+A integral acumula valores de forma contínua, sem saltos. Em Matemática, ela representa a área sob uma curva; em Estatística, ela aparece sempre que a variável em estudo não pode ser contada em unidades separadas — altura, tempo, temperatura, renda.
 
-A ∫ no símbolo transmite:
-
-- análise de fenômenos contínuos,
-- cálculos de probabilidade em distribuições contínuas,
-- modelagem de variação ao longo de um intervalo,
-- ligação entre Estatística e Cálculo.
-
-Enquanto o Σ fala da soma de valores separados, a ∫ fala da soma em forma contínua. Juntas, elas reforçam que a Estatística não vive só de números isolados; ela também trata de medidas de tendência e incerteza em processos contínuos.
+Quando se quer saber a probabilidade de um valor cair dentro de um intervalo em uma distribuição contínua, é a ∫ que resolve o problema. Ela é o ponto de encontro entre Estatística e Cálculo: mesma lógica de acumulação do Σ, mas aplicada a um mundo sem interrupções.
 
 ## Por que usar Σ e ∫ no mesmo símbolo
 
-A união do Σ com a ∫ é poderosa porque mostra a amplitude da Estatística:
+Sozinho, o Σ poderia sugerir apenas estatística descritiva básica — contagens, médias, tabelas. Sozinha, a ∫ pareceria mais análise matemática do que estatística aplicada. Juntos, os dois símbolos cobrem o território inteiro da profissão.
 
-- **Σ** representa a análise de dados discretos, como contagens, frequências e somas.
-- **∫** representa a análise de dados contínuos, como variáveis mensuráveis, densidades e probabilidades.
-
-Esse par de símbolos deixa claro que a profissão estatística está no meio termo entre o mundo dos números isolados e o mundo das curvas contínuas. A Estatística usa ambos para extrair conhecimento de dados.
+O estatístico precisa dos dois. Às vezes os dados chegam em forma discreta: respostas de um questionário, contagem de defeitos numa linha de produção, número de casos de uma doença por município. Outras vezes chegam em forma contínua: medições de temperatura, tempo até um evento, valores financeiros. Mudar de um mundo para o outro — e saber quando cada abordagem é adequada — é parte central do que um estatístico faz.
 
 ## Exemplos resolvidos a mão
 
@@ -147,20 +130,11 @@ Isso mostra como a ∫ no símbolo da Estatística remete ao cálculo de áreas 
 
 ## Um símbolo que reflete a profissão
 
-Além dos símbolos matemáticos, o desenho histórico do símbolo também inclui outros elementos que reforçam a identidade da profissão:
+Além dos dois símbolos matemáticos, o desenho original inclui outros elementos: uma roda dentada, que associa a profissão à indústria e à aplicação prática dos métodos, e a cor azul safira, ligada à tradição e à seriedade da área.
 
-- a presença de uma roda dentada, que lembra a indústria e a aplicação prática dos métodos estatísticos;
-- a cor azul safira, associada à tradição e à seriedade da área.
-
-Mas o coração do símbolo está mesmo no Σ e na ∫: eles são a mensagem matemática que explica por que a Estatística é uma ciência de dados, cálculo e interpretação.
+Mas o coração do símbolo está mesmo no Σ e na ∫. Quem conhece os dois sinais e entende por que eles aparecem juntos já tem uma boa ideia do que é a Estatística — uma profissão que transita entre o discreto e o contínuo, entre a contagem e a integração, e que usa os dois para transformar dados em conhecimento.
 
 ---
-
-## Conclusão
-
-O símbolo da Estatística no Brasil foi criado para mostrar que a profissão combina dois mundos da matemática. O Σ maiúsculo representa o trabalho com dados discretos e somas, enquanto a ∫ representa o trabalho com fenômenos contínuos e integrais.
-
-Essa combinação reflete a essência da Estatística: usar matemática para transformar observações em conhecimento, tanto no universo discreto quanto no contínuo.
 
 ## Referências
 
