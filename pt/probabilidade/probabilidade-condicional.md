@@ -429,60 +429,68 @@ O uso de partições no Teorema de Bayes é fundamental para:
 - a) Qual a probabilidade $\Pr[\text{Lyme} \cap \text{HGE}]$ de que um carrapato seja portador de ambas as doenças?
 - b) Qual a probabilidade condicional de que um carrapato seja portador do HGE, dado que ele é portador da doença de Lyme?
 
-### Dados do problema:
-- $ \Pr[\text{Lyme}] = 0,16 $ (16% dos carrapatos são portadores da doença de Lyme).
-- $ \Pr[\text{HGE}] = 0,10 $ (10% dos carrapatos são portadores de HGE).
-- 10% dos carrapatos que tinham Lyme ou HGE eram portadores de ambas as doenças.
+### Notação e dados do problema
 
-### Parte (a): Encontrar $ \Pr[\text{Lyme} \cap \text{HGE}] $
+Vamos denotar:
 
-A probabilidade de que um carrapato seja portador de ambas as doenças é dada por:
+- $L$: "o carrapato é portador da doença de Lyme"
+- $H$: "o carrapato é portador de HGE"
 
-$$ 0,10 \cdot \Pr[\text{Lyme} \cup \text{HGE}] = \Pr[\text{Lyme} \cap \text{HGE}] $$
+Os dados do enunciado são:
 
-Sabemos que:
+$$P(L) = 0{,}16, \quad P(H) = 0{,}10$$
 
-$$ \Pr[\text{Lyme} \cup \text{HGE}] = \Pr[\text{Lyme}] + \Pr[\text{HGE}] - \Pr[\text{Lyme} \cap \text{HGE}] $$
+e também:
 
-Substituindo esses valores:
+$$P(L \cap H \mid L \cup H) = 0{,}10$$
 
-$$ 0,10 \cdot (0,16 + 0,10 - \Pr[\text{Lyme} \cap \text{HGE}]) = \Pr[\text{Lyme} \cap \text{HGE}] $$
+pois "10% dos carrapatos que eram portadores de Lyme ou HGE eram portadores de ambas".
 
-Resolvendo a equação:
+### Parte (a): Probabilidade $P(L \cap H)$
 
-$$
-0,10 \cdot (0,26 - \Pr[\text{Lyme} \cap \text{HGE}]) = \Pr[\text{Lyme} \cap \text{HGE}]
-$$
+Seja $x = P(L \cap H)$.
 
-$$
-0,026 - 0,10 \cdot \Pr[\text{Lyme} \cap \text{HGE}] = \Pr[\text{Lyme} \cap \text{HGE}]
-$$
+Pela definição de probabilidade condicional:
 
-$$
-0,026 = \Pr[\text{Lyme} \cap \text{HGE}] + 0,10 \cdot \Pr[\text{Lyme} \cap \text{HGE}]
-$$
+$$P(L \cap H \mid L \cup H) = \frac{P(L \cap H)}{P(L \cup H)}$$
 
-$$
-0,026 = 1,10 \cdot \Pr[\text{Lyme} \cap \text{HGE}]
-$$
+Logo:
 
-$$
-\Pr[\text{Lyme} \cap \text{HGE}] = \frac{0,026}{1,10} = 0,0236
-$$
+$$0{,}10 = \frac{x}{P(L \cup H)}$$
 
-> ##### Portanto, a probabilidade de um carrapato ser portador de ambas as doenças é $ \Pr[\text{Lyme} \cap \text{HGE}] = 0,0236 $.
+Mas, pela fórmula da união de dois eventos:
 
-### Parte (b): Probabilidade condicional de que um carrapato seja portador do HGE, dado que ele é portador da doença de Lyme
+$$P(L \cup H) = P(L) + P(H) - P(L \cap H) = 0{,}16 + 0{,}10 - x = 0{,}26 - x$$
 
-A probabilidade condicional de HGE dado Lyme é dada por:
+Substituindo:
 
-$$ \Pr[\text{HGE} | \text{Lyme}] = \frac{\Pr[\text{Lyme} \cap \text{HGE}]}{\Pr[\text{Lyme}]} $$
+$$0{,}10 = \frac{x}{0{,}26 - x}$$
+
+Resolvendo algebricamente:
+
+$$x = 0{,}10\,(0{,}26 - x)$$
+
+$$x = 0{,}026 - 0{,}10x$$
+
+$$x + 0{,}10x = 0{,}026$$
+
+$$1{,}10x = 0{,}026$$
+
+$$x = \frac{0{,}026}{1{,}10} = 0{,}02\overline{36}$$
+
+> ##### Portanto, $P(L \cap H) \approx 0{,}02364$, ou seja, aproximadamente **2,36%**.
+
+### Parte (b): Probabilidade condicional $P(H \mid L)$
+
+Pela definição:
+
+$$P(H \mid L) = \frac{P(H \cap L)}{P(L)} = \frac{P(L \cap H)}{P(L)}$$
 
 Substituindo os valores:
 
-$$ \Pr[\text{HGE} | \text{Lyme}] = \frac{0,0236}{0,16} = 0,1475 $$
+$$P(H \mid L) = \frac{0{,}02364}{0{,}16} = 0{,}14772\ldots$$
 
-> ##### Portanto, a probabilidade de que um carrapato seja portador de HGE, dado que ele é portador da doença de Lyme, é $ \Pr[\text{HGE} | \text{Lyme}] \approx 0,1475 $.
+> ##### Portanto, $P(H \mid L) \approx 0{,}1477$, ou seja, aproximadamente **14,77%**.
 
 <div class="code-container">
   <div class="code-header">
