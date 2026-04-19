@@ -8,6 +8,8 @@ permalink: /pt/inferencia-estatistica/estimadores
 order: 4
 ---
 
+![Estimadores Estatísticos]({{ site.baseurl }}/assets/images/estimadores.png){:style="max-width: 600px; display: block; margin: 0 auto;"}
+
 $$
 \text{Dados} \;\longrightarrow\; \text{Distribuição} \;\longrightarrow\; \text{Verossimilhança} \;\longrightarrow\; \text{Suficiência} \;\longrightarrow\; \text{Estimador} \;\longrightarrow\; \text{Inferência} \;\longrightarrow\; \text{Decisão}
 $$
