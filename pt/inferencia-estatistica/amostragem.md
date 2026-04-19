@@ -10,6 +10,16 @@ order: 3
 
 A amostragem é o processo de selecionar um subconjunto representativo de uma população para realizar inferências estatísticas sobre toda a população. Uma amostra bem escolhida permite estimar parâmetros populacionais com precisão e eficiência, reduzindo custos e tempo em relação ao censo completo.
 
+Para que a inferência seja **válida**, três condições fundamentais devem ser satisfeitas:
+
+1. **Representatividade** — a composição da amostra deve refletir as características relevantes da população-alvo. Amostras enviesadas distorcem as estimativas independentemente do tamanho.
+2. **Aleatoriedade controlada** (nos métodos probabilísticos) — cada elemento deve ter probabilidade conhecida e não nula de ser selecionado, garantindo que as propriedades estatísticas das estimativas sejam matematicamente justificáveis.
+3. **Tamanho adequado** — a precisão cresce com a raiz quadrada de \(n\): para reduzir o erro padrão à metade, é preciso quadruplicar \(n\).
+
+<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
+<strong>Lei dos rendimentos decrescentes:</strong> O erro padrão da média é \(\text{SE}(\bar{X}) = \sigma/\sqrt{n}\). Com \(n = 100\): \(\text{SE} = \sigma/10\). Com \(n = 400\): \(\text{SE} = \sigma/20\). Quadruplicar a amostra <em>dobra</em> a precisão — mas nunca a elimina por completo.
+</div>
+
 ![Amostragem]({{ site.baseurl }}/assets/images/amostragem.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Exemplo visual de amostragem em uma população.</div>
 
@@ -17,10 +27,11 @@ A amostragem é o processo de selecionar um subconjunto representativo de uma po
 
 ## Por que Amostrar?
 
-- Reduz custos e tempo
-- Permite análises destrutivas (quando o teste destrói o item)
-- Torna viável o estudo de populações grandes
-- Facilita o controle de qualidade
+- **Reduz custos e tempo** — um censo completo é frequentemente inviável em termos de logística e tempo de análise
+- **Permite análises destrutivas** — quando o teste destrói o item (resistência de materiais, prazo de validade de produtos, etc.)
+- **Torna viável o estudo de populações grandes** — populações de milhões de elementos só podem ser estudadas via amostra
+- **Facilita o controle de qualidade** — inspeção de 100% da produção é substituída por planos de amostragem padronizados (ex.: ABNT NBR 5426)
+- **Permite maior profundidade** — com uma amostra menor, é possível coletar mais variáveis por elemento e com melhor qualidade de dados
 
 ---
 
@@ -34,6 +45,10 @@ A amostragem é o processo de selecionar um subconjunto representativo de uma po
   - *Origem*: Do grego "parámetros", aquilo que serve de referência.
 - **Estatística** ($\bar{x}$, $s$, $\hat{p}$): Medida numérica que descreve uma característica da amostra (ex: média amostral $\bar{x}$, desvio padrão amostral $s$, proporção amostral $\hat{p}$).
   - *Origem*: Do latim "statisticum", relativo ao Estado, e do italiano "statistica", ciência dos dados do Estado.
+- **Cadastro Amostral** (*sampling frame*): Lista ou registro dos elementos elegíveis da população, a partir do qual a amostra é efetivamente selecionada. Um cadastro incompleto ou desatualizado gera **viés de cobertura** mesmo em amostras probabilísticas perfeitas.
+- **Erro Amostral** ($\varepsilon$): Diferença inevitável entre a estatística amostral e o parâmetro populacional ($\varepsilon = \bar{x} - \mu$). Em amostras probabilísticas, $\mathbb{E}[\varepsilon] = 0$ — o erro é aleatório, sem direção sistemática, e reduzível com $n$ maior.
+- **Fração Amostral** ($f = n/N$): Proporção da população incluída na amostra. Quando $f < 0{,}05$, a correção para população finita é geralmente dispensada — a população pode ser tratada como infinita para fins de cálculo.
+- **Viés** (*bias*): Erro sistemático que desloca as estimativas consistentemente em uma direção. Diferentemente do erro amostral, **não é reduzido** aumentando $n$ — exige correção no próprio desenho da pesquisa.
 
 ---
 
@@ -398,11 +413,154 @@ println("Amostra bola de neve: ", amostra)
 
 ---
 
+## Comparação dos Métodos de Amostragem
+
+<div style="overflow-x:auto; margin: 1em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 750px;">
+  <thead style="background: #e3f2fd;">
+    <tr>
+      <th style="border: 1px solid #bbb; padding: 8px; text-align:left;">Método</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Tipo</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Cadastro</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Precisão</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Custo</th>
+      <th style="border: 1px solid #bbb; padding: 8px; text-align:left;">Melhor uso</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória Simples</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Alta</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderado</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Populações pequenas e homogêneas</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo (ordenado)</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Alta ⚠</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Listas sem periodicidade oculta</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Alta</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderado</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Pop. heterogêneas com estratos conhecidos</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Parcial</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderada</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Pop. dispersas geograficamente</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conveniência</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixa</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Estudos exploratórios e piloto</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Por Quotas</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderada</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Pesquisas de mercado e opinião</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Intencional</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Variável</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Estudos de caso e benchmarking</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Bola de Neve</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixa</td>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Baixo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Populações ocultas ou de difícil acesso</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+⚠ Precisão da sistemática pode ser inferior à AAS na presença de periodicidade oculta na lista ordenada.
+
+---
+
+## Erros em Pesquisas por Amostra
+
+Todo resultado de uma pesquisa por amostra está sujeito a dois tipos fundamentalmente distintos de erro:
+
+### Erro Amostral
+
+Variação natural e esperada entre amostras diferentes extraídas da mesma população. Resulta do uso de parte, e não todos, os elementos. É **quantificável** pela margem de erro e **reduzível** aumentando $n$:
+
+$$\varepsilon = \bar{x} - \mu \qquad \text{com } \mathbb{E}[\varepsilon] = 0 \text{ (amostras probabilísticas)}$$
+
+### Erros Não-Amostrais (Sistemáticos)
+
+São erros que **não diminuem** com amostras maiores — são mais perigosos porque frequentemente passam despercebidos:
+
+<div style="overflow-x:auto; margin: 1em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 620px;">
+  <thead style="background: #ffebee;">
+    <tr>
+      <th style="border: 1px solid #bbb; padding: 8px;">Tipo</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Descrição</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Como mitigar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Cobertura</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Cadastro incompleto exclui parte da população alvo</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Atualizar cadastro; usar múltiplas fontes</td>
+    </tr>
+    <tr style="background:#fff3f3;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Não-resposta</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Elementos selecionados recusam ou não participam</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Múltiplas tentativas; analisar perfil dos ausentes</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Mensuração</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Instrumento mal elaborado ou entrevistador induz respostas</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Pré-teste do questionário; treinamento padronizado</td>
+    </tr>
+    <tr style="background:#fff3f3;">
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Processamento</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Erros na digitação, codificação ou análise dos dados</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Dupla digitação; validação automática</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div style="border-left: 4px solid #e53935; padding: 0.5em 1em; background-color: #ffebee; margin: 0.75em 0;">
+<strong>Caso histórico — Literary Digest (1936):</strong> A maior pesquisa eleitoral da história até então, com 2,4 milhões de respostas, previu erroneamente a derrota de Roosevelt. O erro não foi o tamanho da amostra, mas o <strong>viés de cobertura</strong>: o cadastro (assinantes de revista, proprietários de telefone e automóvel) excluía sistematicamente as classes mais baixas, que votaram majoritariamente em Roosevelt.
+</div>
+
+---
+
 ## Avisos Importantes
 
-- **Amostragem mal planejada pode introduzir vieses e comprometer a validade dos resultados.**
-- **A aleatoriedade é fundamental para garantir a representatividade.**
-- **O tamanho da amostra influencia a precisão das estimativas.**
+- **Amostragem mal planejada introduz vieses que nem amostras enormes conseguem corrigir.** A qualidade do desenho amostral supera a quantidade de dados.
+- **A aleatoriedade é insubstituível em estudos probabilísticos.** Sem ela, intervalos de confiança e testes de hipótese perdem sua fundamentação matemática.
+- **O tamanho da amostra determina a precisão, não a representatividade.** Uma amostra pequena e bem desenhada supera uma grande e enviesada.
+- **Métodos não-probabilísticos** (conveniência, quotas, bola de neve) **não permitem inferência formal** — resultados não devem ser generalizados com margem de erro calculada por fórmulas probabilísticas.
+- **Aplique a correção para população finita quando $f = n/N > 0{,}05$** para evitar superestimação do tamanho amostral necessário.
 
 ---
 
@@ -411,22 +569,115 @@ println("Amostra bola de neve: ", amostra)
 ### Tamanho da Amostra para Proporção
 
 $$
-n = \frac{z_{\alpha/2}^2 \hat{p}(1-\hat{p})}{E^2}
+n = \frac{z_{\alpha/2}^2\; \hat{p}(1-\hat{p})}{E^2}
 $$
 
 Onde:
-- $z_{\alpha/2}$ = valor crítico da normal padrão
-- $\hat{p}$ = proporção estimada
-- $E$ = erro máximo tolerável
+- $z_{\alpha/2}$ = valor crítico da distribuição normal padrão (ex.: 1,96 para 95% de confiança)
+- $\hat{p}$ = proporção estimada (use $\hat{p} = 0{,}5$ quando desconhecida — resulta no maior $n$ possível)
+- $E$ = margem de erro máxima tolerável (ex.: 0,05 para ±5 pontos percentuais)
 
-### Tamanho da Amostra para Média
+> **Margem de erro:** $E = z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}$ — a semilargura do intervalo de confiança para a proporção.
+
+---
+
+### Tamanho da Amostra para Média — $\sigma$ conhecido
 
 $$
-n = \left(\frac{z_{\alpha/2} \sigma}{E}\right)^2
+n = \left(\frac{z_{\alpha/2}\;\sigma}{E}\right)^2
 $$
 
 Onde:
-- $\sigma$ = desvio padrão populacional
+- $\sigma$ = desvio padrão populacional (conhecido ou estimado por estudo piloto)
+- $E$ = diferença máxima tolerável entre $\bar{x}$ e $\mu$
+
+---
+
+### Tamanho da Amostra para Média — $\sigma$ desconhecido (distribuição t)
+
+Quando $\sigma$ não é conhecido e precisa ser estimado por $s$, substitui-se $z_{\alpha/2}$ pelo quantil $t_{\alpha/2;\,n-1}$, que depende do próprio $n$. A solução é iterativa:
+
+$$
+n^{(k+1)} = \left(\frac{t_{\alpha/2;\;n^{(k)}-1}\cdot s}{E}\right)^2
+$$
+
+**Procedimento:**
+1. Parta de $n^{(0)}$ calculado com $z_{\alpha/2}$ (fórmula acima usando $s$ no lugar de $\sigma$)
+2. Use $t_{\alpha/2;\,n^{(0)}-1}$ para obter $n^{(1)}$
+3. Repita até convergir (geralmente 2–3 iterações)
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# n para média com σ desconhecido (iterativo)
+function n_media_t(s, E; alpha=0.05, max_iter=10)
+    z = quantile(Normal(), 1 - alpha/2)
+    n = ceil(Int, (z * s / E)^2)          # ponto de partida com z
+    for _ in 1:max_iter
+        t = quantile(TDist(n - 1), 1 - alpha/2)
+        n_novo = ceil(Int, (t * s / E)^2)
+        n_novo == n && break
+        n = n_novo
+    end
+    println("n necessário (t iterativo) = $n")
+    return n
+end
+
+# Exemplo: s=2.4, erro=0.8, confiança 95%
+n_media_t(2.4, 0.8; alpha=0.05)
+</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  n necessário (t iterativo) = 38
+</div>
+
+---
+
+### Resumo das Fórmulas de Tamanho Amostral
+
+<div style="overflow-x:auto; margin: 1em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 600px;">
+  <thead style="background: #e8f5e9;">
+    <tr>
+      <th style="border: 1px solid #bbb; padding: 8px;">Situação</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Fórmula</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Observação</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;">Proporção (pop. infinita)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$n = z_{\alpha/2}^2\hat{p}(1-\hat{p})/E^2$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Use $\hat{p}=0{,}5$ se desconhecida</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;">Proporção (pop. finita)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Cochran com correção $n_0/(1+(n_0-1)/N)$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Usar quando $f > 0{,}05$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px;">Média, $\sigma$ conhecido</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$n = (z_{\alpha/2}\sigma/E)^2$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Solução direta</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px;">Média, $\sigma$ desconhecido</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$n = (t_{\alpha/2;\,n-1}\cdot s/E)^2$ (iterativo)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Exige estudo piloto para $s$</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 ---
 
@@ -780,12 +1031,71 @@ println("Alocação de Neyman: ", n_alocada_neyman)
 
 ---
 
+## Guia de Escolha do Método de Amostragem
+
+A escolha do método depende de cinco critérios práticos. Responda às perguntas abaixo em ordem:
+
+<div style="overflow-x:auto; margin: 1em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 680px;">
+  <thead style="background: #e8f5e9;">
+    <tr>
+      <th style="border: 1px solid #bbb; padding: 8px;">#</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Pergunta</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Se SIM</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Se NÃO</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">1</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Existe cadastro completo e atualizado da população?</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Vá para 2</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Conglomerados, Quotas ou Bola de Neve</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">2</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">A população é heterogênea com subgrupos identificáveis?</td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong> (máxima precisão)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Vá para 3</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">3</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">O cadastro está ordenado sem periodicidade oculta?</td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong> (operacionalmente simples)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória Simples</strong> (referência padrão)</td>
+    </tr>
+    <tr style="background:#f9fbe7;">
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">4</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">O orçamento é restrito e a população é geograficamente dispersa?</td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong> (reduz deslocamento)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Manter método probabilístico anterior</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">5</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">O objetivo é apenas exploratório ou piloto?</td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conveniência</strong> (rápido, sem inferência formal)</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Retornar ao passo 1 com rigor probabilístico</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div style="border-left: 4px solid #4CAF50; padding: 0.5em 1em; background-color: #e8f5e9; margin: 0.75em 0;">
+<strong>Regra prática:</strong> Sempre que possível, prefira métodos <strong>probabilísticos</strong>. São os únicos que permitem calcular margens de erro e construir intervalos de confiança com garantias matemáticas.
+</div>
+
+---
+
 ## Referências Bibliográficas
 
-1. Montgomery, D. C., & Runger, G. C. (2010). Applied Statistics and Probability for Engineers.
-2. Morettin, P. A., & Bussab, W. O. (2017). Estatística Básica.
-3. Triola, M. F. (2017). Introdução à Estatística.
-4. Bolfarine, H. (2005). Elementos de Amostragem. Brasil: Blucher.
+1. Montgomery, D. C.; Runger, G. C. **Applied Statistics and Probability for Engineers**. 6ª ed. Wiley, 2014.
+2. Morettin, P. A.; Bussab, W. O. **Estatística Básica**. 9ª ed. Saraiva, 2017.
+3. Triola, M. F. **Introdução à Estatística**. 12ª ed. LTC, 2017.
+4. Bolfarine, H.; Bussab, W. O. **Elementos de Amostragem**. Blucher, 2005.
+5. Cochran, W. G. **Sampling Techniques**. 3ª ed. Wiley, 1977. — Referência clássica para teoria de amostragem.
+6. Lohr, S. L. **Sampling: Design and Analysis**. 2ª ed. Brooks/Cole, 2009. — Tratamento moderno com exemplos computacionais.
+7. Groves, R. M. et al. **Survey Methodology**. 2ª ed. Wiley, 2009. — Cobre erros amostrais e não-amostrais em profundidade.
+8. Kish, L. **Survey Sampling**. Wiley, 1965. — Fundamentos matemáticos da amostragem complexa.
 
 ---
 
