@@ -14,7 +14,7 @@ description: "Entenda o significado do símbolo da Estatística no Brasil e por 
 </div>
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/simbolo-estatistica-curso.png" alt="Símbolo do curso de Estatística no Brasil" style="max-width: 35%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/simbolo-estatistica-curso.png" alt="Símbolo do curso de Estatística no Brasil" style="max-width: 20%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> O símbolo da Estatística no Brasil usa o Σ e a ∫ para indicar a união de dados discretos e contínuos.
   </figcaption>
@@ -28,11 +28,15 @@ A escolha não foi por acaso. Juntos, eles delimitam o território da Estatísti
 
 ## O que significa o Σ maiúsculo
 
+O Σ é a letra grega sigma em sua forma maiúscula. Os gregos a usavam para representar o som “s”, mas foi em latim, por meio da palavra *summa* (soma), que ela se conectou à ideia de somatório. No século XVIII, o matemático suíço Leonhard Euler popularizou o uso do Σ como notação formal para somas<sup>[[4]](#ref-cajori)</sup>, e desde então o símbolo nunca mais saiu da matemática e da estatística.
+
 O Σ maiúsculo é o símbolo clássico do somatório: a soma de muitos termos, de observações individuais reunidas em um único resultado.
 
 Grande parte do trabalho estatístico começa exatamente assim. Cada pessoa entrevistada, cada medição registrada, cada observação coletada entra no somatório — e é dessa soma que surgem a média, a variância, os totais e praticamente qualquer medida descritiva que se queira calcular. O Σ é, nesse sentido, a operação mais honesta da Estatística: ela não esconde os dados, ela os soma um a um.
 
 ## O que significa a ∫ (integral)
+
+O símbolo ∫ foi criado por Gottfried Wilhelm Leibniz no século XVII. Ele escolheu a letra “s” alongada — de *summa*, novamente — para indicar que a integral era também uma forma de soma, só que contínua. A ideia era deixar claro que ∫ e Σ fazem a mesma coisa em universos diferentes: um soma parcelas discretas, o outro acumula infinitos valores infinitesimais. Essa conexão intencional entre os dois símbolos é antiga — e torna ainda mais coerente a decisão de colocá-los juntos no símbolo da Estatística.
 
 A integral acumula valores de forma contínua, sem saltos. Em Matemática, ela representa a área sob uma curva; em Estatística, ela aparece sempre que a variável em estudo não pode ser contada em unidades separadas — altura, tempo, temperatura, renda.
 
@@ -141,3 +145,5 @@ Mas o coração do símbolo está mesmo no Σ e na ∫. Quem conhece os dois sin
 - [Conselho Regional de Estatística 6ª Região (CONRE-6) – Símbolos da Profissão](https://www.conre6.org.br/simbolos-da-profissao)
 - [Conselho Regional de Estatística 3ª Região (CONRE-3) – Símbolos da Profissão](https://www.conre3.org.br/portal/simbolos-da-profissao/)
 - [CONFE – Origem de um símbolo](https://www.confe.org.br/origemdeumsimbolo.pdf)
+- <span id="ref-cajori">Cajori, Florian. *A History of Mathematical Notations*, vol. 2. Open Court Publishing, 1929. § 438 (Euler e a notação Σ para somatório).</span>
+- <span id="ref-leibniz">Cajori, Florian. *A History of Mathematical Notations*, vol. 2. Open Court Publishing, 1929. § 620–622 (Leibniz e a criação do símbolo ∫ em 1675).</span>
