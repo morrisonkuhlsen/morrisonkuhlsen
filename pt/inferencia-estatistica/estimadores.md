@@ -119,29 +119,90 @@ $$
 f(x_i;\, \mu) = \frac{1}{\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)
 $$
 
-Como as observações são independentes, a verossimilhança conjunta é:
+Como as observações são independentes, a verossimilhança conjunta é o **produto** das densidades individuais:
+
+$$
+L(\mu \mid \mathbf{x})
+= \prod_{i=1}^{n} f(x_i;\,\mu)
+= f(x_1;\mu) \cdot f(x_2;\mu) \cdots f(x_n;\mu)
+$$
+
+**Passo 1 — Escrever o produto explicitamente:**
 
 $$
 L(\mu \mid \mathbf{x})
 = \prod_{i=1}^{n} \frac{1}{\sigma\sqrt{2\pi}} \exp\!\left(-\frac{(x_i - \mu)^2}{2\sigma^2}\right)
+$$
+
+**Passo 2 — Separar a constante do exponencial** (cada fator tem a mesma constante $\tfrac{1}{\sigma\sqrt{2\pi}}$, que aparece $n$ vezes):
+
+$$
+= \underbrace{\frac{1}{\sigma\sqrt{2\pi}} \cdot \frac{1}{\sigma\sqrt{2\pi}} \cdots \frac{1}{\sigma\sqrt{2\pi}}}_{n \text{ vezes}}
+\cdot
+\exp\!\left(-\frac{(x_1-\mu)^2}{2\sigma^2}\right) \cdot \exp\!\left(-\frac{(x_2-\mu)^2}{2\sigma^2}\right) \cdots \exp\!\left(-\frac{(x_n-\mu)^2}{2\sigma^2}\right)
+$$
+
+**Passo 3 — Compactar usando notação de produto** (usando $a^m \cdot a^m \cdots = a^{mn}$ e $e^a \cdot e^b = e^{a+b}$):
+
+$$
 = \left(\frac{1}{\sigma\sqrt{2\pi}}\right)^{\!n} \exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2\right)
 $$
 
+> **Por que combinar os exponenciais em uma soma?** A regra $e^a \cdot e^b = e^{a+b}$ transforma um produto de $n$ exponenciais em um único exponencial com o expoente igual à soma. Isso é fundamental: transforma um produto intratável em uma soma, que é algebricamente manipulável.
+
 ### 3.3 Log-verossimilhança
 
-Para fins de otimização (maximização), trabalha-se com a **log-verossimilhança** $\ell(\mu)$, que tem o mesmo ponto de máximo que $L(\mu)$, mas é algebricamente mais tratável:
+Para fins de otimização (maximização), trabalha-se com a **log-verossimilhança** $\ell(\mu)$, que tem o mesmo ponto de máximo que $L(\mu)$, mas é algebricamente mais tratável.
+
+> **Por que aplicar logaritmo?** $\ln$ é uma função estritamente crescente, portanto não altera o ponto de máximo: $\arg\max L(\mu) = \arg\max \ln L(\mu)$. A vantagem é transformar o **produto** em **soma** (via $\ln(a \cdot b) = \ln a + \ln b$) e eliminar a exponencial (via $\ln(e^x) = x$).
+
+**Passo 1 — Aplicar $\ln$ ao produto:**
 
 $$
-\ell(\mu \mid \mathbf{x}) = \ln L(\mu \mid \mathbf{x}) = -n\ln(\sigma\sqrt{2\pi}) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2
+\ell(\mu \mid \mathbf{x})
+= \ln\!\left[\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^{\!n}\!\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right)\right]
 $$
 
-Expandindo o somatório em $\mu$:
+**Passo 2 — Separar os fatores** usando $\ln(A \cdot B) = \ln A + \ln B$:
+
+$$
+= \ln\!\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^{\!n} + \ln\!\left[\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right)\right]
+$$
+
+**Passo 3 — Simplificar cada parcela** (usando $\ln(a^n) = n\ln a$ e $\ln(e^x) = x$):
+
+$$
+= n\ln\!\left(\frac{1}{\sigma\sqrt{2\pi}}\right) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2
+$$
+
+$$
+= -n\ln(\sigma\sqrt{2\pi}) - \frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2
+$$
+
+> O primeiro termo, $-n\ln(\sigma\sqrt{2\pi})$, é uma **constante** em relação a $\mu$ — não influencia a maximização e será descartado na derivação.
+
+**Passo 4 — Expandir $(x_i - \mu)^2$** usando a identidade do quadrado do binômio $(a - b)^2 = a^2 - 2ab + b^2$, com $a = x_i$ e $b = \mu$:
+
+$$
+(x_i - \mu)^2 = x_i^2 - 2\mu x_i + \mu^2
+$$
+
+**Passo 5 — Distribuir o somatório** (a soma de parcelas é a parcela das somas):
+
+$$
+\sum_{i=1}^n (x_i - \mu)^2
+= \sum_{i=1}^n x_i^2 \;-\; 2\mu\sum_{i=1}^n x_i \;+\; \sum_{i=1}^n \mu^2
+$$
+
+> O terceiro termo: $\displaystyle\sum_{i=1}^n \mu^2 = n\mu^2$, pois $\mu$ é uma constante somada $n$ vezes.
+
+**Passo 6 — Resultado final da log-verossimilhança expandida:**
 
 $$
 \ell(\mu \mid \mathbf{x}) = -n\ln(\sigma\sqrt{2\pi}) - \frac{1}{2\sigma^2}\left[\sum_{i=1}^{n}x_i^2 - 2\mu\sum_{i=1}^{n}x_i + n\mu^2\right]
 $$
 
-> **Observação:** A log-verossimilhança depende dos dados apenas através de $\sum x_i$ — o que antecipa a suficiência da média amostral, demonstrada na seção seguinte.
+> **Observação crítica:** Após a expansão, os dados $x_1, \ldots, x_n$ entram na log-verossimilhança em **duas formas apenas**: $\sum x_i^2$ e $\sum x_i$. O termo $\sum x_i^2$ não depende de $\mu$ (é constante na otimização). Logo, toda a dependência em $\mu$ passa **exclusivamente** por $\sum x_i$ — o que antecipa a suficiência da média amostral, demonstrada na seção seguinte.
 
 ---
 
@@ -163,16 +224,51 @@ onde $g$ depende de $\mathbf{x}$ apenas através de $T(\mathbf{x})$, e $h$ não 
 
 ### 4.3 Aplicação à distribuição Normal
 
-Reescrevendo a verossimilhança para isolar a dependência em $\mu$:
+O objetivo é reescrever $L(\mu \mid \mathbf{x})$ na forma $h(\mathbf{x}) \cdot g(T(\mathbf{x}), \mu)$, separando o que depende apenas dos dados do que depende também de $\mu$.
+
+**Passo 1 — Partir da verossimilhança compacta** (obtida na Seção 3.2):
 
 $$
 L(\mu \mid \mathbf{x})
-= \underbrace{\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^n \!\exp\!\left(-\frac{\sum x_i^2}{2\sigma^2}\right)}_{h(\mathbf{x})}
-\cdot
-\underbrace{\exp\!\left(\frac{\mu}{\sigma^2}\sum_{i=1}^n x_i - \frac{n\mu^2}{2\sigma^2}\right)}_{g\!\left(T(\mathbf{x}),\,\mu\right)}
+= \left(\frac{1}{\sigma\sqrt{2\pi}}\right)^{\!n}
+\exp\!\left(-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2\right)
 $$
 
-A fatorização é válida com $T(\mathbf{X}) = \displaystyle\sum_{i=1}^n X_i$.
+**Passo 2 — Expandir o expoente** usando $(x_i - \mu)^2 = x_i^2 - 2\mu x_i + \mu^2$ (ver Seção 3.3, Passo 4–5):
+
+$$
+-\frac{1}{2\sigma^2}\sum_{i=1}^n(x_i-\mu)^2
+= -\frac{1}{2\sigma^2}\left[\sum_{i=1}^n x_i^2 - 2\mu\sum_{i=1}^n x_i + n\mu^2\right]
+$$
+
+**Passo 3 — Distribuir o fator $-\tfrac{1}{2\sigma^2}$ pelas três parcelas** (regra da distributividade $\tfrac{a}{c}(x+y+z) = \tfrac{ax}{c} + \tfrac{ay}{c} + \tfrac{az}{c}$):
+
+$$
+= -\frac{\sum_{i=1}^n x_i^2}{2\sigma^2}
+  + \frac{\mu\sum_{i=1}^n x_i}{\sigma^2}
+  - \frac{n\mu^2}{2\sigma^2}
+$$
+
+> Observe que a segunda parcela tem sinal positivo: $-\tfrac{1}{2\sigma^2} \cdot (-2\mu\sum x_i) = +\tfrac{\mu\sum x_i}{\sigma^2}$.
+
+**Passo 4 — Reagrupar as parcelas** separando o que depende só de $\mathbf{x}$ do que envolve $\mu$:
+
+$$
+= \underbrace{\vphantom{\frac{n\mu^2}{2\sigma^2}}-\frac{\sum_{i=1}^n x_i^2}{2\sigma^2}}_{\text{só dados}} + \underbrace{\frac{\mu}{\sigma^2}\sum_{i=1}^n x_i - \frac{n\mu^2}{2\sigma^2}}_{\text{dados} + \mu}
+$$
+
+**Passo 5 — Usar a propriedade $e^{a+b} = e^a \cdot e^b$** para separar os dois grupos em dois exponenciais distintos:
+
+$$
+L(\mu \mid \mathbf{x})
+= \underbrace{\left(\frac{1}{\sigma\sqrt{2\pi}}\right)^n \exp\!\left(-\frac{\sum x_i^2}{2\sigma^2}\right)}_{h(\mathbf{x}) \;:\; \text{não depende de }\mu}
+\cdot
+\underbrace{\exp\!\left(\frac{\mu}{\sigma^2}\sum_{i=1}^n x_i - \frac{n\mu^2}{2\sigma^2}\right)}_{g(T(\mathbf{x}),\,\mu) \;:\; \text{depende de }\mathbf{x}\text{ só via }T=\sum x_i}
+$$
+
+A fatorização está estabelecida com $T(\mathbf{X}) = \displaystyle\sum_{i=1}^n X_i$.
+
+> **Por que $g$ depende de $\mathbf{x}$ apenas através de $\sum x_i$?** O expoente de $g$ contém $\sum x_i$ como bloco monolítico — dado o valor de $\sum x_i$, não importa quais foram os $x_i$ individuais. Isso é precisamente o significado de suficiência: $T = \sum X_i$ captura toda a informação que $\mathbf{x}$ carrega sobre $\mu$.
 
 Como $\bar{X} = T(\mathbf{X})/n$ é uma transformação bijetora de $T(\mathbf{X})$, a **média amostral $\bar{X}$** também é suficiente para $\mu$.
 
@@ -194,31 +290,89 @@ $$
 
 ### 5.2 Derivação completa
 
-**Passo 1 — Log-verossimilhança:**
+**Passo 1 — Log-verossimilhança** (forma expandida, da Seção 3.3):
 
 $$
 \ell(\mu) = -n\ln(\sigma\sqrt{2\pi}) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2
 $$
 
-**Passo 2 — Condição de primeira ordem (equação de score):**
+O primeiro termo não depende de $\mu$ — sua derivada é zero. O segundo termo é o que precisa ser derivado.
+
+**Passo 2 — Calcular $\frac{\partial}{\partial\mu}\sum(x_i - \mu)^2$** usando a regra da cadeia para cada parcela:
 
 $$
-\frac{\partial \ell}{\partial \mu} = \frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i - \mu) = 0
+\frac{\partial}{\partial\mu}(x_i - \mu)^2
+\overset{\text{cadeia}}{=}
+2(x_i - \mu) \cdot \frac{\partial}{\partial\mu}(x_i - \mu)
+= 2(x_i - \mu) \cdot (-1)
+= -2(x_i - \mu)
 $$
 
+Somando sobre $i$:
+
 $$
+\frac{\partial}{\partial\mu}\sum_{i=1}^n (x_i - \mu)^2
+= \sum_{i=1}^n -2(x_i - \mu)
+= -2\sum_{i=1}^n (x_i - \mu)
+$$
+
+**Passo 3 — Derivar a log-verossimilhança completa:**
+
+$$
+\frac{\partial \ell}{\partial \mu}
+= 0 - \frac{1}{2\sigma^2} \cdot \left[-2\sum_{i=1}^{n}(x_i - \mu)\right]
+= \frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i - \mu)
+$$
+
+> O fator $-\tfrac{1}{2\sigma^2}$ multiplicado por $-2$ resulta em $+\tfrac{1}{\sigma^2}$ — os dois sinais negativos se cancelam.
+
+**Passo 4 — Condição de primeira ordem** (equação de score — igualada a zero):
+
+$$
+\frac{\partial \ell}{\partial \mu} = 0
+\quad\Longrightarrow\quad
+\frac{1}{\sigma^2}\sum_{i=1}^{n}(x_i - \mu) = 0
+$$
+
+Como $\sigma^2 > 0$, podemos multiplicar ambos os lados por $\sigma^2$ sem alterar a igualdade:
+
+$$
+\sum_{i=1}^{n}(x_i - \mu) = 0
+$$
+
+**Passo 5 — Distribuir o somatório** (usando $\sum(a - b) = \sum a - \sum b$):
+
+$$
+\sum_{i=1}^{n} x_i - \sum_{i=1}^{n} \mu = 0
+\quad\Longrightarrow\quad
 \sum_{i=1}^{n} x_i - n\mu = 0
+$$
+
+> $\displaystyle\sum_{i=1}^n \mu = n\mu$ porque $\mu$ é constante, somada $n$ vezes.
+
+**Passo 6 — Isolar $\hat{\mu}$** (dividir ambos os lados por $n$):
+
+$$
+n\mu = \sum_{i=1}^{n} x_i
 \quad\Longrightarrow\quad
 \hat{\mu} = \frac{1}{n}\sum_{i=1}^{n} x_i = \bar{x}
 $$
 
-**Passo 3 — Verificação de máximo (segunda derivada):**
+**Passo 7 — Verificação de máximo via segunda derivada** (condição suficiente de máximo):
 
 $$
-\frac{\partial^2 \ell}{\partial \mu^2} = -\frac{n}{\sigma^2} < 0 \quad \forall\, \mu, n, \sigma
+\frac{\partial^2 \ell}{\partial \mu^2}
+= \frac{\partial}{\partial\mu}\left[\frac{1}{\sigma^2}\sum_{i=1}^n(x_i - \mu)\right]
+= \frac{1}{\sigma^2}\sum_{i=1}^n \frac{\partial}{\partial\mu}(x_i - \mu)
+= \frac{1}{\sigma^2}\sum_{i=1}^n (-1)
+= -\frac{n}{\sigma^2}
 $$
 
-A segunda derivada é estritamente negativa em todo o domínio — $\hat{\mu} = \bar{x}$ é um **máximo global único**.
+$$
+-\frac{n}{\sigma^2} < 0 \quad \forall\, n \geq 1,\; \sigma > 0
+$$
+
+> A segunda derivada é **independente de $\mu$** e sempre negativa — a log-verossimilhança é côncava em todo $\mathbb{R}$, portanto $\hat{\mu} = \bar{x}$ é um **máximo global único** (e não apenas local).
 
 ### 5.3 Estimador final
 
@@ -240,24 +394,66 @@ $$
 \text{Viés}(\hat{\theta}) = \mathbb{E}[\hat{\theta}] - \theta = 0
 $$
 
-**Prova para $\bar{X}$:**
+**Prova para $\bar{X}$** (passo a passo com justificativa de cada propriedade):
 
 $$
 \mathbb{E}[\bar{X}]
 = \mathbb{E}\!\left[\frac{1}{n}\sum_{i=1}^n X_i\right]
+$$
+
+**Passo 1 — Linearidade de $\mathbb{E}$:** a constante multiplicativa sai da esperança ($\mathbb{E}[c \cdot Z] = c\cdot\mathbb{E}[Z]$):
+
+$$
+= \frac{1}{n}\,\mathbb{E}\!\left[\sum_{i=1}^n X_i\right]
+$$
+
+**Passo 2 — Linearidade de $\mathbb{E}$ para somas** ($\mathbb{E}[Z_1 + \cdots + Z_n] = \mathbb{E}[Z_1] + \cdots + \mathbb{E}[Z_n]$, sem exigir independência):
+
+$$
 = \frac{1}{n}\sum_{i=1}^n \mathbb{E}[X_i]
-= \frac{1}{n} \cdot n\mu
-= \mu \quad \checkmark
+$$
+
+**Passo 3 — Substituir $\mathbb{E}[X_i] = \mu$** (por hipótese, cada $X_i \sim \mathcal{N}(\mu, \sigma^2)$):
+
+$$
+= \frac{1}{n}\sum_{i=1}^n \mu
+$$
+
+**Passo 4 — Calcular a soma de $n$ termos iguais a $\mu$:**
+
+$$
+= \frac{1}{n} \cdot n\mu = \mu \quad \checkmark
 $$
 
 > **Interpretação:** Se o processo amostral fosse repetido infinitas vezes e $\bar{x}$ calculado em cada réplica, a média de todas as estimativas convergiria exatamente para o parâmetro verdadeiro $\mu$.
 
 ### 6.2 Variância do estimador
 
+**Passo 1 — Escrever a definição:**
+
 $$
 \text{Var}(\bar{X})
 = \text{Var}\!\left(\frac{1}{n}\sum_{i=1}^n X_i\right)
+$$
+
+**Passo 2 — Extrair a constante** usando $\text{Var}(c\cdot Z) = c^2 \,\text{Var}(Z)$ com $c = \tfrac{1}{n}$:
+
+$$
+= \frac{1}{n^2}\,\text{Var}\!\left(\sum_{i=1}^n X_i\right)
+$$
+
+> Atenção: a constante sai **ao quadrado** na variância, diferente da esperança onde sai linearmente.
+
+**Passo 3 — Distribuir a variância sobre a soma** usando independência das observações. Para variáveis **independentes**, $\text{Var}(Z_1 + \cdots + Z_n) = \text{Var}(Z_1) + \cdots + \text{Var}(Z_n)$ (se houvesse dependência, apareceriam termos de covariância $2\sum_{i<j}\text{Cov}(X_i, X_j)$, que aqui são zero por independência):
+
+$$
 = \frac{1}{n^2}\sum_{i=1}^n \text{Var}(X_i)
+$$
+
+**Passo 4 — Substituir $\text{Var}(X_i) = \sigma^2$** (por hipótese, cada $X_i \sim \mathcal{N}(\mu, \sigma^2)$):
+
+$$
+= \frac{1}{n^2}\sum_{i=1}^n \sigma^2
 = \frac{1}{n^2} \cdot n\sigma^2
 = \frac{\sigma^2}{n}
 $$
@@ -280,15 +476,46 @@ $$
 \mathcal{I}(\mu) = \mathbb{E}\!\left[-\frac{\partial^2}{\partial \mu^2}\ln f(X;\,\mu)\right]
 $$
 
-Para $X \sim \mathcal{N}(\mu, \sigma^2)$:
+Para $X \sim \mathcal{N}(\mu, \sigma^2)$, o cálculo segue:
+
+**Passo 1 — Log-densidade de uma observação:**
 
 $$
-\frac{\partial^2}{\partial \mu^2}\ln f(x;\,\mu) = -\frac{1}{\sigma^2}
-\quad\Rightarrow\quad
-\mathcal{I}(\mu) = \frac{1}{\sigma^2}
+\ln f(x;\,\mu)
+= -\ln(\sigma\sqrt{2\pi}) - \frac{(x-\mu)^2}{2\sigma^2}
 $$
 
-Para $n$ observações i.i.d.: $\;\mathcal{I}_n(\mu) = n \cdot \mathcal{I}(\mu) = \dfrac{n}{\sigma^2}$.
+**Passo 2 — Primeira derivada** (a constante $-\ln(\sigma\sqrt{2\pi})$ desaparece; aplica-se a regra da cadeia a $(x-\mu)^2$):
+
+$$
+\frac{\partial}{\partial\mu}\ln f(x;\,\mu)
+= -\frac{1}{2\sigma^2} \cdot 2(x-\mu)\cdot(-1)
+= \frac{x - \mu}{\sigma^2}
+$$
+
+> Esta expressão — a **função score** — mede o quanto a log-densidade varia ao mudar $\mu$. Seu valor esperado é zero: $\mathbb{E}[\text{score}] = \mathbb{E}[(X-\mu)/\sigma^2] = 0$.
+
+**Passo 3 — Segunda derivada** (derivar $\tfrac{x-\mu}{\sigma^2}$ em relação a $\mu$; $x$ é constante):
+
+$$
+\frac{\partial^2}{\partial\mu^2}\ln f(x;\,\mu)
+= \frac{\partial}{\partial\mu}\!\left(\frac{x-\mu}{\sigma^2}\right)
+= \frac{-1}{\sigma^2}
+$$
+
+**Passo 4 — Tomar o valor esperado com sinal negativo:**
+
+$$
+\mathcal{I}(\mu)
+= \mathbb{E}\!\left[-\frac{\partial^2}{\partial\mu^2}\ln f(X;\,\mu)\right]
+= \mathbb{E}\!\left[-\left(-\frac{1}{\sigma^2}\right)\right]
+= \mathbb{E}\!\left[\frac{1}{\sigma^2}\right]
+= \frac{1}{\sigma^2}
+$$
+
+> A segunda derivada é **constante** (não depende de $x$ nem de $\mu$), então o valor esperado é a própria constante.
+
+Para $n$ observações i.i.d., a informação de Fisher total é aditiva: $\;\mathcal{I}_n(\mu) = n \cdot \mathcal{I}(\mu) = \dfrac{n}{\sigma^2}$.
 
 #### Limite de Cramér–Rao (LCR)
 
