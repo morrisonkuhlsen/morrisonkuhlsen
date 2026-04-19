@@ -26,6 +26,16 @@ Nem toda profissão tem um símbolo com história. No caso da Estatística brasi
 
 A escolha não foi por acaso. Juntos, eles delimitam o território da Estatística — de um lado, os dados discretos; do outro, os fenômenos contínuos.
 
+## Dados discretos e dados contínuos
+
+Antes de entender os dois símbolos, vale ter clara a distinção entre esses dois tipos de dados, porque ela é central em toda a Estatística.
+
+**Dados discretos** são aqueles que assumem valores separados, contáveis, sem possibilidade de valores intermediários entre eles. O número de filhos de uma família é discreto: pode ser 0, 1, 2 ou 3, mas não 1,7. O número de clientes que entram numa loja em um dia, a quantidade de defeitos num lote de produção, o resultado de um dado — todos são exemplos de variáveis discretas. Entre dois valores consecutivos possíveis, não existe nenhum outro.
+
+**Dados contínuos** são aqueles que podem assumir qualquer valor dentro de um intervalo, incluindo todos os pontos entre dois extremos. A altura de uma pessoa pode ser 1,72 m, 1,723 m ou 1,7231 m — teoricamente, a precisão não tem limite. O mesmo vale para temperatura, tempo, massa, renda. Entre dois valores quaisquer de uma variável contínua, sempre existe outro valor possível.
+
+Na prática, a distinção importa porque muda a ferramenta matemática usada. Para somar valores discretos, usa-se o somatório. Para acumular valores ao longo de um intervalo contínuo, usa-se a integral. Esse é exatamente o motivo de os dois símbolos aparecerem juntos no símbolo da profissão.
+
 ## O que significa o Σ maiúsculo
 
 O Σ é a letra grega sigma em sua forma maiúscula. Os gregos a usavam para representar o som “s”, mas foi em latim, por meio da palavra *summa* (soma), que ela se conectou à ideia de somatório. No século XVIII, o matemático suíço Leonhard Euler popularizou o uso do Σ como notação formal para somas<sup>[[4]](#ref-cajori)</sup>, e desde então o símbolo nunca mais saiu da matemática e da estatística.
