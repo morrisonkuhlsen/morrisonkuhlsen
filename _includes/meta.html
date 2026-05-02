@@ -37,6 +37,20 @@
 {% comment %} Canonical URL {% endcomment %}
 <link rel="canonical" href="https://morrisonkuhlsen.com{{ page.url | replace:'index.html','' }}" />
 
+{% comment %} Hreflang for bilingual content {% endcomment %}
+{% assign all_pages = site.pages | concat: site.posts %}
+{% if page.ref %}
+  {% assign alternates = all_pages | where: "ref", page.ref %}
+  {% for alt in alternates %}
+    {%- if alt.lang == 'en' -%}
+    <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com{{ alt.url }}" />
+    {%- elsif alt.lang == 'pt' -%}
+    <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com{{ alt.url }}" />
+    {%- endif -%}
+  {% endfor %}
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com{{ page.url }}" />
+{% endif %}
+
 {% comment %} Title {% endcomment %}
 <title>{{ meta_title }}</title>
 
@@ -80,7 +94,14 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:locale" content="{{ page.lang | default: 'pt_BR' }}">
+<meta property="og:image:alt" content="{{ meta_title | strip_html | escape }}">
+{%- if page.lang == 'en' -%}
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+{%- else -%}
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+{%- endif -%}
 
 {% comment %} Web App Manifest {% endcomment %}
 <link rel="manifest" href="{{ site.url | append: '/assets/images/favicons/manifest.json' }}">
@@ -97,13 +118,35 @@
   "@context": "https://schema.org",
   "@type": "WebSite",
   "name": "{{ site.data.t.name[page.lang] }}",
-  "url": "https://morrisonkuhlsen.com",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://morrisonkuhlsen.com/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
+  "url": "https://morrisonkuhlsen.com"
 }
 </script>
+{% if page.layout == 'post' %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ page.title | escape }}",
+  "description": "{{ meta_description | strip_html | truncate: 200 | escape }}",
+  "image": "{{ meta_image_social }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ page.author | default: site.data.t.author[page.lang] | escape }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.data.t.name[page.lang] }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://morrisonkuhlsen.com{{ site.data.t.icon }}"
+    }
+  },
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "dateModified": "{{ page.last_modified_at | default: page.date | date_to_xmlschema }}",
+  "url": "https://morrisonkuhlsen.com{{ page.url }}",
+  "inLanguage": "{{ page.lang }}"
+}
+</script>
+{% endif %}
 
 
