@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MσrrisonKühlsen – One statistics problem per week</title>
+  <meta name="description" content="One statistics problem per week, in a minimal layout. Practice probability, inference, regression, and more." />
+  <meta name="keywords" content="statistics, probability, daily problem, math, practice, inference, regression, dailystats" />
+  <meta name="author" content="dailystats" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://dailystats.github.io/dailystats/" />
+
+  <!-- Open Graph / Facebook, LinkedIn, etc. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://dailystats.github.io/dailystats/" />
+  <meta property="og:title" content="MσrrisonKühlsen – One statistics problem per week" />
+  <meta property="og:description" content="One statistics problem per week, in a minimal layout. Practice probability, inference, regression, and more." />
+  <meta property="og:image" content="https://dailystats.github.io/dailystats/assets/favicon.png" />
+  <meta property="og:site_name" content="dσilystats" />
+  <meta property="og:locale" content="en_US" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="MσrrisonKühlsen – One statistics problem per week" />
+  <meta name="twitter:description" content="One statistics problem per week, in a minimal layout. Practice probability, inference, regression, and more." />
+  <meta name="twitter:image" content="https://dailystats.github.io/dailystats/assets/favicon.png" />
+
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <link rel="stylesheet" href="../css/style-pw.css" />
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(','\\)'], ['$', '$']],
+        displayMath: [['\\[','\\]'], ['$$','$$']],
+        packages: {'[+]': ['cancel']}
+      },
+      loader: { load: ['[tex]/cancel'] },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <div class="brand">MσrrisonKühlsen <small>one problem per week</small></div>
+
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle theme">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+
+          <svg id="moonIcon" style="display:none" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <article class="content" aria-live="polite">
+        <div class="meta">
+          <div><span id="todayLabel">—</span></div>
+          <div><code id="problemId">—</code></div>
+          <div id="timeLeftWrap"><span id="timeLeft">—</span></div>
+        </div>
+
+        <h1 id="problemTitle">Loading…</h1>
+
+        <div class="statement" id="problemStatement"></div>
+
+        <details id="hintBox">
+          <summary>view hint</summary>
+          <div id="problemHint" class="statement"></div>
+        </details>
+
+        <details id="solutionBox">
+          <summary>view solution (when you want)</summary>
+          <div id="problemSolution" class="statement"></div>
+        </details>
+
+        <p class="note">
+          Solve on paper first, then open the solution.
+        </p>
+      </article>
+    </main>
+
+    <footer class="footer-dark">
+      <div class="footer-inner">
+        <div class="footer-powered">
+          <span class="footer-powered-text"><strong>powered</strong> by</span>
+          <img id="footerLogo" src="../images/mklogo-black.png" alt="logo" />
+        </div>
+        <div class="footer-links-row">
+          <a class="footer-link footer-link-with-icon" href="#" id="copyLink">
+            <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            copy problem link
+          </a>
+          <a class="footer-link footer-link-with-icon" href="https://github.com/dailystats/dailystats" target="_blank" rel="noopener">
+            <svg class="footer-icon footer-icon-github" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M6.766 11.695C4.703 11.437 3.25 9.904 3.25 7.92c0-.806.281-1.677.75-2.258-.203-.532-.172-1.662.062-2.129.626-.081 1.469.258 1.969.726.594-.194 1.219-.291 1.985-.291.765 0 1.39.097 1.953.274.484-.451 1.343-.79 1.969-.709.218.435.25 1.564.046 2.113.5.613.766 1.436.766 2.274 0 1.984-1.453 3.485-3.547 3.759.531.355.891 1.129.891 2.016v1.678c0 .484.39.758.859.564C13.781 14.824 16 11.905 16 8.291 16 3.726 12.406 0 7.984 0 3.562 0 0 3.726 0 8.291c0 3.581 2.203 6.55 5.172 7.663A.595.595 0 0 0 6 15.389v-1.291c-.219.097-.5.162-.75.162-1.031 0-1.641-.581-2.078-1.662-.172-.435-.36-.693-.719-.742-.187-.016-.25-.097-.25-.193 0-.194.313-.339.625-.339.453 0 .844.29 1.25.887.313.468.641.678 1.031.678.391 0 .641-.146 1-.516.266-.275.469-.517.657-.678Z"/>
+            </svg>
+            GitHub
+          </a>
+          <a class="footer-link" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener license">CC BY-SA 4.0</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="../js/problems.js"></script>
+  <script defer src="../js/app.js"></script>
+</body>
+</html>
