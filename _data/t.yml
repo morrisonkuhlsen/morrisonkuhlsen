@@ -56,8 +56,8 @@ social-card: /assets/images/favicons/social-card.png
 
 ## Site name
 name:
-  en: "Morrison Kühlsen"
-  pt: "Morrison Kühlsen"
+  en: "MorrisonKühlsen"
+  pt: "MorrisonKühlsen"
 
 ## Site description
 description:
@@ -73,7 +73,7 @@ social-links:
   en:
     twitter:
       name: "twitter"
-      url: "https://twitter.com/morrisonkuhlsen"
+      url: "https://x.com/morrisonkuhlsen"
     facebook:
       name: "facebook"
       url: "https://facebook.com/morrisonkuhlsen"
@@ -86,7 +86,7 @@ social-links:
   pt:
     twitter:
       name: "twitter"
-      url: "https://twitter.com/morrisonkuhlsen"
+      url: "https://x.com/morrisonkuhlsen"
     facebook:
       name: "facebook"
       url: "https://facebook.com/morrisonkuhlsen"
