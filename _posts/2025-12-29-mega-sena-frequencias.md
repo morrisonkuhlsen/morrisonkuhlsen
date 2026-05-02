@@ -1,5 +1,6 @@
----
+﻿---
 layout: post
+image: /assets/images/mega-sena.png
 title: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt

@@ -1,5 +1,6 @@
----
+﻿---
 layout: post
+image: /assets/images/plot_2_brasil_pib.png
 title: "Data Visualization: Brazil State GDP Map in Julia"
 categories: [DATA VISUALIZATION, JULIA]
 tags: [julia, visualization, data, economics, brazil]

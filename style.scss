@@ -65,3 +65,46 @@ img {
   -o-filter: none !important;
   -ms-filter: none !important;
 }
+
+/* Blog post cards */
+.post-card {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+}
+
+.post-card-img {
+  height: 210px;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  flex-wrap: wrap;
+}
+
+.post-card-label {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #17324d;
+}
+
+.post-card-date {
+  color: #5b6f82;
+  font-size: 0.78rem;
+}
+
+.post-card-title {
+  font-weight: 700;
+  color: #0066cc;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    color: #004d99;
+  }
+}

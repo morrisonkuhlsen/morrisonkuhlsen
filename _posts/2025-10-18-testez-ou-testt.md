@@ -1,5 +1,6 @@
----
+﻿---
 layout: post
+image: /assets/images/flowchart-ztest-ttest.png
 title: "Teste Z ou Teste t de Student: Qual Usar?"
 categories: [INFERÊNCIA ESTATÍSTICA, TESTE DE HIPÓTESES]
 tags: [teste-z, teste-t, inferência, estatística, julia]
