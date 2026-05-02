@@ -1,23 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student's t Distribution | T-Table</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/ztable-styles.css">
-
-  <!-- Desativa tooltips apenas nesta página -->
-  <style>
-    /* Esconde tooltips custom (biblioteca) e elementos com role="tooltip" */
-    .tooltip,
-    .tooltip.show,
-    [role="tooltip"] {
-      display: none !important;
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-  </style>
   <!-- Google tag (gtag.js) -->
   <script>
     // Desativa o rastreamento se o cookie de consentimento não existir
@@ -31,7 +18,7 @@
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 </head>
-<body>
+<body class="ttable">
   <div class="table-header">
     <div class="header-content">
       <h1>Student's t Distribution — Critical Values</h1>
@@ -148,17 +135,9 @@
       </tbody>
     </table>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/assets/js/ztable-script-new.js"></script>
-
-  <!-- Remove atributos title para evitar tooltip nativo do navegador nesta página -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('[title]').forEach(function(el) {
-        el.removeAttribute('title');
-      });
-    });
-  </script>
+  <footer>
+    MorrisonKühlsen &copy; 2025 — Creative Commons License
+  </footer>
 </body>
 </html>

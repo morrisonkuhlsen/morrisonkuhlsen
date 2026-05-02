@@ -1,48 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>F Distribution (Snedecor) | F-Table</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="/assets/css/ztable-styles.css">
-  <style>
-    /* Page-specific tweaks */
-    .table-header {
-      padding: 1rem 0;
-      display: flex;
-      align-items: center;
-      justify-content: center; /* centraliza o conteúdo horizontalmente */
-      width: 100%;
-    }
-    /* header left: title + divider + logo */
-    .table-header .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      justify-content: center; /* garante que os itens dentro fiquem centralizados */
-      text-align: center;
-      margin: 0 auto;
-    }
-    .table-header .header-left h1 { margin:0; font-size:1.25rem; line-height:1.1; }
-    .header-divider { width:1px; height:48px; background: rgba(255,255,255,0.06); border-radius:1px; }
-    .logo-img { height:52px; display:block; object-fit:contain; }
-    /* responsive */
-    @media (max-width: 992px) {
-      .logo-img { height:44px; }
-      .header-divider { height:40px; }
-      .table-header .header-left h1 { font-size:1.05rem; }
-    }
-    @media (max-width: 576px) {
-      .header-divider { display:none; }
-      .logo-img { height:36px; }
-      .table-header { padding: 0.6rem 0; }
-      .table-header .header-left h1 { font-size:0.98rem; }
-    }
-    .confidence-level td { font-weight:600; }
-    table { font-size:0.92rem; }
-  </style>
-    <!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
   <script>
     // Desativa o rastreamento se o cookie de consentimento não existir
     if (document.cookie.indexOf('cookies_consent=true') === -1) {
@@ -55,13 +18,13 @@
   </script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 </head>
-<body>
+<body class="ftable">
   <div class="table-header">
-    <div class="header-left">
+    <div class="header-content">
       <h1>F Distribution (Snedecor) — Critical Values</h1>
-      <div class="header-divider" aria-hidden="true"></div>
+      <div class="divider" aria-hidden="true"></div>
       <a href="/" class="logo-link" aria-label="Morrison Kuhlsen">
-        <img src="/assets/images/mklogo.png" alt="Morrison Kuhlsen" class="logo-img" />
+        <img src="/assets/images/mklogo.png" alt="Morrison Kuhlsen" class="logo" />
       </a>
     </div>
   </div>
@@ -244,8 +207,9 @@
       </tbody>
     </table>
   </div>
-
-  <link rel="stylesheet" href="/assets/css/ftable-hover.css">
   <script src="/assets/js/ftable-hover.js" defer></script>
+  <footer>
+    MorrisonKühlsen &copy; 2025 — Creative Commons License
+  </footer>
 </body>
 </html>
