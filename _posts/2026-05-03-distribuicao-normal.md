@@ -22,11 +22,11 @@ mathjax: true
   </figcaption>
 </figure>
 
-## Por que a distribuição normal é tão importante?
+## O que é a distribuição normal e por que ela é tão importante?
 
-Poucas ideias na história da ciência se mostraram tão úteis quanto a distribuição normal. Ela aparece na altura de uma população, no erro de medição de instrumentos de precisão, no retorno de ativos financeiros, na distribuição de notas de uma prova, no tempo de espera em processos industriais. É difícil listar áreas que não a utilizam.
+Poucas ideias na história da ciência se mostraram tão úteis quanto a distribuição normal. Ela aparece na altura de uma população, no erro de medição de instrumentos de precisão, no retorno de ativos financeiros, na distribuição de notas de uma prova, na média de tempos de processos industriais. É difícil listar áreas que não a utilizam.
 
-O motivo não é mágica — é matemático. O **Teorema Central do Limite** garante que, sob condições bastante gerais, a soma (ou a média) de muitas variáveis aleatórias independentes tende a seguir uma distribuição normal, independentemente de como cada variável individual se distribui. Em outras palavras, a normalidade surge naturalmente sempre que muitos fatores pequenos e independentes se combinam.
+O motivo não é mágica — é matemático. Em sua forma clássica, o **Teorema Central do Limite** afirma que a média de muitas variáveis aleatórias independentes e identicamente distribuídas, com média e variância finitas, tende a se comportar aproximadamente como uma normal quando o tamanho da amostra cresce. Em outras palavras, a normalidade surge naturalmente sempre que muitos fatores independentes de mesma natureza se combinam — desde que cada um tenha variabilidade limitada.
 
 ---
 
@@ -42,7 +42,7 @@ A curva em sino tem origem em pelo menos três pensadores do século XVIII e XIX
 
 ---
 
-## A fórmula da distribuição normal
+## Fórmula da distribuição normal
 
 A função de densidade de probabilidade (FDP) da distribuição normal é:
 
@@ -61,6 +61,15 @@ Cada elemento desta equação tem um papel:
 | $\frac{1}{\sigma\sqrt{2\pi}}$ | Coeficiente de normalização | Garante que a área total sob a curva seja igual a 1 |
 
 Escreve-se $X \sim N(\mu, \sigma^2)$ para indicar que a variável $X$ segue uma distribuição normal com média $\mu$ e variância $\sigma^2$.
+
+### O que a fórmula realmente está dizendo?
+
+Apesar da aparência intimidante, a fórmula tem uma lógica visual simples:
+
+- **$\mu$ move a curva** para a esquerda ou para a direita, sem alterar sua forma.
+- **$\sigma$ controla o espalhamento**: um desvio padrão maior achata e alarga a curva; um menor a torna mais estreita e alta.
+- **O termo exponencial** $e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$ faz a curva cair rapidamente à medida que $x$ se afasta da média — quanto mais longe, mais próximo de zero o valor da função.
+- **O coeficiente** $\frac{1}{\sigma\sqrt{2\pi}}$ é um fator de escala que não altera o formato da curva, apenas garante que a área total sob ela seja exatamente 1 (conforme demonstrado na seção sobre a integral gaussiana).
 
 ---
 
@@ -94,7 +103,7 @@ $$
 
 ### 4. As caudas nunca tocam o eixo
 
-A curva se estende indefinidamente nos dois sentidos, aproximando-se do eixo horizontal mas nunca o tocando. Isso reflete o fato de que, tecnicamente, qualquer valor real tem densidade de probabilidade não nula — embora valores muito distantes da média sejam extremamente improváveis.
+A curva se estende indefinidamente nos dois sentidos, aproximando-se do eixo horizontal mas nunca o tocando. A densidade da normal é positiva para qualquer valor real, mas isso não significa que a probabilidade de observar exatamente um valor específico seja positiva. Em distribuições contínuas, probabilidades são calculadas para intervalos, não para pontos isolados: a probabilidade de $X$ assumir exatamente um valor qualquer é sempre zero. O que esta propriedade diz, portanto, é que nenhum intervalo — por mais distante que esteja da média — tem probabilidade absolutamente nula.
 
 ---
 
@@ -242,9 +251,14 @@ Traduzindo em linguagem direta:
 
 Um valor que cai além de 3 desvios padrão da média é raro: acontece em apenas 0,3% dos casos.
 
+<div style="border-left: 4px solid #FF9800; padding: 1em; background-color: #fff3e0; margin: 1em 0; border-radius: 4px;">
+  <h4 style="margin-top: 0;">Atenção</h4>
+  <p>A regra 68–95–99,7 vale exatamente para distribuições normais. Em dados apenas "parecidos com sino" — especialmente com caudas mais pesadas do que a normal prevê — as porcentagens reais podem diferir significativamente. Use a regra com cautela em distribuições assimétricas ou com assimetria nas caudas.</p>
+</div>
+
 ---
 
-## A distribuição normal padrão e o escore Z
+## Como calcular probabilidade usando o escore Z
 
 Quando $\mu = 0$ e $\sigma = 1$, obtemos a **distribuição normal padrão**, denotada $Z \sim N(0, 1)$. Sua FDP simplifica para:
 
@@ -262,7 +276,19 @@ O valor $Z$ resultante — o **escore Z** — indica quantos desvios padrão o v
 
 ---
 
-## Exemplos resolvidos à mão
+## Como usar a distribuição normal na prática
+
+Antes de partir para os exemplos, vale ter claro o fluxo de trabalho padrão:
+
+1. **Identifique $\mu$ e $\sigma$** a partir do enunciado do problema.
+2. **Transforme o valor observado em escore Z** pela fórmula $Z = \dfrac{x - \mu}{\sigma}$.
+3. **Consulte a [tabela Z](/ztable.html)** para encontrar $P(Z \le z)$.
+4. **Use complemento ou diferença de áreas** quando precisar de probabilidades de caudas opostas ou de intervalos.
+5. **Interprete o resultado como probabilidade de intervalo**, nunca como probabilidade de um ponto exato.
+
+---
+
+## Exemplos resolvidos de distribuição normal
 
 ### Exemplo 1: probabilidade em uma distribuição normal qualquer
 
@@ -276,7 +302,7 @@ $$
 Z = \frac{85 - 70}{10} = \frac{15}{10} = 1{,}5
 $$
 
-**Passo 2:** consulte a tabela Z para $z = 1{,}5$:
+**Passo 2:** consulte a [tabela Z](/ztable.html) para $z = 1{,}5$:
 
 $$
 P(Z \le 1{,}5) \approx 0{,}9332
@@ -296,7 +322,7 @@ $$
 Z_1 = \frac{60 - 70}{10} = -1{,}0 \qquad Z_2 = \frac{80 - 70}{10} = 1{,}0
 $$
 
-**Passo 2:** calcule a probabilidade entre $-1$ e $1$ pela tabela Z:
+**Passo 2:** calcule a probabilidade entre $-1$ e $1$ pela [tabela Z](/ztable.html):
 
 $$
 P(-1 \le Z \le 1) = P(Z \le 1) - P(Z \le -1)
@@ -330,11 +356,11 @@ $$
 
 ---
 
-## Limitações e quando a normalidade falha
+## Quando não usar a distribuição normal
 
 A distribuição normal é poderosa, mas não universal. Ela não é adequada quando:
 
-- **Os dados são assimétricos**, como renda, preços de imóveis ou tempos de espera — situações onde a distribuição log-normal ou exponencial pode ser mais indicada.
+- **Os dados são assimétricos**, como renda ou preços de imóveis — situações onde a distribuição log-normal ou exponencial pode ser mais indicada. Note que tempos individuais de espera também costumam ser assimétricos e são mais bem modelados por distribuições como exponencial, gama ou log-normal; já *médias* de muitos tempos de espera podem se aproximar da normal por efeito do Teorema Central do Limite.
 - **Os valores são restritos a um intervalo**, como proporções entre 0 e 1 — onde a distribuição beta é mais natural.
 - **Eventos raros de contagem** são modelados — onde a distribuição de Poisson é mais apropriada.
 - **As caudas são pesadas**, como em retornos financeiros extremos — onde distribuições com caudas mais grossas (como a t de Student) representam melhor a realidade.
