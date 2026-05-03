@@ -4,6 +4,7 @@ title: Inferência Estatística
 lang: pt
 ref: inferencia-estatistica
 order: 3
+mathjax: true
 ---
 
 # Inferência Estatística

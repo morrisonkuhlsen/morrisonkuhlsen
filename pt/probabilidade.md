@@ -4,6 +4,7 @@ title: Probabilidade
 lang: pt
 ref: probabilidade
 order: 2
+mathjax: true
 ---
 
 # Probabilidade

@@ -1,12 +1,13 @@
-﻿---
+---
 layout: post
-image: /assets/images/cointoss.png
+image: /assets/images/cointoss.jpg
 title: "Mistérios do cara ou coroa"
 categories: [PROBABILIDADE, ESTATÍSTICA, GUIA]
 tags: [probabilidade, estatística, bernoulli, binomial, lgn]
 lang: pt
 ref: cara-ou-coroa
 description: "cara-ou-coroa: Binomial, LGN, runs e tempos de espera."
+mathjax: true
 ---
 
 ## 1) Modelo probabilístico (moeda justa)
@@ -14,7 +15,7 @@ description: "cara-ou-coroa: Binomial, LGN, runs e tempos de espera."
 Assuma uma moeda justa e lançamentos independentes.
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/cointoss.png" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/cointoss.jpg" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> A sorte está lançada.
   </figcaption>

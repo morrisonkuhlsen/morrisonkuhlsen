@@ -6,6 +6,7 @@ categories: [DATA VISUALIZATION, JULIA]
 tags: [julia, visualization, data, economics, brazil]
 lang: en
 ref: pib-brasil-julia
+mathjax: true
 ---
 
 Welcome to the first part of our series on working with maps in Julia! In this series we will explore how to create powerful and informative geospatial visualizations using the Julia language.

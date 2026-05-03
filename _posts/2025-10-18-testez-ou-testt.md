@@ -6,6 +6,7 @@ categories: [INFERÊNCIA ESTATÍSTICA, TESTE DE HIPÓTESES]
 tags: [teste-z, teste-t, inferência, estatística, julia]
 lang: pt
 ref: z-vs-t-test
+mathjax: true
 ---
 
 Uma das dúvidas mais comuns em inferência estatística é decidir entre o **Teste Z** e o **Teste t de Student** ao realizar um teste de hipóteses para a média de uma população. Embora ambos os testes sejam semelhantes, a escolha correta depende de uma condição fundamental: **o conhecimento sobre o desvio padrão da população**.

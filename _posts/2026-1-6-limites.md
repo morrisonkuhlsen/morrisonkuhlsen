@@ -1,12 +1,13 @@
-﻿---
+---
 layout: post
-image: /assets/images/limite-image.png
+image: /assets/images/limite-image.jpg
 title: "Limites no Cálculo: notação, técnicas e exemplos resolvidos (passo a passo)"
 categories: [CALCULO, MATEMATICA]
 lang: pt
 tags: [matematica, calculo, limites]
 ref: limites-calculo
 description: "Limites - tendendo ao infinito."
+mathjax: true
 ---
 
 <div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">
@@ -15,7 +16,7 @@ description: "Limites - tendendo ao infinito."
 </div>
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/limite-image.png" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/limite-image.jpg" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> Limite não é “chegar” em $a$, e sim entender o que acontece com $f(x)$ quando $x$ chega <em>muito perto</em> de $a$.
   </figcaption>

@@ -1,15 +1,14 @@
 {% if site.google_analytics %}
-<!-- Google tag (gtag.js) -->
+<!-- Google tag (gtag.js) — carregado de forma assíncrona e não-bloqueante -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 <script>
-  // Desativa o rastreamento se o cookie de consentimento não existir
-  if (document.cookie.indexOf('cookies_consent=true') === -1) {
-    window['ga-disable-G-NCGKDHE0Y6'] = true;
-  }
-  
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
+  // Respeita o consentimento de cookies
+  if (document.cookie.indexOf('cookies_consent=true') === -1) {
+    window['ga-disable-G-NCGKDHE0Y6'] = true;
+  }
   gtag('config', 'G-NCGKDHE0Y6', { 'anonymize_ip': true });
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NCGKDHE0Y6"></script>
 {% endif %}

@@ -6,6 +6,7 @@ categories: [VISUALIZAÇÃO DE DADOS, JULIA]
 tags: [julia, visualização, dados, economia, brasil]
 lang: pt
 ref: pib-brasil-julia
+mathjax: true
 ---
 
 Bem-vindo à primeira parte da nossa série sobre trabalhos com mapas em Julia! Nesta série, exploraremos como criar visualizações geoespaciais poderosas e informativas usando a linguagem Julia. 

@@ -4,6 +4,7 @@ title: Análise de Dados
 lang: pt
 ref: analise-de-dados
 order: 4
+mathjax: true
 ---
 
 # Análise de Dados

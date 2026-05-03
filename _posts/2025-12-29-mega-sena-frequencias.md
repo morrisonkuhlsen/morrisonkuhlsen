@@ -1,12 +1,13 @@
-﻿---
+---
 layout: post
-image: /assets/images/mega-sena.png
+image: /assets/images/mega-sena.jpg
 title: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
 tags: [matemática, probabilidade, mega-sena]
 ref: porcentagens
 description: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
+mathjax: true
 ---
 
 <div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">
@@ -15,7 +16,7 @@ description: "Mega-Sena: o que dá para concluir (e o que não dá) só com freq
 </div>
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/mega-sena.png" alt="Fluxograma de decisão para escolher entre Teste Z e Teste t." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/mega-sena.jpg" alt="Fluxograma de decisão para escolher entre Teste Z e Teste t." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> Na Mega-Sena, “a sorte está lançada”: o jogo está feito e, a partir daqui, só resta acompanhar o sorteio — porque a decisão é sem volta… e a estatística é quem conta a história.
   </figcaption>

@@ -7,6 +7,7 @@ lang: en
 ref: homepage
 permalink: /en/
 order: 0
+preload_hero: true
 ---
 
 {% include hero.html %}

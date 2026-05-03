@@ -1,18 +1,19 @@
-﻿---
+---
 layout: post
-image: /assets/images/duvida.png
+image: /assets/images/duvida.jpg
 title: "16 apostas de 15 números tem a mesma probabilidade de 1 aposta de 16 números na Lotofácil?"
 categories: [MATEMÁTICA, GUIA]
 tags: [probabilidade, combinatória, lotofácil, loterias]
 lang: pt
 ref: lotofacil-16v15
 description: "Demonstração completa (na mão) de que 16 jogos de 15 números têm a mesma chance de 1 jogo de 16 números para acertar 15 na Lotofácil."
+mathjax: true
 ---
 
 Resposta curta e direta, Sim! — **para acertar os 15 números (faixa principal)**, **16 apostas simples de 15 números** têm a **mesma probabilidade** que **1 aposta de 16 números** na Lotofácil, **desde que** você esteja efetivamente fazendo **16 jogos distintos**, mas por quê ambas tem a mesma probabilidade?
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/duvida.png" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/duvida.jpg" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> Dúvida boa é a que vira pergunta.
   </figcaption>
