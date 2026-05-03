@@ -6,6 +6,7 @@ ref: testes-hipotese
 parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/testes-hipotese
 order: 1
+mathjax: true
 ---
 
 <img src="{{ site.baseurl }}/assets/images/testedehipotese.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">

@@ -4,6 +4,7 @@ title: Estatística Descritiva
 lang: pt
 ref: estatistica-descritiva
 order: 1
+mathjax: true
 ---
 
 # Estatística Descritiva

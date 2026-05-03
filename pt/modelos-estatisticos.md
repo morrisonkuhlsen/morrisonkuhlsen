@@ -5,6 +5,7 @@ lang: pt
 ref: contato
 permalink: /pt/contato
 order: 99
+mathjax: true
 ---
 
 Para perguntas, sugestões ou discussões sobre projetos, utilize os canais listados abaixo.

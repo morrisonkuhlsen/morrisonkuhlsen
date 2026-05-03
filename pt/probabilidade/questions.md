@@ -6,6 +6,7 @@ ref: questions
 parent: probabilidade
 permalink: /pt/probabilidade/questions
 order: 6
+mathjax: true
 ---
 
 ## Questões Práticas Resolvidas

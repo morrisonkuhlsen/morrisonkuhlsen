@@ -6,6 +6,7 @@ ref: analise-multivariada
 parent: analise-de-dados
 permalink: /pt/analise-de-dados/analise-multivariada
 order: 3
+mathjax: true
 ---
 
 <img src="{{ site.baseurl }}/assets/images/multivariate.png" alt="Ilustração de análise multivariada" style="max-width: 600px; display: block; margin: 1em auto;">

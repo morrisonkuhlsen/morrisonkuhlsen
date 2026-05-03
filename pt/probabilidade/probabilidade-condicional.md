@@ -6,6 +6,7 @@ ref: probabilidade-condicional
 parent: probabilidade
 permalink: /pt/probabilidade/probabilidade-condicional
 order: 5
+mathjax: true
 ---
 
 A **Probabilidade Condicional** é um conceito fundamental que nos permite calcular a probabilidade de um evento ocorrer, dado que outro evento já ocorreu. Este conceito é essencial para entender dependência entre eventos e fazer previsões mais precisas.

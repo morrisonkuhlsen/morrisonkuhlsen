@@ -6,6 +6,7 @@ ref: amostragem
 parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/amostragem
 order: 3
+mathjax: true
 ---
 
 A amostragem é o processo de selecionar um subconjunto representativo de uma população para realizar inferências estatísticas sobre toda a população. Uma amostra bem escolhida permite estimar parâmetros populacionais com precisão e eficiência, reduzindo custos e tempo em relação ao censo completo.

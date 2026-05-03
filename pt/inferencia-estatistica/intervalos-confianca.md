@@ -6,6 +6,7 @@ ref: intervalos-confianca
 parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/intervalos-confianca
 order: 2
+mathjax: true
 ---
 
 ## Introdução

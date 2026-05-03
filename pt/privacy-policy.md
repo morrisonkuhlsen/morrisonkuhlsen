@@ -5,6 +5,7 @@ description: Conheça nossa política de privacidade e como lidamos com seus dad
 lang: pt
 ref: privacy-policy
 permalink: /pt/privacy-policy
+mathjax: true
 ---
 
 **Última atualização: 18 de outubro de 2025**

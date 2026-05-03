@@ -6,6 +6,7 @@ ref: eventos-espaco-amostral
 parent: probabilidade
 permalink: /pt/probabilidade/eventos-espaco-amostral
 order: 4
+mathjax: true
 ---
 
 Os conceitos de **Eventos** e **Espaço Amostral** são fundamentais para a teoria da probabilidade. Eles fornecem a estrutura básica para entender e calcular probabilidades em diversos contextos.

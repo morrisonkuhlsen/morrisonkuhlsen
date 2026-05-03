@@ -6,6 +6,7 @@ ref: estimadores
 parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/estimadores
 order: 4
+mathjax: true
 ---
 
 ![Estimadores Estatísticos]({{ site.baseurl }}/assets/images/estimadores.png){:style="max-width: 600px; display: block; margin: 0 auto;"}

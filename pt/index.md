@@ -7,6 +7,7 @@ ref: homepage
 permalink: /
 order: 0
 preload_hero: true
+mathjax: true
 ---
 
 {% include hero.html %}

@@ -6,6 +6,7 @@ ref: analise-variancia
 parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/analise-variancia
 order: 5
+mathjax: true
 ---
 
 A Análise de Variância (ANOVA) é uma técnica estatística utilizada para comparar médias de dois ou mais grupos e verificar se pelo menos um deles difere significativamente dos demais. É amplamente empregada em experimentos científicos, controle de qualidade, ciências sociais e biológicas.

@@ -5,6 +5,7 @@ description: Entenda como utilizamos cookies para melhorar sua experiência em n
 lang: pt
 ref: cookie-policy
 permalink: /pt/cookie-policy
+mathjax: true
 ---
 
 **Última atualização: 18 de outubro de 2025**

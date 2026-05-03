@@ -6,6 +6,7 @@ ref: jekyll-site
 parent: em construcao
 permalink: /pt/analise-de-dados/jekyll-site
 order: 5
+mathjax: true
 ---
 
 # Jekyll Site

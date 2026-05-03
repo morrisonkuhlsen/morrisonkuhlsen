@@ -6,6 +6,7 @@ ref: graficos
 parent: estatistica-descritiva
 permalink: /pt/estatistica-descritiva/graficos
 order: 3
+mathjax: true
 ---
 
 Os **gráficos estatísticos** são ferramentas visuais essenciais para a análise exploratória de dados. Eles permitem visualizar padrões, tendências, relações e anomalias que podem não ser óbvias em tabelas de dados brutos. Um bom gráfico pode comunicar informações complexas de forma clara e eficiente.
