@@ -159,3 +159,67 @@ Mas o coração do símbolo está mesmo no Σ e na ∫. Quem conhece os dois sin
 - [CONFE – Origem de um símbolo](https://www.confe.org.br/origemdeumsimbolo.pdf)
 - <span id="ref-cajori">Cajori, Florian. *A History of Mathematical Notations*, vol. 2. Open Court Publishing, 1929. § 438 (Euler e a notação Σ para somatório).</span>
 - <span id="ref-leibniz">Cajori, Florian. *A History of Mathematical Notations*, vol. 2. Open Court Publishing, 1929. § 620–622 (Leibniz e a criação do símbolo ∫ em 1675).</span>
+
+---
+
+<style>
+.share-buttons {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #444;
+  text-align: center;
+}
+.share-buttons-title {
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  margin: 5px;
+  border-radius: 50%;
+  text-decoration: none;
+  background-color: transparent;
+  color: #333 !important;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s, transform 0.2s;
+}
+.share-btn:hover {
+  color: #000 !important;
+  transform: scale(1.1);
+}
+</style>
+
+<div class="share-buttons">
+  <p class="share-buttons-title">Gostou deste artigo? Compartilhe!</p>
+  <a href="https://api.whatsapp.com/send?text={{ page.title | url_encode }}%20-%20{{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp" title="Compartilhar no WhatsApp"><i class="bi bi-whatsapp"></i></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn facebook" title="Compartilhar no Facebook"><i class="bi bi-facebook"></i></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | url_encode }}&summary={{ page.description | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn linkedin" title="Compartilhar no LinkedIn"><i class="bi bi-linkedin"></i></a>
+  <button id="copy-link-btn" class="share-btn copy-link" title="Copiar Link"><i class="bi bi-link-45deg"></i></button>
+</div>
+
+<script>
+document.getElementById('copy-link-btn').addEventListener('click', function() {
+  navigator.clipboard.writeText(window.location.href).then(function() {
+    const button = this;
+    const originalContent = button.innerHTML;
+    button.innerHTML = 'Copiado!';
+    button.style.fontSize = '12px';
+    button.style.fontWeight = 'bold';
+
+    setTimeout(() => {
+      button.innerHTML = originalContent;
+      button.style.fontSize = '';
+      button.style.fontWeight = '';
+    }, 2000);
+  }.bind(this), function(err) {
+    console.error('Erro ao copiar o link: ', err);
+  });
+});
+</script>

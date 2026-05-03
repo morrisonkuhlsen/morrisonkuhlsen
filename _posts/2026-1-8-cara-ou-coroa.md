@@ -12,6 +12,8 @@ mathjax: true
 
 O simples ato de lançar uma moeda revela muito mais do que um jogo de sorte. Por trás do “cara ou coroa” estão conceitos centrais da probabilidade, como variáveis Bernoulli, distribuição Binomial, independência, Lei dos Grandes Números e sequências longas. Neste artigo, usamos uma moeda justa como exemplo para entender como eventos aparentemente aleatórios podem ser descritos matematicamente, por que a frequência de caras tende a se aproximar de 50% no longo prazo e por que sequências improváveis, como várias caras seguidas, ainda fazem parte do comportamento natural do acaso.
 
+## 1) Modelo probabilístico (moeda justa)
+
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
   <img src="/assets/images/cointoss.jpg" alt="Ilustração conceitual de limite (substitua por uma imagem do seu blog, se quiser)." style="max-width: 50%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
