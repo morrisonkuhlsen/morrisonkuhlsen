@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/coin-toss.png
+image: /assets/images/coin-toss.avif
 title: "Mistérios do cara ou coroa"
 categories: [PROBABILIDADE, ESTATÍSTICA, GUIA]
 tags: [probabilidade, estatística, bernoulli, binomial, lgn]

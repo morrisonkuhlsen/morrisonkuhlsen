@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/sorteio.png
+image: /assets/images/sorteio.avif
 title: "16 apostas de 15 números tem a mesma probabilidade de 1 aposta de 16 números na Lotofácil?"
 categories: [MATEMÁTICA, GUIA]
 tags: [probabilidade, combinatória, lotofácil, loterias]

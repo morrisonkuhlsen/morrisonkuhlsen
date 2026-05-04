@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-image: /assets/images/dengue-mapa.png
+image: /assets/images/dengue-mapa.avif
 title: "Mapeando a Saúde Pública: Incidência de Dengue em Pernambuco com Julia"
 categories: [VISUALIZAÇÃO DE DADOS, JULIA, SAÚDE PÚBLICA]
 tags: [julia, visualização, mapas, dengue, saúde, brasil, pernambuco]

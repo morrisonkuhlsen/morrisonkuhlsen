@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/percentage.png
+image: /assets/images/percentage.avif
 title: "Porcentagem — fórmulas e exemplos resolvidos."
 categories: [MATEMÁTICA, GUIA]
 tags: [matemática, porcentagem, álgebra]

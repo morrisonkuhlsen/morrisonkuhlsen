@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/normal-dist.png
+image: /assets/images/normal-dist.avif
 title: "Distribuição Normal (ou de Gauss): o que é e como usar"
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
