@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/percentage.jpg
+image: /assets/images/percentage.png
 title: "Porcentagem — fórmulas e exemplos resolvidos."
 categories: [MATEMÁTICA, GUIA]
 tags: [matemática, porcentagem, álgebra]
@@ -13,7 +13,7 @@ mathjax: true
 Porcentagem é uma forma de comparar quantidades usando a ideia de “por cem” (do símbolo %). Em vez de dizer “0,25”, você pode dizer 25%, o que facilita muito interpretar descontos, aumentos, juros, impostos, probabilidades, estatísticas, gráficos e relatórios do dia a dia.
 
 <div style="text-align:center; margin-bottom:1rem;">
-	<img src="/assets/images/percentage.jpg" alt="Capa: porcentagem" style="max-width:560px; width:100%; height:auto;">
+	<img src="/assets/images/percentage.png" alt="Capa: porcentagem" style="max-width:560px; width:100%; height:auto;">
 </div>
 
 ## 1. Calcular $p\%$ de um valor

@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-image: /assets/images/dengue-mapa.jpg
+image: /assets/images/dengue-mapa.png
 title: "Mapeando a Saúde Pública: Incidência de Dengue em Pernambuco com Julia"
 categories: [VISUALIZAÇÃO DE DADOS, JULIA, SAÚDE PÚBLICA]
 tags: [julia, visualização, mapas, dengue, saúde, brasil, pernambuco]
@@ -9,7 +9,7 @@ ref: dengue-pernambuco-julia
 description: "Um guia completo para visualizar dados de saúde pública em nível municipal com Julia. Aprenda a limpar dados do SIH/SUS, juntá-los com malhas geográficas e criar um mapa temático da incidência de dengue em Pernambuco."
 ---
 
-<img src="../assets/images/dengue-mapa.jpg" alt="Mapa estilizado mostrando a incidência de dengue no estado de Pernambuco" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 1em auto; border-radius: 8px;">
+<img src="../assets/images/dengue-mapa.png" alt="Mapa estilizado mostrando a incidência de dengue no estado de Pernambuco" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 1em auto; border-radius: 8px;">
 
 No nosso [post anterior](https://morrisonkuhlsen.com/visualizacao-pib-brasil-julia/), criamos um mapa do PIB por estado. Agora, vamos aprofundar nossa análise geoespacial para um nível mais granular e impactante: a saúde pública municipal.
 

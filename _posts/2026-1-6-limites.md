@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/limite-image.jpg
+image: /assets/images/lim.png
 title: "Limites no Cálculo: notação, técnicas e exemplos resolvidos (passo a passo)"
 categories: [CALCULO, MATEMATICA]
 lang: pt

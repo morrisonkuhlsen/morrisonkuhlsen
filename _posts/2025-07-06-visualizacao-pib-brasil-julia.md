@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-image: /assets/images/plot_2_brasil_pib.png
+image: /assets/images/pib.png
 title: "Visualização de Dados: Mapa do PIB por Estados do Brasil em Julia"
 categories: [VISUALIZAÇÃO DE DADOS, JULIA]
 tags: [julia, visualização, dados, economia, brasil]

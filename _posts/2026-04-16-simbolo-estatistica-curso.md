@@ -1,6 +1,6 @@
 ﻿---
 layout: post
-image: /assets/images/simbolo-estatistica-curso.png
+image: /assets/images/simb-est.png
 title: "O que significa o símbolo do curso de Estatística no Brasil"
 categories: [ESTATÍSTICA, EDUCAÇÃO]
 lang: pt
