@@ -28,6 +28,26 @@ layout: default
   </div>
 </div>
 
+<!-- Ad widget (fixed bottom-right, post pages only) -->
+<div id="mk-ad-widget">
+  <a class="mk-ad-link" href="/blog" target="_blank" rel="noopener">
+    <div class="mk-ad-card">
+      <img id="mk-ad-img" src="" alt="MorrisonKühlsen" class="mk-ad-img" />
+      <h2 class="mk-ad-headline">
+        <span>Estatística</span>
+        <span>descomplicada.</span>
+      </h2>
+      <p class="mk-ad-text">
+        Artigos, fórmulas e tabelas<br>
+        para estudantes e<br>
+        profissionais.
+      </p>
+      <div class="mk-ad-site">morrisonkuhlsen.com</div>
+    </div>
+  </a>
+  <div class="mk-ad-footer">Ads by MorrisonKühlsen</div>
+</div>
+
 <!-- jQuery (required by bootstrap-toc) -->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <!-- Bootstrap TOC -->
@@ -71,5 +91,18 @@ layout: default
 
     $(window).on("scroll.toc", updateActive);
     updateActive();
+
+    // Imagem aleatória no widget
+    var adImgs = [
+      "{{ site.baseurl }}/assets/images/concept.png",
+      "{{ site.baseurl }}/assets/images/dados.png",
+      "{{ site.baseurl }}/assets/images/office.png"
+    ];
+    $("#mk-ad-img").attr("src", adImgs[Math.floor(Math.random() * adImgs.length)]);
+
+    // Fechar o ad widget
+    $("#mk-ad-close").on("click", function () {
+      $("#mk-ad-widget").fadeOut(200);
+    });
   });
 </script>

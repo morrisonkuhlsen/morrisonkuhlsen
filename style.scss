@@ -180,3 +180,77 @@ img {
     display: none !important;
   }
 }
+
+/* Ad widget (fixed bottom-right, post pages) */
+#mk-ad-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 230px;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index: 1050;
+  text-align: center;
+  opacity: 0.88;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+#mk-ad-widget .mk-ad-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+#mk-ad-widget .mk-ad-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 0;
+}
+
+#mk-ad-widget .mk-ad-card {
+  background: #f8f9fa;
+  border-radius: 4px;
+  padding: 14px 14px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+#mk-ad-widget .mk-ad-headline {
+  margin: 0;
+  color: #1683d8;
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 700;
+
+  span { display: block; }
+}
+
+#mk-ad-widget .mk-ad-text {
+  margin: 4px 0 12px;
+  color: #333;
+  font-size: 13.5px;
+  line-height: 1.35;
+}
+
+#mk-ad-widget .mk-ad-site {
+  color: #9aa1a9;
+  font-size: 11.5px;
+}
+
+#mk-ad-widget .mk-ad-footer {
+  margin-top: 10px;
+  font-size: 11px;
+  color: #555;
+  font-style: italic;
+}
+
+@media (max-width: 767.98px) {
+  #mk-ad-widget {
+    display: none;
+  }
+}
