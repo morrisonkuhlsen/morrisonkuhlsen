@@ -533,8 +533,8 @@ html, body {
 }
 
 .formula-card {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: transparent;
+  border: none;
   border-radius: 10px;
   padding: 1.5rem;
   text-align: center;
@@ -542,12 +542,12 @@ html, body {
   text-decoration: none;
   font-size: 1.1rem;
   font-weight: 500;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .formula-card:hover,
 .formula-card:focus {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: transparent;
   transform: translateY(-5px);
   color: #fff;
   outline: none;
