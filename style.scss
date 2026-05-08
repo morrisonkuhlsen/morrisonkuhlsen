@@ -3,9 +3,14 @@
 
 /* Custom styles */
 
+/* Global font */
+body, p, li, td, th, blockquote, .entry, article, .page-content {
+  font-family: 'Source Sans 3', sans-serif !important;
+}
+
 /* Brand title font */
 .it-brand-wrapper .it-brand-text h2 {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: 'Source Sans 3', sans-serif !important;
   font-weight: 700 !important;
   letter-spacing: -0.02em;
 }
