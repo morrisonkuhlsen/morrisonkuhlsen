@@ -62,6 +62,8 @@ layout: default
         $activeLink.addClass("active");
         // Mostra todas as sub-listas ancestrais (para sub-itens)
         $activeLink.parents("#toc ul").show();
+        // Marca os links pai como ativos também
+        $activeLink.parents("#toc li").children("a.nav-link").addClass("active");
         // Mostra a sub-lista filha direta do item ativo
         $activeLink.siblings("ul").show();
       }
