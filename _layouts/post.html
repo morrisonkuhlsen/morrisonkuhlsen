@@ -2,16 +2,65 @@
 layout: default
 ---
 
-<article class="container my-4">
-  <h1>{{ page.title }}</h1>
+<div class="container my-4">
+  <div class="row">
+    <!-- Main content -->
+    <div class="col-md-9 col-12">
+      <article>
+        <h1>{{ page.title }}</h1>
 
-  <div class="entry">
-    {{ content }}
+        <div class="entry">
+          {{ content }}
+        </div>
+
+        <div class="date">
+          Escrito em {{ page.date | date: "%d/%m/%Y" }}
+        </div>
+
+        {% include disqus.html %}
+      </article>
+    </div>
+
+    <!-- TOC sidebar (hidden on mobile) -->
+    <div class="col-md-3 d-none d-md-block">
+      <nav id="toc" class="sticky-top"></nav>
+    </div>
   </div>
+</div>
 
-  <div class="date">
-    Escrito em {{ page.date | date: "%d/%m/%Y" }}
-  </div>
+<!-- jQuery (required by bootstrap-toc) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<!-- Bootstrap TOC -->
+<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js"></script>
+<script>
+  $(document).ready(function () {
+    Toc.init({
+      $nav: $("#toc"),
+      $scope: $("article")
+    });
+    $("#toc").find("a").addClass("nav-link");
 
-  {% include disqus.html %}
-</article>
+    // Rastreamento de seção ativa via scroll (independente do Bootstrap ScrollSpy)
+    var $tocLinks = $("#toc a.nav-link");
+    var $headings = $("article h1, article h2, article h3, article h4, article h5, article h6").filter("[id]");
+
+    function updateActive() {
+      var scrollTop = $(window).scrollTop() + 80;
+      var activeId = null;
+
+      $headings.each(function () {
+        if ($(this).offset().top <= scrollTop) {
+          activeId = $(this).attr("id");
+        }
+      });
+
+      $tocLinks.removeClass("active");
+      if (activeId) {
+        $tocLinks.filter("[href='#" + activeId + "']").addClass("active");
+      }
+    }
+
+    $(window).on("scroll.toc", updateActive);
+    updateActive();
+  });
+</script>

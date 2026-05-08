@@ -522,6 +522,144 @@ onde $\bar{x}$ é a média ponderada dos dois grupos.
 
 ---
 
+## Exercício resolvido: alturas de uma turma
+
+<figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
+  <img src="/assets/images/sd-altura.avif" alt="Representação visual das alturas de seis pessoas em relação à média do grupo" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <figcaption class="img-caption-contrast">
+    <strong>Figura:</strong> Cada barra representa a altura de uma pessoa do grupo; a linha horizontal indica a média. Os segmentos verticais mostram o quanto cada altura se afasta da média.
+  </figcaption>
+</figure>
+
+### Enunciado
+
+Em uma turma, foram medidas as alturas de seis pessoas. Após calcular a altura média do grupo, observou-se que cada pessoa se distancia da média em uma determinada quantidade de centímetros.
+
+As diferenças absolutas entre a altura de cada pessoa e a média foram:
+
+$$
+|x_1 - \bar{x}| = 18 \text{ cm}, \quad
+|x_2 - \bar{x}| = 8 \text{ cm}, \quad
+|x_3 - \bar{x}| = 15 \text{ cm}
+$$
+
+$$
+|x_4 - \bar{x}| = 8 \text{ cm}, \quad
+|x_5 - \bar{x}| = 9 \text{ cm}, \quad
+|x_6 - \bar{x}| = 6 \text{ cm}
+$$
+
+Sabendo que o desvio padrão dessas alturas é aproximadamente $11{,}5$ cm, interprete o que esse valor significa no contexto da imagem.
+
+**Pergunta:** O que significa dizer que o desvio padrão das alturas desse grupo é de aproximadamente $11{,}5$ cm?
+
+---
+
+### Resolução
+
+#### Passo 1 — Identificar os desvios absolutos de cada pessoa
+
+As diferenças absolutas $|x_i - \bar{x}|$ informam, para cada indivíduo, o quanto sua altura está acima ou abaixo da média. Organizando:
+
+<table style="width:100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.97em;">
+  <thead>
+    <tr style="background-color: #37474f; color: #fff;">
+      <th style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">Pessoa</th>
+      <th style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(|x_i - \bar{x}|\) (cm)</th>
+      <th style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\((x_i - \bar{x})^2\) (cm²)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: #f5f5f5;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">1</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">18</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(18^2 = 324\)</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">2</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">8</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(8^2 = 64\)</td>
+    </tr>
+    <tr style="background-color: #f5f5f5;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">3</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">15</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(15^2 = 225\)</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">4</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">8</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(8^2 = 64\)</td>
+    </tr>
+    <tr style="background-color: #f5f5f5;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">5</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">9</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(9^2 = 81\)</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">6</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">6</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">\(6^2 = 36\)</td>
+    </tr>
+    <tr style="background-color: #eceff1; font-weight: bold;">
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">Soma</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">64</td>
+      <td style="padding: 10px 16px; text-align: center; border: 1px solid #cfd8dc;">794</td>
+    </tr>
+  </tbody>
+</table>
+
+#### Passo 2 — Calcular a soma dos quadrados dos desvios
+
+$$
+\sum_{i=1}^{6}(x_i - \bar{x})^2 = 324 + 64 + 225 + 64 + 81 + 36 = 794 \text{ cm}^2
+$$
+
+#### Passo 3 — Calcular a variância
+
+Como temos os dados de um **grupo específico** que queremos apenas descrever (não estimar uma população maior), usamos o denominador $N = 6$:
+
+$$
+\sigma^2 = \frac{\displaystyle\sum_{i=1}^{6}(x_i - \bar{x})^2}{N} = \frac{794}{6} \approx 132{,}33 \text{ cm}^2
+$$
+
+#### Passo 4 — Calcular o desvio padrão
+
+$$
+\sigma = \sqrt{132{,}33} \approx 11{,}5 \text{ cm}
+$$
+
+O resultado confirma o valor enunciado.
+
+#### Passo 5 — Comparar com o desvio absoluto médio
+
+Para verificar que o desvio padrão **não é** a média das distâncias absolutas, calculamos o **desvio absoluto médio (DAM)**:
+
+$$
+\text{DAM} = \frac{|x_1 - \bar{x}| + |x_2 - \bar{x}| + \cdots + |x_6 - \bar{x}|}{6}
+= \frac{18 + 8 + 15 + 8 + 9 + 6}{6}
+= \frac{64}{6}
+\approx 10{,}67 \text{ cm}
+$$
+
+O DAM ($10{,}67$ cm) e o desvio padrão ($11{,}5$ cm) são parecidos, mas diferentes. O desvio padrão eleva os desvios ao quadrado antes de calcular a média — o que faz com que desvios maiores (como o de 18 cm da pessoa 1) pesem desproporcionalmente mais. Por isso $\sigma > \text{DAM}$ sempre que os desvios não são todos iguais.
+
+---
+
+### Resposta
+
+Dizer que o desvio padrão das alturas é de **11,5 cm** significa que, em termos de dispersão quadrática em torno da média, cada pessoa do grupo se afasta da altura média em uma magnitude equivalente a **11,5 cm**. Em outras palavras:
+
+- Pessoas com alturas dentro do intervalo $[\bar{x} - 11{,}5\text{ cm},\; \bar{x} + 11{,}5\text{ cm}]$ estão a **um desvio padrão** da média.
+- Olhando para a imagem: a pessoa 1 (desvio de 18 cm) e a pessoa 3 (desvio de 15 cm) estão **além** desse intervalo, enquanto as demais (desvios de 8, 8, 9 e 6 cm) estão **dentro** dele.
+- O desvio padrão de 11,5 cm captura o espalhamento geral do grupo de forma mais sensível a valores extremos do que o DAM (10,67 cm), pois penaliza mais quem se afasta muito da média.
+
+<div style="border-left: 4px solid #4CAF50; padding: 1em; background-color: #e8f5e9; margin: 1em 0; border-radius: 4px;">
+  <h4 style="margin-top: 0;">Conclusão</h4>
+  <p>O desvio padrão de 11,5 cm <strong>não</strong> é a distância média simples das alturas à média (isso seria o DAM = 10,67 cm). É a raiz quadrada da média dos quadrados dos desvios — uma medida que dá mais peso às pessoas cujas alturas mais se distanciam da média do grupo.</p>
+</div>
+
+---
+
 ## Calculando na prática: código em Julia
 
 <div class="code-container">
