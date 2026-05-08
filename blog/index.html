@@ -18,6 +18,11 @@ ref: blog
             <div class="col-md-6 col-lg-4 mb-4">
               <div class="card-wrapper">
                 <div class="card">
+                  {% if post.image %}
+                  <a href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
+                    <img src="{{ post.image }}" alt="{{ post.title | escape }}" class="card-img-top" style="height: 180px; object-fit: cover;" loading="lazy">
+                  </a>
+                  {% endif %}
                   <div class="card-body">
                     <h5 class="card-title">
                       <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
