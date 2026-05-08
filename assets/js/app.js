@@ -97,7 +97,7 @@
     moonIcon.style.display = isDark ? "block" : "none";
     themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
     themeToggle.title = isDark ? "theme: dark" : "theme: light";
-    if (footerLogo) footerLogo.src = isDark ? "assets/mklogo-white.png" : "assets/mklogo-black.png";
+    if (footerLogo) footerLogo.src = isDark ? "../images/mklogo.png" : "../images/mklogo-black.png";
   }
 
   function setTheme(mode) {
