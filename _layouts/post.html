@@ -55,8 +55,15 @@ layout: default
       });
 
       $tocLinks.removeClass("active");
+      $("#toc .nav-link + ul").hide();
+
       if (activeId) {
-        $tocLinks.filter("[href='#" + activeId + "']").addClass("active");
+        var $activeLink = $tocLinks.filter("[href='#" + activeId + "']");
+        $activeLink.addClass("active");
+        // Mostra todas as sub-listas ancestrais (para sub-itens)
+        $activeLink.parents("#toc ul").show();
+        // Mostra a sub-lista filha direta do item ativo
+        $activeLink.siblings("ul").show();
       }
     }
 
