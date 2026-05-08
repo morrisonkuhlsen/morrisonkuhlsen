@@ -50,6 +50,123 @@
   {{ content }}
   {%- include footer/footer.html -%}
   {%- include cookiebar.html -%}
+  {%- include search.html -%}
   {%- include scripts.html -%}
+  <!-- Lunr.js search -->
+  <script src="https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js" defer></script>
+  <script defer>
+    (function () {
+      var searchData = null;
+      var lunrIndex = null;
+      var currentLang = document.documentElement.lang || 'pt';
+
+      var overlay = document.getElementById('search-overlay');
+      var input = document.getElementById('search-input');
+      var results = document.getElementById('search-results');
+      var openBtn = document.getElementById('search-open-btn');
+      var closeBtn = document.getElementById('search-close-btn');
+      var activeIndex = -1;
+
+      function openSearch() {
+        overlay.hidden = false;
+        input.focus();
+        input.value = '';
+        results.innerHTML = '';
+        activeIndex = -1;
+        loadData();
+      }
+
+      function closeSearch() {
+        overlay.hidden = true;
+      }
+
+      function loadData() {
+        if (searchData) return;
+        fetch('{{ site.baseurl }}/search.json')
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            searchData = data;
+            lunrIndex = lunr(function () {
+              this.ref('id');
+              this.field('title', { boost: 10 });
+              this.field('excerpt');
+              data.forEach(function (doc) { this.add(doc); }, this);
+            });
+          });
+      }
+
+      function doSearch(query) {
+        results.innerHTML = '';
+        activeIndex = -1;
+        if (!query.trim() || !lunrIndex) return;
+        var hits = lunrIndex.search(query + '~1');
+        var filtered = hits.filter(function (h) {
+          var doc = searchData.find(function (d) { return d.id == h.ref; });
+          if (!doc) return false;
+          if (!doc.lang) return true;
+          return doc.lang === currentLang;
+        });
+        if (!filtered.length) {
+          results.innerHTML = '<div class="search-empty">Nenhum resultado encontrado.</div>';
+          return;
+        }
+        filtered.slice(0, 8).forEach(function (h) {
+          var doc = searchData.find(function (d) { return d.id == h.ref; });
+          var a = document.createElement('a');
+          a.className = 'search-result';
+          a.href = doc.url;
+          a.setAttribute('role', 'option');
+          a.innerHTML =
+            '<div class="result-title">' + doc.title + '</div>' +
+            '<div class="result-excerpt">' + doc.excerpt + '</div>' +
+            '<div class="result-date">' + doc.date + '</div>';
+          results.appendChild(a);
+        });
+      }
+
+      function setActive(idx) {
+        var items = results.querySelectorAll('.search-result');
+        items.forEach(function (el) { el.classList.remove('active'); });
+        if (idx >= 0 && idx < items.length) {
+          items[idx].classList.add('active');
+          items[idx].scrollIntoView({ block: 'nearest' });
+        }
+        activeIndex = idx;
+      }
+
+      if (openBtn) {
+        openBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          openSearch();
+        });
+      }
+
+      if (closeBtn) closeBtn.addEventListener('click', closeSearch);
+
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeSearch();
+      });
+
+      input.addEventListener('input', function () {
+        doSearch(input.value);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if ((e.key === 'k' && (e.ctrlKey || e.metaKey)) || e.key === '/') {
+          if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            openSearch();
+          }
+        }
+        if (!overlay.hidden) {
+          var items = results.querySelectorAll('.search-result');
+          if (e.key === 'Escape') closeSearch();
+          if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(activeIndex + 1, items.length - 1)); }
+          if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(activeIndex - 1, 0)); }
+          if (e.key === 'Enter' && activeIndex >= 0) { items[activeIndex].click(); }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

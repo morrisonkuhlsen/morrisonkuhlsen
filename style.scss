@@ -114,6 +114,137 @@ img {
   }
 }
 
+/* Search modal */
+#search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  backdrop-filter: blur(2px);
+
+  &[hidden] { display: none; }
+}
+
+#search-modal {
+  background: #fff;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  overflow: hidden;
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+#search-input-wrap {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+  gap: 10px;
+
+  #search-icon {
+    color: #999;
+    flex-shrink: 0;
+  }
+
+  #search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.1rem;
+    padding: 18px 0;
+    background: transparent;
+    color: #222;
+    font-family: inherit;
+
+    &::placeholder { color: #bbb; }
+  }
+
+  #search-close-btn {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-size: 11px;
+    color: #999;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &:hover { border-color: #bbb; color: #666; }
+  }
+}
+
+#search-results {
+  max-height: 400px;
+  overflow-y: auto;
+
+  .search-result {
+    display: block;
+    padding: 14px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+
+    &:last-child { border-bottom: none; }
+
+    &:hover, &.active {
+      background: #f5f8ff;
+    }
+
+    .result-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #0066cc;
+      margin-bottom: 3px;
+    }
+
+    .result-excerpt {
+      font-size: 0.85rem;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .result-date {
+      font-size: 0.75rem;
+      color: #aaa;
+      margin-top: 2px;
+    }
+  }
+
+  .search-empty {
+    padding: 24px 20px;
+    color: #999;
+    text-align: center;
+    font-size: 0.95rem;
+  }
+}
+
+#search-footer {
+  display: flex;
+  gap: 16px;
+  padding: 10px 16px;
+  border-top: 1px solid #eee;
+  font-size: 11px;
+  color: #999;
+  background: #fafafa;
+
+  kbd {
+    background: #eee;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 10px;
+    font-family: inherit;
+  }
+}
+
 /* Bootstrap TOC sidebar */
 #toc {
   top: 5px;

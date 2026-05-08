@@ -1,0 +1,20 @@
+<!-- Search Modal -->
+<div id="search-overlay" role="dialog" aria-modal="true" aria-label="Busca" hidden>
+  <div id="search-modal">
+    <div id="search-input-wrap">
+      <svg id="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input id="search-input" type="text" placeholder="Buscar no site…" autocomplete="off" spellcheck="false" aria-label="Buscar" />
+      <button id="search-close-btn" aria-label="Fechar busca">
+        <span aria-hidden="true">ESC</span>
+      </button>
+    </div>
+    <div id="search-results" role="listbox" aria-label="Resultados"></div>
+    <div id="search-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> Navegar</span>
+      <span><kbd>↵</kbd> Abrir</span>
+      <span><kbd>ESC</kbd> Fechar</span>
+    </div>
+  </div>
+</div>
