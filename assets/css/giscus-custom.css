@@ -1,0 +1,15 @@
+@import url('https://giscus.app/themes/noborder_light.css');
+
+:root {
+  --color-btn-primary-bg: #0066cc;
+  --color-btn-primary-hover-bg: #0055aa;
+  --color-btn-primary-active-bg: #004d99;
+  --color-btn-primary-border: #0066cc;
+  --color-btn-primary-hover-border: #0055aa;
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-icon: #ffffff;
+  --color-btn-primary-shadow: 0 1px 0 rgba(0, 102, 204, 0.2);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --color-accent-fg: #0066cc;
+  --color-accent-emphasis: #0066cc;
+}

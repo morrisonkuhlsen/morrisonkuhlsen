@@ -28,7 +28,7 @@ giscus:
   mapping: "title"
   reactions_enabled: "0"
   input_position: "top"
-  theme: "light"
+  theme: "noborder_light"
   lang: "pt"
   loading: "lazy"
 
