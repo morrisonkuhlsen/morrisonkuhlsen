@@ -171,6 +171,136 @@ img {
   overflow: hidden;
 }
 
+/* Tag argomenti — hero header */
+.tag-hero-section {
+  background: #f5f6f7;
+  padding: 2rem 0 1.75rem;
+  border-bottom: 1px solid #e0e7ef;
+  margin-bottom: 0;
+}
+
+.tag-hero-breadcrumb .breadcrumb {
+  font-size: 0.8rem;
+  background: none;
+  padding: 0;
+  margin: 0;
+
+  .breadcrumb-item a {
+    color: #0066cc;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+
+  .breadcrumb-item.active { color: #5c6f82; }
+
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: #5c6f82;
+  }
+}
+
+.tag-hero-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #17324d;
+  margin: 0 0 0.3rem;
+  text-transform: capitalize;
+}
+
+.tag-hero-subtitle {
+  font-size: 0.95rem;
+  color: #5c6f82;
+  margin: 0;
+}
+
+.tag-hero-clear {
+  font-size: 0.85rem;
+  color: #0066cc;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-top: 0.5rem;
+  flex-shrink: 0;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* Tag argomenti — lista de posts */
+.tag-list-heading {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #17324d;
+  margin-bottom: 1.5rem;
+}
+
+.tag-post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-post-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid #e0e7ef;
+
+  &:first-child { border-top: 1px solid #e0e7ef; }
+}
+
+.tag-post-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #0066cc;
+  font-size: 1.1rem;
+}
+
+.tag-post-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.tag-post-top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.tag-post-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0066cc;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.tag-post-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tag-post-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: #17324d;
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.tag-post-excerpt {
+  font-size: 0.875rem;
+  color: #5c6f82;
+  margin: 0;
+  line-height: 1.5;
+}
+
 .post-card-img {
   height: 210px;
   width: 100%;

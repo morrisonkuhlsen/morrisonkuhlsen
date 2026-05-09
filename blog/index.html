@@ -6,19 +6,33 @@ lang: pt
 ref: blog
 ---
 
-<div class="container my-4">
+<!-- Hero da tag (só visível quando há filtro ativo) -->
+<div id="tag-hero" style="display:none" class="tag-hero-section">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="tag-hero-breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{{ '/' | relative_url }}">Início</a></li>
+        <li class="breadcrumb-item"><a href="{{ '/blog' | relative_url }}">Blog</a></li>
+        <li class="breadcrumb-item active" id="tag-hero-crumb" aria-current="page"></li>
+      </ol>
+    </nav>
+    <div class="d-flex align-items-start justify-content-between mt-3">
+      <div>
+        <h1 class="tag-hero-title" id="tag-hero-title"></h1>
+        <p class="tag-hero-subtitle" id="tag-hero-subtitle"></p>
+      </div>
+      <a href="{{ '/blog' | relative_url }}" class="tag-hero-clear">Limpar filtro &times;</a>
+    </div>
+  </div>
+</div>
+
+<!-- Vista normal: cards -->
+<div id="blog-normal-view" class="container my-4">
   <div class="row">
     <div class="col-12">
       <h1>Blog</h1>
       <p class="lead">Artigos, tutoriais e novidades sobre estatística e ciência de dados.</p>
-
-      <!-- Banner de filtro ativo (oculto por padrão) -->
-      <div id="blog-filter-banner" class="alert d-flex align-items-center justify-content-between mb-4" style="display:none!important;background:#e8f1fb;border:1px solid #0066cc;border-radius:6px;">
-        <span>Filtrando por: <strong id="blog-filter-label"></strong></span>
-        <a href="{{ page.url | relative_url }}" class="btn btn-sm btn-outline-primary ms-3">Limpar filtro &times;</a>
-      </div>
-
-      <div class="row" id="blog-posts-grid">
+      <div class="row" id="blog-cards-grid">
         {% for post in site.posts %}
           {% if post.lang == page.lang %}
             {% assign slugged_tags = "" %}
@@ -26,7 +40,7 @@ ref: blog
               {% assign s = t | slugify %}
               {% if forloop.first %}{% assign slugged_tags = s %}{% else %}{% assign slugged_tags = slugged_tags | append: " " | append: s %}{% endif %}
             {% endfor %}
-            <div class="col-md-6 col-lg-4 mb-4 blog-post-item" data-tags="{{ slugged_tags }}">
+            <div class="col-md-6 col-lg-4 mb-4 blog-post-item" data-tags="{{ slugged_tags }}" data-title="{{ post.title | escape }}" data-url="{{ post.url | relative_url }}" data-excerpt="{{ post.excerpt | strip_html | truncatewords: 25 | escape }}" data-rawtags="{{ post.tags | join: ',' | escape }}">
               <div class="card-wrapper">
                 <div class="card">
                   {% if post.image %}
@@ -52,11 +66,6 @@ ref: blog
           {% endif %}
         {% endfor %}
       </div>
-
-      <div id="blog-no-results" style="display:none;" class="text-center py-4">
-        <p class="text-muted">Nenhum post encontrado para esta categoria.</p>
-      </div>
-
       <div class="mt-4">
         <p>Assine nosso <a href="{{ "/feed.xml" | relative_url }}">feed RSS</a> para ficar por dentro das novidades!</p>
       </div>
@@ -64,31 +73,73 @@ ref: blog
   </div>
 </div>
 
+<!-- Vista de tag: lista estilo argomenti -->
+<div id="blog-tag-view" style="display:none" class="container my-5">
+  <h2 class="tag-list-heading" id="tag-list-heading"></h2>
+  <ul class="tag-post-list" id="tag-post-list"></ul>
+  <div id="tag-no-results" style="display:none" class="text-center py-5">
+    <p class="text-muted">Nenhum post encontrado para esta categoria.</p>
+  </div>
+</div>
+
 <script>
 (function () {
-  var params = new URLSearchParams(window.location.search);
-  var tag = params.get('tag');
+  var params  = new URLSearchParams(window.location.search);
+  var tag     = params.get('tag');
   if (!tag) return;
 
-  var items = document.querySelectorAll('.blog-post-item');
-  var visible = 0;
-
-  items.forEach(function (el) {
-    var tags = (el.dataset.tags || '').split(' ');
-    if (tags.indexOf(tag) !== -1) {
-      visible++;
-    } else {
-      el.style.display = 'none';
-    }
+  // Coletar posts com essa tag
+  var items   = Array.from(document.querySelectorAll('.blog-post-item'));
+  var matched = items.filter(function (el) {
+    return (el.dataset.tags || '').split(' ').indexOf(tag) !== -1;
   });
 
-  var banner = document.getElementById('blog-filter-banner');
-  var label  = document.getElementById('blog-filter-label');
-  banner.style.display = 'flex';
-  label.textContent = tag.replace(/-/g, ' ');
+  // Trocar visibilidade das views
+  document.getElementById('blog-normal-view').style.display = 'none';
+  document.getElementById('blog-tag-view').style.display    = '';
+  document.getElementById('tag-hero').style.display         = '';
 
-  if (visible === 0) {
-    document.getElementById('blog-no-results').style.display = 'block';
+  // Preencher hero
+  var label = tag.replace(/-/g, ' ');
+  document.getElementById('tag-hero-title').textContent    = label.charAt(0).toUpperCase() + label.slice(1);
+  document.getElementById('tag-hero-subtitle').textContent = 'Todos os conteúdos relacionados ao tema “' + label + '”';
+  document.getElementById('tag-hero-crumb').textContent    = label.charAt(0).toUpperCase() + label.slice(1);
+
+  // Preencher heading
+  document.getElementById('tag-list-heading').textContent =
+    'Explorar ' + matched.length + ' ' + (matched.length === 1 ? 'artigo' : 'artigos') + ' sobre este tema';
+
+  // Construir lista
+  var list = document.getElementById('tag-post-list');
+  if (matched.length === 0) {
+    document.getElementById('tag-no-results').style.display = 'block';
+    return;
   }
+
+  matched.forEach(function (el) {
+    var url     = el.dataset.url;
+    var title   = el.dataset.title;
+    var excerpt = el.dataset.excerpt;
+    var rawTags = (el.dataset.rawtags || '').split(',').map(function(t){ return t.trim(); }).filter(Boolean);
+
+    var li = document.createElement('li');
+    li.className = 'tag-post-item';
+
+    var badges = rawTags.map(function (t) {
+      return '<span class="tag-post-badge">' + t + '</span>';
+    }).join(' ');
+
+    li.innerHTML =
+      '<div class="tag-post-icon"><i class="bi bi-file-earmark-text"></i></div>' +
+      '<div class="tag-post-body">' +
+        '<div class="tag-post-top">' +
+          '<a href="' + url + '" class="tag-post-title">' + title + '</a>' +
+          (badges ? '<span class="tag-post-badges">' + badges + '</span>' : '') +
+        '</div>' +
+        '<p class="tag-post-excerpt">— ' + excerpt + '</p>' +
+      '</div>';
+
+    list.appendChild(li);
+  });
 })();
 </script>
