@@ -11,11 +11,22 @@ ref: blog
     <div class="col-12">
       <h1>Blog</h1>
       <p class="lead">Artigos, tutoriais e novidades sobre estatística e ciência de dados.</p>
-      
-      <div class="row">
+
+      <!-- Banner de filtro ativo (oculto por padrão) -->
+      <div id="blog-filter-banner" class="alert d-flex align-items-center justify-content-between mb-4" style="display:none!important;background:#e8f1fb;border:1px solid #0066cc;border-radius:6px;">
+        <span>Filtrando por: <strong id="blog-filter-label"></strong></span>
+        <a href="{{ page.url | relative_url }}" class="btn btn-sm btn-outline-primary ms-3">Limpar filtro &times;</a>
+      </div>
+
+      <div class="row" id="blog-posts-grid">
         {% for post in site.posts %}
           {% if post.lang == page.lang %}
-            <div class="col-md-6 col-lg-4 mb-4">
+            {% assign slugged_tags = "" %}
+            {% for t in post.tags %}
+              {% assign s = t | slugify %}
+              {% if forloop.first %}{% assign slugged_tags = s %}{% else %}{% assign slugged_tags = slugged_tags | append: " " | append: s %}{% endif %}
+            {% endfor %}
+            <div class="col-md-6 col-lg-4 mb-4 blog-post-item" data-tags="{{ slugged_tags }}">
               <div class="card-wrapper">
                 <div class="card">
                   {% if post.image %}
@@ -41,10 +52,43 @@ ref: blog
           {% endif %}
         {% endfor %}
       </div>
-      
+
+      <div id="blog-no-results" style="display:none;" class="text-center py-4">
+        <p class="text-muted">Nenhum post encontrado para esta categoria.</p>
+      </div>
+
       <div class="mt-4">
         <p>Assine nosso <a href="{{ "/feed.xml" | relative_url }}">feed RSS</a> para ficar por dentro das novidades!</p>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var tag = params.get('tag');
+  if (!tag) return;
+
+  var items = document.querySelectorAll('.blog-post-item');
+  var visible = 0;
+
+  items.forEach(function (el) {
+    var tags = (el.dataset.tags || '').split(' ');
+    if (tags.indexOf(tag) !== -1) {
+      visible++;
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  var banner = document.getElementById('blog-filter-banner');
+  var label  = document.getElementById('blog-filter-label');
+  banner.style.display = 'flex';
+  label.textContent = tag.replace(/-/g, ' ');
+
+  if (visible === 0) {
+    document.getElementById('blog-no-results').style.display = 'block';
+  }
+})();
+</script>

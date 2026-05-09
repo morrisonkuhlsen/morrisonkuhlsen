@@ -3,6 +3,28 @@
 
 /* Custom styles */
 
+/* Post tags chip */
+.chip-post {
+  border-color: #000 !important;
+  color: #000 !important;
+  text-decoration: none !important;
+
+  > .chip-label {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+
+  &:hover:not(.chip-disabled) {
+    background-color: #000 !important;
+    border-color: #000 !important;
+    text-decoration: none !important;
+
+    > .chip-label {
+      color: #fff !important;
+    }
+  }
+}
+
 /* Global font */
 body, p, li, td, th, blockquote, .entry, article, .page-content {
   font-family: 'Source Sans 3', sans-serif !important;
@@ -69,6 +91,77 @@ img {
   -moz-filter: none !important;
   -o-filter: none !important;
   -ms-filter: none !important;
+}
+
+/* Tags section — chip sizing override */
+.mk-tag.chip.chip-lg {
+  height: 44px;
+  border-radius: 22px;
+  padding: 0 22px;
+  min-width: unset;
+  margin: 4px 0;
+  border-width: 2px !important;
+
+  .chip-label {
+    font-size: 1rem;
+    font-weight: 600;
+    height: auto;
+    transform: none;
+  }
+}
+
+.mk-tag-extra {
+  display: none;
+}
+
+/* Tags section — show-more button */
+.mk-tags-more-btn {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 24px;
+  background: transparent;
+  border: 2px solid #c0c7d3;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+
+  &:hover {
+    border-color: #0066cc;
+    color: #0066cc;
+    background: transparent;
+  }
+}
+
+/* Tags section — chip-primary color fix + no underline */
+.chip.chip-primary {
+  text-decoration: none !important;
+
+  .chip-label {
+    text-decoration: none !important;
+  }
+  background-color: transparent !important;
+  border-color: #0066cc !important;
+  color: #0066cc !important;
+
+  > .chip-label {
+    color: #0066cc !important;
+  }
+
+  &:hover:not(.chip-disabled) {
+    background-color: #0066cc !important;
+    border-color: #0066cc !important;
+    text-decoration: none !important;
+
+    > .chip-label {
+      color: #fff !important;
+      text-decoration: none !important;
+    }
+  }
 }
 
 /* Blog post cards */

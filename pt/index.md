@@ -18,3 +18,5 @@ mathjax: true
 
 </main>
 
+{% include tags-section.html %}
+
