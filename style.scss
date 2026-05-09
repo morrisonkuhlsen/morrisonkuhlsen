@@ -164,6 +164,30 @@ img {
   }
 }
 
+/* Giscus comments section */
+.mk-comments-section {
+  border-top: 2px solid #e0e7ef;
+  padding-top: 2rem;
+}
+
+.mk-comments-header {
+  margin-bottom: 1.25rem;
+}
+
+.mk-comments-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.giscus-container {
+  .giscus {
+    width: 100% !important;
+  }
+}
+
 /* Blog post cards */
 .post-card {
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);

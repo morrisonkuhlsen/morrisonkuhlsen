@@ -15,6 +15,23 @@ noindex: false
 # You can find your shortname on the Settings page of your Disqus account
 disqus:
 
+# Giscus comment system (powered by GitHub Discussions)
+# Generate your parameters at https://giscus.app
+# Steps: 1) enable Discussions on your GitHub repo
+#         2) install the giscus app at https://github.com/apps/giscus
+#         3) fill in the values below
+giscus:
+  repo: "morrisonkuhlsen/morrisonkuhlsen"
+  repo_id: "R_kgDOOr6GPQ"
+  category: "Announcements"
+  category_id: "DIC_kwDOOr6GPc4C8poX"
+  mapping: "title"
+  reactions_enabled: "0"
+  input_position: "top"
+  theme: "light"
+  lang: "pt"
+  loading: "lazy"
+
 # Enter your Google Analytics web tracking code (e.g. UA-000000000-0 or G-XXXXXXXXXX) to activate tracking
 google_analytics: G-HBZB4KRNVM
 
