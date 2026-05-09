@@ -38,7 +38,9 @@ layout: default
 <!-- Ad widget (fixed bottom-right, post pages only) -->
 <div id="mk-ad-widget">
   <button id="mk-ad-close" aria-label="Fechar">&times;</button>
-  <a class="mk-ad-link" href="/blog" target="_blank" rel="noopener">
+
+  <!-- Slot 1: MorrisonKühlsen -->
+  <a class="mk-ad-link mk-ad-slot" id="mk-ad-slot-mk" href="/blog" target="_blank" rel="noopener">
     <div class="mk-ad-card">
       <img id="mk-ad-img" src="" alt="MorrisonKühlsen" class="mk-ad-img" />
       <h2 class="mk-ad-headline">
@@ -53,7 +55,25 @@ layout: default
       <div class="mk-ad-site">morrisonkuhlsen.com</div>
     </div>
   </a>
-  <div class="mk-ad-footer">Ads by MorrisonKühlsen</div>
+
+  <!-- Slot 2: GreekAlpha -->
+  <a class="mk-ad-link mk-ad-slot" id="mk-ad-slot-ga" href="https://greekalpha.bet/" target="_blank" rel="noopener noreferrer" style="display:none;">
+      <div class="mk-ad-card">
+        <img src="{{ site.baseurl }}/assets/images/athena.avif" alt="Greek Alphabet" class="mk-ad-img" />
+        <h2 class="mk-ad-headline">
+          <span>Greek</span>
+          <span>Alphabet</span>
+        </h2>
+        <p class="mk-ad-text">
+          Memorize Greek letters<br>
+          for math, statistics<br>
+          &amp; STEM study.
+        </p>
+        <div class="mk-ad-site">greekalpha.bet</div>
+      </div>
+  </a>
+
+  <div class="mk-ad-footer">Ads</div>
 </div>
 
 <!-- jQuery (required by bootstrap-toc) -->
@@ -100,13 +120,23 @@ layout: default
     $(window).on("scroll.toc", updateActive);
     updateActive();
 
-    // Imagem aleatória no widget
+    // Imagem aleatória no slot MorrisonKühlsen
     var adImgs = [
       "{{ site.baseurl }}/assets/images/concept.png",
       "{{ site.baseurl }}/assets/images/dados.png",
       "{{ site.baseurl }}/assets/images/office.png"
     ];
     $("#mk-ad-img").attr("src", adImgs[Math.floor(Math.random() * adImgs.length)]);
+
+    // Alternar entre os dois slots de ad a cada 9 segundos
+    var mkAdSlots = ["#mk-ad-slot-mk", "#mk-ad-slot-ga"];
+    var mkAdCurrent = 0;
+    setInterval(function () {
+      var $cur = $(mkAdSlots[mkAdCurrent]);
+      mkAdCurrent = (mkAdCurrent + 1) % mkAdSlots.length;
+      var $nxt = $(mkAdSlots[mkAdCurrent]);
+      $cur.fadeOut(400, function () { $nxt.fadeIn(400); });
+    }, 9000);
 
     // Fechar o ad widget
     $("#mk-ad-close").on("click", function () {
