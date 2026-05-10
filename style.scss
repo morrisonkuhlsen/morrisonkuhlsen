@@ -202,6 +202,11 @@ img {
   overflow: hidden;
 }
 
+/* Global breadcrumb separator */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">" !important;
+}
+
 /* Tag argomenti — hero header */
 .tag-hero-section {
   background: #f5f6f7;
@@ -225,7 +230,7 @@ img {
   .breadcrumb-item.active { color: #5c6f82; }
 
   .breadcrumb-item + .breadcrumb-item::before {
-    content: ">";
+    content: ">" !important;
     color: #5c6f82;
   }
 }

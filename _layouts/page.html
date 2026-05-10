@@ -2,6 +2,25 @@
 layout: default
 ---
 
+{% assign home_page = site.pages | where: "ref", "homepage" | where: "lang", page.lang | first %}
+{% assign parent_page = site.pages | where: "ref", page.parent | where: "lang", page.lang | first %}
+{% assign home_label = "Início" %}
+{% if page.lang == "en" %}{% assign home_label = "Home" %}{% endif %}
+
+<nav aria-label="breadcrumb" class="container mt-3 mb-0">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ home_page.url | relative_url }}">{{ home_label }}</a>
+    </li>
+    {% if parent_page %}
+      <li class="breadcrumb-item">
+        <a href="{{ parent_page.url | relative_url }}">{{ parent_page.title }}</a>
+      </li>
+    {% endif %}
+    <li class="breadcrumb-item active" aria-current="page">{{ page.title }}</li>
+  </ol>
+</nav>
+
 <article class="container my-4">
 
   <h1>{{ page.title }}</h1>
