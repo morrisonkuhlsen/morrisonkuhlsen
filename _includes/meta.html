@@ -148,6 +148,26 @@
   "inLanguage": "{{ page.lang }}"
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "{{ site.data.t.name[page.lang] }}",
+      "item": "https://morrisonkuhlsen.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ page.title | escape }}",
+      "item": "https://morrisonkuhlsen.com{{ page.url }}"
+    }
+  ]
+}
+</script>
 {% endif %}
 
 
