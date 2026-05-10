@@ -3,6 +3,13 @@
 
 /* Custom styles */
 
+/* GitHub icon in slim header — no hover effect */
+.it-header-slim-wrapper .link-list a:hover .icon {
+  fill: currentColor !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
 /* Post tags chip */
 .chip-post {
   border-color: #000 !important;
