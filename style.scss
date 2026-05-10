@@ -36,6 +36,11 @@
   border: 1px solid #e0e7ef;
   border-radius: 4px;
 
+  &::before {
+    left: auto !important;
+    right: 80px !important;
+  }
+
   .dropdown-item {
     color: #000000;
     font-size: 0.95rem;
