@@ -7,6 +7,7 @@ parent: probabilidade
 permalink: /pt/probabilidade/distribuicoes
 order: 1
 mathjax: true
+description: "Modelos matemáticos que descrevem como os valores de uma variável aleatória se distribuem."
 ---
 
 As **distribuições de probabilidade** são funções matemáticas que descrevem a probabilidade de diferentes resultados para uma variável aleatória. Elas são fundamentais na estatística e na ciência de dados, permitindo modelar e entender fenômenos aleatórios em diversas áreas do conhecimento.

@@ -5,6 +5,7 @@ lang: pt
 ref: inferencia-estatistica
 order: 3
 mathjax: true
+description: "Aprenda a fazer inferências sobre populações com base em amostras e testes estatísticos."
 ---
 
 # Inferência Estatística

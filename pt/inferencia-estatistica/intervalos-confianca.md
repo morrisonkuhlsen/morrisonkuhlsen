@@ -7,6 +7,7 @@ parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/intervalos-confianca
 order: 2
 mathjax: true
+description: "Intervalos que estimam, com um dado nível de confiança, a localização de um parâmetro populacional."
 ---
 
 ## Introdução

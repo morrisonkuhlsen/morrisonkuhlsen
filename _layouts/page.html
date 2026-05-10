@@ -5,7 +5,19 @@ layout: default
 {% assign home_page = site.pages | where: "ref", "homepage" | where: "lang", page.lang | first %}
 {% assign parent_page = site.pages | where: "ref", page.parent | where: "lang", page.lang | first %}
 {% assign home_label = "Início" %}
-{% if page.lang == "en" %}{% assign home_label = "Home" %}{% endif %}
+{% assign share_label = "Compartilhar" %}
+{% assign share_whatsapp = "Compartilhar no WhatsApp" %}
+{% assign share_linkedin = "Compartilhar no LinkedIn" %}
+{% assign share_email = "Enviar por e-mail" %}
+{% assign share_copy = "Copiar link" %}
+{% if page.lang == "en" %}
+  {% assign home_label = "Home" %}
+  {% assign share_label = "Share" %}
+  {% assign share_whatsapp = "Share on WhatsApp" %}
+  {% assign share_linkedin = "Share on LinkedIn" %}
+  {% assign share_email = "Send by email" %}
+  {% assign share_copy = "Copy link" %}
+{% endif %}
 
 <nav aria-label="breadcrumb" class="container mt-3 mb-0">
   <ol class="breadcrumb">
@@ -21,11 +33,69 @@ layout: default
   </ol>
 </nav>
 
-<article class="container my-4">
+<div class="container mt-3 mb-4">
+  <div class="row align-items-start">
+    <div class="col">
+      <h1 class="mb-2">{{ page.title }}</h1>
+      {% if page.description %}
+        <p class="mk-page-subtitle">{{ page.description }}</p>
+      {% endif %}
+    </div>
+    <div class="col-auto">
+      <div class="dropdown mk-share-dropdown">
+        <button class="btn btn-sm mk-share-btn dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+          <span class="text-uppercase font-weight-bold">{{ share_label }}</span>
+          <svg class="icon icon-sm ml-1" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-more-items"></use></svg>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right mk-share-menu p-3">
+          <a class="dropdown-item d-flex align-items-center justify-content-between py-2"
+             href="https://wa.me/?text={{ page.title | url_encode }}%20{{ page.url | absolute_url | url_encode }}"
+             target="_blank" rel="noopener">
+            {{ share_whatsapp }}
+            <svg class="icon icon-sm ml-3" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-whatsapp"></use></svg>
+          </a>
+          <a class="dropdown-item d-flex align-items-center justify-content-between py-2"
+             href="https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absolute_url | url_encode }}"
+             target="_blank" rel="noopener">
+            {{ share_linkedin }}
+            <svg class="icon icon-sm ml-3" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-linkedin"></use></svg>
+          </a>
+          <a class="dropdown-item d-flex align-items-center justify-content-between py-2"
+             href="mailto:?subject={{ page.title | url_encode }}&body={{ page.url | absolute_url | url_encode }}"
+             target="_blank" rel="noopener">
+            {{ share_email }}
+            <svg class="icon icon-sm ml-3" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-mail"></use></svg>
+          </a>
+          <div class="dropdown-divider"></div>
+          <button class="btn btn-primary btn-block mt-2 d-flex align-items-center justify-content-center mk-copy-link-btn"
+                  data-url="{{ page.url | absolute_url }}" type="button">
+            <span class="mk-copy-label">{{ share_copy }}</span>
+            <svg class="icon icon-sm icon-white ml-2" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-copy"></use></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <h1>{{ page.title }}</h1>
-
+<article class="container my-4 pt-0 mt-0">
   <div class="entry">
     {{ content }}
   </div>
 </article>
+
+<script>
+(function () {
+  document.querySelectorAll('.mk-copy-link-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var url = btn.getAttribute('data-url');
+      var label = btn.querySelector('.mk-copy-label');
+      navigator.clipboard.writeText(url).then(function () {
+        var orig = label.textContent;
+        label.textContent = '✓';
+        setTimeout(function () { label.textContent = orig; }, 1500);
+      });
+    });
+  });
+})();
+</script>

@@ -5,6 +5,7 @@ lang: pt
 ref: analise-de-dados
 order: 4
 mathjax: true
+description: "Técnicas e métodos para analisar, modelar e interpretar conjuntos de dados."
 ---
 
 # Análise de Dados

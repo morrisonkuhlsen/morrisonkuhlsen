@@ -7,6 +7,7 @@ parent: probabilidade
 permalink: /pt/probabilidade/variaveis-aleatorias
 order: 2
 mathjax: true
+description: "Funções que associam valores numéricos aos resultados de um experimento aleatório."
 ---
 
 Uma **variável aleatória** é uma função que associa um número real a cada resultado possível de um experimento aleatório. Este conceito é fundamental em probabilidade e estatística, permitindo a análise matemática de fenômenos aleatórios.

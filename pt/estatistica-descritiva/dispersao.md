@@ -7,6 +7,7 @@ parent: estatistica-descritiva
 permalink: /pt/estatistica-descritiva/dispersao
 order: 2
 mathjax: true
+description: "Medidas que descrevem a variabilidade dos dados: variância, desvio padrão e amplitude."
 ---
 
 As **medidas de dispersão** são ferramentas essenciais na estatística descritiva que nos ajudam a entender o quão espalhados ou concentrados estão os dados em torno de uma medida de tendência central, geralmente a média. Enquanto as medidas de tendência central mostram o valor típico, as medidas de dispersão mostram a variabilidade dos dados.

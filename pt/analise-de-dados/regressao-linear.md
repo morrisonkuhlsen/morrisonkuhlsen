@@ -7,6 +7,7 @@ parent: analise-de-dados
 permalink: /pt/analise-de-dados/regressao-linear
 order: 1
 mathjax: true
+description: "Método estatístico para modelar a relação linear entre variáveis independentes e dependentes."
 ---
 
 <img src="{{ site.baseurl }}/assets/images/regressao.png" alt="Ilustração de regressão linear" style="max-width: 600px; display: block; margin: 1em auto;">

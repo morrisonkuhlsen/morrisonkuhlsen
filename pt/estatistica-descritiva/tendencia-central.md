@@ -7,6 +7,7 @@ parent: estatistica-descritiva
 permalink: /pt/estatistica-descritiva/tendencia-central
 order: 1
 mathjax: true
+description: "Média, mediana e moda: as principais medidas que descrevem o valor típico de um conjunto de dados."
 ---
 
 As **medidas de tendência central** são ferramentas fundamentais na estatística descritiva. Elas nos ajudam a entender *para onde* os dados "apontam", ou seja, qual é o valor em torno do qual os dados tendem a se concentrar.

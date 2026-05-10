@@ -5,6 +5,7 @@ lang: pt
 ref: estatistica-descritiva
 order: 1
 mathjax: true
+description: "Conceitos e ferramentas para descrever e resumir dados de forma clara e objetiva."
 ---
 
 # Estatística Descritiva

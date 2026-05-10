@@ -7,6 +7,7 @@ parent: analise-de-dados
 permalink: /pt/analise-de-dados/series-temporais
 order: 2
 mathjax: true
+description: "Análise de dados ordenados no tempo para identificar padrões, tendências e fazer previsões."
 ---
 
 <img src="{{ site.baseurl }}/assets/images/timeseries.png" alt="Ilustração de séries temporais" style="max-width: 600px; display: block; margin: 1em auto;">

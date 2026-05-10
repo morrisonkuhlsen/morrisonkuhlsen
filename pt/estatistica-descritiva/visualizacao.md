@@ -7,6 +7,7 @@ parent: estatistica-descritiva
 permalink: /pt/estatistica-descritiva/visualizacao
 order: 5
 mathjax: true
+description: "Técnicas e ferramentas para criar visualizações eficazes de dados estatísticos."
 ---
 
 A **Visualização de Dados** é uma ferramenta poderosa para explorar, analisar e comunicar informações de forma eficaz. Ela transforma dados brutos em representações visuais que facilitam a identificação de padrões, tendências e anomalias que poderiam passar despercebidas em tabelas ou textos.

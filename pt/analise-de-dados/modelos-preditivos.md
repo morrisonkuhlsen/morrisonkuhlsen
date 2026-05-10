@@ -7,6 +7,7 @@ parent: analise-de-dados
 permalink: /pt/analise-de-dados/modelos-preditivos
 order: 4
 mathjax: true
+description: "Modelos estatísticos para prever valores futuros com base em dados históricos."
 ---
 
 <img src="{{ site.baseurl }}/assets/images/predictive.png" alt="Ilustração de modelos preditivos" style="max-width: 600px; display: block; margin: 1em auto;">

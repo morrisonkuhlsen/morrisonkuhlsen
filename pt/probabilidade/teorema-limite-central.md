@@ -7,6 +7,7 @@ parent: probabilidade
 permalink: /pt/probabilidade/teorema-limite-central
 order: 3
 mathjax: true
+description: "Um dos teoremas mais importantes da estatística: a distribuição da média amostral converge para a normal."
 ---
 
 O **Teorema do Limite Central (TLC)** é um dos resultados mais importantes da teoria da probabilidade. Ele estabelece que a soma (ou média) de um grande número de variáveis aleatórias independentes e identicamente distribuídas tende a seguir uma distribuição normal.

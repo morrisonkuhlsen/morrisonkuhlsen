@@ -7,6 +7,7 @@ parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/estimadores
 order: 4
 mathjax: true
+description: "Funções de amostras utilizadas para estimar parâmetros desconhecidos de uma população."
 ---
 
 ![Estimadores Estatísticos]({{ site.baseurl }}/assets/images/estimadores.png){:style="max-width: 600px; display: block; margin: 0 auto;"}

@@ -5,6 +5,7 @@ lang: pt
 ref: probabilidade
 order: 2
 mathjax: true
+description: "Fundamentos da teoria da probabilidade, desde eventos básicos até distribuições e variáveis aleatórias."
 ---
 
 # Probabilidade

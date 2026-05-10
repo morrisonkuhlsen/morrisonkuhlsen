@@ -3,6 +3,56 @@
 
 /* Custom styles */
 
+/* Page subtitle */
+.mk-page-subtitle {
+  font-size: 1.2rem;
+  color: #3d3d3d;
+  line-height: 1.5;
+  max-width: 720px;
+  margin-bottom: 0.5rem;
+}
+
+/* Share button */
+.mk-share-btn {
+  border: none !important;
+  color: #000000;
+  background: transparent;
+  letter-spacing: 0.04em;
+  font-size: 0.85rem;
+
+  .icon { fill: #000000; }
+
+  &:hover, &:focus {
+    background: transparent;
+    color: #202020;
+    border: none !important;
+    box-shadow: none;
+  }
+}
+
+.mk-share-menu {
+  min-width: 260px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.13);
+  border: 1px solid #e0e7ef;
+  border-radius: 4px;
+
+  .dropdown-item {
+    color: #000000;
+    font-size: 0.95rem;
+    border-radius: 3px;
+    text-decoration: none !important;
+
+    .icon { fill: #000000; flex-shrink: 0; }
+
+    &:hover { background: #f0f5fb; text-decoration: none !important; }
+  }
+
+  .mk-copy-link-btn {
+    font-size: 0.95rem;
+    border-radius: 4px;
+  }
+}
+
 /* GitHub icon in slim header — no hover effect */
 .it-header-slim-wrapper .link-list a:hover .icon {
   fill: currentColor !important;

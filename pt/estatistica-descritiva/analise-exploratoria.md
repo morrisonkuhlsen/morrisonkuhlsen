@@ -7,6 +7,7 @@ parent: estatistica-descritiva
 permalink: /pt/estatistica-descritiva/analise-exploratoria
 order: 4
 mathjax: true
+description: "Exploração inicial dos dados para descobrir padrões, detectar anomalias e formular hipóteses."
 ---
 
 A **Análise Exploratória de Dados (AED)** é uma abordagem para analisar conjuntos de dados com o objetivo de resumir suas principais características, frequentemente com métodos visuais. Ela ajuda a entender os dados, identificar padrões, detectar anomalias e formular hipóteses.
