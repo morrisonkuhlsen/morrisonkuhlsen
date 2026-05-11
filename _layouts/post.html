@@ -8,6 +8,9 @@ layout: default
     <div class="col-md-9 col-12">
       <article>
         <h1>{{ page.title }}</h1>
+        {% if page.description %}
+          <p class="mk-page-subtitle">{{ page.description }}</p>
+        {% endif %}
 
         <div class="entry">
           {{ content }}

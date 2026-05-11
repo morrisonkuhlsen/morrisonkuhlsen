@@ -7,6 +7,7 @@ tags: [julia, visualization, data, economics, brazil]
 lang: en
 ref: pib-brasil-julia
 mathjax: true
+description: "Step-by-step guide to creating a thematic GDP map of Brazilian states in Julia, using CairoMakie and GeoArtifacts."
 ---
 
 Welcome to the first part of our series on working with maps in Julia! In this series we will explore how to create powerful and informative geospatial visualizations using the Julia language.

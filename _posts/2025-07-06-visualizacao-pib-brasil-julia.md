@@ -7,6 +7,7 @@ tags: [julia, visualização, dados, economia, brasil]
 lang: pt
 ref: pib-brasil-julia
 mathjax: true
+description: "Passo a passo para criar um mapa temático do PIB por estados do Brasil em Julia, usando CairoMakie e GeoArtifacts."
 ---
 
 Bem-vindo à primeira parte da nossa série sobre trabalhos com mapas em Julia! Nesta série, exploraremos como criar visualizações geoespaciais poderosas e informativas usando a linguagem Julia. 
