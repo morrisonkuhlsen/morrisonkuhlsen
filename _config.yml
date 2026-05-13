@@ -2,6 +2,7 @@
 # This file contains configuration flags to customize your site
 #
 environment: "production"
+timezone: America/Sao_Paulo
 
 #
 # Flags below are optional

@@ -1,5 +1,6 @@
 ---
 layout: post
+date: 2026-05-13 09:00:00 -0300
 image: /assets/images/questbooks.avif
 title: "Questões de Livros Famosos — Vol. 1"
 categories: [ALGEBRA, MATEMATICA, CALCULO, PROBABILIDADE, ESTATISTICA]
