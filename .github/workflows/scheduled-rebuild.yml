@@ -3,6 +3,7 @@ name: Scheduled Rebuild
 on:
   schedule:
     - cron: '0 9 * * 3'  # Toda quarta-feira às 09:00 UTC (06:00 BRT)
+    - cron: '0 12 13 5 *' # 13/05/2026 às 12:00 UTC (09:00 BRT) — post questoes-livros-famosos-vol1
   workflow_dispatch:      # Permite rodar manualmente pelo GitHub
 
 jobs:
