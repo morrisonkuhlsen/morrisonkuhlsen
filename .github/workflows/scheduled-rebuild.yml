@@ -1,0 +1,21 @@
+name: Scheduled Rebuild
+
+on:
+  schedule:
+    - cron: '0 9 * * 3'  # Toda quarta-feira às 09:00 UTC (06:00 BRT)
+  workflow_dispatch:      # Permite rodar manualmente pelo GitHub
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger rebuild with empty commit
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git commit --allow-empty -m "chore: scheduled rebuild"
+          git push
