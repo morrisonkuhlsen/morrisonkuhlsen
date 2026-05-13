@@ -6,5 +6,6 @@ gem 'webrick', '~> 1.8'
 gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 gem 'tzinfo', '~> 2.0'
 gem 'tzinfo-data'
+gem 'addressable', '>= 2.9.0'
 
 # Não é necessário adicionar plugin para livereload, pois já está incorporado no Jekyll desde a versão 3.7.0
