@@ -1,41 +1,33 @@
-# Design Jekyll Theme
+# morrisonkuhlsen.com
 
-A Jekyll theme based on the [UI Kit](https://github.com/italia/design-ui-kit)
-and built with [Bootstrap Italia](https://github.com/italia/bootstrap-italia/).
+![morrisonkuhlsen logo](https://raw.githubusercontent.com/morrisonkulsenn/public/refs/heads/main/mk-logo-300x.png)
 
-## Getting started
+A blog dedicated to the study and application of **Statistics and Probability**, available at [morrisonkuhlsen.com](https://morrisonkuhlsen.com).
 
-The theme itself is a starting point for a Jekyll-based website. You can refer
-to the [official Jekyll docs](https://jekyllrb.com/docs/) for further details
-on how to install it locally.
+The goal is to make technical concepts more accessible through clear content, practical examples, and interactive tools. Posts are published in both Portuguese and English.
 
-If you already have `bundler` installed, you can install jekyll and budler gems
-with:
+The site is built with [Jekyll](https://jekyllrb.com/) and [Bootstrap Italia](https://github.com/italia/bootstrap-italia/).
 
-`bundle install`
+## Running locally
 
-However, if you want to install the dependencies locally you can run:
+Install dependencies:
 
-`bundle install --path vendor/bundle`
+```bash
+bundle install
+```
 
-You can build the site and make it available on a local server with:
+Start the development server:
 
-`bundle exec jekyll serve --config {_config.yml, _config_dev.yml}`
+```bash
+bundle exec jekyll serve --config _config.yml,_config_dev.yml
+```
 
-picking one of the two config files where:
+The site will be available at `http://localhost:4000`.
 
-*  _config.yml is the production file
-*  _config_dev.yml is the development file.
+> **Config files:**
+> - `_config.yml` — production settings
+> - `_config_dev.yml` — local development settings (overrides baseurl and environment)
 
-### Notes
+## License
 
-You can run the server just with `bundle exec jekyll serve`: the webiste will
-be available on http://localhost:4000/design-jeyll-theme. This is the default
-settings to allow usage with GitHub pages.
-
-The aforementioned addition of `_config_dev.yml` is needed to run the server on
-http://localhost:4000 without any subpath.
-
-# License
-This repository is licensed with a BSD-3-Clause license. Please check the
-[LICENSE](LICENSE) file to know more details about this.
+This repository is licensed under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for details.
