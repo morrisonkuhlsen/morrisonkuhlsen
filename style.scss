@@ -407,6 +407,18 @@ img {
   flex-wrap: wrap;
 }
 
+.post-card-new-badge {
+  display: inline-block;
+  background-color: #d9364f;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.15em 0.55em;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
 .post-card-label {
   font-weight: 700;
   letter-spacing: 0.06em;

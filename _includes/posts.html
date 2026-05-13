@@ -19,6 +19,7 @@
             {% endif %}
             <div class="card-body p-4 d-flex flex-column">
               <div class="post-card-meta mb-3">
+                {% if forloop.first %}<span class="post-card-new-badge">{% if page.lang == 'en' %}NEW{% else %}NOVO{% endif %}</span>{% endif %}
                 <span class="post-card-label">{% if page.lang == 'en' %}ARTICLE{% else %}ARTIGO{% endif %}</span>
                 <span class="post-card-date">{% include date.html date=post.date %}</span>
               </div>
