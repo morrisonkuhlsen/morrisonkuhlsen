@@ -6,6 +6,7 @@ categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
 tags: [distribuição normal, gaussiana, probabilidade, estatística, distribuições]
 ref: distribuicao-normal
+author: dante-bertuzzi
 description: "Primeira parte da série sobre distribuições: entenda a distribuição normal, sua fórmula, propriedades, a regra 68-95-99,7 e como padronizar com o escore Z."
 mathjax: true
 ---

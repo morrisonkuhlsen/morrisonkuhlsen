@@ -6,6 +6,7 @@ categories: [VISUALIZAÇÃO DE DADOS, JULIA]
 tags: [julia, visualização, dados, economia, brasil]
 lang: pt
 ref: pib-brasil-julia
+author: dante-bertuzzi
 mathjax: true
 description: "Passo a passo para criar um mapa temático do PIB por estados do Brasil em Julia, usando CairoMakie e GeoArtifacts."
 ---

@@ -6,6 +6,7 @@ categories: [INFERÊNCIA ESTATÍSTICA, TESTE DE HIPÓTESES]
 tags: [teste-z, teste-t, inferência, estatística, julia]
 lang: pt
 ref: z-vs-t-test
+author: dante-bertuzzi
 mathjax: true
 description: "Guia prático para decidir entre o Teste Z e o Teste t de Student na inferência para médias, com exemplos resolvidos à mão e em Julia."
 ---

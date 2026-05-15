@@ -6,6 +6,7 @@ categories: [PROBABILIDADE, ESTATÍSTICA, GUIA]
 tags: [probabilidade, estatística, bernoulli, binomial, lgn]
 lang: pt
 ref: cara-ou-coroa
+author: dante-bertuzzi
 description: "cara-ou-coroa: Binomial, LGN, runs e tempos de espera."
 mathjax: true
 ---

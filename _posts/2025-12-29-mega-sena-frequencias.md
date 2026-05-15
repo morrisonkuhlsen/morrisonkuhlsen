@@ -6,6 +6,7 @@ categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
 tags: [matemática, probabilidade, mega-sena]
 ref: porcentagens
+author: dante-bertuzzi
 description: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 mathjax: true
 ---

@@ -6,6 +6,7 @@ categories: [CALCULO, MATEMATICA]
 lang: pt
 tags: [matemática, calculo, limites]
 ref: limites-calculo
+author: dante-bertuzzi
 description: "Limites - tendendo ao infinito."
 mathjax: true
 ---

@@ -7,6 +7,7 @@ categories: [ALGEBRA, MATEMATICA, CALCULO, PROBABILIDADE, ESTATISTICA]
 lang: pt
 tags: [probabilidade, questões, exercícios, livros, coeficiente binomial]
 ref: questoes-livros-famosos-vol1
+author: dante-bertuzzi
 description: "Três questões clássicas retiradas de livros famosos da matemática, resolvidas passo a passo com explicação completa."
 mathjax: true
 serie: questoes-livros-famosos

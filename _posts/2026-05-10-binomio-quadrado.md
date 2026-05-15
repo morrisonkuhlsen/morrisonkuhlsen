@@ -6,6 +6,7 @@ categories: [ALGEBRA, MATEMATICA]
 lang: pt
 tags: [matemática, algebra, binômio, identidade]
 ref: binomio-quadrado
+author: dante-bertuzzi
 description: "Entenda geometricamente por que (a+b)² = a² + 2ab + b² usando um gadget interativo com sliders — mova os valores e veja a identidade acontecer em tempo real."
 mathjax: true
 ---

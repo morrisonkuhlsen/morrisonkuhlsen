@@ -12,6 +12,17 @@ layout: default
           <p class="mk-page-subtitle">{{ page.description }}</p>
         {% endif %}
 
+        {% assign author = site.data.authors[page.author] %}
+        {% if author %}
+        <div class="post-author-block">
+          <span class="post-author-avatar" aria-hidden="true">{{ author.initials }}</span>
+          <div class="post-author-info">
+            <span class="post-author-name">{{ author.name }}</span>
+            <span class="post-author-date">{% include date.html date=page.date %}</span>
+          </div>
+        </div>
+        {% endif %}
+
         <div class="entry">
           {{ content }}
         </div>

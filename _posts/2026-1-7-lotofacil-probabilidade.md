@@ -6,6 +6,7 @@ categories: [MATEMÁTICA, GUIA]
 tags: [probabilidade, combinatória, lotofácil, loterias]
 lang: pt
 ref: lotofacil-16v15
+author: dante-bertuzzi
 description: "Demonstração completa (na mão) de que 16 jogos de 15 números têm a mesma chance de 1 jogo de 16 números para acertar 15 na Lotofácil."
 mathjax: true
 ---

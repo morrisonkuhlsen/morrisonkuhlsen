@@ -6,6 +6,7 @@ categories: [MATEMÁTICA, GUIA]
 tags: [matemática, porcentagem, álgebra]
 lang: pt
 ref: porcentagens
+author: dante-bertuzzi
 description: "Guia prático de porcentagens: fórmulas e exemplos resolvidos."
 mathjax: true
 ---

@@ -6,6 +6,7 @@ categories: [DATA VISUALIZATION, JULIA]
 tags: [julia, visualization, data, economics, brazil]
 lang: en
 ref: pib-brasil-julia
+author: dante-bertuzzi
 mathjax: true
 description: "Step-by-step guide to creating a thematic GDP map of Brazilian states in Julia, using CairoMakie and GeoArtifacts."
 ---

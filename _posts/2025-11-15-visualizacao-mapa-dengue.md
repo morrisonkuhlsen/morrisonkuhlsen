@@ -6,6 +6,7 @@ categories: [VISUALIZAÇÃO DE DADOS, JULIA, SAÚDE PÚBLICA]
 tags: [julia, visualização, mapas, dengue, saúde, brasil, pernambuco]
 lang: pt
 ref: dengue-pernambuco-julia
+author: dante-bertuzzi
 description: "Um guia completo para visualizar dados de saúde pública em nível municipal com Julia. Aprenda a limpar dados do SIH/SUS, juntá-los com malhas geográficas e criar um mapa temático da incidência de dengue em Pernambuco."
 ---
 

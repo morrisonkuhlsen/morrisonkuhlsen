@@ -6,6 +6,7 @@ categories: [ESTATÍSTICA, EDUCAÇÃO]
 lang: pt
 tags: [curiosidades, estatística, educação]
 ref: simbolo-estatistica-curso
+author: dante-bertuzzi
 description: "Entenda o significado do símbolo da Estatística no Brasil e por que ele usa o Σ maiúsculo e a integral."
 mathjax: true
 ---
