@@ -332,6 +332,497 @@ Ex.: dois aumentos de $10\%$: $1{,}1\cdot1{,}1=1{,}21$ → aumento total $21\%$.
 2. Se $x$ representa $12\%$ de $V$ e $x=36$, qual é $V$? — Resposta: $300$.
 3. Uma mercadoria custa $200$; aplica-se desconto de $15\%$ e depois acréscimo de $10\%$. Qual o preço final? — Resposta: $200\cdot0{,}85\cdot1{,}10=187$.
 
+---
+
+### Questão — Venda Parcial de Loteamento e Comunicação DOI no Cartório de Imóveis
+
+Cinco pessoas são coproprietárias de um loteamento urbano com área total de $2.000\ \text{m}^2$. O imóvel está registrado em matrícula no Cartório de Registro de Imóveis, e cada coproprietário possui uma fração ideal sobre o imóvel.
+
+Entretanto, apenas quatro coproprietários irão vender suas respectivas partes ideais. A quinta pessoa possui $35\%$ do imóvel e não participará da venda.
+
+A distribuição das frações ideais é a seguinte:
+
+<table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+  <thead>
+    <tr style="background-color: #1565c0; color: #fff;">
+      <th style="border: 1px solid #90caf9; padding: 8px 16px;">Pessoa</th>
+      <th style="border: 1px solid #90caf9; padding: 8px 16px;">Percentual real sobre o imóvel</th>
+      <th style="border: 1px solid #90caf9; padding: 8px 16px;">Situação</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: #e3f2fd;">
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Marcos</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">40%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Vai vender</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Leandro</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">15%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Vai vender</td>
+    </tr>
+    <tr style="background-color: #e3f2fd;">
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">João</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">8%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Vai vender</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Pedro</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">2%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;">Vai vender</td>
+    </tr>
+    <tr style="background-color: #fff9c4;">
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;"><strong>Quinta pessoa</strong></td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;"><strong>35%</strong></td>
+      <td style="border: 1px solid #90caf9; padding: 8px 16px;"><strong>Não vai vender</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+A soma dos percentuais dos coproprietários que irão vender é:
+
+$$40\% + 15\% + 8\% + 2\% = 65\%$$
+
+Logo, a venda não corresponde à totalidade do imóvel, mas apenas a $65\%$. A quinta pessoa, que possui $35\%$, não entra no cálculo da DOI dessa transmissão, pois não está alienando sua parte ideal.
+
+---
+
+A soma total de todos os coproprietários é:
+
+$$40\% + 15\% + 8\% + 2\% + 35\% = 100\%$$
+
+Mas, para a DOI desta venda, entram apenas os que estão vendendo:
+
+$$40\% + 15\% + 8\% + 2\% = 65\%$$
+
+Portanto, a venda corresponde a apenas $65\%$ do imóvel. A quinta pessoa possui $35\%$ e não participa da venda, então ela não entra na base da DOI dessa transmissão.
+
+---
+
+#### 1. Representando os percentuais como vetor
+
+Na Álgebra Linear, colocamos os percentuais de todos os coproprietários em um vetor coluna:
+
+$$
+\mathbf{p} = \begin{pmatrix} p_M \\ p_L \\ p_J \\ p_P \\ p_Q \end{pmatrix}
+= \begin{pmatrix} 40 \\ 15 \\ 8 \\ 2 \\ 35 \end{pmatrix}
+$$
+
+com $p_M = 40$, $p_L = 15$, $p_J = 8$, $p_P = 2$, $p_Q = 35$.
+
+A soma total do vetor é:
+
+$$40 + 15 + 8 + 2 + 35 = 100$$
+
+O imóvel inteiro está corretamente representado.
+
+---
+
+#### 2. Separando apenas os vendedores
+
+Como a quinta pessoa não vai vender, trabalhamos somente com os quatro vendedores. O vetor dos vendedores é:
+
+$$
+\mathbf{v} = \begin{pmatrix} 40 \\ 15 \\ 8 \\ 2 \end{pmatrix}
+$$
+
+A soma dos componentes de $\mathbf{v}$ é:
+
+$$40 + 15 + 8 + 2 = 65$$
+
+---
+
+#### 3. O que a DOI exige?
+
+A DOI precisa que a parte vendida seja considerada como uma nova base de $100\%$. Matematicamente, queremos transformar:
+
+$$65\% \longrightarrow 100\%$$
+
+mantendo as proporções internas entre os vendedores ($40:15:8:2$). O novo vetor $\mathbf{x}$ deve satisfazer:
+
+$$x_M + x_L + x_J + x_P = 100 \qquad \text{com} \qquad x_M : x_L : x_J : x_P = 40:15:8:2$$
+
+---
+
+#### 4. Modelo de Álgebra Linear
+
+Como a transformação é proporcional, escrevemos $\mathbf{x} = \lambda\,\mathbf{v}$:
+
+$$
+\begin{pmatrix} x_M \\ x_L \\ x_J \\ x_P \end{pmatrix}
+= \lambda \begin{pmatrix} 40 \\ 15 \\ 8 \\ 2 \end{pmatrix}
+= \begin{pmatrix} 40\lambda \\ 15\lambda \\ 8\lambda \\ 2\lambda \end{pmatrix}
+$$
+
+---
+
+#### 5. Usando a condição da DOI
+
+A DOI precisa fechar em $100\%$:
+
+$$x_M + x_L + x_J + x_P = 100$$
+
+Substituindo:
+
+$$40\lambda + 15\lambda + 8\lambda + 2\lambda = 100$$
+
+$$65\lambda = 100$$
+
+Isolando $\lambda$:
+
+$$\lambda = \frac{100}{65} = \frac{20}{13}$$
+
+---
+
+#### 6. Calculando o percentual DOI de cada vendedor
+
+Aplicando $\mathbf{x} = \lambda\,\mathbf{v}$ com $\lambda = \dfrac{20}{13}$:
+
+**Marcos** $(p_M = 40\%)$:
+
+<div style="text-align:center">
+$$
+x_M = 40 \cdot \frac{20}{13} = \frac{800}{13} = 61{,}538\ldots\%
+\approx \boxed{61{,}54\%}
+$$
+</div>
+
+**Leandro** $(p_L = 15\%)$:
+
+<div style="text-align:center">
+$$
+x_L = 15 \cdot \frac{20}{13} = \frac{300}{13} = 23{,}076\ldots\%
+\approx \boxed{23{,}08\%}
+$$
+</div>
+
+**João** $(p_J = 8\%)$:
+
+<div style="text-align:center">
+$$
+x_J = 8 \cdot \frac{20}{13} = \frac{160}{13} = 12{,}307\ldots\%
+\approx \boxed{12{,}31\%}
+$$
+</div>
+
+**Pedro** $(p_P = 2\%)$:
+
+<div style="text-align:center">
+$$
+x_P = 2 \cdot \frac{20}{13} = \frac{40}{13} = 3{,}076\ldots\%
+\approx \boxed{3{,}08\%}
+$$
+</div>
+
+---
+
+#### 7. Vetor DOI final
+
+$$
+\mathbf{x} = \begin{pmatrix} \frac{800}{13} \\[4pt] \frac{300}{13} \\[4pt] \frac{160}{13} \\[4pt] \frac{40}{13} \end{pmatrix}
+\approx \begin{pmatrix} 61{,}54 \\ 23{,}08 \\ 12{,}31 \\ 3{,}08 \end{pmatrix}
+$$
+
+<table style="margin: 1rem auto; border-collapse: collapse; text-align: center;">
+  <thead>
+    <tr style="background-color: #1565c0; color: #fff;">
+      <th style="border: 1px solid #90caf9; padding: 8px 14px;">Vendedor</th>
+      <th style="border: 1px solid #90caf9; padding: 8px 14px;">% real sobre o imóvel</th>
+      <th style="border: 1px solid #90caf9; padding: 8px 14px;">% DOI exato</th>
+      <th style="border: 1px solid #90caf9; padding: 8px 14px;">% DOI aprox.</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: #e3f2fd;">
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">Marcos</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">40%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">800/13 %</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">61,54%</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">Leandro</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">15%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">300/13 %</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">23,08%</td>
+    </tr>
+    <tr style="background-color: #e3f2fd;">
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">João</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">8%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">160/13 %</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">12,31%</td>
+    </tr>
+    <tr style="background-color: #fff;">
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">Pedro</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">2%</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">40/13 %</td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;">3,08%</td>
+    </tr>
+    <tr style="background-color: #fff9c4;">
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;"><strong>Quinta pessoa</strong></td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;"><strong>35%</strong></td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;"><strong>Não entra</strong></td>
+      <td style="border: 1px solid #90caf9; padding: 8px 14px;"><strong>Não entra</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+#### 8. Conferindo a soma exata
+
+$$
+x_M + x_L + x_J + x_P
+= \frac{800}{13} + \frac{300}{13} + \frac{160}{13} + \frac{40}{13}
+= \frac{800 + 300 + 160 + 40}{13}
+= \frac{1300}{13}
+= \boxed{100\%}
+$$
+
+A transformação está correta.
+
+---
+
+#### 9. Escrevendo como matriz de transformação
+
+A transformação $\mathbf{x} = \lambda\,\mathbf{v}$ é uma transformação linear de escala. Com $\lambda = \dfrac{20}{13}$ e $I_4$ a identidade de ordem 4, a matriz de transformação é $T = \dfrac{20}{13}\,I_4$:
+
+$$
+T = \frac{20}{13}
+\begin{pmatrix}
+1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+=
+\begin{pmatrix}
+\frac{20}{13} & 0 & 0 & 0 \\[4pt]
+0 & \frac{20}{13} & 0 & 0 \\[4pt]
+0 & 0 & \frac{20}{13} & 0 \\[4pt]
+0 & 0 & 0 & \frac{20}{13}
+\end{pmatrix}
+$$
+
+Então $\mathbf{x} = T\,\mathbf{v}$:
+
+$$
+\begin{pmatrix} x_M \\ x_L \\ x_J \\ x_P \end{pmatrix}
+=
+\begin{pmatrix}
+\frac{20}{13} & 0 & 0 & 0 \\[4pt]
+0 & \frac{20}{13} & 0 & 0 \\[4pt]
+0 & 0 & \frac{20}{13} & 0 \\[4pt]
+0 & 0 & 0 & \frac{20}{13}
+\end{pmatrix}
+\begin{pmatrix} 40 \\ 15 \\ 8 \\ 2 \end{pmatrix}
+=
+\begin{pmatrix} \frac{800}{13} \\[4pt] \frac{300}{13} \\[4pt] \frac{160}{13} \\[4pt] \frac{40}{13} \end{pmatrix}
+$$
+
+---
+
+#### 10. Fórmula algébrica geral
+
+A relação algébrica usada em cada cálculo individual é:
+
+$$
+\text{Percentual DOI} = \frac{\text{percentual vendido pela pessoa}}{\text{total vendido}} \cdot 100
+$$
+
+Neste caso, o total vendido é $65\%$, então:
+
+$$
+\text{Percentual DOI} = \frac{\text{percentual vendido pela pessoa}}{65} \cdot 100
+$$
+
+Aplicando para cada vendedor:
+
+<div style="text-align:center">
+$$
+\begin{aligned}
+\text{DOI Marcos}  &= \frac{40}{65} \cdot 100 = \frac{4000}{65} = \frac{800}{13} \approx 61{,}54\% \\[8pt]
+\text{DOI Leandro} &= \frac{15}{65} \cdot 100 = \frac{1500}{65} = \frac{300}{13} \approx 23{,}08\% \\[8pt]
+\text{DOI João}    &= \frac{8}{65}  \cdot 100 = \frac{800}{65}  = \frac{160}{13} \approx 12{,}31\% \\[8pt]
+\text{DOI Pedro}   &= \frac{2}{65}  \cdot 100 = \frac{200}{65}  = \frac{40}{13}  \approx 3{,}08\%
+\end{aligned}
+$$
+</div>
+
+---
+
+#### 11. Resolução por EML
+
+##### 1. Dados do problema
+
+Temos:
+
+$$p_M = 40, \quad p_L = 15, \quad p_J = 8, \quad p_P = 2$$
+
+A soma vendida é:
+
+$$S = 40 + 15 + 8 + 2$$
+
+Mas, pelo EML, podemos escrever uma soma usando:
+
+$$a + b = \ln(e^a \cdot e^b)$$
+
+Para quatro parcelas:
+
+$$40 + 15 + 8 + 2 = \ln(e^{40} \cdot e^{15} \cdot e^8 \cdot e^2)$$
+
+Então:
+
+$$S = \ln(e^{40} \cdot e^{15} \cdot e^8 \cdot e^2)$$
+
+Como $e^{40} \cdot e^{15} \cdot e^8 \cdot e^2 = e^{40+15+8+2}$, temos:
+
+$$S = \ln(e^{65})$$
+
+Como $\ln(e^{65}) = 65$, logo:
+
+$$\boxed{S = 65}$$
+
+Portanto, a parte transmitida é $65\%$.
+
+---
+
+##### 2. Fórmula da DOI
+
+A fórmula proporcional comum é:
+
+$$x_i = \frac{p_i}{S} \cdot 100$$
+
+onde $p_i$ é o percentual real vendido por cada pessoa e $S = 65$ é o total vendido.
+
+Usando o EML, a divisão pode ser escrita como:
+
+$$\frac{a}{b} = e^{\ln(a) - \ln(b)}$$
+
+Então:
+
+$$\frac{p_i}{S} = e^{\ln(p_i) - \ln(S)}$$
+
+Como $S = 65$:
+
+$$\frac{p_i}{65} = e^{\ln(p_i) - \ln(65)}$$
+
+Logo, a fórmula da DOI em forma EML é:
+
+$$\boxed{x_i = 100 \cdot e^{\ln(p_i) - \ln(65)}}$$
+
+---
+
+##### 3. Marcos
+
+Marcos vende $p_M = 40$, então:
+
+$$x_M = 100 \cdot e^{\ln(40) - \ln(65)}$$
+
+Pela identidade $\ln(a) - \ln(b) = \ln\!\left(\dfrac{a}{b}\right)$:
+
+$$\ln(40) - \ln(65) = \ln\!\left(\frac{40}{65}\right)$$
+
+Logo:
+
+$$x_M = 100 \cdot e^{\ln\!\left(\frac{40}{65}\right)}$$
+
+Como $e^{\ln(y)} = y$:
+
+$$x_M = 100 \cdot \frac{40}{65}$$
+
+Simplificando $\dfrac{40}{65} = \dfrac{8}{13}$:
+
+$$x_M = 100 \cdot \frac{8}{13} = \frac{800}{13} = 61{,}538\ldots$$
+
+$$\boxed{x_M \approx 61{,}54\%}$$
+
+---
+
+##### 4. Leandro
+
+Leandro vende $p_L = 15$, então:
+
+$$x_L = 100 \cdot e^{\ln(15) - \ln(65)}$$
+
+Pela identidade:
+
+$$\ln(15) - \ln(65) = \ln\!\left(\frac{15}{65}\right)$$
+
+Logo:
+
+$$x_L = 100 \cdot e^{\ln\!\left(\frac{15}{65}\right)} = 100 \cdot \frac{15}{65}$$
+
+Simplificando $\dfrac{15}{65} = \dfrac{3}{13}$:
+
+$$x_L = 100 \cdot \frac{3}{13} = \frac{300}{13} = 23{,}076\ldots$$
+
+$$\boxed{x_L \approx 23{,}08\%}$$
+
+---
+
+##### 5. João
+
+João vende $p_J = 8$, então:
+
+$$x_J = 100 \cdot e^{\ln(8) - \ln(65)}$$
+
+Pela identidade:
+
+$$\ln(8) - \ln(65) = \ln\!\left(\frac{8}{65}\right)$$
+
+Logo:
+
+$$x_J = 100 \cdot e^{\ln\!\left(\frac{8}{65}\right)} = 100 \cdot \frac{8}{65} = \frac{800}{65}$$
+
+Simplificando por $5$:
+
+$$x_J = \frac{160}{13} = 12{,}307\ldots$$
+
+$$\boxed{x_J \approx 12{,}31\%}$$
+
+---
+
+##### 6. Pedro
+
+Pedro vende $p_P = 2$, então:
+
+$$x_P = 100 \cdot e^{\ln(2) - \ln(65)}$$
+
+Pela identidade:
+
+$$\ln(2) - \ln(65) = \ln\!\left(\frac{2}{65}\right)$$
+
+Logo:
+
+$$x_P = 100 \cdot e^{\ln\!\left(\frac{2}{65}\right)} = 100 \cdot \frac{2}{65} = \frac{200}{65}$$
+
+Simplificando por $5$:
+
+$$x_P = \frac{40}{13} = 3{,}076\ldots$$
+
+$$\boxed{x_P \approx 3{,}08\%}$$
+
+---
+
+##### 7. Resultado em forma EML
+
+A fórmula geral usada foi:
+
+$$x_i = 100 \cdot e^{\ln(p_i) - \ln(65)}$$
+
+Aplicando aos quatro vendedores:
+
+<div style="text-align:center">
+$$
+\begin{aligned}
+x_M &= 100 \cdot e^{\ln(40) - \ln(65)} = \frac{800}{13} \approx 61{,}54\% \\[8pt]
+x_L &= 100 \cdot e^{\ln(15) - \ln(65)} = \frac{300}{13} \approx 23{,}08\% \\[8pt]
+x_J &= 100 \cdot e^{\ln(8)  - \ln(65)} = \frac{160}{13} \approx 12{,}31\% \\[8pt]
+x_P &= 100 \cdot e^{\ln(2)  - \ln(65)} = \frac{40}{13}  \approx  3{,}08\%
+\end{aligned}
+$$
+</div>
+
 
 <style>
 .share-buttons {
