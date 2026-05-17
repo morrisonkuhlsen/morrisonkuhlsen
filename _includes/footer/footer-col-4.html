@@ -1,0 +1,18 @@
+<button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-4" aria-expanded="false" aria-controls="ftr-col-4">
+  MorrisonKühlsen <span class="mk-footer-chevron" aria-hidden="true"></span>
+</button>
+<h5 class="mk-footer-heading d-none d-md-block">MorrisonKühlsen</h5>
+<div id="ftr-col-4" class="collapse d-md-block mk-footer-collapse">
+  <ul class="mk-footer-links">
+    {% if page.lang == 'en' %}
+    <li><a href="{{ site.baseurl }}/en/blog/">Blog</a></li>
+    <li><a href="{{ site.baseurl }}/en/about-us">About us</a></li>
+    <li><a href="{{ site.baseurl }}/en/privacy-policy">Privacy Policy</a></li>
+    <li><a href="{{ site.baseurl }}/en/cookie-policy">Cookie Policy</a></li>
+    {% else %}
+    <li><a href="{{ site.baseurl }}/pt/blog/">Blog</a></li>
+    <li><a href="{{ site.baseurl }}/pt/privacy-policy">Política de Privacidade</a></li>
+    <li><a href="{{ site.baseurl }}/pt/cookie-policy">Política de Cookies</a></li>
+    {% endif %}
+  </ul>
+</div>

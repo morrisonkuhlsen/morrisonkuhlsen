@@ -1,23 +1,28 @@
-<div class="pb-2">
-  <h4>
-    {% if page.lang == 'pt' %}
-      <a href="#" title="Ir para a página: Siga-nos" class="">Siga-nos</a>
-    {% elsif page.lang == 'en' %}
-      <a href="#" title="Go to the page: Follow us" class="">Follow us</a>
-    {% else %}
-      <a href="#" title="Follow us" class="">Follow us</a>
-    {% endif %}
-  </h4>
-  <ul class="list-inline text-left social">
-    {% for social-link in site.data.t.social-links[page.lang] %}
-    <li class="list-inline-item">
-      <a href="{{ site.baseurl }}{{ social-link[1].url }}" title="{{ social-link[1].name }}" target="_blank" class="p-2 text-white">
-        <svg class="icon icon-sm icon-white align-top">
-          <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-{{ social-link[1].name }}"></use>
-        </svg>
-        <span class="sr-only">{{ social-link[1].name }}</span>
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
+{% if page.lang == 'en' %}
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-3" aria-expanded="false" aria-controls="ftr-col-3">
+    Contact <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Contact</h5>
+{% else %}
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-3" aria-expanded="false" aria-controls="ftr-col-3">
+    Contato <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Contato</h5>
+{% endif %}
+<div id="ftr-col-3" class="collapse d-md-block mk-footer-collapse">
+<ul class="mk-footer-links">
+  <li>
+    <a href="mailto:morrisonkuhlsen@gmail.com">morrisonkuhlsen@gmail.com</a>
+  </li>
+  <li>
+    <a href="https://github.com/morrisonkuhlsen" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </li>
+  {% for social-link in site.data.t.social-links[page.lang] %}
+  {% unless social-link[1].name == 'rss' %}
+  <li>
+    <a href="{{ social-link[1].url }}" target="_blank" rel="noopener noreferrer">{{ social-link[1].name | capitalize }}</a>
+  </li>
+  {% endunless %}
+  {% endfor %}
+</ul>
 </div>

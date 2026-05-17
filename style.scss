@@ -287,7 +287,6 @@ img {
     background: #1a1a1a !important;
     padding: 0 !important;
     margin: 0 !important;
-    margin-top: -2px !important;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35) !important;
 
     &::before,
@@ -1055,6 +1054,184 @@ img {
 #toc {
   top: 5px;
   padding-top: 28px;
+}
+
+/* =====================================================
+   Footer
+   ===================================================== */
+
+.mk-footer {
+  background-color: #1b1b1b;
+  color: #aaa;
+  font-size: 0.9rem;
+
+  a {
+    color: #aaa;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #fff;
+      text-decoration: none;
+    }
+  }
+}
+
+.mk-footer-main {
+  border-bottom: 1px solid #1b1b1b;
+}
+
+.mk-footer-heading {
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.mk-footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-bottom: 0.55rem;
+  }
+}
+
+.mk-footer-brand {
+  border-bottom: 1px solid #1b1b1b;
+}
+
+.mk-footer-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fff !important;
+
+  &:hover {
+    color: #fff !important;
+  }
+}
+
+.mk-footer-logo {
+  height: 60px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
+
+.mk-footer-brand-name {
+  font-size: 1.60rem;
+  font-weight: 300;
+  color: #fff;
+  letter-spacing: 0.02em;
+
+  strong {
+    font-weight: 700;
+  }
+}
+
+.mk-footer-bottom {
+  background-color: #0a0a0a;
+}
+
+.mk-footer-legal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.5rem;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin: 0;
+  }
+
+  a {
+    color: #555;
+    font-size: 0.78rem;
+
+    &:hover {
+      color: #aaa;
+    }
+  }
+}
+
+/* Footer mobile accordion toggle */
+.mk-footer-toggle {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.9rem 0;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 0;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.mk-footer-chevron {
+  display: inline-block;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid #aaa;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.mk-footer-toggle[aria-expanded="true"] .mk-footer-chevron {
+  transform: rotate(180deg);
+}
+
+.mk-footer-collapse {
+  padding-bottom: 0.75rem;
+}
+
+/* Mobile-specific footer overrides */
+@media (max-width: 767.98px) {
+  .mk-footer-col {
+    border-bottom: 1px solid #262626;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .mk-footer-col--last {
+    border-bottom: none;
+  }
+
+  .mk-footer-links li {
+    margin-bottom: 0;
+  }
+
+  .mk-footer-links li a {
+    padding: 0.45rem 0;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mk-footer-brand .container {
+    padding-top: 1.25rem !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  .mk-footer-logo {
+    height: 44px;
+  }
+
+  .mk-footer-brand-name {
+    font-size: 1.2rem;
+  }
 }
 
 #toc .nav > li > a {

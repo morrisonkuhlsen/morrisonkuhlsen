@@ -1,1 +1,29 @@
-<h4><a href="#" title="Vai alla pagina: Lorem Ipsum">Lorem Ipsum</a></h4>
+{% if page.lang == 'en' %}
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-2" aria-expanded="false" aria-controls="ftr-col-2">
+    Tools <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Tools</h5>
+  <div id="ftr-col-2" class="collapse d-md-block mk-footer-collapse">
+    <ul class="mk-footer-links">
+      <li><a href="{{ site.baseurl }}/ztable.html">Z Table</a></li>
+      <li><a href="{{ site.baseurl }}/ttable.html">T Table</a></li>
+      <li><a href="{{ site.baseurl }}/ftable.html">F Table</a></li>
+      <li><a href="{{ site.baseurl }}/formulas/">Formulas</a></li>
+      <li><a href="{{ site.baseurl }}/greek-alphabet.html">Greek Alphabet</a></li>
+    </ul>
+  </div>
+{% else %}
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-2" aria-expanded="false" aria-controls="ftr-col-2">
+    Ferramentas <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Ferramentas</h5>
+  <div id="ftr-col-2" class="collapse d-md-block mk-footer-collapse">
+    <ul class="mk-footer-links">
+      <li><a href="{{ site.baseurl }}/ztable.html">Tabela Z</a></li>
+      <li><a href="{{ site.baseurl }}/ttable.html">Tabela T</a></li>
+      <li><a href="{{ site.baseurl }}/ftable.html">Tabela F</a></li>
+      <li><a href="{{ site.baseurl }}/formulas/">Fórmulas</a></li>
+      <li><a href="{{ site.baseurl }}/greek-alphabet.html">Alfabeto Grego</a></li>
+    </ul>
+  </div>
+{% endif %}

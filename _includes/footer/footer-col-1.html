@@ -1,21 +1,26 @@
-{% if page.lang == 'pt' %}
-  <h4>Contato</h4>
-{% elsif page.lang == 'en' %}
-  <h4>Contact</h4>
+{% if page.lang == 'en' %}
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-1" aria-expanded="false" aria-controls="ftr-col-1">
+    Statistics <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Statistics</h5>
+  <div id="ftr-col-1" class="collapse d-md-block mk-footer-collapse">
+    <ul class="mk-footer-links">
+      <li><a href="{{ site.baseurl }}/en/">Home</a></li>
+      <li><a href="{{ site.baseurl }}/en/blog/">Blog</a></li>
+      <li><a href="{{ site.baseurl }}/en/about-us">About us</a></li>
+    </ul>
+  </div>
 {% else %}
-  <h4>Contact</h4>
+  <button class="mk-footer-heading mk-footer-toggle d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#ftr-col-1" aria-expanded="false" aria-controls="ftr-col-1">
+    Estatística <span class="mk-footer-chevron" aria-hidden="true"></span>
+  </button>
+  <h5 class="mk-footer-heading d-none d-md-block">Estatística</h5>
+  <div id="ftr-col-1" class="collapse d-md-block mk-footer-collapse">
+    <ul class="mk-footer-links">
+      <li><a href="{{ site.baseurl }}/pt/estatistica-descritiva">Estatística Descritiva</a></li>
+      <li><a href="{{ site.baseurl }}/pt/inferencia-estatistica">Inferência Estatística</a></li>
+      <li><a href="{{ site.baseurl }}/pt/probabilidade">Probabilidade</a></li>
+      <li><a href="{{ site.baseurl }}/pt/analise-de-dados">Análise de Dados</a></li>
+    </ul>
+  </div>
 {% endif %}
-<p class="mb-3">
-  <a href="mailto:morrisonkuhlsen@gmail.com" class="text-white">
-    <svg class="icon icon-sm icon-white align-middle mr-2">
-      <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-mail"></use>
-    </svg>
-    morrisonkuhlsen@gmail.com
-  </a>
-</p>
-<div class="link-list-wrapper">
-  <ul class="footer-list link-list clearfix">
-    <li><a class="list-item" href="#" title="Blog">Blog</a></li>
-    <li><a class="list-item" href="https://github.com/morrisonkuhlsen" title="Github"><svg class="icon icon-sm icon-white align-middle mr-2" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-github"></use></svg>Github</a></li>
-  </ul>
-</div>
