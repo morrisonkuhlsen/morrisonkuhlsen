@@ -31,7 +31,7 @@ giscus:
   input_position: "top"
   theme: "noborder_light"
   lang: "pt"
-  loading: "lazy"
+  loading: "eager"
 
 # Enter your Google Analytics web tracking code (e.g. UA-000000000-0 or G-XXXXXXXXXX) to activate tracking
 google_analytics: G-HBZB4KRNVM
