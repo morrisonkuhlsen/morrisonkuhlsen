@@ -257,6 +257,117 @@ img {
   overflow: hidden;
 }
 
+/* =====================================================
+   Horizontal mega-menu dropdown (desktop ≥ 992px)
+   ===================================================== */
+
+@media (min-width: 992px) {
+  // Positioning context for the full-width dropdown
+  .it-header-navbar-wrapper {
+    position: relative !important;
+  }
+
+  // Detach dropdown from the nav-item so it spans full navbar width
+  .it-header-navbar-wrapper .navbar .menu-wrapper .nav-item.dropdown {
+    position: static !important;
+  }
+
+  // Full-width horizontal bar below the navbar
+  .it-header-navbar-wrapper .navbar .menu-wrapper .nav-item.dropdown .dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 50% !important;
+    right: auto !important;
+    width: 100vw !important;
+    transform: translateX(-50%) !important;
+    min-width: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #1a1a1a !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35) !important;
+
+    &::before,
+    &::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    // Flatten Bootstrap grid wrappers
+    > .row {
+      margin: 0 !important;
+
+      > .col-12 {
+        padding: 0 !important;
+      }
+    }
+
+    .link-list-wrapper {
+      padding: 0 !important;
+    }
+
+    // Horizontal flex list
+    .link-list {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      align-items: stretch !important;
+      justify-content: center !important;
+      list-style: none !important;
+      padding: 0 1rem !important;
+      margin: 0 !important;
+      border: none !important;
+
+      li {
+        border: none !important;
+        margin: 0 !important;
+
+        &::before,
+        &::after {
+          display: none !important;
+        }
+      }
+
+      a.list-item,
+      a.dropdown-item {
+        display: flex !important;
+        align-items: center !important;
+        padding: 0.6rem 1.25rem !important;
+        white-space: nowrap !important;
+        font-size: 16px !important; /* tamanho da font do menu horizontal */
+        font-weight: 500 !important;
+        color: #e0e0e0 !important;
+        background: transparent !important;
+        border-bottom: 3px solid transparent !important;
+        border-left: none !important;
+        border-radius: 0 !important;
+        text-decoration: none !important;
+        transition: border-color 0.15s, color 0.15s !important;
+
+        span {
+          color: inherit !important;
+        }
+
+        &:hover,
+        &:focus {
+          background: transparent !important;
+          color: #fff !important;
+          border-bottom-color: #fc4e03 !important;
+          text-decoration: none !important;
+        }
+
+        &.active {
+          color: #fff !important;
+          font-weight: 700 !important;
+          border-bottom-color: #e8610a !important;
+        }
+      }
+    }
+  }
+}
+
 /* Global breadcrumb separator */
 .breadcrumb-item + .breadcrumb-item::before {
   content: ">" !important;
