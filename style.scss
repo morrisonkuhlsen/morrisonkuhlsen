@@ -1456,6 +1456,23 @@ img {
   height: 20px;
   width: auto;
   flex-shrink: 0;
+
+  animation: pulse-logo 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes pulse-logo {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .mk-annbar__text {
