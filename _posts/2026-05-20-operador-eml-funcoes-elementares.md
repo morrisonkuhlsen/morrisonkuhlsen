@@ -4,7 +4,7 @@ image: /assets/images/eml.avif
 title: "O operador EML: de Euler e logaritmos naturais às operações aritméticas"
 categories: [MATEMATICA, COMPUTACAO]
 lang: pt
-tags: [matemática, funções elementares, eml, euler, logaritmo natural, operações aritméticas]
+tags: [News, Matemática]
 ref: operador-eml-operacoes-aritmeticas
 author: dante-bertuzzi
 description: "Entenda a história do número e, do logaritmo natural e do operador EML, definido por $E(x,y)=e^x-ln(y)$. Veja como operações aritméticas básicas podem ser reescritas com blocos EML."

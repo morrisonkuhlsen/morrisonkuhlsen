@@ -4,7 +4,7 @@ image: /assets/images/sorteio.avif
 title: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
-tags: [matemática, probabilidade, mega-sena]
+tags: [Probabilidade]
 ref: porcentagens
 author: dante-bertuzzi
 description: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"

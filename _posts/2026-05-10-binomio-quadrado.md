@@ -4,7 +4,7 @@ image: /assets/images/algebra1.avif
 title: "Binômio ao Quadrado: a prova geométrica de (a+b)² = a² + 2ab + b²"
 categories: [ALGEBRA, MATEMATICA]
 lang: pt
-tags: [matemática, algebra, binômio, identidade]
+tags: [Álgebra]
 ref: binomio-quadrado
 author: dante-bertuzzi
 description: "Entenda geometricamente por que (a+b)² = a² + 2ab + b² usando um gadget interativo com sliders — mova os valores e veja a identidade acontecer em tempo real."

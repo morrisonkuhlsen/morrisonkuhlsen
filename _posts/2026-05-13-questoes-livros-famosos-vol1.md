@@ -5,7 +5,7 @@ image: /assets/images/questbooks.avif
 title: "Questões de Livros Famosos — Vol. 1"
 categories: [ALGEBRA, MATEMATICA, CALCULO, PROBABILIDADE, ESTATISTICA]
 lang: pt
-tags: [probabilidade, questões, exercícios, livros, coeficiente binomial]
+tags: [News, Probabilidade, Estatística]
 ref: questoes-livros-famosos-vol1
 author: dante-bertuzzi
 description: "Três questões clássicas retiradas de livros famosos da matemática, resolvidas passo a passo com explicação completa."

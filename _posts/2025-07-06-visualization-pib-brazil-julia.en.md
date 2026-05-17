@@ -3,7 +3,7 @@ layout: post
 image: /pib.avif
 title: "Data Visualization: Brazil State GDP Map in Julia"
 categories: [DATA VISUALIZATION, JULIA]
-tags: [julia, visualization, data, economics, brazil]
+tags: [Análise de dados]
 lang: en
 ref: pib-brasil-julia
 author: dante-bertuzzi

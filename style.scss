@@ -416,7 +416,7 @@ img {
 
 .dark-blog-title {
   color: #111111;
-  font-size: 2.5rem;
+  font-size: 3.0rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
@@ -433,7 +433,7 @@ img {
   .dark-blog-filter {
     color: #777;
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 1.125rem;
     font-weight: 500;
     padding: 0.2rem 0;
     border-bottom: 2px solid transparent;
@@ -441,7 +441,7 @@ img {
 
     &:hover {
       color: #111;
-      text-decoration: none;
+      text-decoration: underline;
     }
 
     &.active {
@@ -524,7 +524,7 @@ img {
   }
 
   &__title {
-    font-size: 1.75rem;
+    font-size: 2.0rem;
     font-weight: 700;
     line-height: 1.25;
     margin-bottom: 1rem;
@@ -535,7 +535,7 @@ img {
 
       &:hover {
         color: #444;
-        text-decoration: none;
+        text-decoration: underline;
       }
     }
   }

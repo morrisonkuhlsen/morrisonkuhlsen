@@ -4,7 +4,7 @@ image: /assets/images/triangulo-de-pascal.avif
 title: "Triângulo de Pascal: padrões, combinações e identidades algébricas"
 categories: [MATEMATICA, PROBABILIDADE, COMPUTACAO]
 lang: pt
-tags: [triângulo de pascal, coeficientes binomiais, binômio de Newton, combinações, álgebra, probabilidade, matemática interativa]
+tags: [Álgebra]
 ref: triangulo-de-pascal
 author: dante-bertuzzi
 description: "Entenda o Triângulo de Pascal, seus padrões, suas aplicações em álgebra, combinatória e probabilidade, e explore um widget interativo em HTML, CSS e JavaScript com sliders e identidades em LaTeX."

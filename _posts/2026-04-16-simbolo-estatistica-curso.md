@@ -4,7 +4,7 @@ image: /assets/images/simb-est.avif
 title: "O que significa o símbolo do curso de Estatística no Brasil"
 categories: [ESTATÍSTICA, EDUCAÇÃO]
 lang: pt
-tags: [curiosidades, estatística, educação]
+tags: [News]
 ref: simbolo-estatistica-curso
 author: dante-bertuzzi
 description: "Entenda o significado do símbolo da Estatística no Brasil e por que ele usa o Σ maiúsculo e a integral."

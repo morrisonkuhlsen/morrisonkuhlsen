@@ -3,7 +3,7 @@ layout: post
 image: /assets/images/zort.avif
 title: "Teste Z ou Teste t de Student: Qual Usar?"
 categories: [INFERÊNCIA ESTATÍSTICA, TESTE DE HIPÓTESES]
-tags: [teste-z, teste-t, inferência, estatística, julia]
+tags: [Estatística, Probabilidade]
 lang: pt
 ref: z-vs-t-test
 author: dante-bertuzzi

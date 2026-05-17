@@ -3,7 +3,7 @@ layout: post
 image: /assets/images/percentage.avif
 title: "Porcentagem — fórmulas e exemplos resolvidos."
 categories: [MATEMÁTICA, GUIA]
-tags: [matemática, porcentagem, álgebra]
+tags: [Matemática]
 lang: pt
 ref: porcentagens
 author: dante-bertuzzi

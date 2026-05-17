@@ -4,7 +4,7 @@ image: /assets/images/sd.avif
 title: "Desvio padrão explicado sem mistério"
 categories: [ESTATÍSTICA]
 lang: pt
-tags: [desvio padrão, variância, dispersão, estatística descritiva, estatística]
+tags: [Estatística]
 ref: desvio-padrao
 author: dante-bertuzzi
 description: "Entenda o que é o desvio padrão, como calculá-lo passo a passo, a diferença entre a versão populacional e amostral, e por que ele é a medida de dispersão mais usada na estatística."

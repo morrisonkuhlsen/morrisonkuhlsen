@@ -4,7 +4,7 @@ image: /assets/images/lim.avif
 title: "Limites no Cálculo: notação, técnicas e exemplos resolvidos (passo a passo)"
 categories: [CALCULO, MATEMATICA]
 lang: pt
-tags: [matemática, calculo, limites]
+tags: [Cálculo]
 ref: limites-calculo
 author: dante-bertuzzi
 description: "Limites - tendendo ao infinito."
