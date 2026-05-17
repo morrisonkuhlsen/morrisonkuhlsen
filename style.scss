@@ -1707,3 +1707,137 @@ img {
 .mk-corner-tr { top: -2px; right: -2px; }
 .mk-corner-bl { bottom: -2px; left: -2px; }
 .mk-corner-br { bottom: -2px; right: -2px; }
+
+/* =====================================================
+   Search button (mk-search-btn) — style similar to provided example
+   ===================================================== */
+
+.mk-search-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  background: #19191a;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, #0b1f35 8%, transparent);
+  border: none;
+  cursor: pointer;
+  color: lab(65.9269% -.832707 -8.17473);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.mk-search-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(125,211,252,0.08);
+}
+
+.mk-search-icon {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  margin-left: -0.125rem;
+  fill: lab(65.9269% -.832707 -8.17473);
+}
+
+.mk-search-label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: inherit;
+}
+
+.mk-search-kbd {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.mk-kbd {
+  display: inline-block;
+  padding: 0.08rem 0.32rem;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.06);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-size: 0.75rem;
+  color: rgba(55,65,81,0.9);
+}
+
+@media (max-width: 767.98px) {
+  .mk-search-label,
+  .mk-search-kbd {
+    display: none !important;
+  }
+  .mk-search-btn {
+    padding: 0.3rem;
+    gap: 0;
+  }
+}
+
+/* =====================================================
+   Mobile fixes — align Blog link in #menu1 collapse menu
+   ===================================================== */
+
+@media (max-width: 991.98px) {
+  /* Stack menu links vertically and align left in collapsed mobile menu */
+  #menu1 .link-list {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* treat the blog list item as a full-width menu row */
+  #menu1 .link-list > .mk-blog-item {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  #menu1 .link-list > .mk-blog-item > .mk-blog-nav-link {
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* make the inner boxed link span stretch like other links */
+  #menu1 .mk-blog-item .mk-blog-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0.5rem 0.75rem;
+    box-sizing: border-box;
+  }
+
+  #menu1 .mk-blog-item .mk-blog-text {
+    padding-left: 0.5rem;
+    color: #7dd3fc;
+  }
+
+  /* soften background and keep border full-width */
+  #menu1 .mk-blog-item .mk-blog-bg {
+    border-radius: 6px;
+    background: rgba(11, 31, 53, 0.06);
+  }
+
+  /* hide corner markers on small screens to avoid overflow */
+  #menu1 .mk-blog-item .mk-corner {
+    display: none;
+  }
+
+  /* Ensure list items behave like standard menu rows */
+  #menu1 .link-list li {
+    width: 100%;
+  }
+
+  #menu1 .link-list a {
+    display: block !important;
+    padding: 0.6rem 1rem !important;
+    text-align: left !important;
+  }
+}

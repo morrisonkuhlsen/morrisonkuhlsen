@@ -48,11 +48,12 @@ tutte le pagine del sito che:
               </div>
               <!-- Search button -->
               <div class="it-search-wrapper">
-                <a class="search-link rounded-icon" href="#" aria-label="Buscar" id="search-open-btn">
-                  <svg class="icon">
+                <button type="button" id="search-open-btn" class="mk-search-btn" aria-label="{% if page.lang == 'en' %}Search{% else %}Buscar{% endif %}">
+                  <svg class="icon mk-search-icon" aria-hidden="true">
                     <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-search"></use>
                   </svg>
-                </a>
+                  <span class="mk-search-label d-none d-md-inline">Ctrl K</span>
+                </button>
               </div>
             </div>
           </div>
