@@ -1,0 +1,30 @@
+<a id="mk-annbar"
+   class="mk-annbar"
+   href="https://greekalpha.bet/"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="display: none;">
+  <div class="container mk-annbar__inner">
+    <img src="{{ site.baseurl }}/assets/images/favicon-orange.png" alt="{{ site.name }}" class="mk-annbar__logo">
+    <span class="mk-annbar__text">Explore o Alfabeto Grego completo em greekalpha.bet &rarr;</span>
+    <button class="mk-annbar__close" type="button" aria-label="Fechar anúncio">&#x2715;</button>
+  </div>
+</a>
+<script>
+  (function () {
+    var STORAGE_KEY = 'mk-annbar-v1';
+    var bar = document.getElementById('mk-annbar');
+    if (!bar) return;
+    if (localStorage.getItem(STORAGE_KEY) === '1') return;
+    bar.style.display = 'block';
+    var btn = bar.querySelector('.mk-annbar__close');
+    if (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        bar.style.display = 'none';
+        try { localStorage.setItem(STORAGE_KEY, '1'); } catch (_) {}
+      });
+    }
+  })();
+</script>
