@@ -1524,3 +1524,186 @@ img {
     line-height: 1.45;
   }
 }
+
+
+/* =====================================================
+   Blog button — isolado, sem afetar outros links
+   ===================================================== */
+
+#menu1 .link-list > .mk-blog-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+#menu1 .link-list > .mk-blog-item > .mk-blog-nav-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: auto;
+  height: 28px;
+
+  padding: 0;
+  margin: 0;
+
+  line-height: 1;
+  text-decoration: none;
+}
+
+/* Caixa azul */
+#menu1 .mk-blog-item .mk-blog-link {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 50px;
+  height: 24px;
+
+  padding: 0;
+  margin: 0;
+
+  line-height: 1;
+  box-sizing: border-box;
+  overflow: visible;
+
+  color: #7dd3fc;
+  text-decoration: none;
+}
+
+/* Fundo e borda tracejada */
+#menu1 .mk-blog-item .mk-blog-bg {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: transparent;
+  border: 1px dashed #9a8be5;
+
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Texto centralizado dentro da caixa */
+#menu1 .mk-blog-item .mk-blog-text {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+  margin: 0;
+
+  color: #9a8be5;
+  font-size: .889em;
+  font-weight: 700;
+  line-height: 1;
+
+  transform: none;
+}
+
+/* Marcadores dos cantos */
+#menu1 .mk-blog-item .mk-corner {
+  position: absolute;
+  z-index: 3;
+
+  display: block;
+
+  width: 5px;
+  height: 5px;
+
+  fill: #9a8be5;
+  pointer-events: none;
+}
+
+#menu1 .mk-blog-item .mk-corner-tl {
+  top: -3px;
+  left: -3px;
+}
+
+#menu1 .mk-blog-item .mk-corner-tr {
+  top: -3px;
+  right: -3px;
+}
+
+#menu1 .mk-blog-item .mk-corner-bl {
+  bottom: -3px;
+  left: -3px;
+}
+
+#menu1 .mk-blog-item .mk-corner-br {
+  bottom: -3px;
+  right: -3px;
+}
+
+/* Hover só no Blog */
+#menu1 .mk-blog-item > .mk-blog-nav-link:hover .mk-blog-link {
+  transform: none;
+}
+
+#menu1 .mk-blog-item > .mk-blog-nav-link:hover .mk-blog-bg {
+  background: transparent;
+  border-color: #bbaefd;
+}
+
+#menu1 .mk-blog-item > .mk-blog-nav-link:hover .mk-blog-text {
+  color: #bbaefd;
+}
+
+/* =====================================================
+   Blog link — global styles for header and nav
+   ===================================================== */
+
+.mk-blog-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.55rem;
+  min-height: 1.8rem;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #7dd3fc;
+  text-decoration: none;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+.mk-blog-link:hover {
+  transform: translateY(-2px);
+  color: #bae6fd;
+}
+.mk-blog-bg {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed rgba(125, 211, 252, 0.45);
+  background: rgba(11, 31, 53, 0.12);
+  pointer-events: none;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.mk-blog-text {
+  position: relative;
+  z-index: 2;
+}
+.mk-corner {
+  position: absolute;
+  z-index: 3;
+  fill: rgba(125, 211, 252, 0.75);
+  pointer-events: none;
+  width: 5px;
+  height: 5px;
+}
+.mk-corner-tl { top: -2px; left: -2px; }
+.mk-corner-tr { top: -2px; right: -2px; }
+.mk-corner-bl { bottom: -2px; left: -2px; }
+.mk-corner-br { bottom: -2px; right: -2px; }

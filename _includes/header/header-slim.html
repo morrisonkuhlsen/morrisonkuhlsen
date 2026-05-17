@@ -30,7 +30,18 @@
               </a>
               <div class="link-list-wrapper collapse" id="menu1">
                 <ul class="link-list">
-                  <li><a href="{{ blog_url }}">Blog</a></li>
+                  <li class="mk-blog-item">
+                    <a href="{{ blog_url }}" class="mk-blog-nav-link">
+                      <span class="mk-blog-link">
+                        <span class="mk-blog-bg"></span>
+                        <span class="mk-blog-text">Blog</span>
+                        <svg class="mk-corner mk-corner-tl" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                        <svg class="mk-corner mk-corner-tr" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                        <svg class="mk-corner mk-corner-bl" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                        <svg class="mk-corner mk-corner-br" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                      </span>
+                    </a>
+                  </li>
                   <li><a href="https://github.com/morrisonkuhlsen"><svg class="icon icon-sm" aria-hidden="true"><use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-github"></use></svg> Github</a></li>
                   <li class="d-lg-none"><a href="{{ site.baseurl }}/ztable.html">Standard Normal Table</a></li>
                   <li class="d-lg-none"><a href="{{ site.baseurl }}/ttable.html">Student's T Table</a></li>

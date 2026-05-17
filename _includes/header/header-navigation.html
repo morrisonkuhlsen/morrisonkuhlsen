@@ -116,9 +116,22 @@ tutte le pagine del sito che:
                       </li>
                     {% else %}
                       <li class="nav-item">
+                        {% if menu_page.ref == 'blog' %}
+                        <a class="nav-link" href="{{ site.baseurl }}{{ menu_page.permalink }}">
+                          <span class="mk-blog-link">
+                            <span class="mk-blog-bg"></span>
+                            <span class="mk-blog-text">{{ menu_page.title }}</span>
+                            <svg class="mk-corner mk-corner-tl" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                            <svg class="mk-corner mk-corner-tr" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                            <svg class="mk-corner mk-corner-bl" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                            <svg class="mk-corner mk-corner-br" width="5" height="5" viewBox="0 0 5 5"><path d="M2 0h1v2h2v1h-2v2h-1v-2h-2v-1h2z"></path></svg>
+                          </span>
+                        </a>
+                        {% else %}
                         <a class="nav-link" href="{{ site.baseurl }}{{ menu_page.permalink }}">
                           <span>{{ menu_page.title }}</span>
                         </a>
+                        {% endif %}
                       </li>
                     {% endif %}
                   {% endfor %}
