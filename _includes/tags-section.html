@@ -1,8 +1,17 @@
-<section class="py-5" style="background:#f5f6f7">
-  <div class="container">
+<section class="py-5 mk-category-section">
+  <!-- Background animado -->
+  <div class="mk-category-bg" aria-hidden="true">
+    <div id="mkCategorySplitBoard" class="mk-category-split-board"></div>
+  </div>
+
+  <!-- Conteúdo da section -->
+  <div class="container mk-category-content">
     <div class="row justify-content-center text-center">
       <div class="col-12">
-        <h2 class="mb-4 fw-bold" style="color:#17324d">Navegar por categoria</h2>
+        <h2 class="mb-4 fw-bold mk-category-title">
+          Navegar por categoria
+        </h2>
+
         <div class="d-flex flex-wrap justify-content-center mk-tags-container" style="gap:10px 8px">
           {% assign all_tags = site.tags | sort %}
           {% for tag in all_tags %}
@@ -11,30 +20,540 @@
           </a>
           {% endfor %}
         </div>
-        <!-- Button de toggle para mostrar mais tags (aparece apenas se houver mais de 15 tags) -->
-         <!-- <
-        <div class="mt-4 d-flex justify-content-center" id="tags-btn-wrap">
-          <button id="tags-toggle-btn" class="mk-tags-more-btn">
-            <span id="tags-btn-label">Outros filtros</span>
-          </button>
-        </div>-->
       </div>
     </div>
   </div>
 </section>
 
+<style>
+  .mk-category-section {
+    --mk-bg: #f3f6f8;
+    --mk-cell-bg: #edf1f4;
+    --mk-cell-bg-2: #ffffff;
+    --mk-border: rgba(160, 170, 180, 0.36);
+    --mk-border-soft: rgba(190, 198, 206, 0.35);
+
+    --mk-text: rgba(55, 64, 74, 0.9);
+    --mk-text-dim: rgba(120, 130, 140, 0.72);
+    --mk-accent: rgba(75, 85, 96, 0.94);
+    --mk-gold: rgba(35, 45, 55, 0.96);
+
+    --mk-glow-accent: rgba(180, 188, 196, 0.32);
+    --mk-glow-gold: rgba(150, 160, 170, 0.3);
+
+    --mk-flap-w: clamp(25px, 2.12vw, 44px);
+    --mk-flap-h: clamp(36px, 2.85vw, 58px);
+    --mk-gap-x: clamp(2px, 0.18vw, 3px);
+    --mk-gap-y: clamp(7px, 0.85vw, 12px);
+    --mk-font-size: clamp(20px, 1.68vw, 34px);
+
+    --mk-cols: 41;
+    --mk-rows: 7;
+
+    position: relative;
+    min-height: 340px;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 25% 45%, rgba(255, 255, 255, 0.95), transparent 36%),
+      radial-gradient(circle at 70% 55%, rgba(220, 226, 232, 0.65), transparent 42%),
+      linear-gradient(180deg, #ffffff 0%, #f7f9fb 48%, #edf1f4 100%);
+    border: 0;
+    isolation: isolate;
+  }
+
+  .mk-category-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.24),
+        rgba(245, 247, 249, 0.42)
+      );
+    pointer-events: none;
+  }
+
+  .mk-category-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: grid;
+    place-items: center;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .mk-category-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .mk-category-title {
+    color: #26323f !important;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.95),
+      0 0 18px rgba(150, 160, 170, 0.36);
+  }
+
+  .mk-category-split-board {
+    display: grid;
+    grid-template-columns: repeat(var(--mk-cols), var(--mk-flap-w));
+    grid-template-rows: repeat(var(--mk-rows), var(--mk-flap-h));
+    gap: var(--mk-gap-y) var(--mk-gap-x);
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
+    transform: scale(1.08);
+  }
+
+  .mk-category-flap {
+    position: relative;
+    width: var(--mk-flap-w);
+    height: var(--mk-flap-h);
+    border-radius: 4px;
+    perspective: 420px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.95), transparent 48%),
+      linear-gradient(180deg, var(--mk-cell-bg-2), var(--mk-cell-bg));
+    border: 1px solid var(--mk-border);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(150, 160, 170, 0.2),
+      0 0 0 1px rgba(220, 225, 230, 0.58),
+      0 0 16px rgba(160, 170, 180, 0.18);
+    overflow: hidden;
+  }
+
+  .mk-category-flap::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 50%;
+    height: 1px;
+    background: rgba(150, 160, 170, 0.3);
+    box-shadow:
+      0 -1px 0 rgba(255,255,255,0.85),
+      0 1px 0 rgba(120,130,140,0.12);
+    z-index: 20;
+  }
+
+  .mk-category-flap::after {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 3px;
+    border: 1px solid var(--mk-border-soft);
+    pointer-events: none;
+    z-index: 25;
+  }
+
+  .mk-category-half {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff, #e9edf1);
+    color: var(--mk-text);
+    font-size: var(--mk-font-size);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+    text-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.96),
+      0 0 10px rgba(150, 160, 170, 0.22);
+    backface-visibility: hidden;
+  }
+
+  .mk-category-half span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: var(--mk-flap-h);
+    display: grid;
+    place-items: center;
+  }
+
+  .mk-category-flap.dim .mk-category-half {
+    color: var(--mk-text-dim);
+    font-weight: 500;
+  }
+
+  .mk-category-flap.accent .mk-category-half {
+    color: var(--mk-accent);
+    text-shadow:
+      0 1px 0 rgba(255,255,255,0.95),
+      0 0 12px var(--mk-glow-accent);
+  }
+
+  .mk-category-flap.title .mk-category-half {
+    color: var(--mk-gold);
+    text-shadow:
+      0 1px 0 rgba(255,255,255,0.95),
+      0 0 13px var(--mk-glow-gold);
+  }
+
+  .mk-category-top {
+    top: 0;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .mk-category-bottom {
+    bottom: 0;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .mk-category-top span {
+    top: 0;
+  }
+
+  .mk-category-bottom span {
+    bottom: 0;
+  }
+
+  .mk-category-flip-top {
+    z-index: 10;
+    transform-origin: bottom;
+    animation: mkCategoryFlipTop 0.23s ease-in forwards;
+  }
+
+  .mk-category-flip-bottom {
+    z-index: 11;
+    transform-origin: top;
+    transform: rotateX(90deg);
+    animation: mkCategoryFlipBottom 0.23s ease-out 0.22s forwards;
+  }
+
+  @keyframes mkCategoryFlipTop {
+    from {
+      transform: rotateX(0deg);
+      filter: brightness(1);
+    }
+
+    to {
+      transform: rotateX(-90deg);
+      filter: brightness(0.88);
+    }
+  }
+
+  @keyframes mkCategoryFlipBottom {
+    from {
+      transform: rotateX(90deg);
+      filter: brightness(0.88);
+    }
+
+    to {
+      transform: rotateX(0deg);
+      filter: brightness(1);
+    }
+  }
+
+  .mk-category-section .mk-tag {
+    border: 1px solid rgba(150, 160, 170, 0.42);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.94), rgba(242, 245, 248, 0.9));
+    color: #33404d;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.96),
+      inset 0 -1px 0 rgba(170, 180, 190, 0.18),
+      0 8px 22px rgba(120, 130, 140, 0.12);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition:
+      transform 0.18s ease,
+      box-shadow 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease,
+      background 0.18s ease;
+  }
+
+  .mk-category-section .mk-tag:hover,
+  .mk-category-section .mk-tag:focus {
+    transform: none;
+    border-color: #0066cc !important;
+    color: #ffffff !important;
+    background: linear-gradient(180deg, #0b6fda, #0066cc) !important;
+    box-shadow: none;
+  }
+
+  .mk-category-section .mk-tag:hover .chip-label,
+  .mk-category-section .mk-tag:focus .chip-label {
+    color: #ffffff !important;
+  }
+
+  .mk-category-section .chip-label {
+    color: inherit;
+  }
+
+  @media (max-width: 760px) {
+    .mk-category-section {
+      min-height: 300px;
+      --mk-flap-w: clamp(18px, 2.35vw, 28px);
+      --mk-flap-h: clamp(30px, 4vw, 38px);
+      --mk-font-size: clamp(15px, 2.25vw, 22px);
+      --mk-gap-x: 2px;
+      --mk-gap-y: 7px;
+    }
+
+    .mk-category-split-board {
+      transform: scale(1.22);
+    }
+  }
+</style>
+
 <script>
 (function () {
-  var extras = document.querySelectorAll('.mk-tag-extra');
-  var btn    = document.getElementById('tags-toggle-btn');
-  var label  = document.getElementById('tags-btn-label');
-  var wrap   = document.getElementById('tags-btn-wrap');
-  if (!extras.length) { wrap.style.display = 'none'; return; }
-  var open = false;
-  btn.addEventListener('click', function () {
-    open = !open;
-    extras.forEach(function (el) { el.style.display = open ? 'inline-flex' : 'none'; });
-    label.textContent = open ? 'Mostrar menos' : 'Outros filtros';
-  });
+  const COLS = 41;
+  const ROWS = 7;
+
+  const CHARS = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.:-=+()%|/^∩∪";
+
+  const board = document.getElementById("mkCategorySplitBoard");
+  if (!board) return;
+
+  board.innerHTML = "";
+
+  const layout = [
+    {
+      row: 0,
+      label: "PROBABILIDADE",
+      labelCol: 3,
+      value: "CATEGORIAS",
+      valueCol: 25,
+      labelClass: "title",
+      valueClass: "title",
+      valueWidth: 12
+    },
+    {
+      row: 1,
+      key: "pA",
+      label: "P(A)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    },
+    {
+      row: 2,
+      key: "pB",
+      label: "P(B)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    },
+    {
+      row: 3,
+      key: "pAB",
+      label: "P(A∩B)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    },
+    {
+      row: 4,
+      key: "pUnion",
+      label: "P(A∪B)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    },
+    {
+      row: 5,
+      key: "pAgivenB",
+      label: "P(A|B)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    },
+    {
+      row: 6,
+      key: "pAc",
+      label: "P(A^C)",
+      labelCol: 5,
+      valueCol: 23,
+      valueWidth: 15
+    }
+  ];
+
+  const cells = [];
+
+  function randomChar() {
+    return CHARS[Math.floor(Math.random() * CHARS.length)];
+  }
+
+  function randomBetween(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function clamp(number, min, max) {
+    return Math.min(Math.max(number, min), max);
+  }
+
+  function formatProbability(value) {
+    return `${value.toFixed(3)} ${(value * 100).toFixed(1)}%`;
+  }
+
+  function generateScenario() {
+    const pA = randomBetween(0.26, 0.88);
+    const pB = randomBetween(0.22, 0.82);
+
+    const minIntersection = Math.max(0.02, pA + pB - 1);
+    const maxIntersection = Math.min(pA, pB) - 0.025;
+    const safeMax = Math.max(minIntersection + 0.01, maxIntersection);
+
+    const pAB = clamp(
+      randomBetween(minIntersection, safeMax),
+      minIntersection,
+      Math.min(pA, pB)
+    );
+
+    const pUnion = pA + pB - pAB;
+    const pAgivenB = pAB / pB;
+    const pAc = 1 - pA;
+
+    return {
+      pA: formatProbability(pA),
+      pB: formatProbability(pB),
+      pAB: formatProbability(pAB),
+      pUnion: formatProbability(pUnion),
+      pAgivenB: formatProbability(pAgivenB),
+      pAc: formatProbability(pAc)
+    };
+  }
+
+  function makeHalf(type, char, extraClass = "") {
+    const div = document.createElement("div");
+    div.className = `mk-category-half mk-category-${type} ${extraClass}`;
+
+    const span = document.createElement("span");
+    span.textContent = char;
+
+    div.appendChild(span);
+    return div;
+  }
+
+  function createFlap(initialChar = " ") {
+    const flap = document.createElement("div");
+    flap.className = "mk-category-flap";
+    flap.dataset.char = initialChar;
+    flap.appendChild(makeHalf("top", initialChar));
+    flap.appendChild(makeHalf("bottom", initialChar));
+    return flap;
+  }
+
+  function setStaticChar(flap, char) {
+    flap.innerHTML = "";
+    flap.dataset.char = char;
+    flap.appendChild(makeHalf("top", char));
+    flap.appendChild(makeHalf("bottom", char));
+  }
+
+  function flipTo(flap, nextChar, delay = 0) {
+    const currentChar = flap.dataset.char || " ";
+
+    if (currentChar === nextChar) return;
+
+    setTimeout(() => {
+      flap.innerHTML = "";
+
+      flap.appendChild(makeHalf("top", currentChar));
+      flap.appendChild(makeHalf("bottom", nextChar));
+      flap.appendChild(makeHalf("top", currentChar, "mk-category-flip-top"));
+      flap.appendChild(makeHalf("bottom", nextChar, "mk-category-flip-bottom"));
+
+      flap.dataset.char = nextChar;
+
+      setTimeout(() => {
+        setStaticChar(flap, nextChar);
+      }, 540);
+    }, delay);
+  }
+
+  function setCellClasses(cell, className = "") {
+    cell.el.classList.toggle("dim", className.includes("dim"));
+    cell.el.classList.toggle("accent", className.includes("accent"));
+    cell.el.classList.toggle("title", className.includes("title"));
+  }
+
+  function writeText(row, col, text, options = {}) {
+    const width = options.width || text.length;
+    const paddedText = text.padEnd(width, " ");
+    const className = options.className || "";
+
+    [...paddedText].forEach((char, i) => {
+      const cell = cells[row]?.[col + i];
+      if (!cell) return;
+
+      cell.target = char;
+      setCellClasses(cell, className);
+    });
+  }
+
+  function writeDashboardTargets(scenario) {
+    layout.forEach(item => {
+      writeText(item.row, item.labelCol, item.label, {
+        className: item.labelClass || "dim"
+      });
+
+      const value = item.key ? scenario[item.key] : item.value;
+
+      writeText(item.row, item.valueCol, value, {
+        width: item.valueWidth,
+        className: item.valueClass || "accent"
+      });
+    });
+  }
+
+  function animateTargets(baseDelay = 0, onlyChanged = false) {
+    cells.flat().forEach((cell, index) => {
+      const target = cell.target || " ";
+      const current = cell.el.dataset.char || " ";
+
+      if (onlyChanged && current === target) return;
+
+      const delay = baseDelay + index * 4 + Math.random() * 110;
+      flipTo(cell.el, target, delay);
+    });
+  }
+
+  function introAnimation() {
+    cells.flat().forEach((cell, index) => {
+      const finalChar = cell.target || " ";
+      if (finalChar === " ") return;
+
+      setStaticChar(cell.el, randomChar());
+
+      const delay = 120 + index * 6 + Math.random() * 210;
+      flipTo(cell.el, finalChar, delay);
+    });
+  }
+
+  function updateDashboard() {
+    const scenario = generateScenario();
+    writeDashboardTargets(scenario);
+    animateTargets(0, true);
+  }
+
+  for (let r = 0; r < ROWS; r++) {
+    cells[r] = [];
+
+    for (let c = 0; c < COLS; c++) {
+      const flap = createFlap(" ");
+      board.appendChild(flap);
+
+      cells[r][c] = {
+        el: flap,
+        target: " "
+      };
+    }
+  }
+
+  writeDashboardTargets(generateScenario());
+  introAnimation();
+
+  setInterval(updateDashboard, 3600);
 })();
 </script>
