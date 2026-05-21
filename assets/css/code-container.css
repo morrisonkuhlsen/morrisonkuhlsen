@@ -1,100 +1,244 @@
-/* Estilos para o container de código */
+/* =========================
+   CODE CONTAINER — STYLE IGUAL AO PRINT
+   ========================= */
+
 .code-container {
-  background: #2d2d2d;
-  border-radius: 8px;
+  background: #1d1e22;
+  border-radius: 4px;
   overflow: hidden;
   margin: 1.5em 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
+  border: none;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.32),
+    0 4px 12px rgba(0, 0, 0, 0.22);
 }
 
-/* Cabeçalho do container de código */
+/* Cabeçalho */
 .code-header {
-  background: #1e1e1e;
-  padding: 0.1em 1em;
-  border-bottom: 1px solid #444;
+  background: transparent;
+  height: 38px;
+  padding: 0 12px;
+  border-bottom: transparent;
   display: flex;
   align-items: center;
-  min-height: 30px;
+  justify-content: space-between;
 }
 
-/* Idioma do código */
+/* Linguagem */
 .code-lang {
-  font-weight: 500;
-  color: #9cdcfe;
-  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
-  font-size: 0.9em;
-  text-transform: lowercase;
+  color: #d8dee9;
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-/* Conteúdo do código */
+/* Símbolo do Julia antes do nome */
+.code-lang::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #cb3c33;
+  box-shadow:
+    -6px 8px 0 #389826,
+     6px 8px 0 #9558b2;
+  display: inline-block;
+  flex-shrink: 0;
+
+  /* move um pouco para a direita e mantém a altura */
+  transform: translate(5px, -4px);
+
+  margin-right: 8px;
+}
+
+/* Botão da direita */
+.copy-button {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  font-size: 0;
+  color: transparent;
+  line-height: 0;
+}
+
+.copy-button * {
+  display: none !important;
+}
+
+/* Estado normal: setinha */
+.copy-button::before {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid #4b5563;
+  border-bottom: 2px solid #4b5563;
+  transform: rotate(45deg);
+  top: 4px;
+  left: 6px;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.copy-button::after {
+  content: none;
+}
+
+.copy-button:hover {
+  background: transparent;
+}
+
+.copy-button:hover::before {
+  border-color: #7f8794;
+}
+
+.copy-button.copied::before,
+.copy-button.copy-success::before,
+.copy-button.is-copied::before {
+  opacity: 0;
+}
+
+.copy-button.copied::after,
+.copy-button.copy-success::after,
+.copy-button.is-copied::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #5eead4;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Área do código */
 .code-content {
-  padding: 1em;
+  background: #1d1e22;
+  padding: 0;
   overflow-x: auto;
 }
 
-/* Estilo para o bloco de código */
+/* Bloco pre */
 .code-content pre {
   margin: 0;
-  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
-  line-height: 1.5;
-  font-size: 0.9em;
-  color: #d4d4d4;
+  padding: 14px 12px 70px 0;
+  background: transparent;
+  color: #d6deeb;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  min-width: max-content;
 }
 
-/* Container de saída */
-.code-output {
-  background: #1e1e1e;
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 1em 0;
-  padding: 1em;
-  border-left: 4px solid #9cdcfe;
-  color: #d4d4d4;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* Código */
+.code-content code {
+  background: transparent;
+  color: #d6deeb;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  white-space: pre;
+  display: block;
+  counter-reset: code-line;
 }
 
-/* Título da saída */
-.code-output-header {
-  color: #9cdcfe;
-  margin-bottom: 0.5em;
-  font-size: 0.9em;
+/* Cada linha do código */
+.code-line {
+  display: block;
+  position: relative;
+  min-height: 1.65em;
+  padding-left: 58px;
+  padding-right: 12px;
+  white-space: pre;
+  counter-increment: code-line;
 }
 
-/* Valor numérico destacado */
-.code-number {
-  color: #4ec9b0;
+/* Número da linha */
+.code-line::before {
+  content: counter(code-line);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 42px;
+  padding-right: 12px;
+  text-align: right;
+  color: #4b5563;
+  user-select: none;
+  pointer-events: none;
 }
 
-/* Botão de cópia */
-.copy-button {
-  background: none;
-  color: #9cdcfe;
+/* Remove estilos padrões que podem atrapalhar */
+.code-content pre,
+.code-content code {
   border: none;
-  padding: 0.25em 0.5em;
-  font-size: 0.8em;
-  cursor: pointer;
-  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', monospace;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: 4px;
+  box-shadow: none;
+  border-radius: 0;
 }
 
-/* Efeito hover no botão de cópia */
-.copy-button:hover {
-  color: #4ec9b0;
-  background: none;
+/* =========================
+   CORES DA SINTAXE
+   ========================= */
+
+.code-comment {
+  color: #6b7280;
+  font-style: normal;
 }
 
-/* Ícone do botão de cópia */
-.copy-button i {
-  transition: all 0.2s ease;
+.code-keyword {
+  color: #c792ea;
 }
 
-/* Efeito hover no ícone */
-.copy-button:hover i {
-  transform: translateY(0);
-  color: #4ec9b0;
+.code-function {
+  color: #82aaff;
+}
+
+.code-builtin {
+  color: #82aaff;
+}
+
+.code-number {
+  color: #f78c6c;
+}
+
+.code-string {
+  color: #c3e88d;
+}
+
+.code-operator {
+  color: #89ddff;
+}
+
+.code-paren {
+  color: #d6deeb;
+}
+
+.code-module {
+  color: #ffcb6b;
+}
+
+.code-variable {
+  color: #d6deeb;
+}
+
+/* HTML */
+.code-tag {
+  color: #f2c97d;
+}
+
+.code-attr {
+  color: #ffcb6b;
+}
+
+.code-value {
+  color: #c3e88d;
 }

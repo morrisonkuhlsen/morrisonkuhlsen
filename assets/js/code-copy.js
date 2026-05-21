@@ -1,56 +1,96 @@
-// Função para copiar o código
-function copyCode(button) {
-  // Encontra o bloco de código mais próximo
-  const codeBlock = button.closest('.code-container').querySelector('code');
-  const codeText = codeBlock.textContent;
-  
-  // Cria um elemento temporário para copiar o texto
-  const tempElement = document.createElement('textarea');
-  tempElement.value = codeText;
-  document.body.appendChild(tempElement);
-  
-  // Seleciona e copia o texto
-  tempElement.select();
-  document.execCommand('copy');
-  
-  // Remove o elemento temporário
-  document.body.removeChild(tempElement);
-  
-  // Feedback visual
-  const icon = button.querySelector('i');
-  const originalHTML = button.innerHTML;
-  const originalColor = button.style.color;
-  
-  // Muda o ícone e a cor
-  button.innerHTML = '<i class="bi bi-check" style="margin-right: 4px;"></i>Copiado!';
-  button.style.color = '#4ec9b0';
-  
-  // Volta ao estado original após 2 segundos
-  setTimeout(() => {
-    button.innerHTML = originalHTML;
-    button.style.color = originalColor;
-  }, 2000);
+// =========================
+// CODE COPY + LINE NUMBERS
+// =========================
+
+// Adiciona numeração automática nas linhas dos blocos de código
+function addCodeLineNumbers() {
+  document.querySelectorAll(".code-content code").forEach(function (code) {
+    if (code.dataset.linesReady === "true") return;
+
+    // Guarda o texto original para copiar depois sem números de linha
+    const originalText = code.textContent.replace(/\n$/, "");
+    code.dataset.rawCode = originalText;
+
+    // Mantém o HTML com as cores da sintaxe
+    const html = code.innerHTML.replace(/\n$/, "");
+    const lines = html.split("\n");
+
+    code.innerHTML = lines
+      .map(function (line) {
+        return `<span class="code-line">${line || "&nbsp;"}</span>`;
+      })
+      .join("");
+
+    code.dataset.linesReady = "true";
+  });
 }
 
-// Adiciona o evento de clique a todos os botões de cópia quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-  // Adiciona o CSS para o efeito de hover
-  const style = document.createElement('style');
-  style.textContent = `
-    .copy-button:hover {
-      color: #4ec9b0 !important;
-      background: none !important;
-    }
-    .copy-button i {
-      transition: color 0.2s ease;
-    }
-  `;
-  document.head.appendChild(style);
-  
-  // Adiciona os eventos de clique
-  const copyButtons = document.querySelectorAll('.copy-button');
-  copyButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
+// Pega o texto real do código, sem os números das linhas
+function getCodeText(codeBlock) {
+  if (codeBlock.dataset.rawCode) {
+    return codeBlock.dataset.rawCode;
+  }
+
+  const lines = codeBlock.querySelectorAll(".code-line");
+
+  if (lines.length > 0) {
+    return Array.from(lines)
+      .map(function (line) {
+        const text = line.textContent.replace(/\u00a0/g, "");
+        return text;
+      })
+      .join("\n");
+  }
+
+  return codeBlock.textContent;
+}
+
+// Função para copiar o código
+function copyCode(button) {
+  const codeBlock = button.closest(".code-container").querySelector("code");
+  const codeText = getCodeText(codeBlock);
+
+  function showCopiedFeedback() {
+    button.classList.add("is-copied");
+    button.setAttribute("aria-label", "Copiado!");
+
+    setTimeout(function () {
+      button.classList.remove("is-copied");
+      button.setAttribute("aria-label", "Copiar código");
+    }, 2000);
+  }
+
+  // Método moderno
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(codeText).then(showCopiedFeedback);
+    return;
+  }
+
+  // Método antigo/fallback
+  const tempElement = document.createElement("textarea");
+  tempElement.value = codeText;
+  tempElement.setAttribute("readonly", "");
+  tempElement.style.position = "fixed";
+  tempElement.style.left = "-9999px";
+  tempElement.style.top = "-9999px";
+
+  document.body.appendChild(tempElement);
+  tempElement.select();
+  document.execCommand("copy");
+  document.body.removeChild(tempElement);
+
+  showCopiedFeedback();
+}
+
+// Carrega tudo quando a página abrir
+document.addEventListener("DOMContentLoaded", function () {
+  addCodeLineNumbers();
+
+  document.querySelectorAll(".copy-button").forEach(function (button) {
+    // Evita duplicar evento caso o botão já tenha onclick no HTML
+    if (button.hasAttribute("onclick")) return;
+
+    button.addEventListener("click", function (e) {
       e.preventDefault();
       copyCode(this);
     });
