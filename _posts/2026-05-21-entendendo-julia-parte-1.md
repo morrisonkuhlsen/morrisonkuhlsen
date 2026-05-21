@@ -32,9 +32,9 @@ Julia tenta juntar os dois mundos:
 
 > uma sintaxe clara e próxima da matemática, mas com desempenho alto.
 
-<div class="mk-box mk-box-info">
-  <strong>Ideia central:</strong><br>
-  Julia foi criada para permitir que você escreva código científico de forma simples, expressiva e rápida.
+<div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">
+  <h4 style="margin-top: 0;">Pergunta</h4>
+  <p>Será que é possível começar com duas ideias antigas — o número $e$ e o logaritmo natural — e construir, a partir delas, uma espécie de calculadora minimalista capaz de representar operações aritméticas básicas?</p>
 </div>
 
 <style>
@@ -103,35 +103,75 @@ Julia tenta juntar os dois mundos:
 /* Tabelas HTML */
 .mk-julia-post .mk-table-wrap {
   overflow-x: auto;
-  margin: 1.4rem 0;
-  border-radius: 14px;
-  border: 1px solid var(--mk-card-border);
-  box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
+  margin: 1em 0;
+}
+
+.mk-julia-post table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.95rem;
+}
+
+.mk-julia-post table thead tr {
+  background-color: #17324d;
+  color: #ffffff;
+}
+
+.mk-julia-post table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.mk-julia-post table td {
+  padding: 10px 16px;
+  color: #17324d;
+}
+
+.mk-julia-post table tbody tr:nth-child(odd) {
+  background-color: #f5f6f7;
+}
+
+.mk-julia-post table tbody tr:nth-child(even) {
+  background-color: #ffffff;
 }
 
 .mk-julia-post .mk-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  font-size: .96rem;
+  margin: 1em 0;
+  font-size: 0.95rem;
+}
+
+.mk-julia-post .mk-table thead tr {
+  background-color: #17324d;
+  color: #ffffff;
 }
 
 .mk-julia-post .mk-table th {
-  background: #172033;
-  color: #f8fafc;
-  text-align: left;
-  padding: .85rem;
-  border: 1px solid #26334d;
+  padding: 14px 18px;
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .mk-julia-post .mk-table td {
-  padding: .85rem;
-  border: 1px solid #e5e7eb;
-  vertical-align: top;
+  padding: 12px 18px;
+  text-align: center;
+  color: #17324d;
 }
 
-.mk-julia-post .mk-table tr:nth-child(even) td {
-  background: #f8fafc;
+.mk-julia-post .mk-table tbody tr:nth-child(odd) {
+  background-color: #f5f6f7;
+}
+
+.mk-julia-post .mk-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.mk-julia-post .mk-table tbody tr:last-child td {
+  font-weight: 700;
 }
 
 /* Cartão de metadados SEO */
@@ -180,16 +220,6 @@ Julia tenta juntar os dois mundos:
 }
 
 /* Modo escuro */
-.dark-mode .mk-julia-post .mk-table,
-.dark-mode .mk-julia-post .mk-table td {
-  background: #161616;
-  color: #f3f4f6;
-  border-color: #333;
-}
-
-.dark-mode .mk-julia-post .mk-table tr:nth-child(even) td {
-  background: #1f1f1f;
-}
 
 .dark-mode .mk-julia-post .mk-box-note {
   background: #2a2115;
