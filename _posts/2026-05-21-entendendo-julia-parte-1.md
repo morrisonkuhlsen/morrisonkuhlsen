@@ -3,7 +3,7 @@ layout: post
 image: /assets/images/julia1.avif
 title: "O que é Julia e primeiros comandos"
 categories: [JULIA, PROGRAMAÇÃO CIENTÍFICA]
-tags: [Julia, Programação, Estatística, Ciência de Dados, Programação Científica]
+tags: [Análise de dados]
 lang: pt
 ref: julia-parte-1
 author: dante-bertuzzi
@@ -11,6 +11,31 @@ mathjax: true
 description: "Aprenda o que é a linguagem Julia, por que ela é usada em estatística e programação científica, e escreva seus primeiros comandos passo a passo."
 slug: julia-parte-1-o-que-e-julia-primeiros-comandos
 ---
+
+## 1. Antes dos primeiros comandos: o que torna Julia diferente?
+
+---
+
+Antes de escrever nosso primeiro comando, é importante entender uma coisa:
+
+> Julia não é apenas “mais uma linguagem de programação”.  
+> Ela foi pensada especialmente para matemática, estatística, ciência de dados, simulações e computação científica.
+
+Isso significa que muitas escolhas da linguagem foram feitas para facilitar a vida de quem trabalha com números, fórmulas, tabelas, vetores, matrizes, gráficos e modelos matemáticos.
+
+Em outras linguagens, às vezes precisamos escolher entre:
+
+- código fácil de escrever;
+- código rápido de executar.
+
+Julia tenta juntar os dois mundos:
+
+> uma sintaxe clara e próxima da matemática, mas com desempenho alto.
+
+<div class="mk-box mk-box-info">
+  <strong>Ideia central:</strong><br>
+  Julia foi criada para permitir que você escreva código científico de forma simples, expressiva e rápida.
+</div>
 
 <style>
 /* ==========================================================
@@ -189,31 +214,6 @@ slug: julia-parte-1-o-que-e-julia-primeiros-comandos
 </style>
 
 <div class="mk-julia-post" markdown="1">
-
-## 1. Antes dos primeiros comandos: o que torna Julia diferente?
-
----
-
-Antes de escrever nosso primeiro comando, é importante entender uma coisa:
-
-> Julia não é apenas “mais uma linguagem de programação”.  
-> Ela foi pensada especialmente para matemática, estatística, ciência de dados, simulações e computação científica.
-
-Isso significa que muitas escolhas da linguagem foram feitas para facilitar a vida de quem trabalha com números, fórmulas, tabelas, vetores, matrizes, gráficos e modelos matemáticos.
-
-Em outras linguagens, às vezes precisamos escolher entre:
-
-- código fácil de escrever;
-- código rápido de executar.
-
-Julia tenta juntar os dois mundos:
-
-> uma sintaxe clara e próxima da matemática, mas com desempenho alto.
-
-<div class="mk-box mk-box-info">
-  <strong>Ideia central:</strong><br>
-  Julia foi criada para permitir que você escreva código científico de forma simples, expressiva e rápida.
-</div>
 
 ---
 
