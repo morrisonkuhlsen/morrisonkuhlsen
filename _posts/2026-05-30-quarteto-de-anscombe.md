@@ -318,14 +318,6 @@ O **Quarteto de Anscombe** é um dos exemplos mais famosos da Estatística porqu
 > estatísticas resumidas podem ser iguais, mas os gráficos podem contar histórias completamente diferentes.
 
 Ele é formado por quatro conjuntos de dados. Cada conjunto possui pares de valores $(x, y)$. Quando calculamos média, variância, correlação de Pearson e reta de regressão, os resultados são praticamente os mesmos. Porém, quando fazemos os gráficos de dispersão, percebemos que os padrões são muito diferentes.
-<!--
-<figure style="text-align:center; margin: 2em auto; max-width: 780px;">
-  <img src="/assets/images/quarteto-anscombe.avif" alt="Quarteto de Anscombe com quatro gráficos de dispersão" style="width:100%; border-radius:8px;" />
-  <figcaption style="margin-top:0.75em; font-size:0.88rem; color:#555;">
-    Quatro conjuntos com resumos estatísticos muito parecidos, mas estruturas visuais diferentes.
-  </figcaption>
-</figure>
--->
 
 <div class="mk-box mk-box-info">
   <strong>Pergunta central:</strong><br>
