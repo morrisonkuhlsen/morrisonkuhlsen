@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Correção para População Finita — Interativo</title>
+  <meta name="description" content="Correção para População Finita: O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/correcao-populacao-finita.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -17,7 +19,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Correção para População Finita</h1>
+      <h1 id="title" class="formula-title">Correção para População Finita</h1>
 
       <div class="formula-wrap" aria-label="Fórmula de Correção para População Finita interativa">
         <span class="part corrected-n" data-part="corrected_n" tabindex="0" title="Tamanho da Amostra Corrigido"></span>
@@ -42,6 +44,22 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Tamanho da Amostra Corrigido (n)</dt>
+        <dd>O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra necessário.</dd>
+        <dt>Tamanho da Amostra Inicial (n₀)</dt>
+        <dd>O tamanho da amostra calculado com a fórmula de Cochran (ou outra), que assume uma população infinita.</dd>
+        <dt>Fator de Correção</dt>
+        <dd>O início do denominador que ajusta o tamanho da amostra com base no tamanho da população.</dd>
+        <dt>Amostra Inicial Menos Um (n₀ - 1)</dt>
+        <dd>Parte do cálculo do fator de correção.</dd>
+        <dt>Tamanho da População (N)</dt>
+        <dd>O número total de indivíduos na população finita que você está estudando.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

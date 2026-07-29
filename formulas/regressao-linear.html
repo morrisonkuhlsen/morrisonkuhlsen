@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Regressão Linear — Interativo</title>
+  <meta name="description" content="Regressão Linear Simples: O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/regressao-linear.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Regressão Linear Simples</h1>
+      <h1 id="title" class="formula-title">Regressão Linear Simples</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Regressão Linear Simples interativa">
         <span class="part y-hat" data-part="y_hat" tabindex="0" title="Valor Previsto de Y"></span>
@@ -27,6 +29,20 @@
         <span class="part x-variable" data-part="x_variable" tabindex="0" title="Variável Independente"></span>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Valor Previsto (ŷ)</dt>
+        <dd>O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).</dd>
+        <dt>Intercepto (β₀)</dt>
+        <dd>O valor previsto de Y quando a variável independente (x) é igual a zero. É o ponto onde a linha de regressão cruza o eixo Y.</dd>
+        <dt>Coeficiente Angular (β₁)</dt>
+        <dd>Mede a mudança no valor previsto de Y para cada aumento de uma unidade em x. Representa a inclinação da linha de regressão.</dd>
+        <dt>Variável Independente (x)</dt>
+        <dd>A variável que é usada para prever ou explicar a variação na variável dependente (Y).</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

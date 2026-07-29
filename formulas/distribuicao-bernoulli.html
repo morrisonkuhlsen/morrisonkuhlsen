@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Distribuição de Bernoulli — Interativo</title>
+  <meta name="description" content="Distribuição de Bernoulli: A probabilidade de obter exatamente &#x27;k&#x27; em uma única tentativa de Bernoulli, onde k pode ser 0 (falha) ou 1 (sucesso).">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-bernoulli.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição de Bernoulli</h1>
+      <h1 id="title" class="formula-title">Distribuição de Bernoulli</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Distribuição de Bernoulli interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
         <span class="part p-x-k-bernoulli" data-part="p_x_k_bernoulli" tabindex="0" title="Probabilidade de k" style="white-space: nowrap;"></span>
@@ -26,6 +28,18 @@
         <span class="part q-power-1k" data-part="q_power_1k" tabindex="0" title="Probabilidade de falha elevada a (1-k)" style="white-space: nowrap;"></span>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Probabilidade de k</dt>
+        <dd>A probabilidade de obter exatamente &#x27;k&#x27; em uma única tentativa de Bernoulli, onde k pode ser 0 (falha) ou 1 (sucesso).</dd>
+        <dt>Probabilidade de Sucesso (p^k)</dt>
+        <dd>A probabilidade &#x27;p&#x27; de sucesso elevada à potência &#x27;k&#x27;. Quando k=1, resulta em p (sucesso); quando k=0, resulta em 1.</dd>
+        <dt>Probabilidade de Falha ((1-p)^(1-k))</dt>
+        <dd>A probabilidade de falha (1-p) elevada à potência (1-k). Quando k=0, resulta em (1-p) (falha); quando k=1, resulta em 1.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

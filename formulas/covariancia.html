@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Covariância — Interativo</title>
+  <meta name="description" content="Covariância: Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/covariancia.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Covariância</h1>
+      <h1 id="title" class="formula-title">Covariância</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Covariância interativa" style="flex-wrap: nowrap;">
         <span class="part cov-xy" data-part="cov_xy" tabindex="0" title="Covariância entre X e Y"></span>
@@ -34,6 +36,22 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Covariância</dt>
+        <dd>Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.</dd>
+        <dt>Somatório</dt>
+        <dd>Soma os produtos dos desvios para todas as &#x27;n&#x27; observações do conjunto de dados.</dd>
+        <dt>Desvio de X</dt>
+        <dd>A diferença entre cada valor de X (xi) e a média de X (μx). Mostra o quanto cada ponto se afasta da média.</dd>
+        <dt>Desvio de Y</dt>
+        <dd>A diferença entre cada valor de Y (yi) e a média de Y (μy). Mostra o quanto cada ponto se afasta da média.</dd>
+        <dt>Número de Observações (n)</dt>
+        <dd>O número total de pares de observações no conjunto de dados. Normaliza a soma para obter a média dos produtos dos desvios.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Alocação de Neyman — Interativo</title>
+  <meta name="description" content="Alocação de Neyman: O tamanho da amostra a ser retirado de um estrato específico &#x27;h&#x27;. É o valor que a fórmula calcula.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/neyman-allocation.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -17,7 +19,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Alocação de Neyman</h1>
+      <h1 id="title" class="formula-title">Alocação de Neyman</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Alocação de Neyman interativa">
         <span class="part sample-size-h" data-part="sample_size_h" tabindex="0" title="Amostra do Estrato h"></span>
@@ -37,6 +39,22 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Amostra do Estrato h (nₕ)</dt>
+        <dd>O tamanho da amostra a ser retirado de um estrato específico &#x27;h&#x27;. É o valor que a fórmula calcula.</dd>
+        <dt>Tamanho Total da Amostra (n)</dt>
+        <dd>O número total de indivíduos que comporão a amostra final, somando as amostras de todos os estratos.</dd>
+        <dt>População do Estrato h (Nₕ)</dt>
+        <dd>O número total de indivíduos no estrato &#x27;h&#x27; específico da população.</dd>
+        <dt>Desvio Padrão do Estrato h (σₕ)</dt>
+        <dd>O desvio padrão da variável de interesse dentro do estrato &#x27;h&#x27;. Estratos com maior variabilidade recebem uma amostra maior.</dd>
+        <dt>Soma Ponderada (Σ Nₕσₕ)</dt>
+        <dd>A soma do produto do tamanho da população (Nₕ) pelo desvio padrão (σₕ) para todos os estratos. Funciona como um fator de normalização.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

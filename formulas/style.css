@@ -214,6 +214,46 @@ html, body {
   margin: 8px 0;
 }
 
+.formula-title {
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  text-align: center;
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.formula-static-info {
+  align-self: stretch;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.formula-static-info h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-dark);
+  margin: 0 0 .75rem;
+}
+
+.formula-static-info dl {
+  margin: 0;
+  display: grid;
+  gap: .6rem;
+}
+
+.formula-static-info dt {
+  font-weight: 600;
+  color: #c0c0c0;
+}
+
+.formula-static-info dd {
+  margin: 0 0 .6rem;
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
 .part {
   display: inline-block;
   cursor: pointer;

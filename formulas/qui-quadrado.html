@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Teste Qui-Quadrado — Interativo</title>
+  <meta name="description" content="Teste Qui-Quadrado (χ²): A estatística de teste. Um valor alto indica uma grande discrepância entre os dados observados e os esperados.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/qui-quadrado.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Teste Qui-Quadrado (χ²)</h1>
+      <h1 id="title" class="formula-title">Teste Qui-Quadrado (χ²)</h1>
 
       <div class="formula-wrap" aria-label="Fórmula do Teste Qui-Quadrado interativa">
         <span class="part chi-squared" data-part="chi_squared" tabindex="0" title="Estatística Qui-Quadrado"></span>
@@ -33,6 +35,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Qui-Quadrado (χ²)</dt>
+        <dd>A estatística de teste. Um valor alto indica uma grande discrepância entre os dados observados e os esperados.</dd>
+        <dt>Somatório</dt>
+        <dd>Soma os resultados do cálculo para todas as categorias ou grupos do seu conjunto de dados.</dd>
+        <dt>Diferença Quadrática</dt>
+        <dd>A diferença entre a frequência observada (Oᵢ) e a frequência esperada (Eᵢ), elevada ao quadrado para evitar valores negativos.</dd>
+        <dt>Frequência Esperada (Eᵢ)</dt>
+        <dd>A frequência que seria esperada em uma categoria se a hipótese nula fosse verdadeira. Normaliza a diferença quadrática.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

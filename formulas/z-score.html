@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Z-Score — Interativo</title>
+  <meta name="description" content="Z-Score: Mede a distância de um ponto de dados da média, em termos de desvios padrão. Um Z-score positivo indica que o ponto está acima da média, e um...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/z-score.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -17,7 +19,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Z-Score</h1>
+      <h1 id="title" class="formula-title">Z-Score</h1>
 
       <div class="formula-wrap" aria-label="Fórmula do Z-Score interativa">
         <span class="part z-score" data-part="z_score" tabindex="0" title="Z-Score"></span>
@@ -35,6 +37,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Z-Score (Z)</dt>
+        <dd>Mede a distância de um ponto de dados da média, em termos de desvios padrão. Um Z-score positivo indica que o ponto está acima da média, e um negativo, abaixo.</dd>
+        <dt>Valor da Observação (X)</dt>
+        <dd>O ponto de dados específico ou valor que você está avaliando.</dd>
+        <dt>Média da População (μ)</dt>
+        <dd>A média de todos os pontos de dados na população da qual a amostra foi retirada.</dd>
+        <dt>Desvio Padrão da População (σ)</dt>
+        <dd>Mede a dispersão ou variabilidade dos dados na população. É a raiz quadrada da variância.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

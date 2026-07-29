@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Intervalo de Confiança — Interativo</title>
+  <meta name="description" content="Intervalo de Confiança: Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/intervalo-confianca.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -15,7 +17,7 @@
   <a href="home.html" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Intervalo de Confiança</h1>
+      <h1 id="title" class="formula-title">Intervalo de Confiança</h1>
 
       <div class="formula-wrap" aria-label="Fórmula do Intervalo de Confiança interativa">
         <span class="part ic" data-part="ic" tabindex="0" title="Intervalo de Confiança"></span>
@@ -35,6 +37,24 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Intervalo de Confiança (IC)</dt>
+        <dd>Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro populacional. Representa a incerteza na estimativa.</dd>
+        <dt>Média Amostral (x̄)</dt>
+        <dd>A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional.</dd>
+        <dt>Mais ou Menos (±)</dt>
+        <dd>Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico.</dd>
+        <dt>Valor Crítico Z (z_{α/2})</dt>
+        <dd>O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58.</dd>
+        <dt>Desvio Padrão (σ)</dt>
+        <dd>O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados.</dd>
+        <dt>Raiz Quadrada de n (√n)</dt>
+        <dd>O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

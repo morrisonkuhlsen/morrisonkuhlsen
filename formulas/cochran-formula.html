@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fórmula de Cochran — Interativo</title>
+  <meta name="description" content="Fórmula de Cochran: O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/cochran-formula.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -17,7 +19,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Fórmula de Cochran</h1>
+      <h1 id="title" class="formula-title">Fórmula de Cochran</h1>
 
       <div class="formula-wrap" aria-label="Fórmula de Cochran interativa">
         <span class="part sample-size-cochran" data-part="sample_size_cochran" tabindex="0" title="Tamanho da Amostra"></span>
@@ -37,6 +39,22 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Tamanho da Amostra (n₀)</dt>
+        <dd>O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita.</dd>
+        <dt>Z-score ao Quadrado (Z²)</dt>
+        <dd>O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96.</dd>
+        <dt>Proporção Estimada (p̂)</dt>
+        <dd>A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível.</dd>
+        <dt>Complemento da Proporção (q̂)</dt>
+        <dd>É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica.</dd>
+        <dt>Margem de Erro ao Quadrado (e²)</dt>
+        <dd>O nível de precisão desejado, também chamado de erro amostral. Representa a &#x27;janela&#x27; em torno da estimativa (ex: ±5%).</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

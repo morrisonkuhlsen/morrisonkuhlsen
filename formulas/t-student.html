@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Teste t de Student — Interativo</title>
+  <meta name="description" content="Teste t de Student: A estatística de teste que mede quantos erros padrão a média amostral está distante da média hipotética. Usada quando o desvio...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/t-student.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -15,7 +17,7 @@
   <a href="home.html" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Teste t de Student</h1>
+      <h1 id="title" class="formula-title">Teste t de Student</h1>
 
       <div class="formula-wrap" aria-label="Fórmula do Teste t de Student interativa">
         <span class="part t-statistic" data-part="t_statistic" tabindex="0" title="Estatística t"></span>
@@ -35,6 +37,22 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Estatística t</dt>
+        <dd>A estatística de teste que mede quantos erros padrão a média amostral está distante da média hipotética. Usada quando o desvio padrão populacional é desconhecido e a amostra é pequena.</dd>
+        <dt>Média Amostral (x̄)</dt>
+        <dd>A média calculada a partir da amostra. Representa a estimativa do parâmetro populacional baseada nos dados observados.</dd>
+        <dt>Média Hipotética (μ₀)</dt>
+        <dd>O valor da média sob a hipótese nula (H₀). É o valor que estamos testando se a média populacional é igual a ele.</dd>
+        <dt>Desvio Padrão Amostral (s)</dt>
+        <dd>O desvio padrão calculado a partir da amostra. É usado como estimativa do desvio padrão populacional quando este é desconhecido.</dd>
+        <dt>Raiz Quadrada de n (√n)</dt>
+        <dd>O tamanho da amostra sob raiz quadrada. Junto com o desvio padrão amostral, forma o erro padrão da média (s/√n), que mede a variabilidade da média amostral.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

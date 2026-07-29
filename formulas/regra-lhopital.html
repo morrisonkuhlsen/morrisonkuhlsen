@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale-1" />
   <title>Regra de L'Hôpital — Interativo</title>
+  <meta name="description" content="Regra de L&#x27;Hôpital: A regra se aplica quando o limite de uma fração f(x)/g(x) resulta em uma forma indeterminada, como 0/0 ou ±∞/±∞.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/regra-lhopital.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Regra de L'Hôpital</h1>
+      <h1 id="title" class="formula-title">Regra de L'Hôpital</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Regra de L'Hôpital interativa" style="flex-wrap: nowrap; align-items: center; gap: 1.5rem;">
         <span class="part condition" data-part="condition" tabindex="0" title="Condição Indeterminada" style="white-space: nowrap;"></span>
@@ -35,6 +37,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Forma Indeterminada</dt>
+        <dd>A regra se aplica quando o limite de uma fração f(x)/g(x) resulta em uma forma indeterminada, como 0/0 ou ±∞/±∞.</dd>
+        <dt>Limite</dt>
+        <dd>O limite da nova fração é calculado à medida que &#x27;x&#x27; se aproxima do mesmo ponto &#x27;c&#x27;.</dd>
+        <dt>Derivada do Numerador</dt>
+        <dd>Calcula-se a derivada da função do numerador original, f(x), resultando em f&#x27;(x).</dd>
+        <dt>Derivada do Denominador</dt>
+        <dd>Calcula-se a derivada da função do denominador original, g(x), resultando em g&#x27;(x). Note que não é a derivada do quociente.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

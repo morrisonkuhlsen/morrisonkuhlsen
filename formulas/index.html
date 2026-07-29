@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Teorema de Bayes — Interativo</title>
+  <meta name="description" content="Teorema de Bayes: Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -15,7 +17,7 @@
   <a href="home.html" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Teorema de Bayes</h1>
+      <h1 id="title" class="formula-title">Teorema de Bayes</h1>
 
       <div class="formula-wrap" aria-label="Fórmula de Bayes interativa">
         <span class="part posterior" data-part="posterior" tabindex="0" title="Posterior: P(A|B)"></span>
@@ -33,6 +35,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Posterior</dt>
+        <dd>Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.</dd>
+        <dt>Likelihood</dt>
+        <dd>Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B.</dd>
+        <dt>Prior</dt>
+        <dd>Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições.</dd>
+        <dt>Marginal (Evidência)</dt>
+        <dd>Probabilidade de observar B sob todos os cenários; normaliza a equação. Calculado usando a Lei da Probabilidade Total: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

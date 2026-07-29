@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Distribuição de Poisson — Interativo</title>
+  <meta name="description" content="Distribuição de Poisson: A probabilidade de que o evento ocorra exatamente &#x27;k&#x27; vezes em um intervalo.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-poisson.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição de Poisson</h1>
+      <h1 id="title" class="formula-title">Distribuição de Poisson</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Distribuição de Poisson interativa">
         <span class="part p-k" data-part="p_k" tabindex="0" title="Probabilidade de k ocorrências"></span>
@@ -34,6 +36,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Probabilidade de k Ocorrências</dt>
+        <dd>A probabilidade de que o evento ocorra exatamente &#x27;k&#x27; vezes em um intervalo.</dd>
+        <dt>Taxa Média (λ) Elevada a k</dt>
+        <dd>Lambda (λ) é a taxa média de ocorrências do evento. Este termo ajusta a taxa para o número específico de ocorrências &#x27;k&#x27;.</dd>
+        <dt>Exponencial da Taxa Média Negativa</dt>
+        <dd>O número de Euler (e) elevado a -λ. Este termo representa a probabilidade de nenhuma ocorrência, servindo como base para o cálculo.</dd>
+        <dt>Fatorial de k</dt>
+        <dd>O fatorial do número de ocorrências &#x27;k&#x27;. Este termo normaliza a distribuição, ajustando para as diferentes maneiras que as &#x27;k&#x27; ocorrências podem ser arranjadas.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Coeficiente Binomial — Interativo</title>
+  <meta name="description" content="Coeficiente Binomial: Representa o número de maneiras de escolher &#x27;k&#x27; elementos de um conjunto de &#x27;n&#x27; elementos, sem considerar a...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/coeficiente-binomial.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Coeficiente Binomial</h1>
+      <h1 id="title" class="formula-title">Coeficiente Binomial</h1>
 
       <div class="formula-wrap" aria-label="Fórmula do Coeficiente Binomial interativa">
         <span class="part binom" data-part="binom" tabindex="0" title="Coeficiente Binomial: C(n, k)"></span>
@@ -34,6 +36,20 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Coeficiente Binomial</dt>
+        <dd>Representa o número de maneiras de escolher &#x27;k&#x27; elementos de um conjunto de &#x27;n&#x27; elementos, sem considerar a ordem.</dd>
+        <dt>Total de Itens (n!)</dt>
+        <dd>O fatorial do número total de itens disponíveis no conjunto a partir do qual estamos escolhendo.</dd>
+        <dt>Itens a Escolher (k!)</dt>
+        <dd>O fatorial do número de itens que queremos escolher do conjunto total &#x27;n&#x27;.</dd>
+        <dt>Itens Não Escolhidos ((n-k)!)</dt>
+        <dd>O fatorial do número de itens que restam no conjunto após a escolha de &#x27;k&#x27; itens.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

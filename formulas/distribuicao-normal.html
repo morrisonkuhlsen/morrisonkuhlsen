@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Distribuição Normal — Interativo</title>
+  <meta name="description" content="Distribuição Normal (Gaussiana): Representa a probabilidade relativa de uma variável aleatória contínua assumir um valor específico &#x27;x&#x27;.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-normal.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição Normal (Gaussiana)</h1>
+      <h1 id="title" class="formula-title">Distribuição Normal (Gaussiana)</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Distribuição Normal interativa" style="flex-wrap: nowrap;">
         <span class="part f-x" data-part="f_x" tabindex="0" title="Função de Densidade de Probabilidade"></span>
@@ -25,6 +27,18 @@
         <span class="part e-power" data-part="e_power" tabindex="0" title="Função Exponencial"></span>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Função de Densidade (f(x))</dt>
+        <dd>Representa a probabilidade relativa de uma variável aleatória contínua assumir um valor específico &#x27;x&#x27;.</dd>
+        <dt>Coeficiente de Normalização</dt>
+        <dd>Este termo garante que a área total sob a curva da distribuição seja igual a 1. É composto pelo desvio padrão (σ) e por 2π.</dd>
+        <dt>Função Exponencial</dt>
+        <dd>O coração da distribuição, onde &#x27;e&#x27; é a base do logaritmo natural. O expoente depende da distância do valor &#x27;x&#x27; em relação à média (μ), medida em desvios padrão (σ).</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Probabilidade Condicional — Interativo</title>
+  <meta name="description" content="Probabilidade Condicional: A probabilidade de A ocorrer dado que B já ocorreu. Representa como a ocorrência de B afeta a probabilidade de A.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/probabilidade-condicional.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -15,7 +17,7 @@
   <a href="home.html" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Probabilidade Condicional</h1>
+      <h1 id="title" class="formula-title">Probabilidade Condicional</h1>
 
       <div class="formula-wrap" aria-label="Fórmula de Probabilidade Condicional interativa">
         <span class="part p-a-given-b" data-part="p_a_given_b" tabindex="0" title="Probabilidade Condicional: P(A|B)"></span>
@@ -31,6 +33,18 @@
         </div>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Probabilidade Condicional</dt>
+        <dd>A probabilidade de A ocorrer dado que B já ocorreu. Representa como a ocorrência de B afeta a probabilidade de A.</dd>
+        <dt>Probabilidade da Interseção</dt>
+        <dd>A probabilidade de que tanto A quanto B ocorram simultaneamente. Representa a sobreposição entre os eventos A e B.</dd>
+        <dt>Probabilidade de B</dt>
+        <dd>A probabilidade do evento B ocorrer. Serve como normalizador na fórmula, garantindo que a probabilidade condicional esteja entre 0 e 1.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>

@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Distribuição Binomial — Interativo</title>
+  <meta name="description" content="Distribuição Binomial: A probabilidade de obter exatamente &#x27;k&#x27; sucessos em &#x27;n&#x27; tentativas independentes, onde cada tentativa tem...">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-binomial.html">
 
   <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -16,7 +18,7 @@
 
   <div class="wrap">
     <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" style="position:absolute;left:-9999px;">Distribuição Binomial</h1>
+      <h1 id="title" class="formula-title">Distribuição Binomial</h1>
 
       <div class="formula-wrap" aria-label="Fórmula da Distribuição Binomial interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
         <span class="part p-x-k" data-part="p_x_k" tabindex="0" title="Probabilidade de k sucessos" style="white-space: nowrap;"></span>
@@ -28,6 +30,20 @@
         <span class="part q-power-nk" data-part="q_power_nk" tabindex="0" title="Probabilidade de falha elevada a (n-k)" style="white-space: nowrap;"></span>
       </div>
 
+
+      <section class="formula-static-info">
+        <h2>O que significa cada termo</h2>
+        <dl>
+        <dt>Probabilidade de k Sucessos</dt>
+        <dd>A probabilidade de obter exatamente &#x27;k&#x27; sucessos em &#x27;n&#x27; tentativas independentes, onde cada tentativa tem probabilidade &#x27;p&#x27; de sucesso.</dd>
+        <dt>Coeficiente Binomial</dt>
+        <dd>Representa o número de maneiras diferentes de escolher &#x27;k&#x27; sucessos de &#x27;n&#x27; tentativas. Calculado como C(n, k) = n! / (k! · (n-k)!).</dd>
+        <dt>Probabilidade de Sucesso (p^k)</dt>
+        <dd>A probabilidade &#x27;p&#x27; de sucesso em cada tentativa, elevada à potência &#x27;k&#x27;. Representa a probabilidade de obter &#x27;k&#x27; sucessos consecutivos.</dd>
+        <dt>Probabilidade de Falha ((1-p)^(n-k))</dt>
+        <dd>A probabilidade de falha (1-p) elevada à potência (n-k). Representa a probabilidade de obter (n-k) falhas nas tentativas restantes.</dd>
+        </dl>
+      </section>
       <div id="modal-container"></div>
     </main>
   </div>
