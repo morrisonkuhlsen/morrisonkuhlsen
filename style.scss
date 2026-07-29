@@ -65,6 +65,12 @@
   opacity: 1 !important;
 }
 
+/* GitHub icon in slim header — align with the "Github" label */
+.it-header-slim-wrapper .link-list a[href="https://github.com/morrisonkuhlsen"] .icon {
+  position: relative;
+  top: -2px;
+}
+
 /* Post tags chip */
 .chip-post {
   border-color: #000 !important;
