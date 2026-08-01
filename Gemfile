@@ -12,3 +12,4 @@ gem 'rexml', '>= 3.4.2'
 # Não é necessário adicionar plugin para livereload, pois já está incorporado no Jekyll desde a versão 3.7.0
 gem "csv"
 gem "logger"
+gem "base64"
