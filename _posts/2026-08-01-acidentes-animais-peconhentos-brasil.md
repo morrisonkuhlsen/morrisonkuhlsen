@@ -17,7 +17,7 @@ Escorpião pica muito mais do que mata; serpente mata muito mais do que pica. Us
   <img src="/assets/images/ranking_peconhentos_2023.png" alt="Gráfico de barras comparando notificações e letalidade por tipo de animal peçonhento no Brasil em 2023" style="max-width: 900px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
 </figure>
 
-Toda a análise abaixo foi feita com o pacote [`MicroSUS.jl`](https://github.com/JuliaHealth/MicroSUS.jl), que baixa e lê os microdados do Sinan direto do DATASUS, e `CairoMakie` para as figuras. São cinco scripts encadeados: ranking, sazonalidade nacional, sazonalidade por região, clima e correlações. Neste post mostro os quatro gráficos que eles produzem e como interpreto cada um.
+Toda a análise abaixo foi feita com o pacote [`MicroSUS.jl`](https://github.com/dantebertuzzi/MicroSUS.jl), que baixa e lê os microdados do Sinan direto do DATASUS, e `CairoMakie` para as figuras. São cinco scripts encadeados: ranking, sazonalidade nacional, sazonalidade por região, clima e correlações. Neste post mostro os quatro gráficos que eles produzem e como interpreto cada um.
 
 ## 1) A fonte: Sinan — Animais Peçonhentos
 
@@ -133,7 +133,7 @@ O próprio script marca esse gráfico como **descritivo, não inferencial**: sã
 ## Referências
 
 **Pacotes Julia:**
-- [MicroSUS.jl](https://github.com/JuliaHealth/MicroSUS.jl) — leitura de microdados do DATASUS direto em Julia.
+- [MicroSUS.jl](https://github.com/dantebertuzzi/MicroSUS.jl) — leitura de microdados do DATASUS direto em Julia.
 - [CairoMakie.jl](https://docs.makie.org/stable/) — biblioteca de visualização.
 
 **Fontes dos dados:**

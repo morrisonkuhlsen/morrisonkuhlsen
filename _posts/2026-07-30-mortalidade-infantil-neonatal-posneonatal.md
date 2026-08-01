@@ -19,7 +19,7 @@ Um óbito no terceiro dia de vida e um óbito no oitavo mês entram na mesma est
 
 A **taxa de mortalidade infantil** — a proporção de nascidos vivos que morrem antes de completar um ano — é um dos indicadores mais usados para medir a qualidade de um sistema de saúde. Mas o número sozinho esconde histórias muito diferentes: um óbito no **terceiro dia** de vida costuma apontar para problemas de gestação, parto e cuidado neonatal; um óbito no **oitavo mês** costuma apontar para infecções, saneamento e acesso continuado a serviços de saúde.
 
-Foi para separar essas duas histórias que fiz o gráfico acima em **Julia**, usando o pacote [`MicroSUS.jl`](https://github.com/JuliaHealth/MicroSUS.jl) para baixar e ler diretamente os microdados do SUS. Neste post, mostro o código completo e como interpretar o resultado.
+Foi para separar essas duas histórias que fiz o gráfico acima em **Julia**, usando o pacote [`MicroSUS.jl`](https://github.com/dantebertuzzi/MicroSUS.jl) para baixar e ler diretamente os microdados do SUS. Neste post, mostro o código completo e como interpretar o resultado.
 
 ## 1) Neonatal e pós-neonatal: por que separar
 
@@ -37,7 +37,7 @@ Os dados vêm de dois sistemas do Ministério da Saúde:
 - **SIM** (Sistema de Informações sobre Mortalidade): um registro por óbito, com a idade da criança ao morrer.
 - **SINASC** (Sistema de Informações sobre Nascidos Vivos): um registro por nascimento vivo, usado como denominador.
 
-Em vez de baixar manualmente os arquivos `.dbc` do DATASUS, usei o [`MicroSUS.jl`](https://github.com/JuliaHealth/MicroSUS.jl), que expõe duas funções simples:
+Em vez de baixar manualmente os arquivos `.dbc` do DATASUS, usei o [`MicroSUS.jl`](https://github.com/dantebertuzzi/MicroSUS.jl), que expõe duas funções simples:
 
 <div class="code-container">
   <div class="code-header">
@@ -292,7 +292,7 @@ O script completo — configuração, cores, dicionários de UF, classificação
 ## Referências
 
 **Pacotes Julia:**
-- [MicroSUS.jl](https://github.com/JuliaHealth/MicroSUS.jl) — leitura de microdados do DATASUS direto em Julia.
+- [MicroSUS.jl](https://github.com/dantebertuzzi/MicroSUS.jl) — leitura de microdados do DATASUS direto em Julia.
 - [CairoMakie.jl](https://docs.makie.org/stable/) — biblioteca de visualização.
 
 **Fontes dos dados:**
