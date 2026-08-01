@@ -7,8 +7,9 @@ permalink: /404.html
 ---
 
 <div class="container text-center mk-404">
+  <img src="{{ site.baseurl }}/assets/images/404_dice.png" alt="Um dado triste, chorando" class="mk-404-img">
   <div class="mk-404-code">404</div>
-  <h1 class="mk-404-title">Essa página picou e sumiu</h1>
+  <h1 class="mk-404-title">A probabilidade de encontrar esta página era zero</h1>
   <p class="mk-404-text">
     O link pode estar quebrado ou a página foi movida.<br>
     Aperte <kbd>Ctrl</kbd> + <kbd>K</kbd> para buscar, ou volte por um dos links abaixo.
@@ -21,17 +22,22 @@ permalink: /404.html
 
 <style>
   .mk-404 {
-    padding: 4.5rem 1rem 5rem;
+    padding: 3rem 1rem 5rem;
     max-width: 640px;
   }
+  .mk-404-img {
+    width: 160px;
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
   .mk-404-code {
-    font-size: 6rem;
+    font-size: 2.5rem;
     font-weight: 800;
     line-height: 1;
     color: #0066cc;
   }
   .mk-404-title {
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     font-size: 1.75rem;
   }
   .mk-404-text {
