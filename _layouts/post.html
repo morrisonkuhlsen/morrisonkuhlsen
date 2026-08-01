@@ -142,15 +142,33 @@ layout: default
     ];
     $("#mk-ad-img").attr("src", adImgs[Math.floor(Math.random() * adImgs.length)]);
 
-    // Alternar entre os dois slots de ad a cada 9 segundos
+    // Alternar entre os dois slots de ad a cada 9 segundos.
+    // Guarda global evita um segundo setInterval caso este bloco rode mais de
+    // uma vez na mesma página; o índice "atual" é lido do DOM (não de uma
+    // variável separada) para nunca dessincronizar do que está realmente
+    // visível. .stop(true, true) descarta qualquer animação pendente antes
+    // de iniciar a próxima — sem isso, chamadas acumuladas (ex.: aba em
+    // segundo plano atrasando o setInterval) podiam deixar os dois cards
+    // com display:block ao mesmo tempo.
     var mkAdSlots = ["#mk-ad-slot-mk", "#mk-ad-slot-ga"];
-    var mkAdCurrent = 0;
-    setInterval(function () {
-      var $cur = $(mkAdSlots[mkAdCurrent]);
-      mkAdCurrent = (mkAdCurrent + 1) % mkAdSlots.length;
-      var $nxt = $(mkAdSlots[mkAdCurrent]);
-      $cur.fadeOut(400, function () { $nxt.fadeIn(400); });
-    }, 9000);
+    if (!window.mkAdCycleStarted) {
+      window.mkAdCycleStarted = true;
+      setInterval(function () {
+        if (document.hidden) return;
+
+        var curIdx = 0;
+        for (var i = 0; i < mkAdSlots.length; i++) {
+          if ($(mkAdSlots[i]).is(":visible")) { curIdx = i; break; }
+        }
+        var nxtIdx = (curIdx + 1) % mkAdSlots.length;
+        var $cur = $(mkAdSlots[curIdx]);
+        var $nxt = $(mkAdSlots[nxtIdx]);
+
+        $cur.stop(true, true).fadeOut(400, function () {
+          $nxt.stop(true, true).fadeIn(400);
+        });
+      }, 9000);
+    }
 
     // Fechar o ad widget
     $("#mk-ad-close").on("click", function () {
