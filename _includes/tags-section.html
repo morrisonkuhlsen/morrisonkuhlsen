@@ -2,12 +2,14 @@
   <div class="container">
     <div class="row justify-content-center text-center">
       <div class="col-12">
-        <h2 class="mb-4 fw-bold" style="color:#17324d">Navegar por categoria</h2>
+        <h2 class="mb-4 fw-bold" style="color:#17324d">{{ site.data.t.browse-by-category[page.lang] }}</h2>
         <div class="d-flex flex-wrap justify-content-center mk-tags-container" style="gap:10px 8px">
-          {% assign all_tags = site.tags | sort %}
+          {% assign blog_path = "/blog" %}
+          {% if page.lang == "en" %}{% assign blog_path = "/en/blog" %}{% endif %}
+          {% assign all_tags = site.posts | where: "lang", page.lang | map: "tags" | flatten | uniq | sort %}
           {% for tag in all_tags %}
-          <a href="{{ site.baseurl }}/blog?tag={{ tag[0] | slugify }}" class="chip chip-simple chip-lg chip-primary mk-tag{% if forloop.index > 14 %} mk-tag-extra{% endif %}">
-            <span class="chip-label">{{ tag[0] }}</span>
+          <a href="{{ site.baseurl }}{{ blog_path }}?tag={{ tag | slugify }}" class="chip chip-simple chip-lg chip-primary mk-tag{% if forloop.index > 14 %} mk-tag-extra{% endif %}">
+            <span class="chip-label">{{ tag }}</span>
           </a>
           {% endfor %}
         </div>

@@ -17,3 +17,5 @@ preload_hero: true
 {% include posts.html %}
 
 </main>
+
+{% include tags-section.html %}

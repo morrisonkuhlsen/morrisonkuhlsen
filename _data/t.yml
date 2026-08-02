@@ -104,6 +104,9 @@ portuguese-version:
 english-version:
   en: "English version"
   pt: "versão inglesa"
+browse-by-category:
+  en: "Browse by category"
+  pt: "Navegar por categoria"
 cookie-policy-info:
   en: "This site uses technical, analytics and third-party cookies <br>By continuing to browse, you accept the use of cookies."
   pt: "Este site utiliza cookies técnicos, analíticos e de terceiros.<br>Proseguindo na navegação, você aceita o uso de cookies."
