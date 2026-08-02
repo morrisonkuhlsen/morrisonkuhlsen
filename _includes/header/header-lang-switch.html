@@ -1,4 +1,5 @@
-{% assign pages_in_other_langs = site.pages | where: "ref", page.ref | sort: 'lang' | reverse %}
+{% assign all_pages_and_posts = site.pages | concat: site.posts %}
+{% assign pages_in_other_langs = all_pages_and_posts | where: "ref", page.ref | sort: 'lang' | reverse %}
 
 {% if pages_in_other_langs.size > 0 %}
 <div class="nav-item dropdown">
