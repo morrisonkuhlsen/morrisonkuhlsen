@@ -6,19 +6,111 @@ lang: en
 ref: blog
 ---
 
-<div class="container my-4">
-  <div class="row">
-    <div class="col-12">
-      <h1>Blog</h1>
-      <p class="lead">Articles, tutorials, and news about statistics and data science.</p>
+<style>
+.en-blog-hero {
+  background: #17324d;
+  padding: 2.5rem 0;
+  margin-bottom: 2rem;
+}
+.en-blog-hero-icon {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.en-blog-hero-title {
+  color: #fff;
+  font-weight: 700;
+  margin: 0;
+}
+.en-blog-hero-subtitle {
+  color: rgba(255,255,255,0.75);
+  margin: 0.25rem 0 0;
+}
+.en-blog-filters-title {
+  font-weight: 700;
+  font-size: 1.35rem;
+  color: #17324d;
+}
+.en-blog-field-label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #17324d;
+  margin-bottom: 0.35rem;
+}
+.en-blog-search-wrap {
+  position: relative;
+}
+.en-blog-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  fill: #5b6f82;
+  pointer-events: none;
+}
+.en-blog-search-wrap .form-control {
+  padding-left: 2.25rem;
+}
+.en-blog-count-heading {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #17324d;
+}
+.en-blog-count-divider {
+  margin: 0.75rem 0 1.75rem;
+}
+.en-blog-card-divider {
+  margin: 1rem 0;
+}
+.en-blog-readmore {
+  font-weight: 700;
+  color: #0066cc;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.en-blog-readmore:hover {
+  color: #004d99;
+  text-decoration: underline;
+}
+.en-blog-readmore-icon {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+</style>
+
+<div class="en-blog-hero">
+  <div class="container">
+    <div class="d-flex align-items-center gap-3">
+      <div class="en-blog-hero-icon">
+        <svg class="icon" style="fill:#fff;width:28px;height:28px">
+          <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-file"></use>
+        </svg>
+      </div>
+      <div>
+        <h1 class="en-blog-hero-title">Blog</h1>
+        <p class="en-blog-hero-subtitle">Articles, tutorials, and news about statistics and data science.</p>
+      </div>
     </div>
   </div>
+</div>
 
+<div class="container my-4">
   <div class="row">
     <!-- Sidebar filters -->
     <div class="col-lg-3 mb-4">
       <div class="en-blog-filters-panel">
-        <h5 class="mb-3">Filter by</h5>
+        <h5 class="en-blog-filters-title mb-3">Filter by</h5>
         <hr>
         <h6 class="text-uppercase text-muted mb-3" style="font-size:0.85rem;letter-spacing:.03em">Category</h6>
         {% assign all_tags = site.posts | where: "lang", page.lang | map: "tags" | flatten | uniq | sort %}
@@ -33,11 +125,18 @@ ref: blog
 
     <!-- Results -->
     <div class="col-lg-9">
-      <div class="row align-items-center mb-3 g-2">
+      <div class="row align-items-end mb-4 g-3">
         <div class="col-md-8">
-          <input type="search" class="form-control" id="en-blog-search" placeholder="Search by title">
+          <label for="en-blog-search" class="en-blog-field-label">Search</label>
+          <div class="en-blog-search-wrap">
+            <svg class="icon en-blog-search-icon">
+              <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-search"></use>
+            </svg>
+            <input type="search" class="form-control" id="en-blog-search" placeholder="Search the whole blog">
+          </div>
         </div>
         <div class="col-md-4">
+          <label for="en-blog-sort" class="en-blog-field-label">Sort by</label>
           <select class="form-select" id="en-blog-sort">
             <option value="recent">Most recent</option>
             <option value="oldest">Oldest first</option>
@@ -45,7 +144,8 @@ ref: blog
         </div>
       </div>
 
-      <p class="text-muted"><strong id="en-blog-count">0</strong> posts found</p>
+      <h2 class="en-blog-count-heading"><strong id="en-blog-count">0</strong> posts found</h2>
+      <hr class="en-blog-count-divider">
 
       <div class="row g-4" id="en-blog-posts">
         {% assign lang_posts = site.posts | where: "lang", page.lang %}
@@ -71,7 +171,14 @@ ref: blog
                   <h3 class="h5 card-title mb-3">
                     <a href="{{ post.url | relative_url }}" class="post-card-title">{{ post.title }}</a>
                   </h3>
-                  <p class="card-text text-muted">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+                  <p class="card-text text-muted flex-grow-1">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+                  <hr class="en-blog-card-divider">
+                  <a href="{{ post.url | relative_url }}" class="en-blog-readmore">
+                    Read more
+                    <svg class="icon en-blog-readmore-icon">
+                      <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
+                    </svg>
+                  </a>
                 </div>
               </div>
             </div>
