@@ -6,40 +6,146 @@ lang: en
 ref: blog
 ---
 
-<div class="container my-4">
-  <div class="row">
-    <div class="col-12">
-      <h1>Blog</h1>
-      <p class="lead">Articles, tutorials, and news about statistics and data science.</p>
-      
-      <div class="row">
-        {% for post in site.posts %}
-          {% if post.lang == page.lang %}
-            <div class="col-md-6 col-lg-4 mb-4">
-              <div class="card-wrapper">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">
-                      <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
-                    </h5>
-                    <p class="card-text">{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
-                    <div class="card-text">
-                      <small class="text-muted">
-                        {{ post.date | date: "%B %d, %Y" }}
-                        {% if post.author %} • {{ post.author }}{% endif %}
-                      </small>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-      
-      <div class="mt-4">
-        <p>Subscribe to our <a href="{{ "/feed.xml" | relative_url }}">RSS feed</a> to stay up to date!</p>
-      </div>
-    </div>
+<div class="dark-blog-wrapper">
+
+  <!-- Title -->
+  <div class="dark-blog-header">
+    <h1 class="dark-blog-title">Blog</h1>
   </div>
+
+  <!-- Tag filters -->
+  <div class="dark-blog-filters">
+    <a href="#" class="dark-blog-filter active" data-filter="all">All Posts</a>
+    {% assign all_tags = site.posts | where: "lang", page.lang | map: "tags" | flatten | uniq | sort %}
+    {% for tag in all_tags %}
+    <a href="#" class="dark-blog-filter" data-filter="{{ tag | slugify }}">{{ tag }}</a>
+    {% endfor %}
+  </div>
+
+  <!-- Post list -->
+  <div class="dark-blog-posts" id="dark-blog-posts">
+    {% assign lang_posts = site.posts | where: "lang", page.lang %}
+    {% for post in lang_posts %}
+      {% assign slugged_tags = "" %}
+      {% for t in post.tags %}
+        {% assign s = t | slugify %}
+        {% if forloop.first %}{% assign slugged_tags = s %}{% else %}{% assign slugged_tags = slugged_tags | append: " " | append: s %}{% endif %}
+      {% endfor %}
+      {% assign read_min = post.content | number_of_words | divided_by: 200 | plus: 1 %}
+      {% assign author_data = site.data.authors[post.author] %}
+      <div class="dark-blog-card blog-dpost-item" data-tags="{{ slugged_tags }}">
+        <div class="dark-blog-card__image">
+          {% if post.image %}
+          <a href="{{ post.url | relative_url }}">
+            <img src="{{ post.image }}" alt="{{ post.title | escape }}" loading="lazy">
+          </a>
+          {% else %}
+          <a href="{{ post.url | relative_url }}" class="dark-blog-card__no-image">
+            <span>{{ post.title }}</span>
+          </a>
+          {% endif %}
+        </div>
+        <div class="dark-blog-card__content">
+          <div class="dark-blog-card__meta">
+            {% if post.categories[0] %}{{ post.categories[0] | upcase }}{% endif %}{% if post.date %} — {{ post.date | date: "%m.%d.%Y" }}{% endif %}
+          </div>
+          <h2 class="dark-blog-card__title">
+            <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+          </h2>
+          <p class="dark-blog-card__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+          <div class="dark-blog-card__author">
+            <div class="dark-blog-author-avatar">{{ author_data.initials | default: "?" }}</div>
+            <div class="dark-blog-author-info">
+              <div class="dark-blog-author-name">BY {{ author_data.name | default: post.author | upcase }}</div>
+              <div class="dark-blog-read-time">{{ read_min }} MINUTE READ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div id="dark-blog-no-results" class="dark-blog-no-results" style="display:none">
+    <p>No posts found for this category.</p>
+  </div>
+
+  <div id="dark-blog-show-more" class="dark-blog-show-more" style="display:none">
+    <button id="dark-blog-show-more-btn" class="dark-blog-show-more-btn">Show more</button>
+  </div>
+
+  <div class="mt-4 text-center">
+    <p>Subscribe to our <a href="{{ "/feed.xml" | relative_url }}">RSS feed</a> to stay up to date!</p>
+  </div>
+
 </div>
+
+<script>
+(function () {
+  var PAGE_SIZE = 8;
+  var filters   = document.querySelectorAll('.dark-blog-filter');
+  var posts     = Array.from(document.querySelectorAll('.blog-dpost-item'));
+  var showMoreWrap = document.getElementById('dark-blog-show-more');
+  var showMoreBtn  = document.getElementById('dark-blog-show-more-btn');
+  var visibleCount = 0;   // how many are currently shown
+  var currentVisible = []; // filtered list
+
+  // Read tag from URL
+  var params    = new URLSearchParams(window.location.search);
+  var activeTag = params.get('tag') || 'all';
+
+  function applyAlternating(list) {
+    list.forEach(function (el, i) {
+      el.classList.toggle('dark-blog-card--reverse', i % 2 !== 0);
+    });
+  }
+
+  function renderVisible() {
+    currentVisible.forEach(function (el, i) {
+      el.style.display = i < visibleCount ? '' : 'none';
+    });
+    applyAlternating(currentVisible.slice(0, visibleCount));
+    var hasMore = visibleCount < currentVisible.length;
+    showMoreWrap.style.display = hasMore ? '' : 'none';
+    document.getElementById('dark-blog-no-results').style.display =
+      currentVisible.length === 0 ? '' : 'none';
+  }
+
+  function applyFilter(tag) {
+    currentVisible = posts.filter(function (el) {
+      var tags = (el.dataset.tags || '').split(' ');
+      return tag === 'all' || tags.indexOf(tag) !== -1;
+    });
+    // hide all first
+    posts.forEach(function (el) { el.style.display = 'none'; });
+    visibleCount = Math.min(PAGE_SIZE, currentVisible.length);
+    renderVisible();
+  }
+
+  showMoreBtn.addEventListener('click', function () {
+    visibleCount = Math.min(visibleCount + PAGE_SIZE, currentVisible.length);
+    renderVisible();
+  });
+
+  // Sync active filter UI
+  filters.forEach(function (f) {
+    f.classList.toggle('active', f.dataset.filter === activeTag);
+  });
+
+  applyFilter(activeTag);
+
+  filters.forEach(function (f) {
+    f.addEventListener('click', function (e) {
+      e.preventDefault();
+      var tag = f.dataset.filter;
+      if (tag === 'all') {
+        history.pushState({}, '', window.location.pathname);
+      } else {
+        history.pushState({}, '', '?tag=' + encodeURIComponent(tag));
+      }
+      filters.forEach(function (ff) { ff.classList.remove('active'); });
+      f.classList.add('active');
+      applyFilter(tag);
+    });
+  });
+}());
+</script>
