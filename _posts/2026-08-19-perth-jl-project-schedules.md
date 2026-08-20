@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/perth-ui-en.jpg
+image: /assets/images/perth.avif
 title: "Perth.jl: Project Schedules You Can Compute On"
 categories: [JULIA, PROJECT MANAGEMENT]
 lang: en
@@ -10,6 +10,12 @@ author: dante-bertuzzi
 description: "What Perth.jl is, the concepts behind it (WBS, CPM, slack, critical path, PERT), how to install it, how it works under the hood, and a complete real-world example: the schedule of a service-times study, from the REPL to the browser."
 mathjax: true
 ---
+
+Anyone who has ever coordinated a project — a research study, a construction site, a thesis with a defense date — has lived the same moment: someone asks *"if this step slips two days, what else moves?"*, and answering means redrawing the schedule by hand.
+
+The problem is not the question. It is that the schedule has become a **picture**. A spreadsheet with colored bars, or a PNG exported from some tool, is great for presenting and useless for computing. Nobody can ask an image which task is the bottleneck, how much slack is left, or what the probability is of delivering before the 30th.
+
+This post introduces **Perth.jl**, a Julia package I wrote precisely to treat a schedule as what it actually is: a data structure you can compute on. We'll go through the concept, the installation, how it works under the hood, and finally a real example from start to finish.
 
 <style>
 /* Tabelas deste post: o tema não define espaçamento de célula, e as tabelas
@@ -22,12 +28,6 @@ mathjax: true
 .perth-table td + td, .perth-table th + th { white-space: nowrap; }
 .perth-table td:first-child, .perth-table th:first-child { white-space: normal; }
 </style>
-
-Anyone who has ever coordinated a project — a research study, a construction site, a thesis with a defense date — has lived the same moment: someone asks *"if this step slips two days, what else moves?"*, and answering means redrawing the schedule by hand.
-
-The problem is not the question. It is that the schedule has become a **picture**. A spreadsheet with colored bars, or a PNG exported from some tool, is great for presenting and useless for computing. Nobody can ask an image which task is the bottleneck, how much slack is left, or what the probability is of delivering before the 30th.
-
-This post introduces **Perth.jl**, a Julia package I wrote precisely to treat a schedule as what it actually is: a data structure you can compute on. We'll go through the concept, the installation, how it works under the hood, and finally a real example from start to finish.
 
 ---
 

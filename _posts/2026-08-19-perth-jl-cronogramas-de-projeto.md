@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/perth-ui-pt.jpg
+image: /assets/images/perth.avif
 title: "Perth.jl: cronogramas de projeto que você pode calcular"
 categories: [JULIA, GESTÃO DE PROJETOS]
 lang: pt
@@ -10,6 +10,12 @@ author: dante-bertuzzi
 description: "O que é o Perth.jl, os conceitos por trás dele (EAP, CPM, folga, caminho crítico, PERT), como instalar, como funciona por dentro e um exemplo real completo: o cronograma de um estudo de tempos de atendimento, do REPL ao navegador."
 mathjax: true
 ---
+
+Todo mundo que já coordenou um projeto — uma pesquisa, uma obra, um TCC com prazo de banca — passou pelo mesmo momento: alguém pergunta *"e se essa etapa atrasar dois dias, o que mais anda?"*, e a resposta exige redesenhar o cronograma à mão.
+
+O problema não é a pergunta. É que o cronograma virou **figura**. Uma planilha com barrinhas coloridas, ou um PNG exportado de alguma ferramenta, é ótima para apresentar e péssima para calcular. Ninguém consegue perguntar a uma imagem qual tarefa é o gargalo, quanto de folga sobra, ou qual a probabilidade de entregar antes do dia 30.
+
+Este post apresenta o **Perth.jl**, um pacote Julia que escrevi justamente para tratar cronograma como aquilo que ele é: uma estrutura de dados sobre a qual se calcula. Vamos ver o conceito, a instalação, como ele funciona por dentro e, no fim, um exemplo real do começo ao fim.
 
 <style>
 /* Tabelas deste post: o tema não define espaçamento de célula, e as tabelas
@@ -22,12 +28,6 @@ mathjax: true
 .perth-table td + td, .perth-table th + th { white-space: nowrap; }
 .perth-table td:first-child, .perth-table th:first-child { white-space: normal; }
 </style>
-
-Todo mundo que já coordenou um projeto — uma pesquisa, uma obra, um TCC com prazo de banca — passou pelo mesmo momento: alguém pergunta *"e se essa etapa atrasar dois dias, o que mais anda?"*, e a resposta exige redesenhar o cronograma à mão.
-
-O problema não é a pergunta. É que o cronograma virou **figura**. Uma planilha com barrinhas coloridas, ou um PNG exportado de alguma ferramenta, é ótima para apresentar e péssima para calcular. Ninguém consegue perguntar a uma imagem qual tarefa é o gargalo, quanto de folga sobra, ou qual a probabilidade de entregar antes do dia 30.
-
-Este post apresenta o **Perth.jl**, um pacote Julia que escrevi justamente para tratar cronograma como aquilo que ele é: uma estrutura de dados sobre a qual se calcula. Vamos ver o conceito, a instalação, como ele funciona por dentro e, no fim, um exemplo real do começo ao fim.
 
 ---
 
