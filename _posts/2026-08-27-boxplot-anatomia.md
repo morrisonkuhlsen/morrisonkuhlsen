@@ -456,7 +456,7 @@ $$
 \mathrm{IQR} = Q_3 - Q_1
 $$
 
-No exemplo, $\mathrm{IQR} = 21{,}7 - 13{,}4 = 8{,}3$ minutos: metade dos atendimentos se concentra numa faixa de 8,3 minutos.
+No exemplo, $\mathrm{IQR} = 21{,}700 - 13{,}375 = 8{,}325$ minutos — os 8,3 que a figura mostra, arredondados para uma casa. Metade dos atendimentos se concentra numa faixa de pouco mais de oito minutos.
 
 O IQR é a medida de dispersão do boxplot, e cumpre o mesmo papel do desvio-padrão com uma vantagem: seu **ponto de ruptura é 25%**. Você pode corromper até um quarto das observações de cada lado que o IQR continua descrevendo o miolo dos dados. Com o desvio-padrão, um único valor absurdo basta para inflar a medida.
 
@@ -470,7 +470,7 @@ O IQR é a medida de dispersão do boxplot, e cumpre o mesmo papel do desvio-pad
 Compare as duas metades da caixa:
 
 $$
-Q_2 - Q_1 = 3{,}5 \qquad\text{e}\qquad Q_3 - Q_2 = 4{,}8
+Q_2 - Q_1 = 3{,}475 \qquad\text{e}\qquad Q_3 - Q_2 = 4{,}850
 $$
 
 A metade de cima é mais larga: entre a mediana e $Q_3$ os dados estão mais espalhados do que entre $Q_1$ e a mediana. Isso é **assimetria à direita**, e ela é visível sem calcular nenhum coeficiente — basta ver que a linha da mediana não está no centro da caixa.
@@ -517,7 +517,15 @@ $$
 \text{cerca superior} = Q_3 + 1{,}5 \cdot \mathrm{IQR}
 $$
 
-No exemplo: $13{,}4 - 1{,}5 \times 8{,}3 = 0{,}9$ e $21{,}7 + 1{,}5 \times 8{,}3 = 34{,}2$.
+No exemplo, com os quartis sem arredondar ($Q_1 = 13{,}375$ e $\mathrm{IQR} = 8{,}325$):
+
+$$
+13{,}375 - 1{,}5 \times 8{,}325 = 0{,}89
+\qquad\text{e}\qquad
+21{,}700 + 1{,}5 \times 8{,}325 = 34{,}19
+$$
+
+que são os 0,9 e 34,2 exibidos na figura, arredondados para uma casa decimal.
 
 ### 5.2 Os bigodes (whiskers) — valores observados
 
@@ -667,7 +675,9 @@ $$
 \pm\, 1{,}58 \cdot \frac{\mathrm{IQR}}{\sqrt{n}}
 $$
 
-que aproxima um intervalo de confiança de 95% para a mediana. A leitura é direta: **se os entalhes de dois grupos não se sobrepõem, há evidência de que as medianas diferem**. É uma aproximação (supõe normalidade assintótica da mediana) e não substitui um teste formal, mas resolve 90% das comparações visuais.
+A constante 1,58 merece um cuidado: ela **não** é o intervalo de confiança da mediana de um grupo isolado — é calibrada para a *comparação entre dois grupos*. A construção supõe normalidade assintótica da mediana e tamanhos de amostra parecidos, e faz com que a **não sobreposição** entre dois entalhes corresponda a aproximadamente 95% de confiança para a *diferença* entre as duas medianas. É a mesma conta que aparece com o valor 1,57 em Chambers et al. (1983, p. 62) e é o que o R implementa em `boxplot.stats`.
+
+A leitura, então, é direta: **se os entalhes de dois grupos não se sobrepõem, há evidência de que as medianas diferem**. É uma aproximação e não substitui um teste formal, mas resolve a maior parte das comparações visuais.
 
 ### 9.2 Largura proporcional a √n
 
@@ -1400,6 +1410,9 @@ E, como todo resumo, ele tem um preço: quatro distribuições radicalmente dife
 
 - Wickham, H.; Stryjewski, L. — *40 Years of Boxplots*. Relatório técnico, 2011. (História do gráfico, incluindo o *range bar* de Mary Eleanor Spear, de 1952, e um catálogo de variantes.)  
   https://vita.had.co.nz/papers/boxplots.pdf
+
+- Chambers, J. M.; Cleveland, W. S.; Kleiner, B.; Tukey, P. A. — *Graphical Methods for Data Analysis*. Wadsworth, 1983. (A constante do *notch* aparece na p. 62; é a base da implementação em `boxplot.stats` do R.)  
+  https://stat.ethz.ch/R-manual/R-patched/library/grDevices/html/boxplot.stats.html
 
 - Krzywinski, M.; Altman, N. — *Visualizing samples with box plots*. Nature Methods, 11(2), 119–120, 2014. DOI: 10.1038/nmeth.2813.  
   https://www.nature.com/articles/nmeth.2813
