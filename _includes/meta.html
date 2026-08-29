@@ -1,12 +1,12 @@
 {%- capture meta_title -%}
-{{ site.data.t.name[page.lang] }}{% if page.title and page.title != 'Homepage' %} | {{ page.title }}{% endif %}
+{% if page.title and page.ref != 'homepage' %}{{ page.title }} | {% endif %}{{ site.data.t.name[page.lang] }}
 {%- endcapture -%}
 
 {%- capture meta_description -%}
-{%- if page.excerpt -%}
-{{ page.excerpt | strip_html }}
-{%- elsif page.description -%}
+{%- if page.description -%}
 {{ page.description | strip_html }}
+{%- elsif page.excerpt -%}
+{{ page.excerpt | strip_html | strip_newlines }}
 {%- else -%}
 {{ site.data.t.description[page.lang] }}
 {%- endif -%}
@@ -24,7 +24,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | truncate: 155, '...' | strip }}{% elsif page.description %}{{ page.description | strip_html | truncate: 155, '...' | strip }}{% else %}{{ site.data.t.description[page.lang] | truncate: 155, '...' | strip }}{% endif %}">
+<meta name="description" content="{% if page.description %}{{ page.description | strip_html | truncate: 155, '...' | strip }}{% elsif page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 155, '...' | strip }}{% else %}{{ site.data.t.description[page.lang] | truncate: 155, '...' | strip }}{% endif %}">
 <meta name="author" content="{{ site.data.t.author[page.lang] }}">
 <meta name="generator" content="Jekyll {{site.version}}">
 <meta name="msvalidate.01" content="0DFDC2857DA6BB0624BD01BCD3E8B74D" />
