@@ -35,18 +35,20 @@
     return monday;
   }
 
-  function getISOWeekNumber(date) {
-    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-    const dayNum = d.getUTCDay() || 7;
-    d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  // Monday of the week that shows W01; each following week shows the next problem
+  const FIRST_PROBLEM_WEEK = { year: 2026, month: 9, day: 7 };
+
+  function weeksSinceFirstProblem(date) {
+    const start = Date.UTC(FIRST_PROBLEM_WEEK.year, FIRST_PROBLEM_WEEK.month - 1, FIRST_PROBLEM_WEEK.day);
+    const monday = getMondayOf(date);
+    const current = Date.UTC(monday.getFullYear(), monday.getMonth(), monday.getDate());
+    return Math.round((current - start) / (7 * 86400000));
   }
 
   function pickProblemForDate(date) {
     const problems = window.WEEKLY_PROBLEMS || [];
-    const weekNum = getISOWeekNumber(date);
-    const idx = (weekNum - 1) % problems.length;
+    const n = problems.length;
+    const idx = ((weeksSinceFirstProblem(date) % n) + n) % n;
     return problems[idx];
   }
 
@@ -156,10 +158,10 @@
       url.searchParams.set("date", dateStr);
       try {
         await navigator.clipboard.writeText(url.toString());
-        const el = document.getElementById("copyLink");
-        el.textContent = "link copied ✓";
+        const label = document.getElementById("copyLinkLabel");
+        label.textContent = "link copied ✓";
         setTimeout(function () {
-          el.textContent = "copy problem link";
+          label.textContent = "copy problem link";
         }, 1500);
       } catch (err) {
         prompt("Copy the link:", url.toString());

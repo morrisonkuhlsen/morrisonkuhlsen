@@ -59,8 +59,9 @@ header {
 .topbar {
   max-width: 820px;
   margin: 0 auto;
+  padding-inline: clamp(8px, 2vw, 12px);
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
@@ -82,7 +83,8 @@ header {
   border: 0;
   background: transparent;
   color: var(--muted);
-  padding: 6px 0;
+  padding: 10px;
+  margin: -10px -10px -10px 0;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -303,10 +305,76 @@ footer .foot {
   margin: 0;
 }
 
-mjx-container {
+/* display math scrolls inside itself instead of widening the page */
+mjx-container[display="true"] {
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-bottom: 2px;
+  padding-block: 2px;
+  scrollbar-width: thin;
+}
+
+.statement ul {
+  padding-left: 1.5rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+.table-wrap table {
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border, rgba(128,128,128,0.2));
+  text-align: center;
+  white-space: nowrap;
+}
+
+.table-wrap th {
+  text-align: left;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 14px 16px 0;
+  }
+
+  main {
+    padding: 12px 16px;
+  }
+
+  .content,
+  .topbar {
+    padding: 0;
+  }
+
+  .statement ul {
+    padding-left: 1.1rem;
+  }
+
+  mjx-container[display="true"] {
+    font-size: 92%;
+  }
+
+  .footer-dark {
+    padding: 1.25rem 16px !important;
+  }
+
+  .footer-dark .footer-inner {
+    gap: 1rem;
+  }
+
+  .footer-dark .footer-links-row {
+    justify-content: center;
+    gap: 0.75rem 1.25rem;
+  }
 }
 
 @media (max-width: 420px) {
