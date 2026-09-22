@@ -61,7 +61,7 @@ no header claro, branco sobre o hero.
 também o que deixa o header transparente sobre ela. Para slideshow, use
 `hero_slideshow` com uma lista de `{ src, alt }`.
 
-**Post.** Coluna de leitura de 45rem centrada, com o índice na margem direita:
+**Post.** Coluna de leitura de 52rem centrada, com o índice na margem direita:
 sub-listas fechadas, só o ramo ativo aberto, item ativo = último título que já
 passou 80px abaixo do topo. Traz também assinatura com as iniciais do autor,
 tags, comentários via giscus e MathJax carregado só quando o front matter traz
