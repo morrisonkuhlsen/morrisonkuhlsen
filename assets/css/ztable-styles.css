@@ -1,6 +1,152 @@
+/* Paleta em tokens. O escuro é o padrão — a página nasceu assim —, e o claro
+   entra por prefers-color-scheme ou pela escolha guardada no botão do topo.
+   Nenhuma regra abaixo sabe do tema: todas leem daqui. */
+
+:root {
+    --zt-bg:               #121212;
+    --zt-surface:          #181818;
+    --zt-surface-alt:      #161616;
+    --zt-surface-deep:     #141414;
+    --zt-surface-hover:    #1e1e1e;
+
+    --zt-border:           #232323;
+    --zt-border-strong:    #444444;
+    --zt-card-border:      #2a2a2a;
+
+    --zt-ink:              #e0e0e0;
+    --zt-ink-soft:         #cfd6e0;
+    --zt-ink-muted:        #aaaaaa;
+    --zt-ink-faint:        #888888;
+    --zt-ink-dim:          #666666;
+    --zt-ink-strong:       #ffffff;
+
+    --zt-accent:           #4a90e2;
+    --zt-accent-strong:    #2a4b8d;
+    --zt-accent-hover:     #3a5b9d;
+    --zt-accent-ring:      #5aa0ff;
+    --zt-accent-deep:      #1a3a6a;
+    --zt-on-accent:        #ffffff;
+
+    --zt-row-click:        #27313f;
+    --zt-row-click-hover:  #3a2e1a;
+
+    /* A coluna Z e o realce da célula clicada: o amarelo é a marca da tabela. */
+    --zt-zcol:             #ffcc00;
+    --zt-zcol-bright:      #ffd700;
+
+    --zt-scroll-thumb:       #3a3a3a;
+    --zt-scroll-thumb-hover: #4a4a4a;
+
+    --zt-accent-wash:      rgba(74, 144, 226, 0.10);
+    --zt-accent-wash-2:    rgba(74, 144, 226, 0.20);
+    --zt-plot-area:        rgba(74, 144, 226, 0.38);
+    --zt-row-on:           rgba(74, 144, 226, 0.12);
+    --zt-row-on-border:    rgba(74, 144, 226, 0.50);
+    --zt-formula-bg:       rgba(74, 144, 226, 0.06);
+    --zt-btn-hover-bg:     rgba(255, 255, 255, 0.05);
+    --zt-panel-bg:         rgba(40, 40, 40, 0.8);
+    --zt-tooltip-bg:       rgba(0, 0, 0, 0.9);
+    --zt-tooltip-ink:      #ffffff;
+}
+
+/* No claro o amarelo da coluna Z vira âmbar escuro: #ffcc00 sobre branco tem
+   contraste 1,5:1, ilegível. O azul também escurece, pelo mesmo motivo. */
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+        --zt-bg:               #ffffff;
+        --zt-surface:          #ffffff;
+        --zt-surface-alt:      #f7f8fa;
+        --zt-surface-deep:     #f7f9fc;
+        --zt-surface-hover:    #eef2f7;
+
+        --zt-border:           #e4e7ec;
+        --zt-border-strong:    #b9c0ca;
+        --zt-card-border:      #e4e7ec;
+
+        --zt-ink:              #1b1f27;
+        --zt-ink-soft:         #39414f;
+        --zt-ink-muted:        #5a6474;
+        --zt-ink-faint:        #6b7280;
+        --zt-ink-dim:          #8b94a3;
+        --zt-ink-strong:       #0b0e14;
+
+        --zt-accent:           #1a6fd4;
+        --zt-accent-strong:    #1a6fd4;
+        --zt-accent-hover:     #155cb0;
+        --zt-accent-ring:      #1a6fd4;
+        --zt-accent-deep:      #0f4e97;
+
+        --zt-row-click:        #dbe8fb;
+        --zt-row-click-hover:  #fdf3d6;
+
+        --zt-zcol:             #9a6300;
+        --zt-zcol-bright:      #7d5000;
+
+        --zt-scroll-thumb:       #c3c8d0;
+        --zt-scroll-thumb-hover: #aab1bb;
+
+        --zt-accent-wash:      rgba(26, 111, 212, 0.08);
+        --zt-accent-wash-2:    rgba(26, 111, 212, 0.16);
+        --zt-plot-area:        rgba(26, 111, 212, 0.30);
+        --zt-row-on:           rgba(26, 111, 212, 0.10);
+        --zt-row-on-border:    rgba(26, 111, 212, 0.45);
+        --zt-formula-bg:       rgba(26, 111, 212, 0.06);
+        --zt-btn-hover-bg:     rgba(0, 0, 0, 0.05);
+        --zt-panel-bg:         rgba(240, 242, 246, 0.92);
+        --zt-tooltip-bg:       rgba(20, 22, 28, 0.94);
+        --zt-tooltip-ink:      #ffffff;
+    }
+}
+
+/* Escolha explícita no botão: vale sobre o que o sistema diz. */
+:root[data-theme="light"] {
+    --zt-bg:               #ffffff;
+    --zt-surface:          #ffffff;
+    --zt-surface-alt:      #f7f8fa;
+    --zt-surface-deep:     #f7f9fc;
+    --zt-surface-hover:    #eef2f7;
+
+    --zt-border:           #e4e7ec;
+    --zt-border-strong:    #b9c0ca;
+    --zt-card-border:      #e4e7ec;
+
+    --zt-ink:              #1b1f27;
+    --zt-ink-soft:         #39414f;
+    --zt-ink-muted:        #5a6474;
+    --zt-ink-faint:        #6b7280;
+    --zt-ink-dim:          #8b94a3;
+    --zt-ink-strong:       #0b0e14;
+
+    --zt-accent:           #1a6fd4;
+    --zt-accent-strong:    #1a6fd4;
+    --zt-accent-hover:     #155cb0;
+    --zt-accent-ring:      #1a6fd4;
+    --zt-accent-deep:      #0f4e97;
+
+    --zt-row-click:        #dbe8fb;
+    --zt-row-click-hover:  #fdf3d6;
+
+    --zt-zcol:             #9a6300;
+    --zt-zcol-bright:      #7d5000;
+
+    --zt-scroll-thumb:       #c3c8d0;
+    --zt-scroll-thumb-hover: #aab1bb;
+
+    --zt-accent-wash:      rgba(26, 111, 212, 0.08);
+    --zt-accent-wash-2:    rgba(26, 111, 212, 0.16);
+    --zt-plot-area:        rgba(26, 111, 212, 0.30);
+    --zt-row-on:           rgba(26, 111, 212, 0.10);
+    --zt-row-on-border:    rgba(26, 111, 212, 0.45);
+    --zt-formula-bg:       rgba(26, 111, 212, 0.06);
+    --zt-btn-hover-bg:     rgba(0, 0, 0, 0.05);
+    --zt-panel-bg:         rgba(240, 242, 246, 0.92);
+    --zt-tooltip-bg:       rgba(20, 22, 28, 0.94);
+    --zt-tooltip-ink:      #ffffff;
+}
+
 body {
-            background: #121212;
-            color: #e0e0e0;
+            background: var(--zt-bg);
+            color: var(--zt-ink);
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
             padding: 0 0 32px 0;
@@ -11,7 +157,7 @@ body {
             width: 90%;
             max-width: 600px;
             margin: 24px auto;
-            background: #181818;
+            background: var(--zt-surface);
             box-shadow: none;
             border-radius: 0;
             font-size: 1rem;
@@ -21,7 +167,7 @@ body {
         th, td {
     padding: 10px 22px; /* Aumenta o espaçamento horizontal */
     text-align: center;
-    border-bottom: 1px solid #232323;
+    border-bottom: 1px solid var(--zt-border);
     background: none;
     transition: none;
     font-size: 1rem;
@@ -29,45 +175,45 @@ body {
 
         th {
             background: none;
-            color: #e0e0e0;
+            color: var(--zt-ink);
             font-weight: 600;
-            border-bottom: 2px solid #444;
+            border-bottom: 2px solid var(--zt-border-strong);
             letter-spacing: 0.02em;
         }
 
         tr:nth-child(even) {
-            background: #161616;
+            background: var(--zt-surface-alt);
         }
 
         tr:nth-child(odd) {
-            background: #181818;
+            background: var(--zt-surface);
         }
 
         /* Hover effect */
         tr.highlight-row > td {
-            background: rgba(74, 144, 226, 0.1) !important;
+            background: var(--zt-accent-wash) !important;
         }
 
         .highlight-col {
-            background: rgba(74, 144, 226, 0.1) !important;
+            background: var(--zt-accent-wash) !important;
         }
 
         .highlight-header {
-            background: rgba(74, 144, 226, 0.2) !important;
+            background: var(--zt-accent-wash-2) !important;
         }
 
         /* Mantém o hover original para linhas não selecionadas */
         tr:not(.selected):hover > td:not(.selected) {
-            background: #232323;
+            background: var(--zt-border);
         }
 
         tr:hover {
-            background: #232323;
+            background: var(--zt-border);
         }
 
         td:first-child {
             background: none;
-            color: #ffcc00;
+            color: var(--zt-zcol);
             font-weight: 600;
             border-right: none;
             text-align: left;
@@ -75,18 +221,24 @@ body {
         
         /* Células não selecionadas em cinza */
         td:not(.selected) {
-            color: #888888;
+            color: var(--zt-ink-faint);
+        }
+
+        /* Precisa vir depois e com a mesma força que a regra acima, senão a
+           coluna Z fica cinza como os valores — era o que acontecia. */
+        td:first-child:not(.selected) {
+            color: var(--zt-zcol);
         }
         
-        /* Células selecionadas em branco */
+        /* Células selecionadas: texto sobre o azul forte, branco nos dois temas */
         td.selected {
-            color: #ffffff;
+            color: var(--zt-on-accent);
         }
 
         h1 {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #e0e0e0;
+            color: var(--zt-ink);
             margin-top: 24px;
             margin-bottom: 8px;
             letter-spacing: 0.01em;
@@ -112,7 +264,7 @@ body {
             margin: 0 0 12px 0;
             font-size: 1.2rem;
             font-weight: 600;
-            color: #e0e0e0;
+            color: var(--zt-ink);
             letter-spacing: 0.01em;
         }
 
@@ -126,10 +278,10 @@ body {
             display: flex;
             align-items: center;
             gap: 20px;
-            background: rgba(40, 40, 40, 0.8);
+            background: var(--zt-panel-bg);
             padding: 10px 16px;
             border-radius: 6px;
-            border: 1px solid #444;
+            border: 1px solid var(--zt-border-strong);
             margin-top: 12px;
             position: relative;
         }
@@ -142,14 +294,14 @@ body {
         }
 
         .selection-item .label {
-            color: #aaa;
+            color: var(--zt-ink-muted);
             font-weight: 500;
         }
 
         #copyBtn {
             background: transparent;
-            border: 1px solid #444;
-            color: #888;
+            border: 1px solid var(--zt-border-strong);
+            color: var(--zt-ink-faint);
             width: 32px;
             height: 32px;
             border-radius: 4px;
@@ -161,15 +313,15 @@ body {
         }
 
         #copyBtn:hover {
-            color: #fff;
-            border-color: #666;
-            background: rgba(255,255,255,0.05);
+            color: var(--zt-ink-strong);
+            border-color: var(--zt-ink-dim);
+            background: var(--zt-btn-hover-bg);
         }
 
         .divider {
             width: 1px;
             height: 56px;
-            background: #444;
+            background: var(--zt-border-strong);
             margin: 0 10px;
         }
 
@@ -183,8 +335,8 @@ body {
         /* Tooltip */
         .tooltip {
             position: absolute;
-            background: rgba(0, 0, 0, 0.8);
-            color: #fff;
+            background: var(--zt-tooltip-bg);
+            color: var(--zt-tooltip-ink);
             padding: 6px 10px;
             border-radius: 4px;
             font-size: 13px;
@@ -199,18 +351,18 @@ body {
         .table-container {
             text-align: center;
             font-size: 12px;
-            color: #888;
+            color: var(--zt-ink-faint);
             margin-top: 32px;
-            border-top: 1px solid #232323;
+            border-top: 1px solid var(--zt-border);
         }
 
         /* Footer styles */
         footer {
             text-align: center;
             font-size: 12px;
-            color: #888;
+            color: var(--zt-ink-faint);
             margin-top: 32px;
-            border-top: 1px solid #232323;
+            border-top: 1px solid var(--zt-border);
             padding-top: 12px;
         }
 
@@ -221,17 +373,17 @@ body {
         }
         /* Highlight clicked row and column */
 .highlight-click {
-    background-color: #27313f !important;
+    background-color: var(--zt-row-click) !important;
 }
 
 /* Selected cells */
 td.selected {
     position: relative;
     z-index: 10;
-    background: #2a4b8d !important;
-    color: #fff !important;
+    background: var(--zt-accent-strong) !important;
+    color: var(--zt-on-accent) !important;
     font-weight: bold;
-    box-shadow: 0 0 0 2px #4a90e2;
+    box-shadow: 0 0 0 2px var(--zt-accent);
 }
 
 /* Garante que células selecionadas tenham prioridade */
@@ -290,8 +442,8 @@ td.selected {
 td.selected, 
 tr.highlight-row > td.selected,
 .highlight-col.selected {
-    background: #2a4b8d !important;
-    color: #fff !important;
+    background: var(--zt-accent-strong) !important;
+    color: var(--zt-on-accent) !important;
     position: relative;
     z-index: 5;
 }
@@ -299,17 +451,17 @@ tr.highlight-row > td.selected,
 /* Estilo para células selecionadas com hover */
 tr.highlight-row > td.selected,
 .highlight-col.selected {
-    background: #3a5b9d !important;
-    box-shadow: 0 0 0 2px #5aa0ff;
+    background: var(--zt-accent-hover) !important;
+    box-shadow: 0 0 0 2px var(--zt-accent-ring);
 }
 
 /* Mantém o destaque da linha/coluna quando uma célula está selecionada */
 tr.has-selected > td:not(.selected) {
-    background: rgba(74, 144, 226, 0.1) !important;
+    background: var(--zt-accent-wash) !important;
 }
 
 .has-selected-col:not(.selected) {
-    background: rgba(74, 144, 226, 0.1) !important;
+    background: var(--zt-accent-wash) !important;
 }
 
 /* Hover cruzado mais visível */
@@ -322,8 +474,8 @@ tr:hover > td:not(.selected) {
 }
 
 td.selected:first-child {
-    background: #1a3a6a !important;
-    color: #ffcc00 !important;
+    background: var(--zt-accent-deep) !important;
+    color: var(--zt-zcol) !important;
 }
 
 
@@ -331,8 +483,8 @@ td.selected:first-child {
 /* Tooltip */
 .tooltip {
     position: fixed;
-    background: rgba(0, 0, 0, 0.9);
-    color: #fff;
+    background: var(--zt-tooltip-bg);
+    color: var(--zt-tooltip-ink);
     padding: 6px 12px;
     border-radius: 4px;
     font-size: 13px;
@@ -347,7 +499,7 @@ td.selected:first-child {
 
     /* Bold first column */
         td:first-child {
-            background-color: #121212; /* Cor diferente para a primeira coluna */
+            background-color: var(--zt-bg); /* Cor diferente para a primeira coluna */
             font-weight: bold;
         }
 
@@ -355,7 +507,7 @@ td.selected:first-child {
         thead th {
             position: sticky;
             top: 0;
-            background-color: #121212; /* Cor diferente para a primeira coluna */
+            background-color: var(--zt-bg); /* Cor diferente para a primeira coluna */
             z-index: 2;
         }
 
@@ -363,7 +515,7 @@ td.selected:first-child {
         tr.sticky-z-positive th, tr.sticky-z-positive td {
             position: sticky;
             top: 0; /* Agora sobrepõe a fileira do Z negativo */
-            background-color: #121212;
+            background-color: var(--zt-bg);
             z-index: 3; /* Maior que o thead */
         }
 
@@ -386,45 +538,45 @@ td.selected:first-child {
 
         /* Highlight column header and first row */
         .highlight-header {
-            color: #ffcc00 !important;
-            background-color: #27313f !important;
+            color: var(--zt-zcol) !important;
+            background-color: var(--zt-row-click) !important;
         }
 
         /* Highlight full row and column */
         .highlight-full-row {
-            background-color: #27313f !important;
+            background-color: var(--zt-row-click) !important;
         }
 
         .highlight-full-col {
-            background-color: #27313f !important;
+            background-color: var(--zt-row-click) !important;
         }
 
         /* Garante que a célula selecionada fique destacada mesmo com hover */
 td.highlight-click,
 td.highlight-click:hover {
-    background: #27313f !important;
-    color: #ffffff !important;
+    background: var(--zt-row-click) !important;
+    color: var(--zt-ink-strong) !important;
 }
 
 /* Hover padrão para qualquer célula não selecionada */
 td:hover:not(.highlight-click) {
-    background: #232323;
+    background: var(--zt-border);
     cursor: pointer;
 }
 
 /* Estado normal da célula selecionada */
 td.highlight-click {
-    background: #27313f !important;
-    color: #ffcc00 !important;
+    background: var(--zt-row-click) !important;
+    color: var(--zt-zcol) !important;
     font-weight: bold;
     transition: background 0.2s, color 0.2s;
 }
 
 /* Hover ESPECIAL apenas para a célula selecionada */
 td.highlight-click:hover {
-    background: #3a2e1a !important;
-    color: #ffd700 !important;
-    box-shadow: 0 0 0 2px #ffcc00 inset;
+    background: var(--zt-row-click-hover) !important;
+    color: var(--zt-zcol-bright) !important;
+    box-shadow: 0 0 0 2px var(--zt-zcol) inset;
     font-weight: bold;
 }
 
@@ -468,8 +620,8 @@ body.ftable table {
 .ftable-tooltip {
   position: absolute;
   z-index: 9999;
-  background: rgba(18, 18, 20, 0.96);
-  color: #fff;
+  background: var(--zt-tooltip-bg);
+  color: var(--zt-tooltip-ink);
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -614,8 +766,8 @@ body.ttable [role="tooltip"] {
 }
 
 .calc__card {
-    background: #181818;
-    border: 1px solid #2a2a2a;
+    background: var(--zt-surface);
+    border: 1px solid var(--zt-card-border);
     border-radius: 8px;
     padding: 18px 20px 20px;
 }
@@ -632,7 +784,7 @@ body.ttable [role="tooltip"] {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: #e0e0e0;
+    color: var(--zt-ink);
     text-align: left;
     letter-spacing: 0.01em;
 }
@@ -642,18 +794,18 @@ body.ttable [role="tooltip"] {
     flex-shrink: 0;
     width: 32px;
     height: 32px;
-    border: 1px solid #444;
+    border: 1px solid var(--zt-border-strong);
     border-radius: 4px;
     background: transparent;
-    color: #888;
+    color: var(--zt-ink-faint);
     cursor: pointer;
     transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
 .calc__copy:hover {
-    color: #fff;
-    border-color: #666;
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--zt-ink-strong);
+    border-color: var(--zt-ink-dim);
+    background: var(--zt-btn-hover-bg);
 }
 
 .calc__copied {
@@ -662,8 +814,8 @@ body.ttable [role="tooltip"] {
     bottom: calc(100% + 6px);
     padding: 2px 8px;
     border-radius: 4px;
-    background: #2a4b8d;
-    color: #fff;
+    background: var(--zt-accent-strong);
+    color: var(--zt-on-accent);
     font-size: 11px;
     white-space: nowrap;
     opacity: 0;
@@ -692,7 +844,7 @@ body.ttable [role="tooltip"] {
     align-items: center;
     gap: 10px;
     font-size: 13px;
-    color: #aaa;
+    color: var(--zt-ink-muted);
 }
 
 .calc__field span { white-space: nowrap; }
@@ -700,10 +852,10 @@ body.ttable [role="tooltip"] {
 .calc__field input {
     width: 7rem;
     padding: 7px 10px;
-    border: 1px solid #444;
+    border: 1px solid var(--zt-border-strong);
     border-radius: 4px;
-    background: #121212;
-    color: #e0e0e0;
+    background: var(--zt-bg);
+    color: var(--zt-ink);
     font: inherit;
     font-size: 14px;
     font-variant-numeric: tabular-nums;
@@ -712,25 +864,25 @@ body.ttable [role="tooltip"] {
 .calc__inputs--stack .calc__field {
     justify-content: space-between;
     padding: 9px 0;
-    border-bottom: 1px solid #232323;
+    border-bottom: 1px solid var(--zt-border);
 }
 
 .calc__field input:focus {
     outline: none;
-    border-color: #4a90e2;
+    border-color: var(--zt-accent);
 }
 
 /* O slider é para varrer valores; quem já sabe o z digita no campo. */
 .calc__slider {
     flex: 1 1 12rem;
     min-width: 8rem;
-    accent-color: #4a90e2;
+    accent-color: var(--zt-accent);
 }
 
 .calc__warn {
     margin: 10px 0 0;
     font-size: 12px;
-    color: #ffcc00;
+    color: var(--zt-zcol);
 }
 
 .calc__body {
@@ -746,9 +898,9 @@ body.ttable [role="tooltip"] {
 
 .calc__hero {
     padding: 16px;
-    border: 1px solid #232323;
+    border: 1px solid var(--zt-border);
     border-radius: 6px;
-    background: #141414;
+    background: var(--zt-surface-deep);
     text-align: center;
 }
 
@@ -756,7 +908,7 @@ body.ttable [role="tooltip"] {
     display: block;
     font-size: 1.9rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--zt-ink-strong);
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.01em;
 }
@@ -765,7 +917,7 @@ body.ttable [role="tooltip"] {
     display: block;
     margin-top: 4px;
     font-size: 12px;
-    color: #888;
+    color: var(--zt-ink-faint);
 }
 
 .calc__rows {
@@ -784,34 +936,34 @@ body.ttable [role="tooltip"] {
     border: 1px solid transparent;
     cursor: pointer;
     font-size: 13px;
-    color: #aaa;
+    color: var(--zt-ink-muted);
     transition: background 0.15s, border-color 0.15s;
 }
 
-.calc-row:hover { background: #1e1e1e; }
+.calc-row:hover { background: var(--zt-surface-hover); }
 
 .calc-row:focus-visible {
     outline: none;
-    border-color: #4a90e2;
+    border-color: var(--zt-accent);
 }
 
 /* A linha promovida ao painel grande fica marcada — sem isso não dá para
    saber a qual das cinco leituras o número grande corresponde. */
 .calc-row.is-on {
-    background: rgba(74, 144, 226, 0.12);
-    border-color: rgba(74, 144, 226, 0.5);
-    color: #e0e0e0;
+    background: var(--zt-row-on);
+    border-color: var(--zt-row-on-border);
+    color: var(--zt-ink);
 }
 
 .calc-row__value {
-    color: #e0e0e0;
+    color: var(--zt-ink);
     font-variant-numeric: tabular-nums;
 }
 
 .calc__hint {
     margin: 12px 0 0;
     font-size: 12px;
-    color: #666;
+    color: var(--zt-ink-dim);
 }
 
 /* Desenho da curva. As classes ficam no CSS, e não em atributos, para que
@@ -830,22 +982,22 @@ body.ttable [role="tooltip"] {
 
 .calc-plot__curve {
     fill: none;
-    stroke: #4a90e2;
+    stroke: var(--zt-accent);
     stroke-width: 1.5;
 }
 
 .calc-plot--mini .calc-plot__curve { stroke-width: 1; }
 
-.calc-plot__area { fill: rgba(74, 144, 226, 0.38); }
+.calc-plot__area { fill: var(--zt-plot-area); }
 
-.calc-plot__axis { stroke: #444; stroke-width: 1; }
+.calc-plot__axis { stroke: var(--zt-border-strong); stroke-width: 1; }
 
-.calc-plot__tick { stroke: #444; stroke-width: 1; }
+.calc-plot__tick { stroke: var(--zt-border-strong); stroke-width: 1; }
 
-.calc-plot__label { fill: #666; font-size: 9px; }
+.calc-plot__label { fill: var(--zt-ink-dim); font-size: 9px; }
 
 .calc-plot__mark {
-    stroke: #ffcc00;
+    stroke: var(--zt-zcol);
     stroke-width: 1.5;
     stroke-dasharray: 3 3;
 }
@@ -864,10 +1016,10 @@ body.ttable [role="tooltip"] {
 .calc__formula {
     margin: 0 0 14px;
     padding: 8px 10px;
-    border-left: 2px solid #4a90e2;
-    background: rgba(74, 144, 226, 0.06);
+    border-left: 2px solid var(--zt-accent);
+    background: var(--zt-formula-bg);
     border-radius: 0 4px 4px 0;
-    color: #cfd6e0;
+    color: var(--zt-ink-soft);
     font-size: 13px;
     overflow-x: auto;
 }
@@ -896,20 +1048,20 @@ body.ttable [role="tooltip"] {
    janela entra junto, senão sobra uma faixa branca na borda. */
 html {
     scrollbar-width: thin;
-    scrollbar-color: #3a3a3a #121212;
+    scrollbar-color: var(--zt-scroll-thumb) var(--zt-bg);
 }
 
 html::-webkit-scrollbar { width: 12px; height: 12px; }
-html::-webkit-scrollbar-track { background: #121212; }
-html::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 6px; }
-html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
+html::-webkit-scrollbar-track { background: var(--zt-bg); }
+html::-webkit-scrollbar-thumb { background: var(--zt-scroll-thumb); border-radius: 6px; }
+html::-webkit-scrollbar-thumb:hover { background: var(--zt-scroll-thumb-hover); }
 
 .ztable-side,
 .table-responsive,
 .calc__caption,
 .calc__formula {
     scrollbar-width: thin;
-    scrollbar-color: #3a3a3a transparent;
+    scrollbar-color: var(--zt-scroll-thumb) transparent;
 }
 
 .ztable-side::-webkit-scrollbar,
@@ -931,7 +1083,7 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 .table-responsive::-webkit-scrollbar-thumb,
 .calc__caption::-webkit-scrollbar-thumb,
 .calc__formula::-webkit-scrollbar-thumb {
-    background: #3a3a3a;
+    background: var(--zt-scroll-thumb);
     border-radius: 4px;
 }
 
@@ -939,7 +1091,7 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 .table-responsive::-webkit-scrollbar-thumb:hover,
 .calc__caption::-webkit-scrollbar-thumb:hover,
 .calc__formula::-webkit-scrollbar-thumb:hover {
-    background: #4a4a4a;
+    background: var(--zt-scroll-thumb-hover);
 }
 
 
@@ -948,13 +1100,13 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 .calc__tails {
     margin: 0 0 14px;
     padding: 10px 12px;
-    border: 1px solid #2a2a2a;
+    border: 1px solid var(--zt-card-border);
     border-radius: 4px;
 }
 
 .calc__legend {
     padding: 0 4px;
-    color: #888;
+    color: var(--zt-ink-faint);
     font-size: 12px;
 }
 
@@ -963,12 +1115,12 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
     align-items: center;
     gap: 8px;
     padding: 3px 0;
-    color: #cfd6e0;
+    color: var(--zt-ink-soft);
     font-size: 13px;
     cursor: pointer;
 }
 
-.calc__tails input { accent-color: #4a90e2; }
+.calc__tails input { accent-color: var(--zt-accent); }
 
 /* Valores críticos: consulta, não cálculo — por isso a tabela é compacta e
    os números são botões, que devolvem o z para o primeiro card. */
@@ -985,32 +1137,32 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 .critical td {
     padding: 6px 4px;
     text-align: right;
-    border-bottom: 1px solid #232323;
+    border-bottom: 1px solid var(--zt-border);
     background: none;
     font-size: 12px;
 }
 
 .critical thead th {
-    color: #888;
+    color: var(--zt-ink-faint);
     font-weight: 500;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid var(--zt-border-strong);
     letter-spacing: 0;
 }
 
 .critical tbody th {
-    color: #ffcc00;
+    color: var(--zt-zcol);
     text-align: left;
     font-weight: 600;
 }
 
-.critical tbody tr:hover > * { background: #1e1e1e; }
+.critical tbody tr:hover > * { background: var(--zt-surface-hover); }
 
 .critical__z {
     padding: 2px 6px;
     border: 1px solid transparent;
     border-radius: 3px;
     background: none;
-    color: #e0e0e0;
+    color: var(--zt-ink);
     font: inherit;
     font-variant-numeric: tabular-nums;
     cursor: pointer;
@@ -1019,7 +1171,177 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 
 .critical__z:hover,
 .critical__z:focus-visible {
-    border-color: #4a90e2;
-    color: #fff;
+    border-color: var(--zt-accent);
+    color: var(--zt-ink-strong);
     outline: none;
+}
+
+
+/* Ícones inline. O sprite não ocupa espaço; cada uso herda a cor do botão. */
+.sprite {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.icon {
+    width: 15px;
+    height: 15px;
+    display: block;
+    margin: auto;
+}
+
+
+/* =====================================================
+   Impressão — a tabela em papel, que é como boa parte
+   das pessoas ainda a leva para a prova ou a bancada
+   ===================================================== */
+
+@media print {
+    /* Tudo em preto no branco: o tema escuro gastaria um cartucho por folha
+       e sairia ilegível na maioria das impressoras. */
+    html, body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    .ztable-side,
+    .selection-info,
+    .divider,
+    .calc,
+    .sprite,
+    footer {
+        display: none !important;
+    }
+
+    .ztable-layout {
+        display: block;
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .table-header {
+        display: block;
+        max-width: none;
+        margin: 0 0 8px;
+        padding: 0;
+    }
+
+    .table-header h1 {
+        color: #000 !important;
+        font-size: 13pt;
+        text-align: left;
+    }
+
+    /* O logo é branco: no papel precisa ser invertido, venha de que tema
+       vier — daí o !important, já que a regra do tema claro vem depois. */
+    .logo {
+        height: 34px;
+        filter: invert(1) !important;
+    }
+
+    .table-responsive,
+    .ztable-layout > .table-responsive {
+        overflow: visible !important;
+    }
+
+    .ztable-layout #myTable,
+    table {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        background: none !important;
+        font-size: 7.5pt !important;
+    }
+
+    .ztable-layout #myTable th,
+    .ztable-layout #myTable td,
+    th, td {
+        padding: 2px 3px !important;
+        font-size: 7.5pt !important;
+        color: #000 !important;
+        background: none !important;
+        border-bottom: 1px solid #ccc !important;
+    }
+
+    /* Nenhuma linha zebrada nem seleção: no papel isso vira mancha cinza. */
+    tr:nth-child(even),
+    tr:nth-child(odd),
+    td.selected,
+    .highlight-click,
+    .highlight-col,
+    .highlight-header,
+    tr.highlight-row > td {
+        background: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+        font-weight: normal !important;
+    }
+
+    th {
+        border-bottom: 1.5px solid #000 !important;
+        font-weight: 700 !important;
+    }
+
+    td:first-child {
+        color: #000 !important;
+        font-weight: 700 !important;
+    }
+
+    /* O cabeçalho se repete quando a tabela vira a página — sem ele, a
+       segunda folha é um bloco de números sem coluna. */
+    thead { display: table-header-group; }
+    tr { break-inside: avoid; page-break-inside: avoid; }
+
+    @page {
+        size: A4 portrait;
+        margin: 1cm;
+    }
+}
+
+
+/* Botão de tema. Mostra o destino, não o estado: no escuro aparece o sol,
+   que é para onde o clique leva. */
+#themeBtn {
+    background: transparent;
+    border: 1px solid var(--zt-border-strong);
+    color: var(--zt-ink-faint);
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+#themeBtn:hover {
+    color: var(--zt-ink-strong);
+    border-color: var(--zt-ink-dim);
+    background: var(--zt-btn-hover-bg);
+}
+
+.icon--moon { display: none; }
+
+:root[data-theme="light"] .icon--sun { display: none; }
+:root[data-theme="light"] .icon--moon { display: block; }
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .icon--sun { display: none; }
+    :root:not([data-theme="dark"]) .icon--moon { display: block; }
+}
+
+@media print {
+    #themeBtn { display: none !important; }
+}
+
+
+/* O logo é branco com transparência: no tema claro ele sumiria no fundo. */
+:root[data-theme="light"] .logo { filter: invert(1); }
+
+@media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .logo { filter: invert(1); }
 }

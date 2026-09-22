@@ -5,10 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Standard Normal Distribution | Z-Scores</title>
     <meta name="description" content="Standard normal (Z) table with interactive calculators: p-value from a z-score, probability between two z-scores and z-score from a raw value, each with the area plotted under the curve.">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <link rel="stylesheet" href="/assets/css/ztable-styles.css">
+
+<!-- O tema vai no <html> antes da folha de estilo: aplicado depois, a página
+     piscaria no tema errado a cada carregamento. -->
+<script>
+  (function () {
+    try {
+      var salvo = localStorage.getItem('ztable-theme');
+      if (salvo === 'light' || salvo === 'dark') {
+        document.documentElement.setAttribute('data-theme', salvo);
+      }
+    } catch (e) {}
+  })();
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script>
@@ -40,6 +52,28 @@
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
 </head>
 <body>
+<!-- Os dois únicos ícones da página. Inline, porque baixar uma família de
+     fontes inteira do CDN para desenhar um clipe e um visto não se paga. -->
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 6 9 17l-5-5"></path>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </symbol>
+</svg>
     <!-- Table Title -->
     <!-- Substitua o título da tabela por este bloco -->
 <div class="table-header">
@@ -60,7 +94,11 @@
             <span class="label">Interval:</span>
             <span id="intervalValue">-</span>
         </div>
-        <button id="copyBtn" title="Copy values"><i class="far fa-copy"></i></button>
+        <button id="copyBtn" title="Copy values"><svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg></button>
+        <button id="themeBtn" type="button" title="Switch between light and dark" aria-label="Switch between light and dark">
+          <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+          <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+        </button>
     </div>
     <div class="divider"></div>
     <img src="/assets/images/mklogo.png" alt="Logo" class="logo"/>
@@ -77,7 +115,7 @@
     <header class="calc__head">
       <h2 class="calc__title">Compute a P-value from a Z-score</h2>
       <button class="calc__copy" type="button" data-copiar title="Copy results">
-        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
       </button>
     </header>
 
@@ -108,7 +146,7 @@
     <header class="calc__head">
       <h2 class="calc__title">Z-score from a P-value</h2>
       <button class="calc__copy" type="button" data-copiar title="Copy results">
-        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
       </button>
     </header>
 
@@ -1248,7 +1286,7 @@
     <header class="calc__head">
       <h2 class="calc__title">Probability between two Z-scores</h2>
       <button class="calc__copy" type="button" data-copiar title="Copy results">
-        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
       </button>
     </header>
 
@@ -1285,7 +1323,7 @@
     <header class="calc__head">
       <h2 class="calc__title">Z Score Calculator</h2>
       <button class="calc__copy" type="button" data-copiar title="Copy results">
-        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
       </button>
     </header>
 
@@ -1325,7 +1363,7 @@
     <header class="calc__head">
       <h2 class="calc__title">Critical values</h2>
       <button class="calc__copy" type="button" data-copiar title="Copy table">
-        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
       </button>
     </header>
 

@@ -189,6 +189,44 @@
     el.innerHTML = plot(+vb[2], +vb[3], faixas, marcas, mini);
   }
 
+  /* ── Estado na URL ───────────────────────────────────────────────────────
+     O que está na tela vai para a barra de endereço, e o que vem na barra de
+     endereço volta para a tela. É o que permite guardar nos favoritos, colar
+     num relatório ou mandar o resultado pronto para alguém.
+
+     replaceState, não pushState: cada tecla digitada criaria uma entrada no
+     histórico, e o botão "voltar" do navegador viraria um desfazer. */
+  var params = new URLSearchParams(location.search);
+  var gravando = false;
+  /* Só depois que a página assenta: sem isto, abrir a página já encheria a
+     barra de endereço com os valores padrão de todos os cards. */
+  var podeGravar = false;
+
+  function paramNum(nome) {
+    if (!params.has(nome)) return null;
+    var v = parseFloat(params.get(nome));
+    return isNaN(v) ? null : v;
+  }
+
+  function guardarURL(pares) {
+    if (!podeGravar || gravando) return;
+    gravando = true;
+    /* Junta as mudanças do mesmo gesto numa escrita só — três campos mudando
+       juntos escreveriam a URL três vezes. setTimeout, e não
+       requestAnimationFrame: em aba de segundo plano o quadro não chega, e a
+       trava ficaria presa para sempre. */
+    setTimeout(function () {
+      gravando = false;
+      Object.keys(pares).forEach(function (k) {
+        var v = pares[k];
+        if (v === null || v === undefined || v === '') params.delete(k);
+        else params.set(k, v);
+      });
+      var busca = params.toString();
+      history.replaceState(null, '', busca ? location.pathname + '?' + busca : location.pathname);
+    }, 0);
+  }
+
   function num(el, padrao) {
     var v = parseFloat(el.value);
     return isNaN(v) ? padrao : v;
@@ -287,6 +325,7 @@
       raiz.dataset.copia = 'z = ' + z + '\n' + its.map(function (i) {
         return i.texto + ' = ' + fmt(i.p);
       }).join('\n');
+      guardarURL({ z: campo.value });
     }
 
     function marcar() {
@@ -312,6 +351,12 @@
     });
 
     if (botao) botao.addEventListener('click', function () { copiar(botao, raiz.dataset.copia); });
+
+    var zURL = paramNum('z');
+    if (zURL !== null) {
+      campo.value = zURL;
+      if (slider) slider.value = zURL;
+    }
 
     parear(campo, slider, atualizar);
     atualizar();
@@ -373,6 +418,7 @@
       raiz.dataset.copia = 'z1 = ' + a + ', z2 = ' + b + '\n' + its.map(function (i) {
         return i.texto + ' = ' + fmt(i.p);
       }).join('\n');
+      guardarURL({ z1: c1.value, z2: c2.value });
     }
 
     lista.addEventListener('click', function (e) {
@@ -383,6 +429,10 @@
     });
 
     if (botao) botao.addEventListener('click', function () { copiar(botao, raiz.dataset.copia); });
+
+    var u1 = paramNum('z1'), u2 = paramNum('z2');
+    if (u1 !== null) { c1.value = u1; if (s1) s1.value = u1; }
+    if (u2 !== null) { c2.value = u2; if (s2) s2.value = u2; }
 
     parear(c1, s1, atualizar);
     parear(c2, s2, atualizar);
@@ -439,12 +489,18 @@
           enxuto(sd) + '}=' + enxuto(Math.round(z * 1e5) / 1e5),
           'z = (X − μ) / σ');
       pintar(grafico, [[X0, z]], [z]);
-      raiz.dataset.copia = 'x = ' + x + ', média = ' + mu + ', desvio padrão = ' + sd +
+      raiz.dataset.copia = 'x = ' + x + ', mean = ' + mu + ', standard deviation = ' + sd +
                            '\nz = ' + z.toFixed(5) + '\nP(X < x) = ' + fmt(cdf(z)) +
                            '\nP(X > x) = ' + fmt(1 - cdf(z));
+      guardarURL({ x: cx.value, mu: cmu.value, sd: csd.value });
     }
 
     if (botao) botao.addEventListener('click', function () { copiar(botao, raiz.dataset.copia); });
+
+    var ux = paramNum('x'), umu = paramNum('mu'), usd = paramNum('sd');
+    if (ux !== null) cx.value = ux;
+    if (umu !== null) cmu.value = umu;
+    if (usd !== null) csd.value = usd;
 
     [cx, cmu, csd].forEach(function (c) { c.addEventListener('input', atualizar); });
     atualizar();
@@ -503,9 +559,21 @@
       tex(legenda, expr, 'z = inverse of ' + p);
       pintar(grafico, faixas, tipo === 'two' ? [-Math.abs(z), Math.abs(z)] : [z]);
       raiz.dataset.copia = 'p = ' + p + ' (' + tipo + ')\nz = ' + z.toFixed(5);
+      guardarURL({ p: campo.value, tail: tipo });
     }
 
     if (botao) botao.addEventListener('click', function () { copiar(botao, raiz.dataset.copia); });
+
+    var pURL = paramNum('p');
+    if (pURL !== null) {
+      campo.value = pURL;
+      if (slider) slider.value = pURL;
+    }
+    var tURL = params.get('tail');
+    if (tURL) {
+      opcoes.forEach(function (o) { o.checked = (o.value === tURL); });
+    }
+
     opcoes.forEach(function (o) { o.addEventListener('change', atualizar); });
     parear(campo, slider, atualizar);
     atualizar();
@@ -623,6 +691,41 @@
     });
   }
 
+  /* ── Tema ────────────────────────────────────────────────────────────────
+     Por padrão a página segue o sistema; o botão fixa a escolha. Guardamos
+     só quando ela difere do que o sistema diz, para quem mudar a preferência
+     do sistema depois não ficar preso ao que clicou uma vez. */
+  function tema() {
+    var botao = document.getElementById('themeBtn');
+    if (!botao) return;
+
+    var raiz = document.documentElement;
+    var sistemaClaro = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)');
+
+    function atual() {
+      var fixado = raiz.getAttribute('data-theme');
+      if (fixado) return fixado;
+      return sistemaClaro && sistemaClaro.matches ? 'light' : 'dark';
+    }
+
+    function aplicar(novo) {
+      var doSistema = sistemaClaro && sistemaClaro.matches ? 'light' : 'dark';
+      if (novo === doSistema) {
+        raiz.removeAttribute('data-theme');
+        try { localStorage.removeItem('ztable-theme'); } catch (e) {}
+      } else {
+        raiz.setAttribute('data-theme', novo);
+        try { localStorage.setItem('ztable-theme', novo); } catch (e) {}
+      }
+      botao.setAttribute('aria-pressed', novo === 'light' ? 'true' : 'false');
+    }
+
+    aplicar(atual());
+    botao.addEventListener('click', function () {
+      aplicar(atual() === 'dark' ? 'light' : 'dark');
+    });
+  }
+
   function iniciar() {
     formulasFixas();
     pvalor();
@@ -631,6 +734,9 @@
     zEscore();
     criticos();
     ponte();
+    tema();
+    /* A partir daqui, o que mudar veio de alguém mexendo. */
+    setTimeout(function () { podeGravar = true; }, 0);
   }
 
   if (document.readyState === 'loading') {

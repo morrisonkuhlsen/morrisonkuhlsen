@@ -83,6 +83,17 @@ para a repetição não saltar aos olhos na maioria das telas, e a cor é fixa
 porque o fundo do rodapé também é, nos dois temas. Para trocar as fórmulas,
 edite o `background-image` em `_sass/_footer.scss`.
 
+**Tabela Z.** `ztable.html` é a mais completa das páginas avulsas: além da
+tabela, traz cinco calculadoras (`assets/js/ztable-calculators.js`) — p-valor
+de um z, z de um p, faixa entre dois z, z de um valor bruto e valores críticos
+—, todas calculadas pela normal padrão, não lidas da tabela. Seu estado vive na
+URL (`?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=`), o que torna um resultado
+compartilhável. A paleta está em tokens `--zt-*` no topo de
+`assets/css/ztable-styles.css`, com tema claro por `prefers-color-scheme` e
+botão que fixa a escolha; há também folha de impressão. A coluna Z escreve o
+negativo com o sinal tipográfico − (U+2212), em que `parseFloat` devolve NaN —
+cuidado ao mexer no JS dela.
+
 **Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 23 fórmulas
 interativas, o quiz e o problema semanal são HTML solto, fora do ciclo do
 Jekyll — são aplicações com CSS e JS próprios, não conteúdo. Ficam assim de

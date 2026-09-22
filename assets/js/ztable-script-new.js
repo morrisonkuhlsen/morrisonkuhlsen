@@ -531,8 +531,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         navigator.clipboard.writeText(text).then(() => {
             const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<i class="fas fa-check"></i>';
-            copyBtn.title = 'Copiado!';
+            copyBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>';
+            copyBtn.title = 'Copied';
             setTimeout(() => {
                 copyBtn.innerHTML = originalText;
                 copyBtn.title = 'Copy values';
