@@ -1,0 +1,154 @@
+# Páginas avulsas — ferramentas e fórmulas interativas.
+# Não são páginas do Jekyll, então entram na busca por aqui.
+# Gerado a partir do <title> e do <meta description> de cada arquivo.
+
+- title: "Fórmula de Cochran"
+  url: "/formulas/cochran-formula.html"
+  description: "Fórmula de Cochran: O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Coeficiente Binomial"
+  url: "/formulas/coeficiente-binomial.html"
+  description: "Coeficiente Binomial: Representa o número de maneiras de escolher 'k' elementos de um conjunto de 'n' elementos, sem considerar a..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Coeficiente de Pearson (r)"
+  url: "/formulas/coeficiente-pearson.html"
+  description: "Coeficiente de Correlação de Pearson (r): Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Correção para População Finita"
+  url: "/formulas/correcao-populacao-finita.html"
+  description: "Correção para População Finita: O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Covariância"
+  url: "/formulas/covariancia.html"
+  description: "Covariância: Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Distribuição de Bernoulli"
+  url: "/formulas/distribuicao-bernoulli.html"
+  description: "Distribuição de Bernoulli: A probabilidade de obter exatamente 'k' em uma única tentativa de Bernoulli, onde k pode ser 0 (falha) ou 1 (sucesso)."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Distribuição Binomial"
+  url: "/formulas/distribuicao-binomial.html"
+  description: "Distribuição Binomial: A probabilidade de obter exatamente 'k' sucessos em 'n' tentativas independentes, onde cada tentativa tem..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Distribuição Normal"
+  url: "/formulas/distribuicao-normal.html"
+  description: "Distribuição Normal (Gaussiana): Representa a probabilidade relativa de uma variável aleatória contínua assumir um valor específico 'x'."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Distribuição de Poisson"
+  url: "/formulas/distribuicao-poisson.html"
+  description: "Distribuição de Poisson: A probabilidade de que o evento ocorra exatamente 'k' vezes em um intervalo."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Fórmula Quadrática"
+  url: "/formulas/formula-quadratica.html"
+  description: "Fórmula Quadrática: Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Fórmulas Interativas"
+  url: "/formulas/"
+  description: "Fórmulas interativas de estatística e probabilidade: Teorema de Bayes, distribuições, correlação, regressão, testes de hipótese e mais, explicadas termo a termo."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Intervalo de Confiança"
+  url: "/formulas/intervalo-confianca.html"
+  description: "Intervalo de Confiança: Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Média Harmônica"
+  url: "/formulas/media-harmonica.html"
+  description: "Média Harmônica: Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Alocação de Neyman"
+  url: "/formulas/neyman-allocation.html"
+  description: "Alocação de Neyman: O tamanho da amostra a ser retirado de um estrato específico 'h'. É o valor que a fórmula calcula."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Probabilidade Condicional"
+  url: "/formulas/probabilidade-condicional.html"
+  description: "Probabilidade Condicional: A probabilidade de A ocorrer dado que B já ocorreu. Representa como a ocorrência de B afeta a probabilidade de A."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teste Qui-Quadrado"
+  url: "/formulas/qui-quadrado.html"
+  description: "Teste Qui-Quadrado (χ²): A estatística de teste. Um valor alto indica uma grande discrepância entre os dados observados e os esperados."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Regra de L'Hôpital"
+  url: "/formulas/regra-lhopital.html"
+  description: "Regra de L'Hôpital: A regra se aplica quando o limite de uma fração f(x)/g(x) resulta em uma forma indeterminada, como 0/0 ou ±∞/±∞."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Regressão Linear"
+  url: "/formulas/regressao-linear.html"
+  description: "Regressão Linear Simples: O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x)."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teste t de Student"
+  url: "/formulas/t-student.html"
+  description: "Teste t de Student: A estatística de teste que mede quantos erros padrão a média amostral está distante da média hipotética. Usada quando o desvio..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teorema de Bayes"
+  url: "/formulas/teorema-bayes.html"
+  description: "Teorema de Bayes: Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teorema Central do Limite"
+  url: "/formulas/teorema-central-limite.html"
+  description: "Teorema Central do Limite: A média de uma amostra de tamanho 'n' retirada da população. O teorema descreve a distribuição dessas médias."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teorema de Chebyshev"
+  url: "/formulas/teorema-chebyshev.html"
+  description: "Teorema de Chebyshev: A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Teorema da Probabilidade Total"
+  url: "/formulas/teorema-probabilidade-total.html"
+  description: "Teorema da Probabilidade Total: A probabilidade total do evento B ocorrer, considerando todos os possíveis cenários ou partições do espaço amostral."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Z-Score"
+  url: "/formulas/z-score.html"
+  description: "Z-Score: Mede a distância de um ponto de dados da média, em termos de desvios padrão. Um Z-score positivo indica que o ponto está acima da média, e um..."
+  tags: "fórmula interativa katex"
+  lang: pt
+- title: "Standard Normal Distribution | Z-Scores"
+  url: "/ztable.html"
+  description: ""
+  tags: "tabela z normal padrão"
+  lang: pt
+- title: "Student's t Distribution | T-Table"
+  url: "/ttable.html"
+  description: ""
+  tags: "tabela t student"
+  lang: pt
+- title: "F Distribution (Snedecor) | F-Table"
+  url: "/ftable.html"
+  description: ""
+  tags: "tabela f snedecor"
+  lang: pt
+- title: "Morrison Kühlsen | Alfabeto Grego"
+  url: "/greek-alphabet.html"
+  description: ""
+  tags: "alfabeto grego letras"
+  lang: pt
+- title: "MσrrisonKühlsen – One statistics problem per week"
+  url: "/problema-semanal/"
+  description: "One statistics problem per week, in a minimal layout. Practice probability, inference, regression, and more."
+  tags: "problema semanal exercício"
+  lang: pt
+- title: "Quiz de Testes Estatísticos"
+  url: "/quiz/"
+  description: "Teste seus conhecimentos sobre testes estatísticos: escolha o teste mais adequado para cada cenário em um quiz interativo de estatística."
+  tags: "quiz teste hipótese"
+  lang: pt

@@ -1543,9 +1543,9 @@ comparar_testes()</code></pre>
 <div style="border: 2px solid #4CAF50; border-radius: 8px; padding: 16px; background: #f9f9f9; margin-top: 32px; margin-bottom: 32px;">
   <strong>🎮 Experimente o quiz sobre Testes de Hipótese:</strong>
   <br><br>
-  <iframe src="/assets/html/quiz.html" width="100%" height="700" style="border:none; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></iframe>
+  <iframe src="/quiz/" width="100%" height="700" style="border:none; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></iframe>
   <br>
-  <span style="font-size: 0.95em; color: #555;">Se o quiz não carregar, <a href="/assets/html/quiz.html" target="_blank">clique aqui para abrir em nova aba</a>.</span>
+  <span style="font-size: 0.95em; color: #555;">Se o quiz não carregar, <a href="/quiz/" target="_blank">clique aqui para abrir em nova aba</a>.</span>
 </div>
 
 ## Referências Adicionais

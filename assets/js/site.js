@@ -460,6 +460,14 @@
       return div.innerHTML;
     }
 
+    function rotulo(doc) {
+      if (doc.k === 'post') {
+        return (lang === 'en' ? 'ARTICLE' : 'ARTIGO') + (doc.d ? ' · ' + doc.d : '');
+      }
+      if (doc.k === 'tool') return lang === 'en' ? 'TOOL' : 'FERRAMENTA';
+      return lang === 'en' ? 'PAGE' : 'PÁGINA';
+    }
+
     function render(query) {
       results.innerHTML = '';
       active = -1;
@@ -488,9 +496,7 @@
         a.innerHTML =
           '<span class="search__result-title">' + highlight(hit.doc.t, terms) + '</span>' +
           '<span class="search__result-excerpt">' + highlight(hit.doc.e, terms) + '</span>' +
-          '<span class="search__result-meta">' + (hit.doc.k === 'post'
-            ? (lang === 'en' ? 'ARTICLE' : 'ARTIGO') + (hit.doc.d ? ' · ' + hit.doc.d : '')
-            : (lang === 'en' ? 'PAGE' : 'PÁGINA')) + '</span>';
+          '<span class="search__result-meta">' + rotulo(hit.doc) + '</span>';
         results.appendChild(a);
       });
 

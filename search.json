@@ -9,6 +9,21 @@ permalink: /search.json
 {%- assign pages = site.pages | where_exp: "p", "p.title" | where_exp: "p", "p.layout" | where_exp: "p", "p.layout != 'null'" -%}
 {%- assign items = site.posts | concat: pages -%}
 [
+{%- comment -%}
+  Primeiro as páginas avulsas — ferramentas e fórmulas interativas. Elas são
+  HTML solto, fora do ciclo do Jekyll, então vêm de _data/standalone.yml.
+{%- endcomment -%}
+{%- for avulsa in site.data.standalone -%}
+{
+"t": {{ avulsa.title | jsonify }},
+"u": {{ avulsa.url | relative_url | jsonify }},
+"e": {{ avulsa.description | jsonify }},
+"g": {{ avulsa.tags | jsonify }},
+"l": {{ avulsa.lang | jsonify }},
+"d": "",
+"k": "tool"
+},
+{%- endfor -%}
 {%- for item in items -%}
 {
 "t": {{ item.title | jsonify }},

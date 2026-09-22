@@ -75,6 +75,13 @@ compartilhar, copiar link, tamanho do texto e voltar ao topo. A escala de
 leitura fica no `localStorage`, então vale nos artigos seguintes. Some abaixo
 de 64rem, junto com o índice.
 
+**Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 23 fórmulas
+interativas, o quiz e o problema semanal são HTML solto, fora do ciclo do
+Jekyll — são aplicações com CSS e JS próprios, não conteúdo. Ficam assim de
+propósito. Para entrarem na busca há `_data/standalone.yml`, gerado a partir
+do `<title>` e do `<meta description>` de cada arquivo; regenere-o quando
+adicionar uma página nova.
+
 **Busca.** `search.json` e um matcher próprio em `site.js`. Não usa Lunr: o
 pipeline padrão dele faz *stemming* em inglês, o que atrapalha num site
 majoritariamente em português. Casar prefixos de token sem acento acerta mais
@@ -127,6 +134,8 @@ e pelos crons de publicação agendada. O domínio vem do `CNAME`.
       `:root[data-theme="dark"] .mk-stat-post { … }` resolve. Os outros 31 são
       CSS ad-hoc e hoje dependem do remendo no fim de `_sass/_prose.scss`.
 - [ ] Card de anúncio do post (`mk-ad-widget`), se for para manter.
+- [ ] As páginas avulsas ainda não têm OpenGraph nem hreflang — só title,
+      description e canonical.
 
 ## Licença
 
