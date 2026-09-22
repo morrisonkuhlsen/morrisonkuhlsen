@@ -122,6 +122,14 @@ da Cauchy, é o quantil daqui que fica mais perto do verdadeiro. A normal també
 bate com o `statistics.NormalDist` do Python, que é uma terceira implementação:
 2,1e-13 na cdf e 4,8e-11 no quantil.
 
+Isso confere as distribuições. A composição — qual área cada leitura usa, e as
+fórmulas dos testes t e F — é conferida por `casos-interface.jl`, que imprime
+os mesmos números que as onze leituras das três páginas devem mostrar. Na
+última passagem, os 26 valores bateram dígito a dígito.
+
+E os valores **impressos** nas tabelas também foram conferidos contra as
+distribuições: 820 na Z, 610 na t e 2016 na F.
+
 O estado vive na URL — `?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=` na Z e
 `?t=&df=`, `?a=&adf=&ctail=`, `?xbar=&mu=&s=&n=` na t —, o que torna um
 resultado compartilhável. A paleta está em tokens `--zt-*` no topo de

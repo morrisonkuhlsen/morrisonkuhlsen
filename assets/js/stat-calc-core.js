@@ -423,19 +423,29 @@
     return params.get(nome);
   }
 
+  var pendentes = {};
+
   function guardarURL(pares) {
-    if (!podeGravar || gravando) return;
+    if (!podeGravar) return;
+
+    /* As chamadas do mesmo gesto se acumulam aqui em vez de serem descartadas
+       pela trava: dois campos mudando juntos escreviam a URL uma vez só, e
+       era a primeira que vencia — a barra de endereço ficava com o valor
+       anterior do segundo campo. */
+    Object.keys(pares).forEach(function (k) { pendentes[k] = pares[k]; });
+    if (gravando) return;
     gravando = true;
-    /* Junta as mudanças do mesmo gesto numa escrita só. setTimeout, e não
-       requestAnimationFrame: em aba de segundo plano o quadro não chega, e a
-       trava ficaria presa para sempre. */
+
+    /* setTimeout, e não requestAnimationFrame: em aba de segundo plano o
+       quadro não chega, e a trava ficaria presa para sempre. */
     setTimeout(function () {
       gravando = false;
-      Object.keys(pares).forEach(function (k) {
-        var v = pares[k];
+      Object.keys(pendentes).forEach(function (k) {
+        var v = pendentes[k];
         if (v === null || v === undefined || v === '') params.delete(k);
         else params.set(k, v);
       });
+      pendentes = {};
       var busca = params.toString();
       history.replaceState(null, '', busca ? location.pathname + '?' + busca : location.pathname);
     }, 0);
