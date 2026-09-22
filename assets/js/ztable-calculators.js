@@ -47,6 +47,45 @@
     return Math.min(1, Math.max(0, p));
   }
 
+  /* Φ⁻¹: o z que deixa p de área à esquerda. Começa pela aproximação racional
+     de Acklam (erro relativo ~1e-9) e fecha com um passo de Halley usando a
+     própria cdf — o resultado sai na precisão da máquina, que é o que se
+     espera de quem vai usar o número como valor crítico. */
+  var IA = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02,
+            1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+  var IB = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02,
+            6.680131188771972e+01, -1.328068155288572e+01];
+  var IC = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00,
+            -2.549732539343734e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+  var ID = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00,
+            3.754408661907416e+00];
+
+  function inversa(p) {
+    if (!(p > 0 && p < 1)) return NaN;
+
+    var corte = 0.02425;
+    var q, r, x;
+
+    if (p < corte) {
+      q = Math.sqrt(-2 * Math.log(p));
+      x = (((((IC[0] * q + IC[1]) * q + IC[2]) * q + IC[3]) * q + IC[4]) * q + IC[5]) /
+          ((((ID[0] * q + ID[1]) * q + ID[2]) * q + ID[3]) * q + 1);
+    } else if (p <= 1 - corte) {
+      q = p - 0.5;
+      r = q * q;
+      x = (((((IA[0] * r + IA[1]) * r + IA[2]) * r + IA[3]) * r + IA[4]) * r + IA[5]) * q /
+          (((((IB[0] * r + IB[1]) * r + IB[2]) * r + IB[3]) * r + IB[4]) * r + 1);
+    } else {
+      q = Math.sqrt(-2 * Math.log(1 - p));
+      x = -(((((IC[0] * q + IC[1]) * q + IC[2]) * q + IC[3]) * q + IC[4]) * q + IC[5]) /
+           ((((ID[0] * q + ID[1]) * q + ID[2]) * q + ID[3]) * q + 1);
+    }
+
+    var erro = cdf(x) - p;
+    var u = erro * Math.sqrt(2 * Math.PI) * Math.exp(x * x / 2);
+    return x - u / (1 + x * u / 2);
+  }
+
   /* Densidade, só para desenhar a curva. */
   function pdf(z) {
     return Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
@@ -411,6 +450,122 @@
     atualizar();
   }
 
+  /* ── 4. z a partir de uma probabilidade ──────────────────────────────────
+     O caminho inverso do primeiro card: "quero 95%" → z = 1,645 (ou 1,96, se
+     a área for a central). Qual das três leituras vale muda o resultado, por
+     isso a escolha é explícita em vez de suposta. */
+  function inversaCalc() {
+    var raiz = document.getElementById('calc-inverse');
+    if (!raiz) return;
+
+    var campo = raiz.querySelector('[data-campo]');
+    var slider = raiz.querySelector('[data-slider]');
+    var valor = raiz.querySelector('[data-valor]');
+    var legenda = raiz.querySelector('[data-legenda]');
+    var grafico = raiz.querySelector('[data-plot]');
+    var botao = raiz.querySelector('[data-copiar]');
+    var opcoes = raiz.querySelectorAll('input[name="inv-tail"]');
+
+    function cauda() {
+      for (var i = 0; i < opcoes.length; i++) {
+        if (opcoes[i].checked) return opcoes[i].value;
+      }
+      return 'left';
+    }
+
+    function atualizar() {
+      var p = num(campo, 0.95);
+      var tipo = cauda();
+
+      if (!(p > 0 && p < 1)) {
+        valor.textContent = '—';
+        tex(legenda, 'p\\in(0,1)', 'p must be between 0 and 1');
+        pintar(grafico, [], []);
+        return;
+      }
+
+      var z, faixas, expr;
+      if (tipo === 'left') {
+        z = inversa(p);
+        faixas = [[X0, z]];
+        expr = 'z=\\Phi^{-1}(' + enxuto(p) + ')';
+      } else if (tipo === 'right') {
+        z = inversa(1 - p);
+        faixas = [[z, X1]];
+        expr = 'z=\\Phi^{-1}(1-' + enxuto(p) + ')';
+      } else {
+        z = inversa((1 + p) / 2);
+        faixas = [[-Math.abs(z), Math.abs(z)]];
+        expr = 'z=\\Phi^{-1}\\!\\left(\\tfrac{1+' + enxuto(p) + '}{2}\\right)';
+      }
+
+      valor.textContent = isFinite(z) ? z.toFixed(5) : '—';
+      tex(legenda, expr, 'z = inverse of ' + p);
+      pintar(grafico, faixas, tipo === 'two' ? [-Math.abs(z), Math.abs(z)] : [z]);
+      raiz.dataset.copia = 'p = ' + p + ' (' + tipo + ')\nz = ' + z.toFixed(5);
+    }
+
+    if (botao) botao.addEventListener('click', function () { copiar(botao, raiz.dataset.copia); });
+    opcoes.forEach(function (o) { o.addEventListener('change', atualizar); });
+    parear(campo, slider, atualizar);
+    atualizar();
+  }
+
+  /* ── 5. valores críticos ─────────────────────────────────────────────────
+     A consulta que se repete o dia inteiro. Os números saem da inversa, e não
+     de uma lista escrita à mão, para não haver duas fontes de verdade. */
+  var NIVEIS = [0.80, 0.90, 0.95, 0.98, 0.99, 0.999];
+
+  function criticos() {
+    var raiz = document.getElementById('calc-critical');
+    if (!raiz) return;
+
+    var corpo = raiz.querySelector('[data-criticos]');
+    var botao = raiz.querySelector('[data-copiar]');
+
+    var linhas = NIVEIS.map(function (nivel) {
+      return {
+        nivel: nivel,
+        alfa: Math.round((1 - nivel) * 1000) / 1000,
+        uma: inversa(nivel),
+        duas: inversa((1 + nivel) / 2)
+      };
+    });
+
+    corpo.innerHTML = linhas.map(function (l) {
+      var rotulo = (l.nivel * 100).toFixed(l.nivel === 0.999 ? 1 : 0) + '%';
+      return '<tr>' +
+               '<th scope="row">' + rotulo + '</th>' +
+               '<td>' + l.alfa.toFixed(3) + '</td>' +
+               '<td><button type="button" class="critical__z" data-z="' + l.uma.toFixed(5) + '">' +
+                 l.uma.toFixed(3) + '</button></td>' +
+               '<td><button type="button" class="critical__z" data-z="' + l.duas.toFixed(5) + '">' +
+                 '±' + l.duas.toFixed(3) + '</button></td>' +
+             '</tr>';
+    }).join('');
+
+    /* Clicar num valor manda o z para o primeiro card, pelo mesmo evento que
+       a tabela usa — o caminho de volta do valor crítico para a área. */
+    corpo.addEventListener('click', function (e) {
+      var alvo = e.target.closest('.critical__z');
+      if (!alvo) return;
+      document.dispatchEvent(new CustomEvent('mk:z-escolhido', {
+        detail: { z: parseFloat(alvo.dataset.z) }
+      }));
+      var card = document.getElementById('calc-pvalue');
+      if (card) card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    });
+
+    if (botao) {
+      botao.addEventListener('click', function () {
+        copiar(botao, 'Confidence\tAlpha\tOne-tailed\tTwo-tailed\n' + linhas.map(function (l) {
+          return (l.nivel * 100) + '%\t' + l.alfa.toFixed(3) + '\t' +
+                 l.uma.toFixed(5) + '\t' + l.duas.toFixed(5);
+        }).join('\n'));
+      });
+    }
+  }
+
   /* ── Ponte com a tabela ──────────────────────────────────────────────────
      A tabela já destaca as células clicadas; aqui só lemos o z delas e o
      anunciamos por evento, para as calculadoras não precisarem conhecer o
@@ -471,8 +626,10 @@
   function iniciar() {
     formulasFixas();
     pvalor();
+    inversaCalc();
     entreDois();
     zEscore();
+    criticos();
     ponte();
   }
 

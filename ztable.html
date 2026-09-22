@@ -104,6 +104,40 @@
     <p class="calc__hint">Click a row to show it in the panel.</p>
   </article>
 
+  <article class="calc__card" id="calc-inverse">
+    <header class="calc__head">
+      <h2 class="calc__title">Z-score from a P-value</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <p class="calc__formula" data-tex="z=\Phi^{-1}(p)">z = Φ⁻¹(p)</p>
+
+    <div class="calc__inputs">
+      <label class="calc__field">
+        <span>Probability (p)</span>
+        <input type="number" data-campo step="0.001" min="0.0001" max="0.9999" value="0.95" inputmode="decimal">
+      </label>
+      <input class="calc__slider" type="range" data-slider min="0.001" max="0.999" step="0.001" value="0.95"
+             aria-label="Probability slider">
+    </div>
+
+    <fieldset class="calc__tails">
+      <legend class="calc__legend">p is the area…</legend>
+      <label><input type="radio" name="inv-tail" value="left" checked> to the left of z</label>
+      <label><input type="radio" name="inv-tail" value="right"> to the right of z</label>
+      <label><input type="radio" name="inv-tail" value="two"> between −z and z</label>
+    </fieldset>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-valor>1.64485</output>
+      <span class="calc__caption" data-legenda>z</span>
+      <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+           aria-label="Standard normal curve with the area that defines the z-score shaded"></svg>
+    </div>
+  </article>
+
   </aside>
 
   <div class="table-responsive">
@@ -1285,6 +1319,28 @@
              aria-label="Standard normal curve with the area below the z-score shaded"></svg>
       </div>
     </div>
+  </article>
+
+  <article class="calc__card" id="calc-critical">
+    <header class="calc__head">
+      <h2 class="calc__title">Critical values</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy table">
+        <i class="far fa-copy" aria-hidden="true"></i><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <table class="critical">
+      <thead>
+        <tr>
+          <th scope="col">Conf.</th>
+          <th scope="col">α</th>
+          <th scope="col">One-tailed</th>
+          <th scope="col">Two-tailed</th>
+        </tr>
+      </thead>
+      <tbody data-criticos></tbody>
+    </table>
+    <p class="calc__hint">Click a value to send it to the p-value calculator.</p>
   </article>
 
   </aside>

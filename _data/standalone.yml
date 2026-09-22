@@ -124,8 +124,8 @@
   lang: pt
 - title: "Standard Normal Distribution | Z-Scores"
   url: "/ztable.html"
-  description: ""
-  tags: "tabela z normal padrão"
+  description: "Tabela Z com calculadoras: p-valor a partir de um z-score, probabilidade entre dois z-scores, z-score de um valor bruto, z a partir de uma probabilidade e valores críticos."
+  tags: "tabela z normal padrão calculadora p-valor valor crítico"
   lang: pt
 - title: "Student's t Distribution | T-Table"
   url: "/ttable.html"

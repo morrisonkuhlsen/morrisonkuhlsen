@@ -941,3 +941,85 @@ html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
 .calc__formula::-webkit-scrollbar-thumb:hover {
     background: #4a4a4a;
 }
+
+
+/* Escolha da cauda na calculadora inversa. Três rádios, porque o mesmo p dá
+   três z diferentes conforme a área que se quer. */
+.calc__tails {
+    margin: 0 0 14px;
+    padding: 10px 12px;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+}
+
+.calc__legend {
+    padding: 0 4px;
+    color: #888;
+    font-size: 12px;
+}
+
+.calc__tails label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+    color: #cfd6e0;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.calc__tails input { accent-color: #4a90e2; }
+
+/* Valores críticos: consulta, não cálculo — por isso a tabela é compacta e
+   os números são botões, que devolvem o z para o primeiro card. */
+.critical {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    background: none;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.critical th,
+.critical td {
+    padding: 6px 4px;
+    text-align: right;
+    border-bottom: 1px solid #232323;
+    background: none;
+    font-size: 12px;
+}
+
+.critical thead th {
+    color: #888;
+    font-weight: 500;
+    border-bottom: 1px solid #444;
+    letter-spacing: 0;
+}
+
+.critical tbody th {
+    color: #ffcc00;
+    text-align: left;
+    font-weight: 600;
+}
+
+.critical tbody tr:hover > * { background: #1e1e1e; }
+
+.critical__z {
+    padding: 2px 6px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: none;
+    color: #e0e0e0;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+}
+
+.critical__z:hover,
+.critical__z:focus-visible {
+    border-color: #4a90e2;
+    color: #fff;
+    outline: none;
+}
