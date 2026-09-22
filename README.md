@@ -87,6 +87,12 @@ três elementos por fração. Por isso o data URI não é escrito à mão: vem d
 `scripts/gera-marca-formulas.py`, onde cada fórmula é uma lista de pedaços e a
 fração é uma tupla `(numerador, denominador)`.
 
+O mesmo gerador produz a faixa do header (`.site-header::after`), com seis
+fórmulas menores. Lá o SVG entra como **máscara**, não como imagem: quem pinta
+é o `currentColor`, então a marca acompanha sozinha os três estados do header —
+branca sobre o hero, escura quando ele resolve em branco. A opacidade cai de
+0,09 para 0,05 no fundo claro, onde o contraste é maior.
+
 ```bash
 python3 scripts/gera-marca-formulas.py             # imprime a linha do CSS
 python3 scripts/gera-marca-formulas.py --escrever  # troca no _footer.scss

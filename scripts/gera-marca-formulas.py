@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Gera a marca d'água de fórmulas do rodapé (_sass/_footer.scss).
+"""Gera as marcas d'água de fórmulas: a do rodapé (_sass/_footer.scss) e a
+faixa do header (_sass/_header.scss).
 
 As frações saem empilhadas — numerador sobre denominador, com barra —, o que
 em SVG puro significa três elementos por fração, não um texto com barra. Daí
 este gerador: escrever isso à mão dentro de um data URI seria ilegível.
 
-    python3 scripts/gera-marca-formulas.py        # imprime a linha do CSS
-    python3 scripts/gera-marca-formulas.py --escrever   # troca no _footer.scss
+    python3 scripts/gera-marca-formulas.py             # imprime as duas linhas
+    python3 scripts/gera-marca-formulas.py --escrever  # troca nos dois arquivos
 
 Cada fórmula é uma lista de pedaços: "texto" para o que é corrido e
 ("numerador", "denominador") para o que vira fração.
@@ -17,6 +18,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 FOOTER = RAIZ / "_sass" / "_footer.scss"
+HEADER = RAIZ / "_sass" / "_header.scss"
 
 # x, y, tamanho, rotação, pedaços
 FORMULAS = [
@@ -42,6 +44,19 @@ FORMULAS = [
     (320, 572, 21,  3, ["P(A∪B) = P(A)+P(B)−P(A∩B)"]),
 ]
 
+# A faixa do header é baixa (121px) e passa por trás da marca e do menu, então
+# leva poucas fórmulas, pequenas. Este SVG vira máscara, não imagem: a cor sai
+# do currentColor do header, que já alterna entre branco sobre o hero e escuro
+# no fundo sólido.
+FORMULAS_HEADER = [
+    (30,   34, 17,  -3, ["P(A∩B) = P(A)·P(B)"]),
+    (300,  30, 16,   2, ["σ² = ", ("∑(xᵢ−μ)²", "N")]),
+    (250,  96, 18,  -2, ["x̄ = ", ("∑ xᵢ", "n")]),
+    (560,  40, 15,   3, ["∑ pᵢ = 1"]),
+    (690,  92, 17,  -3, ["z = ", ("x − μ", "σ")]),
+    (10,  100, 15,   2, ["E[X] = μ"]),
+]
+
 # Larguras médias em Georgia itálico, como fração do corpo da fonte. Não é
 # métrica exata: serve para dimensionar a barra da fração e o espaço que ela
 # ocupa. As partes corridas se ancoram nas pontas, então um erro aqui muda a
@@ -64,7 +79,7 @@ def largura(texto, corpo):
     return total * corpo
 
 
-def svg_formula(x, y, corpo, giro, pedacos):
+def svg_formula(x, y, corpo, giro, pedacos, cor="rgb(32,37,49)"):
     """Uma fórmula, em coordenadas locais, dentro de um grupo já rotacionado."""
     partes = []
     cursor = 0.0
@@ -87,7 +102,7 @@ def svg_formula(x, y, corpo, giro, pedacos):
             partes.append(
                 f"<line x1='{cursor:.1f}' y1='{-corpo * 0.28:.1f}'"
                 f" x2='{cursor + barra:.1f}' y2='{-corpo * 0.28:.1f}'"
-                f" stroke='rgb(32,37,49)' stroke-width='{max(1, corpo * 0.055):.1f}'/>"
+                f" stroke='{cor}' stroke-width='{max(1, corpo * 0.055):.1f}'/>"
             )
             partes.append(
                 f"<text x='{meio:.1f}' y='{corpo * 0.62:.1f}' font-size='{menor:.1f}'"
@@ -101,12 +116,12 @@ def escapa(texto):
     return texto.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def monta_svg():
-    corpo = "".join(svg_formula(*f) for f in FORMULAS)
+def monta_svg(formulas, largura, altura, cor):
+    corpo = "".join(svg_formula(*f, cor=cor) for f in formulas)
     return (
-        "<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='620'"
-        " viewBox='0 0 1600 620'>"
-        "<g fill='rgb(32,37,49)' font-family='Georgia, Times New Roman, serif'"
+        f"<svg xmlns='http://www.w3.org/2000/svg' width='{largura}' height='{altura}'"
+        f" viewBox='0 0 {largura} {altura}'>"
+        f"<g fill='{cor}' font-family='Georgia, Times New Roman, serif'"
         " font-style='italic'>" + corpo + "</g></svg>"
     )
 
@@ -130,20 +145,36 @@ def para_data_uri(svg):
     return "data:image/svg+xml," + "".join(saida)
 
 
+def troca(arquivo, padrao, linha):
+    """Devolve False só quando o seletor não existe — conteúdo já igual é sucesso."""
+    css = arquivo.read_text(encoding="utf-8")
+    if not re.search(padrao, css, flags=re.M):
+        print(f"seletor não encontrado em {arquivo.name}")
+        return False
+    novo = re.sub(padrao, linha.replace("\\", "\\\\"), css, count=1, flags=re.M)
+    if novo != css:
+        arquivo.write_text(novo, encoding="utf-8")
+    return True
+
+
 def main():
-    uri = para_data_uri(monta_svg())
-    linha = f'  background-image: url("{uri}");'
+    rodape = para_data_uri(monta_svg(FORMULAS, 1600, 620, "rgb(32,37,49)"))
+    linha_rodape = f'  background-image: url("{rodape}");'
+
+    # branco puro porque este SVG é máscara: o que é opaco recebe a cor do header
+    faixa = para_data_uri(monta_svg(FORMULAS_HEADER, 900, 130, "white"))
+    linha_header = f'  mask-image: url("{faixa}");'
+
     if "--escrever" in sys.argv:
-        css = FOOTER.read_text(encoding="utf-8")
-        novo = re.sub(r'^  background-image: url\(".*?"\);$', linha.replace("\\", "\\\\"),
-                      css, count=1, flags=re.M)
-        if novo == css:
-            print("nada substituído — o seletor mudou?")
-            return 1
-        FOOTER.write_text(novo, encoding="utf-8")
-        print(f"_footer.scss atualizado ({len(uri)} caracteres no data URI)")
-    else:
-        print(linha)
+        ok = troca(FOOTER, r'^  background-image: url\(".*?"\);$', linha_rodape)
+        ok &= troca(HEADER, r'^  mask-image: url\(".*?"\);$', linha_header)
+        if ok:
+            print(f"_footer.scss ({len(rodape)}) e _header.scss ({len(faixa)}) atualizados")
+        return 0 if ok else 1
+
+    print(linha_rodape)
+    print()
+    print(linha_header)
     return 0
 
 

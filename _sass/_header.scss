@@ -34,6 +34,32 @@
   transition: opacity 0.3s;
 }
 
+/* Marca d'água de fórmulas na faixa do header. É máscara, não imagem: o que
+   pinta é o currentColor, então ela acompanha sozinha os três estados — branca
+   sobre o hero, escura quando o header resolve em branco. Fica sobre o degradê
+   (mesmo z-index, declarada depois) e atrás de tudo que é conteúdo. */
+.site-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: currentColor;
+  opacity: 0.09;
+  mask-repeat: repeat;
+  mask-size: 900px 130px;
+  -webkit-mask-repeat: repeat;
+  -webkit-mask-size: 900px 130px;
+  transition: opacity 0.3s;
+  mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20width='900'%20height='130'%20viewBox='0%200%20900%20130'><g%20fill='white'%20font-family='Georgia,%20Times%20New%20Roman,%20serif'%20font-style='italic'><g%20transform='translate(30%2034)%20rotate(-3)'><text%20x='0.0'%20y='0'%20font-size='17'>P(A%E2%88%A9B)%20=%20P(A)%C2%B7P(B)</text></g><g%20transform='translate(300%2030)%20rotate(2)'><text%20x='0.0'%20y='0'%20font-size='16'>%CF%83%C2%B2%20=%20</text><text%20x='63.4'%20y='-6.7'%20font-size='13.1'%20text-anchor='middle'>%E2%88%91(x%E1%B5%A2%E2%88%92%CE%BC)%C2%B2</text><line%20x1='33.6'%20y1='-4.5'%20x2='93.3'%20y2='-4.5'%20stroke='white'%20stroke-width='1.0'/><text%20x='63.4'%20y='9.9'%20font-size='13.1'%20text-anchor='middle'>N</text></g><g%20transform='translate(250%2096)%20rotate(-2)'><text%20x='0.0'%20y='0'%20font-size='18'>x%CC%84%20=%20</text><text%20x='55.1'%20y='-7.6'%20font-size='14.8'%20text-anchor='middle'>%E2%88%91%20x%E1%B5%A2</text><line%20x1='37.8'%20y1='-5.0'%20x2='72.5'%20y2='-5.0'%20stroke='white'%20stroke-width='1.0'/><text%20x='55.1'%20y='11.2'%20font-size='14.8'%20text-anchor='middle'>n</text></g><g%20transform='translate(560%2040)%20rotate(3)'><text%20x='0.0'%20y='0'%20font-size='15'>%E2%88%91%20p%E1%B5%A2%20=%201</text></g><g%20transform='translate(690%2092)%20rotate(-3)'><text%20x='0.0'%20y='0'%20font-size='17'>z%20=%20</text><text%20x='45.0'%20y='-7.1'%20font-size='13.9'%20text-anchor='middle'>x%20%E2%88%92%20%CE%BC</text><line%20x1='27.2'%20y1='-4.8'%20x2='62.7'%20y2='-4.8'%20stroke='white'%20stroke-width='1.0'/><text%20x='45.0'%20y='10.5'%20font-size='13.9'%20text-anchor='middle'>%CF%83</text></g><g%20transform='translate(10%20100)%20rotate(2)'><text%20x='0.0'%20y='0'%20font-size='15'>E[X]%20=%20%CE%BC</text></g></g></svg>");
+  -webkit-mask-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20width='900'%20height='130'%20viewBox='0%200%20900%20130'><g%20fill='white'%20font-family='Georgia,%20Times%20New%20Roman,%20serif'%20font-style='italic'><g%20transform='translate(30%2034)%20rotate(-3)'><text%20x='0.0'%20y='0'%20font-size='17'>P(A%E2%88%A9B)%20=%20P(A)%C2%B7P(B)</text></g><g%20transform='translate(300%2030)%20rotate(2)'><text%20x='0.0'%20y='0'%20font-size='16'>%CF%83%C2%B2%20=%20</text><text%20x='63.4'%20y='-6.7'%20font-size='13.1'%20text-anchor='middle'>%E2%88%91(x%E1%B5%A2%E2%88%92%CE%BC)%C2%B2</text><line%20x1='33.6'%20y1='-4.5'%20x2='93.3'%20y2='-4.5'%20stroke='white'%20stroke-width='1.0'/><text%20x='63.4'%20y='9.9'%20font-size='13.1'%20text-anchor='middle'>N</text></g><g%20transform='translate(250%2096)%20rotate(-2)'><text%20x='0.0'%20y='0'%20font-size='18'>x%CC%84%20=%20</text><text%20x='55.1'%20y='-7.6'%20font-size='14.8'%20text-anchor='middle'>%E2%88%91%20x%E1%B5%A2</text><line%20x1='37.8'%20y1='-5.0'%20x2='72.5'%20y2='-5.0'%20stroke='white'%20stroke-width='1.0'/><text%20x='55.1'%20y='11.2'%20font-size='14.8'%20text-anchor='middle'>n</text></g><g%20transform='translate(560%2040)%20rotate(3)'><text%20x='0.0'%20y='0'%20font-size='15'>%E2%88%91%20p%E1%B5%A2%20=%201</text></g><g%20transform='translate(690%2092)%20rotate(-3)'><text%20x='0.0'%20y='0'%20font-size='17'>z%20=%20</text><text%20x='45.0'%20y='-7.1'%20font-size='13.9'%20text-anchor='middle'>x%20%E2%88%92%20%CE%BC</text><line%20x1='27.2'%20y1='-4.8'%20x2='62.7'%20y2='-4.8'%20stroke='white'%20stroke-width='1.0'/><text%20x='45.0'%20y='10.5'%20font-size='13.9'%20text-anchor='middle'>%CF%83</text></g><g%20transform='translate(10%20100)%20rotate(2)'><text%20x='0.0'%20y='0'%20font-size='15'>E[X]%20=%20%CE%BC</text></g></g></svg>");
+}
+
+/* No fundo branco a mesma marca pesa mais, porque o contraste é maior. */
+.site-header:not(.is-over-hero)::after,
+.site-header.is-over-hero:hover::after,
+.site-header.is-scrolled::after { opacity: 0.05; }
+
 .site-header > * { position: relative; }
 
 /* Largura total, sem container centrado: a marca encosta na borda esquerda
