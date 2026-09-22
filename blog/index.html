@@ -34,8 +34,12 @@ permalink: /blog/
 
   <div class="blog__list" id="blog-list">
     {%- for post in lang_posts -%}
+      {%- comment -%}
+        Separador é vírgula, não espaço: um espaço literal entre tags do Liquid
+        é engolido pelo controle de espaço em branco, e as tags saíam coladas.
+      {%- endcomment -%}
       {%- capture slugged_tags -%}
-        {%- for t in post.tags -%}{{ t | slugify }}{%- unless forloop.last %} {% endunless -%}{%- endfor -%}
+        {%- for t in post.tags -%}{{ t | slugify }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
       {%- endcapture -%}
       {%- assign read_min = post.content | number_of_words | divided_by: 200 | plus: 1 -%}
       {%- assign author = site.data.authors[post.author] -%}

@@ -295,7 +295,7 @@
     function filter(tag) {
       matching = cards.filter(function (card) {
         if (tag === 'all') return true;
-        return (card.dataset.tags || '').split(' ').indexOf(tag) !== -1;
+        return (card.dataset.tags || '').split(',').indexOf(tag) !== -1;
       });
       shown = Math.min(PAGE_SIZE, matching.length);
       render();
