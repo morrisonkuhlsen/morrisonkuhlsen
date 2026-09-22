@@ -55,15 +55,15 @@ Julia tenta juntar os dois mundos:
   --mk-blue: #8be9fd;
   --mk-muted: #a7abc8;
   --mk-border: rgba(255,255,255,.08);
-  --mk-card-bg: #f8fafc;
-  --mk-card-border: #e5e7eb;
-  --mk-note-bg: #fff7ed;
+  --mk-card-bg: var(--mk-surface-2);
+  --mk-card-border: var(--mk-border);
+  --mk-note-bg: var(--mk-tint-warn);
   --mk-note-border: #fb923c;
-  --mk-tip-bg: #ecfdf5;
+  --mk-tip-bg: var(--mk-tint-ok);
   --mk-tip-border: #10b981;
-  --mk-alert-bg: #fff1f2;
+  --mk-alert-bg: var(--mk-tint-danger);
   --mk-alert-border: #f43f5e;
-  --mk-info-bg: #eff6ff;
+  --mk-info-bg: var(--mk-tint-info);
   --mk-info-border: #3b82f6;
 }
 
@@ -114,8 +114,8 @@ Julia tenta juntar os dois mundos:
 }
 
 .mk-julia-post table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 
 .mk-julia-post table th {
@@ -126,15 +126,15 @@ Julia tenta juntar os dois mundos:
 
 .mk-julia-post table td {
   padding: 10px 16px;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 
 .mk-julia-post table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 
 .mk-julia-post table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 
 .mk-julia-post .mk-table {
@@ -145,8 +145,8 @@ Julia tenta juntar os dois mundos:
 }
 
 .mk-julia-post .mk-table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 
 .mk-julia-post .mk-table th {
@@ -159,15 +159,15 @@ Julia tenta juntar os dois mundos:
 .mk-julia-post .mk-table td {
   padding: 12px 18px;
   text-align: center;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 
 .mk-julia-post .mk-table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 
 .mk-julia-post .mk-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 
 .mk-julia-post .mk-table tbody tr:last-child td {
@@ -176,8 +176,8 @@ Julia tenta juntar os dois mundos:
 
 /* Cartão de metadados SEO */
 .mk-julia-post .mk-seo-card {
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--mk-surface-2);
+  border: 1px solid var(--mk-border);
   border-radius: 14px;
   padding: 1.1rem 1.25rem;
   margin: 1.5rem 0;

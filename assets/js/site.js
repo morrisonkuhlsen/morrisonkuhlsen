@@ -349,6 +349,10 @@
     function apply(theme) {
       if (theme === 'dark') root.dataset.theme = 'dark';
       else delete root.dataset.theme;
+      /* Seis posts trazem regras `.dark-mode ...` no próprio <style>, escritas
+         para o tema antigo. A classe ficou órfã quando ele saiu; religá-la faz
+         esses posts usarem as cores escuras que o autor já tinha definido. */
+      root.classList.toggle('dark-mode', theme === 'dark');
       button.setAttribute('aria-pressed', String(theme === 'dark'));
       syncGiscus(theme);
       try { localStorage.setItem('mk-theme', theme); } catch (e) {}

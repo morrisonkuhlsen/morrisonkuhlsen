@@ -22,7 +22,7 @@ Peguei essa base — publicada pela NOAA no repositório [`noaa-nwfsc/srkw-statu
 /* Figuras e legendas deste post — o tema não define estilo de figcaption. */
 .orca-post figure { text-align: center; margin: 2.2em auto; max-width: 1000px; }
 .orca-post figure img { width: 100%; height: auto; border-radius: 10px; box-shadow: 0 8px 24px rgba(15, 23, 42, .12); }
-.orca-post figcaption { margin-top: 0.75em; font-size: 0.88rem; color: #555; line-height: 1.5; text-align: left; }
+.orca-post figcaption { margin-top: 0.75em; font-size: 0.88rem; color: var(--mk-ink-soft); line-height: 1.5; text-align: left; }
 [data-theme="dark"] .orca-post figcaption { color: #a9b4c2 !important; }
 
 /* Tabelas numéricas deste post. */

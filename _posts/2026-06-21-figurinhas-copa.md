@@ -771,8 +771,8 @@ $$
   font-size: 0.95rem;
 }
 .mk-table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 .mk-table th {
   padding: 14px 18px;
@@ -783,13 +783,13 @@ $$
 .mk-table td {
   padding: 12px 18px;
   text-align: center;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 .mk-table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 .mk-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 .mk-table tbody tr:last-child td {
   font-weight: 700;

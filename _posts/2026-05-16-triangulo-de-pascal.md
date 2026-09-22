@@ -335,26 +335,26 @@ Ao mudar a linha, a identidade algébrica aparece automaticamente em notação m
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  color: #000000;
+  color: var(--mk-ink);
   font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 #pascal-widget .pascal-control strong {
-  color: #17324d;
+  color: var(--mk-ink);
   font-size: 1rem;
 }
 
 #pascal-widget input[type="range"] {
   width: 100%;
-  accent-color: #17324d;
+  accent-color: var(--mk-ink);
   cursor: pointer;
 }
 
 #pascal-widget .pascal-latex-small {
   margin-top: 8px;
-  color: #17324d;
+  color: var(--mk-ink);
   font-size: 0.95rem;
   min-height: 1.4em;
 }
@@ -383,9 +383,9 @@ Ao mudar a linha, a identidade algébrica aparece automaticamente em notação m
   height: 38px;
   padding: 0 8px;
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--mk-surface);
   border: 1px solid rgba(23,50,77,0.20);
-  color: #17324d;
+  color: var(--mk-ink);
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -395,20 +395,20 @@ Ao mudar a linha, a identidade algébrica aparece automaticamente em notação m
 }
 
 #pascal-widget .pascal-row.is-selected .pascal-cell {
-  background: #17324d;
-  color: #ffffff;
-  border-color: #17324d;
+  background: var(--mk-ink);
+  color: var(--mk-surface);
+  border-color: var(--mk-ink);
   transform: translateY(-1px);
 }
 
 #pascal-widget .pascal-cell.is-edge {
-  background: #f5f6f7;
+  background: var(--mk-surface-2);
 }
 
 #pascal-widget .pascal-row.is-selected .pascal-cell.is-edge {
   background: #f44336;
   border-color: #f44336;
-  color: #ffffff;
+  color: var(--mk-surface);
 }
 
 #pascal-widget .pascal-output {
@@ -416,20 +416,20 @@ Ao mudar a linha, a identidade algébrica aparece automaticamente em notação m
   background: rgba(0,0,0,0.04);
   border-radius: 10px;
   padding: 14px 16px;
-  color: #000000;
+  color: var(--mk-ink);
   line-height: 1.8;
   overflow-x: auto;
 }
 
 #pascal-widget .pascal-output-title {
   font-weight: 700;
-  color: #17324d;
+  color: var(--mk-ink);
   margin-bottom: 6px;
 }
 
 #pascal-widget .pascal-note {
-  border-left: 4px solid #17324d;
-  background: #f0f4f8;
+  border-left: 4px solid var(--mk-ink);
+  background: var(--mk-surface-2);
 }
 
 @media (max-width: 720px) {
@@ -1211,8 +1211,8 @@ table {
   font-size: 0.95rem;
 }
 table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 table th {
   padding: 12px 16px;
@@ -1221,10 +1221,10 @@ table th {
 }
 table td {
   padding: 10px 16px;
-  color: #17324d;
+  color: var(--mk-ink);
 }
-table tbody tr:nth-child(odd)  { background-color: #f5f6f7; }
-table tbody tr:nth-child(even) { background-color: #ffffff; }
+table tbody tr:nth-child(odd)  { background-color: var(--mk-surface-2); }
+table tbody tr:nth-child(even) { background-color: var(--mk-surface); }
 
 .mk-table {
   width: 100%;
@@ -1233,8 +1233,8 @@ table tbody tr:nth-child(even) { background-color: #ffffff; }
   font-size: 0.95rem;
 }
 .mk-table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 .mk-table th {
   padding: 14px 18px;
@@ -1245,13 +1245,13 @@ table tbody tr:nth-child(even) { background-color: #ffffff; }
 .mk-table td {
   padding: 12px 18px;
   text-align: center;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 .mk-table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 .mk-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 .mk-table tbody tr:last-child td {
   font-weight: 700;

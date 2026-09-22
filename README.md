@@ -88,6 +88,16 @@ majoritariamente em português. Casar prefixos de token sem acento acerta mais
 em ~70 documentos. Abre com Ctrl+K ou `/`, filtra pelo idioma da página e
 destaca o trecho que casou. O índice é buscado uma vez, na primeira abertura.
 
+**Cores dos posts.** Os posts trazem CSS próprio no `<style>`. As cores de
+superfície, texto e borda que eles fixavam viraram tokens `--mk-*`, definidos
+em `_sass/_tokens.scss` para os dois temas — por isso o modo escuro funciona
+dentro dos artigos. Seis posts trazem regras `.dark-mode …` escritas para o
+tema antigo; a classe é religada junto com `data-theme`, então essas cores
+voltaram a valer.
+
+As regras de tabela do tema usam `:where(.prose)`, de especificidade zero, para
+que o CSS do post sempre vença: quem escreveu a tabela decide como ela fica.
+
 **Tema escuro.** Botão na faixa de utilidades. O tema vai em `data-theme` no
 `<html>`, é aplicado por um script inline no `<head>` — antes da folha de
 estilo, senão a página pisca branca —, fica no `localStorage` e é repassado ao
@@ -128,14 +138,9 @@ e pelos crons de publicação agendada. O domínio vem do `CNAME`.
 
 ## O que ainda falta
 
-- [ ] **Tema escuro nos posts antigos.** 36 dos 37 posts trazem o próprio
-      `<style>` (~2.900 linhas no total) com cores claras fixas. Só 5 usam o
-      padrão bom, de variáveis `--mk-*` num wrapper — nesses, um bloco
-      `:root[data-theme="dark"] .mk-stat-post { … }` resolve. Os outros 31 são
-      CSS ad-hoc e hoje dependem do remendo no fim de `_sass/_prose.scss`.
 - [ ] Card de anúncio do post (`mk-ad-widget`), se for para manter.
-- [ ] As páginas avulsas ainda não têm OpenGraph nem hreflang — só title,
-      description e canonical.
+- [ ] As páginas avulsas não têm hreflang — não há contraparte em outro
+      idioma para apontar. OpenGraph e Twitter Card já estão lá.
 
 ## Licença
 

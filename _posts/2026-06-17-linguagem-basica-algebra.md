@@ -754,33 +754,33 @@ O widget monta um polinômio simples e mostra algumas classificações automatic
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  color: #000000;
+  color: var(--mk-ink);
   font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 #poly-widget .poly-control strong {
-  color: #17324d;
+  color: var(--mk-ink);
   font-size: 1rem;
 }
 
 #poly-widget input[type="range"] {
   width: 100%;
-  accent-color: #17324d;
+  accent-color: var(--mk-ink);
   cursor: pointer;
 }
 
 #poly-widget input[type="checkbox"] {
   transform: scale(1.25);
-  accent-color: #17324d;
+  accent-color: var(--mk-ink);
   cursor: pointer;
   margin-top: 8px;
 }
 
 #poly-widget .poly-latex-small {
   margin-top: 8px;
-  color: #17324d;
+  color: var(--mk-ink);
   font-size: 0.95rem;
   min-height: 1.4em;
 }
@@ -790,26 +790,26 @@ O widget monta um polinômio simples e mostra algumas classificações automatic
   background: rgba(0,0,0,0.04);
   border-radius: 10px;
   padding: 14px 16px;
-  color: #000000;
+  color: var(--mk-ink);
   line-height: 1.8;
   overflow-x: auto;
 }
 
 #poly-widget .poly-output-title {
   font-weight: 700;
-  color: #17324d;
+  color: var(--mk-ink);
   margin-bottom: 6px;
 }
 
 #poly-widget .poly-note {
-  border-left: 4px solid #17324d;
-  background: #f0f4f8;
+  border-left: 4px solid var(--mk-ink);
+  background: var(--mk-surface-2);
 }
 
 #poly-widget .poly-badge {
   display: inline-block;
-  background: #17324d;
-  color: #ffffff;
+  background: var(--mk-ink);
+  color: var(--mk-surface);
   padding: 5px 10px;
   border-radius: 999px;
   margin: 4px 6px 4px 0;
@@ -1213,8 +1213,8 @@ table {
   font-size: 0.95rem;
 }
 table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 table th {
   padding: 12px 16px;
@@ -1223,10 +1223,10 @@ table th {
 }
 table td {
   padding: 10px 16px;
-  color: #17324d;
+  color: var(--mk-ink);
 }
-table tbody tr:nth-child(odd)  { background-color: #f5f6f7; }
-table tbody tr:nth-child(even) { background-color: #ffffff; }
+table tbody tr:nth-child(odd)  { background-color: var(--mk-surface-2); }
+table tbody tr:nth-child(even) { background-color: var(--mk-surface); }
 
 .mk-table {
   width: 100%;
@@ -1235,8 +1235,8 @@ table tbody tr:nth-child(even) { background-color: #ffffff; }
   font-size: 0.95rem;
 }
 .mk-table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 .mk-table th {
   padding: 14px 18px;
@@ -1247,13 +1247,13 @@ table tbody tr:nth-child(even) { background-color: #ffffff; }
 .mk-table td {
   padding: 12px 18px;
   text-align: center;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 .mk-table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 .mk-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 .mk-table tbody tr:last-child td {
   font-weight: 700;

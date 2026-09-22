@@ -55,6 +55,7 @@
   try {
     var t = localStorage.getItem('mk-theme');
     if (t) document.documentElement.dataset.theme = t;
+    if (t === 'dark') document.documentElement.classList.add('dark-mode');
   } catch (e) {}
 </script>
 

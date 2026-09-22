@@ -22,28 +22,28 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
   --mk-bg-code: #1d1d2f;
   --mk-bg-code-2: #181829;
   --mk-text-code: #edf1ff;
-  --mk-muted: #64748b;
+  --mk-muted: var(--mk-ink-soft);
 
-  --mk-blue-dark: #17324d;
+  --mk-blue-dark: var(--mk-ink);
   --mk-blue: #2563eb;
   --mk-green: #10b981;
   --mk-orange: #fb923c;
   --mk-red: #f43f5e;
   --mk-purple: #7c3aed;
 
-  --mk-card-bg: #f8fafc;
-  --mk-card-border: #e5e7eb;
+  --mk-card-bg: var(--mk-surface-2);
+  --mk-card-border: var(--mk-border);
 
-  --mk-note-bg: #fff7ed;
+  --mk-note-bg: var(--mk-tint-warn);
   --mk-note-border: #fb923c;
 
-  --mk-tip-bg: #ecfdf5;
+  --mk-tip-bg: var(--mk-tint-ok);
   --mk-tip-border: #10b981;
 
-  --mk-alert-bg: #fff1f2;
+  --mk-alert-bg: var(--mk-tint-danger);
   --mk-alert-border: #f43f5e;
 
-  --mk-info-bg: #eff6ff;
+  --mk-info-bg: var(--mk-tint-info);
   --mk-info-border: #3b82f6;
 
   --mk-purple-bg: #f5f3ff;
@@ -88,7 +88,7 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 }
 
 .mk-stat-post .mk-card {
-  background: #ffffff;
+  background: var(--mk-surface);
   border: 1px solid var(--mk-card-border);
   border-radius: 16px;
   padding: 1.15rem 1.25rem;
@@ -128,8 +128,8 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 }
 
 .mk-stat-post .mk-kpi {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: var(--mk-surface);
+  border: 1px solid var(--mk-border);
   border-radius: 16px;
   padding: 1rem;
   text-align: center;
@@ -138,13 +138,13 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 
 .mk-stat-post .mk-kpi strong {
   display: block;
-  color: #17324d;
+  color: var(--mk-ink);
   font-size: 1.25rem;
   margin-bottom: .25rem;
 }
 
 .mk-stat-post .mk-kpi span {
-  color: #64748b;
+  color: var(--mk-ink-soft);
   font-size: .9rem;
 }
 
@@ -161,8 +161,8 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 }
 
 .mk-stat-post table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 
 .mk-stat-post table th {
@@ -173,16 +173,16 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 
 .mk-stat-post table td {
   padding: 10px 16px;
-  color: #17324d;
+  color: var(--mk-ink);
   vertical-align: top;
 }
 
 .mk-stat-post table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 
 .mk-stat-post table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 
 .mk-stat-post .mk-table {
@@ -193,8 +193,8 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 }
 
 .mk-stat-post .mk-table thead tr {
-  background-color: #17324d;
-  color: #ffffff;
+  background-color: var(--mk-ink);
+  color: var(--mk-surface);
 }
 
 .mk-stat-post .mk-table th {
@@ -207,20 +207,20 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 .mk-stat-post .mk-table td {
   padding: 12px 18px;
   text-align: center;
-  color: #17324d;
+  color: var(--mk-ink);
 }
 
 .mk-stat-post .mk-table tbody tr:nth-child(odd) {
-  background-color: #f5f6f7;
+  background-color: var(--mk-surface-2);
 }
 
 .mk-stat-post .mk-table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+  background-color: var(--mk-surface);
 }
 
 .mk-stat-post .mk-formula-box {
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
+  background: var(--mk-surface-2);
+  border: 1px solid var(--mk-border);
   border-radius: 16px;
   padding: 1.2rem;
   margin: 1.35rem 0;
@@ -229,15 +229,15 @@ slug: quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica
 }
 
 .mk-stat-post .mk-step {
-  border-left: 4px solid #17324d;
-  background: #f8fafc;
+  border-left: 4px solid var(--mk-ink);
+  background: var(--mk-surface-2);
   padding: 1rem 1.1rem;
   border-radius: 10px;
   margin: 1rem 0;
 }
 
 .mk-stat-post .mk-step strong {
-  color: #17324d;
+  color: var(--mk-ink);
 }
 
 .dark-mode .mk-stat-post .mk-card,

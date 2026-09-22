@@ -18,6 +18,19 @@
 
   /* Superfícies que ficam escuras nos dois temas — se usassem --ink, o
      rodapé e os blocos de código clareariam junto com o tema escuro. */
+  /* Cores que os posts antigos traziam fixas no próprio <style>. Vira token
+     aqui para o tema escuro poder redefini-las num lugar só. */
+  --mk-surface:       #ffffff;
+  --mk-surface-2:     #f5f6f7;
+  --mk-ink:           #17324d;
+  --mk-ink-soft:      #555555;
+  --mk-border:        #e5e7eb;
+  --mk-border-strong: #333333;
+  --mk-tint-info:     #eff6ff;
+  --mk-tint-ok:       #ecfdf5;
+  --mk-tint-warn:     #fff7ed;
+  --mk-tint-danger:   #fff1f2;
+
   --code-bg:      #14161c;
   --code-ink:     #e8eaf0;
   --footer-bg:    #14161c;
@@ -88,6 +101,17 @@
   --accent-dark:  #a9bcff;
   --accent-ink:   #11131a;
   --highlight:    #a78bfa;
+
+  --mk-surface:       #1c1f27;
+  --mk-surface-2:     #22262f;
+  --mk-ink:           #dde3ec;
+  --mk-ink-soft:      #a8aebd;
+  --mk-border:        #2e3440;
+  --mk-border-strong: #4a5260;
+  --mk-tint-info:     #17243a;
+  --mk-tint-ok:       #10251c;
+  --mk-tint-warn:     #2a2115;
+  --mk-tint-danger:   #2a1518;
 
   --toc-ink:      #8b93a3;
   --toc-active:   #8ba4ff;

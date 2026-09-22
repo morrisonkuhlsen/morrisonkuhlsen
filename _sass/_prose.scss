@@ -61,11 +61,22 @@
 
 .prose pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
 
-/* Tabelas: rolam no celular em vez de estourar a página. */
+/* Tabelas: rolam no celular em vez de estourar a página.
+
+   O :where() zera a especificidade do escopo. Muitos posts estilizam `table`
+   e `thead tr` com seletor sem classe no próprio <style>; sem isto, o `.prose`
+   daqui vencia sempre e o cabeçalho ficava com o fundo deste tema e a cor do
+   post — texto e fundo na mesma cor. Com :where(), o post ganha, que é o
+   comportamento correto: quem escreveu a tabela decide como ela fica. */
 .prose .table-wrap { overflow-x: auto; }
-.prose table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
-.prose th, .prose td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; }
-.prose th { font-weight: 700; background: var(--paper-alt); }
+:where(.prose) table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+:where(.prose) th, :where(.prose) td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; }
+/* O fundo do cabeçalho vai na LINHA, não na célula. Vários posts estilizam
+   `thead tr` no próprio <style>, que carrega depois desta folha: mirando o
+   mesmo elemento, a regra deles vence naturalmente. Na célula, o fundo cobria
+   o da linha e deixava texto e fundo na mesma cor. */
+:where(.prose) thead tr { background: var(--paper-alt); }
+:where(.prose) th { font-weight: 700; }
 
 .prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.5rem; }
 
@@ -330,20 +341,20 @@ mjx-container[display="true"] {
 :root[data-theme="dark"] .theme-toggle__sun { display: block; }
 
 /* ─── Blocos com cor fixa no Markdown ─────────────────────────────────────
-   Os posts da 1.0 trazem caixas com style="" embutido — fundo claro e, às
-   vezes, color: #000 — escritas quando só existia a página clara. No tema
-   escuro isso dá texto claro sobre caixa clara, ou preto sobre preto.
-   Enquanto esses blocos não virarem classes (junto com o port do mk-box),
-   forçamos um par legível: quem já traz fundo fica com texto escuro; quem
-   não traz ganha uma superfície clara. Precisa de !important porque estilo
-   inline só perde para isso. */
+   As caixas dos posts antigos traziam cores claras fixas em `style=""` no
+   próprio Markdown. As que estavam em <style> viraram tokens; sobra o estilo
+   inline elemento a elemento, que só perde para !important. Esta regra é o
+   último remendo — cai quando esses blocos virarem classes. */
 
-:root[data-theme="dark"] .prose > [style*="color"] { color: #14161c !important; }
-:root[data-theme="dark"] .prose > [style*="color"] * { color: inherit !important; }
+/* Bloco com fundo claro fixo: escurece o texto, para ler sobre a caixa. */
+:root[data-theme="dark"] .prose > [style*="background-color"],
+:root[data-theme="dark"] .prose > [style*="background-color"] * { color: #14161c !important; }
 
-:root[data-theme="dark"] .prose > [style*="color"]:not([style*="background-color"]) {
-  background-color: #f4f5f8 !important;
-  border-radius: 8px;
+/* Bloco que só fixa a cor do texto, sem fundo: clareia, para ler sobre a
+   página escura. Antes isto virava uma ilha clara no meio do artigo. */
+:root[data-theme="dark"] .prose > [style*="color"]:not([style*="background-color"]),
+:root[data-theme="dark"] .prose > [style*="color"]:not([style*="background-color"]) * {
+  color: var(--mk-ink) !important;
 }
 
 
