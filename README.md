@@ -77,11 +77,24 @@ leitura fica no `localStorage`, então vale nos artigos seguintes. Some abaixo
 de 64rem, junto com o índice.
 
 **Marca d'água do rodapé.** Um SVG em data URI que se repete, com 20 fórmulas
-de estatística e probabilidade em notação Unicode, numa serifada em itálico.
-Sem MathJax, sem DOM extra e sem imagem para baixar. O ladrilho é de 1600px
-para a repetição não saltar aos olhos na maioria das telas, e a cor é fixa
-porque o fundo do rodapé também é, nos dois temas. Para trocar as fórmulas,
-edite o `background-image` em `_sass/_footer.scss`.
+de estatística e probabilidade, numa serifada em itálico. Sem MathJax, sem DOM
+extra e sem imagem para baixar. O ladrilho é de 1600px para a repetição não
+saltar aos olhos na maioria das telas, e a cor é fixa porque o fundo do rodapé
+também é, nos dois temas.
+
+As frações são empilhadas — numerador, barra e denominador —, o que em SVG são
+três elementos por fração. Por isso o data URI não é escrito à mão: vem de
+`scripts/gera-marca-formulas.py`, onde cada fórmula é uma lista de pedaços e a
+fração é uma tupla `(numerador, denominador)`.
+
+```bash
+python3 scripts/gera-marca-formulas.py             # imprime a linha do CSS
+python3 scripts/gera-marca-formulas.py --escrever  # troca no _footer.scss
+```
+
+A largura da barra sai de uma tabela de larguras médias da Georgia itálica, que
+é estimativa: as partes corridas se ancoram nas pontas da fração, então um erro
+ali muda a folga em volta da barra e nunca sobrepõe texto.
 
 **Tabelas Z, t e F.** As três são a tabela no meio e calculadoras nas
 laterais, que grudam ao rolar; abaixo de 1400px tudo empilha, calculadoras
