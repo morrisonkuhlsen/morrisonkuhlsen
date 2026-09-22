@@ -3,64 +3,35 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Elementos da interface
     const table = document.getElementById('myTable');
-    const copyBtn = document.getElementById('copyBtn');
-    let z1Value = document.getElementById('z1Value');
-    let z2Value = document.getElementById('z2Value');
-    let intervalValue = document.getElementById('intervalValue');
-    
-    // Verificar se o DOM está totalmente carregado
+
     if (!document.body) {
         console.error('Erro: O corpo do documento não foi carregado!');
         return;
     }
-    
-    // Debug: Verificar se os elementos foram encontrados
-    
-    // Verificar elementos essenciais
+
     if (!table) {
         console.error('Erro: Tabela não encontrada!');
         return;
     }
-    
-    // Criar elementos dinamicamente se não existirem
-    const selectionInfo = document.querySelector('.selection-info');
-    if (selectionInfo) {
-        if (!z1Value) {
-            console.warn('Criando elemento z1Value dinamicamente');
-            const el = document.createElement('span');
-            el.id = 'z1Value';
-            el.textContent = '-';
-            document.querySelector('.selection-item:first-child').appendChild(el);
-            z1Value = el;
-        }
-        if (!z2Value) {
-            console.warn('Criando elemento z2Value dinamicamente');
-            const el = document.createElement('span');
-            el.id = 'z2Value';
-            el.textContent = '-';
-            document.querySelectorAll('.selection-item')[1].appendChild(el);
-            z2Value = el;
-        }
-        if (!intervalValue) {
-            console.warn('Criando elemento intervalValue dinamicamente');
-            const el = document.createElement('span');
-            el.id = 'intervalValue';
-            el.textContent = '-';
-            document.querySelectorAll('.selection-item')[2].appendChild(el);
-            intervalValue = el;
-        }
-    }
-    
+
     // Variáveis globais
     let selectedCells = [];
     let tooltip = null;
     
     // Inicialização
+    /* Ano do rodapé, nas três tabelas. Estava preso em 2025 no HTML. */
+    function anoDoRodape() {
+        document.querySelectorAll('[data-ano]').forEach(el => {
+            el.textContent = new Date().getFullYear();
+        });
+    }
+
     function init() {
         setupEventListeners();
         setupTooltips();
         setupTable();
         setupStickyPositiveHeader(); // <-- adiciona comportamento de "congelar" o cabeçalho positivo
+        anoDoRodape();
     }
     
     // Torna a fileira do Z positivo "sticky" quando atinge o topo, e oculta o thead negativo
@@ -121,14 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar event listeners
     function setupEventListeners() {
-        // Botão de copiar
-        if (copyBtn) {
-            copyBtn.addEventListener('click', copyToClipboard);
-        }
-        
         // Limpar seleções ao clicar fora
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('#myTable') && !e.target.closest('.selection-info')) {
+            if (!e.target.closest('#myTable')) {
                 clearSelections();
             }
         });
@@ -254,9 +220,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
             clearSelections();
-        } else if (e.key === 'c' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            copyToClipboard();
         }
     }
     
@@ -270,8 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.classList.remove('selected');
             selectedCells.splice(index, 1);
             updateSelectionHighlight();
-            updateSelectionInfo();
-            return;
+                return;
         }
         
         // Se já tem 2 selecionados, remove o mais antigo
@@ -284,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
         cell.classList.add('selected');
         selectedCells.push(cell);
         updateSelectionHighlight();
-        updateSelectionInfo();
     }
     
     function updateSelectionHighlight() {
@@ -311,120 +272,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    function updateSelectionInfo() {
-        try {
-            
-            // Verificar se os elementos do painel existem
-            if (!z1Value || !z2Value || !intervalValue) {
-                console.error('Elementos do painel não encontrados');
-                return;
-            }
-            
-            // Função auxiliar para formatar o valor de probabilidade
-            const formatProbability = (p) => {
-                if (p === null || p === undefined || p === '') return '';
-                const num = parseFloat(p);
-                return isNaN(num) ? '' : num.toFixed(4);
-            };
-            
-            if (selectedCells.length === 0) {
-                z1Value.textContent = '-';
-                z2Value.textContent = '-';
-                intervalValue.textContent = '-';
-                return;
-            }
-            
-            // Atualizar Z1
-            const cell1 = selectedCells[0];
-            const row1 = cell1.parentElement;
-            
-            // Obter o valor Z da célula selecionada
-            const cellZValue = cell1.getAttribute('data-z');
-            const cellPValue = cell1.getAttribute('data-p');
-            
-            
-            let z1Display = '-';
-            let p1Display = '-';
-            
-            // Verifica se os valores são válidos
-            if (cellZValue && !isNaN(Number(cellZValue)) && cellPValue && !isNaN(Number(cellPValue))) {
-                z1Display = Number(cellZValue).toFixed(2);
-                p1Display = formatProbability(cellPValue);
-            } else {
-                // Se não encontrar os atributos válidos, tenta calcular
-                const z1 = zDaCelula(cell1);
-                const p1 = formatProbability(cell1.textContent);
-                
-                if (z1 !== null && !isNaN(z1)) z1Display = z1.toFixed(2);
-                if (p1 !== '') p1Display = p1;
-            }
-            
-            // Monta o texto final, mostrando apenas os valores válidos
-            if (z1Display !== '-' && p1Display !== '-') {
-                z1Value.textContent = `${z1Display} (${p1Display})`;
-            } else if (z1Display !== '-') {
-                z1Value.textContent = z1Display;
-            } else if (p1Display !== '-') {
-                z1Value.textContent = `P: ${p1Display}`;
-            } else {
-                z1Value.textContent = '-';
-            }
-            
-            // Atualizar Z2 e intervalo se existir
-            if (selectedCells.length > 1) {
-                const cell2 = selectedCells[1];
-                const row2 = cell2.parentElement;
-                
-                // Obter o valor Z da segunda célula selecionada
-                const cell2ZValue = cell2.getAttribute('data-z');
-                const cell2PValue = cell2.getAttribute('data-p');
-                
-                
-                let z2Display = '-';
-                let p2Display = '-';
-                
-                // Verifica se os valores são válidos
-                if (cell2ZValue && !isNaN(Number(cell2ZValue)) && cell2PValue && !isNaN(Number(cell2PValue))) {
-                    z2Display = Number(cell2ZValue).toFixed(2);
-                    p2Display = formatProbability(cell2PValue);
-                } else {
-                    // Se não encontrar os atributos válidos, tenta calcular
-                    const z2 = zDaCelula(cell2);
-                    const p2 = formatProbability(cell2.textContent);
-                    
-                    if (z2 !== null && !isNaN(z2)) z2Display = z2.toFixed(2);
-                    if (p2 !== '') p2Display = p2;
-                }
-                
-                // Monta o texto final, mostrando apenas os valores válidos
-                if (z2Display !== '-' && p2Display !== '-') {
-                    z2Value.textContent = `${z2Display} (${p2Display})`;
-                } else if (z2Display !== '-') {
-                    z2Value.textContent = z2Display;
-                } else if (p2Display !== '-') {
-                    z2Value.textContent = `P: ${p2Display}`;
-                } else {
-                    z2Value.textContent = '-';
-                }
-                
-                // Calcular intervalo
-                const p1 = cell1.getAttribute('data-p') ? parseFloat(cell1.getAttribute('data-p')) : parseFloat(cell1.textContent);
-                const p2 = cell2.getAttribute('data-p') ? parseFloat(cell2.getAttribute('data-p')) : parseFloat(cell2.textContent);
-                
-                if (!isNaN(p1) && !isNaN(p2)) {
-                    const interval = Math.abs(p2 - p1);
-                    intervalValue.textContent = interval.toFixed(4);
-                } else {
-                    intervalValue.textContent = '-';
-                }
-            } else {
-                z2Value.textContent = '-';
-                intervalValue.textContent = '-';
-            }
-        } catch (error) {
-            console.error('Erro ao atualizar informações de seleção:', error);
-        }
-    }
     
     // Funções de utilidade
     function formatNumber(num) {
@@ -483,64 +330,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    function copyToClipboard() {
-        if (selectedCells.length === 0 || !copyBtn) return;
-        
-        let text = '';
-        if (selectedCells.length === 1) {
-            const z = selectedCells[0].getAttribute('data-z');
-            const p = selectedCells[0].getAttribute('data-p');
-            const isValidZ = z && !isNaN(Number(z));
-            const isValidP = p && !isNaN(Number(p));
-            
-            const parts = [];
-            if (isValidZ) parts.push(`Z = ${Number(z).toFixed(2)}`);
-            if (isValidP) parts.push(`P = ${formatNumber(p)}`);
-            
-            text = parts.join(', ');
-        } else {
-            const z1 = selectedCells[0].getAttribute('data-z');
-            const z2 = selectedCells[1].getAttribute('data-z');
-            const p1 = selectedCells[0].getAttribute('data-p');
-            const p2 = selectedCells[1].getAttribute('data-p');
-            
-            const isValidZ1 = z1 && !isNaN(Number(z1));
-            const isValidZ2 = z2 && !isNaN(Number(z2));
-            const isValidP1 = p1 && !isNaN(Number(p1));
-            const isValidP2 = p2 && !isNaN(Number(p2));
-            
-            const line1 = [];
-            if (isValidZ1) line1.push(`Z1 = ${Number(z1).toFixed(2)}`);
-            if (isValidP1) line1.push(`P1 = ${formatNumber(p1)}`);
-            
-            const line2 = [];
-            if (isValidZ2) line2.push(`Z2 = ${Number(z2).toFixed(2)}`);
-            if (isValidP2) line2.push(`P2 = ${formatNumber(p2)}`);
-            
-            let intervalText = '';
-            if (isValidP1 && isValidP2) {
-                const interval = Math.abs(parseFloat(p2) - parseFloat(p1)).toFixed(4);
-                intervalText = `\nInterval: ${interval}`;
-            }
-            
-            text = '';
-            if (line1.length > 0) text += line1.join(', ');
-            if (line2.length > 0) text += (text ? '\n' : '') + line2.join(', ');
-            if (intervalText) text += intervalText;
-        }
-        
-        navigator.clipboard.writeText(text).then(() => {
-            const originalText = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>';
-            copyBtn.title = 'Copied';
-            setTimeout(() => {
-                copyBtn.innerHTML = originalText;
-                copyBtn.title = 'Copy values';
-            }, 2000);
-        }).catch(err => {
-            console.error('Erro ao copiar para a área de transferência:', err);
-        });
-    }
     
     function clearSelections() {
         // Remover classes de seleção
@@ -553,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Atualizar interface
         updateSelectionHighlight();
-        updateSelectionInfo();
         
     }
     

@@ -81,25 +81,15 @@
         <h1>Standard Normal Distribution Z-Scores</h1>
 
     </div>
-    <div class="selection-info" id="selectionInfo">
-        <div class="selection-item">
-            <span class="label">Z1:</span>
-            <span id="z1Value">-</span>
-        </div>
-        <div class="selection-item">
-            <span class="label">Z2:</span>
-            <span id="z2Value">-</span>
-        </div>
-        <div class="selection-item">
-            <span class="label">Interval:</span>
-            <span id="intervalValue">-</span>
-        </div>
-        <button id="copyBtn" title="Copy values"><svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg></button>
-        <button id="themeBtn" type="button" title="Switch between light and dark" aria-label="Switch between light and dark">
-          <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"></use></svg>
-          <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"></use></svg>
-        </button>
-    </div>
+    <!-- O painel Z1/Z2/Intervalo saiu: as calculadoras ao lado da tabela dão os
+         mesmos números com mais casas e a área desenhada, e são alimentadas
+         pelos mesmos cliques. Dois lugares para o mesmo valor, um deles
+         arredondando duas vezes, é pior que um só. -->
+    <button id="themeBtn" type="button" title="Switch between light and dark"
+            aria-label="Switch between light and dark">
+      <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+      <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+    </button>
     <div class="divider"></div>
     <img src="/assets/images/mklogo.png" alt="Logo" class="logo"/>
 </div>
@@ -1388,7 +1378,8 @@
     <script src="/assets/js/ztable-script-new.js"></script>
     <script src="/assets/js/ztable-calculators.js"></script>
     <footer>
-        MorrisonKühlsen &copy; 2025 — Creative Commons License
+        MorrisonKühlsen &copy; <span data-ano>2026</span> —
+        <a href="/LICENSE">MIT License</a>
     </footer>
 </body>
 </html>

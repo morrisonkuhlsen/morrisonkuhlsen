@@ -274,50 +274,6 @@ body {
             margin-top: 12px;
         }
 
-        .selection-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: var(--zt-panel-bg);
-            padding: 10px 16px;
-            border-radius: 6px;
-            border: 1px solid var(--zt-border-strong);
-            margin-top: 12px;
-            position: relative;
-        }
-
-        .selection-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-        }
-
-        .selection-item .label {
-            color: var(--zt-ink-muted);
-            font-weight: 500;
-        }
-
-        #copyBtn {
-            background: transparent;
-            border: 1px solid var(--zt-border-strong);
-            color: var(--zt-ink-faint);
-            width: 32px;
-            height: 32px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-
-        #copyBtn:hover {
-            color: var(--zt-ink-strong);
-            border-color: var(--zt-ink-dim);
-            background: var(--zt-btn-hover-bg);
-        }
-
         .divider {
             width: 1px;
             height: 56px;
@@ -405,26 +361,12 @@ td.selected {
         padding: 6px 6px;
         font-size: 0.85rem;
     }
-    .selection-info {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100vw;
-        gap: 2px;
-    }
-    .selection-item {
-        width: 100%;
-        margin-bottom: 2px;
-    }
     .divider, .logo {
         display: none;
     }
     .table-header {
         flex-direction: column;
         align-items: flex-start;
-    }
-    .selection-info button {
-        margin-top: 8px;
-        width: 100%;
     }
     footer {
         font-size: 0.8rem;
@@ -1207,7 +1149,6 @@ html::-webkit-scrollbar-thumb:hover { background: var(--zt-scroll-thumb-hover); 
     }
 
     .ztable-side,
-    .selection-info,
     .divider,
     .calc,
     .sprite,
