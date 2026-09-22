@@ -150,26 +150,43 @@
     return Math.exp(lg - (v + 1) / 2 * Math.log(1 + t * t / v));
   }
 
-  /* Quantil da t. Bisseção, e não Newton: com poucos graus de liberdade as
-     caudas são longas e um Newton mal iniciado escapa para o infinito. O
-     chute de partida vem da normal, que já põe o intervalo perto. */
+  /* Quantil da t. Bisseção para chegar perto, e não Newton puro: com poucos
+     graus de liberdade as caudas são longas e um Newton mal iniciado escapa
+     para o infinito. O chute de partida vem da normal.
+
+     Acima da mediana resolvemos o lado espelhado: a cdf de t grande vale
+     1 − ε, e procurar ali significa comparar números que diferem na décima
+     casa. Do lado da cauda a mesma conta sai direto da beta incompleta, sem
+     cancelamento — com ν = 1 e p = 0,999999 isso é a diferença entre errar na
+     sexta casa e acertar na décima. */
   function tinv(p, v) {
     if (!(p > 0 && p < 1) || !(v > 0)) return NaN;
     if (p === 0.5) return 0;
+    if (p > 0.5) return -tinv(1 - p, v);
 
     var chute = ninv(p);
-    var lo = chute - 5, hi = chute + 5;
+    var lo = chute - 5, hi = Math.min(0, chute + 5);
     var passo = 0;
-    while (tcdf(lo, v) > p && passo++ < 80) lo -= Math.max(5, Math.abs(lo));
+    while (tcdf(lo, v) > p && passo++ < 200) lo -= Math.max(5, Math.abs(lo));
     passo = 0;
-    while (tcdf(hi, v) < p && passo++ < 80) hi += Math.max(5, Math.abs(hi));
+    while (tcdf(hi, v) < p && passo++ < 200) hi += Math.max(5, Math.abs(hi));
 
+    var meio = (lo + hi) / 2;
     for (var i = 0; i < 200; i++) {
-      var meio = (lo + hi) / 2;
+      meio = (lo + hi) / 2;
       if (tcdf(meio, v) < p) lo = meio; else hi = meio;
-      if (hi - lo < 1e-13 * Math.max(1, Math.abs(meio))) break;
+      if (hi - lo < 1e-14 * Math.max(1, Math.abs(meio))) break;
     }
-    return (lo + hi) / 2;
+
+    /* Dois passos de Newton levam o resultado ao limite da própria cdf. */
+    for (var k = 0; k < 2; k++) {
+      var d = tpdf(meio, v);
+      if (!(d > 0)) break;
+      var ajuste = (tcdf(meio, v) - p) / d;
+      if (!isFinite(ajuste)) break;
+      meio -= ajuste;
+    }
+    return meio;
   }
 
   /* ── F de Snedecor ───────────────────────────────────────────────────────
@@ -200,12 +217,23 @@
     while (fcdf(hi, d1, d2) < p && passo++ < 200) hi *= 2;
     if (passo >= 200) return NaN;
 
+    var meio = (lo + hi) / 2;
     for (var i = 0; i < 300; i++) {
-      var meio = (lo + hi) / 2;
+      meio = (lo + hi) / 2;
       if (fcdf(meio, d1, d2) < p) lo = meio; else hi = meio;
-      if (hi - lo < 1e-12 * Math.max(1, meio)) break;
+      if (hi - lo < 1e-14 * Math.max(1, meio)) break;
     }
-    return (lo + hi) / 2;
+
+    /* Mesmo acerto final da t: a bisseção sozinha para na tolerância do
+       intervalo, o Newton fecha na precisão da cdf. */
+    for (var k = 0; k < 2; k++) {
+      var d = fpdf(meio, d1, d2);
+      if (!(d > 0)) break;
+      var ajuste = (fcdf(meio, d1, d2) - p) / d;
+      if (!isFinite(ajuste) || meio - ajuste <= 0) break;
+      meio -= ajuste;
+    }
+    return meio;
   }
 
   /* ── Formatação ──────────────────────────────────────────────────────────

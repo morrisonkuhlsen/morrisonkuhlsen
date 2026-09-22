@@ -102,9 +102,25 @@ O desenho descobre o pico amostrando a densidade, em vez de assumi-lo em zero:
 a F é assimétrica, e com ν₁ = 1 ela vai ao infinito na origem.
 
 Os valores **não** são lidos da tabela: são calculados, e por isso valem para
-qualquer z, α ou ν, inclusive os que a tabela não lista. A implementação da t
-foi conferida contra os 610 valores publicados na própria página e a da F
-contra os 2016 da dela, todas dentro do arredondamento das tabelas.
+qualquer z, α ou ν, inclusive os que a tabela não lista. Cada implementação foi
+conferida contra os valores publicados na própria página — 610 na t, 2016 na F
+—, todos dentro do arredondamento delas.
+
+**Validação.** `scripts/validacao/` compara o núcleo com o Distributions.jl:
+
+```bash
+julia scripts/validacao/gera-referencia.jl   # 6301 casos de referência
+node  scripts/validacao/compara.js
+```
+
+Na última execução, o pior erro relativo foi 1,4e-14 na cdf normal, 4,6e-10 no
+quantil normal, 6,9e-12 na cdf da t, 2,5e-11 na cdf da F e 3,3e-9 no quantil da
+F, e 99,8% das saídas são idênticas às do Julia já na tela. As poucas que não
+são estão todas em quantis acima de 300 mil, onde a cdf é plana demais para o
+double distinguir os dois valores; conferido em 200 bits contra a forma fechada
+da Cauchy, é o quantil daqui que fica mais perto do verdadeiro. A normal também
+bate com o `statistics.NormalDist` do Python, que é uma terceira implementação:
+2,1e-13 na cdf e 4,8e-11 no quantil.
 
 O estado vive na URL — `?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=` na Z e
 `?t=&df=`, `?a=&adf=&ctail=`, `?xbar=&mu=&s=&n=` na t —, o que torna um
