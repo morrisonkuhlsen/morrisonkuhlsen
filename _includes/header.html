@@ -1,0 +1,97 @@
+{%- comment -%}
+  Header de duas faixas:
+    topbar → idioma e busca, alinhados à direita; some ao rolar
+    principal → marca colada à esquerda, navegação à direita
+
+  O menu é derivado do front matter das páginas, com o mesmo contrato do site
+  atual — `lang`, `ref`, `order`, `parent` — para que as páginas migrem sem
+  edição. O dropdown "Ferramentas" vem de _data/tools.yml, porque aquelas são
+  páginas HTML avulsas sem front matter.
+
+  `is-over-hero` só entra quando a página declara um hero; o JS a remove assim
+  que o usuário rola.
+{%- endcomment -%}
+
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign menu_pages = site.pages | where: "lang", lang | where_exp: "p", "p.order != nil" | sort: "order" -%}
+{%- assign top_items = menu_pages | where_exp: "p", "p.parent == nil" -%}
+{%- assign tools = site.data.tools[lang] -%}
+
+<header class="site-header{% if page.hero_image %} is-over-hero{% endif %}">
+
+  <div class="topbar">
+    <div class="topbar__inner">
+      {%- include lang-switch.html -%}
+
+      <button class="icon-btn" type="button"
+              data-theme-toggle aria-pressed="false"
+              aria-label="{% if lang == 'en' %}Toggle dark mode{% else %}Alternar modo escuro{% endif %}">
+        <svg class="theme-toggle__sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+        <svg class="theme-toggle__moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+      </button>
+
+      <button class="icon-btn" type="button" data-search-open
+              aria-label="{{ ui.search[lang] }}">
+        <svg aria-hidden="true"><use href="#i-search"></use></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="site-header__inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <svg class="brand__logo" role="img" aria-label="MorrisonKühlsen"><use href="#i-logo"></use></svg>
+    </a>
+
+    <nav class="site-nav" aria-label="{{ ui.menu[lang] }}">
+      {%- for item in top_items -%}
+        {%- assign children = menu_pages | where: "parent", item.ref -%}
+        {%- if children.size > 0 -%}
+          <div class="site-nav__item">
+            <button class="site-nav__link" type="button"
+                    data-dropdown aria-expanded="false" aria-controls="mm-{{ item.ref }}">
+              <span class="site-nav__label">{{ item.title }}</span>
+              <svg class="site-nav__chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+            </button>
+          </div>
+        {%- else -%}
+          <a class="site-nav__link" href="{{ item.url | relative_url }}"
+             {% if page.url == item.url %}aria-current="page"{% endif %}><span class="site-nav__label">{{ item.title }}</span></a>
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if tools -%}
+        <div class="site-nav__item">
+          <button class="site-nav__link" type="button"
+                  data-dropdown aria-expanded="false" aria-controls="mm-tools">
+            <span class="site-nav__label">{{ ui.tools[lang] }}</span>
+            <svg class="site-nav__chevron" aria-hidden="true"><use href="#i-chevron"></use></svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </nav>
+
+    <button class="icon-btn nav-toggle" type="button"
+            data-drawer-toggle aria-expanded="false" aria-controls="site-drawer"
+            aria-label="{{ ui.menu[lang] }}">
+      <svg aria-hidden="true"><use href="#i-menu"></use></svg>
+    </button>
+  </div>
+
+  {%- comment -%}
+    Os painéis ficam fora de .site-header__inner para poderem ocupar a largura
+    toda logo abaixo das duas faixas.
+  {%- endcomment -%}
+  {%- for item in top_items -%}
+    {%- assign children = menu_pages | where: "parent", item.ref -%}
+    {%- if children.size > 0 -%}
+      {%- include megamenu.html item=item pages=menu_pages -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if tools -%}
+    {%- include megamenu-tools.html tools=tools lang=lang ui=ui -%}
+  {%- endif -%}
+</header>
+
+{%- include drawer.html -%}

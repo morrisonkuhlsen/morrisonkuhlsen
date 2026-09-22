@@ -1,0 +1,334 @@
+/* Corpo de post e de página. Estiliza por elemento, não por classe —
+   o Markdown não emite classes. */
+
+.prose {
+  max-width: var(--measure);
+  font-size: var(--step-0);
+}
+
+.prose > * + * { margin-top: 1.1em; }
+
+.prose h2, .prose h3, .prose h4 {
+  font-weight: 700;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.prose h2 { font-size: var(--step-2); margin-top: 2.2em; }
+.prose h3 { font-size: var(--step-1); margin-top: 1.8em; }
+.prose h4 { font-size: var(--step-0); margin-top: 1.5em; text-transform: uppercase; letter-spacing: 0.05em; }
+
+.prose a { color: var(--accent); }
+.prose strong { font-weight: 700; }
+
+.prose ul, .prose ol { padding-left: 1.4rem; }
+.prose li + li { margin-top: 0.4em; }
+
+.prose blockquote {
+  margin-inline: 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--accent);
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.prose img { border-radius: var(--radius); }
+
+.prose figure { margin: 2rem 0; }
+.prose figcaption {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.12em 0.35em;
+  border-radius: 3px;
+  background: var(--paper-alt);
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.prose pre code { background: none; padding: 0; font-size: inherit; color: inherit; }
+
+/* Tabelas: rolam no celular em vez de estourar a página. */
+.prose .table-wrap { overflow-x: auto; }
+.prose table { width: 100%; border-collapse: collapse; font-size: var(--step--1); }
+.prose th, .prose td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--line); text-align: left; }
+.prose th { font-weight: 700; background: var(--paper-alt); }
+
+.prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.5rem; }
+
+/* ─── Cabeçalho de post ───────────────────────────────────────────────────── */
+
+.post-header { padding-block: clamp(2rem, 1rem + 3vw, 3.5rem) 1.5rem; }
+
+.post-header__title {
+  font-size: var(--step-3);
+  font-weight: 700;
+  line-height: 1.12;
+  text-wrap: balance;
+  max-width: 24ch;
+}
+
+.post-header__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.post-header__cover { margin-top: 2rem; border-radius: var(--radius); }
+
+/* ─── Cabeçalho de página ─────────────────────────────────────────────────── */
+
+.page-header { padding-block: 2rem 1rem; }
+.page-header__title { font-size: var(--step-3); font-weight: 700; line-height: 1.15; }
+.page-header__lede { margin-top: 0.75rem; font-size: var(--step-1); color: var(--ink-soft); max-width: var(--measure); }
+
+
+/* ─── Página de post ──────────────────────────────────────────────────────
+   Três faixas: margem, coluna de leitura centrada, margem. O índice ocupa a
+   margem direita, então o texto continua no centro da página. */
+
+/* Coluna de leitura das páginas de conteúdo: mesma medida do post, centrada
+   na janela. Antes o texto ficava em 68ch encostado à esquerda de um container
+   de 1200px, o que o fazia parecer estreito e desalinhado. */
+.reading {
+  max-width: calc(var(--post-measure) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  padding-bottom: 3rem;
+}
+
+.reading__breadcrumb { padding-top: 1.5rem; }
+
+/* O .prose tem trava própria de 68ch; aqui quem manda é a coluna. */
+.reading .prose,
+.reading .page-header__lede { max-width: none; }
+
+.post-layout {
+
+  display: grid;
+  grid-template-columns: 1fr;
+  /* 88.5rem deixa as colunas laterais em 284px — a largura do col-md-3
+     que o índice ocupava na versão 1.0. */
+  max-width: 88.5rem;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.post-layout__main {
+  min-width: 0;
+  max-width: var(--post-measure);
+  margin-inline: auto;
+}
+
+/* O .prose tem a sua própria trava de 68ch; aqui quem manda é a coluna. */
+.post-layout__main .prose,
+.post-layout__main .post-header__lede { max-width: none; }
+
+.post-layout__aside { display: none; }
+
+@media (min-width: 64rem) {
+  .post-layout {
+    grid-template-columns: 1fr minmax(0, var(--post-measure)) 1fr;
+    gap: 2.5rem;
+  }
+
+  .post-layout__main { grid-column: 2; }
+
+  .post-layout__aside {
+    display: block;
+    grid-column: 3;
+    padding-top: 6rem;
+  }
+}
+
+/* ─── Índice ──────────────────────────────────────────────────────────────
+   Portado da versão 1.0 (bootstrap-toc): mesma estrutura ul.nav > li > a,
+   mesmos valores. O recuo diminui 1–2px quando a borda esquerda aparece, para
+   o texto não deslocar entre os estados. */
+
+#toc {
+  position: sticky;
+  /* A 1.0 usava top: 5px porque lá o header não é fixo. Aqui é, então o
+     índice precisa parar abaixo da barra compacta — senão o primeiro item
+     fica escondido atrás dela. */
+  top: calc(var(--headerbar-compact) + 5px);
+  padding-top: 28px;
+  max-height: calc(100vh - var(--headerbar-compact) - 33px);
+  overflow-y: auto;
+}
+
+#toc ul { list-style: none; margin: 0; padding: 0; }
+
+#toc .nav > li > a {
+  display: block;
+  padding: 4px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--toc-ink);
+  text-decoration: none;
+}
+
+#toc .nav > li > a:hover,
+#toc .nav > li > a:focus {
+  padding-left: 19px;
+  color: var(--toc-active);
+  text-decoration: none;
+  background-color: initial;
+  border-left: 1px solid var(--toc-active);
+}
+
+#toc .nav-link.active,
+#toc .nav-link.active:focus,
+#toc .nav-link.active:hover {
+  padding-left: 18px;
+  font-weight: 700;
+  color: var(--toc-active);
+  background-color: initial;
+  border-left: 2px solid var(--toc-active);
+}
+
+/* Sub-listas nascem fechadas; o JS abre só o ramo ativo. */
+#toc .nav-link + ul {
+  padding-bottom: 10px;
+  display: none;
+}
+
+#toc .nav .nav > li > a {
+  padding-top: 1px;
+  padding-bottom: 1px;
+  padding-left: 30px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+#toc .nav .nav > li > a:hover,
+#toc .nav .nav > li > a:focus { padding-left: 29px; }
+
+#toc .nav .nav > li > .active,
+#toc .nav .nav > li > .active:focus,
+#toc .nav .nav > li > .active:hover {
+  padding-left: 28px;
+  font-weight: 500;
+}
+
+@media (max-width: 47.99rem) {
+  #toc { display: none !important; }
+}
+
+/* ─── Assinatura ──────────────────────────────────────────────────────────── */
+
+.byline {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.byline__avatar {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.byline__name { font-weight: 600; color: var(--ink); }
+.byline__date::before { content: "·"; margin-right: 0.5rem; color: var(--ink-faint); }
+
+/* ─── Tags ────────────────────────────────────────────────────────────────── */
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 3rem;
+}
+
+.tag-list a {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.tag-list a:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ─── Comentários ─────────────────────────────────────────────────────────── */
+
+.comments {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.comments__title {
+  margin-bottom: 1.5rem;
+  font-size: var(--step-2);
+  font-weight: 700;
+}
+
+/* ─── Fórmulas ────────────────────────────────────────────────────────────── */
+
+/* Fórmulas em bloco rolam no celular em vez de estourar a página. */
+mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.5rem;
+}
+
+
+/* ─── Alternador de tema ──────────────────────────────────────────────────
+   Vive na faixa de utilidades, entre o idioma e a busca. Mostra o ícone do
+   tema que o clique vai aplicar, não o do tema atual. */
+
+.theme-toggle__moon { display: block; }
+.theme-toggle__sun { display: none; }
+
+:root[data-theme="dark"] .theme-toggle__moon { display: none; }
+:root[data-theme="dark"] .theme-toggle__sun { display: block; }
+
+/* ─── Blocos com cor fixa no Markdown ─────────────────────────────────────
+   Os posts da 1.0 trazem caixas com style="" embutido — fundo claro e, às
+   vezes, color: #000 — escritas quando só existia a página clara. No tema
+   escuro isso dá texto claro sobre caixa clara, ou preto sobre preto.
+   Enquanto esses blocos não virarem classes (junto com o port do mk-box),
+   forçamos um par legível: quem já traz fundo fica com texto escuro; quem
+   não traz ganha uma superfície clara. Precisa de !important porque estilo
+   inline só perde para isso. */
+
+:root[data-theme="dark"] .prose > [style*="color"] { color: #14161c !important; }
+:root[data-theme="dark"] .prose > [style*="color"] * { color: inherit !important; }
+
+:root[data-theme="dark"] .prose > [style*="color"]:not([style*="background-color"]) {
+  background-color: #f4f5f8 !important;
+  border-radius: 8px;
+}

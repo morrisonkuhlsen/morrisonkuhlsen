@@ -1,26 +1,30 @@
-#
-# This file contains configuration flags to customize your site
-#
-environment: "production"
+# ─── Identidade ──────────────────────────────────────────────────────────────
+title: "MorrisonKühlsen"
+description: "Ex nihilo, ad æternum"
+url: "https://morrisonkuhlsen.com"
+baseurl: ""
 timezone: America/Sao_Paulo
+lang: pt
 
-#
-# Flags below are optional
-#
+# ─── Build ───────────────────────────────────────────────────────────────────
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
 
-# Prevent site from being indexed by search engines
-# Set to false to allow search engines to index the site
-noindex: false
+sass:
+  style: compressed
+  sourcemap: never
 
-# Enter your Disqus shortname (not your username) to enable commenting on posts
-# You can find your shortname on the Settings page of your Disqus account
-disqus:
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - vendor
 
-# Giscus comment system (powered by GitHub Discussions)
-# Generate your parameters at https://giscus.app
-# Steps: 1) enable Discussions on your GitHub repo
-#         2) install the giscus app at https://github.com/apps/giscus
-#         3) fill in the values below
+# Deixe vazio para desligar. Só carrega em produção.
+google_analytics: G-HBZB4KRNVM
+
+# ─── Comentários (giscus / GitHub Discussions) ───────────────────────────────
 giscus:
   repo: "morrisonkuhlsen/morrisonkuhlsen"
   repo_id: "R_kgDOOr6GPQ"
@@ -29,45 +33,19 @@ giscus:
   mapping: "title"
   reactions_enabled: "0"
   input_position: "top"
-  theme: "noborder_light"
+  theme: "light"
   lang: "pt"
-  loading: "eager"
 
-# Enter your Google Analytics web tracking code (e.g. UA-000000000-0 or G-XXXXXXXXXX) to activate tracking
-google_analytics: G-HBZB4KRNVM
-
-# Your website URL (e.g. http://example.github.io or http://www.example.com)
-# Used for Sitemap.xml and your RSS feed
-url: "https://morrisonkuhlsen.com"
-
-# If you're hosting your site at a Project repository on GitHub pages
-# (http://yourusername.github.io/repository-name)
-# and NOT your User repository (http://yourusername.github.io)
-# then add in the baseurl here, like this: "/repository-name"
-baseurl: ""
-
-#
-# !! You don't need to change any of the configuration flags below !!
-#
-
+# ─── Conteúdo ────────────────────────────────────────────────────────────────
 permalink: /:title/
+excerpt_separator: "<!--more-->"
 
-# The release of Jekyll Now that you're using
-version: v4.3.4
-
-# Set the Sass partials directory, as we're using @imports
-sass:
-  style: :compressed # You might prefer to minify using :compressed
-
-# Use the following plug-ins
-plugins:
-  - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
-  - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
-
-# Exclude these files from your production _site
-exclude:
-  - Gemfile
-  - Gemfile.lock
-  - AUTHORS
-  - LICENSE
-  - README.md
+defaults:
+  - scope: { path: "", type: "posts" }
+    values:
+      layout: post
+      lang: pt
+  - scope: { path: "", type: "pages" }
+    values:
+      layout: page
+      lang: pt

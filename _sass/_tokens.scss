@@ -1,0 +1,96 @@
+/* Todos os valores de design do site moram aqui. Nada de cor, espaço ou
+   tipo literal nos outros arquivos — sempre via custom property. */
+
+:root {
+  /* Cor */
+  --ink:          #14161c;   /* texto principal */
+  --ink-soft:     #575d6b;
+  --ink-faint:    #8b91a0;
+  --paper:        #ffffff;
+  --paper-alt:    #f5f6f8;   /* faixas alternadas */
+  --line:         #e2e5ea;
+  --accent:       #2540d8;   /* ação: botões, links */
+  --accent-dark:  #1a2fa3;
+  --accent-ink:   #ffffff;
+  --highlight:    #7c5cff;   /* destaque editorial (Problema Semanal) */
+  --on-dark:      #ffffff;
+  --on-dark-soft: rgba(255, 255, 255, 0.72);
+
+  /* Superfícies que ficam escuras nos dois temas — se usassem --ink, o
+     rodapé e os blocos de código clareariam junto com o tema escuro. */
+  --code-bg:      #14161c;
+  --code-ink:     #e8eaf0;
+  --footer-bg:    #14161c;
+  --toc-ink:      #767676;
+  --toc-active:   #0066cc;
+  --chip-bg:      #f2f2f2;
+
+  /* Tipografia */
+  /* Uma família só no site inteiro: o display é a mesma do corpo, no peso
+     máximo. Economiza uma requisição de fonte e dá coerência tipográfica. */
+  --font-body:    "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-body);
+  --font-mono:    ui-monospace, "SFMono-Regular", "Roboto Mono", monospace;
+
+  --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
+  --step-0:  clamp(1rem, 0.97rem + 0.15vw, 1.09rem);
+  --step-1:  clamp(1.25rem, 1.18rem + 0.35vw, 1.5rem);
+  --step-2:  clamp(1.6rem, 1.45rem + 0.75vw, 2.1rem);
+  --step-3:  clamp(2.1rem, 1.8rem + 1.5vw, 3.1rem);
+  --step-4:  clamp(2.7rem, 2rem + 3.4vw, 5.2rem);
+
+  /* Espaço e medida */
+  --gutter:     1.5rem;
+  --container:  75rem;   /* 1200px */
+  --measure:    68ch;    /* largura de leitura confortável */
+  --post-measure: 45rem; /* coluna de post e de página de conteúdo */
+
+  /* Chrome */
+  /* O header tem duas faixas: a de utilidades e a principal. --header-h é a
+     soma, e é dela que dependem o padding do conteúdo e o scroll-padding. */
+  --topbar-h:    3.3125rem;  /* 53px */
+  --headerbar-h: 4.25rem;    /* 68px — 121px no total, como o modelo */
+  --header-h:   calc(var(--topbar-h) + var(--headerbar-h));
+  /* Altura visível do header depois que ele compacta: a faixa de utilidades
+     desliza para fora, sobrando só a barra principal. É essa que importa para
+     ancorar qualquer coisa fixa ou sticky, porque a página só rola assim. */
+  --headerbar-compact: var(--headerbar-h);
+  --header-pad: 1.25rem;
+  --radius:     4px;
+  --shadow:     0 2px 16px rgb(20 22 28 / 12%);
+  --ease:       cubic-bezier(0.22, 0.61, 0.36, 1);
+  --speed:      220ms;
+
+  /* Camadas — declaradas juntas para que a ordem seja legível de uma vez */
+  --z-hero:     1;
+  --z-header:   50;
+  --z-drawer:   60;
+  --z-overlay:  70;
+}
+
+@media (min-width: 62rem) {
+  :root { --header-pad: 4.375rem; }  /* 70px de recuo lateral no desktop */
+}
+
+/* ─── Tema escuro ─────────────────────────────────────────────────────────
+   Só troca os tokens; nenhuma regra de componente precisa saber do tema.
+   Aplicado por data-theme no <html>, definido antes da pintura para não
+   piscar (ver o script inline em head.html). */
+
+:root[data-theme="dark"] {
+  --ink:          #e8eaf0;
+  --ink-soft:     #a8aebd;
+  --ink-faint:    #757c8c;
+  --paper:        #14161c;
+  --paper-alt:    #1c1f27;
+  --line:         #2b2f3a;
+  --accent:       #8ba4ff;
+  --accent-dark:  #a9bcff;
+  --accent-ink:   #11131a;
+  --highlight:    #a78bfa;
+
+  --toc-ink:      #8b93a3;
+  --toc-active:   #8ba4ff;
+  --chip-bg:      #262b36;
+  --shadow:       0 2px 16px rgb(0 0 0 / 55%);
+}

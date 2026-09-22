@@ -1,0 +1,350 @@
+/* Header de uma linha, fixo. Três estados:
+     padrão        → fundo branco, texto escuro (páginas internas)
+     .is-over-hero → transparente com véu em degradê, texto branco (home)
+     .is-scrolled  → volta ao branco sólido e compacto, em qualquer página
+   A troca de estado é feita por JS via IntersectionObserver num sentinel,
+   não por listener de scroll. */
+
+.site-header {
+  position: fixed;
+  /* --annbar-h só existe enquanto a barra de anúncio está visível. */
+  inset: var(--annbar-h, 0px) 0 auto 0;
+  z-index: var(--z-header);
+  background-color: var(--paper);
+  /* O degradê é dimensionado pela padding box; sem isto, a faixa de 1px de
+     borda repetiria o topo do gradiente — um filete preto na base do header. */
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  border: 0;
+  color: var(--ink);
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+/* O degradê vive num pseudo-elemento com opacidade própria. Assim ele some
+   em crossfade com o branco entrando, em vez de sumir de um quadro para o
+   outro — background-image não é animável. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(rgb(0 0 0) 30%, rgb(0 0 0 / 0%));
+  transition: opacity 0.3s;
+}
+
+.site-header > * { position: relative; }
+
+/* Largura total, sem container centrado: a marca encosta na borda esquerda
+   e a navegação na direita, como no modelo. */
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  height: var(--headerbar-h);
+  padding-inline: var(--header-pad);
+}
+
+/* ─── Faixa de utilidades ─────────────────────────────────────────────────
+   Idioma e busca, alinhados à direita. Some quando o header compacta. */
+
+.topbar { height: var(--topbar-h); }
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  height: 100%;
+  padding-inline: var(--header-pad);
+}
+
+
+
+.lang-toggle { display: inline-flex; align-items: center; gap: 0.15rem; }
+
+.lang-toggle__item {
+  padding: 0.5rem 0.75rem;      /* 8px 12px */
+  font-size: 0.875rem;          /* 14px */
+  font-weight: 400;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.lang-toggle__item:hover { text-decoration: underline; }
+
+.lang-toggle__item.is-active {
+  background: var(--chip-bg);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ─── Sobre o hero ────────────────────────────────────────────────────────── */
+
+/* Um único degradê no header inteiro: preto opaco até o fim da faixa de
+   utilidades, depois queda linear até transparente na borda de baixo. Sem
+   fundo separado na faixa e sem filete — é o que produz a transição contínua. */
+.site-header.is-over-hero {
+  background-color: transparent;
+  color: var(--on-dark);
+}
+
+.site-header.is-over-hero::before { opacity: 1; }
+
+/* Passar o cursor sobre o header resolve o degradê em branco sólido. As duas
+   coisas levam 0.3s e acontecem juntas, então é um crossfade. */
+.site-header.is-over-hero:hover {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.site-header.is-over-hero:hover::before { opacity: 0; }
+
+
+/* ─── Depois de rolar ─────────────────────────────────────────────────────── */
+
+/* Compactar é deslizar o header para cima pela altura da faixa de utilidades.
+   Um transform é animado pelo compositor: a faixa sai de cena inteira e a
+   navegação desliza junto, em vez de a faixa ser recortada no lugar. */
+.site-header.is-scrolled {
+  transform: translateY(calc(-1 * var(--topbar-h)));
+  background-color: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.site-header.is-scrolled::before { opacity: 0; }
+
+
+/* ─── Marca ───────────────────────────────────────────────────────────────── */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* O logo é inline e pintado com currentColor: as mesmas formas dão as duas
+   versões da marca, porque o "Mor" é vazado. Preto no header claro, branco
+   sobre o hero — e a troca acompanha a transição de cor do header. */
+.brand__logo {
+  width: auto;
+  height: 3rem;                /* 48px */
+  aspect-ratio: 3736 / 1266;
+  color: currentColor;
+  flex-shrink: 0;
+}
+
+/* ─── Navegação ───────────────────────────────────────────────────────────── */
+
+.site-nav {
+  display: none;
+  margin-left: auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+@media (min-width: 62rem) { .site-nav { display: flex; } }
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding-block: 1rem;          /* 16px 0 */
+  font-size: 0.875rem;          /* 14px */
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 0;
+  transition: color 0.3s;
+}
+
+/* O sublinhado é uma barra que cresce em largura — é isso que dá o efeito
+   de deslizar no hover, que text-decoration não consegue animar. */
+.site-nav__label { position: relative; }
+
+.site-nav__label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2em;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.2s;
+}
+
+.site-nav__link:hover .site-nav__label::after,
+.site-nav__link:focus-visible .site-nav__label::after,
+.site-nav__link[aria-expanded="true"] .site-nav__label::after,
+.site-nav__link[aria-current="page"] .site-nav__label::after { width: 100%; }
+
+.site-nav__chevron {
+  width: 0.7em;
+  height: 0.7em;
+  fill: currentColor;
+  transition: transform var(--speed) var(--ease);
+}
+
+.site-nav__link[aria-expanded="true"] .site-nav__chevron { transform: rotate(180deg); }
+
+/* ─── Mega-menu ───────────────────────────────────────────────────────────
+   Painel branco de largura total, quatro colunas separadas por filetes:
+   descrição · seção e filhos · terceiro nível · chamadas. */
+
+.site-nav__item { position: static; }
+
+.megamenu {
+  position: absolute;
+  inset: 100% 0 auto 0;
+  background: var(--paper);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 18px 40px rgb(20 22 28 / 12%);
+}
+
+.megamenu[hidden] { display: none; }
+
+.megamenu__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 18.5rem;
+}
+
+.megamenu__col {
+  padding: 2.25rem clamp(1.25rem, 2vw, 2.5rem);
+  border-right: 1px solid var(--line);
+}
+
+.megamenu__col:last-child { border-right: 0; }
+
+.megamenu__intro {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  max-width: 30ch;
+}
+
+/* Cabeçalho da coluna: leva à página da própria seção. */
+.megamenu__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.megamenu__heading svg { width: 1.1rem; height: 1.1rem; fill: currentColor; flex-shrink: 0; }
+.megamenu__heading:hover { color: var(--accent); }
+
+.megamenu__list { margin-top: 0.5rem; }
+
+.megamenu__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  font-size: var(--step--1);
+  text-decoration: none;
+  transition: color var(--speed) var(--ease);
+}
+
+.megamenu__link:hover,
+.megamenu__link[aria-expanded="true"] { color: var(--accent); }
+
+.megamenu__link svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  fill: currentColor;
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+/* Terceiro nível: some até que um item do segundo o chame. */
+.megamenu__third[hidden] { display: none; }
+.megamenu__third-title {
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Chamadas empilhadas na última coluna. */
+.megamenu__cta { display: flex; flex-direction: column; align-items: stretch; gap: 0.85rem; }
+.megamenu__cta .btn { justify-content: center; }
+
+/* Enquanto o menu está aberto o header não pode ser transparente. */
+.site-header.is-menu-open {
+  background-color: var(--paper);
+  color: var(--ink);
+}
+
+.site-header.is-menu-open::before { opacity: 0; }
+
+
+
+
+
+/* Desfoca o resto da página atrás do painel aberto. */
+.page-blur {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-header) - 1);
+  backdrop-filter: blur(10px);
+  background: rgb(255 255 255 / 8%);
+}
+
+/* ─── Ações à direita ─────────────────────────────────────────────────────── */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+@media (min-width: 62rem) { .header-actions { margin-left: 0; } }
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  transition: opacity var(--speed) var(--ease);
+}
+
+/* Sem pastilha no hover: só esmaece. O fundo circular não funcionava nos dois
+   estados do header e destoava dos itens do menu, que sublinham. */
+.icon-btn:hover { opacity: 0.6; }
+.icon-btn svg { width: 1.15rem; height: 1.15rem; fill: currentColor; }
+
+.lang-switch {
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 0.6rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-toggle { display: inline-flex; }
+@media (min-width: 62rem) { .nav-toggle { display: none; } }
+
+.megamenu__link--featured { color: var(--highlight); font-weight: 700; }

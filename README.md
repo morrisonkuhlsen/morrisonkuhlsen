@@ -1,45 +1,129 @@
-# morrisonkuhlsen.com
+# MorrisonKühlsen
 
-![morrisonkuhlsen logo](https://raw.githubusercontent.com/morrisonkulsenn/public/refs/heads/main/mk-logo-300x.png)
+Site de estatística e probabilidade, em português e inglês.
 
-A blog dedicated to the study and application of **Statistics and Probability**, available at [morrisonkuhlsen.com](https://morrisonkuhlsen.com).
+Jekyll puro — sem framework de CSS, sem jQuery, sem Node. Só Ruby, Liquid e o
+Sass que já vem embutido no Jekyll. CSS e JS somam cerca de 13 KB gzipados.
 
-The goal is to make technical concepts more accessible through clear content, practical examples, and interactive tools. Posts are published in both Portuguese and English.
-
-The site is built with [Jekyll](https://jekyllrb.com/) and [Bootstrap Italia](https://github.com/italia/bootstrap-italia/).
-
-## Running locally
-
-Install dependencies:
+## Rodar
 
 ```bash
+bundle config set --local path vendor/bundle   # só na primeira vez
 bundle install
-```
-
-Start the development server:
-
-```bash
 bundle exec jekyll serve --config _config.yml,_config_dev.yml
 ```
 
-The site will be available at `http://localhost:4000`.
+O build de produção (com Google Analytics) é `JEKYLL_ENV=production bundle exec jekyll build`.
 
-> **Config files:**
-> - `_config.yml` — production settings
-> - `_config_dev.yml` — local development settings (overrides baseurl and environment)
+## Estrutura
 
-## Acknowledgements
+```
+_data/site.yml     rótulos, links, SEO e a barra de anúncio
+_data/tools.yml    o dropdown "Ferramentas" (páginas HTML avulsas)
+_data/authors.yml  autores dos posts
+_sass/             uma pasta por camada: tokens → reset → layout → componentes
+_includes/         header, hero, busca, rodapé, sprite de ícones
+_layouts/          base → home | page | post
+assets/js/site.js  todo o comportamento do site, sem dependências
+blog/index.html    listagem com filtro por tag
+search.json        índice de busca, gerado pelo Jekyll
+```
 
-This site is built with [Bootstrap Italia](https://github.com/italia/bootstrap-italia/), which is licensed under the BSD 3-Clause License. This project is not affiliated with or endorsed by the Bootstrap Italia team.
+## Contratos que valem conhecer
 
-> Copyright (c) 2022, the respective contributors, as shown by the AUTHORS file.
->
-> Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
->
-> 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-> 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-> 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+**Menu.** Gerado a partir do front matter das páginas: `lang`, `ref`, `order`,
+`parent`. Quem tem `order` aparece no menu; quem tem `parent` vira submenu.
 
-## License
+**Mega-menu.** Toda seção com filhos abre um painel de quatro colunas:
+descrição (do `description` da seção), título com seta + lista de filhos,
+terceiro nível (aparece quando um filho tem netos) e chamadas, que vêm do
+front matter da seção:
 
-This repository is licensed under the BSD-3-Clause license. See the [LICENSE](LICENSE) file for details.
+```yaml
+menu_cta:
+  - { text: "Todos os artigos", url: "/#artigos", style: "primary" }
+  - { text: "Fórmulas",         url: "/formulas/home.html", style: "outline" }
+```
+
+**Header.** Duas faixas — utilidades (idioma, tema, busca) e a principal
+(marca à esquerda, navegação à direita) —, 121px no total. Sobre um hero recebe
+um degradê único: preto opaco até 30% da altura, linear até transparente.
+Passar o cursor sobre ele o resolve em branco sólido; rolar a página compacta a
+barra e some com a faixa de utilidades. O hover dos itens do menu é uma barra
+sob o texto que cresce em largura — por isso o rótulo vai dentro de
+`.site-nav__label`.
+
+**Logo.** Um único SVG inline (`#i-logo` no sprite) pintado com `currentColor`.
+As mesmas formas dão as duas versões da marca, porque o "Mor" é vazado: preto
+no header claro, branco sobre o hero.
+
+**Hero.** Uma página ganha hero declarando `hero_image` no front matter — é
+também o que deixa o header transparente sobre ela. Para slideshow, use
+`hero_slideshow` com uma lista de `{ src, alt }`.
+
+**Post.** Coluna de leitura de 45rem centrada, com o índice na margem direita:
+sub-listas fechadas, só o ramo ativo aberto, item ativo = último título que já
+passou 80px abaixo do topo. Traz também assinatura com as iniciais do autor,
+tags, comentários via giscus e MathJax carregado só quando o front matter traz
+`mathjax: true`. O mesmo vale para as páginas de conteúdo.
+
+`image` no front matter serve de capa social e do card na home — o post **não**
+a repete no corpo, porque o texto em geral já traz a figura.
+
+**Busca.** `search.json` e um matcher próprio em `site.js`. Não usa Lunr: o
+pipeline padrão dele faz *stemming* em inglês, o que atrapalha num site
+majoritariamente em português. Casar prefixos de token sem acento acerta mais
+em ~70 documentos. Abre com Ctrl+K ou `/`, filtra pelo idioma da página e
+destaca o trecho que casou. O índice é buscado uma vez, na primeira abertura.
+
+**Tema escuro.** Botão na faixa de utilidades. O tema vai em `data-theme` no
+`<html>`, é aplicado por um script inline no `<head>` — antes da folha de
+estilo, senão a página pisca branca —, fica no `localStorage` e é repassado ao
+giscus por `postMessage`. Só os tokens mudam; nenhuma regra de componente sabe
+do tema. `--code-bg` e `--footer-bg` ficam escuros nos dois de propósito.
+
+**Tokens.** Toda cor, tamanho e espaçamento vive em `_sass/_tokens.scss` como
+custom property. Mudar a identidade do site é mexer em um arquivo só.
+
+**Ícones.** `_includes/icons.html` é um sprite SVG inline. Para usar:
+`<svg><use href="#i-search"></use></svg>`.
+
+**SEO.** `_includes/head.html` monta título, descrição, canonical, hreflang
+(casado pelo `ref`), OpenGraph, Twitter Card e ícones. Dados estruturados em
+`schema.html` — WebSite sempre, Article e BreadcrumbList nos posts — montados
+com `jsonify`, para que título com aspas ou acento não quebre o JSON.
+Configuração em `_data/site.yml → seo` e `_config.yml → google_analytics`.
+
+**Barras dispensáveis.** A de anúncio (`_data/site.yml → announcement`) é fixa
+no topo e publica a própria altura em `--annbar-h`, de onde o header e o
+conteúdo se deslocam; o aviso de cookies fica embaixo. As duas nascem escondidas
+no HTML e só aparecem se ainda não foram dispensadas, para não piscar.
+
+## Dependências externas
+
+Três, todas carregadas de forma não bloqueante:
+
+| O quê | Onde | Por quê |
+|---|---|---|
+| Source Sans 3 | todas as páginas | única família do site |
+| Bootstrap Icons | só post e página | os posts usam `bi-*` no corpo |
+| MathJax | só com `mathjax: true` | fórmulas |
+
+## Publicação
+
+GitHub Pages via `.github/workflows/deploy.yml`, disparado por push em `master`
+e pelos crons de publicação agendada. O domínio vem do `CNAME`.
+
+## O que ainda falta
+
+- [ ] **Tema escuro nos posts antigos.** 36 dos 37 posts trazem o próprio
+      `<style>` (~2.900 linhas no total) com cores claras fixas. Só 5 usam o
+      padrão bom, de variáveis `--mk-*` num wrapper — nesses, um bloco
+      `:root[data-theme="dark"] .mk-stat-post { … }` resolve. Os outros 31 são
+      CSS ad-hoc e hoje dependem do remendo no fim de `_sass/_prose.scss`.
+- [ ] Card de anúncio do post (`mk-ad-widget`), se for para manter.
+
+## Licença
+
+MIT — veja [LICENSE](LICENSE). O conteúdo dos posts e as imagens não estão
+cobertos por ela.

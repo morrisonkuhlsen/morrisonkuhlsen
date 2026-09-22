@@ -1,0 +1,345 @@
+/* ─── Botões ──────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background var(--speed) var(--ease), color var(--speed) var(--ease);
+}
+
+.btn--primary { background: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--accent-dark); }
+
+.btn--outline {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+.btn--outline:hover { background: var(--accent); color: var(--accent-ink); }
+
+.btn--ghost { border: 1px solid currentColor; }
+.btn--ghost:hover { background: currentColor; color: var(--ink); }
+.hero .btn--ghost:hover { color: var(--ink); }
+
+/* ─── Card de post ────────────────────────────────────────────────────────── */
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease);
+}
+
+.post-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+.post-card__img { aspect-ratio: 16 / 10; object-fit: cover; width: 100%; }
+
+.post-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.5rem;
+}
+
+.post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.post-card__badge {
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  background: var(--highlight);
+  color: var(--on-dark);
+  font-weight: 700;
+}
+
+.post-card__label { font-weight: 700; color: var(--ink-soft); }
+
+.post-card__title {
+  font-size: var(--step-1);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.post-card__title a { text-decoration: none; color: var(--accent); }
+.post-card__title a:hover { text-decoration: underline; }
+
+.post-card__excerpt { color: var(--ink-soft); font-size: var(--step--1); }
+
+/* ─── Card de destaque (o do Alfabeto Grego) ──────────────────────────────── */
+
+.feature-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  box-shadow: var(--shadow);
+}
+
+/* Puxa o card para dentro do hero, como no site atual. Só no desktop:
+   no celular o hero é curto e o card cobriria o botão. */
+.feature-card--overlap { position: relative; z-index: 2; }
+
+@media (min-width: 48rem) {
+  .feature-card--overlap { margin-top: -4rem; }
+}
+
+.feature-card__title { font-size: var(--step-2); font-weight: 700; line-height: 1.2; }
+.feature-card__text { margin-top: 0.75rem; color: var(--ink-soft); max-width: var(--measure); }
+
+.read-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.25rem;
+  font-weight: 700;
+  font-size: var(--step--1);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.read-more:hover { text-decoration: underline; }
+.read-more svg { width: 1em; height: 1em; fill: currentColor; }
+
+/* ─── Breadcrumb ──────────────────────────────────────────────────────────── */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+}
+
+.breadcrumb li + li::before { content: "/"; margin-right: 0.4rem; color: var(--line); }
+.breadcrumb a { color: var(--ink-soft); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+
+/* ─── Gaveta mobile ───────────────────────────────────────────────────────── */
+
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: var(--z-drawer);
+  width: min(22rem, 86vw);
+  padding: calc(var(--header-h) + 1rem) var(--gutter) 2rem;
+  background: var(--paper);
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform var(--speed) var(--ease);
+}
+
+.drawer.is-open { transform: translateX(0); }
+.drawer__link {
+  display: block;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+.drawer__sub { padding-left: 1rem; }
+.drawer__sub .drawer__link { text-transform: none; letter-spacing: 0; font-weight: 400; }
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-drawer) - 1);
+  background: rgb(0 0 0 / 45%);
+  opacity: 0;
+  transition: opacity var(--speed) var(--ease);
+}
+.scrim.is-open { opacity: 1; }
+
+
+/* ─── Navegação por categoria ─────────────────────────────────────────────── */
+
+.tags-section { text-align: center; }
+
+.tags-section__title {
+  margin-bottom: 1.5rem;
+  font-size: var(--step-2);
+  font-weight: 700;
+}
+
+.tags-section__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.chip {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: var(--step--1);
+  color: var(--ink);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.chip:hover { background: var(--ink); color: var(--paper); }
+
+
+/* ─── 404 ─────────────────────────────────────────────────────────────────── */
+
+.mk-404 {
+  padding-block: clamp(2rem, 1rem + 4vw, 5rem);
+  text-align: center;
+}
+
+.mk-404-img { width: min(240px, 60vw); margin-inline: auto; }
+
+.mk-404-code {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 2rem + 6vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ink-faint);
+}
+
+.mk-404-title {
+  margin-top: 0.5rem;
+  font-size: var(--step-2);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+.mk-404 p { margin-top: 1rem; color: var(--ink-soft); }
+.mk-404 .btn { margin-top: 1.5rem; }
+
+
+/* ─── Barra de anúncio ────────────────────────────────────────────────────
+   Fixa no topo, acima do header. O JS mede a altura e publica em --annbar-h,
+   de onde o header e o conteúdo se deslocam. */
+
+.annbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: calc(var(--z-header) + 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 3rem;
+  background: linear-gradient(120deg, #fffef5 0%, #fff9e6 50%, #fffdf8 100%);
+  border-bottom: 1px solid #f0e6b8;
+  color: #0b1f35;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.annbar[hidden] { display: none; }
+.annbar:hover { color: #0b1f35; text-decoration: underline; }
+
+.annbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.annbar__icon {
+  flex-shrink: 0;
+  height: 20px;
+  width: auto;
+  animation: annbar-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes annbar-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+.annbar__text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.annbar__close {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.35rem 0.5rem;
+  border-radius: 3px;
+  color: #888;
+  font-size: 1rem;
+  line-height: 1;
+  transition: color 0.15s, background 0.15s;
+}
+
+.annbar__close:hover { color: #333; background: rgb(0 0 0 / 6%); }
+
+@media (max-width: 36rem) {
+  .annbar { padding: 0.6rem 2.5rem; }
+  .annbar__text { font-size: 0.8rem; line-height: 1.35; }
+}
+
+/* ─── Aviso de cookies ────────────────────────────────────────────────────── */
+
+.cookiebar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: var(--z-overlay);
+  padding: 1.25rem var(--gutter);
+  background: var(--ink);
+  color: var(--on-dark-soft);
+  box-shadow: 0 -4px 24px rgb(0 0 0 / 25%);
+}
+
+.cookiebar[hidden] { display: none; }
+
+.cookiebar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: var(--container);
+  margin-inline: auto;
+}
+
+.cookiebar__text {
+  flex: 1 1 22rem;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+
+.cookiebar__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cookiebar__link {
+  font-size: var(--step--1);
+  color: var(--on-dark-soft);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.cookiebar__link:hover { color: var(--on-dark); }

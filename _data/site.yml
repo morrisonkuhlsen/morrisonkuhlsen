@@ -1,0 +1,55 @@
+# Strings e links do site, por idioma.
+# Substitui o antigo _data/t.yml — mantém só o que é realmente usado.
+
+name: "MorrisonKühlsen"
+tagline:
+  pt: "Ex nihilo, ad æternum"
+  en: "Ex nihilo, ad æternum"
+
+social:
+  - { name: "X",         url: "https://x.com/morrisonkuhlsen",         icon: "x" }
+  - { name: "Instagram", url: "https://instagram.com/morrisonkuhlsen", icon: "instagram" }
+  - { name: "GitHub",    url: "https://github.com/morrisonkuhlsen",    icon: "github" }
+  - { name: "RSS",       url: "/feed.xml",                             icon: "rss" }
+
+# Rótulos de interface. Chave → { pt, en }
+ui:
+  tools:      { pt: "Ferramentas",      en: "Tools" }
+  search:     { pt: "Buscar",           en: "Search" }
+  menu:       { pt: "Menu",             en: "Menu" }
+  close:      { pt: "Fechar",           en: "Close" }
+  home:       { pt: "Início",           en: "Home" }
+  article:    { pt: "ARTIGO",           en: "ARTICLE" }
+  fresh:      { pt: "NOVO",             en: "NEW" }
+  more:       { pt: "Mostrar mais",     en: "Show more" }
+  read_more:  { pt: "Leia mais",        en: "Read more" }
+  share:      { pt: "Compartilhar",     en: "Share" }
+  copy_link:  { pt: "Copiar link",      en: "Copy link" }
+  published:  { pt: "Publicado em",     en: "Published on" }
+  back_top:   { pt: "Voltar ao topo",   en: "Back to top" }
+
+seo:
+  author: "Morrison Kühlsen"
+  twitter: "@morrisonkuhlsen"
+  theme_color: "#2540d8"
+  social_card: /assets/images/favicons/social-card.png
+  verification:
+    google-site-verification: "Z21xGkB6qNtcGineia0hJYivBW4G5DxBHBteF0Jqe2Y"
+    msvalidate.01: "0DFDC2857DA6BB0624BD01BCD3E8B74D"
+
+# Barra de anúncio no topo. Apague `text` para desligá-la.
+announcement:
+  url: "https://greekalpha.bet/"
+  external: true
+  icon: /assets/images/favicon-orange.png
+  text:
+    pt: "Explore o Alfabeto Grego completo em greekalpha.bet →"
+    en: "Explore the full Greek alphabet at greekalpha.bet →"
+
+footer_links:
+  pt:
+    - { name: "Privacy policy", url: "/pt/privacy-policy" }
+    - { name: "Cookie policy",  url: "/pt/cookie-policy" }
+  en:
+    - { name: "Privacy policy", url: "/en/privacy-policy" }
+    - { name: "Cookie policy",  url: "/en/cookie-policy" }

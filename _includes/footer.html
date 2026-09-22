@@ -1,0 +1,60 @@
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign menu_pages = site.pages | where: "lang", lang | where_exp: "p", "p.order != nil" | sort: "order" -%}
+{%- assign top_items = menu_pages | where_exp: "p", "p.parent == nil" -%}
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="grid footer-grid">
+
+      <div class="footer-col">
+        <a class="brand" href="{{ '/' | relative_url }}" style="color:var(--on-dark)">
+          <svg class="brand__logo" role="img" aria-label="MorrisonKühlsen"><use href="#i-logo"></use></svg>
+        </a>
+        <p style="margin-top:0.75rem">{{ site.data.site.tagline[lang] }}</p>
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-col__title">{{ ui.menu[lang] }}</h2>
+        <ul>
+          {%- for item in top_items -%}
+            <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-col__title">{{ ui.tools[lang] }}</h2>
+        <ul>
+          {%- for tool in site.data.tools[lang] -%}
+            <li><a href="{{ tool.url | relative_url }}"
+                   {% if tool.external %}target="_blank" rel="noopener"{% endif %}>{{ tool.name }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h2 class="footer-col__title">Social</h2>
+        <div class="footer-social">
+          {%- for link in site.data.site.social -%}
+            <a href="{{ link.url | relative_url }}" title="{{ link.name }}"
+               {% unless link.icon == 'rss' %}target="_blank" rel="noopener"{% endunless %}>
+              <svg aria-hidden="true"><use href="#i-{{ link.icon }}"></use></svg>
+              <span class="visually-hidden">{{ link.name }}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: "%Y" }} {{ site.data.site.name }}</p>
+      <div class="footer-bottom__links">
+        {%- for link in site.data.site.footer_links[lang] -%}
+          <a href="{{ link.url | relative_url }}">{{ link.name }}</a>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</footer>

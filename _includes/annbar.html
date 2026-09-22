@@ -1,30 +1,25 @@
-<a id="mk-annbar"
-   class="mk-annbar"
-   href="https://greekalpha.bet/"
-   target="_blank"
-   rel="noopener noreferrer"
-   style="display: none;">
-  <div class="container mk-annbar__inner">
-    <img src="{{ site.baseurl }}/assets/images/favicon-orange.png" alt="{{ site.name }}" class="mk-annbar__logo">
-    <span class="mk-annbar__text">Explore o Alfabeto Grego completo em greekalpha.bet &rarr;</span>
-    <button class="mk-annbar__close" type="button" aria-label="Fechar anúncio">&#x2715;</button>
-  </div>
+{%- comment -%}
+  Barra de anúncio. Fica fechada até o JS decidir mostrá-la, para não piscar
+  para quem já dispensou. Em vez de rolar junto com a página como na 1.0, ela
+  é fixa e empurra o header para baixo — o header aqui é fixo, então as duas
+  faixas formam um bloco só de chrome. A altura vai para --annbar-h, de onde
+  o header e o conteúdo se posicionam.
+
+  Configurada em _data/site.yml → announcement. Sem `text`, nada é renderizado.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ann = site.data.site.announcement -%}
+
+{%- if ann.text[lang] -%}
+<a class="annbar" id="annbar" href="{{ ann.url }}"
+   {% if ann.external %}target="_blank" rel="noopener"{% endif %} hidden>
+  <span class="annbar__inner">
+    {%- if ann.icon -%}
+      <img class="annbar__icon" src="{{ ann.icon | relative_url }}" alt="" width="20" height="20">
+    {%- endif -%}
+    <span class="annbar__text">{{ ann.text[lang] }}</span>
+  </span>
+  <button class="annbar__close" type="button" data-annbar-close
+          aria-label="{% if lang == 'en' %}Dismiss{% else %}Fechar anúncio{% endif %}">&#x2715;</button>
 </a>
-<script>
-  (function () {
-    var STORAGE_KEY = 'mk-annbar-v1';
-    var bar = document.getElementById('mk-annbar');
-    if (!bar) return;
-    if (localStorage.getItem(STORAGE_KEY) === '1') return;
-    bar.style.display = 'block';
-    var btn = bar.querySelector('.mk-annbar__close');
-    if (btn) {
-      btn.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        bar.style.display = 'none';
-        try { localStorage.setItem(STORAGE_KEY, '1'); } catch (_) {}
-      });
-    }
-  })();
-</script>
+{%- endif -%}

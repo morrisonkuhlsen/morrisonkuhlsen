@@ -1,0 +1,42 @@
+{%- comment -%}
+  Painel de "Ferramentas". Mesma grade de quatro colunas dos outros, mas os
+  itens vêm de _data/tools.yml em vez do front matter.
+{%- endcomment -%}
+{%- assign tools = include.tools -%}
+{%- assign lang = include.lang -%}
+{%- assign ui = include.ui -%}
+
+<div class="megamenu" id="mm-tools" hidden>
+  <div class="megamenu__grid">
+
+    <div class="megamenu__col">
+      <p class="megamenu__intro">
+        {%- if lang == 'en' -%}
+          Tables, formulas and calculators to use while you study — open in their own page.
+        {%- else -%}
+          Tabelas, fórmulas e calculadoras para usar enquanto você estuda — cada uma em sua própria página.
+        {%- endif -%}
+      </p>
+    </div>
+
+    <div class="megamenu__col">
+      <p class="megamenu__heading" style="border-bottom:1px solid var(--line)">
+        <span>{{ ui.tools[lang] }}</span>
+      </p>
+      <ul class="megamenu__list">
+        {%- for tool in tools -%}
+          <li>
+            <a class="megamenu__link{% if tool.featured %} megamenu__link--featured{% endif %}"
+               href="{{ tool.url | relative_url }}"
+               {% if tool.external %}target="_blank" rel="noopener"{% endif %}>
+              <span>{{ tool.name }}</span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <div class="megamenu__col"></div>
+    <div class="megamenu__col"></div>
+  </div>
+</div>

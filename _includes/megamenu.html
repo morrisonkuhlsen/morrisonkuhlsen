@@ -1,0 +1,81 @@
+{%- comment -%}
+  Painel de mega-menu de uma seção. Quatro colunas:
+    1. descrição da seção (front matter `description`)
+    2. título da seção com seta + lista de filhos
+    3. terceiro nível — preenchido pelo JS quando um filho tem netos
+    4. chamadas, vindas do front matter `menu_cta: [{ text, url, style }]`
+
+  Espera: include.item (página da seção), include.pages (páginas do idioma).
+{%- endcomment -%}
+{%- assign item = include.item -%}
+{%- assign menu_pages = include.pages -%}
+{%- assign children = menu_pages | where: "parent", item.ref -%}
+
+<div class="megamenu" id="mm-{{ item.ref }}" hidden>
+  <div class="megamenu__grid">
+
+    <div class="megamenu__col">
+      {%- if item.description -%}
+        <p class="megamenu__intro">{{ item.description }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="megamenu__col">
+      <a class="megamenu__heading" href="{{ item.url | relative_url }}">
+        <span>{{ item.title }}</span>
+        <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+      </a>
+      <ul class="megamenu__list">
+        {%- for child in children -%}
+          {%- assign grandchildren = menu_pages | where: "parent", child.ref -%}
+          <li>
+            {%- if grandchildren.size > 0 -%}
+              <button class="megamenu__link" type="button"
+                      data-third-toggle="third-{{ child.ref }}"
+                      aria-expanded="false">
+                <span>{{ child.title }}</span>
+                <svg aria-hidden="true" style="transform:rotate(-90deg)"><use href="#i-chevron"></use></svg>
+              </button>
+            {%- else -%}
+              <a class="megamenu__link" href="{{ child.url | relative_url }}">
+                <span>{{ child.title }}</span>
+              </a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+
+    <div class="megamenu__col">
+      {%- for child in children -%}
+        {%- assign grandchildren = menu_pages | where: "parent", child.ref -%}
+        {%- if grandchildren.size > 0 -%}
+          <div class="megamenu__third" id="third-{{ child.ref }}" hidden>
+            <p class="megamenu__third-title">{{ child.title }}</p>
+            <ul class="megamenu__list">
+              {%- for grandchild in grandchildren -%}
+                <li>
+                  <a class="megamenu__link" href="{{ grandchild.url | relative_url }}">
+                    <span>{{ grandchild.title }}</span>
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="megamenu__col">
+      {%- if item.menu_cta -%}
+        <div class="megamenu__cta">
+          {%- for cta in item.menu_cta -%}
+            <a class="btn btn--{{ cta.style | default: 'outline' }}"
+               href="{{ cta.url | relative_url }}">{{ cta.text }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,36 @@
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign posts = site.posts | where: "lang", lang -%}
+{%- assign initial = include.limit | default: 3 | plus: 0 -%}
+
+<div class="grid" style="--min: 20rem">
+  {%- for post in posts -%}
+    <article class="post-card post-item" {% if forloop.index > initial %}hidden{% endif %}>
+      {%- if post.image -%}
+        <a href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
+          <img class="post-card__img" src="{{ post.image | relative_url }}"
+               alt="" loading="lazy" width="800" height="500">
+        </a>
+      {%- endif -%}
+      <div class="post-card__body">
+        <div class="post-card__meta">
+          {%- if forloop.first %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
+          <span class="post-card__label">{{ ui.article[lang] }}</span>
+          <time datetime="{{ post.date | date_to_xmlschema }}">
+            {{ post.date | date: "%-d/%m/%Y" }}
+          </time>
+        </div>
+        <h3 class="post-card__title">
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </h3>
+        <p class="post-card__excerpt">{{ post.excerpt | strip_html | truncatewords: 22 }}</p>
+      </div>
+    </article>
+  {%- endfor -%}
+</div>
+
+{%- if posts.size > initial -%}
+  <p style="text-align:center;margin-top:2.5rem">
+    <button class="btn btn--primary" type="button" data-show-more="3">{{ ui.more[lang] }}</button>
+  </p>
+{%- endif -%}

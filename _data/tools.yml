@@ -1,0 +1,17 @@
+# Itens do dropdown "Ferramentas" do menu principal.
+# São páginas HTML avulsas na raiz, sem front matter de navegação —
+# por isso vivem aqui e não são descobertas por site.pages.
+
+pt:
+  - { name: "Standard Normal Table", url: "/ztable.html" }
+  - { name: "Student's T Table",     url: "/ttable.html" }
+  - { name: "Snedecor F Table",      url: "/ftable.html" }
+  - { name: "Fórmulas",              url: "/formulas/home.html" }
+  - { name: "Problema Semanal",      url: "/assets/html/week-problem.html", external: true, featured: true }
+
+en:
+  - { name: "Standard Normal Table", url: "/ztable.html" }
+  - { name: "Student's T Table",     url: "/ttable.html" }
+  - { name: "Snedecor F Table",      url: "/ftable.html" }
+  - { name: "Formulas",              url: "/formulas/home.html" }
+  - { name: "Weekly Problem",        url: "/assets/html/week-problem.html", external: true, featured: true }

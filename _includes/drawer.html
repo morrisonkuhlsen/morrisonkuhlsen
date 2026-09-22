@@ -1,0 +1,31 @@
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign menu_pages = site.pages | where: "lang", lang | where_exp: "p", "p.order != nil" | sort: "order" -%}
+{%- assign top_items = menu_pages | where_exp: "p", "p.parent == nil" -%}
+{%- assign tools = site.data.tools[lang] -%}
+
+<div class="drawer" id="site-drawer">
+  <nav aria-label="{{ ui.menu[lang] }}">
+    {%- for item in top_items -%}
+      {%- assign children = menu_pages | where: "parent", item.ref -%}
+      <a class="drawer__link" href="{{ item.url | relative_url }}">{{ item.title }}</a>
+      {%- if children.size > 0 -%}
+        <div class="drawer__sub">
+          {%- for child in children -%}
+            <a class="drawer__link" href="{{ child.url | relative_url }}">{{ child.title }}</a>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if tools -%}
+      <a class="drawer__link" href="#" aria-hidden="true" tabindex="-1" style="pointer-events:none">{{ ui.tools[lang] }}</a>
+      <div class="drawer__sub">
+        {%- for tool in tools -%}
+          <a class="drawer__link" href="{{ tool.url | relative_url }}"
+             {% if tool.external %}target="_blank" rel="noopener"{% endif %}>{{ tool.name }}</a>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </nav>
+</div>

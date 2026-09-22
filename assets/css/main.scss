@@ -1,0 +1,15 @@
+---
+# Front matter vazio: faz o Jekyll processar este arquivo com o Sass embutido.
+# A ordem abaixo é a ordem em que o CSS sai — de tokens a componentes.
+---
+
+@use "tokens";
+@use "reset";
+@use "layout";
+@use "header";
+@use "hero";
+@use "components";
+@use "blog";
+@use "prose";
+@use "search";
+@use "footer";

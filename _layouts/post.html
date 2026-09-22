@@ -1,178 +1,56 @@
 ---
-layout: default
+layout: base
 ---
 
-<div class="container my-4">
-  <div class="row">
-    <!-- Main content -->
-    <div class="col-md-9 col-12">
-      <article>
-        <h1>{{ page.title }}</h1>
-        {% if page.description %}
-          <p class="mk-page-subtitle">{{ page.description }}</p>
-        {% endif %}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign author = site.data.authors[page.author] -%}
 
-        {% assign author = site.data.authors[page.author] %}
-        {% if author %}
-        <div class="post-author-block">
-          <span class="post-author-avatar" aria-hidden="true">{{ author.initials }}</span>
-          <div class="post-author-info">
-            <span class="post-author-name">{{ author.name }}</span>
-            <span class="post-author-date">{% include date.html date=page.date %}</span>
-          </div>
-        </div>
-        {% endif %}
+<div class="post-layout">
 
-        <div class="entry">
-          {{ content }}
-        </div>
+  <article class="post-layout__main">
+    <header class="post-header">
+      <h1 class="post-header__title">{{ page.title }}</h1>
 
-        <div class="date">
-          Escrito em {{ page.date | date: "%d/%m/%Y" }}
-        </div>
+      {%- if page.description -%}
+        <p class="post-header__lede">{{ page.description }}</p>
+      {%- endif -%}
 
-        {% if page.tags and page.tags.size > 0 %}
-        <div class="mt-3 d-flex align-items-center flex-wrap" style="font-size:0.875rem;color:#555">
-          <i class="bi bi-tag me-2" style="font-size:1.25rem;color:#000"></i>
-          {% for tag in page.tags %}<a href="{{ site.baseurl }}/blog?tag={{ tag | slugify }}" style="color:#333;text-decoration:none;font-weight:700">{{ tag }}</a>{% unless forloop.last %},&nbsp;{% endunless %}{% endfor %}
-        </div>
-        {% endif %}
-
-        {% include giscus.html %}
-      </article>
-    </div>
-
-    <!-- TOC sidebar (hidden on mobile) -->
-    <div class="col-md-3 d-none d-md-block">
-      <nav id="toc" class="sticky-top"></nav>
-    </div>
-  </div>
-</div>
-
-<!-- Ad widget (fixed bottom-right, post pages only) -->
-<div id="mk-ad-widget">
-  <button id="mk-ad-close" aria-label="Fechar">&times;</button>
-
-  <!-- Slot 1: MorrisonKühlsen -->
-  <a class="mk-ad-link mk-ad-slot" id="mk-ad-slot-mk" href="/blog" target="_blank" rel="noopener">
-    <div class="mk-ad-card">
-      <img id="mk-ad-img" src="" alt="MorrisonKühlsen" class="mk-ad-img" />
-      <h2 class="mk-ad-headline">
-        <span>Estatística</span>
-        <span>descomplicada.</span>
-      </h2>
-      <p class="mk-ad-text">
-        Artigos, fórmulas e tabelas<br>
-        para estudantes e<br>
-        profissionais.
-      </p>
-      <div class="mk-ad-site">morrisonkuhlsen.com</div>
-    </div>
-  </a>
-
-  <!-- Slot 2: GreekAlpha -->
-  <a class="mk-ad-link mk-ad-slot" id="mk-ad-slot-ga" href="https://greekalpha.bet/" target="_blank" rel="noopener noreferrer" style="display:none;">
-      <div class="mk-ad-card">
-        <img src="{{ site.baseurl }}/assets/images/athena.avif" alt="Greek Alphabet" class="mk-ad-img" />
-        <h2 class="mk-ad-headline">
-          <span>Greek</span>
-          <span>Alphabet</span>
-        </h2>
-        <p class="mk-ad-text">
-          Memorize Greek letters<br>
-          for math, statistics<br>
-          &amp; STEM study.
-        </p>
-        <div class="mk-ad-site">greekalpha.bet</div>
+      <div class="byline">
+        {%- if author -%}
+          <span class="byline__avatar" aria-hidden="true">{{ author.initials }}</span>
+          <span class="byline__name">{{ author.name }}</span>
+        {%- endif -%}
+        <time class="byline__date" datetime="{{ page.date | date_to_xmlschema }}">
+          {%- include date.html date=page.date -%}
+        </time>
       </div>
-  </a>
 
-  <div class="mk-ad-footer">Ads</div>
+    </header>
+
+    <div class="prose" id="post-content">
+      {{ content }}
+    </div>
+
+    {%- if page.tags.size > 0 -%}
+      <ul class="tag-list">
+        {%- for tag in page.tags -%}
+          <li><a href="{{ '/blog/' | relative_url }}?tag={{ tag | slugify }}">{{ tag }}</a></li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- include comments.html -%}
+  </article>
+
+  {%- comment -%}
+    O índice vive na margem direita, fora da coluna de leitura, para que o
+    texto continue centrado. O JS o preenche a partir dos títulos do artigo.
+  {%- endcomment -%}
+  <aside class="post-layout__aside">
+    <nav id="toc" aria-label="{% if lang == 'en' %}On this page{% else %}Nesta página{% endif %}"></nav>
+  </aside>
+
 </div>
 
-<!-- jQuery (required by bootstrap-toc) -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<!-- Bootstrap TOC -->
-<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js"></script>
-<script>
-  $(document).ready(function () {
-    Toc.init({
-      $nav: $("#toc"),
-      $scope: $("article")
-    });
-    $("#toc").find("a").addClass("nav-link");
-
-    // Rastreamento de seção ativa via scroll (independente do Bootstrap ScrollSpy)
-    var $tocLinks = $("#toc a.nav-link");
-    var $headings = $("article h1, article h2, article h3, article h4, article h5, article h6").filter("[id]");
-
-    function updateActive() {
-      var scrollTop = $(window).scrollTop() + 80;
-      var activeId = null;
-
-      $headings.each(function () {
-        if ($(this).offset().top <= scrollTop) {
-          activeId = $(this).attr("id");
-        }
-      });
-
-      $tocLinks.removeClass("active");
-      $("#toc .nav-link + ul").hide();
-
-      if (activeId) {
-        var $activeLink = $tocLinks.filter("[href='#" + activeId + "']");
-        $activeLink.addClass("active");
-        // Mostra todas as sub-listas ancestrais (para sub-itens)
-        $activeLink.parents("#toc ul").show();
-        // Marca os links pai como ativos também
-        $activeLink.parents("#toc li").children("a.nav-link").addClass("active");
-        // Mostra a sub-lista filha direta do item ativo
-        $activeLink.siblings("ul").show();
-      }
-    }
-
-    $(window).on("scroll.toc", updateActive);
-    updateActive();
-
-    // Imagem aleatória no slot MorrisonKühlsen
-    var adImgs = [
-      "{{ site.baseurl }}/assets/images/concept.png",
-      "{{ site.baseurl }}/assets/images/dados.png",
-      "{{ site.baseurl }}/assets/images/office.png"
-    ];
-    $("#mk-ad-img").attr("src", adImgs[Math.floor(Math.random() * adImgs.length)]);
-
-    // Alternar entre os dois slots de ad a cada 9 segundos.
-    // Guarda global evita um segundo setInterval caso este bloco rode mais de
-    // uma vez na mesma página; o índice "atual" é lido do DOM (não de uma
-    // variável separada) para nunca dessincronizar do que está realmente
-    // visível. .stop(true, true) descarta qualquer animação pendente antes
-    // de iniciar a próxima — sem isso, chamadas acumuladas (ex.: aba em
-    // segundo plano atrasando o setInterval) podiam deixar os dois cards
-    // com display:block ao mesmo tempo.
-    var mkAdSlots = ["#mk-ad-slot-mk", "#mk-ad-slot-ga"];
-    if (!window.mkAdCycleStarted) {
-      window.mkAdCycleStarted = true;
-      setInterval(function () {
-        if (document.hidden) return;
-
-        var curIdx = 0;
-        for (var i = 0; i < mkAdSlots.length; i++) {
-          if ($(mkAdSlots[i]).is(":visible")) { curIdx = i; break; }
-        }
-        var nxtIdx = (curIdx + 1) % mkAdSlots.length;
-        var $cur = $(mkAdSlots[curIdx]);
-        var $nxt = $(mkAdSlots[nxtIdx]);
-
-        $cur.stop(true, true).fadeOut(400, function () {
-          $nxt.stop(true, true).fadeIn(400);
-        });
-      }, 9000);
-    }
-
-    // Fechar o ad widget
-    $("#mk-ad-close").on("click", function () {
-      $("#mk-ad-widget").fadeOut(200);
-    });
-  });
-</script>
+{%- if page.mathjax -%}{%- include mathjax.html -%}{%- endif -%}

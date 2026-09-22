@@ -1,23 +1,14 @@
-{{ include.date | date: "%-d" }}
-
-{% if page.lang == 'pt' %}
-{% assign m = include.date | date: "%-m" %}
-{% case m %}
-{% when  '1' %}de janeiro de
-{% when  '2' %}de fevereiro de
-{% when  '3' %}de março de
-{% when  '4' %}de abril de
-{% when  '5' %}de maio de
-{% when  '6' %}de junho de
-{% when  '7' %}de julho de
-{% when  '8' %}de agosto de
-{% when  '9' %}de setembro de
-{% when '10' %}de outubro de
-{% when '11' %}de novembro de
-{% when '12' %}de dezembro de
-{% endcase %}
-{% else %}
-{{ include.date | date: "%B" }}
-{% endif %}
-
-{{ include.date | date: "%Y" }}
+{%- comment -%}
+  Data por extenso. Meses em português via array — o `date: "%B"` do Liquid
+  só sabe inglês.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign day = include.date | date: "%-d" -%}
+{%- assign year = include.date | date: "%Y" -%}
+{%- if lang == 'pt' -%}
+  {%- assign months = "janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro" | split: "," -%}
+  {%- assign index = include.date | date: "%-m" | minus: 1 -%}
+  {{ day }} de {{ months[index] }} de {{ year }}
+{%- else -%}
+  {{ include.date | date: "%B" }} {{ day }}, {{ year }}
+{%- endif -%}

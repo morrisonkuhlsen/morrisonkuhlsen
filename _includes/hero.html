@@ -1,95 +1,53 @@
-<div class="it-hero-wrapper it-dark it-overlay it-bottom-overlapping-content">
-  <div class="img-responsive-wrapper">
-    <div class="img-responsive">
-      <div class="img-wrapper hero-slideshow">
-        <img src="{{ site.baseurl }}/assets/images/spiral.jpg" class="active" title="Espiral" alt="Imagem de uma espiral" fetchpriority="high" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/dados.png" title="Dados" alt="Imagem de dados" loading="lazy" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/office.png" title="Escritório" alt="Imagem de escritório" loading="lazy" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/hourglass.png" title="Ampulheta" alt="Imagem de uma ampulheta" loading="lazy" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/cartas.png" title="Cartas" alt="Imagem de cartas de baralho" loading="lazy" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/mkh-background.png" title="Front" alt="Front" loading="lazy" width="1200" height="680">
-        <img src="{{ site.baseurl }}/assets/images/mkh-background-2.png" title="Front" alt="Front" loading="lazy" width="1200" height="680">
-      </div>
-    </div>
-  </div>
-  <style>
-    .hero-slideshow {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .hero-slideshow img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 1.5s ease-in-out;
-    }
-    .hero-slideshow img.active {
-      opacity: 1;
-    }
-  </style>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const images = document.querySelectorAll('.hero-slideshow img');
-      let currentIndex = 0;
-      
-      function changeImage() {
-        images[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % images.length;
-        images[currentIndex].classList.add('active');
-      }
-      
-      // Inicia a transição após 5 segundos e repete a cada 5 segundos
-      setInterval(changeImage, 5000);
-    });
-  </script>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="it-hero-text-wrapper bg-dark" style="background-color: rgba(0, 0, 0, 0.7) !important; padding: 2rem; border-radius: 4px;">
-          <h1 class="no_toc">{{ page.title }}</h1>
-          <p class="d-none d-lg-block">{{ page.description }}</p>
-          <!-- <div class="it-btn-container"><a class="btn btn-sm btn-secondary" href="#">Link di esempio</a></div> -->
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card-wrapper card-space">
-        <div class="card card-bg">
-          <div class="card-body">
+{%- comment -%}
+  Hero full-bleed. As imagens vêm de `page.hero_slideshow` (lista) ou de
+  `page.hero_image` (única). O header fica por cima, transparente.
+{%- endcomment -%}
+{%- assign slides = page.hero_slideshow | default: nil -%}
 
-            {% if page.lang == 'pt' %}
-            <h5 class="card-title">Alfabeto Grego: a linguagem dos símbolos em Estatística, Probabilidade e Matemática</h5>
-            <p class="card-text">O alfabeto grego aparece o tempo todo nas fórmulas — de parâmetros e distribuições (μ, σ, λ) a testes e hipóteses (α, β) e constantes (π). Nesta página didática, você encontra cada letra em maiúscula e minúscula, seu nome, pronúncia e os usos mais comuns em estatística/probabilidade e matemática, com exemplos rápidos para reconhecer e aplicar os símbolos com segurança.</p>
-            <a class="read-more" href="./greek-alphabet.html">
-              <span class="text">Leia mais</span>
-              <svg class="icon">
-                <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
-              </svg>
-            </a>
-
-            {% else %}
-            <h5 class="card-title">Discover the power of statistical analysis for data-driven decision making</h5>
-            <p class="card-text">Statistics is the science that turns raw data into valuable insights. Using statistical methods we can identify patterns, test hypotheses and make predictions that support strategic decisions. Whether in scientific research, market analysis or process optimization, statistics provides the tools to interpret the world's complexity through numbers.</p>
-            <a class="read-more" href="#">
-              <span class="text">Read more</span>
-              <svg class="icon">
-                <use xlink:href="{{ site.baseurl }}/assets/bootstrap-italia/dist/svg/sprite.svg#it-arrow-right"></use>
-              </svg>
-            </a>
-            {% endif %}
-
-          </div>
-        </div>
-      </div>
-    </div>
+<section class="hero">
+  <div class="hero__media">
+    {%- if slides -%}
+      {%- for slide in slides -%}
+        <img src="{{ slide.src | relative_url }}" alt="{{ slide.alt | default: '' }}"
+             class="{% if forloop.first %}is-active{% endif %}"
+             {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+             width="1600" height="900">
+      {%- endfor -%}
+    {%- else -%}
+      <img src="{{ page.hero_image | relative_url }}" alt="" class="is-active"
+           fetchpriority="high" width="1600" height="900">
+    {%- endif -%}
   </div>
-</div>
+
+  <div class="hero__body">
+    <h1 class="hero__title">{{ page.hero_title | default: page.title }}</h1>
+    {%- if page.hero_lede or page.description -%}
+      <p class="hero__lede">{{ page.hero_lede | default: page.description }}</p>
+    {%- endif -%}
+    {%- if page.hero_cta_url -%}
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="{{ page.hero_cta_url | relative_url }}">
+          {{ page.hero_cta_text }}
+          <svg style="width:1em;height:1em;fill:currentColor" aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{%- if slides and slides.size > 1 -%}
+<script>
+  /* Troca de imagem do hero. Fica aqui, e não no site.js, porque só esta
+     página tem slideshow — não vale carregar em todas. */
+  (function () {
+    var slides = document.querySelectorAll('.hero__media img');
+    if (slides.length < 2 || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var i = 0;
+    setInterval(function () {
+      slides[i].classList.remove('is-active');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('is-active');
+    }, 5000);
+  })();
+</script>
+{%- endif -%}

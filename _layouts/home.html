@@ -1,0 +1,17 @@
+---
+layout: base
+---
+
+{%- include hero.html -%}
+
+<div class="container">
+  {{ content }}
+</div>
+
+<section class="section">
+  <div class="container">
+    {%- include post-list.html limit=3 -%}
+  </div>
+</section>
+
+{%- include tags-section.html -%}

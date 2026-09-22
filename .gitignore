@@ -1,6 +1,9 @@
-.bundle
-.jekyll-cache
-.sass-cache
-_site
-.DS_Store
-vendor/*
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+.bundle/
+
+# Gemfile.lock fica versionado: o deploy usa bundler-cache: true e precisa
+# dele para instalar as mesmas versões que rodam aqui.

@@ -1,13 +1,24 @@
-<div class="cookiebar bg-dark p-4 hide" aria-hidden="true">
-  <div class="container">
-    <div class="row d-flex align-items-center">
-      <div class="col-12 col-md-8">
-        <span class="text-white small">{{ site.data.t.cookie-policy-info[page.lang]}}</span>
-      </div>
-      <div class="col-12 col-md-4 mt-4 mt-md-0 d-flex justify-content-end">
-        <a class="btn btn-link" href="{{ site.baseurl }}{{ site.data.t.footer-links[page.lang]['privacy-policy'].url }}">Privacy policy</a>
-        <button class="btn btn-primary mr-2" data-accept="cookiebar">{{ site.data.t.cookie-policy-accept-btn[page.lang] }}</button>
-      </div>
+{%- comment -%}
+  Aviso de cookies. Some depois do aceite, guardado em localStorage.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign privacy = site.data.site.footer_links[lang] | first -%}
+
+<div class="cookiebar" id="cookiebar" role="region"
+     aria-label="{% if lang == 'en' %}Cookie notice{% else %}Aviso de cookies{% endif %}" hidden>
+  <div class="cookiebar__inner">
+    <p class="cookiebar__text">
+      {%- if lang == 'en' -%}
+        This site uses technical, analytics and third-party cookies. By continuing to browse, you accept their use.
+      {%- else -%}
+        Este site utiliza cookies técnicos, analíticos e de terceiros. Prosseguindo na navegação, você aceita o uso de cookies.
+      {%- endif -%}
+    </p>
+    <div class="cookiebar__actions">
+      <a class="cookiebar__link" href="{{ privacy.url | relative_url }}">{{ privacy.name }}</a>
+      <button class="btn btn--primary" type="button" data-cookiebar-accept>
+        {%- if lang == 'en' -%}Accept{%- else -%}Aceito{%- endif -%}
+      </button>
     </div>
   </div>
 </div>

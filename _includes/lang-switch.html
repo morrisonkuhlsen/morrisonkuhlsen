@@ -1,0 +1,22 @@
+{%- comment -%}
+  Alternador de idioma: mostra todas as versões da página, a atual destacada.
+  As versões são casadas pelo `ref` do front matter.
+
+  O `if page.ref` não é redundante: com `ref` nulo, o filtro `where` casaria com
+  toda página que também não tem `ref` — inclusive assets processados.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+
+<div class="lang-toggle">
+  <span class="lang-toggle__item is-active">{{ lang }}</span>
+  {%- if page.ref -%}
+    {%- assign everything = site.pages | concat: site.posts -%}
+    {%- assign siblings = everything | where: "ref", page.ref | sort: "lang" -%}
+    {%- for sibling in siblings -%}
+      {%- if sibling.lang != lang -%}
+        <a class="lang-toggle__item" href="{{ sibling.url | relative_url }}"
+           hreflang="{{ sibling.lang }}" lang="{{ sibling.lang }}">{{ sibling.lang }}</a>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>
