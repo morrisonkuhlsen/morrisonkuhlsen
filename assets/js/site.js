@@ -603,6 +603,78 @@
     }
   }
 
+  /* ── Barra de ações do post ──────────────────────────────────────────────
+     Copiar link, escala de leitura e voltar ao topo. A escala fica no
+     localStorage, então o leitor a escolhe uma vez e ela vale nos próximos
+     artigos. */
+  function initRail() {
+    var rail = document.querySelector('[data-rail]');
+    if (!rail) return;
+
+    var root = document.documentElement;
+    var PASSOS = [0.9, 1, 1.1, 1.25, 1.4];
+    var nivel = 1;
+
+    try {
+      var guardado = parseInt(localStorage.getItem('mk-prose-scale'), 10);
+      if (!isNaN(guardado)) nivel = Math.min(Math.max(guardado, 0), PASSOS.length - 1);
+    } catch (e) {}
+
+    function aplicarEscala() {
+      root.style.setProperty('--prose-scale', PASSOS[nivel]);
+      rail.querySelectorAll('[data-rail-font]').forEach(function (b) {
+        var passo = parseInt(b.dataset.railFont, 10);
+        b.disabled = (passo < 0 && nivel === 0) || (passo > 0 && nivel === PASSOS.length - 1);
+        b.style.opacity = b.disabled ? 0.35 : '';
+      });
+      try { localStorage.setItem('mk-prose-scale', String(nivel)); } catch (e) {}
+    }
+
+    aplicarEscala();
+
+    rail.addEventListener('click', function (event) {
+      var alvo = event.target.closest('button');
+      if (!alvo) return;
+
+      if (alvo.dataset.railFont) {
+        nivel = Math.min(Math.max(nivel + parseInt(alvo.dataset.railFont, 10), 0), PASSOS.length - 1);
+        aplicarEscala();
+        return;
+      }
+
+      if (alvo.hasAttribute('data-rail-top')) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if (alvo.hasAttribute('data-rail-copy')) {
+        var url = alvo.dataset.url || location.href;
+        var confirmar = function () {
+          alvo.classList.add('is-done');
+          setTimeout(function () { alvo.classList.remove('is-done'); }, 1800);
+        };
+        /* clipboard.writeText não existe fora de https/localhost e ainda pode
+           rejeitar por falta de ativação do usuário — então o plano B roda
+           também no rejeitado, não só quando a API falta. */
+        var planoB = function () {
+          var campo = document.createElement('textarea');
+          campo.value = url;
+          campo.style.cssText = 'position:fixed;top:0;opacity:0';
+          document.body.appendChild(campo);
+          campo.select();
+          try { document.execCommand('copy'); confirmar(); } catch (e) {}
+          campo.remove();
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(confirmar, planoB);
+        } else {
+          planoB();
+        }
+      }
+    });
+  }
+
   /* ── Tabelas roláveis no celular ─────────────────────────────────────────── */
   function initTables() {
     document.querySelectorAll('.prose table').forEach(function (table) {
@@ -624,6 +696,7 @@
     initBlog();
     initSearch();
     initDismissables();
+    initRail();
     initTables();
   }
 

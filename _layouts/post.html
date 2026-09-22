@@ -44,6 +44,14 @@ layout: base
   </article>
 
   {%- comment -%}
+    A barra de ações ocupa a margem esquerda, que estava vazia — o índice fica
+    na direita. Nenhuma das duas invade a coluna de leitura.
+  {%- endcomment -%}
+  <aside class="post-layout__rail">
+    {%- include post-rail.html -%}
+  </aside>
+
+  {%- comment -%}
     O índice vive na margem direita, fora da coluna de leitura, para que o
     texto continue centrado. O JS o preenche a partir dos títulos do artigo.
   {%- endcomment -%}

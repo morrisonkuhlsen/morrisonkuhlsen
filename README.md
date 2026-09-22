@@ -70,6 +70,11 @@ tags, comentários via giscus e MathJax carregado só quando o front matter traz
 `image` no front matter serve de capa social e do card na home — o post **não**
 a repete no corpo, porque o texto em geral já traz a figura.
 
+**Barra de ações do post.** Coluna fixa na margem esquerda (`post-rail.html`):
+compartilhar, copiar link, tamanho do texto e voltar ao topo. A escala de
+leitura fica no `localStorage`, então vale nos artigos seguintes. Some abaixo
+de 64rem, junto com o índice.
+
 **Busca.** `search.json` e um matcher próprio em `site.js`. Não usa Lunr: o
 pipeline padrão dele faz *stemming* em inglês, o que atrapalha num site
 majoritariamente em português. Casar prefixos de token sem acento acerta mais

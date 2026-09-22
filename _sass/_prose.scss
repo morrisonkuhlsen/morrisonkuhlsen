@@ -150,6 +150,14 @@
     gap: 2.5rem;
   }
 
+  /* grid-row: 1 nos três é obrigatório, não decorativo. A barra vem depois do
+     artigo no DOM mas pede a coluna 1; sem a linha explícita o auto-placement
+     a joga para uma linha nova, que tem a altura dela mesma — e aí o sticky
+     fica sem curso e a barra some depois de poucos pixels. */
+  .post-layout__rail,
+  .post-layout__main,
+  .post-layout__aside { grid-row: 1; }
+
   .post-layout__main { grid-column: 2; }
 
   .post-layout__aside {
@@ -332,3 +340,89 @@ mjx-container[display="true"] {
   background-color: #f4f5f8 !important;
   border-radius: 8px;
 }
+
+
+/* ─── Barra de ações do post ──────────────────────────────────────────────
+   Coluna fixa na margem esquerda: compartilhar, copiar, tamanho do texto e
+   voltar ao topo. Some abaixo de 64rem, junto com o índice — nessa largura
+   não há margem para ela. */
+
+.post-layout__rail { display: none; }
+
+@media (min-width: 64rem) {
+  .post-layout__rail {
+    display: block;
+    grid-column: 1;
+    padding-top: 6rem;
+    justify-self: end;
+  }
+}
+
+.rail {
+  position: sticky;
+  top: calc(var(--headerbar-compact) + 1.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  width: 3.5rem;
+}
+
+.rail__label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.rail__btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+
+.rail__btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  background: var(--paper-alt);
+}
+
+.rail__btn svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
+
+.rail__btn--text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  gap: 0.05rem;
+  grid-auto-flow: column;
+}
+
+.rail__btn--text span { font-size: 0.7rem; }
+
+.rail__sizes { display: flex; gap: 0.35rem; }
+.rail__sizes .rail__btn { width: 1.9rem; height: 1.9rem; }
+
+.rail__sep {
+  width: 1.5rem;
+  margin: 0.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+/* O ícone de confirmação só aparece depois de copiar. */
+.rail__icon-done { display: none; }
+.rail__btn.is-done { border-color: var(--accent); color: var(--accent); }
+.rail__btn.is-done .rail__icon-copy { display: none; }
+.rail__btn.is-done .rail__icon-done { display: block; }
+
+/* Escala de leitura, controlada pela barra e guardada por visitante. */
+.prose { font-size: calc(var(--step-0) * var(--prose-scale, 1)); }

@@ -1,0 +1,64 @@
+{%- comment -%}
+  Barra de ações do post, fixa na margem esquerda. Compartilhar, copiar link,
+  tamanho do texto e voltar ao topo. Substitui o bloco "Gostou deste artigo?"
+  que vivia no corpo de cada post.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign url = page.url | absolute_url -%}
+{%- assign titulo = page.title | url_encode -%}
+
+{%- if lang == 'en' -%}
+  {%- assign t_share = "Share" -%}{%- assign t_copy = "Copy link" -%}
+  {%- assign t_copied = "Copied" -%}{%- assign t_size = "Text size" -%}
+  {%- assign t_smaller = "Smaller text" -%}{%- assign t_bigger = "Larger text" -%}
+  {%- assign t_top = "Back to top" -%}
+{%- else -%}
+  {%- assign t_share = "Compartilhar" -%}{%- assign t_copy = "Copiar link" -%}
+  {%- assign t_copied = "Copiado" -%}{%- assign t_size = "Tamanho do texto" -%}
+  {%- assign t_smaller = "Diminuir o texto" -%}{%- assign t_bigger = "Aumentar o texto" -%}
+  {%- assign t_top = "Voltar ao topo" -%}
+{%- endif -%}
+
+<div class="rail" data-rail>
+  <p class="rail__label">{{ t_share }}</p>
+
+  <a class="rail__btn" title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener"
+     href="https://api.whatsapp.com/send?text={{ titulo }}%20-%20{{ url | url_encode }}">
+    <svg aria-hidden="true"><use href="#i-whatsapp"></use></svg>
+  </a>
+
+  <a class="rail__btn" title="X" aria-label="X" target="_blank" rel="noopener"
+     href="https://x.com/intent/tweet?text={{ titulo }}&url={{ url | url_encode }}">
+    <svg aria-hidden="true"><use href="#i-x"></use></svg>
+  </a>
+
+  <a class="rail__btn" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener"
+     href="https://www.linkedin.com/shareArticle?mini=true&url={{ url | url_encode }}&title={{ titulo }}">
+    <svg aria-hidden="true"><use href="#i-linkedin"></use></svg>
+  </a>
+
+  <button class="rail__btn" type="button" data-rail-copy
+          data-url="{{ url }}" data-copied="{{ t_copied }}"
+          title="{{ t_copy }}" aria-label="{{ t_copy }}">
+    <svg class="rail__icon-copy" aria-hidden="true"><use href="#i-link"></use></svg>
+    <svg class="rail__icon-done" aria-hidden="true"><use href="#i-check"></use></svg>
+  </button>
+
+  <hr class="rail__sep">
+
+  <p class="rail__label">{{ t_size }}</p>
+
+  <div class="rail__sizes" role="group" aria-label="{{ t_size }}">
+    <button class="rail__btn rail__btn--text" type="button" data-rail-font="-1"
+            title="{{ t_smaller }}" aria-label="{{ t_smaller }}">A<span>−</span></button>
+    <button class="rail__btn rail__btn--text" type="button" data-rail-font="1"
+            title="{{ t_bigger }}" aria-label="{{ t_bigger }}">A<span>+</span></button>
+  </div>
+
+  <hr class="rail__sep">
+
+  <button class="rail__btn" type="button" data-rail-top
+          title="{{ t_top }}" aria-label="{{ t_top }}">
+    <svg aria-hidden="true"><use href="#i-arrow-up"></use></svg>
+  </button>
+</div>

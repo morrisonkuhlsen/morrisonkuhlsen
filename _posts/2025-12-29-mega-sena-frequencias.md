@@ -495,7 +495,6 @@ Além da estatística, confiança real envolve:
   <p>Se eu marcar <strong>20 números</strong> em uma única aposta, qual é a probabilidade de acertar a <strong>Sena</strong> (6 acertos)? E o que significa “1 em x”: isso garante <strong>100%</strong> de chance após x apostas?</p>
 </div>
 
-
 Em um sorteio, existem $$\binom{60}{6}$$ combinações possíveis de 6 números.  
 Quando você marca 20 números, você “cobre” $$\binom{20}{6}$$ combinações de 6 números.
 
@@ -598,7 +597,6 @@ Ou seja: **~63%**, não 100%.
   <p>Se eu fizer <strong>duas</strong> apostas de 20 números, a probabilidade de ganhar a Sena é simplesmente <strong>somar</strong> as probabilidades?</p>
 </div>
 
-
 Se cada aposta tem probabilidade $$p_{20}$$ de acertar a Sena, então a forma correta é usar o **complemento**:
 
 - “Ganhar pelo menos uma vez” = 1 − “não ganhar em nenhuma”.
@@ -647,7 +645,6 @@ Então é cerca de **1 em 646**.
   <p>Nesta semana, viralizou a notícia de um grupo de Cachoeira Dourada (GO) que reuniu cerca de <strong>R$ 13 milhões</strong> e registrou <strong>57 jogos de 20 números</strong> na Mega da Virada. Se eu fizer <strong>57 apostas de 20 números</strong> (uma vez cada), qual é a probabilidade de acertar a <strong>Sena</strong> <em>pelo menos uma vez</em>? E como interpretar esse resultado?</p>
   <p style="margin: 0.5em 0 0 0; font-size: 0.9em; color: #555;"><em>Contexto:</em> caso noticiado pelo InfoMoney em 29/12/2025.</p>
 </div>
-
 
 **Observação importante:**
 - o cálculo abaixo assume que as 57 apostas funcionam como **57 tentativas** (isto é, apostas “separadas”);
@@ -901,69 +898,5 @@ Portanto:
     <li>Probabilidade de acertar a Sena com 20 números em uma aposta: <strong>\(p_{20}=\binom{20}{6}/\binom{60}{6}=\frac{102}{131747}\approx 0{,}0774\%\)</strong></li>
   </ul>
 </div>
-
-
-<style>
-.share-buttons {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #444;
-  text-align: center;
-}
-.share-buttons-title {
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-.share-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 45px;
-  height: 45px;
-  margin: 5px;
-  border-radius: 50%;
-  text-decoration: none;
-  background-color: transparent;
-  color: #333 !important; /* Cor do ícone (cinza escuro) */
-  font-size: 24px;
-  border: none;
-  cursor: pointer;
-  transition: color 0.2s, transform 0.2s;
-}
-.share-btn:hover {
-  color: #000 !important; /* Cor do ícone ao passar o mouse */
-  transform: scale(1.1);
-}
-</style>
-
-<div class="share-buttons">
-  <p class="share-buttons-title">Gostou deste artigo? Compartilhe!</p>
-  <a href="https://api.whatsapp.com/send?text={{ page.title | url_encode }}%20-%20{{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp" title="Compartilhar no WhatsApp"><i class="bi bi-whatsapp"></i></a>
-  <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn facebook" title="Compartilhar no Facebook"><i class="bi bi-facebook"></i></a>
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.url }}{{ page.url }}&title={{ page.title | url_encode }}&summary={{ page.description | url_encode }}" target="_blank" rel="noopener noreferrer" class="share-btn linkedin" title="Compartilhar no LinkedIn"><i class="bi bi-linkedin"></i></a>
-  <a href="https://x.com/intent/tweet?text={{ page.title | url_encode }}&url={{ site.url }}{{ page.url }}" target="_blank" rel="noopener noreferrer" class="share-btn twitter-x" title="Compartilhar no X"><i class="bi bi-twitter-x"></i></a>
-  <button id="copy-link-btn" class="share-btn copy-link" title="Copiar Link"><i class="bi bi-link-45deg"></i></button>
-</div>
-
-<script>
-document.getElementById('copy-link-btn').addEventListener('click', function() {
-  navigator.clipboard.writeText(window.location.href).then(function() {
-    const button = this;
-    const originalContent = button.innerHTML;
-    button.innerHTML = 'Copiado!';
-    button.style.fontSize = '12px';
-    button.style.fontWeight = 'bold';
-    
-    setTimeout(() => {
-      button.innerHTML = originalContent;
-      button.style.fontSize = '';
-      button.style.fontWeight = '';
-    }, 2000);
-  }.bind(this), function(err) {
-    console.error('Erro ao copiar o link: ', err);
-  });
-});
-</script>
 
 <!-- Fim do artigo -->
