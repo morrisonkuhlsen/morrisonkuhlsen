@@ -128,6 +128,22 @@ no topo e publica a própria altura em `--annbar-h`, de onde o header e o
 conteúdo se deslocam; o aviso de cookies fica embaixo. As duas nascem escondidas
 no HTML e só aparecem se ainda não foram dispensadas, para não piscar.
 
+**Leia também.** `related.html`, no fim do post: três cartões escolhidos por
+tags em comum. Em vez de ordenar por pontuação — o `sort` do Liquid não é
+estável e o desempate por data se perderia —, varre os candidatos uma vez por
+nível de afinidade, do maior para o menor; como `site.posts` já vem do mais
+novo para o mais antigo, dentro de cada nível o recente entra primeiro.
+Sobrando vaga, completa com os últimos posts do idioma. Só Liquid, sem plugin.
+
+**Impressão.** `_sass/_print.scss`, a última folha importada — por isso vence
+as outras sem `!important`. Sai só o artigo: header, rodapé, índice, barra de
+ações, comentários, relacionados e o card de anúncio ficam de fora, os tokens
+voltam ao claro mesmo no tema escuro, títulos não caem no pé da página e
+figuras, tabelas e fórmulas não se partem entre folhas. Links externos ganham
+o endereço entre parênteses, e o `.print-source` no cabeçalho traz a URL do
+artigo — no papel é por ela que o leitor volta. Para mostrar algo só na
+impressão, use `.print-only`.
+
 **Card de anúncio.** `ad-widget.html`, só no layout de post: fixo no canto
 inferior direito, some abaixo de 48rem e é dispensável (`mk-adcard` no
 localStorage). Os slots ficam empilhados na mesma célula de um grid e se

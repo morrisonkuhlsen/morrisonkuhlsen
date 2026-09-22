@@ -1,0 +1,82 @@
+{%- comment -%}
+  Posts relacionados, por tags em comum. Só Liquid — nada de plugin.
+
+  Em vez de ordenar por pontuação (o `sort` do Liquid não é estável, e o
+  desempate por data se perderia), varre os candidatos uma vez por nível de
+  afinidade, do maior para o menor: primeiro quem divide 4 tags, depois 3, e
+  assim por diante. Como `site.posts` já vem do mais novo para o mais antigo,
+  dentro de cada nível o mais recente entra primeiro.
+
+  Sobrando vaga — post sem tags, ou tags que ninguém mais usa —, completa com
+  os mais recentes do mesmo idioma, que é o que o título promete.
+
+  Espera: include.limit (padrão 3).
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign limite = include.limit | default: 3 | plus: 0 -%}
+{%- assign candidatos = site.posts | where: "lang", lang -%}
+{%- assign escolhidos = "" | split: "" -%}
+
+{%- for nivel in (1..5) reversed -%}
+  {%- if escolhidos.size >= limite -%}{%- break -%}{%- endif -%}
+  {%- for p in candidatos -%}
+    {%- if escolhidos.size >= limite -%}{%- break -%}{%- endif -%}
+    {%- unless p.url == page.url or escolhidos contains p.url -%}
+      {%- assign comuns = 0 -%}
+      {%- for t in p.tags -%}
+        {%- if page.tags contains t -%}{%- assign comuns = comuns | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if comuns == nivel -%}
+        {%- if escolhidos.size == 0 -%}
+          {%- assign escolhidos = p.url | split: "|" -%}
+        {%- else -%}
+          {%- assign escolhidos = escolhidos | join: "," | append: "," | append: p.url | split: "," -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endunless -%}
+  {%- endfor -%}
+{%- endfor -%}
+
+{%- for p in candidatos -%}
+  {%- if escolhidos.size >= limite -%}{%- break -%}{%- endif -%}
+  {%- unless p.url == page.url or escolhidos contains p.url -%}
+    {%- if escolhidos.size == 0 -%}
+      {%- assign escolhidos = p.url | split: "|" -%}
+    {%- else -%}
+      {%- assign escolhidos = escolhidos | join: "," | append: "," | append: p.url | split: "," -%}
+    {%- endif -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{%- if escolhidos.size > 0 -%}
+<section class="related" aria-labelledby="related-title">
+  <h2 class="related__title" id="related-title">{{ ui.read_next[lang] }}</h2>
+
+  <div class="grid related__grid" style="--min: 13rem; --grid-gap: 1.25rem">
+    {%- for url in escolhidos -%}
+      {%- assign p = site.posts | where: "url", url | first -%}
+      {%- if p -%}
+        <article class="post-card">
+          {%- if p.image -%}
+            <a href="{{ p.url | relative_url }}" tabindex="-1" aria-hidden="true">
+              <img class="post-card__img" src="{{ p.image | relative_url }}"
+                   alt="" loading="lazy" width="800" height="500">
+            </a>
+          {%- endif -%}
+          <div class="post-card__body">
+            <div class="post-card__meta">
+              <time datetime="{{ p.date | date_to_xmlschema }}">
+                {{ p.date | date: "%-d/%m/%Y" }}
+              </time>
+            </div>
+            <h3 class="post-card__title">
+              <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+            </h3>
+          </div>
+        </article>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+{%- endif -%}

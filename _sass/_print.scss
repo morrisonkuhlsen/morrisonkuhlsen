@@ -1,0 +1,138 @@
+/* Impressão e "salvar em PDF" — o uso mais comum do site fora da tela, já que
+   o leitor costuma levar o artigo para estudar. Sai só o artigo: o chrome do
+   site, a navegação e tudo que é interativo ficam de fora.
+
+   Última folha importada, para vencer o que vier antes sem precisar de
+   !important em cada regra. */
+
+@media print {
+  /* Os tokens voltam ao claro mesmo com o tema escuro ligado — senão a página
+     sai com fundo preto, gastando tinta e ficando ilegível no papel. */
+  :root,
+  :root[data-theme="dark"] {
+    --ink:          #000000;
+    --ink-soft:     #333333;
+    --ink-faint:    #555555;
+    --paper:        #ffffff;
+    --paper-alt:    #ffffff;
+    --line:         #bbbbbb;
+    --accent:       #000000;
+    --accent-dark:  #000000;
+    --highlight:    #000000;
+    --code-bg:      #f4f4f4;
+    --code-ink:     #111111;
+    --mk-surface:   #ffffff;
+    --mk-surface-2: #f7f7f7;
+    --mk-ink:       #000000;
+    --mk-ink-soft:  #333333;
+    --mk-border:    #bbbbbb;
+    --shadow:       none;
+    /* Nada é fixo no papel: zerar as alturas do chrome tira o buraco que o
+       header deixaria no alto da primeira página. */
+    --header-h:     0;
+    --annbar-h:     0;
+    --topbar-h:     0;
+    --headerbar-h:  0;
+  }
+
+  @page {
+    margin: 1.8cm 1.5cm;
+  }
+
+  html, body {
+    background: #ffffff;
+    color: #000000;
+    font-size: 11pt;
+  }
+
+  /* Chrome do site, navegação e tudo que só existe para clicar. */
+  .annbar,
+  .cookiebar,
+  .adcard,
+  .site-header,
+  .drawer,
+  .search,
+  .site-footer,
+  .post-layout__rail,
+  .post-layout__aside,
+  .comments,
+  .reading__breadcrumb,
+  .tag-list,
+  .related,
+  .btn,
+  [data-show-more],
+  #toc {
+    display: none !important;
+  }
+
+  /* A coluna de leitura ocupa a página inteira. */
+  .post-layout,
+  .post-layout__main,
+  .reading,
+  .container {
+    display: block;
+    max-width: none;
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .prose { max-width: none; }
+
+  .print-only { display: block; }
+
+  .print-source {
+    margin: 0.35rem 0 0;
+    font-size: 9pt;
+    color: #555555;
+  }
+
+  /* O título não precisa do respiro que tem na tela. */
+  .post-header { padding-block: 0 1rem; }
+  .page-header { padding-block: 0 1rem; }
+  .post-header__title,
+  .page-header__title { font-size: 20pt; }
+  .post-header__lede,
+  .page-header__lede { font-size: 12pt; }
+
+  /* Sem órfãs, e sem título no pé da página. */
+  p, li, blockquote { orphans: 3; widows: 3; }
+
+  h1, h2, h3, h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* O que não faz sentido cortado ao meio. */
+  figure,
+  img,
+  table,
+  pre,
+  .prose blockquote,
+  mjx-container {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  img { max-width: 100% !important; height: auto !important; }
+
+  /* Fórmulas longas são cortadas pela margem do papel, não há para onde rolar. */
+  mjx-container { overflow-x: hidden !important; }
+  .table-wrap { overflow: visible !important; }
+
+  table { width: 100%; }
+
+  /* O endereço dos links externos, que no papel se perderia. Os internos e as
+     âncoras ficam de fora: o URL não ajuda quem está com a folha na mão. */
+  .prose a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    color: #555555;
+    word-break: break-all;
+  }
+
+  .prose a {
+    color: #000000;
+    text-decoration: underline;
+  }
+}

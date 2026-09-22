@@ -26,6 +26,11 @@ layout: base
         </time>
       </div>
 
+      {%- comment -%}
+        No papel o endereço se perde — e é por ele que o leitor volta.
+      {%- endcomment -%}
+      <p class="print-only print-source">{{ page.url | absolute_url }}</p>
+
     </header>
 
     <div class="prose" id="post-content">
@@ -39,6 +44,8 @@ layout: base
         {%- endfor -%}
       </ul>
     {%- endif -%}
+
+    {%- include related.html -%}
 
     {%- include comments.html -%}
   </article>

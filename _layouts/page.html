@@ -29,6 +29,7 @@ layout: base
     {%- if page.description -%}
       <p class="page-header__lede">{{ page.description }}</p>
     {%- endif -%}
+    <p class="print-only print-source">{{ page.url | absolute_url }}</p>
   </header>
 
   <div class="prose">

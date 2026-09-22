@@ -13,3 +13,4 @@
 @use "prose";
 @use "search";
 @use "footer";
+@use "print";   // por último: vence as anteriores sem !important

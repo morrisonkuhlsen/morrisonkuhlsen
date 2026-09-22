@@ -464,3 +464,30 @@
   .adcard__slot,
   .adcard__slot.is-on { transition: none; }
 }
+
+
+/* ── Leia também ───────────────────────────────────────────────────────────
+   Cartões menores que os da home — cabem três na coluna de leitura — e sem
+   resumo: aqui o título já basta, e o bloco não pode competir com o artigo
+   que o leitor acabou de terminar. */
+
+.related {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+.related__title {
+  margin: 0 0 1.5rem;
+  font-size: var(--step-1);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.related .post-card__title { font-size: var(--step-0); }
+
+.related .post-card__body { padding: 1rem; }
+
+
+/* Só existe no papel — ver _print.scss. */
+.print-only { display: none; }

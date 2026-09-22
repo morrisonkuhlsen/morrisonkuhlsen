@@ -28,6 +28,7 @@ ui:
   published:  { pt: "Publicado em",     en: "Published on" }
   back_top:   { pt: "Voltar ao topo",   en: "Back to top" }
   ads:        { pt: "Publicidade",      en: "Ads" }
+  read_next:  { pt: "Leia também",      en: "Read next" }
 
 seo:
   author: "Morrison Kühlsen"
