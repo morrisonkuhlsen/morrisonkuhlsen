@@ -4,7 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student's t Distribution | T-Table</title>
+  <meta name="description" content="Student's t critical values table with interactive calculators: p-value from a t-score, critical t for any alpha and degrees of freedom, and a one-sample t-test, each with the area plotted under the curve.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="/assets/css/ztable-styles.css">
+
+  <!-- O tema vai no <html> antes da folha de estilo: aplicado depois, a página
+       piscaria no tema errado a cada carregamento. -->
+  <script>
+    (function () {
+      try {
+        var salvo = localStorage.getItem('ztable-theme');
+        if (salvo === 'light' || salvo === 'dark') {
+          document.documentElement.setAttribute('data-theme', salvo);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <!-- Google tag (gtag.js) -->
   <script>
     // Desativa o rastreamento se o cookie de consentimento não existir
@@ -23,7 +39,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/ttable.html">
   <meta property="og:title" content="Student&#x27;s t Distribution | T-Table">
-  <meta property="og:description" content="">
+  <meta property="og:description" content="Student's t critical values with calculators: p-value from a t-score, critical t for any alpha and df, and a one-sample t-test.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -31,19 +47,87 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Student&#x27;s t Distribution | T-Table">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:description" content="Student's t critical values with calculators: p-value from a t-score, critical t for any alpha and df, and a one-sample t-test.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
 </head>
 <body class="ttable">
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </symbol>
+</svg>
   <div class="table-header">
     <div class="header-content">
       <h1>Student's t Distribution — Critical Values</h1>
     </div>
 
+    <button id="themeBtn" type="button" title="Switch between light and dark"
+            aria-label="Switch between light and dark">
+      <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+      <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+    </button>
+
 
     <div class="divider"></div>
     <img src="/assets/images/mklogo.png" alt="Logo" class="logo"/>
   </div>
+
+<!-- Calculadoras e tabela lado a lado: a tabela não passa de 600px, então as
+     laterais estavam sobrando. Em tela estreita tudo empilha, com as
+     calculadoras antes da tabela. -->
+<div class="ztable-layout" id="calculators">
+
+  <aside class="ztable-side">
+
+  <article class="calc__card" id="calc-tp">
+    <header class="calc__head">
+      <h2 class="calc__title">Compute a P-value from a t-score</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <p class="calc__formula" data-tex="F(t\mid\nu)=P(T\le t),\quad \nu=n-1">F(t | v) = P(T ≤ t)</p>
+
+    <div class="calc__inputs">
+      <label class="calc__field">
+        <span>t-score</span>
+        <input type="number" data-campo="t" step="0.01" min="-10" max="10" value="2.228" inputmode="decimal">
+      </label>
+      <input class="calc__slider" type="range" data-slider="t" min="-6" max="6" step="0.01" value="2.228"
+             aria-label="t-score slider">
+      <label class="calc__field">
+        <span>Degrees of freedom (ν)</span>
+        <input type="number" data-campo="df" step="1" min="1" value="10" inputmode="numeric">
+      </label>
+    </div>
+
+    <p class="calc__warn" data-aviso hidden>Degrees of freedom must be 1 or more.</p>
+
+    <div class="calc__body">
+      <div class="calc__hero">
+        <output class="calc__value" data-valor>0.02500</output>
+        <span class="calc__caption" data-legenda>P(T &gt; t)</span>
+        <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+             aria-label="Student t curve with the selected area shaded"></svg>
+      </div>
+      <ul class="calc__rows" data-linhas></ul>
+    </div>
+    <p class="calc__hint">Click a row to show it in the panel. Clicking a cell in the table fills these fields.</p>
+  </article>
+
+  </aside>
 
   <div class="table-responsive">
     <table id="myTable">
@@ -143,7 +227,98 @@
       </tbody>
     </table>
   </div>
+
+  <aside class="ztable-side">
+
+  <article class="calc__card" id="calc-tcrit">
+    <header class="calc__head">
+      <h2 class="calc__title">Critical t value</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <p class="calc__formula" data-tex="t_{\alpha,\nu}=F^{-1}(1-\alpha\mid\nu)">t = F⁻¹(1 − α)</p>
+
+    <div class="calc__inputs">
+      <label class="calc__field">
+        <span>α</span>
+        <input type="number" data-campo="alpha" step="0.001" min="0.0001" max="0.9999" value="0.05" inputmode="decimal">
+      </label>
+      <input class="calc__slider" type="range" data-slider="alpha" min="0.001" max="0.5" step="0.001" value="0.05"
+             aria-label="Alpha slider">
+      <label class="calc__field">
+        <span>Degrees of freedom (ν)</span>
+        <input type="number" data-campo="df" step="1" min="1" value="10" inputmode="numeric">
+      </label>
+    </div>
+
+    <fieldset class="calc__tails">
+      <legend class="calc__legend">Test is…</legend>
+      <label><input type="radio" name="crit-tail" value="one" checked> one-tailed</label>
+      <label><input type="radio" name="crit-tail" value="two"> two-tailed</label>
+    </fieldset>
+
+    <p class="calc__warn" data-aviso hidden>α must be between 0 and 1, and ν at least 1.</p>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-valor>1.81246</output>
+      <span class="calc__caption" data-legenda>critical t</span>
+      <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+           aria-label="Student t curve with the rejection region shaded"></svg>
+    </div>
+    <p class="calc__hint">Works for any α and ν, including the ones the table does not list.</p>
+  </article>
+
+  <article class="calc__card" id="calc-tttest">
+    <header class="calc__head">
+      <h2 class="calc__title">One-sample t-test</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <div class="calc__inputs calc__inputs--stack">
+      <label class="calc__field">
+        <span>Sample mean (x̄)</span>
+        <input type="number" data-campo="xbar" step="any" value="10.4" inputmode="decimal">
+      </label>
+      <label class="calc__field">
+        <span>Hypothesized mean (μ₀)</span>
+        <input type="number" data-campo="mu" step="any" value="10" inputmode="decimal">
+      </label>
+      <label class="calc__field">
+        <span>Sample SD (s)</span>
+        <input type="number" data-campo="s" step="any" min="0" value="1.2" inputmode="decimal">
+      </label>
+      <label class="calc__field">
+        <span>Sample size (n)</span>
+        <input type="number" data-campo="n" step="1" min="2" value="25" inputmode="numeric">
+      </label>
+      <p class="calc__warn" data-aviso hidden>Need s &gt; 0 and n ≥ 2.</p>
+    </div>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-t>1.66667</output>
+      <span class="calc__caption">t &nbsp;·&nbsp; ν = <span data-df>24</span></span>
+      <p class="calc__formula" data-formula-t>t = (x̄ − μ₀) / (s / √n)</p>
+    </div>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-p-duas>0.10850</output>
+      <span class="calc__caption">two-tailed p &nbsp;·&nbsp; one-tailed p = <span data-p-uma>0.05425</span></span>
+      <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+           aria-label="Student t curve with both tails beyond the observed t shaded"></svg>
+    </div>
+  </article>
+
+  </aside>
+
+</div>
+
+  <script src="/assets/js/stat-calc-core.js"></script>
   <script src="/assets/js/ztable-script-new.js"></script>
+  <script src="/assets/js/ttable-calculators.js"></script>
   <footer>
     MorrisonKühlsen &copy; <span data-ano>2026</span> —
         <a href="/LICENSE">MIT License</a>

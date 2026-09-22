@@ -83,16 +83,31 @@ para a repetição não saltar aos olhos na maioria das telas, e a cor é fixa
 porque o fundo do rodapé também é, nos dois temas. Para trocar as fórmulas,
 edite o `background-image` em `_sass/_footer.scss`.
 
-**Tabela Z.** `ztable.html` é a mais completa das páginas avulsas: além da
-tabela, traz cinco calculadoras (`assets/js/ztable-calculators.js`) — p-valor
-de um z, z de um p, faixa entre dois z, z de um valor bruto e valores críticos
-—, todas calculadas pela normal padrão, não lidas da tabela. Seu estado vive na
-URL (`?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=`), o que torna um resultado
-compartilhável. A paleta está em tokens `--zt-*` no topo de
-`assets/css/ztable-styles.css`, com tema claro por `prefers-color-scheme` e
-botão que fixa a escolha; há também folha de impressão. A coluna Z escreve o
-negativo com o sinal tipográfico − (U+2212), em que `parseFloat` devolve NaN —
-cuidado ao mexer no JS dela.
+**Tabelas Z e t.** As duas são a tabela no meio e calculadoras nas laterais,
+que grudam ao rolar; abaixo de 1400px tudo empilha, calculadoras primeiro.
+Clicar numa célula preenche os campos — na tabela t a célula carrega também o
+α da coluna e os graus de liberdade da linha.
+
+`assets/js/stat-calc-core.js` é o que elas dividem: normal (erfc de Chebyshev
+e Φ⁻¹ de Acklam com um passo de Halley), t de Student (beta incompleta pela
+fração continuada de Lentz, e quantil por bisseção), o desenho da curva, a
+notação em KaTeX, o estado na URL e o tema. Cada página traz só as suas
+calculadoras — `ztable-calculators.js` e `ttable-calculators.js`.
+
+Os valores **não** são lidos da tabela: são calculados, e por isso valem para
+qualquer z, α ou ν, inclusive os que a tabela não lista. A implementação da t
+foi conferida contra os 610 valores publicados na própria página, todos dentro
+do arredondamento de três casas.
+
+O estado vive na URL — `?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=` na Z e
+`?t=&df=`, `?a=&adf=&ctail=`, `?xbar=&mu=&s=&n=` na t —, o que torna um
+resultado compartilhável. A paleta está em tokens `--zt-*` no topo de
+`assets/css/ztable-styles.css`, com tema claro por `prefers-color-scheme`,
+botão que fixa a escolha e folha de impressão.
+
+A coluna Z escreve o negativo com o sinal tipográfico − (U+2212), em que
+`parseFloat` devolve NaN — cuidado ao mexer no JS dela. E `ttable.html` e
+`ftable.html` usam CRLF, ao contrário do resto do repositório.
 
 **Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 23 fórmulas
 interativas, o quiz e o problema semanal são HTML solto, fora do ciclo do

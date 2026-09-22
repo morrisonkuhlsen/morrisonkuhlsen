@@ -129,7 +129,7 @@
   lang: pt
 - title: "Student's t Distribution | T-Table"
   url: "/ttable.html"
-  description: ""
+  description: "Tabela t de Student com calculadoras: p-valor a partir de um t, t crítico para qualquer α e graus de liberdade, e teste t de uma amostra."
   tags: "tabela t student"
   lang: pt
 - title: "F Distribution (Snedecor) | F-Table"
