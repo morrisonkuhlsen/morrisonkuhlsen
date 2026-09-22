@@ -1,9 +1,33 @@
 .site-footer {
+  position: relative;
+  isolation: isolate;
   margin-top: clamp(3rem, 2rem + 4vw, 6rem);
   padding-block: 3rem 2rem;
   background: var(--footer-bg);
   color: var(--on-dark-soft);
   font-size: var(--step--1);
+  overflow: hidden;
+}
+
+/* Marca d'água de fórmulas. É um SVG em data URI que se repete, então cobre
+   qualquer altura de rodapé sem DOM extra e sem MathJax — a notação vem de
+   caracteres Unicode numa serifada em itálico. A cor é fixa porque o fundo do
+   rodapé também é, nos dois temas. `pointer-events: none` e o z-index negativo
+   mantêm tudo isto atrás e fora do caminho do cursor. */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20width='1600'%20height='620'%20viewBox='0%200%201600%20620'><g%20fill='rgb(32,37,49)'%20font-family='Georgia,%20Times%20New%20Roman,%20serif'%20font-style='italic'><text%20x='20'%20y='54'%20font-size='27'%20transform='rotate(-4%2020%2054)'>P(A|B)%20=%20P(B|A)%C2%B7P(A)%20/%20P(B)</text><text%20x='430'%20y='38'%20font-size='22'%20transform='rotate(3%20430%2038)'>%CF%83%C2%B2%20=%20E%5B(X%20%E2%88%92%20%CE%BC)%C2%B2%5D</text><text%20x='700'%20y='86'%20font-size='25'%20transform='rotate(-2%20700%2086)'>x%CC%84%20=%20(1/n)%20%E2%88%91%20x%E1%B5%A2</text><text%20x='990'%20y='50'%20font-size='21'%20transform='rotate(4%20990%2050)'>%E2%88%AB%20f(x)%20dx%20=%201</text><text%20x='1210'%20y='104'%20font-size='24'%20transform='rotate(-3%201210%20104)'>H%E2%82%80%20:%20%CE%BC%20=%20%CE%BC%E2%82%80</text><text%20x='70'%20y='148'%20font-size='21'%20transform='rotate(5%2070%20148)'>Z%20=%20(x%20%E2%88%92%20%CE%BC)%20/%20%CF%83</text><text%20x='300'%20y='186'%20font-size='26'%20transform='rotate(-3%20300%20186)'>f(x)%20=%20(1/%CF%83%E2%88%9A2%CF%80)%20e%5E%E2%88%92(x%E2%88%92%CE%BC)%C2%B2/2%CF%83%C2%B2</text><text%20x='820'%20y='176'%20font-size='22'%20transform='rotate(2%20820%20176)'>Var(X)%20=%20E%5BX%C2%B2%5D%20%E2%88%92%20E%5BX%5D%C2%B2</text><text%20x='1180'%20y='216'%20font-size='25'%20transform='rotate(-4%201180%20216)'>%CF%81%20=%20Cov(X,Y)%20/%20%CF%83%E2%82%93%CF%83%E1%B5%A7</text><text%20x='30'%20y='262'%20font-size='24'%20transform='rotate(-5%2030%20262)'>s%C2%B2%20=%20%E2%88%91(x%E1%B5%A2%20%E2%88%92%20x%CC%84)%C2%B2%20/%20(n%20%E2%88%92%201)</text><text%20x='480'%20y='300'%20font-size='21'%20transform='rotate(3%20480%20300)'>E%5BX%5D%20=%20%E2%88%91%20x%E1%B5%A2%C2%B7p(x%E1%B5%A2)</text><text%20x='900'%20y='286'%20font-size='27'%20transform='rotate(-2%20900%20286)'>lim%20n%E2%86%92%E2%88%9E%20P(|X%CC%84%E2%82%99%20%E2%88%92%20%CE%BC|%20%26lt;%20%CE%B5)%20=%201</text><text%20x='1330'%20y='330'%20font-size='22'%20transform='rotate(4%201330%20330)'>%CF%87%C2%B2%20=%20%E2%88%91%20(O%E2%88%92E)%C2%B2/E</text><text%20x='140'%20y='368'%20font-size='23'%20transform='rotate(3%20140%20368)'>C(n,k)%20=%20n!%20/%20k!(n%E2%88%92k)!</text><text%20x='620'%20y='398'%20font-size='26'%20transform='rotate(-4%20620%20398)'>t%20=%20(x%CC%84%20%E2%88%92%20%CE%BC%E2%82%80)%20/%20(s/%E2%88%9An)</text><text%20x='1040'%20y='420'%20font-size='21'%20transform='rotate(2%201040%20420)'>P(X=k)%20=%20%CE%BB%E1%B5%8Fe%5E%E2%88%92%CE%BB%20/%20k!</text><text%20x='60'%20y='462'%20font-size='25'%20transform='rotate(-2%2060%20462)'>%CE%B2%CC%82%20=%20%E2%88%91(x%E1%B5%A2%E2%88%92x%CC%84)(y%E1%B5%A2%E2%88%92%C8%B3)%20/%20%E2%88%91(x%E1%B5%A2%E2%88%92x%CC%84)%C2%B2</text><text%20x='700'%20y='500'%20font-size='22'%20transform='rotate(4%20700%20500)'>IC%20=%20x%CC%84%20%C2%B1%20z%C2%B7%CF%83/%E2%88%9An</text><text%20x='1180'%20y='534'%20font-size='24'%20transform='rotate(-3%201180%20534)'>F%20=%20MS_entre%20/%20MS_dentro</text><text%20x='320'%20y='572'%20font-size='21'%20transform='rotate(3%20320%20572)'>P(A%E2%88%AAB)%20=%20P(A)%2BP(B)%E2%88%92P(A%E2%88%A9B)</text></g></svg>");
+  background-repeat: repeat;
+  background-size: 1600px 620px;
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .site-footer::before { transition: opacity 0.4s; }
 }
 
 .site-footer a { color: var(--on-dark-soft); text-decoration: none; }

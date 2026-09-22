@@ -75,6 +75,13 @@ compartilhar, copiar link, tamanho do texto e voltar ao topo. A escala de
 leitura fica no `localStorage`, então vale nos artigos seguintes. Some abaixo
 de 64rem, junto com o índice.
 
+**Marca d'água do rodapé.** Um SVG em data URI que se repete, com 20 fórmulas
+de estatística e probabilidade em notação Unicode, numa serifada em itálico.
+Sem MathJax, sem DOM extra e sem imagem para baixar. O ladrilho é de 1600px
+para a repetição não saltar aos olhos na maioria das telas, e a cor é fixa
+porque o fundo do rodapé também é, nos dois temas. Para trocar as fórmulas,
+edite o `background-image` em `_sass/_footer.scss`.
+
 **Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 23 fórmulas
 interativas, o quiz e o problema semanal são HTML solto, fora do ciclo do
 Jekyll — são aplicações com CSS e JS próprios, não conteúdo. Ficam assim de
