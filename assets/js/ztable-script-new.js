@@ -1,6 +1,5 @@
 // Iniciar o script quando o DOM estiver pronto
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Iniciando script da tabela Z...');
     
     // Elementos da interface
     const table = document.getElementById('myTable');
@@ -16,13 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Debug: Verificar se os elementos foram encontrados
-    console.log('Elementos do painel:', { 
-        table: table ? 'Encontrado' : 'Não encontrado', 
-        copyBtn: copyBtn ? 'Encontrado' : 'Não encontrado',
-        z1Value: z1Value ? 'Encontrado' : 'Não encontrado',
-        z2Value: z2Value ? 'Encontrado' : 'Não encontrado',
-        intervalValue: intervalValue ? 'Encontrado' : 'Não encontrado'
-    });
     
     // Verificar elementos essenciais
     if (!table) {
@@ -230,10 +222,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const cells = document.querySelectorAll('#myTable td');
         cells.forEach(cell => {
             if (cell.cellIndex > 0) {
-                const row = cell.parentElement;
-                const zValue = parseFloat(row.cells[0].textContent) + (cell.cellIndex - 1) * 0.01;
+                const zValue = zDaCelula(cell);
                 const pValue = parseFloat(cell.textContent);
-                cell.setAttribute('data-z', zValue.toFixed(2));
+                if (zValue !== null) cell.setAttribute('data-z', zValue.toFixed(2));
                 cell.setAttribute('data-p', pValue);
             }
         });
@@ -244,6 +235,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    /* O Z de uma célula, a partir do rótulo da linha e da coluna.
+       Duas armadilhas moram aqui: a coluna Z escreve o negativo com o sinal
+       tipográfico − (U+2212), em que parseFloat devolve NaN — era por isso que
+       a metade negativa da tabela não mostrava Z nenhum no painel —, e nessas
+       linhas a coluna precisa ser subtraída: −1.9 com .06 é −1.96, não −1.84. */
+    function zDaCelula(cell) {
+        const linha = cell.parentElement;
+        if (!linha || !linha.cells[0] || cell.cellIndex < 1) return null;
+        const rotulo = linha.cells[0].textContent.trim().replace(/\u2212/g, '-');
+        const base = parseFloat(rotulo);
+        if (isNaN(base)) return null;
+        const passo = (cell.cellIndex - 1) * 0.01;
+        return rotulo.charAt(0) === '-' ? base - passo : base + passo;
+    }
+
     // Manipuladores de eventos
     function handleKeyDown(e) {
         if (e.key === 'Escape') {
@@ -307,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateSelectionInfo() {
         try {
-            console.log('Atualizando informações de seleção...');
             
             // Verificar se os elementos do painel existem
             if (!z1Value || !z2Value || !intervalValue) {
@@ -323,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             if (selectedCells.length === 0) {
-                console.log('Nenhuma célula selecionada, limpando painel');
                 z1Value.textContent = '-';
                 z2Value.textContent = '-';
                 intervalValue.textContent = '-';
@@ -338,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const cellZValue = cell1.getAttribute('data-z');
             const cellPValue = cell1.getAttribute('data-p');
             
-            console.log('Valores da célula 1:', { z: cellZValue, p: cellPValue });
             
             let z1Display = '-';
             let p1Display = '-';
@@ -349,12 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 p1Display = formatProbability(cellPValue);
             } else {
                 // Se não encontrar os atributos válidos, tenta calcular
-                const rowZ = parseFloat(row1.cells[0].textContent);
-                const colZ = (cell1.cellIndex - 1) * 0.01;
-                const z1 = rowZ + colZ;
+                const z1 = zDaCelula(cell1);
                 const p1 = formatProbability(cell1.textContent);
                 
-                if (!isNaN(z1)) z1Display = z1.toFixed(2);
+                if (z1 !== null && !isNaN(z1)) z1Display = z1.toFixed(2);
                 if (p1 !== '') p1Display = p1;
             }
             
@@ -378,7 +379,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cell2ZValue = cell2.getAttribute('data-z');
                 const cell2PValue = cell2.getAttribute('data-p');
                 
-                console.log('Valores da célula 2:', { z: cell2ZValue, p: cell2PValue });
                 
                 let z2Display = '-';
                 let p2Display = '-';
@@ -389,12 +389,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     p2Display = formatProbability(cell2PValue);
                 } else {
                     // Se não encontrar os atributos válidos, tenta calcular
-                    const rowZ2 = parseFloat(row2.cells[0].textContent);
-                    const colZ2 = (cell2.cellIndex - 1) * 0.01;
-                    const z2 = rowZ2 + colZ2;
+                    const z2 = zDaCelula(cell2);
                     const p2 = formatProbability(cell2.textContent);
                     
-                    if (!isNaN(z2)) z2Display = z2.toFixed(2);
+                    if (z2 !== null && !isNaN(z2)) z2Display = z2.toFixed(2);
                     if (p2 !== '') p2Display = p2;
                 }
                 
@@ -416,14 +414,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!isNaN(p1) && !isNaN(p2)) {
                     const interval = Math.abs(p2 - p1);
                     intervalValue.textContent = interval.toFixed(4);
-                    console.log(`Intervalo calculado: ${p2} - ${p1} = ${interval.toFixed(4)}`);
                 } else {
                     intervalValue.textContent = '-';
                 }
             } else {
                 z2Value.textContent = '-';
                 intervalValue.textContent = '-';
-                console.log('Apenas uma célula selecionada, Z2 e intervalo limpos');
             }
         } catch (error) {
             console.error('Erro ao atualizar informações de seleção:', error);
@@ -461,7 +457,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const selectedP = selectedCell.getAttribute('data-p');
                 if (selectedP && !isNaN(parseFloat(selectedP))) {
                     const interval = Math.abs(parseFloat(selectedP) - parseFloat(p));
-                    tooltipText += `\nIntervalo: ${interval.toFixed(4)}`;
+                    tooltipText += `\nInterval: ${interval.toFixed(4)}`;
                 }
             }
             tooltip.textContent = tooltipText;
@@ -524,7 +520,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let intervalText = '';
             if (isValidP1 && isValidP2) {
                 const interval = Math.abs(parseFloat(p2) - parseFloat(p1)).toFixed(4);
-                intervalText = `\nIntervalo: ${interval}`;
+                intervalText = `\nInterval: ${interval}`;
             }
             
             text = '';
@@ -539,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function() {
             copyBtn.title = 'Copiado!';
             setTimeout(() => {
                 copyBtn.innerHTML = originalText;
-                copyBtn.title = 'Copiar valores';
+                copyBtn.title = 'Copy values';
             }, 2000);
         }).catch(err => {
             console.error('Erro ao copiar para a área de transferência:', err);
@@ -559,7 +555,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSelectionHighlight();
         updateSelectionInfo();
         
-        console.log('Seleções limpas');
     }
     
     // Inicializar

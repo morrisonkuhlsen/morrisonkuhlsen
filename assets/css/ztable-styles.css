@@ -525,3 +525,419 @@ body.ttable [role="tooltip"] {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* =====================================================
+   Calculadoras (p-valor, faixa entre dois z, z-score)
+   ===================================================== */
+
+/* Três colunas: calculadora, tabela, calculadoras. A tabela não passa de
+   600px, então as laterais eram espaço morto numa tela de trabalho. As
+   colunas laterais grudam ao rolar — a tabela tem 83 linhas, e quem desce
+   até z = 3 continua com a calculadora à vista. */
+.ztable-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) minmax(280px, 320px);
+    align-items: start;
+    gap: 16px;
+    max-width: 1800px;
+    margin: 0 auto 32px;
+    padding: 0 16px;
+}
+
+/* minmax(0, 1fr) sozinho não basta: sem min-width a tabela estoura a coluna
+   e passa por baixo da lateral, porque o conteúdo mínimo das onze colunas é
+   maior que a fatia disponível. */
+.ztable-layout > .table-responsive {
+    min-width: 0;
+    overflow-x: auto;
+}
+
+/* Na coluna central a tabela usa a largura toda: o max-width de 600px vinha
+   de quando ela era a página inteira, e com as onze colunas ele nunca valeu
+   de verdade — o conteúdo já a empurrava para mil pixels. */
+.ztable-layout #myTable {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* O respiro horizontal das células é o que decide se a tabela cabe na coluna
+   do meio: com os 22px originais ela pedia mil pixels e ganhava barra de
+   rolagem já num laptop de 1440. */
+.ztable-layout #myTable th,
+.ztable-layout #myTable td {
+    padding: 9px 9px;
+    font-size: 0.9rem;
+}
+
+.ztable-side {
+    position: sticky;
+    top: 12px;
+    display: grid;
+    gap: 16px;
+    /* Se as calculadoras passarem da altura da tela, a coluna rola por dentro
+       em vez de esconder a de baixo. */
+    max-height: calc(100vh - 24px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Na coluna lateral não cabe o painel ao lado da lista: empilha. */
+.ztable-side .calc__body { grid-template-columns: minmax(0, 1fr); }
+.ztable-side .calc__body--zscore { grid-template-columns: minmax(0, 1fr); }
+
+/* Abaixo de 1400px a tabela sozinha já toma a tela: tudo empilha, e as
+   calculadoras vêm primeiro. */
+@media (max-width: 1399px) {
+    .ztable-layout {
+        display: flex;
+        flex-direction: column;
+        max-width: 1200px;
+    }
+
+    .ztable-side {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .table-responsive { order: 3; }
+}
+
+.calc {
+    max-width: 1200px;
+    margin: 0 auto 32px;
+    padding: 0 16px;
+    display: grid;
+    gap: 16px;
+}
+
+.calc__card {
+    background: #181818;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    padding: 18px 20px 20px;
+}
+
+.calc__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.calc__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-align: left;
+    letter-spacing: 0.01em;
+}
+
+.calc__copy {
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.calc__copy:hover {
+    color: #fff;
+    border-color: #666;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.calc__copied {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 6px);
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #2a4b8d;
+    color: #fff;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.calc__copy.is-done .calc__copied { opacity: 1; }
+
+.calc__inputs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.calc__inputs--stack {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 0;
+}
+
+.calc__field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.calc__field span { white-space: nowrap; }
+
+.calc__field input {
+    width: 7rem;
+    padding: 7px 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #121212;
+    color: #e0e0e0;
+    font: inherit;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+.calc__inputs--stack .calc__field {
+    justify-content: space-between;
+    padding: 9px 0;
+    border-bottom: 1px solid #232323;
+}
+
+.calc__field input:focus {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* O slider é para varrer valores; quem já sabe o z digita no campo. */
+.calc__slider {
+    flex: 1 1 12rem;
+    min-width: 8rem;
+    accent-color: #4a90e2;
+}
+
+.calc__warn {
+    margin: 10px 0 0;
+    font-size: 12px;
+    color: #ffcc00;
+}
+
+.calc__body {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.calc__body--zscore {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.calc__hero {
+    padding: 16px;
+    border: 1px solid #232323;
+    border-radius: 6px;
+    background: #141414;
+    text-align: center;
+}
+
+.calc__value {
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 600;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.calc__caption {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #888;
+}
+
+.calc__rows {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.calc-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto 54px;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: #aaa;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.calc-row:hover { background: #1e1e1e; }
+
+.calc-row:focus-visible {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+/* A linha promovida ao painel grande fica marcada — sem isso não dá para
+   saber a qual das cinco leituras o número grande corresponde. */
+.calc-row.is-on {
+    background: rgba(74, 144, 226, 0.12);
+    border-color: rgba(74, 144, 226, 0.5);
+    color: #e0e0e0;
+}
+
+.calc-row__value {
+    color: #e0e0e0;
+    font-variant-numeric: tabular-nums;
+}
+
+.calc__hint {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+/* Desenho da curva. As classes ficam no CSS, e não em atributos, para que
+   painel e miniatura compartilhem a mesma aparência. */
+.calc-plot {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 12px;
+}
+
+.calc-plot--mini {
+    width: 54px;
+    margin: 0;
+}
+
+.calc-plot__curve {
+    fill: none;
+    stroke: #4a90e2;
+    stroke-width: 1.5;
+}
+
+.calc-plot--mini .calc-plot__curve { stroke-width: 1; }
+
+.calc-plot__area { fill: rgba(74, 144, 226, 0.38); }
+
+.calc-plot__axis { stroke: #444; stroke-width: 1; }
+
+.calc-plot__tick { stroke: #444; stroke-width: 1; }
+
+.calc-plot__label { fill: #666; font-size: 9px; }
+
+.calc-plot__mark {
+    stroke: #ffcc00;
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+}
+
+@media (max-width: 760px) {
+    .calc__body { grid-template-columns: 1fr; }
+    .calc__card { padding: 14px; }
+    .calc__value { font-size: 1.6rem; }
+    .calc__field input { width: 100%; }
+    .calc__field { width: 100%; justify-content: space-between; }
+}
+
+
+/* Notação nas calculadoras. O KaTeX herda o tamanho do elemento em que
+   entra — daí as regras serem por contexto, e não no .katex. */
+.calc__formula {
+    margin: 0 0 14px;
+    padding: 8px 10px;
+    border-left: 2px solid #4a90e2;
+    background: rgba(74, 144, 226, 0.06);
+    border-radius: 0 4px 4px 0;
+    color: #cfd6e0;
+    font-size: 13px;
+    overflow-x: auto;
+}
+
+.calc__hero .calc__formula {
+    margin: 10px 0 0;
+    border-left: 0;
+    background: none;
+    text-align: center;
+}
+
+.calc__caption .katex { font-size: 1em; }
+
+.calc-row__label .katex { font-size: 0.95em; }
+
+/* A fórmula do painel pode ser longa: rola por dentro em vez de esticar o
+   card e desalinhar as colunas. */
+.calc__caption {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+
+/* Barras de rolagem no tom da página. Sem isto, a coluna das calculadoras
+   ganha a barra clara do sistema e corta o fundo escuro ao meio. A da própria
+   janela entra junto, senão sobra uma faixa branca na borda. */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a #121212;
+}
+
+html::-webkit-scrollbar { width: 12px; height: 12px; }
+html::-webkit-scrollbar-track { background: #121212; }
+html::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 6px; }
+html::-webkit-scrollbar-thumb:hover { background: #4a4a4a; }
+
+.ztable-side,
+.table-responsive,
+.calc__caption,
+.calc__formula {
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a transparent;
+}
+
+.ztable-side::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.calc__caption::-webkit-scrollbar,
+.calc__formula::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.ztable-side::-webkit-scrollbar-track,
+.table-responsive::-webkit-scrollbar-track,
+.calc__caption::-webkit-scrollbar-track,
+.calc__formula::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ztable-side::-webkit-scrollbar-thumb,
+.table-responsive::-webkit-scrollbar-thumb,
+.calc__caption::-webkit-scrollbar-thumb,
+.calc__formula::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border-radius: 4px;
+}
+
+.ztable-side::-webkit-scrollbar-thumb:hover,
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.calc__caption::-webkit-scrollbar-thumb:hover,
+.calc__formula::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
+}
