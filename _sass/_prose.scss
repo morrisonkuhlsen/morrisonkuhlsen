@@ -109,7 +109,12 @@
    na janela. Antes o texto ficava em 68ch encostado à esquerda de um container
    de 1200px, o que o fazia parecer estreito e desalinhado. */
 .reading {
-  max-width: calc(var(--post-measure) + 2 * var(--gutter));
+  /* Mais larga que a coluna do post: a página de conteúdo não divide o espaço
+     com o índice nem com a barra de ações, e costuma trazer tabelas e fórmulas
+     em bloco, que respiram melhor. */
+  --reading-measure: 54rem;
+
+  max-width: calc(var(--reading-measure) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
   padding-bottom: 3rem;
