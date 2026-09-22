@@ -613,6 +613,60 @@
     }
   }
 
+  /* ── Card de anúncio do post ─────────────────────────────────────────────
+     Mesma regra das barras dispensáveis: nasce escondido e só aparece se
+     ainda não foi fechado. Os slots se revezam por CSS — aqui só anda a
+     classe `is-on`. O relógio para com a aba em segundo plano e enquanto o
+     cursor está sobre o card, para a troca não acontecer sob o clique. */
+  function initAdCard() {
+    var card = document.querySelector('[data-adcard]');
+    if (!card) return;
+
+    var fechado = false;
+    try { fechado = localStorage.getItem('mk-adcard') === '1'; } catch (e) {}
+    if (fechado) return;
+
+    card.hidden = false;
+
+    /* Capa sorteada, quando o slot traz uma lista. O HTML já sai com a
+       primeira, então sem JS ainda se vê uma imagem. */
+    card.querySelectorAll('[data-images]').forEach(function (img) {
+      var fontes;
+      try { fontes = JSON.parse(img.dataset.images); } catch (e) { return; }
+      if (!fontes || !fontes.length) return;
+      img.src = fontes[Math.floor(Math.random() * fontes.length)];
+    });
+
+    var slots = card.querySelectorAll('.adcard__slot');
+    var relogio = null;
+
+    if (slots.length > 1) {
+      var espera = parseInt(card.dataset.rotate, 10) || 9000;
+      var atual = 0;
+      var parado = false;
+
+      relogio = setInterval(function () {
+        if (document.hidden || parado) return;
+        slots[atual].classList.remove('is-on');
+        atual = (atual + 1) % slots.length;
+        slots[atual].classList.add('is-on');
+      }, espera);
+
+      var segurar = function () { parado = true; };
+      var soltar = function () { parado = false; };
+      card.addEventListener('mouseenter', segurar);
+      card.addEventListener('mouseleave', soltar);
+      card.addEventListener('focusin', segurar);
+      card.addEventListener('focusout', soltar);
+    }
+
+    card.querySelector('[data-adcard-close]').addEventListener('click', function () {
+      card.hidden = true;
+      if (relogio) clearInterval(relogio);
+      try { localStorage.setItem('mk-adcard', '1'); } catch (e) {}
+    });
+  }
+
   /* ── Barra de ações do post ──────────────────────────────────────────────
      Copiar link, escala de leitura e voltar ao topo. A escala fica no
      localStorage, então o leitor a escolhe uma vez e ela vale nos próximos
@@ -706,6 +760,7 @@
     initBlog();
     initSearch();
     initDismissables();
+    initAdCard();
     initRail();
     initTables();
   }

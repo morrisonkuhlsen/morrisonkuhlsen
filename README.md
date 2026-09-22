@@ -128,6 +128,24 @@ no topo e publica a própria altura em `--annbar-h`, de onde o header e o
 conteúdo se deslocam; o aviso de cookies fica embaixo. As duas nascem escondidas
 no HTML e só aparecem se ainda não foram dispensadas, para não piscar.
 
+**Card de anúncio.** `ad-widget.html`, só no layout de post: fixo no canto
+inferior direito, some abaixo de 48rem e é dispensável (`mk-adcard` no
+localStorage). Os slots ficam empilhados na mesma célula de um grid e se
+revezam por opacidade — o JS só troca a classe `is-on`, o crossfade é CSS. O
+relógio para com a aba em segundo plano e sob o cursor, para a troca não
+acontecer no meio do clique. Configuração em `_data/site.yml → ads`:
+
+```yaml
+ads:
+  rotate: 9000
+  slots:
+    - url: /blog
+      site: "morrisonkuhlsen.com"
+      images: [...]        # sorteia a capa; `image` fixa uma só
+      headline: { pt: [...], en: [...] }
+      text:     { pt: "...", en: "..." }
+```
+
 ## Dependências externas
 
 Três, todas carregadas de forma não bloqueante:
@@ -145,7 +163,6 @@ e pelos crons de publicação agendada. O domínio vem do `CNAME`.
 
 ## O que ainda falta
 
-- [ ] Card de anúncio do post (`mk-ad-widget`), se for para manter.
 - [ ] As páginas avulsas não têm hreflang — não há contraparte em outro
       idioma para apontar. OpenGraph e Twitter Card já estão lá.
 

@@ -1,0 +1,45 @@
+{%- comment -%}
+  Card de anúncio do post. Fixo no canto inferior direito, só em telas largas.
+  Nasce escondido e só aparece se ainda não foi dispensado — como a barra de
+  anúncio e o aviso de cookies, para não piscar para quem já o fechou.
+
+  Os slots se alternam sozinhos; ficam empilhados na mesma célula do grid e o
+  JS só troca a classe `is-on`, então o crossfade é CSS puro.
+
+  Configurado em _data/site.yml → ads. Sem `slots`, nada é renderizado.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign ads = site.data.site.ads -%}
+
+{%- if ads.slots.size > 0 -%}
+<aside class="adcard" id="adcard" data-adcard data-rotate="{{ ads.rotate | default: 9000 }}"
+       aria-label="{{ ui.ads[lang] }}" hidden>
+  <button class="adcard__close" type="button" data-adcard-close
+          aria-label="{{ ui.close[lang] }}">&#x2715;</button>
+
+  <div class="adcard__slots">
+    {%- for slot in ads.slots -%}
+      {%- assign cover = slot.image | default: slot.images[0] -%}
+      <a class="adcard__slot{% if forloop.first %} is-on{% endif %}"
+         href="{% if slot.external %}{{ slot.url }}{% else %}{{ slot.url | relative_url }}{% endif %}"
+         {% if slot.external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+        {%- if cover -%}
+          <img class="adcard__img" src="{{ cover | relative_url }}" alt="" loading="lazy"
+               width="185" height="150"
+               {% if slot.images.size > 1 %}data-images='{{ slot.images | jsonify }}'{% endif %}>
+        {%- endif -%}
+        <span class="adcard__headline">
+          {%- for linha in slot.headline[lang] -%}
+            <span>{{ linha }}</span>
+          {%- endfor -%}
+        </span>
+        <span class="adcard__text">{{ slot.text[lang] }}</span>
+        <span class="adcard__site">{{ slot.site }}</span>
+      </a>
+    {%- endfor -%}
+  </div>
+
+  <p class="adcard__label">{{ ui.ads[lang] }}</p>
+</aside>
+{%- endif -%}

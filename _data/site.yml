@@ -27,6 +27,7 @@ ui:
   copy_link:  { pt: "Copiar link",      en: "Copy link" }
   published:  { pt: "Publicado em",     en: "Published on" }
   back_top:   { pt: "Voltar ao topo",   en: "Back to top" }
+  ads:        { pt: "Publicidade",      en: "Ads" }
 
 seo:
   author: "Morrison Kühlsen"
@@ -45,6 +46,35 @@ announcement:
   text:
     pt: "Explore o Alfabeto Grego completo em greekalpha.bet →"
     en: "Explore the full Greek alphabet at greekalpha.bet →"
+
+# Card de anúncio do post — canto inferior direito, só em telas largas.
+# Apague `slots` (ou deixe a lista vazia) para desligá-lo.
+# `images` sorteia a capa a cada visita; `image` fixa uma só.
+ads:
+  rotate: 9000   # ms entre um slot e o próximo
+  slots:
+    - url: /blog
+      site: "morrisonkuhlsen.com"
+      images:
+        - /assets/images/concept.png
+        - /assets/images/dados.png
+        - /assets/images/office.png
+      headline:
+        pt: ["Estatística", "descomplicada."]
+        en: ["Statistics", "made simple."]
+      text:
+        pt: "Artigos, fórmulas e tabelas para estudantes e profissionais."
+        en: "Articles, formulas and tables for students and professionals."
+    - url: "https://greekalpha.bet/"
+      external: true
+      site: "greekalpha.bet"
+      image: /assets/images/athena.avif
+      headline:
+        pt: ["Alfabeto", "Grego"]
+        en: ["Greek", "Alphabet"]
+      text:
+        pt: "Memorize as letras gregas para matemática, estatística e STEM."
+        en: "Memorize Greek letters for math, statistics & STEM study."
 
 footer_links:
   pt:
