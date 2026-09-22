@@ -99,7 +99,9 @@
     moonIcon.style.display = isDark ? "block" : "none";
     themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
     themeToggle.title = isDark ? "theme: dark" : "theme: light";
-    if (footerLogo) footerLogo.src = isDark ? "../images/mklogo.png" : "../images/mklogo-black.png";
+    // Caminho absoluto: a página mudou de /assets/html/ para /problema-semanal/,
+    // e o ../ resolvia a partir da pasta antiga.
+    if (footerLogo) footerLogo.src = isDark ? "/assets/images/mklogo.png" : "/assets/images/mklogo-black.png";
   }
 
   function setTheme(mode) {
