@@ -7,6 +7,7 @@ pt:
   - { name: "Student's T Table",     url: "/ttable.html" }
   - { name: "Snedecor F Table",      url: "/ftable.html" }
   - { name: "Fórmulas",              url: "/formulas/home.html" }
+  - { name: "Glossário",             url: "/pt/glossario" }
   - { name: "Problema Semanal",      url: "/problema-semanal/", external: true, featured: true }
 
 en:

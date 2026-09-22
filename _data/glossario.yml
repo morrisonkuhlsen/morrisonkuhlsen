@@ -1,0 +1,526 @@
+# Glossário A–Z de estatística e probabilidade.
+#
+# Um item por verbete. `slug` é a âncora na página e entra no índice de busca,
+# então mudá-lo quebra links já publicados — acrescente um verbete novo em vez
+# de renomear. `ordem` é a chave de ordenação sem acento: o `sort` do Liquid
+# compara por código de caractere e jogaria "Álgebra" para depois de "Z".
+# `veja` são os links internos que aprofundam o termo.
+#
+# A estrutura já nasce por idioma para o dia em que houver a versão em inglês.
+
+pt:
+  - termo: "Alocação de Neyman"
+    slug: alocacao-de-neyman
+    ordem: "alocacao de neyman"
+    def: "Reparte o tamanho da amostra entre os estratos conforme o tamanho e a variabilidade de cada um: estrato mais heterogêneo recebe mais unidades. Minimiza a variância da estimativa para um custo fixo."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/neyman-allocation.html" }
+      - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
+
+  - termo: "Amostra"
+    slug: amostra
+    ordem: "amostra"
+    def: "Subconjunto da população efetivamente observado. Toda a inferência estatística consiste em dizer algo sobre a população a partir dela — o que só é honesto quando a amostra foi obtida por um processo aleatório conhecido."
+    veja:
+      - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
+
+  - termo: "Amostragem estratificada"
+    slug: amostragem-estratificada
+    ordem: "amostragem estratificada"
+    def: "Divide a população em estratos homogêneos e sorteia dentro de cada um. Dá estimativas mais precisas que a amostragem simples quando os estratos diferem entre si."
+    veja:
+      - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
+      - { t: "Alocação de Neyman", u: "/formulas/neyman-allocation.html" }
+
+  - termo: "Amplitude"
+    slug: amplitude
+    ordem: "amplitude"
+    def: "Diferença entre o maior e o menor valor do conjunto. É a medida de dispersão mais simples e a mais frágil: dois outliers bastam para descrevê-la inteira."
+    veja:
+      - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
+
+  - termo: "Análise de variância (ANOVA)"
+    slug: analise-de-variancia-anova
+    ordem: "analise de variancia (anova)"
+    def: "Testa se as médias de três ou mais grupos diferem, comparando a variação entre grupos com a variação dentro deles. Rejeitar a hipótese nula diz que alguma média difere, não qual."
+    veja:
+      - { t: "Análise de Variância", u: "/pt/inferencia-estatistica/analise-variancia" }
+
+  - termo: "Análise exploratória de dados"
+    slug: analise-exploratoria-de-dados
+    ordem: "analise exploratoria de dados"
+    def: "Etapa em que se olha para os dados antes de modelá-los — distribuições, faltantes, outliers, relações — para descobrir o que eles têm a dizer e que suposições são defensáveis."
+    veja:
+      - { t: "Análise Exploratória de Dados", u: "/pt/estatistica-descritiva/analise-exploratoria" }
+      - { t: "Quarteto de Anscombe", u: "/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/" }
+
+  - termo: "Assimetria"
+    slug: assimetria
+    ordem: "assimetria"
+    def: "Mede o quanto uma distribuição pende para um dos lados. Com assimetria à direita, a média é puxada acima da mediana — motivo pelo qual renda quase nunca deve ser resumida pela média."
+    veja:
+      - { t: "Medidas de tendência central", u: "/pt/estatistica-descritiva/tendencia-central" }
+
+  - termo: "Boxplot"
+    slug: boxplot
+    ordem: "boxplot"
+    def: "Resumo gráfico de cinco números: mínimo, primeiro quartil, mediana, terceiro quartil e máximo, com os pontos além de 1,5 × IQR marcados à parte. Mostra dispersão e assimetria de uma vez."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Coeficiente binomial"
+    slug: coeficiente-binomial
+    ordem: "coeficiente binomial"
+    def: "O número de maneiras de escolher k elementos entre n, sem importar a ordem. É também cada entrada do triângulo de Pascal."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/coeficiente-binomial.html" }
+      - { t: "Triângulo de Pascal", u: "/triangulo-de-pascal/" }
+
+  - termo: "Coeficiente de variação"
+    slug: coeficiente-de-variacao
+    ordem: "coeficiente de variacao"
+    def: "Desvio padrão dividido pela média, em geral em porcentagem. Permite comparar a dispersão de conjuntos em unidades ou escalas diferentes."
+    veja:
+      - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
+
+  - termo: "Combinação"
+    slug: combinacao
+    ordem: "combinacao"
+    def: "Agrupamento em que a ordem não importa. Escolher 6 dezenas entre 60 é uma combinação — por isso a ordem do sorteio não muda a probabilidade do bilhete."
+    veja:
+      - { t: "Coeficiente binomial", u: "/formulas/coeficiente-binomial.html" }
+      - { t: "Mega-Sena", u: "/mega-sena-frequencias/" }
+
+  - termo: "Correção de população finita"
+    slug: correcao-de-populacao-finita
+    ordem: "correcao de populacao finita"
+    def: "Fator que reduz o erro padrão quando a amostra representa uma parcela grande da população. Sem ele, a incerteza de um censo quase completo sairia exagerada."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/correcao-populacao-finita.html" }
+
+  - termo: "Correlação"
+    slug: correlacao
+    ordem: "correlacao"
+    def: "Mede a força e a direção da associação linear entre duas variáveis, entre −1 e 1. Correlação alta não estabelece causa, e correlação zero não exclui relação não linear."
+    veja:
+      - { t: "Coeficiente de Pearson", u: "/formulas/coeficiente-pearson.html" }
+      - { t: "Quarteto de Anscombe", u: "/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/" }
+
+  - termo: "Covariância"
+    slug: covariancia
+    ordem: "covariancia"
+    def: "Mede se duas variáveis se afastam juntas de suas médias. O sinal indica a direção, mas a magnitude depende das unidades — padronizá-la dá a correlação."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/covariancia.html" }
+
+  - termo: "Curtose"
+    slug: curtose
+    ordem: "curtose"
+    def: "Descreve o peso das caudas de uma distribuição em comparação com a normal. Cauda pesada significa que valores extremos são menos raros do que a normal previria."
+    veja:
+      - { t: "Distribuição normal", u: "/distribuicao-normal/" }
+
+  - termo: "Desigualdade de Chebyshev"
+    slug: desigualdade-de-chebyshev
+    ordem: "desigualdade de chebyshev"
+    def: "Garante que pelo menos 1 − 1/k² das observações ficam a k desvios padrão da média, seja qual for a distribuição. É um limite frouxo, mas que não exige suposição nenhuma."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/teorema-chebyshev.html" }
+
+  - termo: "Desvio padrão"
+    slug: desvio-padrao
+    ordem: "desvio padrao"
+    def: "Raiz quadrada da variância: a dispersão dos dados na mesma unidade da variável. Diz o quanto, em média, as observações se afastam da média."
+    veja:
+      - { t: "Desvio padrão explicado", u: "/desvio-padrao/" }
+      - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
+
+  - termo: "Distribuição binomial"
+    slug: distribuicao-binomial
+    ordem: "distribuicao binomial"
+    def: "Descreve o número de sucessos em n tentativas independentes com a mesma probabilidade p. É a soma de n ensaios de Bernoulli."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/distribuicao-binomial.html" }
+      - { t: "Cara ou coroa", u: "/cara-ou-coroa/" }
+
+  - termo: "Distribuição de Bernoulli"
+    slug: distribuicao-de-bernoulli
+    ordem: "distribuicao de bernoulli"
+    def: "A distribuição de um único ensaio com dois resultados possíveis, sucesso com probabilidade p e fracasso com 1 − p. É o tijolo da binomial."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/distribuicao-bernoulli.html" }
+
+  - termo: "Distribuição de Poisson"
+    slug: distribuicao-de-poisson
+    ordem: "distribuicao de poisson"
+    def: "Modela a contagem de eventos raros num intervalo fixo de tempo ou espaço, quando ocorrem de forma independente e a uma taxa média constante."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/distribuicao-poisson.html" }
+
+  - termo: "Distribuição normal"
+    slug: distribuicao-normal
+    ordem: "distribuicao normal"
+    def: "A distribuição em forma de sino, simétrica em torno da média e descrita apenas por média e desvio padrão. Aparece com frequência porque somas de muitos efeitos independentes tendem a ela."
+    veja:
+      - { t: "Distribuição Normal", u: "/distribuicao-normal/" }
+      - { t: "Tabela Z", u: "/ztable.html" }
+
+  - termo: "Erro padrão"
+    slug: erro-padrao
+    ordem: "erro padrao"
+    def: "Desvio padrão da distribuição de uma estatística ao longo de amostras repetidas. Mede a incerteza da estimativa, não a variabilidade dos dados — confundir os dois é o erro mais comum da área."
+    veja:
+      - { t: "Desvio padrão x erro padrão", u: "/desvio-padrao-x-erro-padrao-qual-a-diferenca/" }
+
+  - termo: "Erro tipo I"
+    slug: erro-tipo-i
+    ordem: "erro tipo i"
+    def: "Rejeitar a hipótese nula quando ela é verdadeira: um falso positivo. Sua probabilidade é o nível de significância α, fixado antes do teste."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Erro tipo II"
+    slug: erro-tipo-ii
+    ordem: "erro tipo ii"
+    def: "Não rejeitar a hipótese nula quando ela é falsa: um falso negativo. Sua probabilidade é β, e 1 − β é o poder do teste."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Espaço amostral"
+    slug: espaco-amostral
+    ordem: "espaco amostral"
+    def: "O conjunto de todos os resultados possíveis de um experimento aleatório. Definir bem o espaço amostral costuma resolver metade dos problemas de probabilidade."
+    veja:
+      - { t: "Eventos e espaço amostral", u: "/pt/probabilidade/eventos-espaco-amostral" }
+
+  - termo: "Esperança"
+    slug: esperanca
+    ordem: "esperanca"
+    def: "O valor médio de uma variável aleatória a longo prazo, ponderando cada resultado pela sua probabilidade. Também chamada de valor esperado ou média populacional."
+    veja:
+      - { t: "Variáveis aleatórias", u: "/pt/probabilidade/variaveis-aleatorias" }
+
+  - termo: "Estimador"
+    slug: estimador
+    ordem: "estimador"
+    def: "Regra de cálculo aplicada à amostra para estimar um parâmetro da população. O valor que ela produz numa amostra concreta é a estimativa."
+    veja:
+      - { t: "Estimadores", u: "/pt/inferencia-estatistica/estimadores" }
+
+  - termo: "Evento"
+    slug: evento
+    ordem: "evento"
+    def: "Qualquer subconjunto do espaço amostral — o conjunto de resultados sob o qual dizemos que algo aconteceu."
+    veja:
+      - { t: "Eventos e espaço amostral", u: "/pt/probabilidade/eventos-espaco-amostral" }
+
+  - termo: "Fórmula de Cochran"
+    slug: formula-de-cochran
+    ordem: "formula de cochran"
+    def: "Calcula quantos indivíduos a amostra precisa ter para atingir certa margem de erro e certo nível de confiança ao estimar uma proporção."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/cochran-formula.html" }
+
+  - termo: "Frequência relativa"
+    slug: frequencia-relativa
+    ordem: "frequencia relativa"
+    def: "Proporção das observações que caem em cada categoria ou faixa. É a base do histograma e a ponte empírica para a noção de probabilidade."
+    veja:
+      - { t: "Gráficos estatísticos", u: "/pt/estatistica-descritiva/graficos" }
+
+  - termo: "Função densidade de probabilidade"
+    slug: funcao-densidade-de-probabilidade
+    ordem: "funcao densidade de probabilidade"
+    def: "Para uma variável contínua, a curva cuja área sob um intervalo dá a probabilidade de a variável cair nele. O valor da função num ponto não é uma probabilidade."
+    veja:
+      - { t: "Variáveis aleatórias", u: "/pt/probabilidade/variaveis-aleatorias" }
+
+  - termo: "Graus de liberdade"
+    slug: graus-de-liberdade
+    ordem: "graus de liberdade"
+    def: "Quantos valores de um cálculo ainda podem variar livremente depois de impostas as restrições. Na variância amostral são n − 1, porque a média já consumiu uma informação."
+    veja:
+      - { t: "Distribuição t de Student", u: "/formulas/t-student.html" }
+
+  - termo: "Heterocedasticidade"
+    slug: heterocedasticidade
+    ordem: "heterocedasticidade"
+    def: "Quando a variância dos resíduos muda ao longo dos valores previstos. Não enviesa os coeficientes da regressão, mas estraga os erros padrão — e com eles os testes e intervalos."
+    veja:
+      - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
+
+  - termo: "Hipótese alternativa"
+    slug: hipotese-alternativa
+    ordem: "hipotese alternativa"
+    def: "A afirmação que se aceita caso a hipótese nula seja rejeitada. É ela que carrega a alegação que o estudo quer sustentar."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Hipótese nula"
+    slug: hipotese-nula
+    ordem: "hipotese nula"
+    def: "A hipótese de que não há efeito ou diferença, tomada como verdadeira enquanto os dados não a contrariarem. Um teste nunca a prova: ou a rejeita, ou deixa de rejeitá-la."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Histograma"
+    slug: histograma
+    ordem: "histograma"
+    def: "Gráfico de barras contíguas que mostra como as observações se distribuem por faixas de valor. A largura das faixas muda a leitura, então vale testar mais de uma."
+    veja:
+      - { t: "Gráficos estatísticos", u: "/pt/estatistica-descritiva/graficos" }
+
+  - termo: "Independência"
+    slug: independencia
+    ordem: "independencia"
+    def: "Dois eventos são independentes quando a ocorrência de um não altera a probabilidade do outro — isto é, quando P(A ∩ B) = P(A) · P(B)."
+    veja:
+      - { t: "Probabilidade condicional", u: "/pt/probabilidade/probabilidade-condicional" }
+
+  - termo: "Inferência bayesiana"
+    slug: inferencia-bayesiana
+    ordem: "inferencia bayesiana"
+    def: "Abordagem que trata o parâmetro como incerto e o descreve por uma distribuição, atualizada pelos dados via teorema de Bayes: a priori vira posteriori."
+    veja:
+      - { t: "Frequentista vs bayesiano", u: "/frequentista-vs-bayesiano-duas-formas-de-pensar-a-incerteza/" }
+      - { t: "Teorema de Bayes", u: "/formulas/teorema-bayes.html" }
+
+  - termo: "Intervalo de confiança"
+    slug: intervalo-de-confianca
+    ordem: "intervalo de confianca"
+    def: "Faixa de valores compatíveis com os dados para um parâmetro. A confiança de 95% é uma propriedade do método ao longo de amostras repetidas, não a probabilidade de o parâmetro estar naquele intervalo."
+    veja:
+      - { t: "Intervalos de confiança", u: "/pt/inferencia-estatistica/intervalos-confianca" }
+      - { t: "Fórmula interativa", u: "/formulas/intervalo-confianca.html" }
+
+  - termo: "Intervalo interquartil (IQR)"
+    slug: intervalo-interquartil-iqr
+    ordem: "intervalo interquartil (iqr)"
+    def: "Distância entre o primeiro e o terceiro quartil, ou seja, a amplitude dos 50% centrais. Por ignorar as caudas, resiste a outliers."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Kaplan-Meier"
+    slug: kaplan-meier
+    ordem: "kaplan-meier"
+    def: "Estimador não paramétrico da curva de sobrevivência que aproveita também as observações censuradas — aquelas cujo desfecho ainda não ocorreu quando o estudo terminou."
+    veja:
+      - { t: "Demografia das orcas", u: "/orcas-residentes-do-sul-demografia-julia-kaplan-meier/" }
+
+  - termo: "Lei dos grandes números"
+    slug: lei-dos-grandes-numeros
+    ordem: "lei dos grandes numeros"
+    def: "Com muitas repetições, a média observada se aproxima da esperança. É o que faz a frequência longa convergir, e o que não garante nada sobre a próxima jogada."
+    veja:
+      - { t: "Cara ou coroa", u: "/cara-ou-coroa/" }
+
+  - termo: "Média aritmética"
+    slug: media-aritmetica
+    ordem: "media aritmetica"
+    def: "Soma dos valores dividida pela quantidade deles. Resume bem distribuições simétricas e engana em distribuições assimétricas ou com outliers."
+    veja:
+      - { t: "Entendendo a média", u: "/media/" }
+      - { t: "Medidas de tendência central", u: "/pt/estatistica-descritiva/tendencia-central" }
+
+  - termo: "Média harmônica"
+    slug: media-harmonica
+    ordem: "media harmonica"
+    def: "Recíproca da média das recíprocas. É a média correta para taxas e velocidades — a média de dois trechos percorridos a velocidades diferentes, por exemplo."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/media-harmonica.html" }
+
+  - termo: "Mediana"
+    slug: mediana
+    ordem: "mediana"
+    def: "O valor que divide o conjunto ordenado em duas metades. Não se move quando um extremo se afasta, o que a torna o resumo preferível em dados assimétricos."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Moda"
+    slug: moda
+    ordem: "moda"
+    def: "O valor mais frequente. É a única medida de tendência central aplicável a variáveis puramente categóricas, e um conjunto pode ter mais de uma."
+    veja:
+      - { t: "Medidas de tendência central", u: "/pt/estatistica-descritiva/tendencia-central" }
+
+  - termo: "Nível de significância"
+    slug: nivel-de-significancia
+    ordem: "nivel de significancia"
+    def: "O limite α escolhido antes do teste para a probabilidade de erro tipo I. O valor 0,05 é convenção herdada, não uma propriedade da natureza."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Outlier"
+    slug: outlier
+    ordem: "outlier"
+    def: "Observação muito distante das demais. Pode ser erro de registro ou o dado mais informativo do conjunto — descartar sem investigar é que não vale."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "p-valor"
+    slug: p-valor
+    ordem: "p-valor"
+    def: "Probabilidade de observar um resultado ao menos tão extremo quanto o obtido, supondo verdadeira a hipótese nula. Não é a probabilidade de a hipótese nula ser verdadeira, nem mede o tamanho do efeito."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Parâmetro"
+    slug: parametro
+    ordem: "parametro"
+    def: "Característica numérica da população, como μ ou σ: fixa e em geral desconhecida. O que se calcula na amostra é uma estatística, que a estima."
+    veja:
+      - { t: "Estimadores", u: "/pt/inferencia-estatistica/estimadores" }
+
+  - termo: "Percentil"
+    slug: percentil
+    ordem: "percentil"
+    def: "Valor abaixo do qual cai determinada porcentagem das observações. O percentil 50 é a mediana; os percentis 25 e 75 são os quartis."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Permutação"
+    slug: permutacao
+    ordem: "permutacao"
+    def: "Arranjo de elementos em que a ordem importa. Trocar a ordem gera uma permutação nova — diferentemente da combinação."
+    veja:
+      - { t: "Triângulo de Pascal", u: "/triangulo-de-pascal/" }
+
+  - termo: "Poder do teste"
+    slug: poder-do-teste
+    ordem: "poder do teste"
+    def: "Probabilidade de detectar um efeito que de fato existe, igual a 1 − β. Estudos pequenos demais falham em achar efeitos reais e, quando acham, superestimam o tamanho deles."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "População"
+    slug: populacao
+    ordem: "populacao"
+    def: "O conjunto completo de unidades sobre o qual se quer concluir algo. Defini-la com precisão é o que determina a quem as conclusões se aplicam."
+    veja:
+      - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
+
+  - termo: "Probabilidade condicional"
+    slug: probabilidade-condicional
+    ordem: "probabilidade condicional"
+    def: "A probabilidade de um evento sabendo que outro ocorreu, escrita P(A|B). Ignorar o condicionamento é a origem de boa parte dos paradoxos da área."
+    veja:
+      - { t: "Probabilidade condicional", u: "/pt/probabilidade/probabilidade-condicional" }
+      - { t: "Fórmula interativa", u: "/formulas/probabilidade-condicional.html" }
+
+  - termo: "Quartil"
+    slug: quartil
+    ordem: "quartil"
+    def: "Cada um dos três valores que dividem o conjunto ordenado em quatro partes iguais. O segundo quartil é a mediana."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Qui-quadrado"
+    slug: qui-quadrado
+    ordem: "qui-quadrado"
+    def: "Distribuição e família de testes usados para comparar frequências observadas com as esperadas, em testes de aderência e de independência entre variáveis categóricas."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/qui-quadrado.html" }
+
+  - termo: "Regressão linear"
+    slug: regressao-linear
+    ordem: "regressao linear"
+    def: "Ajusta uma reta que descreve como a variável resposta muda com uma ou mais variáveis explicativas, minimizando a soma dos quadrados dos resíduos."
+    veja:
+      - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
+      - { t: "Fórmula interativa", u: "/formulas/regressao-linear.html" }
+
+  - termo: "Resíduo"
+    slug: residuo
+    ordem: "residuo"
+    def: "Diferença entre o valor observado e o previsto pelo modelo. Analisar resíduos é como se verifica se o modelo está adequado — quase sempre mais informativo que o R²."
+    veja:
+      - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
+
+  - termo: "Série temporal"
+    slug: serie-temporal
+    ordem: "serie temporal"
+    def: "Sequência de observações ordenadas no tempo, em que valores próximos costumam ser correlacionados. Essa dependência invalida os métodos que supõem observações independentes."
+    veja:
+      - { t: "Séries temporais", u: "/pt/analise-de-dados/series-temporais" }
+
+  - termo: "Significância estatística"
+    slug: significancia-estatistica
+    ordem: "significancia estatistica"
+    def: "Resultado cujo p-valor ficou abaixo do nível adotado. Diz que o efeito dificilmente vem só do acaso, não que seja grande nem que importe na prática."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+
+  - termo: "Taxa de falsas descobertas (FDR)"
+    slug: taxa-de-falsas-descobertas-fdr
+    ordem: "taxa de falsas descobertas (fdr)"
+    def: "Proporção esperada de falsos positivos entre as hipóteses rejeitadas. O procedimento de Benjamini-Hochberg a controla em testes múltiplos, sendo menos conservador que Bonferroni."
+    veja:
+      - { t: "Um contraexemplo ao método BH", u: "/bh-fdr-contraexemplo/" }
+
+  - termo: "Teorema central do limite"
+    slug: teorema-central-do-limite
+    ordem: "teorema central do limite"
+    def: "A média de muitas variáveis independentes de mesma distribuição e variância finita tende à normal, qualquer que seja a distribuição de origem. É o que sustenta boa parte da inferência clássica."
+    veja:
+      - { t: "Teorema do limite central", u: "/pt/probabilidade/teorema-limite-central" }
+      - { t: "Fórmula interativa", u: "/formulas/teorema-central-limite.html" }
+
+  - termo: "Teorema da probabilidade total"
+    slug: teorema-da-probabilidade-total
+    ordem: "teorema da probabilidade total"
+    def: "Decompõe a probabilidade de um evento somando suas probabilidades condicionais em cada parte de uma partição do espaço amostral."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/teorema-probabilidade-total.html" }
+
+  - termo: "Teorema de Bayes"
+    slug: teorema-de-bayes
+    ordem: "teorema de bayes"
+    def: "Inverte o condicionamento: converte P(B|A) em P(A|B), pesando pela probabilidade a priori. Explica por que um teste muito preciso ainda gera muitos falsos positivos quando a condição é rara."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/teorema-bayes.html" }
+      - { t: "Frequentista vs bayesiano", u: "/frequentista-vs-bayesiano-duas-formas-de-pensar-a-incerteza/" }
+
+  - termo: "Teste t de Student"
+    slug: teste-t-de-student
+    ordem: "teste t de student"
+    def: "Compara médias quando o desvio padrão da população é desconhecido e a amostra é pequena, usando a distribuição t, de caudas mais pesadas que a normal."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+      - { t: "Tabela t", u: "/ttable.html" }
+
+  - termo: "Teste z"
+    slug: teste-z
+    ordem: "teste z"
+    def: "Compara médias ou proporções quando o desvio padrão populacional é conhecido, ou quando a amostra é grande o bastante para que a normal valha."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+      - { t: "Tabela Z", u: "/ztable.html" }
+
+  - termo: "Variância"
+    slug: variancia
+    ordem: "variancia"
+    def: "Média dos quadrados dos desvios em relação à média. Por estar em unidade ao quadrado, costuma ser reportada como desvio padrão."
+    veja:
+      - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
+
+  - termo: "Variável aleatória"
+    slug: variavel-aleatoria
+    ordem: "variavel aleatoria"
+    def: "Função que associa um número a cada resultado do experimento. É discreta quando assume valores contáveis e contínua quando assume qualquer valor de um intervalo."
+    veja:
+      - { t: "Variáveis aleatórias", u: "/pt/probabilidade/variaveis-aleatorias" }
+
+  - termo: "Viés"
+    slug: vies
+    ordem: "vies"
+    def: "Erro sistemático que desloca as estimativas sempre no mesmo sentido. Não diminui com amostra maior — só com mudança no processo de coleta ou no estimador."
+    veja:
+      - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
+
+  - termo: "Z-score"
+    slug: z-score
+    ordem: "z-score"
+    def: "Quantos desvios padrão um valor está da média, dado por (x − μ)/σ. Padroniza escalas diferentes e permite comparar valores de distribuições distintas."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/z-score.html" }
+      - { t: "Tabela Z", u: "/ztable.html" }

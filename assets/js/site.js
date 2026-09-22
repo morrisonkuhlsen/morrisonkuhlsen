@@ -469,6 +469,7 @@
         return (lang === 'en' ? 'ARTICLE' : 'ARTIGO') + (doc.d ? ' · ' + doc.d : '');
       }
       if (doc.k === 'tool') return lang === 'en' ? 'TOOL' : 'FERRAMENTA';
+      if (doc.k === 'term') return lang === 'en' ? 'TERM' : 'VERBETE';
       return lang === 'en' ? 'PAGE' : 'PÁGINA';
     }
 
@@ -739,6 +740,42 @@
     });
   }
 
+  /* ── Filtro do glossário ─────────────────────────────────────────────────
+     Reduz a lista enquanto se digita. Compara sem acento, como a busca do
+     site: quem procura "media" tem que achar "Média". Esconder um grupo
+     inteiro quando nenhum verbete dele sobra evita a letra órfã. */
+  function initGlossary() {
+    var glossario = document.querySelector('[data-glossary]');
+    if (!glossario) return;
+
+    var campo = glossario.querySelector('[data-glossary-filter]');
+    var vazio = glossario.querySelector('[data-glossary-empty]');
+    var itens = glossario.querySelectorAll('[data-glossary-item]');
+    var grupos = glossario.querySelectorAll('[data-glossary-group]');
+
+    function dobrar(texto) {
+      return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    campo.addEventListener('input', function () {
+      var busca = dobrar(campo.value.trim());
+      var achou = 0;
+
+      itens.forEach(function (item) {
+        var casa = !busca || dobrar(item.dataset.term).indexOf(busca) !== -1;
+        item.hidden = !casa;
+        if (casa) achou++;
+      });
+
+      grupos.forEach(function (grupo) {
+        var visivel = grupo.querySelector('[data-glossary-item]:not([hidden])');
+        grupo.hidden = !visivel;
+      });
+
+      vazio.hidden = achou !== 0;
+    });
+  }
+
   /* ── Tabelas roláveis no celular ─────────────────────────────────────────── */
   function initTables() {
     document.querySelectorAll('.prose table').forEach(function (table) {
@@ -763,6 +800,7 @@
     initAdCard();
     initRail();
     initTables();
+    initGlossary();
   }
 
   if (document.readyState === 'loading') {

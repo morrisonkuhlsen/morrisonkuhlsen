@@ -24,6 +24,24 @@ permalink: /search.json
 "k": "tool"
 },
 {%- endfor -%}
+{%- comment -%}
+  Os verbetes do glossário entram um a um, cada um com a própria âncora: quem
+  busca "heterocedasticidade" quer cair no verbete, não no topo da página.
+{%- endcomment -%}
+{%- assign glossario = site.pages | where: "ref", "glossario" -%}
+{%- for pagina in glossario -%}
+{%- for v in site.data.glossario[pagina.lang] -%}
+{
+"t": {{ v.termo | jsonify }},
+"u": {{ pagina.url | relative_url | append: "#" | append: v.slug | jsonify }},
+"e": {{ v.def | jsonify }},
+"g": "",
+"l": {{ pagina.lang | jsonify }},
+"d": "",
+"k": "term"
+},
+{%- endfor -%}
+{%- endfor -%}
 {%- for item in items -%}
 {
 "t": {{ item.title | jsonify }},

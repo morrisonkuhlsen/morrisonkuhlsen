@@ -1,0 +1,147 @@
+/* Glossário A–Z. A página é longa por natureza, então tudo aqui serve para
+   encurtar o caminho até um verbete: o índice alfabético gruda no topo, o
+   filtro reduz a lista enquanto se digita e cada verbete tem âncora própria. */
+
+.glossary {
+  margin-top: 2rem;
+}
+
+.glossary__tools {
+  position: sticky;
+  top: var(--headerbar-compact);
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.glossary__search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 14rem;
+  max-width: 22rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink-faint);
+
+  &:focus-within { border-color: var(--accent); }
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    fill: currentColor;
+  }
+}
+
+.glossary__filter {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--step--1);
+
+  &:focus { outline: none; }
+}
+
+.glossary__index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem;
+  font-size: var(--step--1);
+  font-weight: 700;
+
+  a, span {
+    display: inline-block;
+    min-width: 1.35rem;
+    padding: 0.1rem 0;
+    text-align: center;
+    border-radius: 2px;
+    text-decoration: none;
+  }
+
+  a { color: var(--accent); }
+  a:hover { background: var(--accent); color: var(--accent-ink); }
+
+  /* Letra sem verbete: fica no lugar, apagada, para a fileira não dançar. */
+  span { color: var(--ink-faint); opacity: 0.45; }
+}
+
+.glossary__group {
+  margin-bottom: 2.5rem;
+  /* A âncora não pode parar debaixo do header fixo nem do índice grudado. */
+  scroll-margin-top: calc(var(--headerbar-compact) + 5rem);
+}
+
+.glossary__letter {
+  margin: 0 0 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--line);
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+.glossary__list { margin: 0; }
+
+.glossary__item {
+  padding-block: 1rem;
+  scroll-margin-top: calc(var(--headerbar-compact) + 5rem);
+
+  & + & { border-top: 1px solid var(--line); }
+
+  &:target .glossary__term { color: var(--accent); }
+}
+
+.glossary__term {
+  margin: 0 0 0.35rem;
+  font-size: var(--step-0);
+  font-weight: 700;
+}
+
+.glossary__anchor {
+  margin-left: 0.35rem;
+  color: var(--ink-faint);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity var(--speed) var(--ease);
+}
+
+.glossary__item:hover .glossary__anchor,
+.glossary__anchor:focus { opacity: 1; }
+
+.glossary__def {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+.glossary__see {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--step--1);
+  color: var(--ink-faint);
+
+  a { color: var(--accent); }
+}
+
+.glossary__empty {
+  padding: 2rem 0;
+  color: var(--ink-soft);
+}
+
+/* No papel o filtro e o índice não servem para nada. */
+@media print {
+  .glossary__tools { display: none; }
+}

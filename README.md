@@ -20,6 +20,7 @@ O build de produção (com Google Analytics) é `JEKYLL_ENV=production bundle ex
 ```
 _data/site.yml     rótulos, links, SEO e a barra de anúncio
 _data/tools.yml    o dropdown "Ferramentas" (páginas HTML avulsas)
+_data/glossario.yml os verbetes do glossário A–Z
 _data/authors.yml  autores dos posts
 _sass/             uma pasta por camada: tokens → reset → layout → componentes
 _includes/         header, hero, busca, rodapé, sprite de ícones
@@ -89,11 +90,24 @@ propósito. Para entrarem na busca há `_data/standalone.yml`, gerado a partir
 do `<title>` e do `<meta description>` de cada arquivo; regenere-o quando
 adicionar uma página nova.
 
+**Glossário.** `/pt/glossario`, montado por `glossary.html` a partir de
+`_data/glossario.yml` — 71 verbetes de uma ou duas frases, cada um com âncora
+própria e links para o artigo que aprofunda o termo. Cada item traz `ordem`, a
+chave de ordenação sem acento: o `sort` do Liquid compara por código de
+caractere e mandaria "Álgebra" para depois de "Z". O `slug` é a âncora **e** a
+URL no índice de busca, então mudá-lo quebra link publicado — acrescente um
+verbete novo em vez de renomear. A página declara um `DefinedTermSet` em
+JSON-LD, que é como o buscador entende um glossário, e o filtro do topo casa
+sem acento, como a busca do site. A estrutura do arquivo já é por idioma, para
+o dia em que houver a versão em inglês.
+
 **Busca.** `search.json` e um matcher próprio em `site.js`. Não usa Lunr: o
 pipeline padrão dele faz *stemming* em inglês, o que atrapalha num site
 majoritariamente em português. Casar prefixos de token sem acento acerta mais
 em ~70 documentos. Abre com Ctrl+K ou `/`, filtra pelo idioma da página e
-destaca o trecho que casou. O índice é buscado uma vez, na primeira abertura.
+destaca o trecho que casou. O índice é buscado uma vez, na primeira abertura. Além de posts, páginas
+e ferramentas, entra um item por verbete do glossário, apontando para a
+âncora — quem busca um termo quer cair nele, não no topo da página.
 
 **Cores dos posts.** Os posts trazem CSS próprio no `<style>`. As cores de
 superfície, texto e borda que eles fixavam viraram tokens `--mk-*`, definidos

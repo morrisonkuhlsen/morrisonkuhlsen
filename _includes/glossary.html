@@ -1,0 +1,111 @@
+{%- comment -%}
+  Glossário A–Z. Os verbetes vêm de _data/glossario.yml, já ordenados por
+  `ordem` — a chave sem acento, porque o `sort` do Liquid compara por código de
+  caractere e mandaria "Álgebra" para depois de "Z".
+
+  O índice do topo lista o alfabeto inteiro: a letra sem verbete fica apagada,
+  em vez de sumir, para a fileira não dançar a cada verbete novo.
+
+  O JSON-LD declara um DefinedTermSet, que é como o buscador entende um
+  glossário — cada verbete com a própria âncora.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign verbetes = site.data.glossario[lang] | sort: "ordem" -%}
+{%- assign alfabeto = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z" | split: "," -%}
+
+{%- assign presentes = "" -%}
+{%- for v in verbetes -%}
+  {%- assign inicial = v.ordem | slice: 0 | upcase -%}
+  {%- unless presentes contains inicial -%}
+    {%- assign presentes = presentes | append: inicial -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+<div class="glossary" data-glossary>
+
+  <div class="glossary__tools">
+    <label class="glossary__search">
+      <svg aria-hidden="true"><use href="#i-search"></use></svg>
+      <input type="search" class="glossary__filter" data-glossary-filter
+             placeholder="{% if lang == 'en' %}Filter terms{% else %}Filtrar termos{% endif %}"
+             aria-label="{% if lang == 'en' %}Filter terms{% else %}Filtrar termos{% endif %}"
+             autocomplete="off">
+    </label>
+
+    <nav class="glossary__index" aria-label="{% if lang == 'en' %}Alphabetical index{% else %}Índice alfabético{% endif %}">
+      {%- for letra in alfabeto -%}
+        {%- if presentes contains letra -%}
+          <a href="#letra-{{ letra | downcase }}">{{ letra }}</a>
+        {%- else -%}
+          <span aria-hidden="true">{{ letra }}</span>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+  </div>
+
+  <p class="glossary__empty" data-glossary-empty hidden>
+    {%- if lang == 'en' -%}No term matches that search.{%- else -%}Nenhum verbete corresponde a essa busca.{%- endif -%}
+  </p>
+
+  {%- assign anterior = "" -%}
+  {%- for v in verbetes -%}
+    {%- assign inicial = v.ordem | slice: 0 | upcase -%}
+
+    {%- if inicial != anterior -%}
+      {%- unless forloop.first -%}
+          </dl>
+        </section>
+      {%- endunless -%}
+      <section class="glossary__group" id="letra-{{ inicial | downcase }}" data-glossary-group>
+        <h2 class="glossary__letter">{{ inicial }}</h2>
+        <dl class="glossary__list">
+      {%- assign anterior = inicial -%}
+    {%- endif -%}
+
+    <div class="glossary__item" id="{{ v.slug }}" data-glossary-item
+         data-term="{{ v.termo | downcase }}">
+      <dt class="glossary__term">
+        {{ v.termo }}
+        <a class="glossary__anchor" href="#{{ v.slug }}"
+           aria-label="{% if lang == 'en' %}Link to this term{% else %}Link para este verbete{% endif %}">#</a>
+      </dt>
+      <dd class="glossary__def">
+        {{ v.def }}
+        {%- if v.veja.size > 0 -%}
+          <span class="glossary__see">
+            {%- if lang == 'en' -%}See:{%- else -%}Veja:{%- endif -%}&#32;
+            {%- for link in v.veja -%}
+              <a href="{{ link.u | relative_url }}">{{ link.t }}</a>{%- unless forloop.last -%}<span aria-hidden="true"> · </span>{%- endunless -%}
+            {%- endfor -%}
+          </span>
+        {%- endif -%}
+      </dd>
+    </div>
+
+    {%- if forloop.last -%}
+        </dl>
+      </section>
+    {%- endif -%}
+  {%- endfor -%}
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DefinedTermSet",
+  "name": {{ page.title | jsonify }},
+  "url": {{ page.url | absolute_url | jsonify }},
+  "inLanguage": {{ lang | jsonify }},
+  "hasDefinedTerm": [
+    {%- for v in verbetes -%}
+    {
+      "@type": "DefinedTerm",
+      "name": {{ v.termo | jsonify }},
+      "description": {{ v.def | jsonify }},
+      "url": {{ page.url | absolute_url | append: "#" | append: v.slug | jsonify }}
+    }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+}
+</script>
