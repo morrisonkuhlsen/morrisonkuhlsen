@@ -16,38 +16,48 @@
     vline.style.display = 'none';
     document.body.appendChild(vline);
 
-    // pegar headers (th) por índice
-    var headerCells = [];
+    /* Os rótulos das colunas — os graus de liberdade do numerador — estão na
+       última linha do thead; a primeira agora é só o cabeçalho de grupo. */
+    var colunas = [];
     var thead = table.querySelector('thead');
     if (thead) {
-      var ths = thead.querySelectorAll('th');
-      ths.forEach(function (th) { headerCells.push(th.textContent.trim()); });
+      var linhasCab = thead.querySelectorAll('tr');
+      linhasCab[linhasCab.length - 1].querySelectorAll('th').forEach(function (th) {
+        colunas.push(th.textContent.trim());
+      });
     }
 
     var selectedCell = null;
     var hoveredCell = null;
 
+    /* v2 é o rótulo da linha (denominador) e v1 é o cabeçalho da coluna
+       (numerador) — estavam trocados aqui e no HTML, o que fazia o tooltip
+       anunciar o par invertido.
+
+       O índice da coluna depende da linha: as que abrem um grupo trazem a
+       célula de v2 com rowspan, as outras começam direto no α. */
     function computeCellInfo(cell) {
       var row = cell.parentElement;
       var value = cell.textContent.trim();
-      var alpha = (row.cells[1] && row.cells[1].textContent) ? row.cells[1].textContent.trim() : '';
+      var abreGrupo = row.cells[0] && row.cells[0].hasAttribute('rowspan');
 
-      // v1: procurar para cima até encontrar a célula v1 (primeira coluna)
-      var v1 = '';
-      if (row.cells[0] && row.cells[0].textContent.trim() !== '') {
-        v1 = row.cells[0].textContent.trim();
+      var v2 = '';
+      if (abreGrupo) {
+        v2 = row.cells[0].textContent.trim();
       } else {
         var prev = row.previousElementSibling;
         while (prev) {
-          if (prev.cells[0] && prev.cells[0].textContent.trim() !== '') {
-            v1 = prev.cells[0].textContent.trim();
+          if (prev.cells[0] && prev.cells[0].hasAttribute('rowspan')) {
+            v2 = prev.cells[0].textContent.trim();
             break;
           }
           prev = prev.previousElementSibling;
         }
       }
 
-      var v2 = headerCells[cell.cellIndex] || '';
+      var colAlfa = abreGrupo ? 1 : 0;
+      var alpha = row.cells[colAlfa] ? row.cells[colAlfa].textContent.trim() : '';
+      var v1 = colunas[cell.cellIndex - colAlfa - 1] || '';
 
       return { v1: v1, v2: v2, alpha: alpha, value: value, row: row, cellIndex: cell.cellIndex };
     }

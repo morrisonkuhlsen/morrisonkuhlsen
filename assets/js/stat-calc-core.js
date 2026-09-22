@@ -172,6 +172,42 @@
     return (lo + hi) / 2;
   }
 
+  /* ── F de Snedecor ───────────────────────────────────────────────────────
+     Também sai da beta incompleta. A F é assimétrica e vive em x > 0, então
+     aqui não há simetria para aproveitar como na t. */
+  function fcdf(f, d1, d2) {
+    if (!(f > 0)) return 0;
+    if (!(d1 > 0 && d2 > 0)) return NaN;
+    return betai(d1 / 2, d2 / 2, d1 * f / (d1 * f + d2));
+  }
+
+  /* Densidade em log, para não estourar com graus de liberdade altos: com
+     d1 = d2 = 120 os fatoriais do numerador passam de 1e308. */
+  function fpdf(x, d1, d2) {
+    if (!(x > 0) || !(d1 > 0 && d2 > 0)) return 0;
+    var lbeta = lgamma(d1 / 2) + lgamma(d2 / 2) - lgamma((d1 + d2) / 2);
+    var ln = (d1 / 2) * Math.log(d1 / d2) + (d1 / 2 - 1) * Math.log(x) -
+             ((d1 + d2) / 2) * Math.log(1 + d1 * x / d2) - lbeta;
+    return Math.exp(ln);
+  }
+
+  /* Quantil da F, por bisseção: a cdf é monótona e o domínio é (0, ∞), então
+     basta empurrar o limite superior até passar de p. */
+  function finv(p, d1, d2) {
+    if (!(p > 0 && p < 1) || !(d1 > 0 && d2 > 0)) return NaN;
+
+    var lo = 0, hi = 2, passo = 0;
+    while (fcdf(hi, d1, d2) < p && passo++ < 200) hi *= 2;
+    if (passo >= 200) return NaN;
+
+    for (var i = 0; i < 300; i++) {
+      var meio = (lo + hi) / 2;
+      if (fcdf(meio, d1, d2) < p) lo = meio; else hi = meio;
+      if (hi - lo < 1e-12 * Math.max(1, meio)) break;
+    }
+    return (lo + hi) / 2;
+  }
+
   /* ── Formatação ──────────────────────────────────────────────────────────
      Cinco casas, como as tabelas. Abaixo disso o arredondamento viraria
      0.00000 e esconderia justamente o que interessa numa cauda. */
@@ -210,7 +246,17 @@
     var padTopo = mini ? 3 : 10;
     var w = largura - padLado * 2;
     var h = altura - padBaixo - padTopo;
-    var yMax = dens(0);
+
+    /* O pico não está necessariamente em zero: na F ele se desloca, e com
+       d1 = 1 a densidade vai ao infinito na origem. Amostrar resolve os três
+       casos; as duas primeiras amostras ficam de fora justamente por causa
+       dessa assíntota. */
+    var yMax = 0;
+    for (var a = 2; a <= PASSOS; a++) {
+      var ya = dens(x0 + (x1 - x0) * a / PASSOS);
+      if (isFinite(ya) && ya > yMax) yMax = ya;
+    }
+    if (!(yMax > 0)) yMax = 1;
 
     var px = function (x) { return padLado + (x - x0) / (x1 - x0) * w; };
     var py = function (y) { return padTopo + h - (y / yMax) * h; };
@@ -409,6 +455,7 @@
   window.MKCalc = {
     erfc: erfc, ncdf: ncdf, npdf: npdf, ninv: ninv,
     lgamma: lgamma, betai: betai, tcdf: tcdf, tpdf: tpdf, tinv: tinv,
+    fcdf: fcdf, fpdf: fpdf, finv: finv,
     fmt: fmt, limitar: limitar, enxuto: enxuto, num: num,
     plot: plot, pintar: pintar, tex: tex, formulasFixas: formulasFixas,
     parear: parear, linhas: linhas, copiar: copiar,

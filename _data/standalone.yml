@@ -134,7 +134,7 @@
   lang: pt
 - title: "F Distribution (Snedecor) | F-Table"
   url: "/ftable.html"
-  description: ""
+  description: "Tabela F de Snedecor com calculadoras: p-valor a partir de um F, F crítico para qualquer α e graus de liberdade, e teste F de duas variâncias."
   tags: "tabela f snedecor"
   lang: pt
 - title: "Morrison Kühlsen | Alfabeto Grego"

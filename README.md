@@ -83,21 +83,28 @@ para a repetição não saltar aos olhos na maioria das telas, e a cor é fixa
 porque o fundo do rodapé também é, nos dois temas. Para trocar as fórmulas,
 edite o `background-image` em `_sass/_footer.scss`.
 
-**Tabelas Z e t.** As duas são a tabela no meio e calculadoras nas laterais,
-que grudam ao rolar; abaixo de 1400px tudo empilha, calculadoras primeiro.
-Clicar numa célula preenche os campos — na tabela t a célula carrega também o
-α da coluna e os graus de liberdade da linha.
+**Tabelas Z, t e F.** As três são a tabela no meio e calculadoras nas
+laterais, que grudam ao rolar; abaixo de 1400px tudo empilha, calculadoras
+primeiro. Clicar numa célula preenche os campos — na t ela carrega também o α
+da coluna e os graus de liberdade da linha, e na F o par (ν₁, ν₂) e o α.
+
+Na tabela F, atenção: a primeira coluna é **ν₂**, o denominador, e as dezoito
+colunas são **ν₁**, o numerador. Os rótulos vinham trocados; conferido contra
+os 2016 valores publicados, a leitura invertida errava por mais de 90000%.
 
 `assets/js/stat-calc-core.js` é o que elas dividem: normal (erfc de Chebyshev
-e Φ⁻¹ de Acklam com um passo de Halley), t de Student (beta incompleta pela
-fração continuada de Lentz, e quantil por bisseção), o desenho da curva, a
-notação em KaTeX, o estado na URL e o tema. Cada página traz só as suas
-calculadoras — `ztable-calculators.js` e `ttable-calculators.js`.
+e Φ⁻¹ de Acklam com um passo de Halley), t de Student e F de Snedecor (as duas
+pela beta incompleta, com quantil por bisseção), o desenho da curva, a notação
+em KaTeX, o estado na URL e o tema. Cada página traz só as suas calculadoras —
+`ztable-calculators.js`, `ttable-calculators.js` e `ftable-calculators.js`.
+
+O desenho descobre o pico amostrando a densidade, em vez de assumi-lo em zero:
+a F é assimétrica, e com ν₁ = 1 ela vai ao infinito na origem.
 
 Os valores **não** são lidos da tabela: são calculados, e por isso valem para
 qualquer z, α ou ν, inclusive os que a tabela não lista. A implementação da t
-foi conferida contra os 610 valores publicados na própria página, todos dentro
-do arredondamento de três casas.
+foi conferida contra os 610 valores publicados na própria página e a da F
+contra os 2016 da dela, todas dentro do arredondamento das tabelas.
 
 O estado vive na URL — `?z=`, `?z1=&z2=`, `?p=&tail=`, `?x=&mu=&sd=` na Z e
 `?t=&df=`, `?a=&adf=&ctail=`, `?xbar=&mu=&s=&n=` na t —, o que torna um

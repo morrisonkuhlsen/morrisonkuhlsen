@@ -4,7 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>F Distribution (Snedecor) | F-Table</title>
+  <meta name="description" content="F distribution (Snedecor) critical values with interactive calculators: p-value from an F-score, critical F for any alpha and degrees of freedom, and an F-test for two variances.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="/assets/css/ztable-styles.css">
+
+  <!-- O tema vai no <html> antes da folha de estilo, senão a página pisca no
+       tema errado a cada carregamento. -->
+  <script>
+    (function () {
+      try {
+        var salvo = localStorage.getItem('ztable-theme');
+        if (salvo === 'light' || salvo === 'dark') {
+          document.documentElement.setAttribute('data-theme', salvo);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <!-- Google tag (gtag.js) -->
   <script>
     // Desativa o rastreamento se o cookie de consentimento não existir
@@ -23,7 +39,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/ftable.html">
   <meta property="og:title" content="F Distribution (Snedecor) | F-Table">
-  <meta property="og:description" content="">
+  <meta property="og:description" content="F distribution (Snedecor) critical values with interactive calculators: p-value from an F-score, critical F for any alpha and degrees of freedom, and an F-test for two variances.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -31,13 +47,34 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="F Distribution (Snedecor) | F-Table">
-  <meta name="twitter:description" content="">
+  <meta name="twitter:description" content="F distribution (Snedecor) critical values with interactive calculators: p-value from an F-score, critical F for any alpha and degrees of freedom, and an F-test for two variances.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
 </head>
 <body class="ftable">
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+  </symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+  </symbol>
+</svg>
   <div class="table-header">
     <div class="header-content">
       <h1>F Distribution (Snedecor) — Critical Values</h1>
+      <button id="themeBtn" type="button" title="Switch between light and dark"
+              aria-label="Switch between light and dark">
+        <svg class="icon icon--sun" aria-hidden="true"><use href="#i-sun"></use></svg>
+        <svg class="icon icon--moon" aria-hidden="true"><use href="#i-moon"></use></svg>
+      </button>
       <div class="divider" aria-hidden="true"></div>
       <a href="/" class="logo-link" aria-label="Morrison Kuhlsen">
         <img src="/assets/images/mklogo.png" alt="Morrison Kuhlsen" class="logo" />
@@ -45,12 +82,68 @@
     </div>
   </div>
 
+<!-- Calculadoras nas laterais e a tabela no meio, como nas tabelas Z e t.
+     Abaixo de 1400px tudo empilha, calculadoras primeiro. -->
+<div class="ztable-layout" id="calculators">
+
+  <aside class="ztable-side">
+
+  <article class="calc__card" id="calc-fp">
+    <header class="calc__head">
+      <h2 class="calc__title">Compute a P-value from an F-score</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <p class="calc__formula" data-tex="F\sim F(\nu_{1},\nu_{2}),\quad p=P(F>f)">F ~ F(v1, v2), p = P(F &gt; f)</p>
+
+    <div class="calc__inputs">
+      <label class="calc__field">
+        <span>F value</span>
+        <input type="number" data-campo="f" step="0.01" min="0" value="3.33" inputmode="decimal">
+      </label>
+      <input class="calc__slider" type="range" data-slider="f" min="0.01" max="12" step="0.01" value="3.33"
+             aria-label="F value slider">
+      <label class="calc__field">
+        <span>ν₁ (numerator)</span>
+        <input type="number" data-campo="v1" step="1" min="1" value="5" inputmode="numeric">
+      </label>
+      <label class="calc__field">
+        <span>ν₂ (denominator)</span>
+        <input type="number" data-campo="v2" step="1" min="1" value="10" inputmode="numeric">
+      </label>
+    </div>
+
+    <p class="calc__warn" data-aviso hidden>F must be positive and both degrees of freedom at least 1.</p>
+
+    <div class="calc__body">
+      <div class="calc__hero">
+        <output class="calc__value" data-valor>0.05000</output>
+        <span class="calc__caption" data-legenda>P(F &gt; f)</span>
+        <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+             aria-label="F distribution curve with the selected area shaded"></svg>
+      </div>
+      <ul class="calc__rows" data-linhas></ul>
+    </div>
+    <p class="calc__hint">Clicking a cell in the table fills these fields.</p>
+  </article>
+
+  </aside>
+
   <div class="table-responsive">
     <table id="myTable" class="table table-sm table-striped">
+      <!-- Os rótulos estavam trocados: a primeira coluna é v2, o denominador,
+           e as dezoito colunas são v1, o numerador. Conferido contra os 2016
+           valores da própria tabela — lidos como antes rotulado, o erro
+           passava de 90000%; lidos assim, fica no arredondamento. -->
       <thead>
         <tr>
-          <th>v1</th>
-          <th>α</th>
+          <th rowspan="2">v2</th>
+          <th rowspan="2">α</th>
+          <th colspan="18" class="ftable-group">v1 — numerator degrees of freedom</th>
+        </tr>
+        <tr>
           <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th><th>12</th><th>15</th><th>20</th><th>24</th><th>30</th><th>40</th><th>60</th><th>120</th>
         </tr>
       </thead>
@@ -223,7 +316,96 @@
       </tbody>
     </table>
   </div>
+  <aside class="ztable-side">
+
+  <article class="calc__card" id="calc-fcrit">
+    <header class="calc__head">
+      <h2 class="calc__title">Critical F value</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <p class="calc__formula" data-tex="F_{\alpha;\,\nu_{1},\nu_{2}}=F^{-1}(1-\alpha)">F = F⁻¹(1 − α)</p>
+
+    <div class="calc__inputs">
+      <label class="calc__field">
+        <span>α</span>
+        <input type="number" data-campo="alpha" step="0.001" min="0.0001" max="0.9999" value="0.05" inputmode="decimal">
+      </label>
+      <input class="calc__slider" type="range" data-slider="alpha" min="0.001" max="0.5" step="0.001" value="0.05"
+             aria-label="Alpha slider">
+      <label class="calc__field">
+        <span>ν₁ (numerator)</span>
+        <input type="number" data-campo="v1" step="1" min="1" value="5" inputmode="numeric">
+      </label>
+      <label class="calc__field">
+        <span>ν₂ (denominator)</span>
+        <input type="number" data-campo="v2" step="1" min="1" value="10" inputmode="numeric">
+      </label>
+    </div>
+
+    <p class="calc__warn" data-aviso hidden>α must be between 0 and 1, and both ν at least 1.</p>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-valor>3.3258</output>
+      <span class="calc__caption" data-legenda>critical F</span>
+      <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+           aria-label="F distribution curve with the rejection region shaded"></svg>
+    </div>
+    <p class="calc__hint">Any α and any ν, including the ones the table does not list.</p>
+  </article>
+
+  <article class="calc__card" id="calc-ftest">
+    <header class="calc__head">
+      <h2 class="calc__title">F-test for two variances</h2>
+      <button class="calc__copy" type="button" data-copiar title="Copy results">
+        <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg><span class="calc__copied">Copied</span>
+      </button>
+    </header>
+
+    <div class="calc__inputs calc__inputs--stack">
+      <label class="calc__field">
+        <span>Sample 1 SD (s₁)</span>
+        <input type="number" data-campo="s1" step="any" min="0" value="12.5" inputmode="decimal">
+      </label>
+      <label class="calc__field">
+        <span>Sample 1 size (n₁)</span>
+        <input type="number" data-campo="n1" step="1" min="2" value="16" inputmode="numeric">
+      </label>
+      <label class="calc__field">
+        <span>Sample 2 SD (s₂)</span>
+        <input type="number" data-campo="s2" step="any" min="0" value="8.4" inputmode="decimal">
+      </label>
+      <label class="calc__field">
+        <span>Sample 2 size (n₂)</span>
+        <input type="number" data-campo="n2" step="1" min="2" value="21" inputmode="numeric">
+      </label>
+      <p class="calc__warn" data-aviso hidden>Need both SDs above zero and both sizes at least 2.</p>
+    </div>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-f>2.21513</output>
+      <span class="calc__caption">F &nbsp;·&nbsp; ν = <span data-df>15, 20</span></span>
+      <p class="calc__formula" data-formula-f>F = s²max / s²min</p>
+    </div>
+
+    <div class="calc__hero">
+      <output class="calc__value" data-p-uma>0.04500</output>
+      <span class="calc__caption">one-tailed p &nbsp;·&nbsp; two-tailed p = <span data-p-duas>0.09000</span></span>
+      <svg class="calc-plot" data-plot viewBox="0 0 320 150" role="img"
+           aria-label="F distribution curve with the tail beyond the observed F shaded"></svg>
+    </div>
+    <p class="calc__hint">The larger variance goes in the numerator, which is how the table is published.</p>
+  </article>
+
+  </aside>
+
+</div>
+
+  <script src="/assets/js/stat-calc-core.js"></script>
   <script src="/assets/js/ftable-hover.js" defer></script>
+  <script src="/assets/js/ftable-calculators.js" defer></script>
   <footer>
     MorrisonKühlsen &copy; <span data-ano>2026</span> —
         <a href="/LICENSE">MIT License</a>
