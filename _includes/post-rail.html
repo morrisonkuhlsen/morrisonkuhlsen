@@ -20,8 +20,6 @@
 {%- endif -%}
 
 <div class="rail" data-rail>
-  <p class="rail__label">{{ t_share }}</p>
-
   <a class="rail__btn" title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener"
      href="https://api.whatsapp.com/send?text={{ titulo }}%20-%20{{ url | url_encode }}">
     <svg aria-hidden="true"><use href="#i-whatsapp"></use></svg>
@@ -44,18 +42,12 @@
     <svg class="rail__icon-done" aria-hidden="true"><use href="#i-check"></use></svg>
   </button>
 
-  <hr class="rail__sep">
-
-  <p class="rail__label">{{ t_size }}</p>
-
   <div class="rail__sizes" role="group" aria-label="{{ t_size }}">
     <button class="rail__btn rail__btn--text" type="button" data-rail-font="-1"
             title="{{ t_smaller }}" aria-label="{{ t_smaller }}">A<span>−</span></button>
     <button class="rail__btn rail__btn--text" type="button" data-rail-font="1"
             title="{{ t_bigger }}" aria-label="{{ t_bigger }}">A<span>+</span></button>
   </div>
-
-  <hr class="rail__sep">
 
   <button class="rail__btn" type="button" data-rail-top
           title="{{ t_top }}" aria-label="{{ t_top }}">

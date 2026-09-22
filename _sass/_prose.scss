@@ -369,34 +369,25 @@ mjx-container[display="true"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.15rem;
   width: 3.5rem;
 }
 
-.rail__label {
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  text-align: center;
-  line-height: 1.2;
-}
-
+/* Só ícones: o nome de cada ação vive no title e no aria-label, então nada
+   se perde para leitor de tela nem para quem passa o cursor. */
 .rail__btn {
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: 1px solid var(--line);
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
   border-radius: 50%;
-  color: var(--ink-soft);
+  color: var(--ink-faint);
   text-decoration: none;
-  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  transition: color 0.2s, background-color 0.2s;
 }
 
 .rail__btn:hover {
-  border-color: var(--ink);
   color: var(--ink);
   background: var(--paper-alt);
 }
@@ -404,7 +395,7 @@ mjx-container[display="true"] {
 .rail__btn svg { width: 1.05rem; height: 1.05rem; fill: currentColor; }
 
 .rail__btn--text {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 700;
   line-height: 1;
   gap: 0.05rem;
@@ -413,15 +404,14 @@ mjx-container[display="true"] {
 
 .rail__btn--text span { font-size: 0.7rem; }
 
-.rail__sizes { display: flex; gap: 0.35rem; }
-.rail__sizes .rail__btn { width: 1.9rem; height: 1.9rem; }
-
-.rail__sep {
-  width: 1.5rem;
-  margin: 0.5rem 0;
-  border: 0;
-  border-top: 1px solid var(--line);
+/* Um respiro separa compartilhar de ler, sem precisar de filete. */
+.rail__sizes {
+  display: flex;
+  gap: 0.1rem;
+  margin-block: 0.75rem;
 }
+
+.rail__sizes .rail__btn { width: 1.75rem; height: 1.75rem; }
 
 /* O ícone de confirmação só aparece depois de copiar. */
 .rail__icon-done { display: none; }
