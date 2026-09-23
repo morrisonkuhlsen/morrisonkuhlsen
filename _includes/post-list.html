@@ -2,12 +2,22 @@
 {%- assign ui = site.data.site.ui -%}
 {%- assign posts = site.posts | where: "lang", lang -%}
 {%- assign initial = include.limit | default: 3 | plus: 0 -%}
-{%- assign offset = include.offset | default: 0 | plus: 0 -%}
-{%- assign remaining = posts.size | minus: offset -%}
+{%- comment -%}
+  Com skip_featured, a grade pula o post do card de destaque da home.
+{%- endcomment -%}
+{%- assign skip_url = nil -%}
+{%- if include.skip_featured -%}
+  {%- include featured-post.html -%}
+  {%- assign skip_url = featured.url -%}
+{%- endif -%}
+{%- assign shown = 0 -%}
 
 <div class="grid" style="--min: 20rem">
-  {%- for post in posts offset: offset -%}
-    <article class="post-card post-item" {% if forloop.index > initial %}hidden{% endif %}>
+  {%- for post in posts -%}
+    {%- if post.url == skip_url -%}{%- continue -%}{%- endif -%}
+    {%- assign shown = shown | plus: 1 -%}
+    {%- assign read_min = post.content | number_of_words | divided_by: 200 | plus: 1 -%}
+    <article class="post-card post-item" {% if shown > initial %}hidden{% endif %}>
       {%- if post.image -%}
         <a href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
           <img class="post-card__img" src="{{ post.image | relative_url }}"
@@ -16,11 +26,11 @@
       {%- endif -%}
       <div class="post-card__body">
         <div class="post-card__meta">
-          {%- if forloop.first and offset == 0 %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
-          <span class="post-card__label">{{ ui.article[lang] }}</span>
+          {%- if post.url == posts.first.url %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
           <time datetime="{{ post.date | date_to_xmlschema }}">
             {{ post.date | date: "%-d/%m/%Y" }}
           </time>
+          <span>{{ read_min }} {{ ui.read_time[lang] }}</span>
         </div>
         <h3 class="post-card__title">
           <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
@@ -31,7 +41,7 @@
   {%- endfor -%}
 </div>
 
-{%- if remaining > initial -%}
+{%- if shown > initial -%}
   <p style="text-align:center;margin-top:2.5rem">
     <button class="btn btn--primary" type="button" data-show-more="3">{{ ui.more[lang] }}</button>
   </p>

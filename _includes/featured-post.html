@@ -1,0 +1,10 @@
+{%- comment -%}
+  Escolhe o post de destaque da home e o deixa em `featured`. Vale o mais
+  recente com `featured: true` no front matter; sem nenhum marcado, o mais
+  recente de todos. O card (feature-post.html) e a grade (post-list.html)
+  chamam este include, então os dois concordam sobre qual post pular.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign lang_posts = site.posts | where: "lang", lang -%}
+{%- assign featured = lang_posts | where: "featured", true | first -%}
+{%- unless featured -%}{%- assign featured = lang_posts | first -%}{%- endunless -%}

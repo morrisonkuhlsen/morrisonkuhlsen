@@ -70,8 +70,6 @@
   font-weight: 700;
 }
 
-.post-card__label { font-weight: 700; color: var(--ink-soft); }
-
 .post-card__title {
   font-size: var(--step-1);
   font-weight: 700;
@@ -83,7 +81,7 @@
 
 .post-card__excerpt { color: var(--ink-soft); font-size: var(--step--1); }
 
-/* ─── Card de destaque (a última postagem) ────────────────────────────────── */
+/* ─── Card de destaque da home ───────────────────────────────────────────── */
 
 .feature-card {
   background: var(--paper);
@@ -93,12 +91,11 @@
   box-shadow: var(--shadow);
 }
 
+/* Fundo --paper-alt: --paper é a cor da página e o card sumiria nela. */
+.feature-card--overlap { position: relative; z-index: 2; background: var(--paper-alt); }
+
 /* Puxa o card para dentro do hero, como no site atual. Só no desktop:
    no celular o hero é curto e o card cobriria o botão. */
-.feature-card--overlap { position: relative; z-index: 2; }
-
-/* No escuro, --paper é a cor da página e o card sumiria nela. */
-:root[data-theme="dark"] .feature-card--overlap { background: var(--paper-alt); }
 
 @media (min-width: 48rem) {
   .feature-card--overlap { margin-top: -4rem; }
@@ -122,7 +119,19 @@
 
 .feature-card__title { font-size: var(--step-2); font-weight: 700; line-height: 1.2; }
 .feature-card__title a { color: inherit; text-decoration: none; }
-.feature-card__title a:hover { text-decoration: underline; }
+
+/* Um só link cobre o card inteiro: o ::after do título se estica sobre ele.
+   O card precisa de position: relative, que já vem de --overlap. */
+.feature-card__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
+.feature-card__link:focus-visible { outline: none; }
+.feature-card:has(.feature-card__link:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* Mesmo hover dos cards da grade, mais o sublinhado do título. */
+.feature-card:has(.feature-card__link) { transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease); }
+.feature-card:has(.feature-card__link):hover { transform: translateY(-3px); }
+.feature-card:hover .feature-card__link,
+.feature-card:hover .read-more { text-decoration: underline; }
+
 .feature-card__text { margin-top: 0.75rem; color: var(--ink-soft); max-width: var(--measure); }
 
 .read-more {

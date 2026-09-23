@@ -21,6 +21,8 @@ ui:
   home:       { pt: "Início",           en: "Home" }
   article:    { pt: "ARTIGO",           en: "ARTICLE" }
   fresh:      { pt: "NOVO",             en: "NEW" }
+  featured:   { pt: "DESTAQUE",         en: "FEATURED" }
+  read_time:  { pt: "min de leitura",   en: "min read" }
   more:       { pt: "Mostrar mais",     en: "Show more" }
   read_more:  { pt: "Leia mais",        en: "Read more" }
   share:      { pt: "Compartilhar",     en: "Share" }
