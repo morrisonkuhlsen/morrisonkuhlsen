@@ -2,9 +2,11 @@
 {%- assign ui = site.data.site.ui -%}
 {%- assign posts = site.posts | where: "lang", lang -%}
 {%- assign initial = include.limit | default: 3 | plus: 0 -%}
+{%- assign offset = include.offset | default: 0 | plus: 0 -%}
+{%- assign remaining = posts.size | minus: offset -%}
 
 <div class="grid" style="--min: 20rem">
-  {%- for post in posts -%}
+  {%- for post in posts offset: offset -%}
     <article class="post-card post-item" {% if forloop.index > initial %}hidden{% endif %}>
       {%- if post.image -%}
         <a href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
@@ -14,7 +16,7 @@
       {%- endif -%}
       <div class="post-card__body">
         <div class="post-card__meta">
-          {%- if forloop.first %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
+          {%- if forloop.first and offset == 0 %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
           <span class="post-card__label">{{ ui.article[lang] }}</span>
           <time datetime="{{ post.date | date_to_xmlschema }}">
             {{ post.date | date: "%-d/%m/%Y" }}
@@ -29,7 +31,7 @@
   {%- endfor -%}
 </div>
 
-{%- if posts.size > initial -%}
+{%- if remaining > initial -%}
   <p style="text-align:center;margin-top:2.5rem">
     <button class="btn btn--primary" type="button" data-show-more="3">{{ ui.more[lang] }}</button>
   </p>

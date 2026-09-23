@@ -1,0 +1,30 @@
+{%- comment -%}
+  Card de destaque da home: sempre a última postagem do blog neste idioma.
+  A grade logo abaixo (post-list.html com offset=1) começa do segundo post,
+  então o destaque não aparece duas vezes.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign ui = site.data.site.ui -%}
+{%- assign latest = site.posts | where: "lang", lang | first -%}
+<div class="feature-card feature-card--overlap{% if latest.image %} feature-card--media{% endif %}" id="{{ include.id }}">
+  {%- if latest.image -%}
+    <a class="feature-card__media" href="{{ latest.url | relative_url }}" tabindex="-1" aria-hidden="true">
+      <img src="{{ latest.image | relative_url }}" alt="" width="800" height="500">
+    </a>
+  {%- endif -%}
+  <div class="feature-card__body">
+    <div class="post-card__meta">
+      <span class="post-card__badge">{{ ui.fresh[lang] }}</span>
+      <span class="post-card__label">{{ ui.article[lang] }}</span>
+      <time datetime="{{ latest.date | date_to_xmlschema }}">{{ latest.date | date: "%-d/%m/%Y" }}</time>
+    </div>
+    <h2 class="feature-card__title">
+      <a href="{{ latest.url | relative_url }}">{{ latest.title }}</a>
+    </h2>
+    <p class="feature-card__text">{{ latest.description | default: latest.excerpt | strip_html | truncatewords: 60 }}</p>
+    <a class="read-more" href="{{ latest.url | relative_url }}">
+      {{ ui.read_more[lang] }}
+      <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+    </a>
+  </div>
+</div>

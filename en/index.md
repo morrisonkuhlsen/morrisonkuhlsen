@@ -21,15 +21,4 @@ hero_slideshow:
   - { src: /assets/images/cartas.png,    alt: "Playing cards" }
 ---
 
-{%- comment -%}
-  Card de destaque: sempre a última postagem do blog neste idioma.
-{%- endcomment -%}
-{%- assign latest = site.posts | where: "lang", page.lang | first -%}
-<div class="feature-card feature-card--overlap" id="articles">
-  <h2 class="feature-card__title">{{ latest.title }}</h2>
-  <p class="feature-card__text">{{ latest.description | default: latest.excerpt | strip_html | truncatewords: 60 }}</p>
-  <a class="read-more" href="{{ latest.url | relative_url }}">
-    Read more
-    <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
-  </a>
-</div>
+{%- include feature-post.html id="articles" -%}

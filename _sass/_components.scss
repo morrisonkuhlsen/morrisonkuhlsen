@@ -97,11 +97,32 @@
    no celular o hero é curto e o card cobriria o botão. */
 .feature-card--overlap { position: relative; z-index: 2; }
 
+/* No escuro, --paper é a cor da página e o card sumiria nela. */
+:root[data-theme="dark"] .feature-card--overlap { background: var(--paper-alt); }
+
 @media (min-width: 48rem) {
   .feature-card--overlap { margin-top: -4rem; }
 }
 
+/* Com imagem: foto em cima no celular, ao lado do texto no desktop. */
+.feature-card--media { display: grid; gap: 1.5rem; }
+
+@media (min-width: 48rem) {
+  .feature-card--media { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); align-items: center; gap: 2.5rem; }
+}
+
+.feature-card__media img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+
+.feature-card__body .post-card__meta { margin-bottom: 0.75rem; }
+
 .feature-card__title { font-size: var(--step-2); font-weight: 700; line-height: 1.2; }
+.feature-card__title a { color: inherit; text-decoration: none; }
+.feature-card__title a:hover { text-decoration: underline; }
 .feature-card__text { margin-top: 0.75rem; color: var(--ink-soft); max-width: var(--measure); }
 
 .read-more {
