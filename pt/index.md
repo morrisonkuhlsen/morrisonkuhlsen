@@ -23,10 +23,14 @@ hero_slideshow:
   - { src: /assets/images/mkh-background-2.png, alt: "" }
 ---
 
+{%- comment -%}
+  Card de destaque: sempre a última postagem do blog neste idioma.
+{%- endcomment -%}
+{%- assign latest = site.posts | where: "lang", page.lang | first -%}
 <div class="feature-card feature-card--overlap" id="artigos">
-  <h2 class="feature-card__title">Alfabeto Grego: a linguagem dos símbolos em Estatística, Probabilidade e Matemática</h2>
-  <p class="feature-card__text">O alfabeto grego aparece o tempo todo nas fórmulas — de parâmetros e distribuições (μ, σ, λ) a testes e hipóteses (α, β) e constantes (π). Nesta página didática, você encontra cada letra em maiúscula e minúscula, seu nome, pronúncia e os usos mais comuns em estatística/probabilidade e matemática.</p>
-  <a class="read-more" href="/greek-alphabet.html">
+  <h2 class="feature-card__title">{{ latest.title }}</h2>
+  <p class="feature-card__text">{{ latest.description | default: latest.excerpt | strip_html | truncatewords: 60 }}</p>
+  <a class="read-more" href="{{ latest.url | relative_url }}">
     Leia mais
     <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
   </a>
