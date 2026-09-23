@@ -57,8 +57,12 @@
 
 /* No fundo branco a mesma marca pesa mais, porque o contraste é maior. */
 .site-header:not(.is-over-hero)::after,
-.site-header.is-over-hero:hover::after,
 .site-header.is-scrolled::after { opacity: 0.05; }
+
+/* No hover a marca sai de cena junto com o degradê: os dois levam 0,3s, então
+   o header resolve em branco limpo em vez de trocar fórmulas claras por
+   escuras no meio da transição. */
+.site-header.is-over-hero:hover::after { opacity: 0; }
 
 .site-header > * { position: relative; }
 
