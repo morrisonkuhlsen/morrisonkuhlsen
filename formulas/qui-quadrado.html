@@ -61,6 +61,31 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora (teste de aderência) e exemplo resolvido; estado em ?o=&e=. -->
+    <section class="calc" data-calc="chi" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um dado foi lançado 60 vezes e as faces de 1 a 6 saíram 8, 12, 9, 11, 6 e 14 vezes. Ele é honesto? Troque os valores para testar o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Frequências observadas <i>O<sub>i</sub></i></span>
+          <input name="o" type="text" inputmode="decimal" value="8 12 9 11 6 14" data-list autocomplete="off" spellcheck="false">
+          <small>Uma por categoria, separadas por espaço ou ponto e vírgula.</small>
+        </label>
+        <label class="calc-field wide" data-tone="4">
+          <span>Frequências esperadas <i>E<sub>i</sub></i></span>
+          <input name="e" type="text" inputmode="decimal" value="" placeholder="em branco: todas as categorias igualmente prováveis" data-list data-optional autocomplete="off" spellcheck="false">
+          <small>Contagens que somem o mesmo que as observadas, ou proporções que somem 1.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

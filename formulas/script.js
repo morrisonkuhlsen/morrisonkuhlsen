@@ -280,6 +280,41 @@
       / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
   }
 
+  // Gama incompleta superior regularizada Q(a, x): série para x < a + 1,
+  // fração contínua acima disso (Numerical Recipes, gammq).
+  function gammaQ(a, x) {
+    if (x <= 0) return 1;
+    const lnPre = a * Math.log(x) - x - lgamma(a);
+    if (x < a + 1) {
+      let sum = 1 / a, term = sum;
+      for (let n = 1; n < 500; n++) {
+        term *= x / (a + n);
+        sum += term;
+        if (Math.abs(term) < Math.abs(sum) * 1e-14) break;
+      }
+      return 1 - sum * Math.exp(lnPre);
+    }
+    let b = x + 1 - a, c = 1e300, d = 1 / b, h = d;
+    for (let i = 1; i < 500; i++) {
+      const an = -i * (i - a);
+      b += 2;
+      d = an * d + b;
+      d = Math.abs(d) < 1e-300 ? 1e-300 : d;
+      c = b + an / c;
+      c = Math.abs(c) < 1e-300 ? 1e-300 : c;
+      d = 1 / d;
+      const del = d * c;
+      h *= del;
+      if (Math.abs(del - 1) < 1e-14) break;
+    }
+    return Math.exp(lnPre) * h;
+  }
+
+  // Valor-p da qui-quadrado: P(χ² ≥ x) com df graus de liberdade.
+  const chiSurvival = (x, df) => gammaQ(df / 2, x / 2);
+
+  const pValueText = p => (p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`);
+
   const CALCS = {
     zscore({ x, mu, sd }) {
       if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
@@ -325,7 +360,6 @@
       const R = tone(texNum(root), 5);
       const SE = texNum(se);
 
-      const pTxt = p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`;
       const muTxt = fmt(mu);
       const veredito = p < 0.05
         ? `Ao nível de 5%, rejeita-se H₀: há evidência de que a média populacional é diferente de ${muTxt}.`
@@ -341,7 +375,7 @@
           ["Subtraia a média hipotética da média amostral:", `t = \\dfrac{${texNum(diff)}}{${SE}}`],
           ["Divida pelo erro padrão:", `t ${approx(t)} ${tone(texNum(t), 1)}`],
         ],
-        note: `Com n − 1 = ${df} graus de liberdade, o valor-p bilateral é ${pTxt}. ${veredito}`
+        note: `Com n − 1 = ${df} ${df === 1 ? "grau" : "graus"} de liberdade, o valor-p bilateral é ${pValueText(p)}. ${veredito}`
           + ` <a href="/ttable.html?t=${Math.abs(t).toFixed(3)}&amp;df=${df}">Conferir na tabela t</a>.`,
       };
     },
@@ -380,6 +414,70 @@
           + ` O valor crítico foi arredondado para duas casas, como na tabela Z.`,
       };
     },
+
+    // Teste de aderência. As esperadas podem vir como contagens, como
+    // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
+    chi({ o, e }) {
+      const k = o.length;
+      if (k < 2) return { error: "Informe as frequências observadas de pelo menos duas categorias." };
+      if (k > 50) return { error: "Use no máximo 50 categorias." };
+      if (o.some(x => x < 0)) return { error: "As frequências observadas não podem ser negativas." };
+      const total = o.reduce((s, x) => s + x, 0);
+      if (total <= 0) return { error: "As frequências observadas precisam somar mais que zero." };
+
+      let exp, step1;
+      if (!e.length) {
+        exp = o.map(() => total / k);
+        step1 = ["Sem esperadas informadas, a hipótese é de categorias igualmente prováveis: divida o total pelo número de categorias.",
+          `E_i = \\dfrac{${texNum(total)}}{${k}} ${approx(total / k)} ${tone(texNum(total / k), 4)}`];
+      } else {
+        if (e.length !== k) return { error: `Há ${k} observadas e ${e.length} esperadas; as listas precisam ter o mesmo tamanho.` };
+        if (e.some(x => x <= 0)) return { error: "As frequências esperadas precisam ser maiores que zero." };
+        const se = e.reduce((s, x) => s + x, 0);
+        if (Math.abs(se - 1) < 1e-6) {
+          exp = e.map(p => p * total);
+          step1 = ["As esperadas foram dadas como proporções: multiplique cada uma pelo total observado.",
+            `E_i = p_i \\cdot ${texNum(total)}`];
+        } else if (Math.abs(se - total) <= 0.01 * total) {
+          exp = e;
+          step1 = ["Use as frequências esperadas informadas; elas somam o mesmo que as observadas.",
+            `\\textstyle\\sum E_i ${approx(se)} ${texNum(se)} = \\sum O_i`];
+        } else {
+          return { error: `As esperadas somam ${fmt(se)} e as observadas, ${fmt(total)}. Elas precisam somar o mesmo — ou dê as esperadas como proporções que somam 1.` };
+        }
+      }
+
+      const parts = o.map((x, i) => (x - exp[i]) ** 2 / exp[i]);
+      const chi2 = parts.reduce((s, x) => s + x, 0);
+      const df = k - 1;
+      const p = chiSurvival(chi2, df);
+
+      const rows = o.map((x, i) =>
+        `${i + 1} & ${tone(texNum(x), 3)} & ${tone(texNum(exp[i]), 4)} & `
+        + `\\dfrac{(${texNum(x)} - ${paren(exp[i], texNum(exp[i]))})^2}{${texNum(exp[i])}} ${approx(parts[i])} ${texNum(parts[i])}`
+      ).join(" \\\\[0.6em] ");
+      const table = `\\begin{array}{c|c|c|l} i & O_i & E_i & (O_i - E_i)^2 / E_i \\\\ \\hline ${rows} \\end{array}`;
+      const sum = k <= 8
+        ? `\\chi^2 = ${parts.map(x => texNum(x)).join(" + ")} ${approx(chi2)} ${tone(texNum(chi2), 1)}`
+        : `\\chi^2 = \\textstyle\\sum \\dfrac{(O_i - E_i)^2}{E_i} ${approx(chi2)} ${tone(texNum(chi2), 1)}`;
+
+      const veredito = p < 0.05
+        ? "Ao nível de 5%, rejeita-se H₀: as frequências observadas diferem das esperadas mais do que o acaso explicaria."
+        : "Ao nível de 5%, não se rejeita H₀: as diferenças entre observadas e esperadas são compatíveis com o acaso.";
+      const pequenas = exp.some(x => x < 5)
+        ? " <strong>Atenção:</strong> há frequência esperada menor que 5, e com ela a aproximação pela qui-quadrado fica pouco confiável. Junte categorias ou aumente a amostra."
+        : "";
+
+      return {
+        result: `\\chi^2 ${approx(chi2)} ${tone(texNum(chi2), 1)}`,
+        steps: [
+          step1,
+          ["Calcule a parcela de cada categoria:", table],
+          ["Some as parcelas:", sum],
+        ],
+        note: `Com k − 1 = ${df} ${df === 1 ? "grau" : "graus"} de liberdade, o valor-p é ${pValueText(p)}. ${veredito}${pequenas}`,
+      };
+    },
   };
 
   function initCalc(section) {
@@ -392,12 +490,19 @@
     const math = (el, src) => (window.katex ? katex.render(src, el, opts) : (el.textContent = src));
     // Aceita vírgula decimal, sinal tipográfico −, espaços de milhar e um % no fim.
     const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/[\s%]/g, "").replace("−", "-").replace(",", ".")));
+    // Campo com data-list vira um array, separado por espaço ou ponto e vírgula
+    // (a vírgula é a decimal). Com data-optional, pode ficar vazio.
+    const read = i => {
+      if (!("list" in i.dataset)) return parse(i.value);
+      const xs = i.value.split(/[\s;]+/).filter(Boolean).map(parse);
+      return xs.some(Number.isNaN) || (!xs.length && !("optional" in i.dataset)) ? NaN : xs;
+    };
 
     const params = new URLSearchParams(location.search);
     inputs.forEach(i => { if (params.has(i.name)) i.value = params.get(i.name); });
 
     function update() {
-      const v = Object.fromEntries(inputs.map(i => [i.name, parse(i.value)]));
+      const v = Object.fromEntries(inputs.map(i => [i.name, read(i)]));
       inputs.forEach(i => i.setAttribute("aria-invalid", String(Number.isNaN(v[i.name]))));
       const out = Object.values(v).some(Number.isNaN)
         ? { error: "Preencha todos os campos com números." }
