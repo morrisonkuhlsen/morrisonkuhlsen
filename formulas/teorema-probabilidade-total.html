@@ -56,6 +56,31 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?pa=&pb=, em %. -->
+    <section class="calc" data-calc="total" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma fábrica tem três máquinas, que produzem 50%, 30% e 20% das peças, com taxas de defeito de 1%, 2% e 3%. Qual a chance de uma peça escolhida ao acaso ser defeituosa? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="4">
+          <span>Probabilidade de cada cenário <i>P(A<sub>i</sub>)</i> (%)</span>
+          <input name="pa" type="text" inputmode="decimal" value="50 30 20" data-list autocomplete="off" spellcheck="false">
+          <small>Os cenários precisam cobrir todos os casos sem se sobrepor: somam 100%.</small>
+        </label>
+        <label class="calc-field wide" data-tone="3">
+          <span>Probabilidade de B em cada cenário <i>P(B|A<sub>i</sub>)</i> (%)</span>
+          <input name="pb" type="text" inputmode="decimal" value="1 2 3" data-list autocomplete="off" spellcheck="false">
+          <small>Na mesma ordem dos cenários acima.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

@@ -60,6 +60,33 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?N=&nb=&nab=. -->
+    <section class="calc" data-calc="cond" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: numa turma de 40 alunos, 25 fazem inglês e 10 fazem inglês e espanhol. Sorteando um aluno que faz inglês, qual a chance de ele também fazer espanhol? Aqui A é “faz espanhol” e B é “faz inglês”. Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>Total de casos</span>
+          <input name="N" type="text" inputmode="numeric" value="40" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Casos de B</span>
+          <input name="nb" type="text" inputmode="numeric" value="25" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Casos de A e B juntos</span>
+          <input name="nab" type="text" inputmode="numeric" value="10" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

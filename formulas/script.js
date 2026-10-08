@@ -803,6 +803,62 @@
       };
     },
 
+    cond({ N, nb, nab }) {
+      if ([N, nb, nab].some(v => !Number.isInteger(v) || v < 0)) return { error: "Use contagens inteiras e não negativas." };
+      if (nb === 0) return { error: "Sem nenhum caso de B, não há como condicionar em B." };
+      if (nb > N) return { error: "Os casos de B não podem passar do total." };
+      if (nab > nb) return { error: "Os casos de A e B juntos não podem passar dos casos de B." };
+      const pab = nab / N, pb = nb / N, c = nab / nb;
+      const n6 = v => texNum(v, 6);
+      return {
+        result: `P(A\\mid B) ${approx(c, 6)} ${tone(`${texNum(c * 100, 2)}\\%`, 1)}`,
+        steps: [
+          ["Transforme as contagens em probabilidades, dividindo pelo total:",
+            `P(A \\cap B) = \\dfrac{${nab}}{${N}} ${approx(pab, 6)} ${tone(n6(pab), 2)}, \\qquad P(B) = \\dfrac{${nb}}{${N}} ${approx(pb, 6)} ${tone(n6(pb), 4)}`],
+          ["Divida a interseção pela probabilidade de B:",
+            `P(A\\mid B) = \\dfrac{${tone(n6(pab), 2)}}{${tone(n6(pb), 4)}} ${approx(c, 6)} ${tone(n6(c), 1)}`],
+          ["Repare que o total se cancela: dá o mesmo dividir as contagens direto.",
+            `P(A\\mid B) = \\dfrac{${tone(nab, 2)}}{${tone(nb, 4)}} ${approx(c, 6)} ${tone(n6(c), 1)}`],
+        ],
+        note: `Condicionar em B é trocar o universo: em vez dos ${fmt(N)} casos, só contam os ${fmt(nb)} em que B aconteceu, e entre eles A aparece ${fmt(nab)} vezes.`
+          + ` Sem a condição, a chance de A e B juntos seria só ${fmt(pab * 100, 2)}%.`,
+      };
+    },
+
+    total({ pa, pb }) {
+      const k = pa.length;
+      if (k < 2) return { error: "Informe pelo menos dois cenários." };
+      if (pb.length !== k) return { error: `Há ${k} cenários e ${pb.length} probabilidades de B; as listas precisam ter o mesmo tamanho.` };
+      if (k > 30) return { error: "Use no máximo 30 cenários." };
+      if ([...pa, ...pb].some(v => v < 0 || v > 100)) return { error: "As probabilidades precisam estar entre 0 e 100%." };
+      const sumA = pa.reduce((s, v) => s + v, 0);
+      if (Math.abs(sumA - 100) > 0.01) return { error: `Os cenários somam ${fmt(sumA, 2)}%, e precisam somar 100%: juntos, eles cobrem todos os casos.` };
+      const a = pa.map(v => v / 100), b = pb.map(v => v / 100);
+      const prods = a.map((v, i) => v * b[i]);
+      const total = prods.reduce((s, v) => s + v, 0);
+      const n6 = v => texNum(v, 6);
+      const table = `\\begin{array}{c|c|c|c} i & P(A_i) & P(B\\mid A_i) & P(B\\mid A_i)\\,P(A_i) \\\\ \\hline `
+        + a.map((v, i) => `${i + 1} & ${tone(n6(v), 4)} & ${tone(n6(b[i]), 3)} & ${n6(prods[i])}`).join(" \\\\ ")
+        + ` \\end{array}`;
+      const sumLine = k <= 6
+        ? `P(B) = ${prods.map(n6).join(" + ")} ${approx(total, 6)} ${tone(n6(total), 1)}`
+        : `P(B) = \\textstyle\\sum_i P(B\\mid A_i)\\,P(A_i) ${approx(total, 6)} ${tone(n6(total), 1)}`;
+      let note = `${fmt(total * 100, 2)}% dos casos têm B, juntando todos os cenários.`;
+      if (total > 0) {
+        const post = prods.map(v => `${fmt(v / total * 100, 1)}%`);
+        note += ` E dado que B aconteceu, de que cenário ele veio? É o <a href="teorema-bayes.html">Teorema de Bayes</a>, com P(B) no denominador:`
+          + ` cada produto dividido por ${fmt(total, 6)} dá ${post.length > 1 ? `${post.slice(0, -1).join(", ")} e ${post[post.length - 1]}` : post[0]}, na ordem dos cenários.`;
+      }
+      return {
+        result: `P(B) ${approx(total, 6)} ${tone(`${texNum(total * 100, 2)}\\%`, 1)}`,
+        steps: [
+          ["Escreva as porcentagens como probabilidades e multiplique cada par:", table],
+          ["Some os produtos:", sumLine],
+        ],
+        note,
+      };
+    },
+
     // Teste de aderência. As esperadas podem vir como contagens, como
     // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
     chi({ o, e }) {
