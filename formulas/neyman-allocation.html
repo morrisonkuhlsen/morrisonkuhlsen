@@ -64,6 +64,35 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?n=&Nh=&sh=. -->
+    <section class="calc" data-calc="neyman" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma empresa quer estimar o salário médio entrevistando 200 funcionários. Ela tem três setores: operacional (1.000 pessoas, desvio padrão de R$ 300), administrativo (400 pessoas, R$ 800) e diretoria (100 pessoas, R$ 3.000). Quantos entrevistar em cada um? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Amostra total <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="200" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="3">
+          <span>Tamanho de cada estrato <i>N<sub>h</sub></i></span>
+          <input name="Nh" type="text" inputmode="decimal" value="1000 400 100" data-list autocomplete="off" spellcheck="false">
+          <small>Um por estrato, separados por espaço ou ponto e vírgula.</small>
+        </label>
+        <label class="calc-field wide" data-tone="5">
+          <span>Desvio padrão de cada estrato <i>σ<sub>h</sub></i></span>
+          <input name="sh" type="text" inputmode="decimal" value="300 800 3000" data-list autocomplete="off" spellcheck="false">
+          <small>Na mesma ordem dos estratos acima.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

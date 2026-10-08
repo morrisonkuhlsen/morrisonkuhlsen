@@ -205,7 +205,7 @@
 
   const nf = d => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: d });
   const fmt = (n, d = 4) => nf(d).format(n === 0 ? 0 : n); // evita "-0"
-  const texNum = (n, d = 4) => fmt(n, d).replace(/\./g, "").replace(",", "{,}");
+  const texNum = (n, d = 4) => fmt(n, d).replace(/\./g, "{.}").replace(",", "{,}");
   const tone = (t, n) => `\\htmlData{tone=${n}}{${t}}`;
   // Negativo dentro de uma subtração ou fração vai entre parênteses.
   const paren = (n, t) => (n < 0 ? `\\left(${t}\\right)` : t);
@@ -321,6 +321,19 @@
   // Tamanho de amostra sempre arredonda para cima; a folga absorve o ruído do
   // ponto flutuante (400,0000000001 não pode virar 401).
   const ceilInt = x => Math.ceil(x - 1e-9);
+
+  // Reparte um total inteiro proporcionalmente aos pesos pelo método dos
+  // maiores restos: arredonda tudo para baixo e dá as unidades que sobram a
+  // quem tem a maior parte fracionária. Assim as partes somam o total.
+  function apportion(total, weights) {
+    const sum = weights.reduce((s, w) => s + w, 0);
+    const exact = weights.map(w => total * w / sum);
+    const out = exact.map(x => Math.floor(x + 1e-9));
+    let left = total - out.reduce((s, x) => s + x, 0);
+    exact.map((x, i) => [x - out[i], i]).sort((a, b) => b[0] - a[0])
+      .forEach(([, i]) => { if (left > 0) { out[i]++; left--; } });
+    return { exact, out };
+  }
 
   const confError = { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
 
@@ -479,6 +492,57 @@
       };
     },
 
+    neyman({ n, Nh, sh }) {
+      const k = Nh.length;
+      if (!Number.isInteger(n) || n < 1) return { error: "A amostra total precisa ser um inteiro positivo." };
+      if (k < 2) return { error: "Informe o tamanho de pelo menos dois estratos." };
+      if (sh.length !== k) return { error: `Há ${k} tamanhos de estrato e ${sh.length} desvios padrão; as listas precisam ter o mesmo tamanho.` };
+      if (k > 30) return { error: "Use no máximo 30 estratos." };
+      if (Nh.some(x => x <= 0)) return { error: "O tamanho de cada estrato precisa ser maior que zero." };
+      if (sh.some(x => x < 0)) return { error: "Os desvios padrão não podem ser negativos." };
+      const prods = Nh.map((x, i) => x * sh[i]);
+      const sum = prods.reduce((s, x) => s + x, 0);
+      if (sum <= 0) return { error: "Pelo menos um estrato precisa ter desvio padrão maior que zero." };
+      const totalN = Nh.reduce((s, x) => s + x, 0);
+      if (n > totalN) return { error: `A amostra total (${fmt(n)}) é maior que a população (${fmt(totalN)}).` };
+
+      const ney = apportion(n, prods);
+      const prop = apportion(n, Nh);
+      const sumTex = texNum(sum);
+
+      const t1 = `\\begin{array}{c|c|c|r} h & N_h & \\sigma_h & N_h \\cdot \\sigma_h \\\\ \\hline `
+        + Nh.map((x, i) => `${i + 1} & ${tone(texNum(x), 3)} & ${tone(texNum(sh[i]), 5)} & ${texNum(prods[i])}`).join(" \\\\ ")
+        + ` \\end{array}`;
+      const sumLine = k <= 6
+        ? `\\textstyle\\sum (N_h \\cdot \\sigma_h) = ${prods.map(x => texNum(x)).join(" + ")} = ${tone(sumTex, 4)}`
+        : `\\textstyle\\sum (N_h \\cdot \\sigma_h) = ${tone(sumTex, 4)}`;
+      const t2 = `\\def\\arraystretch{2.4}\\begin{array}{c|l|c} h & n_h = n \\cdot N_h\\sigma_h / \\Sigma & \\text{arredondado} \\\\ \\hline `
+        + prods.map((x, i) =>
+          `${i + 1} & ${tone(texNum(n), 2)} \\cdot \\dfrac{${texNum(x)}}{${tone(sumTex, 4)}} ${approx(ney.exact[i], 2)} ${texNum(ney.exact[i], 2)} & ${tone(texNum(ney.out[i]), 1)}`
+        ).join(" \\\\ ")
+        + ` \\end{array}`;
+
+      const list = xs => xs.length > 1 ? `${xs.slice(0, -1).join(", ")} e ${xs[xs.length - 1]}` : xs[0];
+      const over = ney.out.map((x, i) => x > Nh[i] ? i + 1 : 0).filter(Boolean);
+      let note = `Na alocação proporcional, que olha só o tamanho dos estratos, seriam ${list(prop.out.map(x => fmt(x)))}.`
+        + " A de Neyman desloca a amostra para os estratos onde a variável varia mais, o que dá a menor variância para a média estimada com o mesmo n.";
+      note += " Os arredondamentos usam o método dos maiores restos, para que a soma dê exatamente n.";
+      if (over.length) {
+        note += ` <strong>Atenção:</strong> no estrato ${list(over.map(String))}, a alocação passa do tamanho do próprio estrato.`
+          + " Nesse caso, entreviste o estrato inteiro e redistribua o restante entre os outros.";
+      }
+
+      return {
+        result: `n_h = ${tone(ney.out.map(x => texNum(x)).join(",\\ "), 1)}`,
+        steps: [
+          ["Multiplique o tamanho de cada estrato pelo seu desvio padrão:", t1],
+          ["Some os produtos:", sumLine],
+          ["Divida a amostra total na proporção de cada produto e arredonde:", t2],
+        ],
+        note,
+      };
+    },
+
     // Teste de aderência. As esperadas podem vir como contagens, como
     // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
     chi({ o, e }) {
@@ -519,8 +583,8 @@
       const rows = o.map((x, i) =>
         `${i + 1} & ${tone(texNum(x), 3)} & ${tone(texNum(exp[i]), 4)} & `
         + `\\dfrac{(${texNum(x)} - ${paren(exp[i], texNum(exp[i]))})^2}{${texNum(exp[i])}} ${approx(parts[i])} ${texNum(parts[i])}`
-      ).join(" \\\\[0.6em] ");
-      const table = `\\begin{array}{c|c|c|l} i & O_i & E_i & (O_i - E_i)^2 / E_i \\\\ \\hline ${rows} \\end{array}`;
+      ).join(" \\\\ ");
+      const table = `\\def\\arraystretch{2.4}\\begin{array}{c|c|c|l} i & O_i & E_i & (O_i - E_i)^2 / E_i \\\\ \\hline ${rows} \\end{array}`;
       const sum = k <= 8
         ? `\\chi^2 = ${parts.map(x => texNum(x)).join(" + ")} ${approx(chi2)} ${tone(texNum(chi2), 1)}`
         : `\\chi^2 = \\textstyle\\sum \\dfrac{(O_i - E_i)^2}{E_i} ${approx(chi2)} ${tone(texNum(chi2), 1)}`;
