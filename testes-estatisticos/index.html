@@ -1,17 +1,27 @@
+---
+layout: null
+---
+{%- comment -%}
+  Processado pelo Jekyll só para ler _data/testes_estatisticos.yml: a contagem
+  da descrição e a lista "Todos os testes" saem de lá, em HTML estático, para
+  quem não roda JavaScript (buscadores incluídos).
+{%- endcomment -%}
+{%- assign cat = site.data.testes_estatisticos -%}
+{%- capture desc -%}Catálogo de {{ cat.testes | size }} testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula.{%- endcapture -%}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Catálogo de Testes Estatísticos</title>
-  <meta name="description" content="Catálogo de 42 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula.">
+  <meta name="description" content="{{ desc }}">
   <link rel="canonical" href="https://morrisonkuhlsen.com/testes-estatisticos/">
   <!-- OpenGraph / Twitter -->
   <meta property="og:site_name" content="MorrisonKühlsen">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/testes-estatisticos/">
   <meta property="og:title" content="Catálogo de Testes Estatísticos">
-  <meta property="og:description" content="Catálogo de 42 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula.">
+  <meta property="og:description" content="{{ desc }}">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -19,7 +29,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Catálogo de Testes Estatísticos">
-  <meta name="twitter:description" content="Catálogo de 42 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula.">
+  <meta name="twitter:description" content="{{ desc }}">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
 
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
@@ -61,7 +71,7 @@
       </div>
     </div>
 
-    <noscript><p>Esta página precisa de JavaScript para montar a tabela.</p></noscript>
+    <noscript><p>Sem JavaScript a tabela não aparece, mas a lista completa dos testes está logo abaixo.</p></noscript>
 
     <section class="pt-notes">
       <h2>Como ler</h2>
@@ -72,6 +82,25 @@
         <li><strong>Lacunas</strong> são cruzamentos sem um teste de uso corrente.</li>
       </ul>
       <p>Para fazer as contas, veja as <a href="/formulas/">fórmulas interativas</a> e as tabelas <a href="/ztable.html">Z</a>, <a href="/ttable.html">t</a> e <a href="/ftable.html">F</a>.</p>
+    </section>
+
+    <section class="pt-index" aria-labelledby="todos">
+      <h2 id="todos">Todos os testes</h2>
+      {%- for par in cat.familias %}
+      {%- assign fam = par[1] %}
+      {%- assign grupo = cat.testes | where: "fam", par[0] %}
+      <h3 data-cor="{{ fam.cor }}">{{ fam.nome }}{% if fam.sub %} <span>({{ fam.sub }})</span>{% endif %}</h3>
+      <ul>
+        {%- for t in grupo %}
+        <li>
+          <a href="#{{ t.id }}">{{ t.nome | escape }}</a>
+          {%- if t.row %}{% assign i = t.row | minus: 1 %} <span class="pt-index-row">· {{ cat.linhas[i] }}</span>{% endif %}
+          <p>{{ t.quando | escape }}</p>
+          <p><abbr title="Hipótese nula">H₀</abbr>: {{ t.h0 | escape }}</p>
+        </li>
+        {%- endfor %}
+      </ul>
+      {%- endfor %}
     </section>
   </main>
 </body>

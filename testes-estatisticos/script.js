@@ -1,6 +1,7 @@
-/* Monta o catálogo a partir de dados.js e cuida da ficha, da busca e
- * do link direto (#id-do-teste). Os textos vêm do arquivo de dados, que é
- * conteúdo nosso, mas entram com textContent mesmo assim. */
+/* Monta o catálogo a partir de dados.js (gerado de
+ * _data/testes_estatisticos.yml) e cuida da ficha, da busca e do link direto
+ * (#id-do-teste). Os textos vêm do arquivo de dados, que é conteúdo nosso, mas
+ * entram com textContent mesmo assim. */
 (() => {
   const C = window.CATALOGO;
   const grid = document.getElementById("tabela");
@@ -195,8 +196,8 @@
   const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
   const hay = new Map(C.testes.map(t => {
     const fam = C.familias[t.fam];
-    const parts = [t.nome, t.sym, t.quando, t.h0, fam.nome, fam.sub || "", t.row ? C.linhas[t.row - 1] : "",
-      ...t.vars.map(v => v[0])];
+    const parts = [t.nome, t.sym, t.quando, t.h0, t.dist, ...t.pres, fam.nome, fam.sub || "",
+      t.row ? C.linhas[t.row - 1] : "", ...t.vars.map(v => v[0])];
     return [t.id, fold(parts.join(" "))];
   }));
 
@@ -212,8 +213,12 @@
   });
 
   document.addEventListener("keydown", e => { if (e.key === "Escape" && current) select(null, true); });
-  addEventListener("hashchange", () => select(location.hash.slice(1), false));
-
-  select(location.hash.slice(1), false);
-  if (current) tiles.get(current).scrollIntoView({ block: "nearest", inline: "center" });
+  // O hash muda pelos links da lista "Todos os testes", que fica abaixo da
+  // tabela: o teste escolhido precisa voltar à vista junto com a ficha.
+  const fromHash = () => {
+    select(location.hash.slice(1), false);
+    if (current) tiles.get(current).scrollIntoView({ block: "nearest", inline: "center" });
+  };
+  addEventListener("hashchange", fromHash);
+  fromHash();
 })();
