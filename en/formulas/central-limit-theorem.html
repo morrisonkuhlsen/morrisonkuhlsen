@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Central Limit Theorem — Interactive</title>
+  <meta name="description" content="The central limit theorem explained term by term, with a simulation: the histogram of sample means turns into a bell as n grows.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/central-limit-theorem.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/teorema-central-limite.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/central-limit-theorem.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/teorema-central-limite.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/central-limit-theorem.html">
+  <meta property="og:title" content="Central Limit Theorem — Interactive">
+  <meta property="og:description" content="The central limit theorem explained term by term, with a simulation: the histogram of sample means turns into a bell as n grows.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Central Limit Theorem — Interactive">
+  <meta name="twitter:description" content="The central limit theorem explained term by term, with a simulation: the histogram of sample means turns into a bell as n grows.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/teorema-central-limite.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Central Limit Theorem</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive central limit theorem formula">
+        <span class="part" data-part="sample_mean" data-tone="1" data-tex="\bar{X}_n"></span>
+        <span class="part" data-part="approaches" data-tone="0" data-tex="\sim"></span>
+        <span class="part" data-part="normal_dist" data-tone="2" data-tex="\mathcal{N}"></span>
+        <span class="op">(</span>
+        <span class="part" data-part="pop_mean" data-tone="3" data-tex="\mu"></span>
+        <span class="op">,</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="pop_variance" data-tone="4" data-tex="\sigma^2"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="sample_size" data-tone="5" data-tex="n"></span>
+          </span>
+        </span>
+        <span class="op">)</span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Simulação com gráfico; estado em ?mu=&n=. O sorteio usa semente fixa, então os mesmos valores dão o mesmo histograma. -->
+    <section class="calc" data-calc="tcl" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the waiting time at a bus stop follows an exponential distribution, which is quite skewed, with a mean of 10 minutes. The chart shows the means of 2,000 samples of 30 waits each. Change n to watch the bell form, or fall apart when n is small.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Population mean <i>μ</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Size of each sample <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="30" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="sample_mean" data-tone="1">Sample Mean (X̄ₙ)</dt>
+          <dd>The mean of a sample of size 'n' drawn from the population. The theorem describes the distribution of these means.</dd>
+          <dt data-part="approaches" data-tone="0">Is Distributed As (~)</dt>
+          <dd>Means that, as the sample size 'n' grows, the distribution of sample means approaches a normal distribution.</dd>
+          <dt data-part="normal_dist" data-tone="2">Normal Distribution (N)</dt>
+          <dd>A continuous, bell-shaped probability distribution defined by its mean and variance.</dd>
+          <dt data-part="pop_mean" data-tone="3">Population Mean (μ)</dt>
+          <dd>The mean of the whole population. The distribution of sample means is centered on this value.</dd>
+          <dt data-part="pop_variance" data-tone="4">Population Variance (σ²)</dt>
+          <dd>A measure of how spread out the data are across the whole population.</dd>
+          <dt data-part="sample_size" data-tone="5">Sample Size (n)</dt>
+          <dd>The number of observations in each sample. The variance of the distribution of sample means shrinks as 'n' grows.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="normal-distribution.html" rel="prev"><span>Previous</span>Normal (Gaussian) Distribution</a>
+      <a class="pager-next" href="z-score.html" rel="next"><span>Next</span>Z-Score</a>
+    </nav>
+  </main>
+</body>
+</html>

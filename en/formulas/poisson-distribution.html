@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Poisson Distribution — Interactive</title>
+  <meta name="description" content="The Poisson distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/poisson-distribution.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-poisson.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/poisson-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-poisson.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/poisson-distribution.html">
+  <meta property="og:title" content="Poisson Distribution — Interactive">
+  <meta property="og:description" content="The Poisson distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Poisson Distribution — Interactive">
+  <meta name="twitter:description" content="The Poisson distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/distribuicao-poisson.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Poisson Distribution</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive Poisson distribution formula">
+        <span class="part" data-part="p_k" data-tone="1" data-tex="P(X=k)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="lambda_k" data-tone="2" data-tex="\lambda^k"></span>
+            <span class="op">·</span>
+            <span class="part" data-part="e_lambda" data-tone="3" data-tex="e^{-\lambda}"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="k_factorial_poisson" data-tone="4" data-tex="k!"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?lambda=&k=. -->
+    <section class="calc" data-calc="poisson" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a call center receives an average of 4 calls per minute. What is the chance that exactly 6 arrive in a minute? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Mean rate <i>λ</i></span>
+          <input name="lambda" type="text" inputmode="decimal" value="4" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Occurrences <i>k</i></span>
+          <input name="k" type="text" inputmode="numeric" value="6" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="p_k" data-tone="1">Probability of k Occurrences</dt>
+          <dd>The probability that the event happens exactly 'k' times in an interval.</dd>
+          <dt data-part="lambda_k" data-tone="2">Mean Rate (λ) to the Power k</dt>
+          <dd>Lambda (λ) is the mean rate at which the event occurs. This term scales the rate to the specific number of occurrences 'k'.</dd>
+          <dt data-part="e_lambda" data-tone="3">Exponential of the Negative Mean Rate</dt>
+          <dd>Euler's number (e) raised to -λ. This term is the probability of no occurrences, the base of the calculation.</dd>
+          <dt data-part="k_factorial_poisson" data-tone="4">k Factorial</dt>
+          <dd>The factorial of the number of occurrences 'k'. It normalizes the distribution, accounting for the different ways the 'k' occurrences can be arranged.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="binomial-distribution.html" rel="prev"><span>Previous</span>Binomial Distribution</a>
+      <a class="pager-next" href="normal-distribution.html" rel="next"><span>Next</span>Normal (Gaussian) Distribution</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Harmonic Mean — Interactive</title>
+  <meta name="description" content="The harmonic mean explained term by term, with a calculator, step-by-step working and a comparison with the arithmetic mean.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/harmonic-mean.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/media-harmonica.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/harmonic-mean.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/media-harmonica.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/harmonic-mean.html">
+  <meta property="og:title" content="Harmonic Mean — Interactive">
+  <meta property="og:description" content="The harmonic mean explained term by term, with a calculator, step-by-step working and a comparison with the arithmetic mean.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Harmonic Mean — Interactive">
+  <meta name="twitter:description" content="The harmonic mean explained term by term, with a calculator, step-by-step working and a comparison with the arithmetic mean.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/media-harmonica.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Harmonic Mean</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive harmonic mean formula">
+        <span class="part" data-part="h_mean" data-tone="1" data-tex="H"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="n_total" data-tone="2" data-tex="n"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="sum_reciprocals" data-tone="3" data-tex="\sum_{i=1}^{n} \frac{1}{x_i}"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora e exemplo resolvido; estado em ?x=. -->
+    <section class="calc" data-calc="harm" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a car drives from one town to another at 60 km/h and comes back the same way at 40 km/h. What was the average speed of the trip? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Values <i>x<sub>i</sub></i></span>
+          <input name="x" type="text" inputmode="decimal" value="60 40" data-list autocomplete="off" spellcheck="false">
+          <small>All positive, separated by spaces or commas.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="h_mean" data-tone="1">Harmonic Mean (H)</dt>
+          <dd>A kind of average suited to sets of rates, such as speeds. It is the number of observations divided by the sum of the reciprocals of each observation.</dd>
+          <dt data-part="n_total" data-tone="2">Total Number of Observations (n)</dt>
+          <dd>The total count of values or observations in the data.</dd>
+          <dt data-part="sum_reciprocals" data-tone="3">Sum of the Reciprocals (Σ 1/xᵢ)</dt>
+          <dd>The sum of the inverse of each value (xᵢ) in the data. The reciprocal of a number is 1 divided by that number.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="linear-regression.html" rel="prev"><span>Previous</span>Simple Linear Regression</a>
+      <a class="pager-next" href="quadratic-formula.html" rel="next"><span>Next</span>Quadratic Formula</a>
+    </nav>
+  </main>
+</body>
+</html>

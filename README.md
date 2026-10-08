@@ -166,6 +166,16 @@ propósito. Para entrarem na busca há `_data/standalone.yml`, gerado a partir
 do `<title>` e do `<meta description>` de cada arquivo; regenere-o quando
 adicionar uma página nova.
 
+**Fórmulas em inglês.** `/en/formulas/` é gerado a partir das páginas em
+português por `scripts/gera-formulas-en.py`, com as traduções em
+`scripts/formulas_en_data.py`. Depois de editar uma página de `/formulas/`,
+atualize a tradução correspondente e rode `python3 scripts/gera-formulas-en.py`;
+o script falha se algum texto esperado não for encontrado, em vez de deixar
+português na versão inglesa. As duas versões usam o mesmo `script.js`, que lê
+o idioma do `<html lang>`: os textos gerados (passos, notas, erros) estão em
+`T("pt", "en")`, e números, decimais e listas seguem o idioma — em inglês, a
+vírgula separa milhar e itens de lista.
+
 **Glossário.** `/pt/glossario`, montado por `glossary.html` a partir de
 `_data/glossario.yml` — 71 verbetes de uma ou duas frases, cada um com âncora
 própria e links para o artigo que aprofunda o termo. Cada item traz `ordem`, a

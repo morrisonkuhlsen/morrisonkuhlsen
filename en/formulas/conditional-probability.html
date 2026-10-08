@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Conditional Probability — Interactive</title>
+  <meta name="description" content="Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/conditional-probability.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/probabilidade-condicional.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/conditional-probability.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/probabilidade-condicional.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/conditional-probability.html">
+  <meta property="og:title" content="Conditional Probability — Interactive">
+  <meta property="og:description" content="Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Conditional Probability — Interactive">
+  <meta name="twitter:description" content="Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/probabilidade-condicional.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Conditional Probability</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive conditional probability formula">
+        <span class="part" data-part="p_a_given_b" data-tone="1" data-tex="P(A\mid B)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="p_intersection" data-tone="2" data-tex="P(A \cap B)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="p_b" data-tone="4" data-tex="P(B)"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora e exemplo resolvido; estado em ?N=&nb=&nab=. -->
+    <section class="calc" data-calc="cond" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: in a class of 40 students, 25 take English and 10 take both English and Spanish. Picking a student who takes English at random, what is the chance they also take Spanish? Here A is “takes Spanish” and B is “takes English”. Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>Total cases</span>
+          <input name="N" type="text" inputmode="numeric" value="40" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Cases of B</span>
+          <input name="nb" type="text" inputmode="numeric" value="25" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Cases of A and B together</span>
+          <input name="nab" type="text" inputmode="numeric" value="10" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="p_a_given_b" data-tone="1">Conditional Probability</dt>
+          <dd>The probability of A happening given that B has already happened. It shows how the occurrence of B affects the probability of A.</dd>
+          <dt data-part="p_intersection" data-tone="2">Probability of the Intersection</dt>
+          <dd>The probability that both A and B happen. It is the overlap between events A and B.</dd>
+          <dt data-part="p_b" data-tone="4">Probability of B</dt>
+          <dd>The probability of event B. It normalizes the formula, keeping the conditional probability between 0 and 1.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="bayes-theorem.html" rel="prev"><span>Previous</span>Bayes&#x27; Theorem</a>
+      <a class="pager-next" href="law-of-total-probability.html" rel="next"><span>Next</span>Law of Total Probability</a>
+    </nav>
+  </main>
+</body>
+</html>

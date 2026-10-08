@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linear Regression — Interactive</title>
+  <meta name="description" content="Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/linear-regression.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/regressao-linear.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/linear-regression.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/regressao-linear.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/linear-regression.html">
+  <meta property="og:title" content="Linear Regression — Interactive">
+  <meta property="og:description" content="Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Linear Regression — Interactive">
+  <meta name="twitter:description" content="Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/regressao-linear.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Simple Linear Regression</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive simple linear regression formula">
+        <span class="part" data-part="y_hat" data-tone="1" data-tex="\hat{y}"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="beta_0" data-tone="2" data-tex="\beta_0"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="beta_1" data-tone="3" data-tex="\beta_1"></span>
+        <span class="part" data-part="x_variable" data-tone="4" data-tex="x"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora e exemplo resolvido; estado em ?x=&y=&x0=. Mesmo exemplo da covariância e de Pearson. -->
+    <section class="calc" data-calc="reg" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: five students studied 1, 2, 3, 4 and 5 hours for an exam and scored 52, 58, 65, 70 and 80. Which line predicts the score from the hours, and what score should someone who studies 4.5 hours expect? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="4">
+          <span>Values of <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1 2 3 4 5" data-list autocomplete="off" spellcheck="false">
+          <small>One value per observation, separated by spaces or commas.</small>
+        </label>
+        <label class="calc-field wide" data-tone="1">
+          <span>Values of <i>y</i></span>
+          <input name="y" type="text" inputmode="decimal" value="52 58 65 70 80" data-list autocomplete="off" spellcheck="false">
+          <small>In the same order as the x values.</small>
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Predict for <i>x</i> =</span>
+          <input name="x0" type="text" inputmode="decimal" value="4.5" placeholder="optional" data-list data-optional autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="y_hat" data-tone="1">Predicted Value (ŷ)</dt>
+          <dd>The estimated value of the dependent variable (Y) for a given value of the independent variable (x).</dd>
+          <dt data-part="beta_0" data-tone="2">Intercept (β₀)</dt>
+          <dd>The predicted value of Y when the independent variable (x) is zero. It is where the regression line crosses the Y axis.</dd>
+          <dt data-part="beta_1" data-tone="3">Slope (β₁)</dt>
+          <dd>The change in the predicted value of Y for each one-unit increase in x. It is the slope of the regression line.</dd>
+          <dt data-part="x_variable" data-tone="4">Independent Variable (x)</dt>
+          <dd>The variable used to predict or explain the variation in the dependent variable (Y).</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="pearson-correlation.html" rel="prev"><span>Previous</span>Pearson Correlation Coefficient (r)</a>
+      <a class="pager-next" href="harmonic-mean.html" rel="next"><span>Next</span>Harmonic Mean</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -152,3 +152,125 @@
   description: "Teste seus conhecimentos sobre testes estatísticos: escolha o teste mais adequado para cada cenário em um quiz interativo de estatística."
   tags: "quiz teste hipótese"
   lang: pt
+
+# Versões em inglês das fórmulas (/en/formulas/), geradas das portuguesas.
+- title: "Interactive Formulas"
+  url: "/en/formulas/"
+  description: "Statistics and probability formulas explained term by term, with calculators, step-by-step working and charts: Bayes, distributions, tests, sampling and more."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Bayes' Theorem"
+  url: "/en/formulas/bayes-theorem.html"
+  description: "Bayes' theorem explained term by term, with a calculator: enter the prior, sensitivity and false positive rate and get the posterior step by step."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Conditional Probability"
+  url: "/en/formulas/conditional-probability.html"
+  description: "Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Law of Total Probability"
+  url: "/en/formulas/law-of-total-probability.html"
+  description: "The law of total probability explained term by term, with a scenario calculator, step by step, and Bayes for each scenario."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Binomial Coefficient"
+  url: "/en/formulas/binomial-coefficient.html"
+  description: "The binomial coefficient C(n, k) explained term by term, with an exact calculator and a step-by-step cancellation of the factorials."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Chebyshev's Theorem"
+  url: "/en/formulas/chebyshev-theorem.html"
+  description: "Chebyshev's theorem explained term by term, with a calculator: the minimum share of the data within μ ± kσ, for any distribution."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Bernoulli Distribution"
+  url: "/en/formulas/bernoulli-distribution.html"
+  description: "The Bernoulli distribution explained term by term, with a calculator, a chart and a step-by-step P(X = k)."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Binomial Distribution"
+  url: "/en/formulas/binomial-distribution.html"
+  description: "The binomial distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Poisson Distribution"
+  url: "/en/formulas/poisson-distribution.html"
+  description: "The Poisson distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Normal (Gaussian) Distribution"
+  url: "/en/formulas/normal-distribution.html"
+  description: "The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Central Limit Theorem"
+  url: "/en/formulas/central-limit-theorem.html"
+  description: "The central limit theorem explained term by term, with a simulation: the histogram of sample means turns into a bell as n grows."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Z-Score"
+  url: "/en/formulas/z-score.html"
+  description: "The z-score explained term by term, with a calculator, step-by-step working and the matching percentile in the normal distribution."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Student's t-Test"
+  url: "/en/formulas/students-t-test.html"
+  description: "Student's t-test explained term by term, with a calculator for the t statistic, degrees of freedom, p-value and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Confidence Interval"
+  url: "/en/formulas/confidence-interval.html"
+  description: "The confidence interval for a mean explained term by term, with a calculator, critical z value, margin of error and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Chi-Square Test (χ²)"
+  url: "/en/formulas/chi-square-test.html"
+  description: "The chi-square goodness-of-fit test explained term by term, with a calculator, a table of terms, p-value and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Cochran's Formula"
+  url: "/en/formulas/cochran-formula.html"
+  description: "Cochran's formula explained term by term, with a calculator for the sample size needed to estimate a proportion, step by step."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Finite Population Correction"
+  url: "/en/formulas/finite-population-correction.html"
+  description: "The finite population correction explained term by term, with a calculator that shrinks the sample size, step by step."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Neyman Allocation"
+  url: "/en/formulas/neyman-allocation.html"
+  description: "Neyman allocation explained term by term, with a calculator that splits the sample across strata and compares it with proportional allocation."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Covariance"
+  url: "/en/formulas/covariance.html"
+  description: "Covariance explained term by term, with a calculator that takes lists of x and y, a table of deviations and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Pearson Correlation Coefficient (r)"
+  url: "/en/formulas/pearson-correlation.html"
+  description: "The Pearson correlation coefficient explained term by term, with a calculator, r², an interpretation of strength and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Simple Linear Regression"
+  url: "/en/formulas/linear-regression.html"
+  description: "Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Harmonic Mean"
+  url: "/en/formulas/harmonic-mean.html"
+  description: "The harmonic mean explained term by term, with a calculator, step-by-step working and a comparison with the arithmetic mean."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Quadratic Formula"
+  url: "/en/formulas/quadratic-formula.html"
+  description: "The quadratic formula explained term by term, with a calculator for real or complex roots and step-by-step working."
+  tags: "formula interactive calculator step by step"
+  lang: en
+- title: "L'Hôpital's Rule"
+  url: "/en/formulas/lhopital-rule.html"
+  description: "L'Hôpital's rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form."
+  tags: "formula interactive calculator step by step"
+  lang: en

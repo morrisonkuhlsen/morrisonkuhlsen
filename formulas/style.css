@@ -134,6 +134,24 @@ body {
   color: var(--text-strong);
 }
 
+/* Troca de idioma, no canto oposto ao "voltar". */
+.lang-link {
+  position: absolute;
+  top: 22px;
+  right: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: .85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+
+.lang-link:hover,
+.lang-link:focus-visible {
+  color: var(--text-strong);
+}
+
 :focus-visible {
   outline: 2px solid var(--tone-2);
   outline-offset: 3px;

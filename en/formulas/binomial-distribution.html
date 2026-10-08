@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Binomial Distribution — Interactive</title>
+  <meta name="description" content="The binomial distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/binomial-distribution.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-binomial.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/binomial-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-binomial.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/binomial-distribution.html">
+  <meta property="og:title" content="Binomial Distribution — Interactive">
+  <meta property="og:description" content="The binomial distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Binomial Distribution — Interactive">
+  <meta name="twitter:description" content="The binomial distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/distribuicao-binomial.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Binomial Distribution</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive binomial distribution formula">
+        <span class="part" data-part="p_x_k" data-tone="1" data-tex="P(X=k)"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="binom_coef" data-tone="2" data-tex="\binom{n}{k}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="p_power_k" data-tone="3" data-tex="p^k"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="q_power_nk" data-tone="4" data-tex="(1-p)^{n-k}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?n=&p=&k=. -->
+    <section class="calc" data-calc="binomial" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the same player, who scores 75% of penalty kicks, takes 10. What is the chance they score exactly 8? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Trials <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Probability of success <i>p</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="75" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Successes <i>k</i></span>
+          <input name="k" type="text" inputmode="numeric" value="8" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="p_x_k" data-tone="1">Probability of k Successes</dt>
+          <dd>The probability of getting exactly 'k' successes in 'n' independent trials, each with probability 'p' of success.</dd>
+          <dt data-part="binom_coef" data-tone="2">Binomial Coefficient</dt>
+          <dd>The number of different ways to choose 'k' successes out of 'n' trials. Computed as C(n, k) = n! / (k! · (n-k)!).</dd>
+          <dt data-part="p_power_k" data-tone="3">Probability of Success (p^k)</dt>
+          <dd>The probability of success 'p' on each trial, raised to the power 'k'. It is the probability that k specific trials are all successes.</dd>
+          <dt data-part="q_power_nk" data-tone="4">Probability of Failure ((1-p)^(n-k))</dt>
+          <dd>The probability of failure (1-p) raised to the power (n-k). It is the probability of (n-k) failures in the remaining trials.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="bernoulli-distribution.html" rel="prev"><span>Previous</span>Bernoulli Distribution</a>
+      <a class="pager-next" href="poisson-distribution.html" rel="next"><span>Next</span>Poisson Distribution</a>
+    </nav>
+  </main>
+</body>
+</html>

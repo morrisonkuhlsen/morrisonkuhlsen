@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Interactive Formulas</title>
+  <meta name="description" content="Statistics and probability formulas explained term by term, with calculators, step-by-step working and charts: Bayes, distributions, tests, sampling and more.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/">
+  <meta property="og:title" content="Interactive Formulas">
+  <meta property="og:description" content="Statistics and probability formulas explained term by term, with calculators, step-by-step working and charts: Bayes, distributions, tests, sampling and more.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Interactive Formulas">
+  <meta name="twitter:description" content="Statistics and probability formulas explained term by term, with calculators, step-by-step working and charts: Bayes, distributions, tests, sampling and more.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card home">
+    <header class="home-header">
+      <h1 class="home-title">Formulas</h1>
+      <p class="home-lede">23 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <label class="filter">
+        <span class="visually-hidden">Filter formulas</span>
+        <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
+      </label>
+    </header>
+      <section class="formula-group">
+        <h2>Probability</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="bayes-theorem.html">
+            <span class="card-tex" data-tex="P(A\mid B) = \dfrac{P(B\mid A) \cdot P(A)}{P(B)}"></span>
+            <span class="card-name">Bayes&#x27; Theorem</span>
+            <span class="card-blurb">Updates the probability of a hypothesis after seeing evidence.</span>
+          </a></li>
+          <li><a class="formula-card" href="conditional-probability.html">
+            <span class="card-tex" data-tex="P(A\mid B) = \dfrac{P(A \cap B)}{P(B)}"></span>
+            <span class="card-name">Conditional Probability</span>
+            <span class="card-blurb">The chance of A when you already know B happened.</span>
+          </a></li>
+          <li><a class="formula-card" href="law-of-total-probability.html">
+            <span class="card-tex" data-tex="P(B) = \sum_{i=1}^{n} P(B\mid A_i) \cdot P(A_i)"></span>
+            <span class="card-name">Law of Total Probability</span>
+            <span class="card-blurb">Adds up the probability of B across every scenario of a partition.</span>
+          </a></li>
+          <li><a class="formula-card" href="binomial-coefficient.html">
+            <span class="card-tex" data-tex="\binom{n}{k} = \dfrac{n!}{k! \cdot (n-k)!}"></span>
+            <span class="card-name">Binomial Coefficient</span>
+            <span class="card-blurb">How many ways there are to choose k items out of n, ignoring order.</span>
+          </a></li>
+          <li><a class="formula-card" href="chebyshev-theorem.html">
+            <span class="card-tex" data-tex="P \left( |X - \mu| \ge k \sigma \right) \le \dfrac{1}{k^2}"></span>
+            <span class="card-name">Chebyshev&#x27;s Theorem</span>
+            <span class="card-blurb">A bound on the share of data far from the mean, for any distribution.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Distributions</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="bernoulli-distribution.html">
+            <span class="card-tex" data-tex="P(X=k) = p^k \cdot (1-p)^{1-k}"></span>
+            <span class="card-name">Bernoulli Distribution</span>
+            <span class="card-blurb">A single trial with two outcomes: success or failure.</span>
+          </a></li>
+          <li><a class="formula-card" href="binomial-distribution.html">
+            <span class="card-tex" data-tex="P(X=k) = \binom{n}{k} \cdot p^k \cdot (1-p)^{n-k}"></span>
+            <span class="card-name">Binomial Distribution</span>
+            <span class="card-blurb">The number of successes in n independent trials.</span>
+          </a></li>
+          <li><a class="formula-card" href="poisson-distribution.html">
+            <span class="card-tex" data-tex="P(X=k) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}"></span>
+            <span class="card-name">Poisson Distribution</span>
+            <span class="card-blurb">The number of events in an interval, given a mean rate.</span>
+          </a></li>
+          <li><a class="formula-card" href="normal-distribution.html">
+            <span class="card-tex" data-tex="f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}"></span>
+            <span class="card-name">Normal (Gaussian) Distribution</span>
+            <span class="card-blurb">The bell curve defined by its mean and standard deviation.</span>
+          </a></li>
+          <li><a class="formula-card" href="central-limit-theorem.html">
+            <span class="card-tex" data-tex="\bar{X}_n \sim \mathcal{N} \left( \mu ,\, \dfrac{\sigma^2}{n} \right)"></span>
+            <span class="card-name">Central Limit Theorem</span>
+            <span class="card-blurb">Why the sample mean tends to a normal distribution as n grows.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Inference</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="z-score.html">
+            <span class="card-tex" data-tex="Z = \dfrac{X - \mu}{\sigma}"></span>
+            <span class="card-name">Z-Score</span>
+            <span class="card-blurb">How many standard deviations an observation is from the mean.</span>
+          </a></li>
+          <li><a class="formula-card" href="students-t-test.html">
+            <span class="card-tex" data-tex="t = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}}"></span>
+            <span class="card-name">Student&#x27;s t-Test</span>
+            <span class="card-blurb">Compares a sample mean with a hypothesized value when σ is unknown.</span>
+          </a></li>
+          <li><a class="formula-card" href="confidence-interval.html">
+            <span class="card-tex" data-tex="CI = \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}"></span>
+            <span class="card-name">Confidence Interval</span>
+            <span class="card-blurb">A range of plausible values for the population mean.</span>
+          </a></li>
+          <li><a class="formula-card" href="chi-square-test.html">
+            <span class="card-tex" data-tex="\chi^2 = \sum \dfrac{(O_i - E_i)^2}{E_i}"></span>
+            <span class="card-name">Chi-Square Test (χ²)</span>
+            <span class="card-blurb">Measures the gap between observed and expected frequencies.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Sampling</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="cochran-formula.html">
+            <span class="card-tex" data-tex="n_0 = \dfrac{Z^2 \cdot \hat{p} \cdot \hat{q}}{e^2}"></span>
+            <span class="card-name">Cochran&#x27;s Formula</span>
+            <span class="card-blurb">Sample size to estimate a proportion with a given margin of error.</span>
+          </a></li>
+          <li><a class="formula-card" href="finite-population-correction.html">
+            <span class="card-tex" data-tex="n = \dfrac{n_0}{1 + \dfrac{(n_0 - 1)}{N}}"></span>
+            <span class="card-name">Finite Population Correction</span>
+            <span class="card-blurb">Shrinks the sample size when the population is small.</span>
+          </a></li>
+          <li><a class="formula-card" href="neyman-allocation.html">
+            <span class="card-tex" data-tex="n_h = n \cdot \dfrac{N_h \cdot \sigma_h}{\sum(N_h \cdot \sigma_h)}"></span>
+            <span class="card-name">Neyman Allocation</span>
+            <span class="card-blurb">Splits the sample across strata by size and variability.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Association and means</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="covariance.html">
+            <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>
+            <span class="card-name">Covariance</span>
+            <span class="card-blurb">Whether two variables move together, and in which direction.</span>
+          </a></li>
+          <li><a class="formula-card" href="pearson-correlation.html">
+            <span class="card-tex" data-tex="r_{xy} = \dfrac{Cov(X,Y)}{\sigma_x \cdot \sigma_y}"></span>
+            <span class="card-name">Pearson Correlation Coefficient (r)</span>
+            <span class="card-blurb">Strength and direction of a linear relationship, from −1 to 1.</span>
+          </a></li>
+          <li><a class="formula-card" href="linear-regression.html">
+            <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>
+            <span class="card-name">Simple Linear Regression</span>
+            <span class="card-blurb">The line that predicts y from x.</span>
+          </a></li>
+          <li><a class="formula-card" href="harmonic-mean.html">
+            <span class="card-tex" data-tex="H = \dfrac{n}{\sum_{i=1}^{n} \frac{1}{x_i}}"></span>
+            <span class="card-name">Harmonic Mean</span>
+            <span class="card-blurb">The right average for rates and ratios.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Algebra and calculus</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="quadratic-formula.html">
+            <span class="card-tex" data-tex="x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"></span>
+            <span class="card-name">Quadratic Formula</span>
+            <span class="card-blurb">The roots of ax² + bx + c = 0.</span>
+          </a></li>
+          <li><a class="formula-card" href="lhopital-rule.html">
+            <span class="card-tex" data-tex="\lim_{x\to c}\frac{f(x)}{g(x)} = \lim_{x\to c}\frac{f&#x27;(x)}{g&#x27;(x)}"></span>
+            <span class="card-name">L&#x27;Hôpital&#x27;s Rule</span>
+            <span class="card-blurb">Resolves indeterminate limits of the form 0/0 or ∞/∞.</span>
+          </a></li>
+        </ul>
+      </section>
+    <p class="filter-empty" hidden>No formula with that name.</p>
+  </main>
+</body>
+</html>

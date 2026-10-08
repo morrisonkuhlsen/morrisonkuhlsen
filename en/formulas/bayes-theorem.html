@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Teorema de Bayes — Interativo</title>
-  <meta name="description" content="Teorema de Bayes explicado termo a termo, com calculadora: informe prior, sensibilidade e falso positivo e veja o posterior passo a passo.">
-  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/teorema-bayes.html">
+  <title>Bayes&#x27; Theorem — Interactive</title>
+  <meta name="description" content="Bayes&#x27; theorem explained term by term, with a calculator: enter the prior, sensitivity and false positive rate and get the posterior step by step.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/bayes-theorem.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/teorema-bayes.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/bayes-theorem.html">
   <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/teorema-bayes.html">
   <!-- OpenGraph / Twitter -->
   <meta property="og:site_name" content="MorrisonKühlsen">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/teorema-bayes.html">
-  <meta property="og:title" content="Teorema de Bayes — Interativo">
-  <meta property="og:description" content="Teorema de Bayes explicado termo a termo, com calculadora: informe prior, sensibilidade e falso positivo e veja o posterior passo a passo.">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/bayes-theorem.html">
+  <meta property="og:title" content="Bayes&#x27; Theorem — Interactive">
+  <meta property="og:description" content="Bayes&#x27; theorem explained term by term, with a calculator: enter the prior, sensitivity and false positive rate and get the posterior step by step.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
-  <meta name="twitter:title" content="Teorema de Bayes — Interativo">
-  <meta name="twitter:description" content="Teorema de Bayes explicado termo a termo, com calculadora: informe prior, sensibilidade e falso positivo e veja o posterior passo a passo.">
+  <meta name="twitter:title" content="Bayes&#x27; Theorem — Interactive">
+  <meta name="twitter:description" content="Bayes&#x27; theorem explained term by term, with a calculator: enter the prior, sensitivity and false positive rate and get the posterior step by step.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -39,17 +39,17 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <a class="lang-link" href="/en/formulas/bayes-theorem.html" hreflang="en" lang="en">English</a>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/teorema-bayes.html" hreflang="pt-BR" lang="pt-BR">Português</a>
   <main class="card" aria-labelledby="title">
-    <h1 id="title" class="formula-title">Teorema de Bayes</h1>
+    <h1 id="title" class="formula-title">Bayes&#x27; Theorem</h1>
 
     <div class="formula-scroll">
-      <div class="formula-wrap" role="group" aria-label="Fórmula de Bayes interativa">
+      <div class="formula-wrap" role="group" aria-label="Interactive Bayes&#x27; theorem formula">
         <span class="part" data-part="posterior" data-tone="1" data-tex="P(A\mid B)"></span>
         <span class="op">=</span>
         <span class="frac">
@@ -64,12 +64,12 @@
         </span>
       </div>
     </div>
-    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
 
     <!-- Calculadora e exemplo resolvido; estado em ?pa=&pba=&pbna=, tudo em %. -->
     <section class="calc" data-calc="bayes" aria-labelledby="calc-title">
-      <h2 id="calc-title">Calcule</h2>
-      <p class="calc-lede">Exemplo: uma doença atinge 1% da população. Um teste detecta 95% dos doentes, mas também dá positivo em 5% dos sadios. Se o seu teste deu positivo, qual a chance de você ter a doença? Aqui A é “ter a doença” e B é “testar positivo”. Troque os valores para calcular o seu caso.</p>
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a disease affects 1% of the population. A test detects 95% of sick people, but also comes back positive for 5% of healthy ones. If your test is positive, what is the chance you have the disease? Here A is “having the disease” and B is “testing positive”. Change the values to work out your own case.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="3">
@@ -81,34 +81,34 @@
           <input name="pba" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
         </label>
         <label class="calc-field" data-tone="4">
-          <span>Falso positivo <i>P(B|¬A)</i> (%)</span>
+          <span>False positive <i>P(B|¬A)</i> (%)</span>
           <input name="pbna" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
         </label>
       </div>
 
       <output class="calc-result" data-tone="1" aria-live="polite"></output>
 
-      <h3>Passo a passo</h3>
+      <h3>Step by step</h3>
       <ol class="calc-steps"></ol>
       <p class="calc-note"></p>
     </section>
 
     <section class="formula-static-info">
-      <h2>O que significa cada termo</h2>
+      <h2>What each term means</h2>
       <dl>
           <dt data-part="posterior" data-tone="1">Posterior</dt>
-          <dd>Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.</dd>
+          <dd>The probability of A given that B happened. It updates the belief about A after observing B.</dd>
           <dt data-part="likelihood" data-tone="2">Likelihood</dt>
-          <dd>Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B.</dd>
+          <dd>The probability of observing B if A is true. It says how compatible A is with the data B.</dd>
           <dt data-part="prior" data-tone="3">Prior</dt>
-          <dd>Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições.</dd>
-          <dt data-part="marginal" data-tone="4">Marginal (Evidência)</dt>
-          <dd>Probabilidade de observar B sob todos os cenários; normaliza a equação. Calculado usando a Lei da Probabilidade Total: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)</dd>
+          <dd>The initial belief about A before observing B. It may come from previous knowledge or assumptions.</dd>
+          <dt data-part="marginal" data-tone="4">Marginal (Evidence)</dt>
+          <dd>The probability of observing B across all scenarios; it normalizes the equation. Computed with the law of total probability: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)</dd>
       </dl>
     </section>
 
-    <nav class="pager" aria-label="Outras fórmulas">
-      <a class="pager-next" href="probabilidade-condicional.html" rel="next"><span>Próxima</span>Probabilidade Condicional</a>
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-next" href="conditional-probability.html" rel="next"><span>Next</span>Conditional Probability</a>
     </nav>
   </main>
 </body>

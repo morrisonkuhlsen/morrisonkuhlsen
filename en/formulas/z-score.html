@@ -1,28 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Z-Score — Interativo</title>
-  <meta name="description" content="Z-score explicado termo a termo, com calculadora, passo a passo e o percentil correspondente na distribuição normal.">
-  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/z-score.html">
+  <title>Z-Score — Interactive</title>
+  <meta name="description" content="The z-score explained term by term, with a calculator, step-by-step working and the matching percentile in the normal distribution.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/z-score.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/z-score.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/z-score.html">
   <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/z-score.html">
   <!-- OpenGraph / Twitter -->
   <meta property="og:site_name" content="MorrisonKühlsen">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/z-score.html">
-  <meta property="og:title" content="Z-Score — Interativo">
-  <meta property="og:description" content="Z-score explicado termo a termo, com calculadora, passo a passo e o percentil correspondente na distribuição normal.">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/z-score.html">
+  <meta property="og:title" content="Z-Score — Interactive">
+  <meta property="og:description" content="The z-score explained term by term, with a calculator, step-by-step working and the matching percentile in the normal distribution.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale" content="en_US">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
-  <meta name="twitter:title" content="Z-Score — Interativo">
-  <meta name="twitter:description" content="Z-score explicado termo a termo, com calculadora, passo a passo e o percentil correspondente na distribuição normal.">
+  <meta name="twitter:title" content="Z-Score — Interactive">
+  <meta name="twitter:description" content="The z-score explained term by term, with a calculator, step-by-step working and the matching percentile in the normal distribution.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -39,17 +39,17 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <a class="lang-link" href="/en/formulas/z-score.html" hreflang="en" lang="en">English</a>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/z-score.html" hreflang="pt-BR" lang="pt-BR">Português</a>
   <main class="card" aria-labelledby="title">
     <h1 id="title" class="formula-title">Z-Score</h1>
 
     <div class="formula-scroll">
-      <div class="formula-wrap" role="group" aria-label="Fórmula do Z-Score interativa">
+      <div class="formula-wrap" role="group" aria-label="Interactive z-score formula">
         <span class="part" data-part="z_score" data-tone="1" data-tex="Z"></span>
         <span class="op">=</span>
         <span class="frac">
@@ -64,54 +64,54 @@
         </span>
       </div>
     </div>
-    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
 
     <!-- Calculadora e exemplo resolvido. Os valores padrão são o exemplo da
          prova; o estado vai para a URL (?x=&mu=&sd=) só depois que o leitor
          mexe, como nas tabelas. -->
     <section class="calc" data-calc="zscore" aria-labelledby="calc-title">
-      <h2 id="calc-title">Calcule</h2>
-      <p class="calc-lede">Exemplo: numa prova com média 70 e desvio padrão 8, um aluno tirou 82. Quão acima da média ele ficou? Troque os valores para calcular o seu caso.</p>
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: on an exam with a mean of 70 and a standard deviation of 8, a student scored 82. How far above the mean are they? Change the values to work out your own case.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="2">
-          <span>Observação <i>X</i></span>
+          <span>Observation <i>X</i></span>
           <input name="x" type="text" inputmode="decimal" value="82" autocomplete="off" spellcheck="false">
         </label>
         <label class="calc-field" data-tone="3">
-          <span>Média <i>μ</i></span>
+          <span>Mean <i>μ</i></span>
           <input name="mu" type="text" inputmode="decimal" value="70" autocomplete="off" spellcheck="false">
         </label>
         <label class="calc-field" data-tone="4">
-          <span>Desvio padrão <i>σ</i></span>
+          <span>Standard deviation <i>σ</i></span>
           <input name="sd" type="text" inputmode="decimal" value="8" autocomplete="off" spellcheck="false">
         </label>
       </div>
 
       <output class="calc-result" data-tone="1" aria-live="polite"></output>
 
-      <h3>Passo a passo</h3>
+      <h3>Step by step</h3>
       <ol class="calc-steps"></ol>
       <p class="calc-note"></p>
     </section>
 
     <section class="formula-static-info">
-      <h2>O que significa cada termo</h2>
+      <h2>What each term means</h2>
       <dl>
           <dt data-part="z_score" data-tone="1">Z-Score (Z)</dt>
-          <dd>Mede a distância de um ponto de dados da média, em termos de desvios padrão. Um Z-score positivo indica que o ponto está acima da média, e um negativo, abaixo.</dd>
-          <dt data-part="observation" data-tone="2">Valor da Observação (X)</dt>
-          <dd>O ponto de dados específico ou valor que você está avaliando.</dd>
-          <dt data-part="pop_mean_z" data-tone="3">Média da População (μ)</dt>
-          <dd>A média de todos os pontos de dados na população da qual a amostra foi retirada.</dd>
-          <dt data-part="pop_std_dev" data-tone="4">Desvio Padrão da População (σ)</dt>
-          <dd>Mede a dispersão ou variabilidade dos dados na população. É a raiz quadrada da variância.</dd>
+          <dd>Measures how far a data point is from the mean, in standard deviations. A positive z-score means the point is above the mean; a negative one, below.</dd>
+          <dt data-part="observation" data-tone="2">Observed Value (X)</dt>
+          <dd>The specific data point or value you are evaluating.</dd>
+          <dt data-part="pop_mean_z" data-tone="3">Population Mean (μ)</dt>
+          <dd>The mean of all data points in the population the sample was drawn from.</dd>
+          <dt data-part="pop_std_dev" data-tone="4">Population Standard Deviation (σ)</dt>
+          <dd>Measures how spread out the data are in the population. It is the square root of the variance.</dd>
       </dl>
     </section>
 
-    <nav class="pager" aria-label="Outras fórmulas">
-      <a class="pager-prev" href="teorema-central-limite.html" rel="prev"><span>Anterior</span>Teorema Central do Limite</a>
-      <a class="pager-next" href="t-student.html" rel="next"><span>Próxima</span>Teste t de Student</a>
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="central-limit-theorem.html" rel="prev"><span>Previous</span>Central Limit Theorem</a>
+      <a class="pager-next" href="students-t-test.html" rel="next"><span>Next</span>Student&#x27;s t-Test</a>
     </nav>
   </main>
 </body>

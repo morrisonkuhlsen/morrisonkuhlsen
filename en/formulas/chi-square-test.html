@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Chi-Square Test — Interactive</title>
+  <meta name="description" content="The chi-square goodness-of-fit test explained term by term, with a calculator, a table of terms, p-value and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/chi-square-test.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/qui-quadrado.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/chi-square-test.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/qui-quadrado.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/chi-square-test.html">
+  <meta property="og:title" content="Chi-Square Test — Interactive">
+  <meta property="og:description" content="The chi-square goodness-of-fit test explained term by term, with a calculator, a table of terms, p-value and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Chi-Square Test — Interactive">
+  <meta name="twitter:description" content="The chi-square goodness-of-fit test explained term by term, with a calculator, a table of terms, p-value and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/qui-quadrado.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Chi-Square Test (χ²)</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive chi-square test formula">
+        <span class="part" data-part="chi_squared" data-tone="1" data-tex="\chi^2"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="summation_chi" data-tone="2" data-tex="\sum"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="numerator_chi" data-tone="3" data-tex="(O_i - E_i)^2"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="denominator_chi" data-tone="4" data-tex="E_i"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora (teste de aderência) e exemplo resolvido; estado em ?o=&e=. -->
+    <section class="calc" data-calc="chi" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a die was rolled 60 times and faces 1 to 6 came up 8, 12, 9, 11, 6 and 14 times. Is it fair? Change the values to test your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Observed frequencies <i>O<sub>i</sub></i></span>
+          <input name="o" type="text" inputmode="decimal" value="8 12 9 11 6 14" data-list autocomplete="off" spellcheck="false">
+          <small>One per category, separated by spaces or commas.</small>
+        </label>
+        <label class="calc-field wide" data-tone="4">
+          <span>Expected frequencies <i>E<sub>i</sub></i></span>
+          <input name="e" type="text" inputmode="decimal" value="" placeholder="blank: all categories equally likely" data-list data-optional autocomplete="off" spellcheck="false">
+          <small>Counts that add up to the same as the observed ones, or proportions that add up to 1.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="chi_squared" data-tone="1">Chi-Square (χ²)</dt>
+          <dd>The test statistic. A high value means a large gap between the observed and the expected data.</dd>
+          <dt data-part="summation_chi" data-tone="2">Summation</dt>
+          <dd>Adds the result of the calculation over every category or group in your data.</dd>
+          <dt data-part="numerator_chi" data-tone="3">Squared Difference</dt>
+          <dd>The difference between the observed frequency (Oᵢ) and the expected frequency (Eᵢ), squared so that negative values don't cancel out.</dd>
+          <dt data-part="denominator_chi" data-tone="4">Expected Frequency (Eᵢ)</dt>
+          <dd>The frequency you would expect in a category if the null hypothesis were true. It normalizes the squared difference.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="confidence-interval.html" rel="prev"><span>Previous</span>Confidence Interval</a>
+      <a class="pager-next" href="cochran-formula.html" rel="next"><span>Next</span>Cochran&#x27;s Formula</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Normal Distribution — Interactive</title>
+  <meta name="description" content="The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/normal-distribution.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-normal.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/normal-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-normal.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/normal-distribution.html">
+  <meta property="og:title" content="Normal Distribution — Interactive">
+  <meta property="og:description" content="The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Normal Distribution — Interactive">
+  <meta name="twitter:description" content="The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/distribuicao-normal.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Normal (Gaussian) Distribution</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive normal distribution formula">
+        <span class="part" data-part="f_x" data-tone="1" data-tex="f(x)"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="one_over" data-tone="2" data-tex="\frac{1}{\sigma\sqrt{2\pi}}"></span>
+        <span class="part" data-part="e_power" data-tone="3" data-tex="e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?mu=&sd=&x=. -->
+    <section class="calc" data-calc="normal" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: adult height follows a normal distribution with mean 170 cm and standard deviation 10 cm. What is the density at 185 cm, and what share of people is shorter than that? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Mean <i>μ</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="170" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Standard deviation <i>σ</i></span>
+          <input name="sd" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Value <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="185" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="f_x" data-tone="1">Density Function (f(x))</dt>
+          <dd>The relative likelihood that a continuous random variable takes a specific value 'x'.</dd>
+          <dt data-part="one_over" data-tone="2">Normalizing Coefficient</dt>
+          <dd>This term makes the total area under the curve equal to 1. It is built from the standard deviation (σ) and 2π.</dd>
+          <dt data-part="e_power" data-tone="3">Exponential Function</dt>
+          <dd>The heart of the distribution, where 'e' is the base of the natural logarithm. The exponent depends on how far 'x' is from the mean (μ), measured in standard deviations (σ).</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="poisson-distribution.html" rel="prev"><span>Previous</span>Poisson Distribution</a>
+      <a class="pager-next" href="central-limit-theorem.html" rel="next"><span>Next</span>Central Limit Theorem</a>
+    </nav>
+  </main>
+</body>
+</html>

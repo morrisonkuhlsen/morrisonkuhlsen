@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>L&#x27;Hôpital&#x27;s Rule — Interactive</title>
+  <meta name="description" content="L&#x27;Hôpital&#x27;s rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/lhopital-rule.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/regra-lhopital.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/lhopital-rule.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/regra-lhopital.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/lhopital-rule.html">
+  <meta property="og:title" content="L&#x27;Hôpital&#x27;s Rule — Interactive">
+  <meta property="og:description" content="L&#x27;Hôpital&#x27;s rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="L&#x27;Hôpital&#x27;s Rule — Interactive">
+  <meta name="twitter:description" content="L&#x27;Hôpital&#x27;s rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/regra-lhopital.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">L&#x27;Hôpital&#x27;s Rule</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive L&#x27;Hôpital&#x27;s rule formula">
+        <span class="part" data-part="condition" data-tone="1" data-tex="\lim_{x \to c} \frac{f(x)}{g(x)} = \frac{0}{0} \text{ or } \frac{\infty}{\infty}"></span>
+        <span class="op">⇒</span>
+        <span class="part" data-part="lim" data-tone="2" data-tex="\lim_{x \to c}"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="f_prime" data-tone="3" data-tex="f&#x27;(x)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="g_prime" data-tone="4" data-tex="g&#x27;(x)"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Exemplos resolvidos, sem campos: a regra é simbólica e não cabe numa
+         calculadora numérica. As cores seguem as da fórmula. -->
+    <section class="calc worked" aria-labelledby="ex-title">
+      <h2 id="ex-title">Worked examples</h2>
+
+      <h3>0/0, applying the rule twice</h3>
+      <ol class="calc-steps">
+        <li><span>Plugging in x = 0 gives 0/0, an indeterminate form:</span><span class="calc-math" data-tex="\lim_{x \to 0} \dfrac{1 - \cos x}{x^2} = \dfrac{1 - \cos 0}{0^2} = \dfrac{0}{0}"></span></li>
+        <li><span>Differentiate the numerator and the denominator separately:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to 0}} \dfrac{\htmlData{tone=3}{\sin x}}{\htmlData{tone=4}{2x}}"></span></li>
+        <li><span>It is still 0/0 at x = 0. Apply the rule again:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to 0}} \dfrac{\htmlData{tone=3}{\cos x}}{\htmlData{tone=4}{2}}"></span></li>
+        <li><span>Now plugging in works:</span><span class="calc-math" data-tex="\dfrac{\cos 0}{2} = \htmlData{tone=1}{\dfrac{1}{2}}"></span></li>
+      </ol>
+
+      <h3>∞/∞</h3>
+      <ol class="calc-steps">
+        <li><span>As x grows, the numerator and the denominator both go to infinity: ∞/∞.</span><span class="calc-math" data-tex="\lim_{x \to \infty} \dfrac{\ln x}{x} = \dfrac{\infty}{\infty}"></span></li>
+        <li><span>Differentiate each part: the derivative of ln x is 1/x, and that of x is 1.</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to \infty}} \dfrac{\htmlData{tone=3}{1/x}}{\htmlData{tone=4}{1}}"></span></li>
+        <li><span>As x goes to infinity, 1/x goes to zero:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to \infty}} \dfrac{1}{x} = \htmlData{tone=1}{0}"></span></li>
+      </ol>
+
+      <h3>Common mistake: using the rule without an indeterminate form</h3>
+      <ol class="calc-steps">
+        <li><span>Here plugging in directly already works, because there is no indeterminate form:</span><span class="calc-math" data-tex="\lim_{x \to 1} \dfrac{x^2 + 1}{x + 1} = \dfrac{2}{2} = \htmlData{tone=1}{1}"></span></li>
+        <li><span>Applying the rule anyway would give a wrong result:</span><span class="calc-math" data-tex="\lim_{x \to 1} \dfrac{2x}{1} = 2 \;\ne\; 1"></span></li>
+      </ol>
+      <p class="calc-note">The rule only holds for 0/0 or ∞/∞. Before differentiating, plug in the point and check that the form really is indeterminate.</p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="condition" data-tone="1">Indeterminate Form</dt>
+          <dd>The rule applies when the limit of a fraction f(x)/g(x) gives an indeterminate form, such as 0/0 or ±∞/±∞.</dd>
+          <dt data-part="lim" data-tone="2">Limit</dt>
+          <dd>The limit of the new fraction is taken as 'x' approaches the same point 'c'.</dd>
+          <dt data-part="f_prime" data-tone="3">Derivative of the Numerator</dt>
+          <dd>Take the derivative of the original numerator, f(x), which gives f'(x).</dd>
+          <dt data-part="g_prime" data-tone="4">Derivative of the Denominator</dt>
+          <dd>Take the derivative of the original denominator, g(x), which gives g'(x). Note that this is not the derivative of the quotient.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="quadratic-formula.html" rel="prev"><span>Previous</span>Quadratic Formula</a>
+    </nav>
+  </main>
+</body>
+</html>
