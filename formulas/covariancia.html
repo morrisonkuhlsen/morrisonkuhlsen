@@ -62,6 +62,31 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?x=&y=. Mesmo exemplo de Pearson e da regressão. -->
+    <section class="calc" data-calc="cov" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: cinco alunos estudaram 1, 2, 3, 4 e 5 horas para uma prova e tiraram 52, 58, 65, 70 e 80. Horas e nota andam juntas? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Valores de <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1 2 3 4 5" data-list autocomplete="off" spellcheck="false">
+          <small>Um valor por observação, separados por espaço ou ponto e vírgula.</small>
+        </label>
+        <label class="calc-field wide" data-tone="5">
+          <span>Valores de <i>y</i></span>
+          <input name="y" type="text" inputmode="decimal" value="52 58 65 70 80" data-list autocomplete="off" spellcheck="false">
+          <small>Na mesma ordem dos valores de x.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

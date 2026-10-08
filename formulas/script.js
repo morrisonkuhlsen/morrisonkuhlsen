@@ -335,6 +335,44 @@
     return { exact, out };
   }
 
+  // Base comum a covariância, Pearson e regressão: valida os pares, calcula
+  // médias, desvios e somas, e monta os passos que as três compartilham.
+  // `mean` é o símbolo da média: μ nas fórmulas populacionais, x̄ na regressão.
+  const MAX_TABLE = 15;
+  function paired(x, y, mean) {
+    if (x.length !== y.length) return { error: `Há ${x.length} valores de x e ${y.length} de y; as listas precisam ter o mesmo tamanho.` };
+    const n = x.length;
+    if (n < 2) return { error: "Informe pelo menos dois pares de valores." };
+    if (n > 200) return { error: "Use no máximo 200 pares." };
+    const sum = a => a.reduce((s, v) => s + v, 0);
+    const mx = sum(x) / n, my = sum(y) / n;
+    const dx = x.map(v => v - mx), dy = y.map(v => v - my);
+    const prod = dx.map((v, i) => v * dy[i]);
+    const r = {
+      n, mx, my, dx, dy, prod,
+      sxy: sum(prod), sxx: sum(dx.map(v => v * v)), syy: sum(dy.map(v => v * v)),
+      mxTex: mean("x"), myTex: mean("y"),
+    };
+    const meanOf = (a, m) => n <= 6
+      ? `\\dfrac{${a.map(v => texNum(v)).join(" + ")}}{${n}} ${approx(m)} ${texNum(m)}`
+      : `\\dfrac{${texNum(sum(a))}}{${n}} ${approx(m)} ${texNum(m)}`;
+    r.meansStep = ["Calcule as médias de x e de y:",
+      `${r.mxTex} = ${meanOf(x, mx)}, \\qquad ${r.myTex} = ${meanOf(y, my)}`];
+    // Tabela com as colunas pedidas, cada uma [cabeçalho, valores].
+    r.table = cols => {
+      if (n > MAX_TABLE) return `\\text{(${n} pares: a tabela fica longa demais; seguem só as somas)}`;
+      const head = cols.map(c => c[0]).join(" & ");
+      const rows = Array.from({ length: n }, (_, i) => cols.map(c => c[1](i)).join(" & ")).join(" \\\\ ");
+      const foot = cols.map(c => c[2] || "").join(" & ");
+      return `\\begin{array}{${"c|".repeat(cols.length - 1)}c} ${head} \\\\ \\hline ${rows} \\\\ \\hline ${foot} \\end{array}`;
+    };
+    r.link = (page, extra = "") => {
+      const q = new URLSearchParams({ x: x.join(" "), y: y.join(" ") });
+      return `${page}?${q}${extra}`;
+    };
+    return r;
+  }
+
   const confError = { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
 
   const pValueText = p => (p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`);
@@ -541,6 +579,110 @@
         ],
         note,
       };
+    },
+
+    cov({ x, y }) {
+      const d = paired(x, y, v => `\\mu_${v}`);
+      if (d.error) return d;
+      const cov = d.sxy / d.n;
+      const table = d.table([
+        ["i", i => i + 1, "\\Sigma"],
+        ["x_i", i => texNum(x[i])],
+        ["y_i", i => texNum(y[i])],
+        ["x_i - \\mu_x", i => tone(texNum(d.dx[i]), 3)],
+        ["y_i - \\mu_y", i => tone(texNum(d.dy[i]), 5)],
+        ["\\text{produto}", i => texNum(d.prod[i]), tone(texNum(d.sxy), 2)],
+      ]);
+      const sinal = Math.abs(cov) < 1e-12
+        ? "A covariância é zero: não há tendência linear entre x e y."
+        : cov > 0
+          ? "A covariância é positiva: quando x está acima da média, y também tende a estar."
+          : "A covariância é negativa: quando x está acima da média, y tende a ficar abaixo.";
+      return {
+        result: `Cov(X,Y) ${approx(cov)} ${tone(texNum(cov), 1)}`,
+        steps: [
+          d.meansStep,
+          ["Calcule os desvios de cada valor em relação à média e multiplique os pares:", table],
+          ["Divida a soma dos produtos pelo número de pares:",
+            `Cov(X,Y) = \\dfrac{${tone(texNum(d.sxy), 2)}}{${tone(d.n, 4)}} ${approx(cov)} ${tone(texNum(cov), 1)}`],
+        ],
+        note: `${sinal} O tamanho do número, porém, depende das unidades de x e de y e não diz se a relação é forte;`
+          + ` para isso existe o <a href="${d.link("coeficiente-pearson.html")}">coeficiente de Pearson, com estes mesmos dados</a>.`
+          + ` Esta fórmula divide por n (covariância populacional); a amostral divide por n − 1 e daria ${fmt(d.sxy / (d.n - 1))}.`,
+      };
+    },
+
+    pearson({ x, y }) {
+      const d = paired(x, y, v => `\\mu_${v}`);
+      if (d.error) return d;
+      if (d.sxx === 0) return { error: "Todos os valores de x são iguais: o desvio padrão de x é zero e r não é definido." };
+      if (d.syy === 0) return { error: "Todos os valores de y são iguais: o desvio padrão de y é zero e r não é definido." };
+      const cov = d.sxy / d.n, sx = Math.sqrt(d.sxx / d.n), sy = Math.sqrt(d.syy / d.n);
+      const r = Math.max(-1, Math.min(1, cov / (sx * sy)));
+      const table = d.table([
+        ["i", i => i + 1, "\\Sigma"],
+        ["x_i - \\mu_x", i => texNum(d.dx[i])],
+        ["y_i - \\mu_y", i => texNum(d.dy[i])],
+        ["\\text{produto}", i => texNum(d.prod[i]), texNum(d.sxy)],
+        ["(x_i - \\mu_x)^2", i => texNum(d.dx[i] ** 2), texNum(d.sxx)],
+        ["(y_i - \\mu_y)^2", i => texNum(d.dy[i] ** 2), texNum(d.syy)],
+      ]);
+      const a = Math.abs(r);
+      const forca = a >= 0.9 ? "muito forte" : a >= 0.7 ? "forte" : a >= 0.5 ? "moderada" : a >= 0.3 ? "fraca" : "muito fraca ou inexistente";
+      const direcao = a < 0.3 ? "" : r > 0 ? " e positiva" : " e negativa";
+      return {
+        result: `r_{xy} ${approx(r)} ${tone(texNum(r), 1)}`,
+        steps: [
+          d.meansStep,
+          ["Calcule os desvios, seus produtos e seus quadrados:", table],
+          ["Divida as somas por n para obter a covariância e os desvios padrão:",
+            `Cov(X,Y) = \\dfrac{${texNum(d.sxy)}}{${d.n}} ${approx(cov)} ${tone(texNum(cov), 2)}, \\quad `
+            + `\\sigma_x = \\sqrt{\\dfrac{${texNum(d.sxx)}}{${d.n}}} ${approx(sx)} ${tone(texNum(sx), 3)}, \\quad `
+            + `\\sigma_y = \\sqrt{\\dfrac{${texNum(d.syy)}}{${d.n}}} ${approx(sy)} ${tone(texNum(sy), 4)}`],
+          ["Divida a covariância pelo produto dos desvios padrão:",
+            `r_{xy} = \\dfrac{${tone(texNum(cov), 2)}}{${tone(texNum(sx), 3)} \\cdot ${tone(texNum(sy), 4)}} ${approx(r)} ${tone(texNum(r), 1)}`],
+        ],
+        note: `Correlação ${forca}${direcao}. O quadrado, r² ${approx(r * r * 100, 1) === "=" ? "=" : "≈"} ${fmt(r * r * 100, 1)}%, é a fração da variação de y que acompanha x numa reta.`
+          + " Lembre que r só mede relação <em>linear</em> e que correlação não prova causa."
+          + ` Para a reta em si, veja a <a href="${d.link("regressao-linear.html")}">regressão linear com estes mesmos dados</a>.`,
+      };
+    },
+
+    reg({ x, y, x0 }) {
+      const d = paired(x, y, v => `\\bar{${v}}`);
+      if (d.error) return d;
+      if (d.sxx === 0) return { error: "Todos os valores de x são iguais: não há como traçar uma reta que dependa de x." };
+      if (x0.length > 1) return { error: "Informe um único valor de x para a previsão, ou deixe o campo vazio." };
+      const b1 = d.sxy / d.sxx, b0 = d.my - b1 * d.mx;
+      const B0 = tone(texNum(b0), 2), B1 = tone(texNum(b1), 3);
+      const line = `\\hat{y} = ${B0} ${b1 < 0 ? "-" : "+"} ${tone(texNum(Math.abs(b1)), 3)}\\,${tone("x", 4)}`;
+      const table = d.table([
+        ["i", i => i + 1, "\\Sigma"],
+        ["x_i - \\bar{x}", i => texNum(d.dx[i])],
+        ["y_i - \\bar{y}", i => texNum(d.dy[i])],
+        ["\\text{produto}", i => texNum(d.prod[i]), texNum(d.sxy)],
+        ["(x_i - \\bar{x})^2", i => texNum(d.dx[i] ** 2), texNum(d.sxx)],
+      ]);
+      const steps = [
+        d.meansStep,
+        ["Calcule os desvios, seus produtos e os quadrados dos desvios de x:", table],
+        ["A inclinação é a soma dos produtos dividida pela soma dos quadrados:",
+          `\\beta_1 = \\dfrac{\\sum (x_i - \\bar{x})(y_i - \\bar{y})}{\\sum (x_i - \\bar{x})^2} = \\dfrac{${texNum(d.sxy)}}{${texNum(d.sxx)}} ${approx(b1)} ${B1}`],
+        ["O intercepto faz a reta passar pelo ponto das médias:",
+          `\\beta_0 = \\bar{y} - \\beta_1 \\bar{x} = ${texNum(d.my)} - ${paren(b1, texNum(b1))} \\cdot ${paren(d.mx, texNum(d.mx))} ${approx(b0)} ${B0}`],
+      ];
+      let note = `Cada unidade a mais de x ${b1 >= 0 ? "soma" : "tira"} ${fmt(Math.abs(b1))} ao valor previsto de y.`;
+      if (x0.length) {
+        const v = x0[0], yh = b0 + b1 * v;
+        steps.push(["Substitua o x desejado na reta:",
+          `\\hat{y} = ${B0} ${b1 < 0 ? "-" : "+"} ${tone(texNum(Math.abs(b1)), 3)} \\cdot ${tone(paren(v, texNum(v)), 4)} ${approx(yh)} ${tone(texNum(yh), 1)}`]);
+        note += ` Para x = ${fmt(v)}, a previsão é ${fmt(yh)}.`;
+        const lo = Math.min(...x), hi = Math.max(...x);
+        if (v < lo || v > hi) {
+          note += ` <strong>Atenção:</strong> ${fmt(v)} está fora da faixa observada (${fmt(lo)} a ${fmt(hi)}). Extrapolar supõe que a reta continua valendo além dos dados, o que pode não ser verdade.`;
+        }
+      }
+      return { result: line, steps, note };
     },
 
     // Teste de aderência. As esperadas podem vir como contagens, como
