@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Covariância — Interativo</title>
   <meta name="description" content="Covariância: Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/covariancia.html">
@@ -21,90 +21,67 @@
   <meta name="twitter:title" content="Covariância — Interativo">
   <meta name="twitter:description" content="Covariância: Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Covariância</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Covariância</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula da Covariância interativa" style="flex-wrap: nowrap;">
-        <span class="part cov-xy" data-part="cov_xy" tabindex="0" title="Covariância entre X e Y"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="display: flex; align-items: center;">
-            <span class="part summation" data-part="summation" tabindex="0" title="Somatório"></span>
-            <span class="part x-dev" data-part="x_dev" tabindex="0" title="Desvio de X" style="white-space: nowrap;"></span>
-            <span class="part y-dev" data-part="y_dev" tabindex="0" title="Desvio de Y" style="white-space: nowrap;"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part divisor" data-part="divisor" tabindex="0" title="Número de observações"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Covariância interativa">
+        <span class="part" data-part="cov_xy" data-tone="1" data-tex="Cov(X,Y)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="summation" data-tone="2" data-tex="\sum_{i=1}^{n}"></span>
+            <span class="part" data-part="x_dev" data-tone="3" data-tex="(x_i - \mu_x)"></span>
+            <span class="part" data-part="y_dev" data-tone="5" data-tex="(y_i - \mu_y)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="divisor" data-tone="4" data-tex="n"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="cov_xy" data-tone="1">Covariância</dt>
+          <dd>Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.</dd>
+          <dt data-part="summation" data-tone="2">Somatório</dt>
+          <dd>Soma os produtos dos desvios para todas as 'n' observações do conjunto de dados.</dd>
+          <dt data-part="x_dev" data-tone="3">Desvio de X</dt>
+          <dd>A diferença entre cada valor de X (xi) e a média de X (μx). Mostra o quanto cada ponto se afasta da média.</dd>
+          <dt data-part="y_dev" data-tone="5">Desvio de Y</dt>
+          <dd>A diferença entre cada valor de Y (yi) e a média de Y (μy). Mostra o quanto cada ponto se afasta da média.</dd>
+          <dt data-part="divisor" data-tone="4">Número de Observações (n)</dt>
+          <dd>O número total de pares de observações no conjunto de dados. Normaliza a soma para obter a média dos produtos dos desvios.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Covariância</dt>
-        <dd>Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa.</dd>
-        <dt>Somatório</dt>
-        <dd>Soma os produtos dos desvios para todas as &#x27;n&#x27; observações do conjunto de dados.</dd>
-        <dt>Desvio de X</dt>
-        <dd>A diferença entre cada valor de X (xi) e a média de X (μx). Mostra o quanto cada ponto se afasta da média.</dd>
-        <dt>Desvio de Y</dt>
-        <dd>A diferença entre cada valor de Y (yi) e a média de Y (μy). Mostra o quanto cada ponto se afasta da média.</dd>
-        <dt>Número de Observações (n)</dt>
-        <dd>O número total de pares de observações no conjunto de dados. Normaliza a soma para obter a média dos produtos dos desvios.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        cov_xy: "\\displaystyle Cov(X,Y)",
-        summation: "\\displaystyle \\sum_{i=1}^{n}",
-        x_dev: "\\displaystyle (x_i - \\mu_x)",
-        y_dev: "\\displaystyle (y_i - \\mu_y)",
-        divisor: "\\displaystyle n"
-      },
-      explanations: {
-        cov_xy: {
-          title: "Covariância",
-          text: "Mede a relação linear entre duas variáveis. Um valor positivo indica uma relação direta, um negativo indica uma relação inversa."
-        },
-        summation: {
-          title: "Somatório",
-          text: "Soma os produtos dos desvios para todas as 'n' observações do conjunto de dados."
-        },
-        x_dev: {
-          title: "Desvio de X",
-          text: "A diferença entre cada valor de X (xi) e a média de X (μx). Mostra o quanto cada ponto se afasta da média."
-        },
-        y_dev: {
-          title: "Desvio de Y",
-          text: "A diferença entre cada valor de Y (yi) e a média de Y (μy). Mostra o quanto cada ponto se afasta da média."
-        },
-        divisor: {
-          title: "Número de Observações (n)",
-          text: "O número total de pares de observações no conjunto de dados. Normaliza a soma para obter a média dos produtos dos desvios."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="neyman-allocation.html" rel="prev"><span>Anterior</span>Alocação de Neyman</a>
+      <a class="pager-next" href="coeficiente-pearson.html" rel="next"><span>Próxima</span>Coeficiente de Correlação de Pearson (r)</a>
+    </nav>
+  </main>
 </body>
 </html>

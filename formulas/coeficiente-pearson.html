@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Coeficiente de Pearson (r) — Interativo</title>
   <meta name="description" content="Coeficiente de Correlação de Pearson (r): Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/coeficiente-pearson.html">
@@ -21,83 +21,65 @@
   <meta name="twitter:title" content="Coeficiente de Pearson (r) — Interativo">
   <meta name="twitter:description" content="Coeficiente de Correlação de Pearson (r): Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Coeficiente de Correlação de Pearson (r)</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Coeficiente de Correlação de Pearson (r)</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula do Coeficiente de Pearson interativa">
-        <span class="part r-xy" data-part="r_xy" tabindex="0" title="Coeficiente de Pearson"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part cov-xy-pearson" data-part="cov_xy_pearson" tabindex="0" title="Covariância entre X e Y"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part std-x" data-part="std_x" tabindex="0" title="Desvio Padrão de X"></span>
-            <span class="op" style="font-size: 1.5em;">·</span>
-            <span class="part std-y" data-part="std_y" tabindex="0" title="Desvio Padrão de Y"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Coeficiente de Pearson interativa">
+        <span class="part" data-part="r_xy" data-tone="1" data-tex="r_{xy}"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="cov_xy_pearson" data-tone="2" data-tex="Cov(X,Y)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="std_x" data-tone="3" data-tex="\sigma_x"></span>
+            <span class="op">·</span>
+            <span class="part" data-part="std_y" data-tone="4" data-tex="\sigma_y"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="r_xy" data-tone="1">Coeficiente de Pearson (r)</dt>
+          <dd>Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a +1 (correlação positiva perfeita).</dd>
+          <dt data-part="cov_xy_pearson" data-tone="2">Covariância de X e Y</dt>
+          <dd>Mede como duas variáveis mudam juntas. É o numerador da fórmula.</dd>
+          <dt data-part="std_x" data-tone="3">Desvio Padrão de X</dt>
+          <dd>Mede a dispersão ou variabilidade dos dados da variável X em relação à sua média.</dd>
+          <dt data-part="std_y" data-tone="4">Desvio Padrão de Y</dt>
+          <dd>Mede a dispersão ou variabilidade dos dados da variável Y em relação à sua média.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Coeficiente de Pearson (r)</dt>
-        <dd>Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a +1 (correlação positiva perfeita).</dd>
-        <dt>Covariância de X e Y</dt>
-        <dd>Mede como duas variáveis mudam juntas. É o numerador da fórmula.</dd>
-        <dt>Desvio Padrão de X</dt>
-        <dd>Mede a dispersão ou variabilidade dos dados da variável X em relação à sua média.</dd>
-        <dt>Desvio Padrão de Y</dt>
-        <dd>Mede a dispersão ou variabilidade dos dados da variável Y em relação à sua média.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        r_xy: "\\displaystyle r_{xy}",
-        cov_xy_pearson: "\\displaystyle Cov(X,Y)",
-        std_x: "\\displaystyle \\sigma_x",
-        std_y: "\\displaystyle \\sigma_y"
-      },
-      explanations: {
-        r_xy: {
-          title: "Coeficiente de Pearson (r)",
-          text: "Mede a força e a direção da relação linear entre duas variáveis. Varia de -1 (correlação negativa perfeita) a +1 (correlação positiva perfeita)."
-        },
-        cov_xy_pearson: {
-          title: "Covariância de X e Y",
-          text: "Mede como duas variáveis mudam juntas. É o numerador da fórmula."
-        },
-        std_x: {
-          title: "Desvio Padrão de X",
-          text: "Mede a dispersão ou variabilidade dos dados da variável X em relação à sua média."
-        },
-        std_y: {
-          title: "Desvio Padrão de Y",
-          text: "Mede a dispersão ou variabilidade dos dados da variável Y em relação à sua média."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="covariancia.html" rel="prev"><span>Anterior</span>Covariância</a>
+      <a class="pager-next" href="regressao-linear.html" rel="next"><span>Próxima</span>Regressão Linear Simples</a>
+    </nav>
+  </main>
 </body>
 </html>

@@ -2,842 +2,451 @@
   box-sizing: border-box;
 }
 
+/* Cada termo de fórmula leva data-tone="0..5". As cores são as mesmas em todas
+   as páginas: 1 é sempre o resultado, 2-5 os ingredientes, 0 os conectivos. */
 :root {
-  --bg-dark: #1c1c1c;
-  --text-dark: #616161;
+  color-scheme: dark;
+  --bg: #1c1c1c;
+  --surface: #242424;
+  --border: #333;
+  --text: #a8a8a8;
+  --text-strong: #e6e6e6;
+  --text-muted: #7c7c7c;
+  --tip-bg: rgba(22, 22, 22, 0.97);
 
-  /* Cores Teorema de Bayes */
-  --posterior: rgba(61, 105, 155, 0.8);
-  --likelihood: #ff9f1c;
-  --prior: rgba(79, 155, 108, 0.9);
-  --marginal: rgba(207, 79, 79, 0.9);
-
-  /* Cores Coeficiente Binomial (Padronizadas) */
-  --binom: var(--posterior);
-  --n-factorial: var(--likelihood);
-  --k-factorial: var(--prior);
-  --nk-factorial: var(--marginal);
-
-  /* Cores Distribuição de Poisson (Padronizadas) */
-  --p-k: var(--posterior);
-  --lambda-k: var(--likelihood);
-  --e-lambda: var(--prior);
-  --k-factorial-poisson: var(--marginal);
-
-  /* Cores Covariância (Padronizadas) */
-  --cov-xy: var(--posterior);
-  --summation: var(--likelihood);
-  --x-dev: var(--prior);
-  --y-dev: #1c9eff;
-  --divisor: var(--marginal);
-
-  /* Cores Regra de L'Hôpital (Padronizadas) */
-  --condition: var(--posterior);
-  --lim: var(--likelihood);
-  --f-prime: var(--prior);
-  --g-prime: var(--marginal);
-
-  /* Cores Coeficiente de Pearson (Padronizadas) */
-  --r-xy: var(--posterior);
-  --cov-xy-pearson: var(--likelihood);
-  --std-x: var(--prior);
-  --std-y: var(--marginal);
-
-  /* Cores Regressão Linear (Padronizadas) */
-  --y-hat: var(--posterior);
-  --beta-0: var(--likelihood);
-  --beta-1: var(--prior);
-  --x-variable: var(--marginal);
-
-  /* Cores Fórmula Quadrática (Padronizadas) */
-  --x-quadratic: var(--posterior);
-  --neg-b: var(--likelihood);
-  --plus-minus: #1c9eff;
-  --discriminant: var(--prior);
-  --divisor-2a: var(--marginal);
-
-  /* Cores Distribuição Normal (Padronizadas) */
-  --f-x: var(--posterior);
-  --one-over: var(--likelihood);
-  --e-power: var(--prior);
-
-  /* Cores Qui-Quadrado (Padronizadas) */
-  --chi-squared: var(--posterior);
-  --summation-chi: var(--likelihood);
-  --numerator-chi: var(--prior);
-  --denominator-chi: var(--marginal);
-
-  /* Cores Média Harmônica (Padronizadas) */
-  --h-mean: var(--posterior);
-  --n-total: var(--likelihood);
-  --sum-reciprocals: var(--prior);
-
-  /* Cores Teorema Central do Limite (Padronizadas) */
-  --sample-mean: var(--posterior);
-  --approaches: var(--text-dark);
-  --normal-dist: var(--likelihood);
-  --pop-mean: var(--prior);
-  --pop-variance: var(--marginal);
-  --sample-size: #1c9eff;
-
-  /* Cores Z-Score (Padronizadas) */
-  --z-score: var(--posterior);
-  --observation: var(--likelihood);
-  --pop-mean-z: var(--prior);
-  --pop-std-dev: var(--marginal);
-
-  /* Cores Fórmula de Cochran (Padronizadas) */
-  --sample-size-cochran: var(--posterior);
-  --z-squared: var(--likelihood);
-  --p-hat: var(--prior);
-  --q-hat: #1c9eff;
-  --e-squared: var(--marginal);
-
-  /* Cores Correção População Finita (Padronizadas) */
-  --corrected-n: var(--posterior);
-  --initial-n-num: var(--likelihood);
-  --one-plus: var(--text-dark);
-  --initial-n-den: var(--prior);
-  --pop-size: var(--marginal);
-
-  /* Cores Alocação de Neyman (Padronizadas) */
-  --sample-size-h: var(--posterior);
-  --total-sample-size: var(--likelihood);
-  --pop-size-h: var(--prior);
-  --std-dev-h: #1c9eff;
-  --sum-neyman: var(--marginal);
-
-  /* Cores Distribuição Binomial (Padronizadas) */
-  --p-x-k: var(--posterior);
-  --binom-coef: var(--likelihood);
-  --p-power-k: var(--prior);
-  --q-power-nk: var(--marginal);
-
-  /* Cores Probabilidade Condicional (Padronizadas) */
-  --p-a-given-b: var(--posterior);
-  --p-intersection: var(--likelihood);
-  --p-b: var(--marginal);
-
-  /* Cores Teorema da Probabilidade Total (Padronizadas) */
-  --p-b-total: var(--posterior);
-  --summation-total: var(--likelihood);
-  --p-b-given-ai: var(--prior);
-  --p-ai: var(--marginal);
-
-  /* Cores Distribuição de Bernoulli (Padronizadas) */
-  --p-x-k-bernoulli: var(--posterior);
-  --p-power-k-bernoulli: var(--likelihood);
-  --q-power-1k: var(--marginal);
-
-  /* Cores Intervalo de Confiança (Padronizadas) */
-  --ic: var(--posterior);
-  --sample-mean-ic: var(--likelihood);
-  --plus-minus-ic: #1c9eff;
-  --z-critical: var(--prior);
-  --std-dev-ic: var(--marginal);
-  --sqrt-n: #1c9eff;
-
-  /* Cores Teste t de Student (Padronizadas) */
-  --t-statistic: var(--posterior);
-  --sample-mean-t: var(--likelihood);
-  --null-mean: var(--prior);
-  --sample-std: var(--marginal);
-  --sqrt-n-t: #1c9eff;
-
-  /* Cores Teorema de Chebyshev (Otimizadas) */
-  --prob-chebyshev: var(--posterior);
-  --abs-var: var(--likelihood);
-  --k-const: var(--prior);
-  --sigma-chebyshev: var(--marginal);
-  --one-num: #1c9eff;
-  --k-squared-chebyshev: var(--prior);
-  --paren-chebyshev: #7a7a7a;
+  --tone-0: #8a8a8a;
+  --tone-1: #6f9bd1;
+  --tone-2: #ff9f1c;
+  --tone-3: #5fb37f;
+  --tone-4: #e06666;
+  --tone-5: #b48ae6;
 }
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #fafaf8;
+    --surface: #ffffff;
+    --border: #e2e2de;
+    --text: #4a4a4a;
+    --text-strong: #1c1c1c;
+    --text-muted: #6e6e6e;
+    --tip-bg: rgba(255, 255, 255, 0.98);
+
+    --tone-0: #6b6b6b;
+    --tone-1: #2f5f96;
+    --tone-2: #b85f00;
+    --tone-3: #2e7d4f;
+    --tone-4: #b83a3a;
+    --tone-5: #7a4fc0;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --border: #e2e2de;
+  --text: #4a4a4a;
+  --text-strong: #1c1c1c;
+  --text-muted: #6e6e6e;
+  --tip-bg: rgba(255, 255, 255, 0.98);
+
+  --tone-0: #6b6b6b;
+  --tone-1: #2f5f96;
+  --tone-2: #b85f00;
+  --tone-3: #2e7d4f;
+  --tone-4: #b83a3a;
+  --tone-5: #7a4fc0;
+}
+
+[data-tone="0"] { --tone: var(--tone-0); }
+[data-tone="1"] { --tone: var(--tone-1); }
+[data-tone="2"] { --tone: var(--tone-2); }
+[data-tone="3"] { --tone: var(--tone-3); }
+[data-tone="4"] { --tone: var(--tone-4); }
+[data-tone="5"] { --tone: var(--tone-5); }
 
 html, body {
-  height: 100%;
   margin: 0;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  background: var(--bg-dark);
-  color: var(--text-dark);
+  min-height: 100%;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.wrap {
-  min-height: 100vh;
+body {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 4vw, 1.75rem); /* 16px -> 28px */
+  padding: 4.5rem 16px 3rem;
 }
 
 .card {
   width: 100%;
   max-width: 980px;
-  border-radius: 14px;
-  padding: clamp(1.25rem, 5vw, 2rem); /* 20px -> 32px */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(1rem, 3vw, 1.5rem); /* 16px -> 24px */
+  gap: 1.5rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- voltar */
+
+.back-link {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: inline-flex;
+  padding: 6px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  transition: color .2s ease;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--text-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--tone-2);
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------- fórmula */
+
+.formula-title {
+  margin: 0;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  text-align: center;
+  color: var(--text-strong);
+}
+
+/* A fórmula nunca quebra linha: o script diminui a fonte até caber e, abaixo
+   do mínimo, a faixa rola na horizontal. */
+.formula-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  padding: 12px 0;
 }
 
 .formula-wrap {
+  --fit: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  width: 100%;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-.formula-wrap[aria-label*="Distribuição Binomial"] {
-  flex-wrap: nowrap !important;
-  white-space: nowrap !important;
-}
-
-/* Forçar nowrap em todas as fórmulas em modo paisagem mobile */
-@media (max-width: 896px) and (max-height: 500px) and (orientation: landscape),
-       (max-width: 640px) and (orientation: landscape) {
-  .formula-wrap {
-    flex-wrap: nowrap !important;
-    white-space: nowrap !important;
-    overflow-x: auto;
-    overflow-y: visible;
-  }
-}
-
-.formula-divider {
-  width: 80%;
-  height: 2px;
-  background-color: var(--text-dark);
-  margin: 8px 0;
-}
-
-.formula-title {
-  font-size: clamp(1.3rem, 4vw, 1.8rem);
-  text-align: center;
-  color: #e0e0e0;
-  margin: 0;
-}
-
-.formula-static-info {
-  align-self: stretch;
-  width: 100%;
-  max-width: 720px;
+  gap: .25em;
+  width: max-content;
+  min-width: 100%;
   margin: 0 auto;
-  text-align: left;
+  white-space: nowrap;
+  font-size: calc(clamp(1.6rem, 6vw, 3.6rem) * var(--fit));
 }
 
-.formula-static-info h2 {
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  color: var(--text-dark);
-  margin: 0 0 .75rem;
-}
-
-.formula-static-info dl {
-  margin: 0;
-  display: grid;
-  gap: .6rem;
-}
-
-.formula-static-info dt {
-  font-weight: 600;
-  color: #c0c0c0;
-}
-
-.formula-static-info dd {
-  margin: 0 0 .6rem;
-  color: var(--text-dark);
-  line-height: 1.5;
+.formula-wrap .katex {
+  font-size: 1em;
+  line-height: 1;
 }
 
 .part {
   display: inline-block;
-  cursor: pointer;
-  padding: 8px 12px;
+  padding: .12em .18em;
   border-radius: 10px;
+  color: var(--tone);
+  cursor: pointer;
   user-select: none;
-  transition: transform .25s ease;
+  transition: transform .25s ease, background-color .2s ease;
+}
+
+.part:hover {
+  background: color-mix(in srgb, var(--tone) 12%, transparent);
+}
+
+.part.selected {
   position: relative;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.part:focus-visible {
-  outline: 2px solid var(--likelihood);
-  outline-offset: 4px;
+  z-index: 10;
+  transform: translateY(-.15em);
 }
 
-/* Estilos Teorema de Bayes */
-.posterior { color: var(--posterior); }
-.likelihood { color: var(--likelihood); }
-.prior { color: var(--prior); }
-.marginal { color: var(--marginal); }
-
-/* Estilos Coeficiente Binomial */
-.binom { color: var(--binom); }
-.n-factorial { color: var(--n-factorial); }
-.k-factorial { color: var(--k-factorial); }
-.nk-factorial { color: var(--nk-factorial); }
-
-/* Estilos Distribuição de Poisson */
-.p-k { color: var(--p-k); }
-.lambda-k { color: var(--lambda-k); }
-.e-lambda { color: var(--e-lambda); }
-.k-factorial-poisson { color: var(--k-factorial-poisson); }
-
-/* Estilos Covariância */
-.cov-xy { color: var(--cov-xy); }
-.summation { color: var(--summation); }
-.x-dev { color: var(--x-dev); }
-.y-dev { color: var(--y-dev); }
-.divisor { color: var(--divisor); }
-
-/* Estilos Regra de L'Hôpital */
-.condition { color: var(--condition); }
-.lim { color: var(--lim); }
-.f-prime { color: var(--f-prime); }
-.g-prime { color: var(--g-prime); }
-
-/* Estilos Coeficiente de Pearson */
-.r-xy { color: var(--r-xy); }
-.cov-xy-pearson { color: var(--cov-xy-pearson); }
-.std-x { color: var(--std-x); }
-.std-y { color: var(--std-y); }
-
-/* Estilos Regressão Linear */
-.y-hat { color: var(--y-hat); }
-.beta-0 { color: var(--beta-0); }
-.beta-1 { color: var(--beta-1); }
-.x-variable { color: var(--x-variable); }
-
-/* Estilos Fórmula Quadrática */
-.x-quadratic { color: var(--x-quadratic); }
-.neg-b { color: var(--neg-b); }
-.plus-minus { color: var(--plus-minus); }
-.discriminant { color: var(--discriminant); }
-.divisor-2a { color: var(--divisor-2a); }
-
-/* Estilos Distribuição Normal */
-.f-x { color: var(--f-x); }
-.one-over { color: var(--one-over); }
-.e-power { color: var(--e-power); }
-
-/* Estilos Qui-Quadrado */
-.chi-squared { color: var(--chi-squared); }
-.summation-chi { color: var(--summation-chi); }
-.numerator-chi { color: var(--numerator-chi); }
-.denominator-chi { color: var(--denominator-chi); }
-
-/* Estilos Média Harmônica */
-.h-mean { color: var(--h-mean); }
-.n-total { color: var(--n-total); }
-.sum-reciprocals { color: var(--sum-reciprocals); }
-
-/* Estilos Teorema Central do Limite */
-.sample-mean { color: var(--sample-mean); }
-.approaches { color: var(--approaches); }
-.normal-dist { color: var(--normal-dist); }
-.pop-mean { color: var(--pop-mean); }
-.pop-variance { color: var(--pop-variance); }
-.sample-size { color: var(--sample-size); }
-
-/* Estilos Z-Score */
-.z-score { color: var(--z-score); }
-.observation { color: var(--observation); }
-.pop-mean-z { color: var(--pop-mean-z); }
-.pop-std-dev { color: var(--pop-std-dev); }
-
-/* Estilos Fórmula de Cochran */
-.sample-size-cochran { color: var(--sample-size-cochran); }
-.z-squared { color: var(--z-squared); }
-.p-hat { color: var(--p-hat); }
-.q-hat { color: var(--q-hat); }
-.e-squared { color: var(--e-squared); }
-
-/* Estilos Correção População Finita */
-.corrected-n { color: var(--corrected-n); }
-.initial-n-num { color: var(--initial-n-num); }
-.one-plus { color: var(--one-plus); }
-.initial-n-den { color: var(--initial-n-den); }
-.pop-size { color: var(--pop-size); }
-
-/* Estilos Alocação de Neyman */
-.sample-size-h { color: var(--sample-size-h); }
-.total-sample-size { color: var(--total-sample-size); }
-.pop-size-h { color: var(--pop-size-h); }
-.std-dev-h { color: var(--std-dev-h); }
-.sum-neyman { color: var(--sum-neyman); }
-
-/* Estilos Distribuição Binomial */
-.p-x-k,
-.p-x-k .katex,
-.p-x-k .katex * { color: var(--p-x-k) !important; }
-.binom-coef,
-.binom-coef .katex,
-.binom-coef .katex * { color: var(--binom-coef) !important; }
-.p-power-k,
-.p-power-k .katex,
-.p-power-k .katex * { color: var(--p-power-k) !important; }
-.q-power-nk,
-.q-power-nk .katex,
-.q-power-nk .katex * { color: var(--q-power-nk) !important; }
-
-/* Estilos Probabilidade Condicional */
-.p-a-given-b,
-.p-a-given-b .katex,
-.p-a-given-b .katex * { color: var(--p-a-given-b) !important; }
-.p-intersection,
-.p-intersection .katex,
-.p-intersection .katex * { color: var(--p-intersection) !important; }
-.p-b,
-.p-b .katex,
-.p-b .katex * { color: var(--p-b) !important; }
-
-/* Estilos Teorema da Probabilidade Total */
-.p-b-total,
-.p-b-total .katex,
-.p-b-total .katex * { color: var(--p-b-total) !important; }
-.summation-total,
-.summation-total .katex,
-.summation-total .katex * { color: var(--summation-total) !important; }
-.p-b-given-ai,
-.p-b-given-ai .katex,
-.p-b-given-ai .katex * { color: var(--p-b-given-ai) !important; }
-.p-ai,
-.p-ai .katex,
-.p-ai .katex * { color: var(--p-ai) !important; }
-
-/* Estilos Distribuição de Bernoulli */
-.p-x-k-bernoulli,
-.p-x-k-bernoulli .katex,
-.p-x-k-bernoulli .katex * { color: var(--p-x-k-bernoulli) !important; }
-.p-power-k-bernoulli,
-.p-power-k-bernoulli .katex,
-.p-power-k-bernoulli .katex * { color: var(--p-power-k-bernoulli) !important; }
-.q-power-1k,
-.q-power-1k .katex,
-.q-power-1k .katex * { color: var(--q-power-1k) !important; }
-
-/* Estilos Intervalo de Confiança */
-.ic,
-.ic .katex,
-.ic .katex * { color: var(--ic) !important; }
-.sample-mean-ic,
-.sample-mean-ic .katex,
-.sample-mean-ic .katex * { color: var(--sample-mean-ic) !important; }
-.plus-minus-ic,
-.plus-minus-ic .katex,
-.plus-minus-ic .katex * { color: var(--plus-minus-ic) !important; }
-.z-critical,
-.z-critical .katex,
-.z-critical .katex * { color: var(--z-critical) !important; }
-.std-dev-ic,
-.std-dev-ic .katex,
-.std-dev-ic .katex * { color: var(--std-dev-ic) !important; }
-.sqrt-n,
-.sqrt-n .katex,
-.sqrt-n .katex * { color: var(--sqrt-n) !important; }
-
-/* Estilos Teste t de Student */
-.t-statistic,
-.t-statistic .katex,
-.t-statistic .katex * { color: var(--t-statistic) !important; }
-.sample-mean-t,
-.sample-mean-t .katex,
-.sample-mean-t .katex * { color: var(--sample-mean-t) !important; }
-.null-mean,
-.null-mean .katex,
-.null-mean .katex * { color: var(--null-mean) !important; }
-.sample-std,
-.sample-std .katex,
-.sample-std .katex * { color: var(--sample-std) !important; }
-.sqrt-n-t,
-.sqrt-n-t .katex,
-.sqrt-n-t .katex * { color: var(--sqrt-n-t) !important; }
-
-/* Estilos Teorema de Chebyshev */
-.prob,
-.prob .katex,
-.prob .katex * { color: var(--prob-chebyshev) !important; }
-.paren-left,
-.paren-left .katex,
-.paren-left .katex * { color: var(--paren-chebyshev) !important; }
-.paren-right,
-.paren-right .katex,
-.paren-right .katex * { color: var(--paren-chebyshev) !important; }
-.abs-var,
-.abs-var .katex,
-.abs-var .katex * { color: var(--abs-var) !important; }
-.k,
-.k .katex,
-.k .katex * { color: var(--k-const) !important; }
-.sigma,
-.sigma .katex,
-.sigma .katex * { color: var(--sigma-chebyshev) !important; }
-.one,
-.one .katex,
-.one .katex * { color: var(--one-num) !important; }
-.k-squared,
-.k-squared .katex,
-.k-squared .katex * { color: var(--k-squared-chebyshev) !important; }
-
-.part.selected { z-index: 10; }
+.part.selected.is-below {
+  transform: translateY(.15em);
+}
 
 .op {
-  color: var(--text-dark);
+  color: var(--tone-0);
   font-weight: 700;
-  font-size: 2.05em;
-  padding: 0 6px;
+  font-size: .9em;
+  padding: 0 .1em;
 }
 
-.katex {
-  font-size: clamp(1.75rem, 7.6vw, 4.25rem); /* 28px -> 68px */
-  line-height: 1;
-  display: inline-block;
-  vertical-align: middle;
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* modal explicativo */
+.num,
+.den {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .15em;
+  padding: .08em .2em;
+}
+
+.den {
+  border-top: 2px solid var(--tone-0);
+}
+
+.frac .op {
+  font-size: .75em;
+}
+
+.formula-hint {
+  margin: -.5rem 0 0;
+  font-size: .9rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.toggle-all {
+  font: inherit;
+  color: var(--text-strong);
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------- balões */
+
 .explain-modal {
   position: fixed;
-  font-size: 0.95rem;
-  max-width: 280px;
-  line-height: 1.4;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease, transform .25s ease;
+  top: 0;
+  left: 0;
   z-index: 1000;
-  word-wrap: break-word;
+  max-width: 280px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--tip-bg);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .35);
+  color: var(--text);
+  font-size: .92rem;
+  line-height: 1.45;
   overflow-wrap: break-word;
   hyphens: auto;
-  padding: 12px;
-  background: rgba(28, 28, 28, 0.95);
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s ease, visibility .2s;
 }
 
 .explain-modal.show {
   opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
+  visibility: visible;
 }
 
 .modal-title {
+  margin-bottom: 4px;
   font-weight: 700;
-  margin-bottom: 6px;
-  font-size: 1rem;
+  color: var(--tone);
 }
 
-.modal-text {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
+/* ---------------------------------------------------------------- legenda */
+
+.formula-static-info {
+  width: 100%;
+  max-width: 720px;
 }
 
-/* Scrollbar customizada para modais */
-.explain-modal::-webkit-scrollbar {
-  width: 4px;
+.formula-static-info h2 {
+  margin: 0 0 .9rem;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
 }
 
-.explain-modal::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+.formula-static-info dl {
+  margin: 0;
 }
 
-.explain-modal::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+.formula-static-info dt {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-weight: 600;
+  color: var(--text-strong);
 }
 
-.explain-modal::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(255, 255, 255, 0.5);
+.formula-static-info dt::before {
+  content: "";
+  flex: none;
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--tone);
 }
 
-/* Estilos da Página Inicial */
-.home-title {
-  color: #e0e0e0;
-  font-size: clamp(2rem, 6vw, 3rem);
+.formula-static-info dd {
+  margin: .3rem 0 1.1rem 1.15rem;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------- paginação */
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  max-width: 720px;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.pager a {
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  max-width: 48%;
+  color: var(--text-strong);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pager a span {
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.pager a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pager-next {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------- índice */
+
+.home {
+  max-width: 1100px;
+  align-items: stretch;
+  gap: 2.25rem;
+}
+
+.home-header {
   text-align: center;
-  margin-bottom: 1.5rem;
+}
+
+.home-title {
+  margin: 0 0 .5rem;
+  font-size: clamp(2rem, 6vw, 3rem);
+  color: var(--text-strong);
+}
+
+.home-lede {
+  max-width: 560px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.55;
+}
+
+.filter input {
+  width: 100%;
+  max-width: 420px;
+  padding: .7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.formula-group h2 {
+  margin: 0 0 .9rem;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
 }
 
 .formula-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 1rem;
-  width: 100%;
-  max-width: 1200px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .formula-card {
-  background-color: transparent;
-  border: none;
-  border-radius: 10px;
-  padding: 1.5rem;
-  text-align: center;
-  color: #c0c0c0;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
   text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 500;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: border-color .2s ease, transform .2s ease;
 }
 
 .formula-card:hover,
-.formula-card:focus {
-  background-color: transparent;
-  transform: translateY(-5px);
-  color: #fff;
-  outline: none;
+.formula-card:focus-visible {
+  border-color: var(--tone-1);
+  transform: translateY(-2px);
 }
 
-/* Link de Voltar */
-.back-link {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  color: var(--text-dark);
-  text-decoration: none;
-  font-size: 2rem;
-  line-height: 1;
-  transition: color 0.2s ease;
-  z-index: 2000;
+.card-tex {
+  display: block;
+  min-height: 3.2rem;
+  margin-bottom: .3rem;
+  overflow: hidden;
+  color: var(--text-strong);
+  font-size: .95rem;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, #000 88%, transparent);
 }
 
-.back-link:hover {
-  color: #fff;
+.card-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-strong);
 }
 
-/* Mensagem para girar para paisagem em mobile retrato */
-.rotate-message {
-  display: none;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(28, 28, 28, 0.98);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
-  padding: 2rem 1.5rem;
-  border-radius: 16px;
+.card-blurb {
+  font-size: .9rem;
+  line-height: 1.45;
+}
+
+.filter-empty {
   text-align: center;
-  z-index: 10000;
-  max-width: 280px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
+  color: var(--text-muted);
 }
 
-.rotate-message.show {
-  display: block;
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-
-.rotate-message-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  display: block;
-  animation: rotateIcon 2s ease-in-out infinite;
-}
-
-@keyframes rotateIcon {
-  0%, 100% { transform: rotate(0deg); }
-  50% { transform: rotate(90deg); }
-}
-
-.rotate-message-text {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #e0e0e0;
-}
-
-.rotate-message-text strong {
-  color: #fff;
-  font-size: 1.1rem;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-/* Otimizações para mobile em modo paisagem */
-@media (max-width: 896px) and (max-height: 500px) and (orientation: landscape) {
-  .wrap {
-    padding: clamp(0.5rem, 2vw, 1rem);
-    min-height: 100vh;
-    align-items: center;
-  }
-
-  .card {
-    padding: clamp(0.75rem, 3vw, 1.25rem);
-    gap: clamp(0.5rem, 2vw, 1rem);
-    max-width: 100%;
-  }
-
-  .katex {
-    font-size: clamp(1.5rem, 5vw, 2.5rem); /* 24px -> 40px */
-  }
-
-  .part {
-    padding: 6px 10px;
-    border-radius: 8px;
-  }
-
-  .op {
-    font-size: 1.8em;
-    padding: 0 4px;
-  }
-
-  .formula-wrap {
-    gap: 8px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-    padding: 4px 0;
-  }
-
-  .formula-wrap::-webkit-scrollbar {
-    height: 4px;
-  }
-
-  .formula-wrap::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .formula-wrap::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-  }
-
-  .explain-modal {
-    max-width: calc(100vw - 30px);
-    max-height: calc(100vh - 100px);
-    font-size: 0.85rem;
-    padding: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .modal-title {
-    font-size: 0.95rem;
-    margin-bottom: 4px;
-  }
-
-  .modal-text {
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-  }
-
-  .back-link {
-    top: 10px;
-    left: 10px;
-    font-size: 1.5rem;
-  }
-
-  .formula-divider {
-    width: 85%;
-    margin: 4px 0;
-  }
-}
-
-/* Mobile retrato - mostrar mensagem para girar */
-@media (max-width: 640px) and (orientation: portrait) {
-  .rotate-message.show {
-    display: block;
-  }
-
-  .card {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .katex { 
-    font-size: clamp(1.375rem, 10vw, 3rem); /* 22px -> 48px */
-  }
-  
-  .part { 
-    padding: 6px 8px; 
-    border-radius: 8px; 
-  }
-  
-  .explain-modal { 
-    max-width: calc(100vw - 30px);
-    max-height: calc(100vh - 100px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 10px;
-  }
-
-  .modal-text {
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-  }
-}
-
-/* Mobile paisagem pequeno */
-@media (max-width: 640px) and (orientation: landscape) {
-  .wrap {
-    padding: clamp(0.5rem, 2vw, 1rem);
-  }
-
-  .card {
-    padding: clamp(0.75rem, 3vw, 1.25rem);
-    gap: clamp(0.5rem, 2vw, 1rem);
-  }
-
-  .katex {
-    font-size: clamp(1.25rem, 4vw, 2rem); /* 20px -> 32px */
-  }
-
-  .part {
-    padding: 5px 8px;
-  }
-
-  .op {
-    font-size: 1.6em;
-    padding: 0 3px;
-  }
-
-  .formula-wrap {
-    gap: 6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .explain-modal {
-    max-width: calc(100vw - 30px);
-    max-height: calc(100vh - 80px);
-    font-size: 0.8rem;
-    padding: 8px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .modal-text {
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-  }
-
-  .back-link {
-    top: 8px;
-    left: 8px;
-    font-size: 1.3rem;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
   }
 }

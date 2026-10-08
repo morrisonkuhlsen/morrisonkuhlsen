@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Teorema de Bayes — Interativo</title>
   <meta name="description" content="Teorema de Bayes: Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/teorema-bayes.html">
@@ -21,82 +21,64 @@
   <meta name="twitter:title" content="Teorema de Bayes — Interativo">
   <meta name="twitter:description" content="Teorema de Bayes: Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Teorema de Bayes</h1>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Teorema de Bayes</h1>
 
-      <div class="formula-wrap" aria-label="Fórmula de Bayes interativa">
-        <span class="part posterior" data-part="posterior" tabindex="0" title="Posterior: P(A|B)"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part likelihood" data-part="likelihood" tabindex="0" title="Likelihood: P(B|A)"></span>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula de Bayes interativa">
+        <span class="part" data-part="posterior" data-tone="1" data-tex="P(A\mid B)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="likelihood" data-tone="2" data-tex="P(B\mid A)"></span>
             <span class="op">·</span>
-            <span class="part prior" data-part="prior" tabindex="0" title="Prior: P(A)"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part marginal" data-part="marginal" tabindex="0" title="Marginal: P(B)"></span>
-          </div>
-        </div>
+            <span class="part" data-part="prior" data-tone="3" data-tex="P(A)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="marginal" data-tone="4" data-tex="P(B)"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="posterior" data-tone="1">Posterior</dt>
+          <dd>Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.</dd>
+          <dt data-part="likelihood" data-tone="2">Likelihood</dt>
+          <dd>Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B.</dd>
+          <dt data-part="prior" data-tone="3">Prior</dt>
+          <dd>Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições.</dd>
+          <dt data-part="marginal" data-tone="4">Marginal (Evidência)</dt>
+          <dd>Probabilidade de observar B sob todos os cenários; normaliza a equação. Calculado usando a Lei da Probabilidade Total: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Posterior</dt>
-        <dd>Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B.</dd>
-        <dt>Likelihood</dt>
-        <dd>Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B.</dd>
-        <dt>Prior</dt>
-        <dd>Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições.</dd>
-        <dt>Marginal (Evidência)</dt>
-        <dd>Probabilidade de observar B sob todos os cenários; normaliza a equação. Calculado usando a Lei da Probabilidade Total: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        posterior: "\\displaystyle P(A\\mid B)",
-        likelihood: "\\displaystyle P(B\\mid A)",
-        prior: "\\displaystyle P(A)",
-        marginal: "\\displaystyle P(B)"
-      },
-      explanations: {
-        posterior: {
-          title: "Posterior",
-          text: "Probabilidade de A dado que B ocorreu. Atualiza a crença sobre A após observar B."
-        },
-        likelihood: {
-          title: "Likelihood",
-          text: "Probabilidade de observar B se A for verdade. Indica o quão compatível é A com os dados B."
-        },
-        prior: {
-          title: "Prior",
-          text: "Crença inicial sobre A antes de observar B. Pode vir de conhecimento prévio ou suposições."
-        },
-        marginal: {
-          title: "Marginal (Evidência)",
-          text: "Probabilidade de observar B sob todos os cenários; normaliza a equação. Calculado usando a Lei da Probabilidade Total: P(B) = P(B|A) · P(A) + P(B|¬A) · P(¬A)"
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-next" href="probabilidade-condicional.html" rel="next"><span>Próxima</span>Probabilidade Condicional</a>
+    </nav>
+  </main>
 </body>
 </html>

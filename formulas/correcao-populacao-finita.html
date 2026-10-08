@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Correção para População Finita — Interativo</title>
   <meta name="description" content="Correção para População Finita: O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/correcao-populacao-finita.html">
@@ -21,98 +21,73 @@
   <meta name="twitter:title" content="Correção para População Finita — Interativo">
   <meta name="twitter:description" content="Correção para População Finita: O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Correção para População Finita</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Correção para População Finita</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula de Correção para População Finita interativa">
-        <span class="part corrected-n" data-part="corrected_n" tabindex="0" title="Tamanho da Amostra Corrigido"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part initial-n-num" data-part="initial_n_num" tabindex="0" title="Tamanho da Amostra Inicial"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div style="display: flex; align-items: center;">
-            <span class="part one-plus" data-part="one_plus" tabindex="0" title="Fator de Correção"></span>
-            <div style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin-left:8px;">
-              <div>
-                <span class="part initial-n-den" data-part="initial_n_den" tabindex="0" title="Amostra Inicial Menos Um"></span>
-              </div>
-              <div class="formula-divider" style="width: 100%;"></div>
-              <div>
-                <span class="part pop-size" data-part="pop_size" tabindex="0" title="Tamanho da População"></span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula de Correção para População Finita interativa">
+        <span class="part" data-part="corrected_n" data-tone="1" data-tex="n"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="initial_n_num" data-tone="2" data-tex="n_0"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="one_plus" data-tone="0" data-tex="1 +"></span>
+            <span class="frac">
+              <span class="num">
+                <span class="part" data-part="initial_n_den" data-tone="3" data-tex="(n_0 - 1)"></span>
+              </span>
+              <span class="den">
+                <span class="part" data-part="pop_size" data-tone="4" data-tex="N"></span>
+              </span>
+            </span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="corrected_n" data-tone="1">Tamanho da Amostra Corrigido (n)</dt>
+          <dd>O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra necessário.</dd>
+          <dt data-part="initial_n_num" data-tone="2">Tamanho da Amostra Inicial (n₀)</dt>
+          <dd>O tamanho da amostra calculado com a fórmula de Cochran (ou outra), que assume uma população infinita.</dd>
+          <dt data-part="one_plus" data-tone="0">Fator de Correção</dt>
+          <dd>O início do denominador que ajusta o tamanho da amostra com base no tamanho da população.</dd>
+          <dt data-part="initial_n_den" data-tone="3">Amostra Inicial Menos Um (n₀ - 1)</dt>
+          <dd>Parte do cálculo do fator de correção.</dd>
+          <dt data-part="pop_size" data-tone="4">Tamanho da População (N)</dt>
+          <dd>O número total de indivíduos na população finita que você está estudando.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Tamanho da Amostra Corrigido (n)</dt>
-        <dd>O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra necessário.</dd>
-        <dt>Tamanho da Amostra Inicial (n₀)</dt>
-        <dd>O tamanho da amostra calculado com a fórmula de Cochran (ou outra), que assume uma população infinita.</dd>
-        <dt>Fator de Correção</dt>
-        <dd>O início do denominador que ajusta o tamanho da amostra com base no tamanho da população.</dd>
-        <dt>Amostra Inicial Menos Um (n₀ - 1)</dt>
-        <dd>Parte do cálculo do fator de correção.</dd>
-        <dt>Tamanho da População (N)</dt>
-        <dd>O número total de indivíduos na população finita que você está estudando.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        corrected_n: "\\displaystyle n",
-        initial_n_num: "\\displaystyle n_0",
-        one_plus: "\\displaystyle 1 +",
-        initial_n_den: "\\displaystyle (n_0 - 1)",
-        pop_size: "\\displaystyle N"
-      },
-      explanations: {
-        corrected_n: {
-          title: "Tamanho da Amostra Corrigido (n)",
-          text: "O tamanho da amostra ajustado para populações que não são muito grandes. Esta correção reduz o tamanho da amostra necessário."
-        },
-        initial_n_num: {
-          title: "Tamanho da Amostra Inicial (n₀)",
-          text: "O tamanho da amostra calculado com a fórmula de Cochran (ou outra), que assume uma população infinita."
-        },
-        one_plus: {
-          title: "Fator de Correção",
-          text: "O início do denominador que ajusta o tamanho da amostra com base no tamanho da população."
-        },
-        initial_n_den: {
-          title: "Amostra Inicial Menos Um (n₀ - 1)",
-          text: "Parte do cálculo do fator de correção."
-        },
-        pop_size: {
-          title: "Tamanho da População (N)",
-          text: "O número total de indivíduos na população finita que você está estudando."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="cochran-formula.html" rel="prev"><span>Anterior</span>Fórmula de Cochran</a>
+      <a class="pager-next" href="neyman-allocation.html" rel="next"><span>Próxima</span>Alocação de Neyman</a>
+    </nav>
+  </main>
 </body>
 </html>

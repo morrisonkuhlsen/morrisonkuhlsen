@@ -6,7 +6,7 @@ pt:
   - { name: "Standard Normal Table", url: "/ztable.html" }
   - { name: "Student's T Table",     url: "/ttable.html" }
   - { name: "Snedecor F Table",      url: "/ftable.html" }
-  - { name: "Fórmulas",              url: "/formulas/home.html" }
+  - { name: "Fórmulas",              url: "/formulas/" }
   - { name: "Glossário",             url: "/pt/glossario" }
   - { name: "Problema Semanal",      url: "/problema-semanal/", external: true, featured: true }
 
@@ -14,5 +14,5 @@ en:
   - { name: "Standard Normal Table", url: "/ztable.html" }
   - { name: "Student's T Table",     url: "/ttable.html" }
   - { name: "Snedecor F Table",      url: "/ftable.html" }
-  - { name: "Formulas",              url: "/formulas/home.html" }
+  - { name: "Formulas",              url: "/formulas/" }
   - { name: "Weekly Problem",        url: "/problema-semanal/", external: true, featured: true }

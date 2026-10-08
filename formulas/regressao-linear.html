@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Regressão Linear — Interativo</title>
   <meta name="description" content="Regressão Linear Simples: O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/regressao-linear.html">
@@ -21,76 +21,59 @@
   <meta name="twitter:title" content="Regressão Linear — Interativo">
   <meta name="twitter:description" content="Regressão Linear Simples: O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Regressão Linear Simples</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Regressão Linear Simples</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula da Regressão Linear Simples interativa">
-        <span class="part y-hat" data-part="y_hat" tabindex="0" title="Valor Previsto de Y"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <span class="part beta-0" data-part="beta_0" tabindex="0" title="Intercepto"></span>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Regressão Linear Simples interativa">
+        <span class="part" data-part="y_hat" data-tone="1" data-tex="\hat{y}"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="beta_0" data-tone="2" data-tex="\beta_0"></span>
         <span class="op">+</span>
-        <span class="part beta-1" data-part="beta_1" tabindex="0" title="Coeficiente Angular (Inclinação)"></span>
-        <span class="part x-variable" data-part="x_variable" tabindex="0" title="Variável Independente"></span>
+        <span class="part" data-part="beta_1" data-tone="3" data-tex="\beta_1"></span>
+        <span class="part" data-part="x_variable" data-tone="4" data-tex="x"></span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="y_hat" data-tone="1">Valor Previsto (ŷ)</dt>
+          <dd>O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).</dd>
+          <dt data-part="beta_0" data-tone="2">Intercepto (β₀)</dt>
+          <dd>O valor previsto de Y quando a variável independente (x) é igual a zero. É o ponto onde a linha de regressão cruza o eixo Y.</dd>
+          <dt data-part="beta_1" data-tone="3">Coeficiente Angular (β₁)</dt>
+          <dd>Mede a mudança no valor previsto de Y para cada aumento de uma unidade em x. Representa a inclinação da linha de regressão.</dd>
+          <dt data-part="x_variable" data-tone="4">Variável Independente (x)</dt>
+          <dd>A variável que é usada para prever ou explicar a variação na variável dependente (Y).</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Valor Previsto (ŷ)</dt>
-        <dd>O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x).</dd>
-        <dt>Intercepto (β₀)</dt>
-        <dd>O valor previsto de Y quando a variável independente (x) é igual a zero. É o ponto onde a linha de regressão cruza o eixo Y.</dd>
-        <dt>Coeficiente Angular (β₁)</dt>
-        <dd>Mede a mudança no valor previsto de Y para cada aumento de uma unidade em x. Representa a inclinação da linha de regressão.</dd>
-        <dt>Variável Independente (x)</dt>
-        <dd>A variável que é usada para prever ou explicar a variação na variável dependente (Y).</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        y_hat: "\\displaystyle \\hat{y}",
-        beta_0: "\\displaystyle \\beta_0",
-        beta_1: "\\displaystyle \\beta_1",
-        x_variable: "\\displaystyle x"
-      },
-      explanations: {
-        y_hat: {
-          title: "Valor Previsto (ŷ)",
-          text: "O valor estimado da variável dependente (Y) para um determinado valor da variável independente (x)."
-        },
-        beta_0: {
-          title: "Intercepto (β₀)",
-          text: "O valor previsto de Y quando a variável independente (x) é igual a zero. É o ponto onde a linha de regressão cruza o eixo Y."
-        },
-        beta_1: {
-          title: "Coeficiente Angular (β₁)",
-          text: "Mede a mudança no valor previsto de Y para cada aumento de uma unidade em x. Representa a inclinação da linha de regressão."
-        },
-        x_variable: {
-          title: "Variável Independente (x)",
-          text: "A variável que é usada para prever ou explicar a variação na variável dependente (Y)."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="coeficiente-pearson.html" rel="prev"><span>Anterior</span>Coeficiente de Correlação de Pearson (r)</a>
+      <a class="pager-next" href="media-harmonica.html" rel="next"><span>Próxima</span>Média Harmônica</a>
+    </nav>
+  </main>
 </body>
 </html>

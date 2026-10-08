@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Teorema Central do Limite — Interativo</title>
   <meta name="description" content="Teorema Central do Limite: A média de uma amostra de tamanho &#x27;n&#x27; retirada da população. O teorema descreve a distribuição dessas médias.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/teorema-central-limite.html">
@@ -21,101 +21,72 @@
   <meta name="twitter:title" content="Teorema Central do Limite — Interativo">
   <meta name="twitter:description" content="Teorema Central do Limite: A média de uma amostra de tamanho &#x27;n&#x27; retirada da população. O teorema descreve a distribuição dessas médias.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Teorema Central do Limite</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Teorema Central do Limite</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula do Teorema Central do Limite interativa">
-        <span class="part sample-mean" data-part="sample_mean" tabindex="0" title="Média Amostral"></span>
-        <span class="part approaches" data-part="approaches" tabindex="0" title="Aproxima-se de"></span>
-        <span class="part normal-dist" data-part="normal_dist" tabindex="0" title="Distribuição Normal"></span>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Teorema Central do Limite interativa">
+        <span class="part" data-part="sample_mean" data-tone="1" data-tex="\bar{X}_n"></span>
+        <span class="part" data-part="approaches" data-tone="0" data-tex="\sim"></span>
+        <span class="part" data-part="normal_dist" data-tone="2" data-tex="\mathcal{N}"></span>
         <span class="op">(</span>
-        <span class="part pop-mean" data-part="pop_mean" tabindex="0" title="Média Populacional"></span>
+        <span class="part" data-part="pop_mean" data-tone="3" data-tex="\mu"></span>
         <span class="op">,</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part pop-variance" data-part="pop_variance" tabindex="0" title="Variância Populacional"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part sample-size" data-part="sample_size" tabindex="0" title="Tamanho da Amostra"></span>
-          </div>
-        </div>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="pop_variance" data-tone="4" data-tex="\sigma^2"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="sample_size" data-tone="5" data-tex="n"></span>
+          </span>
+        </span>
         <span class="op">)</span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="sample_mean" data-tone="1">Média Amostral (X̄ₙ)</dt>
+          <dd>A média de uma amostra de tamanho 'n' retirada da população. O teorema descreve a distribuição dessas médias.</dd>
+          <dt data-part="approaches" data-tone="0">É distribuído como (~)</dt>
+          <dd>Indica que, à medida que o tamanho da amostra 'n' aumenta, a distribuição das médias amostrais se aproxima de uma distribuição normal.</dd>
+          <dt data-part="normal_dist" data-tone="2">Distribuição Normal (N)</dt>
+          <dd>Uma distribuição de probabilidade contínua em forma de sino, definida por sua média e variância.</dd>
+          <dt data-part="pop_mean" data-tone="3">Média Populacional (μ)</dt>
+          <dd>A média de toda a população. A distribuição das médias amostrais é centrada neste valor.</dd>
+          <dt data-part="pop_variance" data-tone="4">Variância Populacional (σ²)</dt>
+          <dd>Uma medida da dispersão dos dados em toda a população.</dd>
+          <dt data-part="sample_size" data-tone="5">Tamanho da Amostra (n)</dt>
+          <dd>O número de observações em cada amostra. A variância da distribuição das médias amostrais diminui à medida que 'n' aumenta.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Média Amostral (X̄ₙ)</dt>
-        <dd>A média de uma amostra de tamanho &#x27;n&#x27; retirada da população. O teorema descreve a distribuição dessas médias.</dd>
-        <dt>É distribuído como (~)</dt>
-        <dd>Indica que, à medida que o tamanho da amostra &#x27;n&#x27; aumenta, a distribuição das médias amostrais se aproxima de uma distribuição normal.</dd>
-        <dt>Distribuição Normal (N)</dt>
-        <dd>Uma distribuição de probabilidade contínua em forma de sino, definida por sua média e variância.</dd>
-        <dt>Média Populacional (μ)</dt>
-        <dd>A média de toda a população. A distribuição das médias amostrais é centrada neste valor.</dd>
-        <dt>Variância Populacional (σ²)</dt>
-        <dd>Uma medida da dispersão dos dados em toda a população.</dd>
-        <dt>Tamanho da Amostra (n)</dt>
-        <dd>O número de observações em cada amostra. A variância da distribuição das médias amostrais diminui à medida que &#x27;n&#x27; aumenta.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        sample_mean: "\\displaystyle \\bar{X}_n",
-        approaches: "\\displaystyle \\sim",
-        normal_dist: "\\displaystyle \\mathcal{N}",
-        pop_mean: "\\displaystyle \\mu",
-        pop_variance: "\\displaystyle \\sigma^2",
-        sample_size: "\\displaystyle n"
-      },
-      explanations: {
-        sample_mean: {
-          title: "Média Amostral (X̄ₙ)",
-          text: "A média de uma amostra de tamanho 'n' retirada da população. O teorema descreve a distribuição dessas médias."
-        },
-        approaches: {
-          title: "É distribuído como (~)",
-          text: "Indica que, à medida que o tamanho da amostra 'n' aumenta, a distribuição das médias amostrais se aproxima de uma distribuição normal."
-        },
-        normal_dist: {
-          title: "Distribuição Normal (N)",
-          text: "Uma distribuição de probabilidade contínua em forma de sino, definida por sua média e variância."
-        },
-        pop_mean: {
-          title: "Média Populacional (μ)",
-          text: "A média de toda a população. A distribuição das médias amostrais é centrada neste valor."
-        },
-        pop_variance: {
-          title: "Variância Populacional (σ²)",
-          text: "Uma medida da dispersão dos dados em toda a população."
-        },
-        sample_size: {
-          title: "Tamanho da Amostra (n)",
-          text: "O número de observações em cada amostra. A variância da distribuição das médias amostrais diminui à medida que 'n' aumenta."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="distribuicao-normal.html" rel="prev"><span>Anterior</span>Distribuição Normal (Gaussiana)</a>
+      <a class="pager-next" href="z-score.html" rel="next"><span>Próxima</span>Z-Score</a>
+    </nav>
+  </main>
 </body>
 </html>

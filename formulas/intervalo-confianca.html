@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Intervalo de Confiança — Interativo</title>
   <meta name="description" content="Intervalo de Confiança: Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/intervalo-confianca.html">
@@ -21,98 +21,71 @@
   <meta name="twitter:title" content="Intervalo de Confiança — Interativo">
   <meta name="twitter:description" content="Intervalo de Confiança: Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Intervalo de Confiança</h1>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Intervalo de Confiança</h1>
 
-      <div class="formula-wrap" aria-label="Fórmula do Intervalo de Confiança interativa">
-        <span class="part ic" data-part="ic" tabindex="0" title="Intervalo de Confiança"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <span class="part sample-mean-ic" data-part="sample_mean_ic" tabindex="0" title="Média Amostral"></span>
-        <span class="part plus-minus-ic" data-part="plus_minus_ic" tabindex="0" title="Mais ou Menos"></span>
-        <span class="part z-critical" data-part="z_critical" tabindex="0" title="Valor Crítico Z"></span>
-        <span class="op" style="font-size: 1.5em;">·</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part std-dev-ic" data-part="std_dev_ic" tabindex="0" title="Desvio Padrão"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part sqrt-n" data-part="sqrt_n" tabindex="0" title="Raiz Quadrada de n"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Intervalo de Confiança interativa">
+        <span class="part" data-part="ic" data-tone="1" data-tex="IC"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="sample_mean_ic" data-tone="2" data-tex="\bar{x}"></span>
+        <span class="part" data-part="plus_minus_ic" data-tone="5" data-tex="\pm"></span>
+        <span class="part" data-part="z_critical" data-tone="3" data-tex="z_{\alpha/2}"></span>
+        <span class="op">·</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="std_dev_ic" data-tone="4" data-tex="\sigma"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="sqrt_n" data-tone="5" data-tex="\sqrt{n}"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="ic" data-tone="1">Intervalo de Confiança (IC)</dt>
+          <dd>Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro populacional. Representa a incerteza na estimativa.</dd>
+          <dt data-part="sample_mean_ic" data-tone="2">Média Amostral (x̄)</dt>
+          <dd>A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional.</dd>
+          <dt data-part="plus_minus_ic" data-tone="5">Mais ou Menos (±)</dt>
+          <dd>Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico.</dd>
+          <dt data-part="z_critical" data-tone="3">Valor Crítico Z (z_{α/2})</dt>
+          <dd>O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58.</dd>
+          <dt data-part="std_dev_ic" data-tone="4">Desvio Padrão (σ)</dt>
+          <dd>O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados.</dd>
+          <dt data-part="sqrt_n" data-tone="5">Raiz Quadrada de n (√n)</dt>
+          <dd>O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Intervalo de Confiança (IC)</dt>
-        <dd>Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro populacional. Representa a incerteza na estimativa.</dd>
-        <dt>Média Amostral (x̄)</dt>
-        <dd>A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional.</dd>
-        <dt>Mais ou Menos (±)</dt>
-        <dd>Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico.</dd>
-        <dt>Valor Crítico Z (z_{α/2})</dt>
-        <dd>O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58.</dd>
-        <dt>Desvio Padrão (σ)</dt>
-        <dd>O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados.</dd>
-        <dt>Raiz Quadrada de n (√n)</dt>
-        <dd>O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        ic: "\\displaystyle IC",
-        sample_mean_ic: "\\displaystyle \\bar{x}",
-        plus_minus_ic: "\\displaystyle \\pm",
-        z_critical: "\\displaystyle z_{\\alpha/2}",
-        std_dev_ic: "\\displaystyle \\sigma",
-        sqrt_n: "\\displaystyle \\sqrt{n}"
-      },
-      explanations: {
-        ic: {
-          title: "Intervalo de Confiança (IC)",
-          text: "Um intervalo de valores que, com um certo nível de confiança (geralmente 95% ou 99%), contém o verdadeiro parâmetro populacional. Representa a incerteza na estimativa."
-        },
-        sample_mean_ic: {
-          title: "Média Amostral (x̄)",
-          text: "A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional."
-        },
-        plus_minus_ic: {
-          title: "Mais ou Menos (±)",
-          text: "Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico."
-        },
-        z_critical: {
-          title: "Valor Crítico Z (z_{α/2})",
-          text: "O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58."
-        },
-        std_dev_ic: {
-          title: "Desvio Padrão (σ)",
-          text: "O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados."
-        },
-        sqrt_n: {
-          title: "Raiz Quadrada de n (√n)",
-          text: "O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="t-student.html" rel="prev"><span>Anterior</span>Teste t de Student</a>
+      <a class="pager-next" href="qui-quadrado.html" rel="next"><span>Próxima</span>Teste Qui-Quadrado (χ²)</a>
+    </nav>
+  </main>
 </body>
 </html>

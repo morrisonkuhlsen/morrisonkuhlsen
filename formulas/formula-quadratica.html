@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Fórmula Quadrática — Interativo</title>
   <meta name="description" content="Fórmula Quadrática: Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/formula-quadratica.html">
@@ -21,90 +21,67 @@
   <meta name="twitter:title" content="Fórmula Quadrática — Interativo">
   <meta name="twitter:description" content="Fórmula Quadrática: Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Fórmula Quadrática</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Fórmula Quadrática</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula Quadrática interativa">
-        <span class="part x-quadratic" data-part="x_quadratic" tabindex="0" title="Solução x"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div style="display: flex; align-items: center;">
-            <span class="part neg-b" data-part="neg_b" tabindex="0" title="Coeficiente b negativo"></span>
-            <span class="part plus-minus" data-part="plus_minus" tabindex="0" title="Mais ou Menos"></span>
-            <span class="part discriminant" data-part="discriminant" tabindex="0" title="Discriminante"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part divisor-2a" data-part="divisor_2a" tabindex="0" title="Divisor 2a"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula Quadrática interativa">
+        <span class="part" data-part="x_quadratic" data-tone="1" data-tex="x"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="neg_b" data-tone="2" data-tex="-b"></span>
+            <span class="part" data-part="plus_minus" data-tone="5" data-tex="\pm"></span>
+            <span class="part" data-part="discriminant" data-tone="3" data-tex="\sqrt{b^2-4ac}"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="divisor_2a" data-tone="4" data-tex="2a"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="x_quadratic" data-tone="1">Solução (x)</dt>
+          <dd>Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0.</dd>
+          <dt data-part="neg_b" data-tone="2">Coeficiente 'b' Negativo</dt>
+          <dd>O oposto do coeficiente 'b', que é o termo que acompanha 'x' na equação.</dd>
+          <dt data-part="plus_minus" data-tone="5">Mais ou Menos (±)</dt>
+          <dd>Indica que a fórmula gera duas soluções: uma somando a raiz do discriminante e outra subtraindo.</dd>
+          <dt data-part="discriminant" data-tone="3">Discriminante (Δ)</dt>
+          <dd>A expressão b²-4ac, chamada de discriminante (delta), determina a natureza das raízes (reais ou complexas).</dd>
+          <dt data-part="divisor_2a" data-tone="4">Divisor (2a)</dt>
+          <dd>O dobro do coeficiente 'a', que é o termo que acompanha x². Este valor normaliza a expressão.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Solução (x)</dt>
-        <dd>Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0.</dd>
-        <dt>Coeficiente &#x27;b&#x27; Negativo</dt>
-        <dd>O oposto do coeficiente &#x27;b&#x27;, que é o termo que acompanha &#x27;x&#x27; na equação.</dd>
-        <dt>Mais ou Menos (±)</dt>
-        <dd>Indica que a fórmula gera duas soluções: uma somando a raiz do discriminante e outra subtraindo.</dd>
-        <dt>Discriminante (Δ)</dt>
-        <dd>A expressão b²-4ac, chamada de discriminante (delta), determina a natureza das raízes (reais ou complexas).</dd>
-        <dt>Divisor (2a)</dt>
-        <dd>O dobro do coeficiente &#x27;a&#x27;, que é o termo que acompanha x². Este valor normaliza a expressão.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        x_quadratic: "\\displaystyle x",
-        neg_b: "\\displaystyle -b",
-        plus_minus: "\\displaystyle \\pm",
-        discriminant: "\\displaystyle \\sqrt{b^2-4ac}",
-        divisor_2a: "\\displaystyle 2a"
-      },
-      explanations: {
-        x_quadratic: {
-          title: "Solução (x)",
-          text: "Representa as raízes ou soluções de uma equação quadrática do tipo ax² + bx + c = 0."
-        },
-        neg_b: {
-          title: "Coeficiente 'b' Negativo",
-          text: "O oposto do coeficiente 'b', que é o termo que acompanha 'x' na equação."
-        },
-        plus_minus: {
-          title: "Mais ou Menos (±)",
-          text: "Indica que a fórmula gera duas soluções: uma somando a raiz do discriminante e outra subtraindo."
-        },
-        discriminant: {
-          title: "Discriminante (Δ)",
-          text: "A expressão b²-4ac, chamada de discriminante (delta), determina a natureza das raízes (reais ou complexas)."
-        },
-        divisor_2a: {
-          title: "Divisor (2a)",
-          text: "O dobro do coeficiente 'a', que é o termo que acompanha x². Este valor normaliza a expressão."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="media-harmonica.html" rel="prev"><span>Anterior</span>Média Harmônica</a>
+      <a class="pager-next" href="regra-lhopital.html" rel="next"><span>Próxima</span>Regra de L'Hôpital</a>
+    </nav>
+  </main>
 </body>
 </html>

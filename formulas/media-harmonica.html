@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Média Harmônica — Interativo</title>
   <meta name="description" content="Média Harmônica: Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/media-harmonica.html">
@@ -21,74 +21,61 @@
   <meta name="twitter:title" content="Média Harmônica — Interativo">
   <meta name="twitter:description" content="Média Harmônica: Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Média Harmônica</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Média Harmônica</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula da Média Harmônica interativa">
-        <span class="part h-mean" data-part="h_mean" tabindex="0" title="Média Harmônica"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part n-total" data-part="n_total" tabindex="0" title="Número Total de Observações"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part sum-reciprocals" data-part="sum_reciprocals" tabindex="0" title="Soma dos Recíprocos"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Média Harmônica interativa">
+        <span class="part" data-part="h_mean" data-tone="1" data-tex="H"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="n_total" data-tone="2" data-tex="n"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="sum_reciprocals" data-tone="3" data-tex="\sum_{i=1}^{n} \frac{1}{x_i}"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="h_mean" data-tone="1">Média Harmônica (H)</dt>
+          <dd>Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada observação.</dd>
+          <dt data-part="n_total" data-tone="2">Número Total de Observações (n)</dt>
+          <dd>A contagem total de valores ou observações no conjunto de dados.</dd>
+          <dt data-part="sum_reciprocals" data-tone="3">Soma dos Recíprocos (Σ 1/xᵢ)</dt>
+          <dd>A soma do inverso de cada valor (xᵢ) no conjunto de dados. O recíproco de um número é 1 dividido por esse número.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Média Harmônica (H)</dt>
-        <dd>Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada observação.</dd>
-        <dt>Número Total de Observações (n)</dt>
-        <dd>A contagem total de valores ou observações no conjunto de dados.</dd>
-        <dt>Soma dos Recíprocos (Σ 1/xᵢ)</dt>
-        <dd>A soma do inverso de cada valor (xᵢ) no conjunto de dados. O recíproco de um número é 1 dividido por esse número.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        h_mean: "\\displaystyle H",
-        n_total: "\\displaystyle n",
-        sum_reciprocals: "\\displaystyle \\sum_{i=1}^{n} \\frac{1}{x_i}"
-      },
-      explanations: {
-        h_mean: {
-          title: "Média Harmônica (H)",
-          text: "Um tipo de média, ideal para conjuntos de taxas, como velocidades. É o número de observações dividido pela soma dos recíprocos de cada observação."
-        },
-        n_total: {
-          title: "Número Total de Observações (n)",
-          text: "A contagem total de valores ou observações no conjunto de dados."
-        },
-        sum_reciprocals: {
-          title: "Soma dos Recíprocos (Σ 1/xᵢ)",
-          text: "A soma do inverso de cada valor (xᵢ) no conjunto de dados. O recíproco de um número é 1 dividido por esse número."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="regressao-linear.html" rel="prev"><span>Anterior</span>Regressão Linear Simples</a>
+      <a class="pager-next" href="formula-quadratica.html" rel="next"><span>Próxima</span>Fórmula Quadrática</a>
+    </nav>
+  </main>
 </body>
 </html>

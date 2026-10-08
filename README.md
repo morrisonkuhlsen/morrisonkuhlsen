@@ -43,7 +43,7 @@ front matter da seção:
 ```yaml
 menu_cta:
   - { text: "Todos os artigos", url: "/#artigos", style: "primary" }
-  - { text: "Fórmulas",         url: "/formulas/home.html", style: "outline" }
+  - { text: "Fórmulas",         url: "/formulas/", style: "outline" }
 ```
 
 **Header.** Duas faixas — utilidades (idioma, tema, busca) e a principal

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Teorema de Chebyshev — Interativo</title>
   <meta name="description" content="Teorema de Chebyshev: A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/teorema-chebyshev.html">
@@ -21,114 +21,73 @@
   <meta name="twitter:title" content="Teorema de Chebyshev — Interativo">
   <meta name="twitter:description" content="Teorema de Chebyshev: A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Teorema de Chebyshev</h1>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Teorema de Chebyshev</h1>
 
-      <div class="formula-wrap" aria-label="Fórmula do Teorema de Chebyshev interativa" style="flex-wrap: nowrap !important; white-space: nowrap !important;">
-        <span class="part prob" data-part="prob" tabindex="0" title="Probabilidade" style="white-space: nowrap;"></span>
-        <span class="part paren-left" data-part="paren_left" tabindex="0" title="Parêntese Esquerdo" style="white-space: nowrap;"></span>
-        <span class="part abs-var" data-part="abs_var" tabindex="0" title="Valor Absoluto de X - μ" style="white-space: nowrap;"></span>
-        <span class="op" style="white-space: nowrap;">≥</span>
-        <span class="part k" data-part="k" tabindex="0" title="Constante k" style="white-space: nowrap;"></span>
-        <span class="part sigma" data-part="sigma" tabindex="0" title="Desvio Padrão" style="white-space: nowrap;"></span>
-        <span class="part paren-right" data-part="paren_right" tabindex="0" title="Parêntese Direito" style="white-space: nowrap;"></span>
-        <span class="op" style="white-space: nowrap;">≤</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part one" data-part="one" tabindex="0" title="Um"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part k-squared" data-part="k_squared" tabindex="0" title="k ao Quadrado"></span>
-          </div>
-        </div>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Teorema de Chebyshev interativa">
+        <span class="part" data-part="prob" data-tone="1" data-tex="P"></span>
+        <span class="op">(</span>
+        <span class="part" data-part="abs_var" data-tone="2" data-tex="|X - \mu|"></span>
+        <span class="op">≥</span>
+        <span class="part" data-part="k" data-tone="3" data-tex="k"></span>
+        <span class="part" data-part="sigma" data-tone="4" data-tex="\sigma"></span>
+        <span class="op">)</span>
+        <span class="op">≤</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="one" data-tone="5" data-tex="1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="k_squared" data-tone="3" data-tex="k^2"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="prob" data-tone="1">Probabilidade (P)</dt>
+          <dd>A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a uma certa distância da média.</dd>
+          <dt data-part="abs_var" data-tone="2">Valor Absoluto |X - μ|</dt>
+          <dd>A distância entre a variável aleatória X e sua média μ. O valor absoluto garante que estamos medindo a distância, independentemente da direção (acima ou abaixo da média).</dd>
+          <dt data-part="k" data-tone="3">Constante k (k)</dt>
+          <dd>Um número real positivo (k &gt; 0) que representa quantos desvios padrão estamos considerando. Por exemplo, k = 2 significa 2 desvios padrão da média.</dd>
+          <dt data-part="sigma" data-tone="4">Desvio Padrão (σ)</dt>
+          <dd>O desvio padrão da variável aleatória X, que mede a dispersão dos dados em relação à média. É a raiz quadrada da variância.</dd>
+          <dt data-part="one" data-tone="5">Um (1)</dt>
+          <dd>O numerador da fração que limita a probabilidade máxima.</dd>
+          <dt data-part="k_squared" data-tone="3">k ao Quadrado (k²)</dt>
+          <dd>O denominador da fração. Quanto maior o valor de k, menor será 1/k², indicando que é menos provável encontrar valores muito distantes da média. Por exemplo, para k = 2, temos P(|X - μ| ≥ 2σ) ≤ 1/4 = 0.25, ou seja, no máximo 25% dos dados estão além de 2 desvios padrão da média.</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Probabilidade (P)</dt>
-        <dd>A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a uma certa distância da média.</dd>
-        <dt>Parêntese Esquerdo</dt>
-        <dd>Parêntese que delimita a expressão de probabilidade.</dd>
-        <dt>Valor Absoluto |X - μ|</dt>
-        <dd>A distância entre a variável aleatória X e sua média μ. O valor absoluto garante que estamos medindo a distância, independentemente da direção (acima ou abaixo da média).</dd>
-        <dt>Constante k (k)</dt>
-        <dd>Um número real positivo (k &gt; 0) que representa quantos desvios padrão estamos considerando. Por exemplo, k = 2 significa 2 desvios padrão da média.</dd>
-        <dt>Desvio Padrão (σ)</dt>
-        <dd>O desvio padrão da variável aleatória X, que mede a dispersão dos dados em relação à média. É a raiz quadrada da variância.</dd>
-        <dt>Parêntese Direito</dt>
-        <dd>Parêntese que fecha a expressão de probabilidade.</dd>
-        <dt>Um (1)</dt>
-        <dd>O numerador da fração que limita a probabilidade máxima.</dd>
-        <dt>k ao Quadrado (k²)</dt>
-        <dd>O denominador da fração. Quanto maior o valor de k, menor será 1/k², indicando que é menos provável encontrar valores muito distantes da média. Por exemplo, para k = 2, temos P(|X - μ| ≥ 2σ) ≤ 1/4 = 0.25, ou seja, no máximo 25% dos dados estão além de 2 desvios padrão da média.</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        prob: "\\displaystyle P",
-        paren_left: "\\displaystyle \\Big(",
-        abs_var: "\\displaystyle |X - \\mu|",
-        k: "\\displaystyle k",
-        sigma: "\\displaystyle \\sigma",
-        paren_right: "\\displaystyle \\Big)",
-        one: "\\displaystyle 1",
-        k_squared: "\\displaystyle k^2"
-      },
-      explanations: {
-        prob: {
-          title: "Probabilidade (P)",
-          text: "A probabilidade de que um evento ocorra. No Teorema de Chebyshev, representa a probabilidade de que a variável aleatória esteja a uma certa distância da média."
-        },
-        paren_left: {
-          title: "Parêntese Esquerdo",
-          text: "Parêntese que delimita a expressão de probabilidade."
-        },
-        abs_var: {
-          title: "Valor Absoluto |X - μ|",
-          text: "A distância entre a variável aleatória X e sua média μ. O valor absoluto garante que estamos medindo a distância, independentemente da direção (acima ou abaixo da média)."
-        },
-        k: {
-          title: "Constante k (k)",
-          text: "Um número real positivo (k > 0) que representa quantos desvios padrão estamos considerando. Por exemplo, k = 2 significa 2 desvios padrão da média."
-        },
-        sigma: {
-          title: "Desvio Padrão (σ)",
-          text: "O desvio padrão da variável aleatória X, que mede a dispersão dos dados em relação à média. É a raiz quadrada da variância."
-        },
-        paren_right: {
-          title: "Parêntese Direito",
-          text: "Parêntese que fecha a expressão de probabilidade."
-        },
-        one: {
-          title: "Um (1)",
-          text: "O numerador da fração que limita a probabilidade máxima."
-        },
-        k_squared: {
-          title: "k ao Quadrado (k²)",
-          text: "O denominador da fração. Quanto maior o valor de k, menor será 1/k², indicando que é menos provável encontrar valores muito distantes da média. Por exemplo, para k = 2, temos P(|X - μ| ≥ 2σ) ≤ 1/4 = 0.25, ou seja, no máximo 25% dos dados estão além de 2 desvios padrão da média."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="coeficiente-binomial.html" rel="prev"><span>Anterior</span>Coeficiente Binomial</a>
+      <a class="pager-next" href="distribuicao-bernoulli.html" rel="next"><span>Próxima</span>Distribuição de Bernoulli</a>
+    </nav>
+  </main>
 </body>
 </html>

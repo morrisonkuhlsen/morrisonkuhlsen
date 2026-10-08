@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Fórmula de Cochran — Interativo</title>
   <meta name="description" content="Fórmula de Cochran: O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população...">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/cochran-formula.html">
@@ -21,93 +21,69 @@
   <meta name="twitter:title" content="Fórmula de Cochran — Interativo">
   <meta name="twitter:description" content="Fórmula de Cochran: O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população...">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
 
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-
   <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
 </head>
 <body>
-  <a href="./" class="back-link" title="Voltar"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Fórmula de Cochran</h1>
 
-  <div class="wrap">
-    <main class="card" role="main" aria-labelledby="title">
-      <h1 id="title" class="formula-title">Fórmula de Cochran</h1>
-
-      <div class="formula-wrap" aria-label="Fórmula de Cochran interativa">
-        <span class="part sample-size-cochran" data-part="sample_size_cochran" tabindex="0" title="Tamanho da Amostra"></span>
-        <span class="op" id="op-equals" style="cursor:pointer;" title="Mostrar/Esconder todos">=</span>
-        <div style="display:flex;flex-direction:column;align-items:center;">
-          <div>
-            <span class="part z-squared" data-part="z_squared" tabindex="0" title="Z-score ao Quadrado"></span>
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula de Cochran interativa">
+        <span class="part" data-part="sample_size_cochran" data-tone="1" data-tex="n_0"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="z_squared" data-tone="2" data-tex="Z^2"></span>
             <span class="op">·</span>
-            <span class="part p-hat" data-part="p_hat" tabindex="0" title="Proporção Estimada"></span>
+            <span class="part" data-part="p_hat" data-tone="3" data-tex="\hat{p}"></span>
             <span class="op">·</span>
-            <span class="part q-hat" data-part="q_hat" tabindex="0" title="Complemento da Proporção"></span>
-          </div>
-          <div class="formula-divider"></div>
-          <div>
-            <span class="part e-squared" data-part="e_squared" tabindex="0" title="Margem de Erro ao Quadrado"></span>
-          </div>
-        </div>
+            <span class="part" data-part="q_hat" data-tone="5" data-tex="\hat{q}"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="e_squared" data-tone="4" data-tex="e^2"></span>
+          </span>
+        </span>
       </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="sample_size_cochran" data-tone="1">Tamanho da Amostra (n₀)</dt>
+          <dd>O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita.</dd>
+          <dt data-part="z_squared" data-tone="2">Z-score ao Quadrado (Z²)</dt>
+          <dd>O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96.</dd>
+          <dt data-part="p_hat" data-tone="3">Proporção Estimada (p̂)</dt>
+          <dd>A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível.</dd>
+          <dt data-part="q_hat" data-tone="5">Complemento da Proporção (q̂)</dt>
+          <dd>É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica.</dd>
+          <dt data-part="e_squared" data-tone="4">Margem de Erro ao Quadrado (e²)</dt>
+          <dd>O nível de precisão desejado, também chamado de erro amostral. Representa a 'janela' em torno da estimativa (ex: ±5%).</dd>
+      </dl>
+    </section>
 
-      <section class="formula-static-info">
-        <h2>O que significa cada termo</h2>
-        <dl>
-        <dt>Tamanho da Amostra (n₀)</dt>
-        <dd>O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita.</dd>
-        <dt>Z-score ao Quadrado (Z²)</dt>
-        <dd>O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96.</dd>
-        <dt>Proporção Estimada (p̂)</dt>
-        <dd>A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível.</dd>
-        <dt>Complemento da Proporção (q̂)</dt>
-        <dd>É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica.</dd>
-        <dt>Margem de Erro ao Quadrado (e²)</dt>
-        <dd>O nível de precisão desejado, também chamado de erro amostral. Representa a &#x27;janela&#x27; em torno da estimativa (ex: ±5%).</dd>
-        </dl>
-      </section>
-      <div id="modal-container"></div>
-    </main>
-  </div>
-
-  <script>
-    window.formulaConfig = {
-      parts: {
-        sample_size_cochran: "\\displaystyle n_0",
-        z_squared: "\\displaystyle Z^2",
-        p_hat: "\\displaystyle \\hat{p}",
-        q_hat: "\\displaystyle \\hat{q}",
-        e_squared: "\\displaystyle e^2"
-      },
-      explanations: {
-        sample_size_cochran: {
-          title: "Tamanho da Amostra (n₀)",
-          text: "O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita."
-        },
-        z_squared: {
-          title: "Z-score ao Quadrado (Z²)",
-          text: "O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96."
-        },
-        p_hat: {
-          title: "Proporção Estimada (p̂)",
-          text: "A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível."
-        },
-        q_hat: {
-          title: "Complemento da Proporção (q̂)",
-          text: "É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica."
-        },
-        e_squared: {
-          title: "Margem de Erro ao Quadrado (e²)",
-          text: "O nível de precisão desejado, também chamado de erro amostral. Representa a 'janela' em torno da estimativa (ex: ±5%)."
-        }
-      }
-    };
-  </script>
-  <script src="script.js"></script>
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="qui-quadrado.html" rel="prev"><span>Anterior</span>Teste Qui-Quadrado (χ²)</a>
+      <a class="pager-next" href="correcao-populacao-finita.html" rel="next"><span>Próxima</span>Correção para População Finita</a>
+    </nav>
+  </main>
 </body>
 </html>
