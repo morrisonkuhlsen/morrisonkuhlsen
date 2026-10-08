@@ -221,6 +221,46 @@
     return z >= 0 ? (1 + erf) / 2 : (1 - erf) / 2;
   }
 
+  // ln Γ(x) pela aproximação de Lanczos (g = 7, 9 termos).
+  function lgamma(x) {
+    const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313,
+      -176.61503916999185, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6,
+      1.5056327351493116e-7];
+    if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - lgamma(1 - x);
+    x -= 1;
+    let a = c[0];
+    const t = x + 7.5;
+    for (let i = 1; i < 9; i++) a += c[i] / (x + i);
+    return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+  }
+
+  // Beta incompleta regularizada I_x(a, b), por fração contínua (Numerical Recipes).
+  function betainc(x, a, b) {
+    if (x <= 0) return 0;
+    if (x >= 1) return 1;
+    if (x > (a + 1) / (a + b + 2)) return 1 - betainc(1 - x, b, a);
+    const front = Math.exp(a * Math.log(x) + b * Math.log(1 - x) - lgamma(a) - lgamma(b) + lgamma(a + b)) / a;
+    let f = 1, c = 1, d = 0;
+    for (let i = 0; i <= 200; i++) {
+      const m = i >> 1;
+      const num = i === 0 ? 1 : i % 2
+        ? -((a + m) * (a + b + m) * x) / ((a + 2 * m) * (a + 2 * m + 1))
+        : (m * (b - m) * x) / ((a + 2 * m - 1) * (a + 2 * m));
+      d = 1 + num * d;
+      d = Math.abs(d) < 1e-30 ? 1e-30 : d;
+      d = 1 / d;
+      c = 1 + num / c;
+      c = Math.abs(c) < 1e-30 ? 1e-30 : c;
+      const cd = c * d;
+      f *= cd;
+      if (Math.abs(1 - cd) < 1e-12) break;
+    }
+    return front * (f - 1);
+  }
+
+  // Valor-p bilateral da t de Student com df graus de liberdade.
+  const tTwoTail = (t, df) => betainc(df / (df + t * t), df / 2, 0.5);
+
   const CALCS = {
     zscore({ x, mu, sd }) {
       if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
@@ -249,6 +289,41 @@
           ["Divida pelo desvio padrão:", `Z ${approx(z)} ${tone(texNum(z), 1)}`],
         ],
         note,
+      };
+    },
+
+    tstudent({ xbar, mu, s, n }) {
+      if (s <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
+      if (!Number.isInteger(n) || n < 2) return { error: "O tamanho da amostra precisa ser um inteiro maior ou igual a 2." };
+      const root = Math.sqrt(n);
+      const se = s / root;
+      const diff = xbar - mu;
+      const t = diff / se;
+      const df = n - 1;
+      const p = tTwoTail(t, df);
+      const X = tone(texNum(xbar), 2), M = tone(paren(mu, texNum(mu)), 3), S = tone(texNum(s), 4);
+      const N = tone(`\\sqrt{${texNum(n)}}`, 5);
+      const R = tone(texNum(root), 5);
+      const SE = texNum(se);
+
+      const pTxt = p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`;
+      const muTxt = fmt(mu);
+      const veredito = p < 0.05
+        ? `Ao nível de 5%, rejeita-se H₀: há evidência de que a média populacional é diferente de ${muTxt}.`
+        : `Ao nível de 5%, não se rejeita H₀: os dados não bastam para dizer que a média populacional é diferente de ${muTxt}.`;
+
+      return {
+        result: `t ${approx(t)} ${tone(texNum(t), 1)}`,
+        steps: [
+          ["Substitua os valores na fórmula:", `t = \\dfrac{${X} - ${M}}{${S} / ${N}}`],
+          // Raiz exata (√25 = 5) ganha um passo intermediário; as outras não.
+          ["Calcule o erro padrão, o desvio padrão dividido pela raiz de n:",
+            `\\mathrm{EP} = \\dfrac{${S}}{${N}} ${Number.isInteger(root) ? `= \\dfrac{${S}}{${R}}` : ""} ${approx(se)} ${SE}`],
+          ["Subtraia a média hipotética da média amostral:", `t = \\dfrac{${texNum(diff)}}{${SE}}`],
+          ["Divida pelo erro padrão:", `t ${approx(t)} ${tone(texNum(t), 1)}`],
+        ],
+        note: `Com n − 1 = ${df} graus de liberdade, o valor-p bilateral é ${pTxt}. ${veredito}`
+          + ` <a href="/ttable.html?t=${Math.abs(t).toFixed(3)}&amp;df=${df}">Conferir na tabela t</a>.`,
       };
     },
   };

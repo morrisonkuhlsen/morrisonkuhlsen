@@ -64,6 +64,37 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?xbar=&mu=&s=&n=. -->
+    <section class="calc" data-calc="tstudent" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma máquina deveria encher pacotes com 500 g. Numa amostra de 25 pacotes, a média foi 496 g, com desvio padrão de 8 g. A máquina está desregulada? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Média amostral <i>x̄</i></span>
+          <input name="xbar" type="text" inputmode="decimal" value="496" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Média hipotética <i>μ₀</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="500" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Desvio padrão <i>s</i></span>
+          <input name="s" type="text" inputmode="decimal" value="8" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Tamanho da amostra <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="25" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

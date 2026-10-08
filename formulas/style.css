@@ -331,6 +331,7 @@ body {
 
 .calc-field input {
   width: 100%;
+  margin-top: auto; /* alinha os campos mesmo quando um rótulo quebra linha */
   padding: .6rem .75rem;
   border: 1px solid var(--border);
   border-radius: 8px;
