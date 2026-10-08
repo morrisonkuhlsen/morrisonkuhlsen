@@ -68,6 +68,29 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?n0=&N=. A página de Cochran linka para cá com ?n0= preenchido. -->
+    <section class="calc" data-calc="fpc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: a pesquisa da <a href="cochran-formula.html">fórmula de Cochran</a> precisaria de 385 eleitores numa população grande. E se a cidade tiver só 2.000 eleitores? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Amostra inicial <i>n₀</i></span>
+          <input name="n0" type="text" inputmode="numeric" value="385" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Tamanho da população <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="2000" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

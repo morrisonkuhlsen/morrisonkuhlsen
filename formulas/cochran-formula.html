@@ -64,15 +64,42 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?conf=&p=&e=. -->
+    <section class="calc" data-calc="cochran" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma pesquisa quer estimar a fração de eleitores que aprovam um candidato, com 95% de confiança e margem de erro de 5 pontos percentuais. Sem nenhuma estimativa prévia, usa-se p̂ = 50%, que dá a maior amostra possível. Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Confiança (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Proporção estimada <i>p̂</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="50" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Margem de erro <i>e</i> (%)</span>
+          <input name="e" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
           <dt data-part="sample_size_cochran" data-tone="1">Tamanho da Amostra (n₀)</dt>
           <dd>O número de indivíduos a serem incluídos na amostra para obter resultados estatisticamente significativos, assumindo uma população grande ou infinita.</dd>
           <dt data-part="z_squared" data-tone="2">Z-score ao Quadrado (Z²)</dt>
-          <dd>O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1.96.</dd>
+          <dd>O valor crítico da distribuição normal padrão correspondente ao nível de confiança desejado. Por exemplo, para 95% de confiança, Z ≈ 1,96.</dd>
           <dt data-part="p_hat" data-tone="3">Proporção Estimada (p̂)</dt>
-          <dd>A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0.5 para maximizar a variância e obter o maior tamanho de amostra possível.</dd>
+          <dd>A estimativa da proporção de uma característica na população. Se desconhecida, usa-se p̂ = 0,5 para maximizar a variância e obter o maior tamanho de amostra possível.</dd>
           <dt data-part="q_hat" data-tone="5">Complemento da Proporção (q̂)</dt>
           <dd>É calculado como (1 - p̂). Representa a proporção estimada da população que não possui a característica.</dd>
           <dt data-part="e_squared" data-tone="4">Margem de Erro ao Quadrado (e²)</dt>

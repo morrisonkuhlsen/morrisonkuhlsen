@@ -313,6 +313,17 @@
   // Valor-p da qui-quadrado: P(χ² ≥ x) com df graus de liberdade.
   const chiSurvival = (x, df) => gammaQ(df / 2, x / 2);
 
+  // Valor crítico z para a confiança em %, arredondado para duas casas como na
+  // tabela Z e usado assim nas contas seguintes: quem refizer à mão chega nos
+  // mesmos números.
+  const zCrit = conf => Number(probit(1 - (1 - conf / 100) / 2).toFixed(2));
+
+  // Tamanho de amostra sempre arredonda para cima; a folga absorve o ruído do
+  // ponto flutuante (400,0000000001 não pode virar 401).
+  const ceilInt = x => Math.ceil(x - 1e-9);
+
+  const confError = { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
+
   const pValueText = p => (p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`);
 
   const CALCS = {
@@ -383,11 +394,9 @@
     ic({ xbar, sd, n, conf }) {
       if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
       if (!Number.isInteger(n) || n < 1) return { error: "O tamanho da amostra precisa ser um inteiro positivo." };
-      if (conf <= 0 || conf >= 100) return { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
+      if (conf <= 0 || conf >= 100) return confError;
       const alpha = 1 - conf / 100;
-      // Arredondado para duas casas, como na tabela Z, e usado assim nas contas
-      // seguintes: quem refizer à mão chega nos mesmos números.
-      const z = Number(probit(1 - alpha / 2).toFixed(2));
+      const z = zCrit(conf);
       const root = Math.sqrt(n);
       const se = sd / root;
       const e = z * se;
@@ -412,6 +421,61 @@
         note: `Com ${confTxt} de confiança, a média populacional está entre ${fmt(lo)} e ${fmt(hi)}:`
           + ` intervalos construídos assim, em amostras diferentes, contêm a média verdadeira em ${confTxt} das vezes.`
           + ` O valor crítico foi arredondado para duas casas, como na tabela Z.`,
+      };
+    },
+
+    cochran({ conf, p, e }) {
+      if (conf <= 0 || conf >= 100) return confError;
+      if (p <= 0 || p >= 100) return { error: "A proporção estimada precisa estar entre 0 e 100%, sem os extremos. Na dúvida, use 50." };
+      if (e <= 0 || e >= 100) return { error: "A margem de erro precisa estar entre 0 e 100%, como 3 ou 5." };
+      const z = zCrit(conf);
+      const ph = p / 100, qh = 1 - ph, ed = e / 100;
+      const num = z * z * ph * qh, den = ed * ed;
+      const n0 = num / den, n = ceilInt(n0);
+      const Z = tone(texNum(z), 2), P = tone(texNum(ph, 6), 3), Q = tone(texNum(qh, 6), 5), E = tone(texNum(ed, 6), 4);
+
+      return {
+        result: `n_0 = ${tone(texNum(n), 1)}`,
+        steps: [
+          [`Encontre o valor crítico para ${fmt(conf, 2)}% de confiança, como na tabela Z:`, `Z \\approx ${Z}`],
+          ["Escreva as porcentagens como proporções; q̂ é o complemento de p̂:",
+            `\\hat{p} = ${P}, \\quad \\hat{q} = 1 - ${texNum(ph, 6)} = ${Q}, \\quad e = ${E}`],
+          ["Substitua na fórmula:",
+            `n_0 = \\dfrac{${Z}^2 \\cdot ${P} \\cdot ${Q}}{${E}^2} ${approx(num, 6)} \\dfrac{${texNum(num, 6)}}{${texNum(den, 8)}} ${approx(n0, 2)} ${texNum(n0, 2)}`],
+          ["Arredonde sempre para cima: para baixo, a margem de erro ficaria maior que a pedida.",
+            `n_0 = ${tone(texNum(n), 1)}`],
+        ],
+        note: `Com ${fmt(n)} indivíduos, a proporção é estimada com margem de ±${fmt(e, 2)} pontos percentuais e ${fmt(conf, 2)}% de confiança, numa população grande.`
+          + ` Se a população for pequena, a amostra pode ser menor: <a href="correcao-populacao-finita.html?n0=${n}">aplique a correção para população finita</a>.`,
+      };
+    },
+
+    fpc({ n0, N }) {
+      if (n0 < 1) return { error: "A amostra inicial precisa ser de pelo menos 1." };
+      if (!Number.isInteger(N) || N < 1) return { error: "O tamanho da população precisa ser um inteiro positivo." };
+      const frac = (n0 - 1) / N, den = 1 + frac;
+      const n = n0 / den, nr = ceilInt(n);
+      const N0 = tone(texNum(n0), 2), NN = tone(texNum(N), 4);
+      const red = (1 - nr / ceilInt(n0)) * 100;
+      const share = n0 / N * 100;
+
+      let note = `Numa população de ${fmt(N)}, bastam ${fmt(nr)} em vez de ${fmt(ceilInt(n0))}`;
+      note += red >= 1 ? `: ${fmt(red, 0)}% a menos.` : ", praticamente o mesmo.";
+      note += share > 5
+        ? ` A amostra inicial é ${fmt(share, 1)}% da população, e acima de 5% a correção costuma fazer diferença.`
+        : ` A amostra inicial é só ${fmt(share, 1)}% da população; abaixo de 5%, a correção pouco muda.`;
+
+      return {
+        result: `n = ${tone(texNum(nr), 1)}`,
+        steps: [
+          ["Substitua na fórmula:", `n = \\dfrac{${N0}}{1 + \\dfrac{${tone(`(${texNum(n0)} - 1)`, 3)}}{${NN}}}`],
+          ["Calcule a fração do denominador:",
+            `\\dfrac{${tone(texNum(n0 - 1), 3)}}{${NN}} ${approx(frac, 6)} ${texNum(frac, 6)}`],
+          ["Some 1:", `1 + ${texNum(frac, 6)} ${approx(den, 6)} ${texNum(den, 6)}`],
+          ["Divida e arredonde para cima:",
+            `n = \\dfrac{${N0}}{${texNum(den, 6)}} ${approx(n, 2)} ${texNum(n, 2)} \\;\\Rightarrow\\; n = ${tone(texNum(nr), 1)}`],
+        ],
+        note,
       };
     },
 
