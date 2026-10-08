@@ -373,6 +373,55 @@
     return r;
   }
 
+  // Número muito grande ou muito pequeno vai em notação científica.
+  function texSci(x, d = 4) {
+    if (x === 0 || (Math.abs(x) < 1e9 && Math.abs(x) >= 1e-4)) return texNum(x, d);
+    const e = Math.floor(Math.log10(Math.abs(x)));
+    return `${texNum(x / 10 ** e, 3)} \\times 10^{${e}}`;
+  }
+  const SUP = { "-": "⁻", 0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹" };
+  const fmtSci = (x, d = 4) => {
+    if (x === 0 || (Math.abs(x) < 1e9 && Math.abs(x) >= 1e-4)) return fmt(x, d);
+    const e = Math.floor(Math.log10(Math.abs(x)));
+    return `${fmt(x / 10 ** e, 3)} × 10${String(e).replace(/./g, c => SUP[c])}`;
+  };
+  const pctTex = (x, d = 2) => `${texSci(x * 100, d)}\\%`;
+
+  // Em escala log, para n grande não estourar nem zerar no meio da conta.
+  function binPmf(n, p, k) {
+    if (p === 0) return k === 0 ? 1 : 0;
+    if (p === 1) return k === n ? 1 : 0;
+    return Math.exp(lgamma(n + 1) - lgamma(k + 1) - lgamma(n - k + 1) + k * Math.log(p) + (n - k) * Math.log(1 - p));
+  }
+  const poisPmf = (lam, k) => Math.exp(k * Math.log(lam) - lam - lgamma(k + 1));
+  const normPdf = (x, mu, sd) => Math.exp(-0.5 * ((x - mu) / sd) ** 2) / (sd * Math.sqrt(2 * Math.PI));
+
+  // Sorteio com semente (mulberry32): os mesmos valores dão o mesmo gráfico.
+  function rng(seed) {
+    let a = seed >>> 0;
+    return () => {
+      a = (a + 0x6D2B79F5) >>> 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  // Barras de uma distribuição discreta, com a tabela de todos os valores.
+  function discreteChart(label, xLabel, xs, ys, k, symbol) {
+    return {
+      type: "bars", label, xLabel, xs, ys,
+      xMin: xs[0] - 0.5, xMax: xs[xs.length - 1] + 0.5, yMax: Math.max(...ys),
+      hi: x => x === k,
+      tip: (x, y) => [fmtSci(y, 4), `P(${symbol} = ${x})`],
+      table: {
+        title: "Ver todas as probabilidades",
+        head: [symbol, `P(${symbol} = ${symbol.toLowerCase()})`],
+        rows: xs.map((x, i) => ({ hi: x === k, cells: [fmt(x), fmtSci(ys[i], 6)] })),
+      },
+    };
+  }
+
   const confError = { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
 
   const pValueText = p => (p < 0.0001 ? "menor que 0,0001" : `${approx(p) === "=" ? "" : "≈ "}${fmt(p, 4)}`);
@@ -892,7 +941,7 @@
       }
       const cs = c.toString();
       let note = digits > 24
-        ? `Há cerca de ${cs[0]},${cs.slice(1, 4)} × 10^${digits - 1} maneiras, um número de ${digits} dígitos.`
+        ? `Há cerca de ${cs[0]},${cs.slice(1, 4)} × 10${String(digits - 1).replace(/./g, c => SUP[c])} maneiras, um número de ${digits} dígitos.`
         : c === 1n ? "Há uma única maneira." : `Há ${c.toLocaleString("pt-BR")} maneiras.`;
       if (k >= 2 && k <= 12) {
         let perm = 1n;
@@ -936,6 +985,159 @@
         note: `Pelo menos ${fmt(inside * 100, 2)}% dos valores ficam entre ${fmt(lo)} e ${fmt(hi)}, qualquer que seja a distribuição.`
           + ` É uma garantia conservadora: se os dados fossem normais, a fração seria de ${fmt(normal * 100, 1)}%.`
           + " O preço de valer para tudo é ser folgado em cada caso.",
+      };
+    },
+
+    bern({ p, k }) {
+      if (p < 0 || p > 100) return { error: "A probabilidade de sucesso precisa estar entre 0 e 100%." };
+      if (k !== 0 && k !== 1) return { error: "Numa tentativa de Bernoulli, k só pode ser 0 (falha) ou 1 (sucesso)." };
+      const pp = p / 100, q = 1 - pp;
+      const res = k === 1 ? pp : q;
+      const P = tone(texNum(pp, 6), 2), Q = tone(texNum(q, 6), 4);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart("Distribuição de Bernoulli", "k", [0, 1], [q, pp], k, "X"),
+        steps: [
+          ["Escreva p como proporção; a falha tem probabilidade 1 − p:", `p = ${P}, \\qquad 1 - p = ${Q}`],
+          [`Substitua k = ${k}: ${k === 1 ? "o termo da falha vira 1, porque qualquer número elevado a 0 dá 1." : "o termo do sucesso vira 1, porque p elevado a 0 dá 1."}`,
+            `P(X = ${k}) = ${P}^{${k}} \\cdot ${Q}^{${1 - k}} = ${texNum(k === 1 ? pp : 1, 6)} \\cdot ${texNum(k === 1 ? 1 : q, 6)} ${approx(res, 6)} ${tone(texNum(res, 6), 1)}`],
+        ],
+        note: "A fórmula é só um jeito compacto de escrever P(X = 1) = p e P(X = 0) = 1 − p numa linha."
+          + ` A média é p = ${fmt(pp, 4)} e a variância é p(1 − p) = ${fmt(pp * q, 4)}.`
+          + ' Repetindo a tentativa várias vezes e contando os sucessos, chega-se à <a href="distribuicao-binomial.html">distribuição binomial</a>.',
+      };
+    },
+
+    binomial({ n, p, k }) {
+      if (!Number.isInteger(n) || n < 1) return { error: "O número de tentativas precisa ser um inteiro positivo." };
+      if (n > 200) return { error: "Use no máximo 200 tentativas." };
+      if (p < 0 || p > 100) return { error: "A probabilidade de sucesso precisa estar entre 0 e 100%." };
+      if (!Number.isInteger(k) || k < 0 || k > n) return { error: `k precisa ser um inteiro entre 0 e ${n}.` };
+      const pp = p / 100, q = 1 - pp;
+      const xs = Array.from({ length: n + 1 }, (_, i) => i);
+      const ys = xs.map(i => binPmf(n, pp, i));
+      const res = ys[k];
+      const c = Math.exp(lgamma(n + 1) - lgamma(k + 1) - lgamma(n - k + 1));
+      const cR = Math.round(c);
+      const pk = pp ** k, qk = q ** (n - k);
+      const le = ys.slice(0, k + 1).reduce((a, b) => a + b, 0);
+      const ge = ys.slice(k).reduce((a, b) => a + b, 0);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart(`Distribuição binomial com n = ${n} e p = ${fmt(pp, 4)}`, "número de sucessos k", xs, ys, k, "X"),
+        steps: [
+          [`Conte de quantas maneiras os ${k} sucessos podem se distribuir entre as ${n} tentativas:`,
+            `\\dbinom{${n}}{${k}} = ${tone(c < 1e15 ? texNum(cR) : texSci(c), 2)}`],
+          ["Calcule a chance de uma sequência específica com k sucessos e n − k falhas:",
+            `p^{k} = ${texNum(pp, 6)}^{${k}} ${approx(pk, 6)} ${tone(texSci(pk, 6), 3)}, \\qquad (1-p)^{n-k} = ${texNum(q, 6)}^{${n - k}} ${approx(qk, 6)} ${tone(texSci(qk, 6), 4)}`],
+          ["Multiplique as três partes:",
+            `P(X = ${k}) = ${tone(c < 1e15 ? texNum(cR) : texSci(c), 2)} \\cdot ${tone(texSci(pk, 6), 3)} \\cdot ${tone(texSci(qk, 6), 4)} ${approx(res, 6)} ${tone(texSci(res, 6), 1)}`],
+        ],
+        note: `Acumulando: P(X ≤ ${k}) ≈ ${fmt(le * 100, 2)}% e P(X ≥ ${k}) ≈ ${fmt(ge * 100, 2)}%.`
+          + ` A média é np = ${fmt(n * pp, 2)} e o desvio padrão é √(np(1 − p)) ≈ ${fmt(Math.sqrt(n * pp * q), 3)}; as barras se concentram em torno da média.`,
+      };
+    },
+
+    poisson({ lambda, k }) {
+      if (lambda <= 0) return { error: "A taxa média λ precisa ser maior que zero." };
+      if (lambda > 500) return { error: "Use λ de no máximo 500." };
+      if (!Number.isInteger(k) || k < 0) return { error: "k precisa ser um inteiro não negativo." };
+      const top = Math.max(k, Math.ceil(lambda + 4 * Math.sqrt(lambda)) + 1);
+      const lo = Math.max(0, Math.min(k, Math.floor(lambda - 4 * Math.sqrt(lambda))));
+      const xs = Array.from({ length: top - lo + 1 }, (_, i) => lo + i);
+      const ys = xs.map(i => poisPmf(lambda, i));
+      const res = poisPmf(lambda, k);
+      let le = 0;
+      for (let i = 0; i <= k; i++) le += poisPmf(lambda, i);
+      const ge = 1 - le + res;
+      const lk = lambda ** k, el = Math.exp(-lambda), kf = Math.exp(lgamma(k + 1));
+      const L = texNum(lambda);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart(`Distribuição de Poisson com λ = ${fmt(lambda)}`, "número de ocorrências k", xs, ys, k, "X"),
+        steps: [
+          ["Calcule cada parte da fórmula:",
+            `\\lambda^k = ${L}^{${k}} ${approx(lk)} ${tone(texSci(lk), 2)}, \\quad e^{-\\lambda} = e^{-${L}} ${approx(el, 6)} ${tone(texSci(el, 6), 3)}, \\quad k! = ${k}! = ${tone(kf < 1e15 ? texNum(Math.round(kf)) : texSci(kf), 4)}`],
+          ["Junte tudo:",
+            `P(X = ${k}) = \\dfrac{${tone(texSci(lk), 2)} \\cdot ${tone(texSci(el, 6), 3)}}{${tone(kf < 1e15 ? texNum(Math.round(kf)) : texSci(kf), 4)}} ${approx(res, 6)} ${tone(texSci(res, 6), 1)}`],
+        ],
+        note: `Acumulando: P(X ≤ ${k}) ≈ ${fmt(le * 100, 2)}% e P(X ≥ ${k}) ≈ ${fmt(ge * 100, 2)}%.`
+          + ` Na Poisson, média e variância são iguais a λ = ${fmt(lambda)}. Ela vale quando os eventos acontecem de forma independente e a uma taxa constante.`,
+      };
+    },
+
+    normal({ mu, sd, x }) {
+      if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
+      const z = (x - mu) / sd;
+      const coef = 1 / (sd * Math.sqrt(2 * Math.PI));
+      const ex = Math.exp(-z * z / 2);
+      const f = coef * ex;
+      const cdf = phi(z);
+      const lo = Math.min(mu - 4 * sd, x - sd), hi = Math.max(mu + 4 * sd, x + sd);
+      const pts = Array.from({ length: 201 }, (_, i) => { const v = lo + (hi - lo) * i / 200; return [v, normPdf(v, mu, sd)]; });
+      const peak = normPdf(mu, mu, sd);
+      return {
+        result: `f(${texNum(x)}) ${approx(f, 6)} ${tone(texSci(f, 6), 1)}`,
+        chart: {
+          type: "curve", label: `Densidade normal com média ${fmt(mu)} e desvio padrão ${fmt(sd)}; área sombreada até x = ${fmt(x)}`,
+          xLabel: "x", xMin: lo, xMax: hi, yMax: peak, pts, shadeTo: x, marker: [x, f],
+          tipAt: v => [`f = ${fmtSci(normPdf(v, mu, sd), 6)}`, `x = ${fmt(v, 2)}, P(X ≤ x) ≈ ${fmt(phi((v - mu) / sd) * 100, 1)}%`],
+        },
+        steps: [
+          ["Calcule quantos desvios padrão x está da média:",
+            `\\dfrac{x - \\mu}{\\sigma} = \\dfrac{${texNum(x)} - ${paren(mu, texNum(mu))}}{${texNum(sd)}} ${approx(z)} ${texNum(z)}`],
+          ["Calcule o coeficiente de normalização:",
+            `\\dfrac{1}{\\sigma\\sqrt{2\\pi}} = \\dfrac{1}{${texNum(sd)} \\cdot ${texNum(Math.sqrt(2 * Math.PI))}} ${approx(coef, 6)} ${tone(texSci(coef, 6), 2)}`],
+          ["Calcule a exponencial:",
+            `e^{-\\frac{1}{2} \\cdot ${paren(z, texNum(z))}^2} = e^{-${texNum(z * z / 2)}} ${approx(ex, 6)} ${tone(texSci(ex, 6), 3)}`],
+          ["Multiplique:", `f(${texNum(x)}) = ${tone(texSci(coef, 6), 2)} \\cdot ${tone(texSci(ex, 6), 3)} ${approx(f, 6)} ${tone(texSci(f, 6), 1)}`],
+        ],
+        note: `f(x) é densidade, não probabilidade: a chance de dar exatamente ${fmt(x)} é zero. Probabilidade é área sob a curva.`
+          + ` A área sombreada é P(X ≤ ${fmt(x)}) = Φ(${fmt(z, 2)}) ≈ ${fmt(cdf * 100, 1)}%.`
+          + ` <a href="/ztable.html?z=${z.toFixed(2)}">Conferir na tabela Z</a> ou ver o <a href="z-score.html?x=${x}&amp;mu=${mu}&amp;sd=${sd}">z-score com estes valores</a>.`,
+      };
+    },
+
+    tcl({ mu, n }) {
+      if (mu <= 0) return { error: "A média da população exponencial precisa ser maior que zero." };
+      if (!Number.isInteger(n) || n < 1) return { error: "O tamanho da amostra precisa ser um inteiro positivo." };
+      if (n > 500) return { error: "Use n de no máximo 500." };
+      const SIMS = 2000;
+      const rand = rng(Math.round(mu * 1000) * 7919 + n);
+      const means = new Float64Array(SIMS);
+      for (let s = 0; s < SIMS; s++) {
+        let sum = 0;
+        for (let i = 0; i < n; i++) sum += -mu * Math.log(1 - rand());
+        means[s] = sum / n;
+      }
+      const se = mu / Math.sqrt(n);
+      const mSim = means.reduce((a, b) => a + b, 0) / SIMS;
+      const sdSim = Math.sqrt(means.reduce((a, b) => a + (b - mSim) ** 2, 0) / (SIMS - 1));
+      const lo = Math.max(0, Math.min(...means, mu - 4 * se)), hi = Math.max(...means, mu + 4 * se);
+      const B = 30, w = (hi - lo) / B;
+      const counts = new Array(B).fill(0);
+      means.forEach(v => { counts[Math.min(B - 1, Math.floor((v - lo) / w))]++; });
+      const bins = counts.map((c, i) => ({ x0: lo + i * w, x1: lo + (i + 1) * w, count: c, y: c / (SIMS * w) }));
+      const pts = Array.from({ length: 151 }, (_, i) => { const v = lo + (hi - lo) * i / 150; return [v, normPdf(v, mu, se)]; });
+      const yMax = Math.max(...bins.map(b => b.y), normPdf(mu, mu, se));
+      const M = tone(texNum(mu), 3), N = tone(n, 5);
+      return {
+        result: `\\bar{X}_{${n}} \\;\\dot\\sim\\; ${tone("\\mathcal{N}", 2)}\\left(${M},\\, \\dfrac{${tone(`${texNum(mu)}^2`, 4)}}{${N}}\\right)`,
+        chart: {
+          type: "hist", label: `Histograma de ${SIMS} médias de amostras de tamanho ${n}, com a curva normal prevista pelo teorema`,
+          xLabel: "média da amostra", xMin: lo, xMax: hi, yMax, bins, pts,
+        },
+        steps: [
+          ["Numa exponencial, o desvio padrão é igual à média:", `\\mu = ${M}, \\qquad \\sigma = ${tone(texNum(mu), 4)}`],
+          ["O teorema diz que a média de n valores tem desvio padrão σ/√n, o erro padrão:",
+            `\\dfrac{\\sigma}{\\sqrt{n}} = \\dfrac{${texNum(mu)}}{\\sqrt{${N}}} ${approx(se)} ${texNum(se)}`],
+          [`A simulação sorteou ${fmt(SIMS)} amostras de ${n} valores e tirou a média de cada uma:`,
+            `\\text{média das médias} \\approx ${texNum(mSim, 3)}, \\qquad \\text{desvio das médias} \\approx ${texNum(sdSim, 3)}`],
+        ],
+        note: `As médias se concentram em ${fmt(mSim, 2)}, perto de μ = ${fmt(mu)}, com desvio ${fmt(sdSim, 3)}, perto dos ${fmt(se, 3)} previstos; a curva é a normal que o teorema prevê.`
+          + (n < 10
+            ? " Com n tão pequeno, o histograma ainda carrega a assimetria da exponencial: a aproximação normal ainda não chegou. Aumente n para ver o sino se formar."
+            : " A população é muito assimétrica, com a maioria esperando pouco e alguns esperando muito, e mesmo assim as médias já desenham um sino. Diminua n para 2 ou 3 e veja a assimetria voltar."),
       };
     },
 
@@ -1004,6 +1206,164 @@
     },
   };
 
+  /* ---------------------------------------------------------------- gráficos
+   *
+   * SVG desenhado à mão, sem biblioteca: uma série só, então sem legenda; o
+   * valor pedido fica em destaque (--chart-hi) e o resto atenuado
+   * (--chart-base). Tipos: "bars" (distribuições discretas), "curve" (densidade
+   * com área sombreada) e "hist" (histograma com curva sobreposta).
+   */
+
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function svg(tag, attrs, parent) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(el);
+    return el;
+  }
+
+  // Passo "redondo" (1, 2 ou 5 × 10ⁿ) para ~count marcas de 0 até max.
+  function niceStep(span, count) {
+    const raw = span / count;
+    const mag = 10 ** Math.floor(Math.log10(raw));
+    const f = raw / mag;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * mag;
+  }
+
+  // Barra com topo arredondado (4px) e base reta, crescendo da linha de base.
+  function barPath(x, y, w, h) {
+    const r = Math.min(4, w / 2, h);
+    return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
+  }
+
+  function renderChart(box, spec) {
+    box.replaceChildren();
+    if (!spec) return;
+    const W = 640, H = 230, m = { l: 48, r: 14, t: 14, b: 34 };
+    const iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, class: "chart", role: "img", "aria-label": spec.label }, box);
+    const tip = document.createElement("div");
+    tip.className = "chart-tip";
+    tip.hidden = true;
+    box.appendChild(tip);
+
+    const xMin = spec.xMin, xMax = spec.xMax;
+    const yMax = spec.yMax * 1.08 || 1;
+    const X = v => m.l + (v - xMin) / (xMax - xMin) * iw;
+    const Y = v => m.t + ih - v / yMax * ih;
+
+    // Grade e eixo y: linhas finas, recessivas.
+    const ys = niceStep(yMax, 4);
+    for (let v = 0; v <= yMax + 1e-12; v += ys) {
+      svg("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: v === 0 ? "chart-axis" : "chart-grid" }, root);
+      svg("text", { x: m.l - 6, y: Y(v) + 4, class: "chart-label", "text-anchor": "end" }, root).textContent = fmt(v, 4);
+    }
+
+    function showTip(evt, value, label) {
+      tip.replaceChildren();
+      const b = document.createElement("strong");
+      b.textContent = value;
+      const sp = document.createElement("span");
+      sp.textContent = label;
+      tip.append(b, sp);
+      tip.hidden = false;
+      const r = box.getBoundingClientRect();
+      const px = (evt.clientX ?? r.left + r.width / 2) - r.left;
+      tip.style.left = `${Math.max(0, Math.min(px + 12, r.width - tip.offsetWidth))}px`;
+      tip.style.top = "8px";
+    }
+    const hideTip = () => { tip.hidden = true; };
+    root.addEventListener("pointerleave", hideTip);
+
+    if (spec.type === "bars") {
+      const n = spec.xs.length;
+      const band = iw / (xMax - xMin);
+      const bw = Math.max(1, Math.min(24, band - 2));
+      const every = Math.ceil(n / 12);
+      spec.xs.forEach((x, i) => {
+        const y = spec.ys[i];
+        const cx = X(x), h = Math.max(0, Y(0) - Y(y));
+        const hi = spec.hi(x);
+        if (h > 0) svg("path", { d: barPath(cx - bw / 2, Y(y), bw, h), class: hi ? "chart-hi" : "chart-base" }, root);
+        if (i % every === 0 || hi) {
+          svg("text", { x: cx, y: H - m.b + 16, class: hi ? "chart-label is-hi" : "chart-label", "text-anchor": "middle" }, root).textContent = fmt(x);
+        }
+        // Área de toque da faixa inteira, maior que a barra.
+        const hit = svg("rect", { x: cx - band / 2, y: m.t, width: band, height: ih, class: "chart-hit" }, root);
+        const t = spec.tip(x, y);
+        const show = e => showTip(e, t[0], t[1]);
+        hit.addEventListener("pointermove", show);
+        if (n <= 40) {
+          hit.setAttribute("tabindex", "0");
+          hit.setAttribute("aria-label", `${t[1]}: ${t[0]}`);
+          hit.addEventListener("focus", show);
+          hit.addEventListener("blur", hideTip);
+        }
+      });
+      svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
+    } else {
+      // Eixo x numérico.
+      const xs = niceStep(xMax - xMin, 6);
+      for (let v = Math.ceil(xMin / xs) * xs; v <= xMax + 1e-9; v += xs) {
+        svg("text", { x: X(v), y: H - m.b + 16, class: "chart-label", "text-anchor": "middle" }, root).textContent = fmt(v, 2);
+      }
+      svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
+
+      if (spec.type === "hist") {
+        spec.bins.forEach(b => {
+          const x0 = X(b.x0) + 1, w = Math.max(1, X(b.x1) - X(b.x0) - 2);
+          const h = Math.max(0, Y(0) - Y(b.y));
+          if (h > 0) svg("path", { d: barPath(x0, Y(b.y), w, h), class: "chart-base" }, root);
+          const hit = svg("rect", { x: X(b.x0), y: m.t, width: X(b.x1) - X(b.x0), height: ih, class: "chart-hit" }, root);
+          hit.addEventListener("pointermove", e => showTip(e, `${fmt(b.count)} médias`, `entre ${fmt(b.x0, 2)} e ${fmt(b.x1, 2)}`));
+        });
+      }
+      const line = spec.pts.map(([x, y], i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("");
+      if (spec.shadeTo != null) {
+        const under = spec.pts.filter(([x]) => x <= spec.shadeTo);
+        if (under.length > 1) {
+          const d = `M${X(under[0][0])},${Y(0)}` + under.map(([x, y]) => `L${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("")
+            + `L${X(under[under.length - 1][0])},${Y(0)}Z`;
+          svg("path", { d, class: "chart-area" }, root);
+        }
+      }
+      svg("path", { d: line, class: "chart-line" }, root);
+      if (spec.marker) {
+        const [mx, my] = spec.marker;
+        svg("line", { x1: X(mx), x2: X(mx), y1: Y(0), y2: Y(my), class: "chart-rule" }, root);
+        svg("circle", { cx: X(mx), cy: Y(my), r: 5, class: "chart-dot" }, root);
+      }
+      if (spec.tipAt) {
+        const hit = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit" }, root);
+        hit.addEventListener("pointermove", e => {
+          const r = root.getBoundingClientRect();
+          const x = xMin + ((e.clientX - r.left) / r.width * W - m.l) / iw * (xMax - xMin);
+          const t = spec.tipAt(x);
+          showTip(e, t[0], t[1]);
+        });
+      }
+    }
+
+    // Tabela: o mesmo dado sem depender de cor nem de passar o mouse.
+    if (spec.table) {
+      const det = document.createElement("details");
+      det.className = "chart-table";
+      const sum = document.createElement("summary");
+      sum.textContent = spec.table.title;
+      const table = document.createElement("table");
+      const head = table.createTHead().insertRow();
+      spec.table.head.forEach(h => { const th = document.createElement("th"); th.textContent = h; head.appendChild(th); });
+      const body = table.createTBody();
+      spec.table.rows.forEach(row => {
+        const tr = body.insertRow();
+        if (row.hi) tr.className = "is-hi";
+        row.cells.forEach(c => { tr.insertCell().textContent = c; });
+      });
+      det.append(sum, table);
+      box.appendChild(det);
+    }
+  }
+
   // \htmlData só para pintar trechos com data-tone; nada além disso é confiável.
   const MATH_OPTS = { throwOnError: false, strict: false, trust: c => c.command === "\\htmlData" };
   const math = (el, src) => (window.katex ? katex.render(src, el, MATH_OPTS) : (el.textContent = src));
@@ -1014,6 +1374,7 @@
     const result = section.querySelector(".calc-result");
     const steps = section.querySelector(".calc-steps");
     const note = section.querySelector(".calc-note");
+    const chart = section.querySelector(".calc-chart");
     // Aceita vírgula decimal, sinal tipográfico −, espaços de milhar e um % no fim.
     const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/[\s%]/g, "").replace("−", "-").replace(",", ".")));
     // Campo com data-list vira um array, separado por espaço ou ponto e vírgula
@@ -1036,6 +1397,7 @@
 
       section.classList.toggle("has-error", !!out.error);
       steps.replaceChildren();
+      if (chart) renderChart(chart, out.error ? null : out.chart);
       if (out.error) {
         result.textContent = "";
         note.textContent = out.error;

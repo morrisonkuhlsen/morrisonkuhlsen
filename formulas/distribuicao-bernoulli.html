@@ -55,6 +55,30 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora com gráfico; estado em ?p=&k=. -->
+    <section class="calc" data-calc="bern" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um jogador converte 75% dos pênaltis. Numa cobrança, qual a chance de ele marcar (k = 1)? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Probabilidade de sucesso <i>p</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="75" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Resultado <i>k</i> (0 ou 1)</span>
+          <input name="k" type="text" inputmode="numeric" value="1" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

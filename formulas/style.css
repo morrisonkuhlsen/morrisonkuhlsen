@@ -20,6 +20,13 @@
   --tone-3: #5fb37f;
   --tone-4: #e06666;
   --tone-5: #b48ae6;
+
+  /* Gráficos: destaque e atenuado validados (contraste ≥ 3:1 e separação
+     para daltonismo) contra --surface, nos dois temas. */
+  --chart-hi: #5b8ac4;
+  --chart-base: #707070;
+  --chart-grid: #333331;
+  --chart-axis: #4a4a47;
 }
 
 @media (prefers-color-scheme: light) {
@@ -39,6 +46,11 @@
     --tone-3: #2e7d4f;
     --tone-4: #b83a3a;
     --tone-5: #7a4fc0;
+
+    --chart-hi: #2f5f96;
+    --chart-base: #8c8c86;
+    --chart-grid: #ecebe6;
+    --chart-axis: #c3c2b7;
   }
 }
 
@@ -58,6 +70,11 @@
   --tone-3: #2e7d4f;
   --tone-4: #b83a3a;
   --tone-5: #7a4fc0;
+
+  --chart-hi: #2f5f96;
+  --chart-base: #8c8c86;
+  --chart-grid: #ecebe6;
+  --chart-axis: #c3c2b7;
 }
 
 [data-tone="0"] { --tone: var(--tone-0); }
@@ -415,6 +432,109 @@ body {
 
 .calc.has-error h3 {
   display: none;
+}
+
+/* ---------------------------------------------------------------- gráfico */
+
+.calc-chart {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.calc-chart:empty {
+  display: none;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-grid { stroke: var(--chart-grid); stroke-width: 1; }
+.chart-axis { stroke: var(--chart-axis); stroke-width: 1; }
+.chart-base { fill: var(--chart-base); }
+.chart-hi { fill: var(--chart-hi); }
+.chart-line { fill: none; stroke: var(--chart-hi); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-area { fill: var(--chart-hi); opacity: .18; }
+.chart-rule { stroke: var(--chart-hi); stroke-width: 1; }
+.chart-dot { fill: var(--chart-hi); stroke: var(--surface); stroke-width: 2; }
+.chart-hit { fill: transparent; outline: none; }
+.chart-hit:focus-visible { stroke: var(--text-strong); stroke-width: 1; }
+
+.chart-label {
+  font-size: 11px;
+  fill: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-label.is-hi {
+  fill: var(--text-strong);
+  font-weight: 700;
+}
+
+.chart-tip {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--tip-bg);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .25);
+  font-size: .8rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.chart-tip[hidden] {
+  display: none;
+}
+
+.chart-tip strong {
+  color: var(--text-strong);
+  font-size: .95rem;
+}
+
+.chart-table {
+  margin-top: .6rem;
+  font-size: .85rem;
+}
+
+/* Explícito: fechado, o <details> nem sempre esconde a tabela criada por JS. */
+.chart-table:not([open]) > table {
+  display: none;
+}
+
+.chart-table summary {
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.chart-table table {
+  margin-top: .5rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-table th,
+.chart-table td {
+  padding: 3px 14px 3px 0;
+  text-align: left;
+}
+
+.chart-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.chart-table tr.is-hi td {
+  color: var(--text-strong);
+  font-weight: 700;
 }
 
 /* ---------------------------------------------------------------- legenda */

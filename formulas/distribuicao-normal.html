@@ -54,6 +54,34 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora com gráfico; estado em ?mu=&sd=&x=. -->
+    <section class="calc" data-calc="normal" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: a altura de adultos segue uma normal com média 170 cm e desvio padrão 10 cm. Qual a densidade em 185 cm, e que fração das pessoas é mais baixa que isso? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Média <i>μ</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="170" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Desvio padrão <i>σ</i></span>
+          <input name="sd" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Valor <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="185" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
