@@ -767,6 +767,42 @@
       return { result, steps, note };
     },
 
+    bayes({ pa, pba, pbna }) {
+      if ([pa, pba, pbna].some(v => v < 0 || v > 100)) return { error: "As probabilidades precisam estar entre 0 e 100%." };
+      const a = pa / 100, ba = pba / 100, bna = pbna / 100, na = 1 - a;
+      const joint = ba * a, other = bna * na, pb = joint + other;
+      if (pb === 0) return { error: "Com esses valores B nunca acontece (P(B) = 0), e P(A|B) não é definida." };
+      const post = joint / pb;
+      const n6 = v => texNum(v, 6);
+      const A = tone(n6(a), 3), BA = tone(n6(ba), 2), BNA = tone(n6(bna), 4), PB = tone(n6(pb), 4);
+      const pct = v => `${texNum(v * 100, 2)}\\%`;
+
+      // Frequências naturais: uma população grande o bastante para que os
+      // verdadeiros positivos não arredondem para zero.
+      const N = 10 ** Math.min(9, Math.max(4, Math.ceil(-Math.log10(a || 1)) + 2));
+      const sick = Math.round(N * a), tp = Math.round(sick * ba);
+      const healthy = N - sick, fp = Math.round(healthy * bna), pos = tp + fp;
+      let note = `Em frequências: de ${fmt(N)} pessoas, ${fmt(sick)} têm A e ${fmt(tp)} delas dão B;`
+        + ` das ${fmt(healthy)} sem A, ${fmt(fp)} dão B mesmo assim.`
+        + (pos ? ` Dos ${fmt(pos)} casos de B, só ${fmt(tp)} têm A, ou ${fmt(tp / pos * 100, 1)}%.` : "");
+      if (post < 0.5 && ba > 0.5) {
+        note += " O resultado baixo vem de A ser rara: mesmo uma taxa pequena de falsos positivos, aplicada a muita gente sem A, supera os verdadeiros positivos.";
+      }
+
+      return {
+        result: `P(A\\mid B) ${approx(post, 6)} ${tone(pct(post), 1)}`,
+        steps: [
+          ["Escreva as porcentagens como probabilidades e calcule o complemento do prior:",
+            `P(A) = ${A}, \\quad P(B\\mid A) = ${BA}, \\quad P(B\\mid \\neg A) = ${BNA}, \\quad P(\\neg A) = 1 - ${n6(a)} = ${n6(na)}`],
+          ["Calcule a evidência P(B) pela lei da probabilidade total:",
+            `P(B) = P(B\\mid A)\\,P(A) + P(B\\mid \\neg A)\\,P(\\neg A) = ${BA} \\cdot ${A} + ${BNA} \\cdot ${n6(na)} ${approx(pb, 6)} ${n6(joint)} + ${n6(other)} ${approx(pb, 6)} ${PB}`],
+          ["Aplique o teorema de Bayes:",
+            `P(A\\mid B) = \\dfrac{${BA} \\cdot ${A}}{${PB}} ${approx(joint, 6)} \\dfrac{${n6(joint)}}{${n6(pb)}} ${approx(post, 6)} ${tone(n6(post), 1)} ${approx(post * 100, 2)} ${tone(pct(post), 1)}`],
+        ],
+        note,
+      };
+    },
+
     // Teste de aderência. As esperadas podem vir como contagens, como
     // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
     chi({ o, e }) {

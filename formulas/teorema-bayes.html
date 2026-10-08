@@ -62,6 +62,33 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?pa=&pba=&pbna=, tudo em %. -->
+    <section class="calc" data-calc="bayes" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma doença atinge 1% da população. Um teste detecta 95% dos doentes, mas também dá positivo em 5% dos sadios. Se o seu teste deu positivo, qual a chance de você ter a doença? Aqui A é “ter a doença” e B é “testar positivo”. Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Prior <i>P(A)</i> (%)</span>
+          <input name="pa" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Likelihood <i>P(B|A)</i> (%)</span>
+          <input name="pba" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Falso positivo <i>P(B|¬A)</i> (%)</span>
+          <input name="pbna" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
