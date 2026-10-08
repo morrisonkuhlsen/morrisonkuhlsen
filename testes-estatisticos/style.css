@@ -425,6 +425,40 @@ a {
   display: none;
 }
 
+/* ---------------------------------------------------------------- dicas */
+
+/* Rótulo com explicação: sublinhado pontilhado, como uma abreviação. */
+.pt-colhead[data-tip] span,
+.pt-rowhead[data-tip],
+.pt-striphead[data-tip] strong {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--text-muted);
+  text-underline-offset: 3px;
+}
+
+[data-tip] {
+  cursor: help;
+}
+
+.pt-tip {
+  position: fixed;
+  z-index: 60;
+  max-width: 18rem;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text-strong);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+  font-size: .8rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.pt-tip[hidden] {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- notas */
 
 .pt-notes {
@@ -480,6 +514,10 @@ a {
   border-radius: 3px;
   border: 1px solid var(--c);
   background: color-mix(in srgb, var(--c) 30%, var(--surface));
+}
+
+.pt-index-dica {
+  color: var(--text-muted);
 }
 
 .pt-index h3 span {

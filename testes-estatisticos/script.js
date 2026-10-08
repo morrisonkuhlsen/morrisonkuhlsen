@@ -9,6 +9,7 @@
   const busca = document.getElementById("busca");
   const count = document.querySelector(".pt-count");
   const byId = new Map(C.testes.map(t => [t.id, t]));
+  const formulas = new Map(C.formulas.map(f => [f.url.replace(/^\/formulas\/|\.html$/g, ""), f.title]));
   const tiles = new Map();
   let current = null;
 
@@ -35,6 +36,46 @@
   ];
   ordered.forEach((t, i) => { t.n = i + 1; });
 
+  /* ---------------------------------------------------------------- dicas */
+
+  // Os rótulos de coluna, linha e faixa explicam o próprio termo. O balão é um
+  // só, preso ao body com position: fixed, porque a tabela rola na horizontal
+  // e cortaria um balão posto dentro dela. Para leitor de tela, o texto vai
+  // num span oculto ligado por aria-describedby; o balão em si é só visual.
+  const balao = el("div", "pt-tip");
+  balao.setAttribute("aria-hidden", "true");
+  balao.hidden = true;
+  document.body.appendChild(balao);
+
+  function dica(alvo, texto, key) {
+    if (!texto) return;
+    const desc = el("span", "visually-hidden", texto);
+    desc.id = `dica-${key}`;
+    alvo.append(desc);
+    alvo.tabIndex = 0;
+    alvo.dataset.tip = texto;
+    alvo.setAttribute("aria-describedby", desc.id);
+    const show = () => mostra(alvo);
+    alvo.addEventListener("mouseenter", show);
+    alvo.addEventListener("focus", show);
+    alvo.addEventListener("mouseleave", esconde);
+    alvo.addEventListener("blur", esconde);
+  }
+
+  function mostra(alvo) {
+    balao.textContent = alvo.dataset.tip;
+    balao.hidden = false;
+    // Abaixo do rótulo; acima, se não couber. Na horizontal, dentro da tela.
+    const r = alvo.getBoundingClientRect(), b = balao.getBoundingClientRect();
+    const top = r.bottom + 8 + b.height > innerHeight ? r.top - 8 - b.height : r.bottom + 8;
+    const left = Math.min(Math.max(8, r.left), innerWidth - b.width - 8);
+    balao.style.top = `${top}px`;
+    balao.style.left = `${left}px`;
+  }
+
+  function esconde() { balao.hidden = true; }
+  addEventListener("scroll", esconde, { passive: true, capture: true });
+
   /* ---------------------------------------------------------------- tabela */
 
   const colHeads = [], rowHeads = [];
@@ -43,11 +84,13 @@
     const h = place(el("div", "pt-colhead"), 1, i + 2);
     h.dataset.cor = fam.cor;
     h.append(el("strong", null, fam.nome), el("span", null, fam.sub));
+    dica(h, fam.dica, f);
     grid.appendChild(h);
     colHeads.push(h);
   });
-  C.linhas.forEach((nome, i) => {
-    const h = place(el("div", "pt-rowhead", nome), i + 2, 1);
+  C.linhas.forEach((linha, i) => {
+    const h = place(el("div", "pt-rowhead", linha.nome), i + 2, 1);
+    dica(h, linha.dica, `linha-${i + 1}`);
     grid.appendChild(h);
     rowHeads.push(h);
   });
@@ -59,6 +102,7 @@
     const h = place(el("div", "pt-striphead"), firstStripRow + i, 1);
     h.dataset.cor = fam.cor;
     h.append(el("strong", null, fam.nome));
+    dica(h, fam.dica, f);
     grid.appendChild(h);
   });
 
@@ -120,7 +164,7 @@
     badge.append(el("span", null, t.n), el("strong", null, t.sym));
     const titles = el("div");
     titles.append(el("h2", "fd-name", t.nome));
-    const where = t.row ? `${fam.nome} · ${C.linhas[t.row - 1]}` : fam.nome;
+    const where = t.row ? `${fam.nome} · ${C.linhas[t.row - 1].nome}` : fam.nome;
     titles.append(el("p", "fd-fam", `${where} · ${t.dist}`));
     top.append(badge, titles);
     box.appendChild(top);
@@ -137,6 +181,16 @@
     const tex = el("div", "fd-tex");
     math(tex, `\\displaystyle ${t.tex}`);
     box.appendChild(tex);
+
+    if (t.efeito) {
+      sec(box, "Tamanho de efeito");
+      box.appendChild(el("p", null, t.efeito.texto));
+      if (t.efeito.tex) {
+        const ef = el("div", "fd-tex");
+        math(ef, `\\displaystyle ${t.efeito.tex}`);
+        box.appendChild(ef);
+      }
+    }
 
     if (t.vars.length) {
       sec(box, "Variantes e alternativas");
@@ -160,14 +214,46 @@
       box.appendChild(vl);
     }
 
+    const veja = (t.veja || []).filter(slug => formulas.has(slug));
+    if (veja.length) {
+      sec(box, "Veja também");
+      const ul = el("ul");
+      veja.forEach(slug => {
+        const a = el("a", null, formulas.get(slug));
+        a.href = `/formulas/${slug}.html`;
+        const li = el("li");
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+      box.appendChild(ul);
+    }
+
     const actions = el("div", "fd-actions");
     if (t.page) {
       const a = el("a", null, "Abrir a fórmula interativa");
       a.href = `/formulas/${t.page}.html`;
       actions.appendChild(a);
     }
-    const link = el("a", null, "Link para este teste");
-    link.href = `#${t.id}`;
+    const tab = tabela(t.dist);
+    if (tab) {
+      const a = el("a", null, `Tabela ${tab.nome}`);
+      a.href = tab.url;
+      actions.appendChild(a);
+    }
+    // Copia em vez de navegar: um <a href="#id"> empilharia uma entrada no
+    // histórico, e o resto da página troca o hash sem empilhar.
+    const link = el("button", "fd-ref", "Copiar link");
+    link.type = "button";
+    link.addEventListener("click", async () => {
+      const url = `${location.origin}${location.pathname}#${t.id}`;
+      try {
+        await navigator.clipboard.writeText(url);
+        link.textContent = "Link copiado";
+      } catch {
+        history.replaceState(null, "", `#${t.id}`);
+        link.textContent = "Copie da barra de endereço";
+      }
+    });
     actions.appendChild(link);
     const close = el("button", "fd-ref fd-close", "Fechar");
     close.type = "button";
@@ -179,7 +265,21 @@
     ficha.classList.add("is-open");
   }
 
+  // `push` marca uma ação de quem usa a página (e não a leitura do hash): só
+  // então o foco acompanha, indo para a ficha que abriu ou voltando ao teste
+  // cuja ficha fechou. Sem isso, a ficha que sobe de baixo no celular fica
+  // fora do alcance de quem navega por teclado ou leitor de tela.
+  // A tabela do site que dá os valores críticos, quando a distribuição de
+  // referência tem uma: t, F ou normal padrão.
+  function tabela(dist) {
+    if (/^t\(/.test(dist)) return { nome: "t", url: "/ttable.html" };
+    if (/^F\b/.test(dist)) return { nome: "F", url: "/ftable.html" };
+    if (dist.includes("N(0, 1)")) return { nome: "Z", url: "/ztable.html" };
+    return null;
+  }
+
   function select(id, push) {
+    const prev = current;
     if (current) tiles.get(current).setAttribute("aria-pressed", "false");
     current = id && byId.has(id) ? id : null;
     if (current) {
@@ -188,7 +288,10 @@
     } else {
       legend();
     }
-    if (push) history.replaceState(null, "", current ? `#${current}` : location.pathname + location.search);
+    if (!push) return;
+    history.replaceState(null, "", current ? `#${current}` : location.pathname + location.search);
+    if (current) ficha.focus({ preventScroll: true });
+    else if (prev) tiles.get(prev).focus({ preventScroll: true });
   }
 
   /* ---------------------------------------------------------------- busca */
@@ -197,7 +300,8 @@
   const hay = new Map(C.testes.map(t => {
     const fam = C.familias[t.fam];
     const parts = [t.nome, t.sym, t.quando, t.h0, t.dist, ...t.pres, fam.nome, fam.sub || "",
-      t.row ? C.linhas[t.row - 1] : "", ...t.vars.map(v => v[0])];
+      t.row ? C.linhas[t.row - 1].nome : "", t.efeito ? t.efeito.texto : "",
+      ...t.vars.map(v => v[0])];
     return [t.id, fold(parts.join(" "))];
   }));
 
@@ -212,13 +316,21 @@
     count.textContent = terms.length ? (n ? `${n} de ${C.testes.length} testes` : "Nenhum teste com esses termos.") : "";
   });
 
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && current) select(null, true); });
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Escape") return;
+    if (!balao.hidden) esconde();
+    else if (current) select(null, true);
+  });
   // O hash muda pelos links da lista "Todos os testes", que fica abaixo da
   // tabela: o teste escolhido precisa voltar à vista junto com a ficha.
-  const fromHash = () => {
+  // Ao carregar a página, o foco fica onde está; num clique da lista, vai
+  // para a ficha.
+  const fromHash = foco => {
     select(location.hash.slice(1), false);
-    if (current) tiles.get(current).scrollIntoView({ block: "nearest", inline: "center" });
+    if (!current) return;
+    tiles.get(current).scrollIntoView({ block: "nearest", inline: "center" });
+    if (foco) ficha.focus({ preventScroll: true });
   };
-  addEventListener("hashchange", fromHash);
-  fromHash();
+  addEventListener("hashchange", () => fromHash(true));
+  fromHash(false);
 })();

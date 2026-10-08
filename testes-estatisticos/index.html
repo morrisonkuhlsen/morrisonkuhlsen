@@ -90,11 +90,12 @@ layout: null
       {%- assign fam = par[1] %}
       {%- assign grupo = cat.testes | where: "fam", par[0] %}
       <h3 data-cor="{{ fam.cor }}">{{ fam.nome }}{% if fam.sub %} <span>({{ fam.sub }})</span>{% endif %}</h3>
+      <p class="pt-index-dica">{{ fam.dica | escape }}</p>
       <ul>
         {%- for t in grupo %}
         <li>
           <a href="#{{ t.id }}">{{ t.nome | escape }}</a>
-          {%- if t.row %}{% assign i = t.row | minus: 1 %} <span class="pt-index-row">· {{ cat.linhas[i] }}</span>{% endif %}
+          {%- if t.row %}{% assign i = t.row | minus: 1 %} <span class="pt-index-row">· {{ cat.linhas[i].nome }}</span>{% endif %}
           <p>{{ t.quando | escape }}</p>
           <p><abbr title="Hipótese nula">H₀</abbr>: {{ t.h0 | escape }}</p>
         </li>

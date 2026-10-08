@@ -7,26 +7,64 @@
 # guardam o que não depende de quantos grupos há.
 # Cada teste traz `row` + `col` (bloco) ou `strip` + `pos` (faixa).
 # `vars` lista variantes como [texto, ref]; um `ref` aponta para outro teste.
-# `page` é a fórmula interativa correspondente em /formulas/, quando existe.
+# `efeito` é o tamanho de efeito usual: `texto` e, se houver, `tex`.
+# `page` é a fórmula interativa do próprio teste em /formulas/, quando existe;
+# `veja` lista fórmulas relacionadas. Os dois usam o nome do arquivo, sem .html.
 # `tex` vai entre aspas simples: assim a barra invertida do LaTeX fica literal.
 
+# `dica` é o tooltip do rótulo da coluna, linha ou faixa: explica o termo
+# para quem não conhece o jargão.
 familias:
-  medias: { nome: 'Médias', sub: 'paramétricos', cor: 1 }
-  postos: { nome: 'Postos', sub: 'não paramétricos', cor: 2 }
-  prop: { nome: 'Proporções', sub: 'contagens', cor: 3 }
-  vari: { nome: 'Variâncias', sub: 'dispersão', cor: 4 }
-  ader: { nome: 'Aderência e normalidade', cor: 5 }
-  assoc: { nome: 'Associação e correlação', cor: 6 }
-  modelos: { nome: 'Modelos e regressão', cor: 7 }
-  series: { nome: 'Séries temporais', cor: 8 }
+  medias:
+    nome: 'Médias'
+    sub: 'paramétricos'
+    cor: 1
+    dica: 'Testes paramétricos supõem um modelo para os dados, em geral a distribuição normal, e comparam parâmetros dele, como a média. Quando o pressuposto vale, são os mais poderosos.'
+  postos:
+    nome: 'Postos'
+    sub: 'não paramétricos'
+    cor: 2
+    dica: 'Testes não paramétricos não supõem uma distribuição para os dados. Trocam cada valor pelo seu posto, a posição na ordem (1º, 2º, 3º…), o que os protege de valores extremos e serve para dados ordinais.'
+  prop:
+    nome: 'Proporções'
+    sub: 'contagens'
+    cor: 3
+    dica: 'Para respostas categóricas, como sim ou não, acerto ou erro: o dado é quantas vezes cada categoria aparece, e o teste compara proporções.'
+  vari:
+    nome: 'Variâncias'
+    sub: 'dispersão'
+    cor: 4
+    dica: 'Comparam o quanto os dados se espalham, não o centro. Servem por si mesmos, como no controle de qualidade, e para conferir o pressuposto de variâncias iguais de outros testes.'
+  ader:
+    nome: 'Aderência e normalidade'
+    cor: 5
+    dica: 'Aderência: os dados seguem a distribuição esperada? Os testes de normalidade são o caso mais comum e conferem um pressuposto dos testes paramétricos.'
+  assoc:
+    nome: 'Associação e correlação'
+    cor: 6
+    dica: 'Em vez de comparar grupos, medem se duas variáveis variam juntas e com que força.'
+  modelos:
+    nome: 'Modelos e regressão'
+    cor: 7
+    dica: 'Testes feitos dentro de um modelo ajustado: se um coeficiente importa, se o modelo explica algo e se os resíduos cumprem os pressupostos.'
+  series:
+    nome: 'Séries temporais'
+    cor: 8
+    dica: 'Para observações ordenadas no tempo, em que valores vizinhos costumam ser correlacionados: testam estacionariedade e autocorrelação.'
 colunas: [medias, postos, prop, vari]
 linhas:
-  - 'Uma amostra'
-  - 'Duas amostras independentes'
-  - 'Duas amostras pareadas'
-  - 'Três ou mais grupos independentes'
-  - 'Três ou mais medidas repetidas'
-  - 'Comparações múltiplas'
+  - nome: 'Uma amostra'
+    dica: 'Um único grupo comparado com um valor de referência fixado de antemão, como uma meta ou um padrão.'
+  - nome: 'Duas amostras independentes'
+    dica: 'Dois grupos de indivíduos diferentes, sem relação entre si, como tratamento e controle.'
+  - nome: 'Duas amostras pareadas'
+    dica: 'Duas medidas ligadas aos pares: o mesmo indivíduo antes e depois, ou pares casados, como gêmeos. O teste usa a diferença dentro de cada par.'
+  - nome: 'Três ou mais grupos independentes'
+    dica: 'Vários grupos de indivíduos diferentes, testados de uma vez: um teste por par inflaria o erro tipo I.'
+  - nome: 'Três ou mais medidas repetidas'
+    dica: 'Os mesmos indivíduos medidos em três ou mais condições ou momentos: o pareado com mais de duas medidas.'
+  - nome: 'Comparações múltiplas'
+    dica: 'Pós-testes: depois de rejeitar a igualdade de todos os grupos, apontam quais pares diferem, controlando o erro do conjunto de comparações.'
 faixas: [ader, assoc, modelos, series]
 
 testes:
@@ -45,10 +83,14 @@ testes:
       - 'Observações independentes'
       - 'Dados aproximadamente normais, ou n grande (≳ 30)'
     tex: 't = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}}'
+    efeito:
+      texto: 'd de Cohen: a diferença em desvios padrão. Referências usuais: 0,2 pequeno, 0,5 médio e 0,8 grande.'
+      tex: 'd = \dfrac{\bar{x} - \mu_0}{s}'
     vars:
       - ['Teste Z, quando σ é conhecido', null]
       - ['Teste do sinal, sem supor normalidade', sinal]
     page: t-student
+    veja: [intervalo-confianca, teorema-central-limite]
   - id: t-independente
     sym: 't₂'
     nome: 't para duas amostras independentes'
@@ -62,6 +104,9 @@ testes:
       - 'Grupos independentes entre si'
       - 'Normalidade em cada grupo, ou amostras grandes'
     tex: 't = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}'
+    efeito:
+      texto: 'd de Cohen com o desvio padrão combinado; o g de Hedges corrige o viés em amostras pequenas.'
+      tex: 'd = \dfrac{\bar{x}_1 - \bar{x}_2}{s_p}, \qquad s_p = \sqrt{\dfrac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}'
     vars:
       - ['Welch (acima): não supõe variâncias iguais e é o padrão recomendado', null]
       - ['Student clássico, com variância combinada, se as variâncias forem iguais', null]
@@ -79,6 +124,9 @@ testes:
       - 'Pares independentes entre si'
       - 'Diferenças aproximadamente normais'
     tex: 't = \dfrac{\bar{d}}{s_d / \sqrt{n}}'
+    efeito:
+      texto: 'd_z, na escala das diferenças.'
+      tex: 'd_z = \dfrac{\bar{d}}{s_d}'
     vars:
       - ['Wilcoxon de postos sinalizados, sem supor normalidade', wilcoxon]
   - id: anova
@@ -95,6 +143,9 @@ testes:
       - 'Normalidade dos resíduos'
       - 'Variâncias iguais (confira com Levene)'
     tex: 'F = \dfrac{QM_{\text{entre}}}{QM_{\text{dentro}}}'
+    efeito:
+      texto: 'η²: a fração da variação total explicada pelos grupos. O ω² é menos viesado. Referências: 0,01, 0,06 e 0,14.'
+      tex: '\eta^2 = \dfrac{SQ_{\text{entre}}}{SQ_{\text{total}}}'
     vars:
       - ['ANOVA de Welch, quando as variâncias diferem', null]
       - ['Kruskal-Wallis, sem supor normalidade', kruskal-wallis]
@@ -112,6 +163,9 @@ testes:
       - 'Normalidade dos resíduos'
       - 'Esfericidade (confira com Mauchly)'
     tex: 'F = \dfrac{QM_{\text{condições}}}{QM_{\text{erro}}}'
+    efeito:
+      texto: 'η² parcial: a variação das condições relativa a ela mais o erro.'
+      tex: '\eta^2_p = \dfrac{SQ_{\text{condições}}}{SQ_{\text{condições}} + SQ_{\text{erro}}}'
     vars:
       - ['Correções de Greenhouse-Geisser ou Huynh-Feldt, se a esfericidade falhar', null]
       - ['Friedman, sem supor normalidade', friedman]
@@ -129,6 +183,9 @@ testes:
       - 'Os mesmos da ANOVA'
       - 'Grupos de tamanhos parecidos (Tukey-Kramer ajusta os desiguais)'
     tex: 'q = \dfrac{\bar{x}_i - \bar{x}_j}{\sqrt{QM_{\text{dentro}} / n}}'
+    efeito:
+      texto: 'd de Cohen para cada par, com o desvio padrão estimado pela ANOVA.'
+      tex: 'd_{ij} = \dfrac{\bar{x}_i - \bar{x}_j}{\sqrt{QM_{\text{dentro}}}}'
     vars:
       - ['Games-Howell, com variâncias diferentes', null]
       - ['Dunnett, comparando todos contra um controle', null]
@@ -148,8 +205,12 @@ testes:
       - 'Observações independentes'
       - 'Variável ao menos ordinal'
     tex: 'S = \#\{\, x_i > m_0 \,\} \sim \text{Bin}\left(n, \tfrac{1}{2}\right)'
+    efeito:
+      texto: 'g de Cohen: quanto a proporção de sinais positivos se afasta de ½.'
+      tex: 'g = \hat{p} - \tfrac{1}{2}'
     vars:
       - ['Wilcoxon de postos sinalizados, mais poderoso se a distribuição for simétrica', wilcoxon]
+    veja: [distribuicao-binomial]
   - id: mann-whitney
     sym: 'U'
     nome: 'Mann-Whitney U'
@@ -163,6 +224,9 @@ testes:
       - 'Grupos independentes'
       - 'Variável ao menos ordinal'
     tex: 'U = n_1 n_2 + \dfrac{n_1(n_1 + 1)}{2} - R_1'
+    efeito:
+      texto: 'r, a partir do z da aproximação normal (N é o total das duas amostras); a correlação rank-bisserial é outra opção.'
+      tex: 'r = \dfrac{|z|}{\sqrt{N}}'
     vars:
       - ['Também chamado de Wilcoxon rank-sum', null]
       - ['Versão paramétrica', t-independente]
@@ -179,6 +243,9 @@ testes:
       - 'Pares independentes'
       - 'Diferenças com distribuição simétrica'
     tex: 'W = \sum_{d_i > 0} \operatorname{posto}(|d_i|)'
+    efeito:
+      texto: 'r, a partir do z da aproximação normal (n é o número de pares).'
+      tex: 'r = \dfrac{|z|}{\sqrt{n}}'
     vars:
       - ['Teste do sinal, se nem a simetria for razoável', sinal]
       - ['Versão paramétrica', t-pareado]
@@ -195,6 +262,9 @@ testes:
       - 'Grupos independentes'
       - 'Variável ao menos ordinal'
     tex: 'H = \dfrac{12}{N(N+1)} \sum_j \dfrac{R_j^2}{n_j} - 3(N+1)'
+    efeito:
+      texto: 'ε²: a versão por postos do η².'
+      tex: '\varepsilon^2 = \dfrac{H}{N - 1}'
     vars:
       - ['Depois de rejeitar H₀', dunn]
       - ['Versão paramétrica', anova]
@@ -211,6 +281,9 @@ testes:
       - 'Blocos (indivíduos) independentes'
       - 'Variável ao menos ordinal'
     tex: '\chi^2_F = \dfrac{12}{nk(k+1)} \sum_j R_j^2 - 3n(k+1)'
+    efeito:
+      texto: 'W de Kendall: a concordância entre os blocos, de 0 a 1.'
+      tex: 'W = \dfrac{\chi^2_F}{n(k - 1)}'
     vars:
       - ['Pós-teste de Nemenyi ou Conover', null]
       - ['Versão paramétrica', anova-mr]
@@ -226,6 +299,9 @@ testes:
     pres:
       - 'Os mesmos do Kruskal-Wallis'
     tex: 'z = \dfrac{\bar{R}_i - \bar{R}_j}{\sqrt{\dfrac{N(N+1)}{12}\left(\dfrac{1}{n_i} + \dfrac{1}{n_j}\right)}}'
+    efeito:
+      texto: 'r para cada par, a partir do z do teste.'
+      tex: 'r = \dfrac{|z|}{\sqrt{n_i + n_j}}'
     vars:
       - ['Ajuste os valores-p das comparações (Bonferroni, Holm)', null]
       - ['Conover-Iman, um pouco mais poderoso', null]
@@ -244,8 +320,12 @@ testes:
       - 'Observações independentes'
       - 'Para o Z: np₀ e n(1 − p₀) pelo menos 10; senão, use o binomial exato'
     tex: 'z = \dfrac{\hat{p} - p_0}{\sqrt{p_0(1 - p_0)/n}}'
+    efeito:
+      texto: 'h de Cohen: a diferença entre as proporções na escala do arco-seno. Referências: 0,2, 0,5 e 0,8.'
+      tex: 'h = 2\arcsin\sqrt{\hat{p}} - 2\arcsin\sqrt{p_0}'
     vars:
       - ['Teste binomial exato, para amostras pequenas', null]
+    veja: [distribuicao-binomial]
   - id: z-duas-proporcoes
     sym: 'Z₂'
     nome: 'Z para duas proporções'
@@ -259,6 +339,9 @@ testes:
       - 'Grupos independentes'
       - 'Pelo menos 5 a 10 sucessos e fracassos em cada grupo'
     tex: 'z = \dfrac{\hat{p}_1 - \hat{p}_2}{\sqrt{\hat{p}(1 - \hat{p})\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}'
+    efeito:
+      texto: 'h de Cohen; também se reportam a diferença de proporções, o risco relativo e a razão de chances.'
+      tex: 'h = 2\arcsin\sqrt{\hat{p}_1} - 2\arcsin\sqrt{\hat{p}_2}'
     vars:
       - ['Qui-quadrado de independência, equivalente numa tabela 2 × 2', qui-quadrado-independencia]
       - ['Fisher exato, com contagens pequenas', fisher]
@@ -275,6 +358,9 @@ testes:
       - 'Resposta binária pareada'
       - 'b + c não muito pequeno (senão, versão exata)'
     tex: '\chi^2 = \dfrac{(b - c)^2}{b + c}'
+    efeito:
+      texto: 'Razão de chances pareada: quantas vezes uma troca é mais comum que a outra.'
+      tex: 'OR = \dfrac{b}{c}'
     vars:
       - ['Versão exata binomial, para b + c pequeno', null]
   - id: qui-quadrado-homogeneidade
@@ -290,9 +376,13 @@ testes:
       - 'Observações independentes'
       - 'Frequências esperadas de pelo menos 5'
     tex: '\chi^2 = \sum \dfrac{(O - E)^2}{E}'
+    efeito:
+      texto: 'V de Cramér, de 0 a 1.'
+      tex: 'V = \sqrt{\dfrac{\chi^2}{N\,(\min(r, c) - 1)}}'
     vars:
       - ['Qui-quadrado de independência, que usa a mesma conta', qui-quadrado-independencia]
-    page: qui-quadrado
+      - ['Depois de rejeitar H₀', marascuilo]
+    veja: [qui-quadrado]
   - id: cochran-q
     sym: 'Q'
     nome: 'Q de Cochran'
@@ -308,6 +398,21 @@ testes:
     tex: 'Q = \dfrac{(k - 1)\left[k \sum_j C_j^2 - N^2\right]}{kN - \sum_i R_i^2}'
     vars:
       - ['McNemar, o caso com duas condições', mcnemar]
+  - id: marascuilo
+    sym: 'Ms'
+    nome: 'Marascuilo'
+    fam: prop
+    row: 6
+    col: 3
+    dist: 'χ²(k−1)'
+    quando: 'Depois de um qui-quadrado de homogeneidade significativo entre três ou mais grupos, descobrir quais pares de proporções diferem.'
+    h0: 'Para cada par: pᵢ = pⱼ.'
+    pres:
+      - 'Os mesmos do qui-quadrado de homogeneidade'
+      - 'Resposta binária em cada grupo'
+    tex: '|\hat{p}_i - \hat{p}_j| > \sqrt{\chi^2_{\alpha;\,k-1}} \, \sqrt{\dfrac{\hat{p}_i(1 - \hat{p}_i)}{n_i} + \dfrac{\hat{p}_j(1 - \hat{p}_j)}{n_j}}'
+    vars:
+      - ['Com medidas repetidas, McNemar par a par com ajuste dos valores-p', mcnemar]
 
   # ------------------------------------------------------------------ variâncias
   - id: qui-quadrado-variancia
@@ -338,6 +443,22 @@ testes:
     tex: 'F = \dfrac{s_1^2}{s_2^2}'
     vars:
       - ['Levene, robusto à falta de normalidade', levene]
+      - ['Pitman-Morgan, com amostras pareadas', pitman-morgan]
+  - id: pitman-morgan
+    sym: 'PM'
+    nome: 'Pitman-Morgan'
+    fam: vari
+    row: 3
+    col: 4
+    dist: 't(n−2)'
+    quando: 'Comparar as variâncias de duas medidas pareadas, como a precisão de dois instrumentos aplicados às mesmas amostras.'
+    h0: 'As duas variâncias são iguais: σ₁² = σ₂².'
+    pres:
+      - 'Pares independentes entre si'
+      - 'Normalidade bivariada'
+    tex: 'r = \operatorname{corr}(x - y,\; x + y), \qquad t = \dfrac{r\sqrt{n - 2}}{\sqrt{1 - r^2}}'
+    vars:
+      - ['F para duas variâncias, com amostras independentes', f-variancias]
   - id: levene
     sym: 'Lv'
     nome: 'Levene'
@@ -384,6 +505,7 @@ testes:
       - 'Com n muito grande, rejeita desvios irrelevantes: olhe também o gráfico Q-Q'
     tex: 'W = \dfrac{\left(\sum a_i\, x_{(i)}\right)^2}{\sum (x_i - \bar{x})^2}'
     vars: []
+    veja: [distribuicao-normal]
   - id: kolmogorov-smirnov
     sym: 'KS'
     nome: 'Kolmogorov-Smirnov'
@@ -440,6 +562,7 @@ testes:
       - 'Amostras grandes: em amostras pequenas o teste é pouco confiável'
     tex: 'JB = \dfrac{n}{6}\left(S^2 + \dfrac{(K - 3)^2}{4}\right)'
     vars: []
+    veja: [distribuicao-normal]
   - id: lilliefors
     sym: 'Lf'
     nome: 'Lilliefors'
@@ -456,6 +579,7 @@ testes:
       - ['Kolmogorov-Smirnov com valores críticos corrigidos', kolmogorov-smirnov]
 
   # ------------------------------------------------------------------ associação e correlação
+    veja: [distribuicao-normal]
   - id: pearson
     sym: 'r'
     nome: 'Correlação de Pearson'
@@ -470,9 +594,12 @@ testes:
       - 'Normalidade bivariada (para o teste)'
       - 'Sem valores extremos influentes'
     tex: 't = \dfrac{r\sqrt{n - 2}}{\sqrt{1 - r^2}}'
+    efeito:
+      texto: 'O próprio r; r² é a fração da variância de uma variável explicada pela outra.'
     vars:
       - ['Correlação de Spearman, para relações monotônicas ou dados ordinais', spearman]
     page: coeficiente-pearson
+    veja: [covariancia]
   - id: spearman
     sym: 'ρ'
     nome: 'Correlação de Spearman'
@@ -486,8 +613,11 @@ testes:
       - 'Variáveis ao menos ordinais'
       - 'Pares independentes'
     tex: '\rho = 1 - \dfrac{6 \sum d_i^2}{n(n^2 - 1)}'
+    efeito:
+      texto: 'O próprio ρ.'
     vars:
       - ['Tau de Kendall, mais estável com amostras pequenas e empates', kendall]
+    veja: [coeficiente-pearson]
   - id: kendall
     sym: 'τ'
     nome: 'Tau de Kendall'
@@ -500,6 +630,8 @@ testes:
     pres:
       - 'Variáveis ao menos ordinais'
     tex: '\tau_a = \dfrac{C - D}{\binom{n}{2}}'
+    efeito:
+      texto: 'O próprio τ.'
     vars:
       - ['Tau-b, que corrige os empates no denominador e é o que a maioria dos programas calcula', null]
   - id: qui-quadrado-independencia
@@ -515,9 +647,13 @@ testes:
       - 'Observações independentes'
       - 'Frequências esperadas de pelo menos 5'
     tex: '\chi^2 = \sum_{i,j} \dfrac{(O_{ij} - E_{ij})^2}{E_{ij}}, \qquad E_{ij} = \dfrac{R_i\, C_j}{N}'
+    efeito:
+      texto: 'V de Cramér, de 0 a 1; numa tabela 2 × 2, é o φ.'
+      tex: 'V = \sqrt{\dfrac{\chi^2}{N\,(\min(r, c) - 1)}}'
     vars:
       - ['Fisher exato, para tabelas 2 × 2 com contagens pequenas', fisher]
       - ['V de Cramér, para medir a força da associação', null]
+    veja: [qui-quadrado]
   - id: fisher
     sym: 'Fe'
     nome: 'Fisher exato'
@@ -530,8 +666,12 @@ testes:
     pres:
       - 'Totais das margens fixos (ou tratados como fixos): o valor-p soma as tabelas com essas margens tão ou menos prováveis que a observada'
     tex: 'P(T) = \dfrac{\binom{a+b}{a}\binom{c+d}{c}}{\binom{n}{a+c}}, \qquad p = \sum_{P(T'') \,\le\, P(T_{\text{obs}})} P(T'')'
+    efeito:
+      texto: 'Razão de chances da tabela 2 × 2.'
+      tex: 'OR = \dfrac{a\,d}{b\,c}'
     vars:
       - ['Qui-quadrado de independência, com contagens maiores', qui-quadrado-independencia]
+    veja: [coeficiente-binomial]
   - id: ponto-bisserial
     sym: 'rₚᵦ'
     nome: 'Correlação ponto-bisserial'
@@ -544,6 +684,8 @@ testes:
     pres:
       - 'Variável quantitativa normal em cada grupo'
     tex: 'r_{pb} = \dfrac{\bar{x}_1 - \bar{x}_0}{s_n} \sqrt{\dfrac{n_1 n_0}{n^2}}, \qquad s_n = \sqrt{\tfrac{1}{n} \textstyle\sum (x_i - \bar{x})^2}'
+    efeito:
+      texto: 'O próprio r_pb.'
     vars:
       - ['Teste equivalente', t-independente]
 
@@ -560,6 +702,9 @@ testes:
     pres:
       - 'Resíduos independentes, normais e com variância constante'
     tex: 't = \dfrac{\hat{\beta}_j}{EP(\hat{\beta}_j)}'
+    efeito:
+      texto: 'Coeficiente padronizado: o efeito em desvios padrão de y por desvio padrão de x.'
+      tex: '\beta^*_j = \hat{\beta}_j \, \dfrac{s_{x_j}}{s_y}'
     vars:
       - ['Wald, a versão para modelos generalizados', wald]
     page: regressao-linear
@@ -575,8 +720,12 @@ testes:
     pres:
       - 'Os mesmos da regressão linear'
     tex: 'F = \dfrac{R^2 / k}{(1 - R^2) / (n - k - 1)}'
+    efeito:
+      texto: 'f² de Cohen. Referências: 0,02, 0,15 e 0,35.'
+      tex: 'f^2 = \dfrac{R^2}{1 - R^2}'
     vars:
       - ['F parcial, para comparar modelos aninhados', null]
+    veja: [regressao-linear]
   - id: razao-verossimilhanca
     sym: 'LR'
     nome: 'Razão de verossimilhança'
@@ -590,6 +739,9 @@ testes:
       - 'Modelos aninhados'
       - 'Amostra grande'
     tex: 'G^2 = 2\left(\ell_{\text{completo}} - \ell_{\text{reduzido}}\right)'
+    efeito:
+      texto: 'Pseudo-R² de McFadden, comparando com o modelo só com intercepto.'
+      tex: 'R^2_{\text{McF}} = 1 - \dfrac{\ell_{\text{completo}}}{\ell_{\text{nulo}}}'
     vars:
       - ['Wald e escore, aproximações do mesmo teste', wald]
   - id: wald
@@ -605,6 +757,9 @@ testes:
       - 'Amostra grande'
       - 'Pode falhar com separação perfeita na logística'
     tex: 'W = \left(\dfrac{\hat{\beta}}{EP(\hat{\beta})}\right)^2'
+    efeito:
+      texto: 'Na regressão logística, a razão de chances do coeficiente.'
+      tex: 'OR = e^{\hat{\beta}}'
     vars:
       - ['Razão de verossimilhança, mais confiável', razao-verossimilhanca]
   - id: durbin-watson
