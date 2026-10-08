@@ -153,6 +153,12 @@
   tags: "quiz teste hipótese"
   lang: pt
 
+- title: "Catálogo de testes estatísticos"
+  url: "/testes-estatisticos/"
+  description: "Catálogo de 42 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula."
+  tags: "testes estatísticos catálogo hipótese escolha do teste"
+  lang: pt
+
 # Versões em inglês das fórmulas (/en/formulas/), geradas das portuguesas.
 - title: "Interactive Formulas"
   url: "/en/formulas/"
