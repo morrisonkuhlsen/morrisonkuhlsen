@@ -150,6 +150,9 @@ def build(slug, d):
     for a, b in d.get("extra", []):
         s = sub1(s, a, b)
 
+    # O link para o catálogo de testes aponta para uma página só em português.
+    s = re.sub(r'    <p class="formula-catalog">.*?</p>\n\n', "", s)
+
     def pager(m):
         kind, target = m.group(1), m.group(2)
         word = "Previous" if kind == "prev" else "Next"
