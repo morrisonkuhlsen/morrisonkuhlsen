@@ -62,6 +62,35 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido. Os valores padrão são o exemplo da
+         prova; o estado vai para a URL (?x=&mu=&sd=) só depois que o leitor
+         mexe, como nas tabelas. -->
+    <section class="calc" data-calc="zscore" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: numa prova com média 70 e desvio padrão 8, um aluno tirou 82. Quão acima da média ele ficou? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Observação <i>X</i></span>
+          <input name="x" type="text" inputmode="decimal" value="82" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Média <i>μ</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="70" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Desvio padrão <i>σ</i></span>
+          <input name="sd" type="text" inputmode="decimal" value="8" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

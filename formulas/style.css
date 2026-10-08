@@ -266,6 +266,147 @@ body {
   color: var(--tone);
 }
 
+/* ---------------------------------------------------------------- calculadora */
+
+.calc {
+  width: 100%;
+  max-width: 720px;
+  padding: 1.25rem 1.4rem 1.4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.calc h2,
+.calc h3 {
+  margin: 0 0 .6rem;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.calc h3 {
+  margin-top: 1.4rem;
+}
+
+.calc-lede {
+  margin: 0 0 1.1rem;
+  line-height: 1.55;
+}
+
+.calc-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .8rem;
+}
+
+.calc-field {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  font-size: .9rem;
+  color: var(--text-strong);
+}
+
+.calc-field span {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+}
+
+.calc-field span::before {
+  content: "";
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--tone);
+}
+
+.calc-field i {
+  font-family: KaTeX_Math, serif;
+  font-size: 1.1em;
+  color: var(--tone);
+}
+
+.calc-field input {
+  width: 100%;
+  padding: .6rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-field input:focus-visible {
+  outline: 2px solid var(--tone);
+  outline-offset: 1px;
+}
+
+.calc-field input[aria-invalid="true"] {
+  border-color: var(--tone-4);
+}
+
+.calc-result {
+  display: block;
+  margin-top: 1.2rem;
+  font-size: 1.6rem;
+  color: var(--text-strong);
+  text-align: center;
+  min-height: 2.4rem;
+}
+
+.calc-steps {
+  margin: 0;
+  padding-left: 1.3rem;
+  display: grid;
+  gap: .9rem;
+}
+
+.calc-steps li {
+  padding-left: .2rem;
+}
+
+.calc-steps li::marker {
+  color: var(--text-muted);
+}
+
+.calc-math {
+  display: block;
+  margin-top: .35rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 1.05rem;
+  color: var(--text-strong);
+}
+
+/* \htmlData{tone=n} do KaTeX vira data-tone="n" no HTML gerado. */
+.calc [data-tone] .katex,
+.calc .katex [data-tone] {
+  color: var(--tone);
+}
+
+.calc-note {
+  margin: 1.2rem 0 0;
+  line-height: 1.55;
+}
+
+.calc-note a {
+  color: var(--text-strong);
+  text-underline-offset: 3px;
+}
+
+.calc.has-error .calc-note {
+  color: var(--tone-4);
+}
+
+.calc.has-error h3 {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- legenda */
 
 .formula-static-info {

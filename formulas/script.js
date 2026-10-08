@@ -195,6 +195,118 @@
     if (document.fonts) document.fonts.ready.then(fit);
   }
 
+  /* ---------------------------------------------------------------- calculadora
+   *
+   * <section class="calc" data-calc="nome"> com um <input name> por variável.
+   * Cada entrada de CALCS recebe os valores já convertidos e devolve o
+   * resultado, os passos (texto + LaTeX) e uma nota final, ou um erro.
+   * No LaTeX, tone(tex, n) pinta o trecho com a cor do termo n da fórmula.
+   */
+
+  const nf = d => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: d });
+  const fmt = (n, d = 4) => nf(d).format(n === 0 ? 0 : n); // evita "-0"
+  const texNum = (n, d = 4) => fmt(n, d).replace(/\./g, "").replace(",", "{,}");
+  const tone = (t, n) => `\\htmlData{tone=${n}}{${t}}`;
+  // Negativo dentro de uma subtração ou fração vai entre parênteses.
+  const paren = (n, t) => (n < 0 ? `\\left(${t}\\right)` : t);
+  const approx = (n, d = 4) => (Math.abs(n - Number(n.toFixed(d))) > 1e-12 ? "\\approx" : "=");
+
+  // Função de distribuição da normal padrão, por Abramowitz–Stegun 7.1.26
+  // (erro < 1,5·10⁻⁷, mais do que basta para um percentil com uma casa).
+  function phi(z) {
+    const x = Math.abs(z) / Math.SQRT2;
+    const t = 1 / (1 + 0.3275911 * x);
+    const erf = 1 - t * (0.254829592 + t * (-0.284496736 + t * (1.421413741
+      + t * (-1.453152027 + t * 1.061405429)))) * Math.exp(-x * x);
+    return z >= 0 ? (1 + erf) / 2 : (1 - erf) / 2;
+  }
+
+  const CALCS = {
+    zscore({ x, mu, sd }) {
+      if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
+      const diff = x - mu;
+      const z = diff / sd;
+      const X = tone(texNum(x), 2), M = tone(paren(mu, texNum(mu)), 3), S = tone(texNum(sd), 4);
+      const zAbs = Math.abs(Number(z.toFixed(2)));
+
+      let note;
+      if (zAbs === 0) {
+        note = "A observação coincide com a média.";
+      } else {
+        const lado = z > 0 ? "acima" : "abaixo";
+        note = `A observação está ${fmt(Math.abs(z), 2)} ${zAbs >= 2 ? "desvios padrão" : "desvio padrão"} ${lado} da média.`;
+      }
+      const p = phi(z) * 100;
+      const pct = p > 99.9 ? "mais de 99,9%" : p < 0.1 ? "menos de 0,1%" : `cerca de ${fmt(p, 1)}%`;
+      note += ` Se os dados seguem uma distribuição normal, ${pct} dos valores ficam abaixo dela.`
+        + ` <a href="/ztable.html?z=${z.toFixed(2)}">Conferir na tabela Z</a>.`;
+
+      return {
+        result: `Z ${approx(z)} ${tone(texNum(z), 1)}`,
+        steps: [
+          ["Substitua os valores na fórmula:", `Z = \\dfrac{${X} - ${M}}{${S}}`],
+          ["Subtraia a média da observação:", `Z = \\dfrac{${texNum(diff)}}{${S}}`],
+          ["Divida pelo desvio padrão:", `Z ${approx(z)} ${tone(texNum(z), 1)}`],
+        ],
+        note,
+      };
+    },
+  };
+
+  function initCalc(section) {
+    const calc = CALCS[section.dataset.calc];
+    const inputs = Array.from(section.querySelectorAll("input[name]"));
+    const result = section.querySelector(".calc-result");
+    const steps = section.querySelector(".calc-steps");
+    const note = section.querySelector(".calc-note");
+    const opts = { throwOnError: false, strict: false, trust: c => c.command === "\\htmlData" };
+    const math = (el, src) => (window.katex ? katex.render(src, el, opts) : (el.textContent = src));
+    // Aceita vírgula decimal, sinal tipográfico − e espaços de milhar.
+    const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/\s/g, "").replace("−", "-").replace(",", ".")));
+
+    const params = new URLSearchParams(location.search);
+    inputs.forEach(i => { if (params.has(i.name)) i.value = params.get(i.name); });
+
+    function update() {
+      const v = Object.fromEntries(inputs.map(i => [i.name, parse(i.value)]));
+      inputs.forEach(i => i.setAttribute("aria-invalid", String(Number.isNaN(v[i.name]))));
+      const out = Object.values(v).some(Number.isNaN)
+        ? { error: "Preencha todos os campos com números." }
+        : calc(v);
+
+      section.classList.toggle("has-error", !!out.error);
+      steps.replaceChildren();
+      if (out.error) {
+        result.textContent = "";
+        note.textContent = out.error;
+        return;
+      }
+      math(result, out.result);
+      out.steps.forEach(([text, src]) => {
+        const li = document.createElement("li");
+        const p = document.createElement("span");
+        const m = document.createElement("span");
+        p.textContent = text;
+        m.className = "calc-math";
+        math(m, src);
+        li.append(p, m);
+        steps.appendChild(li);
+      });
+      note.innerHTML = out.note;
+    }
+
+    // replaceState, não pushState: cada tecla viraria uma entrada no histórico.
+    section.addEventListener("input", () => {
+      update();
+      const q = new URLSearchParams(location.search);
+      inputs.forEach(i => q.set(i.name, i.value.trim()));
+      history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
+    });
+    update();
+  }
+
+  document.querySelectorAll(".calc[data-calc]").forEach(initCalc);
+
   if (document.querySelector(".formula-wrap")) initFormula();
   else if (document.getElementById("filtro")) initIndex();
 })();
