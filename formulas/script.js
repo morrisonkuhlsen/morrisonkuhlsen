@@ -859,6 +859,86 @@
       };
     },
 
+    binom({ n, k }) {
+      if (!Number.isInteger(n) || !Number.isInteger(k) || n < 0 || k < 0) return { error: "n e k precisam ser inteiros não negativos." };
+      if (k > n) return { error: "Não dá para escolher mais itens (k) do que existem (n)." };
+      if (n > 1000) return { error: "Use n de no máximo 1.000." };
+      // Fórmula multiplicativa com BigInt: exata mesmo quando o resultado
+      // passa de 2⁵³. Usa o menor de k e n − k, que dá o mesmo valor.
+      const m = Math.min(k, n - k);
+      let c = 1n;
+      for (let i = 1; i <= m; i++) c = c * BigInt(n - m + i) / BigInt(i);
+      const digits = c.toString().length;
+      const big = v => v.toLocaleString("pt-BR").replace(/\./g, "{.}");
+      const shown = digits > 24
+        ? `\\approx ${tone(`${c.toString()[0]}{,}${c.toString().slice(1, 4)} \\times 10^{${digits - 1}}`, 1)}`
+        : `= ${tone(big(c), 1)}`;
+      const N = tone(`${n}!`, 2), K = tone(`${k}!`, 3), NK = tone(`${n - k}!`, 4);
+      const steps = [["Substitua na fórmula:", `\\dbinom{${n}}{${k}} = \\dfrac{${N}}{${K} \\cdot ${NK}}`]];
+      if (m <= 10 && m > 0) {
+        const top = Array.from({ length: m }, (_, i) => n - i);
+        const bottom = Array.from({ length: m }, (_, i) => m - i);
+        let num = 1n, den = 1n;
+        top.forEach(v => { num *= BigInt(v); });
+        bottom.forEach(v => { den *= BigInt(v); });
+        const rest = m === k ? n - k : k;
+        steps.push([`Cancele ${rest}! em cima e embaixo: sobram os ${m} maiores fatores de ${n}! sobre ${m}!.`,
+          `\\dfrac{${top.join(" \\cdot ")}}{${bottom.join(" \\cdot ")}} = \\dfrac{${big(num)}}{${big(den)}} ${shown}`]);
+      } else if (m === 0) {
+        steps.push(["Escolher nenhum ou todos os itens só pode ser feito de um jeito:", `\\dbinom{${n}}{${k}} = ${tone(1, 1)}`]);
+      } else {
+        steps.push([`Com tantos fatores, a conta vai direto pela fórmula multiplicativa, sem escrever ${n}! inteiro:`,
+          `\\dbinom{${n}}{${k}} = \\prod_{i=1}^{${m}} \\dfrac{${n - m} + i}{i} ${shown}`]);
+      }
+      const cs = c.toString();
+      let note = digits > 24
+        ? `Há cerca de ${cs[0]},${cs.slice(1, 4)} × 10^${digits - 1} maneiras, um número de ${digits} dígitos.`
+        : c === 1n ? "Há uma única maneira." : `Há ${c.toLocaleString("pt-BR")} maneiras.`;
+      if (k >= 2 && k <= 12) {
+        let perm = 1n;
+        for (let i = 0; i < k; i++) perm *= BigInt(n - i);
+        const fk = Array.from({ length: k }, (_, i) => BigInt(i + 1)).reduce((a, b) => a * b, 1n);
+        if (perm.toString().length <= 24) {
+          note += ` Se a ordem importasse (um arranjo), seriam ${perm.toLocaleString("pt-BR")}: cada grupo aparece ${k}! = ${fk.toLocaleString("pt-BR")} vezes, uma para cada ordem.`;
+        }
+      }
+      if (k !== n - k) note += ` Escolher ${k} é o mesmo que deixar ${n - k} de fora, por isso C(${n}, ${k}) = C(${n}, ${n - k}).`;
+      return { result: `\\dbinom{${n}}{${k}} ${shown}`, steps, note };
+    },
+
+    cheb({ mu, sd, k }) {
+      if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
+      if (k <= 0) return { error: "k precisa ser maior que zero." };
+      const lo = mu - k * sd, hi = mu + k * sd;
+      const bound = 1 / (k * k);
+      const K = tone(texNum(k), 3), S = tone(texNum(sd), 4), M = tone(texNum(mu), 2);
+      const interval = `\\left[\\,${texNum(lo)}\\,;\\ ${texNum(hi)}\\,\\right]`;
+      const steps = [
+        ["Monte o intervalo de k desvios padrão em torno da média:",
+          `\\mu \\pm k\\sigma = ${M} \\pm ${K} \\cdot ${S} ${approx(lo) === "=" && approx(hi) === "=" ? "=" : "\\approx"} ${interval}`],
+        ["Calcule o limite de Chebyshev para ficar fora dele:",
+          `P\\big(|X - \\mu| \\ge k\\sigma\\big) \\le \\dfrac{${tone(1, 5)}}{${K}^2} ${approx(bound, 6)} ${tone(texNum(bound, 6), 1)}`],
+      ];
+      if (k <= 1) {
+        return {
+          result: `P\\big(|X - \\mu| \\ge k\\sigma\\big) \\le ${tone(texNum(bound, 6), 1)}`,
+          steps,
+          note: "Com k ≤ 1, o limite é 1 ou mais, e toda probabilidade já é no máximo 1: o teorema não diz nada. Ele só informa para k > 1.",
+        };
+      }
+      const inside = 1 - bound;
+      const normal = 2 * phi(k) - 1;
+      steps.push(["O complemento é a fração garantida dentro do intervalo:",
+        `P\\big(|X - \\mu| < k\\sigma\\big) \\ge 1 - ${texNum(bound, 6)} ${approx(inside, 6)} ${tone(`${texNum(inside * 100, 2)}\\%`, 1)}`]);
+      return {
+        result: `\\text{pelo menos } ${tone(`${texNum(inside * 100, 2)}\\%`, 1)} \\text{ em } ${interval}`,
+        steps,
+        note: `Pelo menos ${fmt(inside * 100, 2)}% dos valores ficam entre ${fmt(lo)} e ${fmt(hi)}, qualquer que seja a distribuição.`
+          + ` É uma garantia conservadora: se os dados fossem normais, a fração seria de ${fmt(normal * 100, 1)}%.`
+          + " O preço de valer para tudo é ser folgado em cada caso.",
+      };
+    },
+
     // Teste de aderência. As esperadas podem vir como contagens, como
     // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
     chi({ o, e }) {

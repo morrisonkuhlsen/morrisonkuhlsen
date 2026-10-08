@@ -66,6 +66,33 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?mu=&sd=&k=. -->
+    <section class="calc" data-calc="cheb" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: os salários de uma empresa têm média de R$ 3.000 e desvio padrão de R$ 500, mas não se sabe a forma da distribuição. No mínimo, que fração dos salários fica entre R$ 2.000 e R$ 4.000? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Média <i>μ</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="3000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Desvio padrão <i>σ</i></span>
+          <input name="sd" type="text" inputmode="decimal" value="500" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Desvios padrão <i>k</i></span>
+          <input name="k" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
