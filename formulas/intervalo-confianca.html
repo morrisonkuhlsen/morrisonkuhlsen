@@ -64,6 +64,37 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?xbar=&sd=&n=&conf=. -->
+    <section class="calc" data-calc="ic" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma amostra de 36 lâmpadas durou em média 1.200 horas. Sabe-se que o desvio padrão da produção é de 120 horas. Entre que valores está a vida média de todas as lâmpadas, com 95% de confiança? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Média amostral <i>x̄</i></span>
+          <input name="xbar" type="text" inputmode="decimal" value="1200" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Desvio padrão <i>σ</i></span>
+          <input name="sd" type="text" inputmode="decimal" value="120" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Tamanho da amostra <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="36" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Confiança (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
@@ -73,10 +104,10 @@
           <dd>A média calculada a partir da amostra. Serve como ponto central do intervalo de confiança, sendo a melhor estimativa do parâmetro populacional.</dd>
           <dt data-part="plus_minus_ic" data-tone="5">Mais ou Menos (±)</dt>
           <dd>Indica que o intervalo se estende tanto acima quanto abaixo da média amostral, criando um intervalo simétrico.</dd>
-          <dt data-part="z_critical" data-tone="3">Valor Crítico Z (z_{α/2})</dt>
-          <dd>O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z_{α/2} ≈ 1.96; para 99%, z_{α/2} ≈ 2.58.</dd>
+          <dt data-part="z_critical" data-tone="3">Valor Crítico Z (z<sub>α/2</sub>)</dt>
+          <dd>O valor da distribuição normal padrão que corresponde ao nível de confiança desejado. Para 95% de confiança, z<sub>α/2</sub> ≈ 1,96; para 99%, z<sub>α/2</sub> ≈ 2,58.</dd>
           <dt data-part="std_dev_ic" data-tone="4">Desvio Padrão (σ)</dt>
-          <dd>O desvio padrão da população (ou da amostra, se a população for desconhecida). Mede a variabilidade dos dados.</dd>
+          <dd>O desvio padrão da população, que a fórmula supõe conhecido. Quando ele é estimado pela própria amostra, o certo é trocar z pelo valor crítico da <a href="t-student.html">distribuição t</a>.</dd>
           <dt data-part="sqrt_n" data-tone="5">Raiz Quadrada de n (√n)</dt>
           <dd>O tamanho da amostra sob raiz quadrada. Este termo no denominador reduz a margem de erro à medida que o tamanho da amostra aumenta, tornando a estimativa mais precisa.</dd>
       </dl>

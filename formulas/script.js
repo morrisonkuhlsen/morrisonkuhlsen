@@ -261,6 +261,25 @@
   // Valor-p bilateral da t de Student com df graus de liberdade.
   const tTwoTail = (t, df) => betainc(df / (df + t * t), df / 2, 0.5);
 
+  // Inversa da normal padrão, pelo algoritmo de Acklam (erro relativo < 1,2·10⁻⁹).
+  function probit(p) {
+    const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269,
+      -30.66479806614716, 2.506628277459239];
+    const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972,
+      -13.28068155288572];
+    const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734,
+      4.374664141464968, 2.938163982698783];
+    const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+    const lo = 0.02425;
+    const tail = q => (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5])
+      / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+    if (p < lo) return tail(Math.sqrt(-2 * Math.log(p)));
+    if (p > 1 - lo) return -tail(Math.sqrt(-2 * Math.log(1 - p)));
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q
+      / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
   const CALCS = {
     zscore({ x, mu, sd }) {
       if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
@@ -326,6 +345,41 @@
           + ` <a href="/ttable.html?t=${Math.abs(t).toFixed(3)}&amp;df=${df}">Conferir na tabela t</a>.`,
       };
     },
+
+    ic({ xbar, sd, n, conf }) {
+      if (sd <= 0) return { error: "O desvio padrão precisa ser maior que zero." };
+      if (!Number.isInteger(n) || n < 1) return { error: "O tamanho da amostra precisa ser um inteiro positivo." };
+      if (conf <= 0 || conf >= 100) return { error: "A confiança precisa estar entre 0 e 100%, como 90, 95 ou 99." };
+      const alpha = 1 - conf / 100;
+      // Arredondado para duas casas, como na tabela Z, e usado assim nas contas
+      // seguintes: quem refizer à mão chega nos mesmos números.
+      const z = Number(probit(1 - alpha / 2).toFixed(2));
+      const root = Math.sqrt(n);
+      const se = sd / root;
+      const e = z * se;
+      const lo = xbar - e, hi = xbar + e;
+      const X = tone(texNum(xbar), 2), S = tone(texNum(sd), 4), Z = tone(texNum(z), 3);
+      const N = tone(`\\sqrt{${texNum(n)}}`, 5), R = tone(texNum(root), 5), PM = tone("\\pm", 5);
+      const interval = `\\left[\\,${texNum(lo)}\\,;\\ ${texNum(hi)}\\,\\right]`;
+      const confTxt = `${fmt(conf, 2)}%`;
+
+      return {
+        result: `IC ${approx(lo) === "=" && approx(hi) === "=" ? "=" : "\\approx"} ${tone(interval, 1)}`,
+        steps: [
+          [`Encontre o valor crítico: com ${confTxt} de confiança, α = ${fmt(alpha, 6)} e α/2 = ${fmt(alpha / 2, 6)}.`,
+            `z_{${texNum(alpha / 2, 6)}} \\approx ${Z}`],
+          ["Calcule o erro padrão, o desvio padrão dividido pela raiz de n:",
+            `\\mathrm{EP} = \\dfrac{${S}}{${N}} ${Number.isInteger(root) ? `= \\dfrac{${S}}{${R}}` : ""} ${approx(se)} ${texNum(se)}`],
+          ["Multiplique pelo valor crítico para obter a margem de erro:",
+            `E = ${Z} \\cdot ${texNum(se)} ${approx(e)} ${texNum(e)}`],
+          ["Some e subtraia a margem da média amostral:",
+            `IC = ${X} ${PM} ${texNum(e)} ${approx(lo) === "=" && approx(hi) === "=" ? "=" : "\\approx"} ${tone(interval, 1)}`],
+        ],
+        note: `Com ${confTxt} de confiança, a média populacional está entre ${fmt(lo)} e ${fmt(hi)}:`
+          + ` intervalos construídos assim, em amostras diferentes, contêm a média verdadeira em ${confTxt} das vezes.`
+          + ` O valor crítico foi arredondado para duas casas, como na tabela Z.`,
+      };
+    },
   };
 
   function initCalc(section) {
@@ -336,8 +390,8 @@
     const note = section.querySelector(".calc-note");
     const opts = { throwOnError: false, strict: false, trust: c => c.command === "\\htmlData" };
     const math = (el, src) => (window.katex ? katex.render(src, el, opts) : (el.textContent = src));
-    // Aceita vírgula decimal, sinal tipográfico − e espaços de milhar.
-    const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/\s/g, "").replace("−", "-").replace(",", ".")));
+    // Aceita vírgula decimal, sinal tipográfico −, espaços de milhar e um % no fim.
+    const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/[\s%]/g, "").replace("−", "-").replace(",", ".")));
 
     const params = new URLSearchParams(location.search);
     inputs.forEach(i => { if (params.has(i.name)) i.value = params.get(i.name); });
@@ -374,7 +428,7 @@
     section.addEventListener("input", () => {
       update();
       const q = new URLSearchParams(location.search);
-      inputs.forEach(i => q.set(i.name, i.value.trim()));
+      inputs.forEach(i => q.set(i.name, i.value.trim().replace(/%$/, "")));
       history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
     });
     update();
