@@ -685,6 +685,88 @@
       return { result: line, steps, note };
     },
 
+    harm({ x }) {
+      const n = x.length;
+      if (n < 2) return { error: "Informe pelo menos dois valores." };
+      if (n > 200) return { error: "Use no máximo 200 valores." };
+      if (x.some(v => v <= 0)) return { error: "A média harmônica só faz sentido para valores positivos." };
+      const rec = x.map(v => 1 / v);
+      const sum = rec.reduce((a, b) => a + b, 0);
+      const h = n / sum;
+      const arith = x.reduce((a, b) => a + b, 0) / n;
+      const S = tone(texNum(sum, 6), 3);
+      const recLine = n <= 6
+        ? `${x.map(v => `\\dfrac{1}{${texNum(v)}}`).join(" + ")} ${approx(sum, 6)} ${rec.map(v => texNum(v, 6)).join(" + ")} ${approx(sum, 6)} ${S}`
+        : `\\textstyle\\sum \\dfrac{1}{x_i} ${approx(sum, 6)} ${S}`;
+      return {
+        result: `H ${approx(h)} ${tone(texNum(h), 1)}`,
+        steps: [
+          ["Some os recíprocos (1 dividido por cada valor):", recLine],
+          ["Divida o número de valores por essa soma:",
+            `H = \\dfrac{${tone(n, 2)}}{${S}} ${approx(h)} ${tone(texNum(h), 1)}`],
+        ],
+        note: `A média aritmética dos mesmos valores seria ${fmt(arith)}; a harmônica é sempre menor ou igual a ela.`
+          + " É a média certa quando os valores são taxas sobre uma mesma quantidade, como velocidades num mesmo trecho:"
+          + " o trecho feito mais devagar leva mais tempo e pesa mais no resultado.",
+      };
+    },
+
+    quad({ a, b, c }) {
+      if (a === 0) {
+        return { error: b === 0
+          ? "Com a = 0 e b = 0, não há equação em x."
+          : `Com a = 0 a equação é de primeiro grau, e a solução é x = −c/b = ${fmt(-c / b)}.` };
+      }
+      const term = (k, v, first) => {
+        if (k === 0) return "";
+        const sign = k < 0 ? "-" : first ? "" : "+";
+        const abs = Math.abs(k);
+        const coef = v && abs === 1 ? "" : texNum(abs);
+        return `${sign} ${coef}${v}`;
+      };
+      const poly = [term(a, "x^2", true), term(b, "x", a === 0), term(c, "", false)].filter(Boolean).join(" ") + " = 0";
+      const A = tone(paren(a, texNum(a)), 4), B = tone(paren(b, texNum(b)), 2), C = tone(paren(c, texNum(c)), 3);
+      const delta = b * b - 4 * a * c;
+      const D = tone(texNum(delta), 3);
+      const twoA = 2 * a;
+      const TA = tone(texNum(twoA), 4), MB = tone(texNum(-b), 2), PM = tone("\\pm", 5);
+      const steps = [
+        ["Identifique os coeficientes da equação:", `${poly} \\quad\\Rightarrow\\quad a = ${A},\\; b = ${B},\\; c = ${C}`],
+        ["Calcule o discriminante:",
+          `\\Delta = b^2 - 4ac = ${B}^2 - 4 \\cdot ${A} \\cdot ${C} ${approx(delta)} ${D}`],
+      ];
+      let result, note;
+      if (Math.abs(delta) < 1e-12) {
+        const x = -b / twoA;
+        steps.push(["Com Δ = 0, a raiz quadrada some e sobra uma única raiz (dupla):",
+          `x = \\dfrac{-b}{2a} = \\dfrac{${MB}}{${TA}} ${approx(x)} ${tone(texNum(x), 1)}`]);
+        result = `x ${approx(x)} ${tone(texNum(x), 1)}`;
+        note = "Raiz dupla: a parábola toca o eixo x num único ponto, o vértice.";
+      } else if (delta > 0) {
+        const r = Math.sqrt(delta);
+        const x1 = (-b + r) / twoA, x2 = (-b - r) / twoA;
+        const R = tone(texNum(r), 3);
+        steps.push(["Tire a raiz do discriminante:", `\\sqrt{\\Delta} = \\sqrt{${D}} ${approx(r)} ${R}`]);
+        steps.push(["Aplique a fórmula, uma vez com + e outra com −:",
+          `x = \\dfrac{${MB} ${PM} ${R}}{${TA}} \\quad\\Rightarrow\\quad `
+          + `x_1 = \\dfrac{${texNum(-b)} + ${texNum(r)}}{${texNum(twoA)}} ${approx(x1)} ${tone(texNum(x1), 1)}, \\quad `
+          + `x_2 = \\dfrac{${texNum(-b)} - ${texNum(r)}}{${texNum(twoA)}} ${approx(x2)} ${tone(texNum(x2), 1)}`]);
+        result = `x_1 ${approx(x1)} ${tone(texNum(x1), 1)}, \\quad x_2 ${approx(x2)} ${tone(texNum(x2), 1)}`;
+        note = `Duas raízes reais: a parábola cruza o eixo x em ${fmt(x2 < x1 ? x2 : x1)} e ${fmt(x2 < x1 ? x1 : x2)}.`
+          + ` Para conferir, a soma das raízes é −b/a = ${fmt(-b / a)} e o produto é c/a = ${fmt(c / a)}.`;
+      } else {
+        const re = -b / twoA, im = Math.abs(Math.sqrt(-delta) / twoA);
+        const R = tone(`${texNum(Math.sqrt(-delta))}\\,i`, 3);
+        steps.push(["Com Δ < 0, a raiz é imaginária: √Δ = i·√|Δ|.",
+          `\\sqrt{\\Delta} = \\sqrt{${D}} ${approx(Math.sqrt(-delta))} ${R}`]);
+        steps.push(["Aplique a fórmula e separe a parte real da imaginária:",
+          `x = \\dfrac{${MB} ${PM} ${R}}{${TA}} ${approx(re) === "=" && approx(im) === "=" ? "=" : "\\approx"} ${tone(`${texNum(re)} \\pm ${texNum(im)}\\,i`, 1)}`]);
+        result = `x ${approx(re) === "=" && approx(im) === "=" ? "=" : "\\approx"} ${tone(`${texNum(re)} \\pm ${texNum(im)}\\,i`, 1)}`;
+        note = "Sem raízes reais: a parábola não cruza o eixo x. As duas raízes são complexas conjugadas.";
+      }
+      return { result, steps, note };
+    },
+
     // Teste de aderência. As esperadas podem vir como contagens, como
     // proporções (somando 1) ou ficar em branco, para a distribuição uniforme.
     chi({ o, e }) {
@@ -750,14 +832,16 @@
     },
   };
 
+  // \htmlData só para pintar trechos com data-tone; nada além disso é confiável.
+  const MATH_OPTS = { throwOnError: false, strict: false, trust: c => c.command === "\\htmlData" };
+  const math = (el, src) => (window.katex ? katex.render(src, el, MATH_OPTS) : (el.textContent = src));
+
   function initCalc(section) {
     const calc = CALCS[section.dataset.calc];
     const inputs = Array.from(section.querySelectorAll("input[name]"));
     const result = section.querySelector(".calc-result");
     const steps = section.querySelector(".calc-steps");
     const note = section.querySelector(".calc-note");
-    const opts = { throwOnError: false, strict: false, trust: c => c.command === "\\htmlData" };
-    const math = (el, src) => (window.katex ? katex.render(src, el, opts) : (el.textContent = src));
     // Aceita vírgula decimal, sinal tipográfico −, espaços de milhar e um % no fim.
     const parse = s => (s.trim() === "" ? NaN : Number(s.replace(/[\s%]/g, "").replace("−", "-").replace(",", ".")));
     // Campo com data-list vira um array, separado por espaço ou ponto e vírgula
@@ -810,6 +894,8 @@
   }
 
   document.querySelectorAll(".calc[data-calc]").forEach(initCalc);
+  // Exemplos resolvidos fixos, escritos direto no HTML (L'Hôpital).
+  document.querySelectorAll(".worked [data-tex]").forEach(el => math(el, "\\displaystyle " + el.dataset.tex));
 
   if (document.querySelector(".formula-wrap")) initFormula();
   else if (document.getElementById("filtro")) initIndex();

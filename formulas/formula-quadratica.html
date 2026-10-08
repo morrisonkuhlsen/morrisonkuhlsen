@@ -62,6 +62,33 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?a=&b=&c=. -->
+    <section class="calc" data-calc="quad" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: resolva x² − 5x + 6 = 0, ou seja, a = 1, b = −5 e c = 6. Troque os coeficientes para resolver a sua equação.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="4">
+          <span>Coeficiente <i>a</i></span>
+          <input name="a" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Coeficiente <i>b</i></span>
+          <input name="b" type="text" inputmode="decimal" value="-5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Coeficiente <i>c</i></span>
+          <input name="c" type="text" inputmode="decimal" value="6" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
@@ -72,7 +99,7 @@
           <dt data-part="plus_minus" data-tone="5">Mais ou Menos (±)</dt>
           <dd>Indica que a fórmula gera duas soluções: uma somando a raiz do discriminante e outra subtraindo.</dd>
           <dt data-part="discriminant" data-tone="3">Discriminante (Δ)</dt>
-          <dd>A expressão b²-4ac, chamada de discriminante (delta), determina a natureza das raízes (reais ou complexas).</dd>
+          <dd>A expressão b² − 4ac, chamada de discriminante (Δ). Se Δ &gt; 0, há duas raízes reais; se Δ = 0, uma raiz dupla; se Δ &lt; 0, duas raízes complexas conjugadas.</dd>
           <dt data-part="divisor_2a" data-tone="4">Divisor (2a)</dt>
           <dd>O dobro do coeficiente 'a', que é o termo que acompanha x². Este valor normaliza a expressão.</dd>
       </dl>

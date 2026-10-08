@@ -61,6 +61,34 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Exemplos resolvidos, sem campos: a regra é simbólica e não cabe numa
+         calculadora numérica. As cores seguem as da fórmula. -->
+    <section class="calc worked" aria-labelledby="ex-title">
+      <h2 id="ex-title">Exemplos resolvidos</h2>
+
+      <h3>0/0, aplicando a regra duas vezes</h3>
+      <ol class="calc-steps">
+        <li><span>Substituir x = 0 dá 0/0, uma forma indeterminada:</span><span class="calc-math" data-tex="\lim_{x \to 0} \dfrac{1 - \cos x}{x^2} = \dfrac{1 - \cos 0}{0^2} = \dfrac{0}{0}"></span></li>
+        <li><span>Derive o numerador e o denominador separadamente:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to 0}} \dfrac{\htmlData{tone=3}{\sin x}}{\htmlData{tone=4}{2x}}"></span></li>
+        <li><span>Ainda dá 0/0 em x = 0. Aplique a regra de novo:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to 0}} \dfrac{\htmlData{tone=3}{\cos x}}{\htmlData{tone=4}{2}}"></span></li>
+        <li><span>Agora a substituição funciona:</span><span class="calc-math" data-tex="\dfrac{\cos 0}{2} = \htmlData{tone=1}{\dfrac{1}{2}}"></span></li>
+      </ol>
+
+      <h3>∞/∞</h3>
+      <ol class="calc-steps">
+        <li><span>Quando x cresce, numerador e denominador vão ao infinito: ∞/∞.</span><span class="calc-math" data-tex="\lim_{x \to \infty} \dfrac{\ln x}{x} = \dfrac{\infty}{\infty}"></span></li>
+        <li><span>Derive cada parte: a derivada de ln x é 1/x, e a de x é 1.</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to \infty}} \dfrac{\htmlData{tone=3}{1/x}}{\htmlData{tone=4}{1}}"></span></li>
+        <li><span>Com x indo ao infinito, 1/x vai a zero:</span><span class="calc-math" data-tex="\htmlData{tone=2}{\lim_{x \to \infty}} \dfrac{1}{x} = \htmlData{tone=1}{0}"></span></li>
+      </ol>
+
+      <h3>Erro comum: usar a regra sem indeterminação</h3>
+      <ol class="calc-steps">
+        <li><span>Aqui a substituição direta já resolve, porque não há indeterminação:</span><span class="calc-math" data-tex="\lim_{x \to 1} \dfrac{x^2 + 1}{x + 1} = \dfrac{2}{2} = \htmlData{tone=1}{1}"></span></li>
+        <li><span>Aplicar a regra mesmo assim daria um resultado errado:</span><span class="calc-math" data-tex="\lim_{x \to 1} \dfrac{2x}{1} = 2 \;\ne\; 1"></span></li>
+      </ol>
+      <p class="calc-note">A regra só vale para 0/0 ou ∞/∞. Antes de derivar, substitua o ponto e confira se a forma é mesmo indeterminada.</p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>

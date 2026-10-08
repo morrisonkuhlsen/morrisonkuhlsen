@@ -60,6 +60,26 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
+    <!-- Calculadora e exemplo resolvido; estado em ?x=. -->
+    <section class="calc" data-calc="harm" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um carro vai de uma cidade a outra a 60 km/h e volta pelo mesmo caminho a 40 km/h. Qual foi a velocidade média da viagem? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Valores <i>x<sub>i</sub></i></span>
+          <input name="x" type="text" inputmode="decimal" value="60 40" data-list autocomplete="off" spellcheck="false">
+          <small>Todos positivos, separados por espaço ou ponto e vírgula.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
     <section class="formula-static-info">
       <h2>O que significa cada termo</h2>
       <dl>
