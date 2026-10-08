@@ -111,6 +111,7 @@ testes:
       - ['Welch (acima): não supõe variâncias iguais e é o padrão recomendado', null]
       - ['Student clássico, com variância combinada, se as variâncias forem iguais', null]
       - ['Mann-Whitney U, sem supor normalidade', mann-whitney]
+      - ['TOST (dois testes t unilaterais), para mostrar equivalência dentro de uma margem em vez de diferença', null]
   - id: t-pareado
     sym: 'tₚ'
     nome: 't pareado'
@@ -150,6 +151,7 @@ testes:
       - ['ANOVA de Welch, quando as variâncias diferem', null]
       - ['Kruskal-Wallis, sem supor normalidade', kruskal-wallis]
       - ['Depois de rejeitar H₀', tukey]
+      - ['Com dois fatores e a interação entre eles', anova-dois-fatores]
   - id: anova-mr
     sym: 'Fᵣ'
     nome: 'ANOVA de medidas repetidas'
@@ -577,6 +579,22 @@ testes:
     tex: 'D = \sup_x \left| F_n(x) - \Phi\!\left(\dfrac{x - \bar{x}}{s}\right) \right|'
     vars:
       - ['Kolmogorov-Smirnov com valores críticos corrigidos', kolmogorov-smirnov]
+  - id: grubbs
+    sym: 'Gr'
+    nome: 'Grubbs'
+    fam: ader
+    strip: 1
+    pos: 7
+    dist: 'G (crítico via t)'
+    quando: 'Verificar se o valor mais extremo de uma amostra é um outlier, isto é, distante demais para vir da mesma distribuição normal que os outros.'
+    h0: 'Não há outlier: todos os valores vêm da mesma distribuição normal.'
+    pres:
+      - 'Dados normais, fora o possível outlier'
+      - 'Procura um outlier por vez: repetir o teste depois de remover um infla o erro tipo I'
+    tex: 'G = \dfrac{\max_i |x_i - \bar{x}|}{s}'
+    vars:
+      - ['Dixon (Q), para amostras muito pequenas', null]
+      - ['ESD generalizado de Rosner, para procurar vários outliers de uma vez', null]
 
   # ------------------------------------------------------------------ associação e correlação
     veja: [distribuicao-normal]
@@ -688,6 +706,25 @@ testes:
       texto: 'O próprio r_pb.'
     vars:
       - ['Teste equivalente', t-independente]
+  - id: kappa
+    sym: 'κ'
+    nome: 'Kappa de Cohen'
+    fam: assoc
+    strip: 2
+    pos: 7
+    dist: 'N(0, 1) aprox.'
+    quando: 'Medir a concordância entre dois avaliadores que classificam os mesmos itens em categorias, descontando a concordância esperada por acaso.'
+    h0: 'A concordância é só a do acaso: κ = 0.'
+    pres:
+      - 'Os mesmos itens classificados pelos dois avaliadores'
+      - 'Categorias fixas e mutuamente exclusivas'
+      - 'Avaliações independentes entre si'
+    tex: '\kappa = \dfrac{p_o - p_e}{1 - p_e}'
+    efeito:
+      texto: 'O próprio κ. Pela referência de Landis e Koch, acima de 0,6 é concordância substancial e acima de 0,8, quase perfeita.'
+    vars:
+      - ['Kappa ponderado, para categorias ordinais', null]
+      - ['Kappa de Fleiss, para mais de dois avaliadores', null]
 
   # ------------------------------------------------------------------ modelos e regressão
   - id: t-coeficiente
@@ -726,12 +763,32 @@ testes:
     vars:
       - ['F parcial, para comparar modelos aninhados', null]
     veja: [regressao-linear]
+  - id: anova-dois-fatores
+    sym: 'F₂'
+    nome: 'ANOVA de dois fatores'
+    fam: modelos
+    strip: 3
+    pos: 3
+    dist: 'F'
+    quando: 'Avaliar ao mesmo tempo o efeito de dois fatores sobre uma resposta numérica, e se eles interagem, como dose e sexo num ensaio.'
+    h0: 'Para cada fator, as médias dos níveis são iguais; para a interação, o efeito de um fator não depende do nível do outro.'
+    pres:
+      - 'Observações independentes'
+      - 'Normalidade dos resíduos'
+      - 'Variâncias iguais entre as células'
+    tex: 'F_A = \dfrac{QM_A}{QM_{\text{erro}}}, \quad F_B = \dfrac{QM_B}{QM_{\text{erro}}}, \quad F_{AB} = \dfrac{QM_{AB}}{QM_{\text{erro}}}'
+    efeito:
+      texto: 'η² parcial de cada efeito: fator A, fator B e interação.'
+      tex: '\eta^2_p = \dfrac{SQ_A}{SQ_A + SQ_{\text{erro}}}'
+    vars:
+      - ['ANOVA de um fator, com um fator só', anova]
+      - ['ANCOVA, quando há também uma covariável numérica', null]
   - id: razao-verossimilhanca
     sym: 'LR'
     nome: 'Razão de verossimilhança'
     fam: modelos
     strip: 3
-    pos: 3
+    pos: 4
     dist: 'χ²(gl)'
     quando: 'Comparar dois modelos aninhados ajustados por máxima verossimilhança, como numa regressão logística.'
     h0: 'O modelo menor é suficiente.'
@@ -749,7 +806,7 @@ testes:
     nome: 'Wald'
     fam: modelos
     strip: 3
-    pos: 4
+    pos: 5
     dist: 'χ²(1) ou N(0, 1)'
     quando: 'Testar um coeficiente de um modelo ajustado por máxima verossimilhança usando só o modelo completo.'
     h0: 'O coeficiente é zero.'
@@ -762,12 +819,27 @@ testes:
       tex: 'OR = e^{\hat{\beta}}'
     vars:
       - ['Razão de verossimilhança, mais confiável', razao-verossimilhanca]
+  - id: hosmer-lemeshow
+    sym: 'HL'
+    nome: 'Hosmer-Lemeshow'
+    fam: modelos
+    strip: 3
+    pos: 6
+    dist: 'χ²(g−2)'
+    quando: 'Verificar se as probabilidades previstas por uma regressão logística batem com as frequências observadas, agrupando os casos por faixa de risco.'
+    h0: 'O modelo se ajusta bem: as frequências observadas e previstas coincidem.'
+    pres:
+      - 'Amostra grande'
+      - 'O resultado depende do número de grupos g, em geral 10'
+    tex: 'HL = \sum_{j=1}^{g} \dfrac{(O_j - E_j)^2}{E_j\,(1 - E_j / n_j)}'
+    vars:
+      - ['Razão de verossimilhança, para comparar modelos aninhados', razao-verossimilhanca]
   - id: durbin-watson
     sym: 'DW'
     nome: 'Durbin-Watson'
     fam: modelos
     strip: 3
-    pos: 5
+    pos: 7
     dist: 'd (tabelada)'
     quando: 'Verificar autocorrelação de primeira ordem nos resíduos de uma regressão, comum em dados ao longo do tempo.'
     h0: 'Os resíduos não têm autocorrelação.'
@@ -783,7 +855,7 @@ testes:
     nome: 'Breusch-Pagan'
     fam: modelos
     strip: 3
-    pos: 6
+    pos: 8
     dist: 'χ²(k)'
     quando: 'Verificar se a variância dos resíduos de uma regressão é constante (homocedasticidade).'
     h0: 'Os resíduos são homocedásticos.'

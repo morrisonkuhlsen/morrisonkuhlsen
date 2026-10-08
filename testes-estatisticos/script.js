@@ -96,10 +96,19 @@
   });
   // Vão entre o bloco principal e as faixas.
   grid.appendChild(place(el("div", "pt-gap"), C.linhas.length + 2, 1, 7));
-  const firstStripRow = C.linhas.length + 3;
+  // Cada faixa tem 6 posições por linha da grade; a partir da 7ª, quebra para
+  // a linha de baixo e o rótulo se estende pelas duas.
+  const POR_LINHA = 6;
+  const stripRow = [];
+  let nextRow = C.linhas.length + 3;
   C.faixas.forEach((f, i) => {
     const fam = C.familias[f];
-    const h = place(el("div", "pt-striphead"), firstStripRow + i, 1);
+    const maxPos = Math.max(1, ...C.testes.filter(t => t.strip === i + 1).map(t => t.pos));
+    const rows = Math.ceil(maxPos / POR_LINHA);
+    stripRow[i + 1] = nextRow;
+    const h = place(el("div", "pt-striphead"), nextRow, 1);
+    h.style.gridRow = `${nextRow} / span ${rows}`;
+    nextRow += rows;
     h.dataset.cor = fam.cor;
     h.append(el("strong", null, fam.nome));
     dica(h, fam.dica, f);
@@ -116,7 +125,7 @@
     b.setAttribute("aria-label", `${t.n}, ${t.nome}, ${fam.nome}`);
     b.append(el("span", "el-n", t.n), el("span", "el-sym", t.sym), el("span", "el-name", t.nome), el("span", "el-dist", t.dist));
     if (t.row) place(b, t.row + 1, t.col + 1);
-    else place(b, firstStripRow + t.strip - 1, t.pos + 1);
+    else place(b, stripRow[t.strip] + Math.floor((t.pos - 1) / POR_LINHA), (t.pos - 1) % POR_LINHA + 2);
     b.addEventListener("click", () => select(t.id, true));
     b.addEventListener("mouseenter", () => hot(t, true));
     b.addEventListener("mouseleave", () => hot(t, false));
