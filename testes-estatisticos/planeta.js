@@ -86,6 +86,60 @@
       return l2 * l2 * l;
     }
 
+    float ruidoValor(vec2 p) {
+      vec2 i = floor(p), f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                 mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+    }
+    float fbm(vec2 p) {
+      float s = 0.0, a = 0.5;
+      for (int i = 0; i < 5; i++) { s += a * ruidoValor(p); p *= 2.03; a *= 0.5; }
+      return s;
+    }
+
+    // O céu atrás do planeta: estrelas e a Via Láctea, presas à direção
+    // (estáveis em qualquer tamanho de tela). Cada estrela é um ponto com
+    // perfil gaussiano de menos de um pixel; o brilho segue uma lei de
+    // potência (muitas fracas, poucas fortes) e a cor, a temperatura
+    // (azuladas, brancas, amarelas, alaranjadas). No espaço não há
+    // cintilação. O brilho do sol apaga as estrelas, como numa foto exposta
+    // para ele.
+    vec3 ceu(vec3 d, float ang) {
+      vec2 esf = vec2(atan(d.x, -d.z), asin(clamp(d.y, -1.0, 1.0)));
+      float pix = 2.0 * uTanY / uRes.y;          // radianos por pixel
+      const float C = 0.0042;                     // célula da grade de estrelas
+      // A Via Láctea: uma faixa difusa num grande círculo inclinado.
+      // (O plano dela passa pela direção da câmera: a faixa cruza o céu
+      // visível na diagonal.)
+      float banda = exp(-pow(dot(d, normalize(vec3(0.8, 0.55, -0.2))) / 0.13, 2.0));
+      vec2 gi = floor(esf / C);
+      vec3 luz = vec3(0.0);
+      for (int j = -1; j <= 1; j++) {
+        for (int i = -1; i <= 1; i++) {
+          vec2 c = gi + vec2(float(i), float(j));
+          if (hash(c) > 0.14 + 0.45 * banda) continue;
+          vec2 pos = (c + vec2(hash(c + 11.3), hash(c + 27.1))) * C;
+          vec2 dd = esf - pos;
+          dd.x *= cos(esf.y);
+          float r = length(dd) / pix;
+          float h = hash(c + 3.7);
+          float L = 0.004 + 0.12 * pow(h, 5.0) + 3.0 * pow(h, 40.0);
+          float t = hash(c + 51.2);
+          vec3 tinta = t < 0.15 ? vec3(0.66, 0.76, 1.0) : t < 0.55 ? vec3(0.95, 0.97, 1.0)
+                     : t < 0.85 ? vec3(1.0, 0.93, 0.82) : vec3(1.0, 0.79, 0.6);
+          luz += tinta * L * (exp(-r * r / 0.72) + (L > 1.2 ? 0.05 * exp(-r * r / 8.0) : 0.0));
+        }
+      }
+      // O brilho difuso da Via Láctea, com faixas escuras de poeira.
+      float nuvem = 0.55 + 0.45 * fbm(esf * 14.0);
+      float poeira = 1.0 - 0.75 * smoothstep(0.48, 0.72, fbm(esf * 26.0 + 5.0));
+      float via = banda * nuvem * poeira;
+      luz += (vec3(0.72, 0.76, 0.9) * 0.035 + vec3(1.0, 0.86, 0.72) * 0.012) * via;
+      float apaga = (1.0 - 0.5 * uVis) * (1.0 - 0.92 * uVis * exp(-ang / 0.3));
+      return luz * apaga;
+    }
+
     vec3 aces(vec3 x) {
       return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
     }
@@ -159,9 +213,7 @@
       float ang = acos(clamp(mu, -1.0, 1.0));
       if (!chao) {
         cor += Tv * vec3(1.0, 0.96, 0.9) * 900.0 * smoothstep(RS + 0.0006, RS - 0.0006, ang);
-        vec2 cel = floor(gl_FragCoord.xy / 2.0);
-        float hs = hash(cel);
-        if (hs > 0.9993) cor += Tv * vec3(0.9, 0.93, 1.0) * (hs - 0.9993) * 900.0 * (1.0 - 0.85 * uVis);
+        cor += Tv * ceu(d, ang);
       }
 
       // Cor do sol visto pela câmera: a luz atravessa a atmosfera rente ao
