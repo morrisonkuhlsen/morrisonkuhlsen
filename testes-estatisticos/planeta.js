@@ -208,9 +208,10 @@
       // boa parte do disco já saiu de trás do planeta.
       cor += corLente * estrela * uBurstK * uVis;
 
-      // Rastro anamórfico: linha horizontal fina e azulada pelo sol.
-      cor += corLente * vec3(0.55, 0.7, 1.0) * 0.5 *
-             exp(-abs(dp.y) / (1.1 * e)) * exp(-abs(dp.x) / (420.0 * e));
+      // Rastro anamórfico: um brilho horizontal fino e azulado junto ao sol,
+      // que some bem antes das bordas da tela.
+      cor += corLente * vec3(0.55, 0.7, 1.0) * 0.12 *
+             exp(-abs(dp.y) / (1.1 * e)) * exp(-abs(dp.x) / (160.0 * e));
 
       // Reflexos da lente: uma fileira de discos, anéis e pontos azulados
       // na linha que vai do sol ao centro da tela e continua do outro lado
