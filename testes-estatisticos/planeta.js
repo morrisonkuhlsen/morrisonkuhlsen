@@ -213,12 +213,36 @@
       cor += corLente * vec3(0.55, 0.7, 1.0) * 0.12 *
              exp(-abs(dp.y) / (1.1 * e)) * exp(-abs(dp.x) / (160.0 * e));
 
-      // Reflexos da lente: uma fileira de discos, anéis e pontos azulados
-      // na linha que vai do sol ao centro da tela e continua do outro lado
-      // (com o sol no centro, uma fileira vertical). Cada reflexo: um disco
-      // suave, a borda mais clara e, em alguns, um ponto brilhante no meio.
-      vec2 centro = uRes * 0.5;
-      vec2 eixo = centro - uSunPx;
+
+      // Exposição, curva de tom, gama e um ruído leve contra faixas de cor.
+      cor = aces(cor * 0.9);
+      cor = pow(cor, vec3(1.0 / 2.2));
+      cor += (hash(gl_FragCoord.xy + 17.0) - 0.5) / 255.0;
+      gl_FragColor = vec4(cor, 1.0);
+    }`;
+
+  // Segunda etapa: os reflexos da lente, sobre a cena já pronta (guardada
+  // numa textura pela primeira etapa). É leve, e é só ela que se refaz
+  // quando o mouse move os reflexos. A mesma curva de tom da cena converte
+  // o brilho deles, que entram como luz sobreposta ("screen").
+  const FRAG_REFLEXOS = `
+    precision highp float;
+    uniform sampler2D uCena;
+    uniform vec2 uRes, uSunPx, uEixo;
+    uniform float uVis, uEsc, uRealce;
+
+    vec3 aces(vec3 x) {
+      return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
+    }
+
+    void main() {
+      vec3 base = texture2D(uCena, gl_FragCoord.xy / uRes).rgb;
+      float e = uEsc;
+      // Os reflexos ficam na linha que vai do sol ao eixo da lente (uEixo:
+      // o centro da tela ou, com o mouse sobre o hero, o cursor) e continua
+      // do outro lado. Cada reflexo: um disco suave, a borda mais clara e,
+      // em alguns, um ponto brilhante no meio.
+      vec2 eixo = uEixo - uSunPx;
       vec3 refl = vec3(0.0);
       for (int k = 0; k < 10; k++) {
         float f = k == 0 ? 0.2 : k == 1 ? 0.36 : k == 2 ? 0.52 : k == 3 ? 0.7 : k == 4 ? 0.9
@@ -244,13 +268,19 @@
       float along = dot(qf, ue), across = dot(qf, vec2(-ue.y, ue.x));
       refl += vec3(0.3, 0.55, 1.0) * 0.12 * exp(-across * across / (2.0 * pow(4.0 * e, 2.0))) *
               exp(-along * along / (2.0 * pow(60.0 * e, 2.0)));
-      cor += refl * uVis * uVis;
+      vec3 g = refl * uVis * uVis * (1.0 + 0.9 * uRealce);
+      g = pow(aces(g * 0.9), vec3(1.0 / 2.2));
+      vec3 cor = 1.0 - (1.0 - base) * (1.0 - g);
 
-      // Exposição, curva de tom, gama e um ruído leve contra faixas de cor.
-      cor = aces(cor * 0.9);
-      cor = pow(cor, vec3(1.0 / 2.2));
-      cor += (hash(gl_FragCoord.xy + 17.0) - 0.5) / 255.0;
-      gl_FragColor = vec4(cor, 1.0);
+      // Gradação de cor da imagem toda nos tons do rosa #E2768B: o brilho de
+      // cada ponto é mantido e o tom vem de uma rampa (preto, vinho, o rosa,
+      // branco-rosado). Fica 15% da cor original, para não chapar.
+      float l = dot(cor, vec3(0.2126, 0.7152, 0.0722));
+      vec3 vinho = vec3(0.32, 0.07, 0.14), rosa = vec3(0.886, 0.463, 0.545), claro = vec3(1.0, 0.93, 0.95);
+      vec3 tom = l < 0.25 ? mix(vec3(0.0), vinho, l / 0.25)
+               : l < 0.6 ? mix(vinho, rosa, (l - 0.25) / 0.35)
+               : mix(rosa, claro, (l - 0.6) / 0.4);
+      gl_FragColor = vec4(mix(cor, tom, 0.85), 1.0);
     }`;
 
   const compilar = (tipo, fonte) => {
@@ -260,28 +290,31 @@
     if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
     return s;
   };
-  let prog;
+  const programa = frag => {
+    const p = gl.createProgram();
+    gl.attachShader(p, compilar(gl.VERTEX_SHADER, VERT));
+    gl.attachShader(p, compilar(gl.FRAGMENT_SHADER, frag));
+    gl.bindAttribLocation(p, 0, "p");
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+    return p;
+  };
+  let prog, progReflexos;
   try {
-    prog = gl.createProgram();
-    gl.attachShader(prog, compilar(gl.VERTEX_SHADER, VERT));
-    gl.attachShader(prog, compilar(gl.FRAGMENT_SHADER, FRAG));
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+    prog = programa(FRAG);
+    progReflexos = programa(FRAG_REFLEXOS);
   } catch (err) {
     console.warn("planeta.js:", err);
     return;
   }
-  gl.useProgram(prog);
   // Um triângulo que cobre a tela toda.
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const loc = gl.getAttribLocation(prog, "p");
-  gl.enableVertexAttribArray(loc);
-  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const U = {};
-  for (const n of ["uRes", "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uSun", "uSunPx", "uVis", "uEsc", "uBurst", "uBurstPx", "uBurstK"]) {
-    U[n] = gl.getUniformLocation(prog, n);
-  }
+  gl.enableVertexAttribArray(0);
+  gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+  const uniformes = (p, nomes) => Object.fromEntries(nomes.map(n => [n, gl.getUniformLocation(p, n)]));
+  const U = uniformes(prog, ["uRes", "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uSun", "uSunPx", "uVis", "uEsc", "uBurst", "uBurstPx", "uBurstK"]);
+  const UR = uniformes(progReflexos, ["uCena", "uRes", "uSunPx", "uEixo", "uVis", "uEsc", "uRealce"]);
 
   /* ---------------------------------------------------------------- difração */
 
@@ -422,6 +455,9 @@
   const mergulho = Math.acos(RP / (RP + ALT)); // quanto o horizonte fica abaixo da horizontal
 
   let W = 0, H = 0, escala = 1;
+  // A cena vai para esta textura (unidade 1; a 0 é a da difração).
+  const cenaTex = gl.createTexture();
+  const cenaFb = gl.createFramebuffer();
   function medir() {
     // Até 1.5 pixel por pixel CSS: a cena é pesada e quase toda suave.
     escala = Math.min(1.5, devicePixelRatio || 1);
@@ -432,7 +468,22 @@
     canvas.style.width = `${hero.clientWidth}px`;
     canvas.style.height = `${hero.clientHeight}px`;
     gl.viewport(0, 0, W, H);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, cenaTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, cenaFb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, cenaTex, 0);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.activeTexture(gl.TEXTURE0);
+    eixo = alvo ? eixo : [W / 2, H / 2];
   }
+
+  // Último sol desenhado, para a etapa dos reflexos.
+  const sol = { x: 0, y: 0, vis: 0 };
 
   // `e` é a elevação do centro do sol acima do horizonte, em radianos.
   function desenhar(e) {
@@ -443,15 +494,18 @@
     const Up = [0, Math.cos(pitch), Math.sin(pitch)];
     const az = Math.atan(SOL_X * tanX);
     const el = -mergulho + e;
-    const sol = [Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)];
+    const dirSol = [Math.sin(az) * Math.cos(el), Math.sin(el), -Math.cos(az) * Math.cos(el)];
     const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-    const zf = dot(sol, F);
-    const sx = (dot(sol, R) / zf / tanX * 0.5 + 0.5) * W;
-    const sy = (dot(sol, Up) / zf / tanY * 0.5 + 0.5) * H;
+    const zf = dot(dirSol, F);
+    const sx = (dot(dirSol, R) / zf / tanX * 0.5 + 0.5) * W;
+    const sy = (dot(dirSol, Up) / zf / tanY * 0.5 + 0.5) * H;
     // Fração visível do disco, numa curva suave (sem quinas no começo e no fim).
     const fr = Math.max(0, Math.min(1, (e + RAIO_SOL) / (2 * RAIO_SOL)));
     const vis = fr * fr * (3 - 2 * fr);
+    Object.assign(sol, { x: sx, y: sy, vis });
 
+    gl.bindFramebuffer(gl.FRAMEBUFFER, cenaFb);
+    gl.useProgram(prog);
     gl.uniform2f(U.uRes, W, H);
     gl.uniform3f(U.uCam, 0, RP + ALT, 0);
     gl.uniform3fv(U.uF, F);
@@ -459,7 +513,7 @@
     gl.uniform3fv(U.uU, Up);
     gl.uniform1f(U.uTanX, tanX);
     gl.uniform1f(U.uTanY, tanY);
-    gl.uniform3fv(U.uSun, sol);
+    gl.uniform3fv(U.uSun, dirSol);
     gl.uniform2f(U.uSunPx, sx, sy);
     gl.uniform1f(U.uVis, vis);
     gl.uniform1f(U.uEsc, Math.min(W, 1600 * escala) / 1400);
@@ -467,7 +521,57 @@
     gl.uniform1f(U.uBurstPx, H * 0.95);
     gl.uniform1f(U.uBurstK, ganho());
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    compor();
   }
+
+  /* ---------------------------------------------------------------- reflexos */
+
+  // Os reflexos de uma lente ficam na linha que liga a luz ao centro da
+  // lente. Com o mouse sobre o hero, esse centro segue o cursor, com
+  // inércia, e os reflexos se acendem um pouco; ao sair, voltam ao centro
+  // da tela. Só esta etapa leve é refeita. No toque, nada muda.
+  let eixo = null, alvo = null, realce = 0, alvoRealce = 0, passoPendente = 0;
+
+  function compor() {
+    gl.useProgram(progReflexos);
+    gl.uniform1i(UR.uCena, 1);
+    gl.uniform2f(UR.uRes, W, H);
+    gl.uniform2f(UR.uSunPx, sol.x, sol.y);
+    gl.uniform2f(UR.uEixo, eixo[0], eixo[1]);
+    gl.uniform1f(UR.uVis, sol.vis);
+    gl.uniform1f(UR.uEsc, Math.min(W, 1600 * escala) / 1400);
+    gl.uniform1f(UR.uRealce, realce);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+
+  function passoReflexos() {
+    passoPendente = 0;
+    const destino = alvo || [W / 2, H / 2];
+    const k = parado ? 1 : 0.12;
+    eixo[0] += (destino[0] - eixo[0]) * k;
+    eixo[1] += (destino[1] - eixo[1]) * k;
+    realce += (alvoRealce - realce) * (parado ? 1 : 0.1);
+    // Durante o nascer, o quadro dele já chama compor().
+    if (fim) compor();
+    const falta = Math.hypot(destino[0] - eixo[0], destino[1] - eixo[1]) > 0.5 || Math.abs(alvoRealce - realce) > 0.005;
+    if (falta) passoPendente = requestAnimationFrame(passoReflexos);
+  }
+  const mexer = () => {
+    if (!passoPendente) passoPendente = requestAnimationFrame(passoReflexos);
+  };
+  hero.addEventListener("pointermove", ev => {
+    if (ev.pointerType === "touch") return;
+    const r = canvas.getBoundingClientRect();
+    alvo = [(ev.clientX - r.left) * escala, H - (ev.clientY - r.top) * escala];
+    alvoRealce = 1;
+    mexer();
+  });
+  hero.addEventListener("pointerleave", () => {
+    alvo = null;
+    alvoRealce = 0;
+    mexer();
+  });
 
   /* ---------------------------------------------------------------- nascer */
 
