@@ -10,7 +10,7 @@
  * reflexos da lente. A curva de tom ACES comprime o brilho como numa foto
  * exposta.
  *
- * O sol nasce em ~6 s; depois a cena para no último quadro (só volta a ser
+ * O sol nasce em ~9 s; depois a cena para no último quadro (só volta a ser
  * desenhada se a janela mudar de tamanho). Com prefers-reduced-motion,
  * desenha direto o quadro final. Sem WebGL, fica só o fundo preto do CSS. */
 (() => {
@@ -204,7 +204,9 @@
       }
       estrela /= soma;
       estrela *= smoothstep(0.5, 0.3, length(uv));
-      cor += corLente * estrela * uBurstK;
+      // Os raios crescem mais devagar que o brilho: só ganham força quando
+      // boa parte do disco já saiu de trás do planeta.
+      cor += corLente * estrela * uBurstK * uVis;
 
       // Rastro anamórfico: linha horizontal fina e azulada pelo sol.
       cor += corLente * vec3(0.55, 0.7, 1.0) * 0.5 *
@@ -290,9 +292,11 @@
   // Calculado uma vez, com uma FFT 2D de 1024 × 1024 (raios de 2 a 3 px
   // na tela), e enviado como textura. A conta leva uns décimos de segundo:
   // roda logo depois do primeiro quadro, com o sol ainda atrás do planeta,
-  // e até lá o ganho fica em zero.
+  // e até lá os raios ficam apagados.
   const GANHO = 16000;
-  let ganho = 0;
+  // Quando a textura fica pronta, os raios entram em 1,2 s, nunca de uma vez.
+  let pronta = null;
+  const ganho = () => pronta === null ? 0 : GANHO * Math.min(1, (performance.now() - pronta) / 1200);
   function estrela() {
     const N = 1024, LOG = 10, c = N / 2, r = N / 3;
     const re = new Float32Array(N * N), im = new Float32Array(N * N);
@@ -403,7 +407,7 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-    ganho = GANHO;
+    pronta = parado ? -Infinity : performance.now();
   }
 
   /* ---------------------------------------------------------------- geometria */
@@ -443,7 +447,9 @@
     const zf = dot(sol, F);
     const sx = (dot(sol, R) / zf / tanX * 0.5 + 0.5) * W;
     const sy = (dot(sol, Up) / zf / tanY * 0.5 + 0.5) * H;
-    const vis = Math.max(0, Math.min(1, (e + RAIO_SOL) / (2 * RAIO_SOL)));
+    // Fração visível do disco, numa curva suave (sem quinas no começo e no fim).
+    const fr = Math.max(0, Math.min(1, (e + RAIO_SOL) / (2 * RAIO_SOL)));
+    const vis = fr * fr * (3 - 2 * fr);
 
     gl.uniform2f(U.uRes, W, H);
     gl.uniform3f(U.uCam, 0, RP + ALT, 0);
@@ -458,24 +464,27 @@
     gl.uniform1f(U.uEsc, Math.min(W, 1600 * escala) / 1400);
     gl.uniform1i(U.uBurst, 0);
     gl.uniform1f(U.uBurstPx, H * 0.95);
-    gl.uniform1f(U.uBurstK, ganho);
+    gl.uniform1f(U.uBurstK, ganho());
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
   /* ---------------------------------------------------------------- nascer */
 
-  // O sol sai de 1,2 raio abaixo do horizonte e para 0,8 raio acima.
-  const DURACAO = 6000;
-  const E0 = -RAIO_SOL * 1.2, E1 = RAIO_SOL * 0.8;
-  const easeOut = x => 1 - Math.pow(1 - x, 3);
+  // O sol sai de 2,5 raios abaixo do horizonte (antes dele, a atmosfera
+  // clareia sozinha, como numa alvorada) e para 0,8 raio acima, em 9 s, com
+  // começo e fim lentos.
+  const DURACAO = 9000;
+  const E0 = -RAIO_SOL * 2.5, E1 = RAIO_SOL * 0.8;
+  const suaviza = x => (1 - Math.cos(Math.PI * x)) / 2;
   let inicio = null, fim = false;
-  const elevacao = ms => E0 + (E1 - E0) * easeOut(Math.min(1, ms / DURACAO));
+  const elevacao = ms => E0 + (E1 - E0) * suaviza(Math.min(1, ms / DURACAO));
 
   function quadro(ms) {
     if (inicio === null) inicio = ms;
     const passou = ms - inicio;
     desenhar(elevacao(passou));
-    if (passou < DURACAO) requestAnimationFrame(quadro);
+    // Continua até o fim da subida e da entrada dos raios.
+    if (passou < DURACAO || ganho() < GANHO) requestAnimationFrame(quadro);
     else fim = true;
   }
 
