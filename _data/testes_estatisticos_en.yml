@@ -43,16 +43,22 @@ familias:
     dica: 'For observations ordered in time, where neighboring values tend to be correlated: they test stationarity and autocorrelation.'
 linhas:
   - nome: 'One sample'
+    curto: 'One sample'
     dica: 'A single group compared with a reference value set in advance, such as a target or a standard.'
   - nome: 'Two independent samples'
+    curto: 'Two independent'
     dica: 'Two groups of different individuals, unrelated to each other, such as treatment and control.'
   - nome: 'Two paired samples'
+    curto: 'Two paired'
     dica: 'Two measurements linked in pairs: the same individual before and after, or matched pairs, such as twins. The test uses the difference within each pair.'
   - nome: 'Three or more independent groups'
+    curto: '3+ independent'
     dica: 'Several groups of different individuals, tested at once: one test per pair would inflate the type I error.'
   - nome: 'Three or more repeated measures'
+    curto: '3+ repeated'
     dica: 'The same individuals measured under three or more conditions or time points: the paired design with more than two measurements.'
   - nome: 'Multiple comparisons'
+    curto: 'Post hoc'
     dica: 'Post hoc tests: after rejecting that all groups are equal, they point out which pairs differ, controlling the error of the whole set of comparisons.'
 
 testes:

@@ -11,6 +11,7 @@
   const TXT = {
     pt: {
       comoUsar: "Como usar",
+      outros: "Não dependem do número de grupos",
       legenda: "Toque num teste para ver quando usar, a hipótese nula, os pressupostos e a estatística. Cada cor é uma família:",
       quando: "Quando usar", h0: "Hipótese nula", pres: "Pressupostos", estatistica: "Estatística",
       efeito: "Tamanho de efeito", reporte: "Como reportar", codigo: "No R e no Python",
@@ -23,6 +24,7 @@
     },
     en: {
       comoUsar: "How to use",
+      outros: "Not tied to the number of groups",
       legenda: "Tap a test to see when to use it, the null hypothesis, the assumptions and the test statistic. Each color is a family:",
       quando: "When to use it", h0: "Null hypothesis", pres: "Assumptions", estatistica: "Test statistic",
       efeito: "Effect size", reporte: "How to report it", codigo: "In R and Python",
@@ -59,9 +61,10 @@
     else node.textContent = tex;
   };
 
-  // Numeração na ordem de leitura: bloco principal linha a linha, depois as faixas.
+  // Numeração na ordem de leitura: o bloco principal família por família
+  // (linha a linha, na tela), depois as faixas.
   const ordered = [
-    ...C.testes.filter(t => t.row).sort((a, b) => a.row - b.row || a.col - b.col),
+    ...C.testes.filter(t => t.row).sort((a, b) => a.col - b.col || a.row - b.row),
     ...C.testes.filter(t => t.strip).sort((a, b) => a.strip - b.strip || a.pos - b.pos),
   ];
   ordered.forEach((t, i) => { t.n = i + 1; });
@@ -108,45 +111,41 @@
 
   /* ---------------------------------------------------------------- tabela */
 
-  const colHeads = [], rowHeads = [];
-  C.colunas.forEach((f, i) => {
-    const fam = C.familias[f];
-    const h = place(el("div", "pt-colhead"), 1, i + 2);
-    h.dataset.cor = fam.cor;
-    h.append(el("strong", null, fam.nome), el("span", null, fam.sub));
-    dica(h, fam.dica, f);
-    grid.appendChild(h);
-    colHeads.push(h);
-  });
+  // Dois blocos lado a lado, cada um com uma família por linha, para a tabela
+  // caber na largura da tela. À esquerda, o bloco principal, transposto em
+  // relação aos dados: a família (col) na linha e o delineamento (row) na
+  // coluna. À direita, as faixas: uma família por linha, os testes na ordem
+  // de `pos`. Colunas da grade: rótulo, 6 delineamentos, vão, rótulo e as
+  // posições das faixas.
+  const NDEL = C.linhas.length;
+  const NPOS = Math.max(...C.testes.filter(t => t.strip).map(t => t.pos));
+  const COL_B = NDEL + 3; // rótulo do bloco das faixas
+  grid.style.setProperty("--ndel", NDEL);
+  grid.style.setProperty("--npos", NPOS);
+  grid.style.setProperty("--nfam", Math.max(C.colunas.length, C.faixas.length));
+
+  const famHeads = [], delHeads = [];
   C.linhas.forEach((linha, i) => {
-    const h = place(el("div", "pt-rowhead", linha.nome), i + 2, 1);
-    dica(h, linha.dica, `linha-${i + 1}`);
+    const h = place(el("div", "pt-colhead", linha.curto || linha.nome), 1, i + 2);
+    dica(h, `${linha.nome}. ${linha.dica}`, `linha-${i + 1}`);
     grid.appendChild(h);
-    rowHeads.push(h);
+    delHeads.push(h);
   });
-  // Vão entre o bloco principal e as faixas.
-  grid.appendChild(place(el("div", "pt-gap"), C.linhas.length + 2, 1, 5));
-  // Cada faixa tem 4 posições por linha da grade, as mesmas colunas do bloco
-  // principal; a partir da 5ª, quebra para a linha de baixo e o rótulo se
-  // estende pelas linhas que ela ocupa.
-  const POR_LINHA = 4;
-  const stripRow = [];
-  let nextRow = C.linhas.length + 3;
-  C.faixas.forEach((f, i) => {
+  const outros = place(el("div", "pt-colhead pt-colhead-b", TXT.outros), 1, COL_B, NPOS + 1);
+  grid.appendChild(outros);
+
+  const rotulo = (f, row, col) => {
     const fam = C.familias[f];
-    const maxPos = Math.max(1, ...C.testes.filter(t => t.strip === i + 1).map(t => t.pos));
-    const rows = Math.ceil(maxPos / POR_LINHA);
-    stripRow[i + 1] = nextRow;
-    const h = place(el("div", "pt-striphead"), nextRow, 1);
-    h.style.gridRow = `${nextRow} / span ${rows}`;
-    nextRow += rows;
+    const h = place(el("div", "pt-famhead"), row, col);
     h.dataset.cor = fam.cor;
     h.append(el("strong", null, fam.nome));
+    if (fam.sub) h.append(el("span", null, fam.sub));
     dica(h, fam.dica, f);
     grid.appendChild(h);
-  });
-  // A ficha ocupa a coluna da direita da primeira à última linha.
-  ficha.style.gridRow = `1 / ${nextRow}`;
+    return h;
+  };
+  C.colunas.forEach((f, i) => famHeads.push(rotulo(f, i + 2, 1)));
+  C.faixas.forEach((f, i) => rotulo(f, i + 2, COL_B));
 
   ordered.forEach(t => {
     const fam = C.familias[t.fam];
@@ -156,9 +155,10 @@
     b.dataset.id = t.id;
     b.setAttribute("aria-pressed", "false");
     b.setAttribute("aria-label", `${t.n}, ${t.nome}, ${fam.nome}`);
+    b.title = t.nome;
     b.append(el("span", "el-n", t.n), el("span", "el-sym", t.sym), el("span", "el-name", t.nome), el("span", "el-dist", t.dist));
-    if (t.row) place(b, t.row + 1, t.col + 1);
-    else place(b, stripRow[t.strip] + Math.floor((t.pos - 1) / POR_LINHA), (t.pos - 1) % POR_LINHA + 2);
+    if (t.row) place(b, t.col + 1, t.row + 1);
+    else place(b, t.strip + 1, COL_B + t.pos);
     b.addEventListener("click", () => select(t.id, true));
     b.addEventListener("mouseenter", () => hot(t, true));
     b.addEventListener("mouseleave", () => hot(t, false));
@@ -168,12 +168,28 @@
     tiles.set(t.id, b);
   });
 
-  // Acende o rótulo da linha e da coluna do teste sob o cursor.
+  // Acende o rótulo da família e do delineamento do teste sob o cursor.
   function hot(t, on) {
     if (!t.row) return;
-    rowHeads[t.row - 1].classList.toggle("is-hot", on);
-    colHeads[t.col - 1].classList.toggle("is-hot", on);
+    delHeads[t.row - 1].classList.toggle("is-hot", on);
+    famHeads[t.col - 1].classList.toggle("is-hot", on);
   }
+
+  // Em tela de computador, a tabela vai até o pé da janela: as linhas
+  // dividem a altura que sobra abaixo do cabeçalho (com um mínimo, no CSS).
+  // No celular, a altura é a dos cards e a tabela rola de lado.
+  const largo = matchMedia("(min-width: 901px)");
+  function ajustarAltura() {
+    if (!largo.matches) {
+      grid.style.height = "";
+      return;
+    }
+    const topo = grid.getBoundingClientRect().top + scrollY;
+    grid.style.height = `${Math.max(0, innerHeight - topo - 16)}px`;
+  }
+  addEventListener("resize", ajustarAltura);
+  ajustarAltura();
+  if (document.fonts) document.fonts.ready.then(ajustarAltura);
 
   /* ---------------------------------------------------------------- ficha */
 

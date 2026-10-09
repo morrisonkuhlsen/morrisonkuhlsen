@@ -4,8 +4,10 @@
 # HTML estático que fica abaixo da tabela e, com _plugins/paginas_testes.rb,
 # uma página por teste em /testes-estatisticos/<id>/.
 #
-# Bloco principal: coluna = família, linha = delineamento. As faixas de baixo
-# guardam o que não depende de quantos grupos há.
+# Bloco principal: `col` = família, `row` = delineamento. As faixas guardam o
+# que não depende de quantos grupos há. Na tela, o bloco principal aparece
+# transposto (família na linha, delineamento na coluna) e as faixas formam
+# um segundo bloco ao lado dele: ver script.js.
 # Cada teste traz `row` + `col` (bloco) ou `strip` + `pos` (faixa).
 # `nome` é o rótulo curto da tabela; `titulo`, o nome completo, que encabeça
 # a página do teste.
@@ -18,7 +20,8 @@
 # `tex` vai entre aspas simples: assim a barra invertida do LaTeX fica literal.
 
 # `dica` é o tooltip do rótulo da coluna, linha ou faixa: explica o termo
-# para quem não conhece o jargão.
+# para quem não conhece o jargão. Em `linhas`, `curto` é o rótulo que cabe
+# na coluna estreita da tabela; o nome inteiro aparece no tooltip.
 familias:
   medias:
     nome: 'Médias'
@@ -59,16 +62,22 @@ familias:
 colunas: [medias, postos, prop, vari]
 linhas:
   - nome: 'Uma amostra'
+    curto: 'Uma amostra'
     dica: 'Um único grupo comparado com um valor de referência fixado de antemão, como uma meta ou um padrão.'
   - nome: 'Duas amostras independentes'
+    curto: 'Duas independentes'
     dica: 'Dois grupos de indivíduos diferentes, sem relação entre si, como tratamento e controle.'
   - nome: 'Duas amostras pareadas'
+    curto: 'Duas pareadas'
     dica: 'Duas medidas ligadas aos pares: o mesmo indivíduo antes e depois, ou pares casados, como gêmeos. O teste usa a diferença dentro de cada par.'
   - nome: 'Três ou mais grupos independentes'
+    curto: '3+ independentes'
     dica: 'Vários grupos de indivíduos diferentes, testados de uma vez: um teste por par inflaria o erro tipo I.'
   - nome: 'Três ou mais medidas repetidas'
+    curto: '3+ repetidas'
     dica: 'Os mesmos indivíduos medidos em três ou mais condições ou momentos: o pareado com mais de duas medidas.'
   - nome: 'Comparações múltiplas'
+    curto: 'Pós-testes'
     dica: 'Pós-testes: depois de rejeitar a igualdade de todos os grupos, apontam quais pares diferem, controlando o erro do conjunto de comparações.'
 faixas: [ader, assoc, modelos, series]
 

@@ -115,9 +115,9 @@ module MK
       por_id = cat["testes"].to_h { |t| [t["id"], t] }
       url = ->(id) { "#{ui['base']}#{id}/" }
 
-      # Mesma ordem de leitura da tabela (script.js): o bloco principal linha a
-      # linha, depois as faixas.
-      ordem = cat["testes"].select { |t| t["row"] }.sort_by { |t| [t["row"], t["col"]] } +
+      # Mesma ordem de leitura da tabela (script.js): o bloco principal família
+      # por família, depois as faixas.
+      ordem = cat["testes"].select { |t| t["row"] }.sort_by { |t| [t["col"], t["row"]] } +
               cat["testes"].select { |t| t["strip"] }.sort_by { |t| [t["strip"], t["pos"]] }
 
       caminhos = Hash.new { |h, k| h[k] = [] }
