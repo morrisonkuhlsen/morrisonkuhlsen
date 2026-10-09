@@ -155,8 +155,14 @@
 
 - title: "Catálogo de testes estatísticos"
   url: "/testes-estatisticos/"
-  description: "Catálogo de 42 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula."
+  description: "Catálogo de 48 testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula."
   tags: "testes estatísticos catálogo hipótese escolha do teste"
+  lang: pt
+
+- title: "Qual teste estatístico usar?"
+  url: "/testes-estatisticos/arvore/"
+  description: "Árvore de decisão para escolher o teste estatístico certo: responda o que quer fazer, o tipo de dado e o delineamento e chegue a um dos 48 testes do catálogo."
+  tags: "testes estatísticos árvore de decisão qual teste usar escolha do teste fluxograma"
   lang: pt
 
 # Versões em inglês das fórmulas (/en/formulas/), geradas das portuguesas.

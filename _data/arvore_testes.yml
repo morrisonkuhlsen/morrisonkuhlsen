@@ -1,0 +1,197 @@
+# Árvore de decisão do catálogo de testes (/testes-estatisticos/arvore/).
+#
+# Cada nó é uma pergunta com `opcoes`. Uma opção ou abre outra pergunta
+# (`pergunta` + `opcoes`) ou termina num teste (`teste`, o id dele em
+# _data/testes_estatisticos.yml, de onde vêm o nome, a cor e o "quando usar").
+# Numa folha, opcionalmente:
+#   confira  testes de pressuposto para rodar antes
+#   depois   pós-testes, se H₀ for rejeitada
+#   tambem   alternativas que respondem à mesma pergunta
+#   nota     uma observação curta
+
+pergunta: 'O que você quer fazer?'
+opcoes:
+  - rotulo: 'Comparar grupos, ou um grupo com um valor de referência'
+    pergunta: 'Que tipo de resposta você mediu?'
+    opcoes:
+      - rotulo: 'Numérica: uma medida, como peso, tempo ou nota'
+        pergunta: 'Quantos grupos ou medidas?'
+        opcoes:
+          - rotulo: 'Um grupo, contra um valor de referência'
+            pergunta: 'Os dados são aproximadamente normais, ou a amostra é grande (n ≳ 30)?'
+            opcoes:
+              - rotulo: 'Sim'
+                teste: t-uma-amostra
+                confira: [shapiro-wilk]
+              - rotulo: 'Não'
+                teste: sinal
+          - rotulo: 'Dois grupos'
+            pergunta: 'Os grupos são de indivíduos diferentes ou dos mesmos indivíduos?'
+            opcoes:
+              - rotulo: 'Indivíduos diferentes (independentes)'
+                pergunta: 'Os dados são aproximadamente normais em cada grupo, ou as amostras são grandes?'
+                opcoes:
+                  - rotulo: 'Sim'
+                    teste: t-independente
+                    confira: [shapiro-wilk]
+                    nota: 'Use a versão de Welch, que não exige variâncias iguais.'
+                  - rotulo: 'Não, ou a resposta é ordinal'
+                    teste: mann-whitney
+              - rotulo: 'Os mesmos indivíduos, como antes e depois (pareados)'
+                pergunta: 'As diferenças entre os pares são aproximadamente normais?'
+                opcoes:
+                  - rotulo: 'Sim'
+                    teste: t-pareado
+                    confira: [shapiro-wilk]
+                  - rotulo: 'Não, mas são simétricas'
+                    teste: wilcoxon
+                  - rotulo: 'Não, e nem simétricas'
+                    teste: sinal
+          - rotulo: 'Três ou mais grupos'
+            pergunta: 'Os grupos são de indivíduos diferentes ou dos mesmos indivíduos?'
+            opcoes:
+              - rotulo: 'Indivíduos diferentes (independentes)'
+                pergunta: 'Os resíduos são aproximadamente normais?'
+                opcoes:
+                  - rotulo: 'Sim'
+                    teste: anova
+                    confira: [shapiro-wilk, levene]
+                    depois: [tukey]
+                  - rotulo: 'Não, ou a resposta é ordinal'
+                    teste: kruskal-wallis
+                    depois: [dunn]
+              - rotulo: 'Os mesmos indivíduos, em várias condições ou momentos'
+                pergunta: 'Os resíduos são aproximadamente normais?'
+                opcoes:
+                  - rotulo: 'Sim'
+                    teste: anova-mr
+                    confira: [mauchly]
+                  - rotulo: 'Não, ou a resposta é ordinal'
+                    teste: friedman
+          - rotulo: 'Dois fatores ao mesmo tempo, como dose e sexo'
+            teste: anova-dois-fatores
+            confira: [shapiro-wilk, levene]
+      - rotulo: 'Categórica: sim ou não, ou categorias'
+        pergunta: 'Quantos grupos ou medidas?'
+        opcoes:
+          - rotulo: 'Um grupo, contra uma proporção de referência'
+            teste: binomial
+          - rotulo: 'Um grupo, com várias categorias contra frequências esperadas'
+            teste: qui-quadrado-aderencia
+          - rotulo: 'Dois grupos independentes'
+            pergunta: 'Todas as contagens esperadas são de pelo menos 5?'
+            opcoes:
+              - rotulo: 'Sim'
+                teste: z-duas-proporcoes
+                tambem: [qui-quadrado-independencia]
+              - rotulo: 'Não'
+                teste: fisher
+          - rotulo: 'Duas medidas nos mesmos indivíduos'
+            teste: mcnemar
+          - rotulo: 'Três ou mais grupos independentes'
+            teste: qui-quadrado-homogeneidade
+            depois: [marascuilo]
+          - rotulo: 'Três ou mais medidas nos mesmos indivíduos'
+            teste: cochran-q
+      - rotulo: 'A dispersão, e não o centro'
+        pergunta: 'Quantos grupos ou medidas?'
+        opcoes:
+          - rotulo: 'Um grupo, contra uma variância de referência'
+            teste: qui-quadrado-variancia
+          - rotulo: 'Dois grupos independentes'
+            pergunta: 'Os dados são normais?'
+            opcoes:
+              - rotulo: 'Sim'
+                teste: f-variancias
+              - rotulo: 'Não, ou não dá para garantir'
+                teste: levene
+          - rotulo: 'Duas medidas nos mesmos indivíduos'
+            teste: pitman-morgan
+          - rotulo: 'Três ou mais grupos independentes'
+            teste: levene
+  - rotulo: 'Medir a relação entre duas variáveis'
+    pergunta: 'Que tipo são as variáveis?'
+    opcoes:
+      - rotulo: 'As duas numéricas'
+        pergunta: 'A relação é linear, sem valores extremos fortes?'
+        opcoes:
+          - rotulo: 'Sim'
+            teste: pearson
+          - rotulo: 'Não, ou as variáveis são ordinais'
+            pergunta: 'A amostra é pequena ou tem muitos empates?'
+            opcoes:
+              - rotulo: 'Sim'
+                teste: kendall
+              - rotulo: 'Não'
+                teste: spearman
+      - rotulo: 'As duas categóricas'
+        pergunta: 'Todas as contagens esperadas são de pelo menos 5?'
+        opcoes:
+          - rotulo: 'Sim'
+            teste: qui-quadrado-independencia
+          - rotulo: 'Não, numa tabela 2 × 2'
+            teste: fisher
+      - rotulo: 'Uma binária e uma numérica'
+        teste: ponto-bisserial
+      - rotulo: 'Dois avaliadores classificando os mesmos itens'
+        teste: kappa
+  - rotulo: 'Verificar um pressuposto ou a distribuição dos dados'
+    pergunta: 'O que você quer verificar?'
+    opcoes:
+      - rotulo: 'Se os dados são normais'
+        pergunta: 'De que tamanho é a amostra?'
+        opcoes:
+          - rotulo: 'Pequena ou média'
+            teste: shapiro-wilk
+            tambem: [anderson-darling, lilliefors]
+          - rotulo: 'Grande, como em econometria'
+            teste: jarque-bera
+            nota: 'Com n muito grande, qualquer teste rejeita desvios irrelevantes: olhe também o gráfico Q-Q.'
+      - rotulo: 'Se os dados seguem outra distribuição contínua'
+        pergunta: 'Os parâmetros da distribuição são conhecidos de antemão?'
+        opcoes:
+          - rotulo: 'Sim'
+            teste: kolmogorov-smirnov
+          - rotulo: 'Não, são estimados dos dados'
+            teste: anderson-darling
+      - rotulo: 'Se as frequências de categorias são as esperadas'
+        teste: qui-quadrado-aderencia
+      - rotulo: 'Se um valor extremo é um outlier'
+        teste: grubbs
+      - rotulo: 'Se os grupos têm a mesma variância'
+        teste: levene
+      - rotulo: 'A esfericidade, antes de uma ANOVA de medidas repetidas'
+        teste: mauchly
+  - rotulo: 'Testar um modelo de regressão'
+    pergunta: 'O que você quer testar?'
+    opcoes:
+      - rotulo: 'Se uma variável explicativa tem efeito'
+        pergunta: 'Como o modelo foi ajustado?'
+        opcoes:
+          - rotulo: 'Mínimos quadrados (regressão linear)'
+            teste: t-coeficiente
+          - rotulo: 'Máxima verossimilhança, como a logística'
+            teste: wald
+            tambem: [razao-verossimilhanca]
+      - rotulo: 'Se o modelo como um todo explica algo'
+        teste: f-global
+      - rotulo: 'Se um modelo maior vale a pena frente a um menor'
+        teste: razao-verossimilhanca
+      - rotulo: 'O ajuste de uma regressão logística'
+        teste: hosmer-lemeshow
+      - rotulo: 'Os resíduos'
+        pergunta: 'Qual problema você suspeita?'
+        opcoes:
+          - rotulo: 'Autocorrelação, em dados ao longo do tempo'
+            teste: durbin-watson
+          - rotulo: 'Variância que muda com os valores previstos'
+            teste: breusch-pagan
+  - rotulo: 'Analisar uma série temporal'
+    pergunta: 'O que você quer saber?'
+    opcoes:
+      - rotulo: 'Se a série é estacionária'
+        teste: dickey-fuller
+        tambem: [kpss]
+        nota: 'Os dois têm hipóteses nulas opostas: rodar ambos dá uma conclusão mais firme.'
+      - rotulo: 'Se ainda há autocorrelação, ou se é ruído branco'
+        teste: ljung-box

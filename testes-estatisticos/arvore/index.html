@@ -1,0 +1,77 @@
+---
+layout: null
+---
+{%- comment -%}
+  Árvore de decisão para escolher um teste. A árvore vem de
+  _data/arvore_testes.yml e é montada aqui, em HTML estático, pelo include
+  recursivo arvore-no.html; o arvore.js só acrescenta o comportamento.
+{%- endcomment -%}
+{%- capture desc -%}Árvore de decisão para escolher o teste estatístico certo: responda o que quer fazer, o tipo de dado e o delineamento e chegue a um dos {{ site.data.testes_estatisticos.testes | size }} testes do catálogo.{%- endcapture -%}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Qual Teste Estatístico Usar?</title>
+  <meta name="description" content="{{ desc }}">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/testes-estatisticos/arvore/">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/testes-estatisticos/arvore/">
+  <meta property="og:title" content="Qual Teste Estatístico Usar?">
+  <meta property="og:description" content="{{ desc }}">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Qual Teste Estatístico Usar?">
+  <meta name="twitter:description" content="{{ desc }}">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="../style.css">
+  <script defer src="arvore.js"></script>
+</head>
+<body>
+  <a href="/" class="back-link" aria-label="Voltar ao site" title="Voltar ao site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+
+  <main class="pt tr">
+    <header class="pt-head">
+      <h1>Qual teste estatístico usar?</h1>
+      <p class="pt-lede">Responda as perguntas, uma por vez, até chegar a um teste. Cada resposta abre a próxima pergunta; o teste no fim leva à ficha completa no <a href="../">catálogo de testes estatísticos</a>, com hipótese nula, pressupostos e fórmula.</p>
+      <p class="tr-tools" hidden>
+        <button type="button" class="fd-ref" data-acao="abrir">Expandir tudo</button>
+        <button type="button" class="fd-ref" data-acao="fechar">Recolher tudo</button>
+      </p>
+    </header>
+
+    <nav class="tr-tree" aria-label="Árvore de decisão">
+      {%- include arvore-no.html no=site.data.arvore_testes %}
+    </nav>
+
+    <section class="pt-notes">
+      <h2>Antes de seguir a árvore</h2>
+      <ul>
+        <li><strong>Normal ou não?</strong> Em amostras grandes, os testes de médias toleram bem a falta de normalidade. Na dúvida, olhe o histograma e o gráfico Q-Q antes de confiar só num teste de normalidade.</li>
+        <li><strong>Independentes ou pareados?</strong> Se cada valor de um grupo tem um par natural no outro, como o mesmo paciente antes e depois, as amostras são pareadas.</li>
+        <li><strong>A árvore é um começo.</strong> Ela cobre os casos usuais; o desenho do estudo e a pergunta de pesquisa podem pedir outro teste.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
