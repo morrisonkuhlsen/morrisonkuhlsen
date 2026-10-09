@@ -39,23 +39,13 @@ jobs:
       # Só links internos: os externos caem e voltam sozinhos e deixariam a
       # checagem vermelha sem ninguém ter mudado nada. As âncoras (#…) ficam
       # de fora porque o catálogo de testes as cria em JavaScript.
-      #
-      # FIGURAS_PENDENTES são imagens que as páginas já citam, mas que nunca
-      # foram geradas. Ao criar uma, tire-a da lista.
       - name: Check links
-        env:
-          FIGURAS_PENDENTES: >-
-            /sd-altura\.avif/,/valor-p\.png/,/teste-media\.png/,/predictive\.png/,
-            /espaco_amostral\.png/,/operacoes_eventos\.png/,/grafico_pizza\.png/,
-            /images\/histograma\.png/,/images\/boxplot\.png/,/scatter_plot\.png/,
-            /linha_temporal\.png/
         run: >-
           htmlproofer _site
           --disable-external
           --no-check-internal-hash
           --checks Links,Images,Scripts
           --ignore-files "/google420a39717b8e1fc8\.html/"
-          --ignore-urls "${FIGURAS_PENDENTES// /}"
 
   dns:
     name: Subdomínios pendurados

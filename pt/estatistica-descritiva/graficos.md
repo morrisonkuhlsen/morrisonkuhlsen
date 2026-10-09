@@ -245,12 +245,14 @@ O **boxplot** resume a distribuição de uma variável quantitativa através de 
 ### Exemplo Prático
 
 Considere as idades de participantes de um evento:
-- Mínimo: 18
+- Menor valor (sem contar outliers): 18
 - Q1: 22
 - Mediana: 25
 - Q3: 30
-- Máximo: 45
-- Outliers: 17, 16, 50
+- Maior valor (sem contar outliers): 41
+- Outliers: 45 e 50
+
+Com $IQR = 30 - 22 = 8$, as cercas ficam em $22 - 12 = 10$ e $30 + 12 = 42$: só 45 e 50 passam delas.
 
 <div style="text-align: center; margin: 1em 0;">
   <img src="{{ site.baseurl }}/assets/images/boxplot.png" alt="Boxplot - Distribuição de Idades" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">

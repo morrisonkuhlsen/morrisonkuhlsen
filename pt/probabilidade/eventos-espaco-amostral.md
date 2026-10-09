@@ -149,33 +149,37 @@ Sejam A e B eventos do mesmo espaço amostral:
   <div class="code-content">
     <pre><code>using Plots
 
-# Função para criar círculo
-function circle(h, k, r)
+# Círculo de raio r centrado em (h, k)
+function circulo(h, k, r)
     θ = range(0, 2π, length=100)
-    h .+ r*cos.(θ), k .+ r*sin.(θ)
+    Shape(h .+ r .* cos.(θ), k .+ r .* sin.(θ))
 end
 
-# Plot base
-plot(size=(800,300), layout=(1,3), legend=:top)
+# A ∩ B: o arco de A que fica dentro de B, seguido do arco de B dentro de A
+θa = range(-π/3, π/3, length=50)
+θb = range(2π/3, 4π/3, length=50)
+lente = Shape(vcat(cos.(θa), 1 .+ cos.(θb)), vcat(sin.(θa), sin.(θb)))
 
-# União
-p1 = plot!(subplot=1, title="União (A ∪ B)")
-plot!(p1, circle(0,0,1), seriestype=:shape, alpha=0.3, color=:blue, label="A")
-plot!(p1, circle(1,0,1), seriestype=:shape, alpha=0.3, color=:red, label="B")
-plot!(p1, xlims=(-1.5,2.5), ylims=(-1.5,1.5), aspect_ratio=:equal)
+omega = Shape([-1.5, 2.5, 2.5, -1.5], [-1.5, -1.5, 1.5, 1.5])
+eixos = (xlims=(-1.5, 2.5), ylims=(-1.5, 1.5), aspect_ratio=:equal,
+         framestyle=:box, ticks=false, grid=false, legend=false)
 
-# Interseção
-p2 = plot!(subplot=2, title="Interseção (A ∩ B)")
-plot!(p2, circle(0,0,1), seriestype=:shape, alpha=0.3, color=:blue, label="A")
-plot!(p2, circle(1,0,1), seriestype=:shape, alpha=0.3, color=:red, label="B")
-plot!(p2, xlims=(-1.5,2.5), ylims=(-1.5,1.5), aspect_ratio=:equal)
+# União: tudo o que está em A ou em B
+p1 = plot(omega; color=:white, linecolor=:gray, title="União (A ∪ B)", eixos...)
+plot!(p1, circulo(0, 0, 1); color=:royalblue, alpha=0.5, linecolor=:black)
+plot!(p1, circulo(1, 0, 1); color=:royalblue, alpha=0.5, linecolor=:black)
 
-# Complemento
-p3 = plot!(subplot=3, title="Complemento (A')")
-plot!(p3, circle(0,0,1), seriestype=:shape, alpha=0.3, color=:blue, label="A")
-rectangle = Shape([-1.5,-1.5], [2.5,-1.5], [2.5,1.5], [-1.5,1.5])
-plot!(p3, rectangle, fillalpha=0.1, color=:gray, label="Ω")
-plot!(p3, xlims=(-1.5,2.5), ylims=(-1.5,1.5), aspect_ratio=:equal)</code></pre>
+# Interseção: só a parte comum
+p2 = plot(omega; color=:white, linecolor=:gray, title="Interseção (A ∩ B)", eixos...)
+plot!(p2, lente; color=:royalblue, alpha=0.7, linewidth=0)
+plot!(p2, circulo(0, 0, 1); fillalpha=0, linecolor=:black)
+plot!(p2, circulo(1, 0, 1); fillalpha=0, linecolor=:black)
+
+# Complemento: tudo em Ω que não está em A
+p3 = plot(omega; color=:royalblue, alpha=0.5, linecolor=:gray, title="Complemento (A′)", eixos...)
+plot!(p3, circulo(0, 0, 1); color=:white, linecolor=:black)
+
+plot(p1, p2, p3, layout=(1, 3), size=(900, 320))</code></pre>
   </div>
 </div>
 
