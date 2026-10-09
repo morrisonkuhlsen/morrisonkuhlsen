@@ -6,8 +6,9 @@
  * ar (Rayleigh, que dá o azul) e por partículas (Mie, que dá o clarão em
  * volta do sol). O laranja rente ao horizonte e o sol avermelhado ao nascer
  * saem dessa conta. Por cima vem o que a câmera acrescenta: brilho em
- * camadas, raios de difração, estrias, rastro anamórfico e reflexos da
- * lente. A curva de tom ACES comprime o brilho como numa foto exposta.
+ * camadas, a estrela de difração da abertura (calculada por FFT) e
+ * reflexos da lente. A curva de tom ACES comprime o brilho como numa foto
+ * exposta.
  *
  * O sol nasce em ~6 s; depois a cena para no último quadro (só volta a ser
  * desenhada se a janela mudar de tamanho). Com prefers-reduced-motion,
@@ -34,6 +35,9 @@
     uniform vec2 uSunPx;     // posição do sol na tela, em pixels (origem embaixo)
     uniform float uVis;      // fração do disco do sol acima do horizonte
     uniform float uEsc;      // escala dos efeitos de lente
+    uniform sampler2D uBurst; // padrão de difração da abertura (intensidade^(1/5))
+    uniform float uBurstPx;  // largura do padrão na tela, em pixels
+    uniform float uBurstK;   // ganho do padrão
 
     const float RP = 6371.0, RA = 6471.0;   // raio do planeta e do topo da atmosfera
     const float HR = 8.0, HM = 1.2;         // alturas de escala (km)
@@ -70,6 +74,16 @@
       sombra = (cosChi < 0.0 && perp < RP) ? 0.0 : 1.0;
       float h = max(0.0, r - RP);
       return vec2(HR * chapman(RP / HR, h / HR, cosChi), HM * chapman(RP / HM, h / HM, cosChi));
+    }
+
+    // Intensidade do padrão de difração num ponto (centro em 0, borda em
+    // ±0.5). A textura guarda a intensidade elevada a 1/5, para caber a
+    // faixa enorme de brilho em 8 bits.
+    float difracao(vec2 uv) {
+      if (abs(uv.x) > 0.5 || abs(uv.y) > 0.5) return 0.0;
+      float l = texture2D(uBurst, uv + 0.5).r;
+      float l2 = l * l;
+      return l2 * l2 * l;
     }
 
     vec3 aces(vec3 x) {
@@ -177,28 +191,26 @@
       vec2 dp = gl_FragCoord.xy - uSunPx;
       float dist = length(dp);
       float e = uEsc;
-      vec3 lente = vec3(0.0);
 
-      // Raios de difração: dois feixes fortes em X e quatro fracos. São
-      // largos e suaves junto ao sol e afinam e somem com a distância; as
-      // cores se separam de leve nas pontas.
-      for (int k = 0; k < 6; k++) {
-        float a = k == 0 ? 0.96 : k == 1 ? 2.18 : k == 2 ? 0.0 : k == 3 ? 0.42 : k == 4 ? 1.57 : 2.72;
-        vec2 dir = vec2(cos(a), sin(a));
-        float ao = abs(dot(dp, dir));
-        float perp = abs(dp.x * dir.y - dp.y * dir.x);
-        float compr = (k < 2 ? 150.0 : k == 2 ? 90.0 : 45.0) * e;
-        float forca = (k < 2 ? 1.0 : k == 2 ? 0.45 : 0.25) * exp(-ao / compr);
-        vec3 s = (3.2 * e * exp(-ao / (40.0 * e)) + 0.7 * e) * vec3(1.0, 1.06, 1.12);
-        lente += forca * exp(-perp * perp / (2.0 * s * s));
+      // Estrela de difração: o padrão que a abertura da lente faz com uma
+      // luz pontual (ver estrela() no JavaScript). O padrão escala com o
+      // comprimento de onda; a luz do sol tem todos, e somá-los (dez, de 420
+      // a 680 nm, cada um pesado na sua cor) alisa o granulado de uma luz
+      // pura e deixa as franjas de cor só nas pontas dos raios. Some suave
+      // antes da borda da textura.
+      vec2 uv = dp / uBurstPx;
+      vec3 estrela = vec3(0.0), soma = vec3(0.0);
+      for (int i = 0; i < 10; i++) {
+        float lam = 420.0 + 28.0 * float(i);
+        vec3 w = vec3(exp(-pow((lam - 610.0) / 45.0, 2.0)),
+                      exp(-pow((lam - 545.0) / 40.0, 2.0)),
+                      exp(-pow((lam - 460.0) / 35.0, 2.0)));
+        estrela += w * difracao(uv * (550.0 / lam));
+        soma += w;
       }
-      // Estrias finas em volta (a "coroa ciliar" das lentes).
-      float fi = atan(dp.y, dp.x);
-      float ruido = hash(vec2(floor(fi * 140.0), 3.0));
-      lente += 0.12 * pow(ruido, 8.0) * exp(-dist / (45.0 * e));
-      // Rastro anamórfico: linha horizontal fina e azulada.
-      lente += vec3(0.45, 0.6, 1.0) * 0.18 * exp(-abs(dp.y) / (1.2 * e)) * exp(-abs(dp.x) / (500.0 * e));
-      cor += corLente * lente * 0.45;
+      estrela /= soma;
+      estrela *= smoothstep(0.5, 0.3, length(uv));
+      cor += corLente * estrela * uBurstK;
 
       // Reflexos da lente na linha que vai do sol ao centro da tela, e o
       // anel de halo com as cores separadas.
@@ -255,9 +267,125 @@
   gl.enableVertexAttribArray(loc);
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   const U = {};
-  for (const n of ["uRes", "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uSun", "uSunPx", "uVis", "uEsc"]) {
+  for (const n of ["uRes", "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uSun", "uSunPx", "uVis", "uEsc", "uBurst", "uBurstPx", "uBurstK"]) {
     U[n] = gl.getUniformLocation(prog, n);
   }
+
+  /* ---------------------------------------------------------------- difração */
+
+  // A estrela em volta do sol, como numa foto: o padrão de difração de
+  // Fraunhofer da abertura da lente, que é a intensidade da transformada de
+  // Fourier do formato da abertura. Cada borda reta do diafragma dá um par
+  // de raios perpendicular a ela (aqui, duas bordas: o X); a borda redonda
+  // dá os anéis; poeira e fibras na lente dão as estrias finas em volta.
+  // Calculado uma vez, com uma FFT 2D de 512 × 512, e enviado como textura.
+  const GANHO = 1400;
+  function estrela() {
+    const N = 512, LOG = 9, c = N / 2, r = N / 4.5;
+    const re = new Float32Array(N * N), im = new Float32Array(N * N);
+    let semente = 101;
+    const aleatorio = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
+
+    // A abertura: um disco cortado por duas faixas (as bordas retas), com a
+    // borda levemente irregular, poeira e fibras. Bordas suavizadas em 1 px
+    // para não criar falsos raios de serrilhado.
+    const faixas = [0.96, 2.18].map(a => [Math.cos(a), Math.sin(a), r * 0.8]);
+    const poeira = Array.from({ length: 28 }, () => {
+      const a = aleatorio() * 6.283, d = Math.sqrt(aleatorio()) * r * 0.9;
+      return [c + d * Math.cos(a), c + d * Math.sin(a), 0.6 + aleatorio() * 1.8];
+    });
+    const fibras = Array.from({ length: 36 }, () => {
+      const a = aleatorio() * 6.283, d = Math.sqrt(aleatorio()) * r * 0.9;
+      const ang = aleatorio() * Math.PI, comp = r * (0.2 + aleatorio() * 0.9);
+      return [c + d * Math.cos(a), c + d * Math.sin(a), Math.cos(ang), Math.sin(ang), comp / 2];
+    });
+    const lim = Math.ceil(r + 2);
+    for (let y = c - lim; y <= c + lim; y++) {
+      for (let x = c - lim; x <= c + lim; x++) {
+        const px = x + 0.5 - c, py = y + 0.5 - c;
+        const d = Math.hypot(px, py), th = Math.atan2(py, px);
+        const rr = r * (1 + 0.008 * Math.sin(7 * th + 1) + 0.005 * Math.sin(13 * th + 2));
+        let v = Math.min(1, Math.max(0, rr - d + 0.5));
+        if (!v) continue;
+        for (const [cx, cy, a] of faixas) v *= Math.min(1, Math.max(0, a - Math.abs(px * cx + py * cy) + 0.5));
+        for (const [qx, qy, rad] of poeira) {
+          const dd = Math.hypot(x + 0.5 - qx, y + 0.5 - qy);
+          if (dd < rad + 1) v *= Math.min(1, Math.max(0, dd - rad + 0.5));
+        }
+        for (const [qx, qy, ux, uy, meia] of fibras) {
+          const dx = x + 0.5 - qx, dy = y + 0.5 - qy;
+          const ao = dx * ux + dy * uy;
+          if (Math.abs(ao) > meia) continue;
+          const perp = Math.abs(dx * uy - dy * ux);
+          if (perp < 1.2) v *= 0.25 + 0.75 * Math.min(1, perp / 1.2);
+        }
+        re[y * N + x] = v;
+      }
+    }
+
+    // FFT 2D: radix 2, nas linhas e depois nas colunas.
+    const inv = new Uint16Array(N);
+    for (let i = 0; i < N; i++) {
+      let j = 0;
+      for (let b = 0; b < LOG; b++) j |= ((i >> b) & 1) << (LOG - 1 - b);
+      inv[i] = j;
+    }
+    const cosT = new Float32Array(N / 2), sinT = new Float32Array(N / 2);
+    for (let k = 0; k < N / 2; k++) {
+      cosT[k] = Math.cos(2 * Math.PI * k / N);
+      sinT[k] = -Math.sin(2 * Math.PI * k / N);
+    }
+    const fft = (ini, passo) => {
+      for (let i = 0; i < N; i++) {
+        const j = inv[i];
+        if (j > i) {
+          const a = ini + i * passo, b = ini + j * passo;
+          let t = re[a]; re[a] = re[b]; re[b] = t;
+          t = im[a]; im[a] = im[b]; im[b] = t;
+        }
+      }
+      for (let tam = 2; tam <= N; tam *= 2) {
+        const meio = tam / 2, salto = N / tam;
+        for (let ini2 = 0; ini2 < N; ini2 += tam) {
+          for (let k = 0; k < meio; k++) {
+            const wr = cosT[k * salto], wi = sinT[k * salto];
+            const a = ini + (ini2 + k) * passo, b = ini + (ini2 + k + meio) * passo;
+            const xr = re[b] * wr - im[b] * wi, xi = re[b] * wi + im[b] * wr;
+            re[b] = re[a] - xr; im[b] = im[a] - xi;
+            re[a] += xr; im[a] += xi;
+          }
+        }
+      }
+    };
+    for (let y = 0; y < N; y++) fft(y * N, 1);
+    for (let x = 0; x < N; x++) fft(x, N);
+
+    // Intensidade, com a frequência zero no centro, normalizada pelo pico e
+    // guardada como intensidade^(1/5) em 8 bits.
+    let max = 0;
+    const pot = new Float32Array(N * N);
+    for (let i = 0; i < N * N; i++) {
+      pot[i] = re[i] * re[i] + im[i] * im[i];
+      if (pot[i] > max) max = pot[i];
+    }
+    const dados = new Uint8Array(N * N);
+    for (let y = 0; y < N; y++) {
+      for (let x = 0; x < N; x++) {
+        const v = pot[((y + c) % N) * N + ((x + c) % N)] / max;
+        dados[y * N + x] = Math.round(255 * Math.pow(v, 0.2));
+      }
+    }
+    const tex = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, N, N, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, dados);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  }
+  estrela();
 
   /* ---------------------------------------------------------------- geometria */
 
@@ -309,6 +437,9 @@
     gl.uniform2f(U.uSunPx, sx, sy);
     gl.uniform1f(U.uVis, vis);
     gl.uniform1f(U.uEsc, Math.min(W, 1600 * escala) / 1400);
+    gl.uniform1i(U.uBurst, 0);
+    gl.uniform1f(U.uBurstPx, H * 1.9);
+    gl.uniform1f(U.uBurstK, GANHO);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
