@@ -459,6 +459,51 @@ a {
   display: none;
 }
 
+/* Como reportar e código: o reporte num bloco discreto; o código em
+   monoespaçada, rolando de lado em vez de quebrar a linha. */
+.fd-report {
+  padding: .5rem .7rem;
+  border-left: 3px solid var(--c);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--c) 8%, var(--surface));
+  color: var(--text-strong);
+}
+
+.fd-code {
+  margin: .5rem 0 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.fd-code-head {
+  display: flex;
+  justify-content: space-between;
+  padding: .3rem .6rem;
+  border-bottom: 1px solid var(--border);
+  font-size: .75rem;
+  color: var(--text-muted);
+}
+
+.fd-code pre {
+  margin: 0;
+  padding: .55rem .7rem;
+  overflow-x: auto;
+  font-size: .78rem;
+  line-height: 1.5;
+}
+
+.fd-code code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: var(--text-strong);
+}
+
+.fd-code-nota {
+  margin: .4rem 0 0;
+  font-size: .75rem;
+  color: var(--text-muted);
+}
+
 /* ---------------------------------------------------------------- notas */
 
 .pt-notes {

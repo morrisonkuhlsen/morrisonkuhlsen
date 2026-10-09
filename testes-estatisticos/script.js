@@ -201,6 +201,38 @@
       }
     }
 
+    if (t.reporte) {
+      sec(box, "Como reportar");
+      box.appendChild(el("p", "fd-report", t.reporte));
+    }
+
+    if (t.codigo) {
+      sec(box, "No R e no Python");
+      [["r", "R"], ["py", "Python"]].forEach(([chave, rotulo]) => {
+        const texto = (t.codigo[chave] || "").trimEnd();
+        if (!texto) return;
+        const bloco = el("div", "fd-code");
+        const topo = el("div", "fd-code-head");
+        const copiar = el("button", "fd-ref", "Copiar");
+        copiar.type = "button";
+        copiar.setAttribute("aria-label", `Copiar o código em ${rotulo}`);
+        copiar.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(texto);
+            copiar.textContent = "Copiado";
+          } catch {
+            copiar.textContent = "Selecione e copie";
+          }
+        });
+        topo.append(el("span", null, rotulo), copiar);
+        const pre = el("pre");
+        pre.appendChild(el("code", null, texto));
+        bloco.append(topo, pre);
+        box.appendChild(bloco);
+      });
+      box.appendChild(el("p", "fd-code-nota", "No Python, stats é scipy.stats e np é numpy."));
+    }
+
     if (t.vars.length) {
       sec(box, "Variantes e alternativas");
       const vl = el("ul");

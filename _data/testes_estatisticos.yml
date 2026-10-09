@@ -8,6 +8,8 @@
 # Cada teste traz `row` + `col` (bloco) ou `strip` + `pos` (faixa).
 # `vars` lista variantes como [texto, ref]; um `ref` aponta para outro teste.
 # `efeito` é o tamanho de efeito usual: `texto` e, se houver, `tex`.
+# `reporte` é um exemplo de como escrever o resultado; `codigo` traz `r` e
+# `py` (no Python, `stats` é scipy.stats e `np`, numpy).
 # `page` é a fórmula interativa do próprio teste em /formulas/, quando existe;
 # `veja` lista fórmulas relacionadas. Os dois usam o nome do arquivo, sem .html.
 # `tex` vai entre aspas simples: assim a barra invertida do LaTeX fica literal.
@@ -91,6 +93,12 @@ testes:
       - ['Teste do sinal, sem supor normalidade', sinal]
     page: t-student
     veja: [intervalo-confianca, teorema-central-limite]
+    reporte: 't(24) = 2,31; p = 0,030; d = 0,46'
+    codigo:
+      r: |
+        t.test(x, mu = 50)
+      py: |
+        stats.ttest_1samp(x, popmean=50)
   - id: t-independente
     sym: 't₂'
     nome: 't para duas amostras independentes'
@@ -112,6 +120,12 @@ testes:
       - ['Student clássico, com variância combinada, se as variâncias forem iguais', null]
       - ['Mann-Whitney U, sem supor normalidade', mann-whitney]
       - ['TOST (dois testes t unilaterais), para mostrar equivalência dentro de uma margem em vez de diferença', null]
+    reporte: 't(37,8) = 2,15; p = 0,038; d = 0,68 (Welch)'
+    codigo:
+      r: |
+        t.test(y ~ grupo, data = dados)  # Welch é o padrão
+      py: |
+        stats.ttest_ind(a, b, equal_var=False)  # Welch
   - id: t-pareado
     sym: 'tₚ'
     nome: 't pareado'
@@ -130,6 +144,12 @@ testes:
       tex: 'd_z = \dfrac{\bar{d}}{s_d}'
     vars:
       - ['Wilcoxon de postos sinalizados, sem supor normalidade', wilcoxon]
+    reporte: 't(14) = 3,02; p = 0,009; d_z = 0,78'
+    codigo:
+      r: |
+        t.test(depois, antes, paired = TRUE)
+      py: |
+        stats.ttest_rel(depois, antes)
   - id: anova
     sym: 'F'
     nome: 'ANOVA de um fator'
@@ -152,6 +172,12 @@ testes:
       - ['Kruskal-Wallis, sem supor normalidade', kruskal-wallis]
       - ['Depois de rejeitar H₀', tukey]
       - ['Com dois fatores e a interação entre eles', anova-dois-fatores]
+    reporte: 'F(2, 42) = 4,87; p = 0,013; η² = 0,19'
+    codigo:
+      r: |
+        summary(aov(y ~ grupo, data = dados))
+      py: |
+        stats.f_oneway(a, b, c)
   - id: anova-mr
     sym: 'Fᵣ'
     nome: 'ANOVA de medidas repetidas'
@@ -172,6 +198,14 @@ testes:
       - ['Correções de Greenhouse-Geisser ou Huynh-Feldt, se a esfericidade falhar', null]
       - ['Friedman, sem supor normalidade', friedman]
       - ['Esfericidade de Mauchly, para conferir o pressuposto', mauchly]
+    reporte: 'F(2, 38) = 6,12; p = 0,005; η²p = 0,24 (com correção de Greenhouse-Geisser, informe os gl corrigidos)'
+    codigo:
+      r: |
+        library(afex)
+        aov_ez("id", "y", dados, within = "tempo")
+      py: |
+        from statsmodels.stats.anova import AnovaRM
+        AnovaRM(dados, "y", "id", within=["tempo"]).fit()
   - id: tukey
     sym: 'Tk'
     nome: 'Tukey HSD'
@@ -194,6 +228,13 @@ testes:
       - ['Bonferroni, mais conservador e geral', null]
 
   # ------------------------------------------------------------------ postos
+    reporte: 'B − A = 4,2; IC 95% [1,1; 7,3]; p ajustado = 0,006'
+    codigo:
+      r: |
+        TukeyHSD(aov(y ~ grupo, data = dados))
+      py: |
+        from statsmodels.stats.multicomp import pairwise_tukeyhsd
+        pairwise_tukeyhsd(dados["y"], dados["grupo"])
   - id: sinal
     sym: 'Sg'
     nome: 'Teste do sinal'
@@ -213,6 +254,12 @@ testes:
     vars:
       - ['Wilcoxon de postos sinalizados, mais poderoso se a distribuição for simétrica', wilcoxon]
     veja: [distribuicao-binomial]
+    reporte: '15 de 20 acima do valor de referência; teste do sinal, p = 0,041'
+    codigo:
+      r: |
+        binom.test(sum(x > m0), sum(x != m0), p = 0.5)
+      py: |
+        stats.binomtest(int((x > m0).sum()), int((x != m0).sum()), p=0.5)
   - id: mann-whitney
     sym: 'U'
     nome: 'Mann-Whitney U'
@@ -232,6 +279,12 @@ testes:
     vars:
       - ['Também chamado de Wilcoxon rank-sum', null]
       - ['Versão paramétrica', t-independente]
+    reporte: 'U = 112; z = −2,38; p = 0,017; r = 0,38'
+    codigo:
+      r: |
+        wilcox.test(y ~ grupo, data = dados)
+      py: |
+        stats.mannwhitneyu(a, b, alternative="two-sided")
   - id: wilcoxon
     sym: 'W'
     nome: 'Wilcoxon de postos sinalizados'
@@ -251,6 +304,12 @@ testes:
     vars:
       - ['Teste do sinal, se nem a simetria for razoável', sinal]
       - ['Versão paramétrica', t-pareado]
+    reporte: 'V = 21; z = −2,21; p = 0,027; r = 0,57'
+    codigo:
+      r: |
+        wilcox.test(depois, antes, paired = TRUE)
+      py: |
+        stats.wilcoxon(depois, antes)
   - id: kruskal-wallis
     sym: 'H'
     nome: 'Kruskal-Wallis'
@@ -270,6 +329,12 @@ testes:
     vars:
       - ['Depois de rejeitar H₀', dunn]
       - ['Versão paramétrica', anova]
+    reporte: 'H(2) = 8,43; p = 0,015; ε² = 0,19'
+    codigo:
+      r: |
+        kruskal.test(y ~ grupo, data = dados)
+      py: |
+        stats.kruskal(a, b, c)
   - id: friedman
     sym: 'Fr'
     nome: 'Friedman'
@@ -289,6 +354,12 @@ testes:
     vars:
       - ['Pós-teste de Nemenyi ou Conover', null]
       - ['Versão paramétrica', anova-mr]
+    reporte: 'χ²F(2) = 9,10; p = 0,011; W de Kendall = 0,23'
+    codigo:
+      r: |
+        friedman.test(y ~ tempo | id, data = dados)
+      py: |
+        stats.friedmanchisquare(t1, t2, t3)
   - id: dunn
     sym: 'Dn'
     nome: 'Teste de Dunn'
@@ -309,6 +380,14 @@ testes:
       - ['Conover-Iman, um pouco mais poderoso', null]
 
   # ------------------------------------------------------------------ proporções
+    reporte: 'B − A: z = 2,74; p ajustado (Holm) = 0,018'
+    codigo:
+      r: |
+        library(FSA)
+        dunnTest(y ~ grupo, data = dados, method = "holm")
+      py: |
+        import scikit_posthocs as sp
+        sp.posthoc_dunn(dados, val_col="y", group_col="grupo", p_adjust="holm")
   - id: binomial
     sym: 'Bi'
     nome: 'Binomial / Z para uma proporção'
@@ -328,6 +407,12 @@ testes:
     vars:
       - ['Teste binomial exato, para amostras pequenas', null]
     veja: [distribuicao-binomial]
+    reporte: '62 de 100 (62%); teste binomial contra 50%, p = 0,021; h = 0,24'
+    codigo:
+      r: |
+        binom.test(62, 100, p = 0.5)  # exato; prop.test() faz o Z
+      py: |
+        stats.binomtest(62, 100, p=0.5)
   - id: z-duas-proporcoes
     sym: 'Z₂'
     nome: 'Z para duas proporções'
@@ -347,6 +432,13 @@ testes:
     vars:
       - ['Qui-quadrado de independência, equivalente numa tabela 2 × 2', qui-quadrado-independencia]
       - ['Fisher exato, com contagens pequenas', fisher]
+    reporte: '45% contra 30%; z = 2,19; p = 0,029; h = 0,31'
+    codigo:
+      r: |
+        prop.test(c(45, 30), c(100, 100), correct = FALSE)
+      py: |
+        from statsmodels.stats.proportion import proportions_ztest
+        proportions_ztest([45, 30], [100, 100])
   - id: mcnemar
     sym: 'Mc'
     nome: 'McNemar'
@@ -365,6 +457,13 @@ testes:
       tex: 'OR = \dfrac{b}{c}'
     vars:
       - ['Versão exata binomial, para b + c pequeno', null]
+    reporte: 'b = 18, c = 6; χ²(1) = 6,00; p = 0,014; OR = 3,0'
+    codigo:
+      r: |
+        mcnemar.test(tabela, correct = FALSE)
+      py: |
+        from statsmodels.stats.contingency_tables import mcnemar
+        mcnemar(tabela, exact=False, correction=False)
   - id: qui-quadrado-homogeneidade
     sym: 'χ²ₕ'
     nome: 'Qui-quadrado de homogeneidade'
@@ -385,6 +484,12 @@ testes:
       - ['Qui-quadrado de independência, que usa a mesma conta', qui-quadrado-independencia]
       - ['Depois de rejeitar H₀', marascuilo]
     veja: [qui-quadrado]
+    reporte: 'χ²(4, N = 300) = 11,2; p = 0,024; V = 0,14'
+    codigo:
+      r: |
+        chisq.test(tabela)
+      py: |
+        stats.chi2_contingency(tabela)
   - id: cochran-q
     sym: 'Q'
     nome: 'Q de Cochran'
@@ -400,6 +505,14 @@ testes:
     tex: 'Q = \dfrac{(k - 1)\left[k \sum_j C_j^2 - N^2\right]}{kN - \sum_i R_i^2}'
     vars:
       - ['McNemar, o caso com duas condições', mcnemar]
+    reporte: 'Q(2) = 7,6; p = 0,022'
+    codigo:
+      r: |
+        library(rstatix)
+        cochran_qtest(dados, resposta ~ condicao | id)
+      py: |
+        from statsmodels.stats.contingency_tables import cochrans_q
+        cochrans_q(matriz)  # linhas = indivíduos, colunas = condições
   - id: marascuilo
     sym: 'Ms'
     nome: 'Marascuilo'
@@ -417,6 +530,14 @@ testes:
       - ['Com medidas repetidas, McNemar par a par com ajuste dos valores-p', mcnemar]
 
   # ------------------------------------------------------------------ variâncias
+    reporte: 'A − C: |0,42 − 0,25| = 0,17, acima do valor crítico de 0,15: diferem a 5%'
+    codigo:
+      r: |
+        # sem função padrão: compare cada |p[i] - p[j]| com
+        sqrt(qchisq(0.95, k - 1)) * sqrt(p[i]*(1-p[i])/n[i] + p[j]*(1-p[j])/n[j])
+      py: |
+        # sem função padrão: compare cada |p[i] - p[j]| com
+        np.sqrt(stats.chi2.ppf(0.95, k - 1)) * np.sqrt(p[i]*(1-p[i])/n[i] + p[j]*(1-p[j])/n[j])
   - id: qui-quadrado-variancia
     sym: 'χ²ᵥ'
     nome: 'Qui-quadrado para uma variância'
@@ -430,6 +551,14 @@ testes:
       - 'Dados normais: o teste é muito sensível a desvios de normalidade'
     tex: '\chi^2 = \dfrac{(n - 1)\, s^2}{\sigma_0^2}'
     vars: []
+    reporte: 'χ²(24) = 38,9; p = 0,056'
+    codigo:
+      r: |
+        library(EnvStats)
+        varTest(x, sigma.squared = 4)
+      py: |
+        q = (len(x) - 1) * x.var(ddof=1) / 4
+        p = 2 * min(stats.chi2.cdf(q, len(x) - 1), stats.chi2.sf(q, len(x) - 1))
   - id: f-variancias
     sym: 'Fᵥ'
     nome: 'F para duas variâncias'
@@ -446,6 +575,13 @@ testes:
     vars:
       - ['Levene, robusto à falta de normalidade', levene]
       - ['Pitman-Morgan, com amostras pareadas', pitman-morgan]
+    reporte: 'F(15, 20) = 2,22; p = 0,097'
+    codigo:
+      r: |
+        var.test(a, b)
+      py: |
+        f = a.var(ddof=1) / b.var(ddof=1)
+        p = 2 * min(stats.f.cdf(f, len(a) - 1, len(b) - 1), stats.f.sf(f, len(a) - 1, len(b) - 1))
   - id: pitman-morgan
     sym: 'PM'
     nome: 'Pitman-Morgan'
@@ -461,6 +597,12 @@ testes:
     tex: 'r = \operatorname{corr}(x - y,\; x + y), \qquad t = \dfrac{r\sqrt{n - 2}}{\sqrt{1 - r^2}}'
     vars:
       - ['F para duas variâncias, com amostras independentes', f-variancias]
+    reporte: 'r(D, S) = 0,48; t(18) = 2,32; p = 0,032'
+    codigo:
+      r: |
+        cor.test(x - y, x + y)
+      py: |
+        stats.pearsonr(x - y, x + y)
   - id: levene
     sym: 'Lv'
     nome: 'Levene'
@@ -476,6 +618,13 @@ testes:
     vars:
       - ['Brown-Forsythe, com desvios da mediana (mais robusto)', null]
       - ['Bartlett, mais poderoso mas exige normalidade', null]
+    reporte: 'F(2, 42) = 1,36; p = 0,27'
+    codigo:
+      r: |
+        library(car)
+        leveneTest(y ~ grupo, data = dados, center = mean)  # center = median é o Brown-Forsythe
+      py: |
+        stats.levene(a, b, c, center="mean")  # "median" é o Brown-Forsythe
   - id: mauchly
     sym: 'Mw'
     nome: 'Esfericidade de Mauchly'
@@ -493,6 +642,14 @@ testes:
       - ['ANOVA de medidas repetidas, com correção de Greenhouse-Geisser ou Huynh-Feldt se a esfericidade falhar', anova-mr]
 
   # ------------------------------------------------------------------ aderência e normalidade
+    reporte: 'W = 0,71; χ²(2) = 6,2; p = 0,045; ε de Greenhouse-Geisser = 0,78'
+    codigo:
+      r: |
+        library(afex)
+        summary(aov_ez("id", "y", dados, within = "tempo"))  # traz o Mauchly
+      py: |
+        import pingouin as pg
+        pg.sphericity(dados, dv="y", subject="id", within="tempo")
   - id: shapiro-wilk
     sym: 'SW'
     nome: 'Shapiro-Wilk'
@@ -508,6 +665,12 @@ testes:
     tex: 'W = \dfrac{\left(\sum a_i\, x_{(i)}\right)^2}{\sum (x_i - \bar{x})^2}'
     vars: []
     veja: [distribuicao-normal]
+    reporte: 'W = 0,96; p = 0,31'
+    codigo:
+      r: |
+        shapiro.test(x)
+      py: |
+        stats.shapiro(x)
   - id: kolmogorov-smirnov
     sym: 'KS'
     nome: 'Kolmogorov-Smirnov'
@@ -523,6 +686,12 @@ testes:
     vars:
       - ['Lilliefors, quando os parâmetros são estimados dos dados', lilliefors]
       - ['Versão para duas amostras, que compara as duas distribuições empíricas: D = sup |F₁(x) − F₂(x)|', null]
+    reporte: 'D = 0,12; p = 0,43'
+    codigo:
+      r: |
+        ks.test(x, "pnorm", mean = 0, sd = 1)
+      py: |
+        stats.kstest(x, "norm", args=(0, 1))
   - id: anderson-darling
     sym: 'AD'
     nome: 'Anderson-Darling'
@@ -536,6 +705,13 @@ testes:
       - 'Observações independentes'
     tex: 'A^2 = -n - \dfrac{1}{n} \sum_{i=1}^{n} (2i - 1)\left[\ln F(x_{(i)}) + \ln\left(1 - F(x_{(n+1-i)})\right)\right]'
     vars: []
+    reporte: 'A² = 0,52; p = 0,18'
+    codigo:
+      r: |
+        library(nortest)
+        ad.test(x)
+      py: |
+        stats.anderson(x, dist="norm")  # devolve valores críticos, não o p
   - id: qui-quadrado-aderencia
     sym: 'χ²ₐ'
     nome: 'Qui-quadrado de aderência'
@@ -551,6 +727,12 @@ testes:
     tex: '\chi^2 = \sum_i \dfrac{(O_i - E_i)^2}{E_i}'
     vars: []
     page: qui-quadrado
+    reporte: 'χ²(5, N = 120) = 4,8; p = 0,44'
+    codigo:
+      r: |
+        chisq.test(observado, p = proporcoes_esperadas)
+      py: |
+        stats.chisquare(observado, f_exp=esperado)
   - id: jarque-bera
     sym: 'JB'
     nome: 'Jarque-Bera'
@@ -565,6 +747,13 @@ testes:
     tex: 'JB = \dfrac{n}{6}\left(S^2 + \dfrac{(K - 3)^2}{4}\right)'
     vars: []
     veja: [distribuicao-normal]
+    reporte: 'JB = 3,1; p = 0,21'
+    codigo:
+      r: |
+        library(tseries)
+        jarque.bera.test(x)
+      py: |
+        stats.jarque_bera(x)
   - id: lilliefors
     sym: 'Lf'
     nome: 'Lilliefors'
@@ -579,6 +768,14 @@ testes:
     tex: 'D = \sup_x \left| F_n(x) - \Phi\!\left(\dfrac{x - \bar{x}}{s}\right) \right|'
     vars:
       - ['Kolmogorov-Smirnov com valores críticos corrigidos', kolmogorov-smirnov]
+    reporte: 'D = 0,09; p = 0,38'
+    codigo:
+      r: |
+        library(nortest)
+        lillie.test(x)
+      py: |
+        from statsmodels.stats.diagnostic import lilliefors
+        lilliefors(x)
   - id: grubbs
     sym: 'Gr'
     nome: 'Grubbs'
@@ -598,6 +795,16 @@ testes:
 
   # ------------------------------------------------------------------ associação e correlação
     veja: [distribuicao-normal]
+    reporte: 'G = 2,91; n = 20; p = 0,017: o maior valor é um outlier'
+    codigo:
+      r: |
+        library(outliers)
+        grubbs.test(x)
+      py: |
+        n = len(x)
+        G = np.abs(x - x.mean()).max() / x.std(ddof=1)
+        t = stats.t.ppf(1 - 0.05 / (2 * n), n - 2)
+        G_crit = (n - 1) / np.sqrt(n) * np.sqrt(t**2 / (n - 2 + t**2))
   - id: pearson
     sym: 'r'
     nome: 'Correlação de Pearson'
@@ -618,6 +825,12 @@ testes:
       - ['Correlação de Spearman, para relações monotônicas ou dados ordinais', spearman]
     page: coeficiente-pearson
     veja: [covariancia]
+    reporte: 'r(28) = 0,42; p = 0,021'
+    codigo:
+      r: |
+        cor.test(x, y)
+      py: |
+        stats.pearsonr(x, y)
   - id: spearman
     sym: 'ρ'
     nome: 'Correlação de Spearman'
@@ -636,6 +849,12 @@ testes:
     vars:
       - ['Tau de Kendall, mais estável com amostras pequenas e empates', kendall]
     veja: [coeficiente-pearson]
+    reporte: 'ρ = 0,51; n = 30; p = 0,004'
+    codigo:
+      r: |
+        cor.test(x, y, method = "spearman")
+      py: |
+        stats.spearmanr(x, y)
   - id: kendall
     sym: 'τ'
     nome: 'Tau de Kendall'
@@ -652,6 +871,12 @@ testes:
       texto: 'O próprio τ.'
     vars:
       - ['Tau-b, que corrige os empates no denominador e é o que a maioria dos programas calcula', null]
+    reporte: 'τ = 0,33; n = 30; p = 0,010'
+    codigo:
+      r: |
+        cor.test(x, y, method = "kendall")
+      py: |
+        stats.kendalltau(x, y)
   - id: qui-quadrado-independencia
     sym: 'χ²ᵢ'
     nome: 'Qui-quadrado de independência'
@@ -672,6 +897,12 @@ testes:
       - ['Fisher exato, para tabelas 2 × 2 com contagens pequenas', fisher]
       - ['V de Cramér, para medir a força da associação', null]
     veja: [qui-quadrado]
+    reporte: 'χ²(2, N = 200) = 7,4; p = 0,025; V = 0,19'
+    codigo:
+      r: |
+        chisq.test(table(dados$a, dados$b))
+      py: |
+        stats.chi2_contingency(pd.crosstab(dados["a"], dados["b"]))
   - id: fisher
     sym: 'Fe'
     nome: 'Fisher exato'
@@ -690,6 +921,12 @@ testes:
     vars:
       - ['Qui-quadrado de independência, com contagens maiores', qui-quadrado-independencia]
     veja: [coeficiente-binomial]
+    reporte: 'OR = 6,4; p = 0,028 (Fisher exato, bilateral)'
+    codigo:
+      r: |
+        fisher.test(tabela)
+      py: |
+        stats.fisher_exact(tabela)
   - id: ponto-bisserial
     sym: 'rₚᵦ'
     nome: 'Correlação ponto-bisserial'
@@ -706,6 +943,12 @@ testes:
       texto: 'O próprio r_pb.'
     vars:
       - ['Teste equivalente', t-independente]
+    reporte: 'r_pb(38) = 0,33; p = 0,038'
+    codigo:
+      r: |
+        cor.test(y, as.numeric(grupo == "B"))
+      py: |
+        stats.pointbiserialr(binaria, y)
   - id: kappa
     sym: 'κ'
     nome: 'Kappa de Cohen'
@@ -727,6 +970,14 @@ testes:
       - ['Kappa de Fleiss, para mais de dois avaliadores', null]
 
   # ------------------------------------------------------------------ modelos e regressão
+    reporte: 'κ = 0,68; IC 95% [0,52; 0,84]: concordância substancial'
+    codigo:
+      r: |
+        library(irr)
+        kappa2(dados[, c("aval1", "aval2")])
+      py: |
+        from sklearn.metrics import cohen_kappa_score
+        cohen_kappa_score(aval1, aval2)
   - id: t-coeficiente
     sym: 'β'
     nome: 't de um coeficiente'
@@ -745,6 +996,13 @@ testes:
     vars:
       - ['Wald, a versão para modelos generalizados', wald]
     page: regressao-linear
+    reporte: 'b = 1,85; EP = 0,62; t(47) = 2,98; p = 0,005'
+    codigo:
+      r: |
+        summary(lm(y ~ x1 + x2, data = dados))
+      py: |
+        import statsmodels.formula.api as smf
+        smf.ols("y ~ x1 + x2", data=dados).fit().summary()
   - id: f-global
     sym: 'Fg'
     nome: 'F global da regressão'
@@ -763,6 +1021,14 @@ testes:
     vars:
       - ['F parcial, para comparar modelos aninhados', null]
     veja: [regressao-linear]
+    reporte: 'F(2, 47) = 9,4; p < 0,001; R² = 0,29'
+    codigo:
+      r: |
+        summary(lm(y ~ x1 + x2, data = dados))  # o F vem na última linha
+      py: |
+        import statsmodels.formula.api as smf
+        m = smf.ols("y ~ x1 + x2", data=dados).fit()
+        m.fvalue, m.f_pvalue
   - id: anova-dois-fatores
     sym: 'F₂'
     nome: 'ANOVA de dois fatores'
@@ -783,6 +1049,15 @@ testes:
     vars:
       - ['ANOVA de um fator, com um fator só', anova]
       - ['ANCOVA, quando há também uma covariável numérica', null]
+    reporte: 'Dose: F(2, 54) = 7,9; p = 0,001; η²p = 0,23. Interação: F(2, 54) = 1,1; p = 0,34'
+    codigo:
+      r: |
+        summary(aov(y ~ dose * sexo, data = dados))
+      py: |
+        import statsmodels.api as sm
+        import statsmodels.formula.api as smf
+        m = smf.ols("y ~ C(dose) * C(sexo)", data=dados).fit()
+        sm.stats.anova_lm(m, typ=2)
   - id: razao-verossimilhanca
     sym: 'LR'
     nome: 'Razão de verossimilhança'
@@ -801,6 +1076,13 @@ testes:
       tex: 'R^2_{\text{McF}} = 1 - \dfrac{\ell_{\text{completo}}}{\ell_{\text{nulo}}}'
     vars:
       - ['Wald e escore, aproximações do mesmo teste', wald]
+    reporte: 'G²(2) = 9,8; p = 0,007'
+    codigo:
+      r: |
+        anova(reduzido, completo, test = "LRT")
+      py: |
+        G2 = 2 * (completo.llf - reduzido.llf)
+        p = stats.chi2.sf(G2, completo.df_model - reduzido.df_model)
   - id: wald
     sym: 'Wd'
     nome: 'Wald'
@@ -819,6 +1101,13 @@ testes:
       tex: 'OR = e^{\hat{\beta}}'
     vars:
       - ['Razão de verossimilhança, mais confiável', razao-verossimilhanca]
+    reporte: 'b = 0,74; EP = 0,29; z = 2,55; p = 0,011; OR = 2,10'
+    codigo:
+      r: |
+        summary(glm(y ~ x, family = binomial, data = dados))
+      py: |
+        import statsmodels.formula.api as smf
+        smf.logit("y ~ x", data=dados).fit().summary()
   - id: hosmer-lemeshow
     sym: 'HL'
     nome: 'Hosmer-Lemeshow'
@@ -834,6 +1123,17 @@ testes:
     tex: 'HL = \sum_{j=1}^{g} \dfrac{(O_j - E_j)^2}{E_j\,(1 - E_j / n_j)}'
     vars:
       - ['Razão de verossimilhança, para comparar modelos aninhados', razao-verossimilhanca]
+    reporte: 'χ²(8) = 6,3; p = 0,61: sem evidência de mau ajuste'
+    codigo:
+      r: |
+        library(ResourceSelection)
+        hoslem.test(modelo$y, fitted(modelo), g = 10)
+      py: |
+        # sem função no statsmodels: agrupe por decis de p_hat
+        g = pd.qcut(p_hat, 10, labels=False)
+        t = pd.DataFrame({"y": y, "p": p_hat, "g": g}).groupby("g").agg(o=("y", "sum"), e=("p", "sum"), n=("y", "size"))
+        HL = ((t.o - t.e)**2 / (t.e * (1 - t.e / t.n))).sum()
+        p = stats.chi2.sf(HL, 10 - 2)
   - id: durbin-watson
     sym: 'DW'
     nome: 'Durbin-Watson'
@@ -850,6 +1150,14 @@ testes:
     vars:
       - ['Breusch-Godfrey, para defasagens maiores', null]
       - ['Ljung-Box, nos resíduos de séries', ljung-box]
+    reporte: 'd = 1,32; p = 0,004'
+    codigo:
+      r: |
+        library(lmtest)
+        dwtest(modelo)
+      py: |
+        from statsmodels.stats.stattools import durbin_watson
+        durbin_watson(modelo.resid)  # só a estatística, sem o p
   - id: breusch-pagan
     sym: 'BP'
     nome: 'Breusch-Pagan'
@@ -866,6 +1174,14 @@ testes:
       - ['White, sem supor uma forma para a heterocedasticidade', null]
 
   # ------------------------------------------------------------------ séries temporais
+    reporte: 'BP(2) = 8,9; p = 0,012'
+    codigo:
+      r: |
+        library(lmtest)
+        bptest(modelo)
+      py: |
+        from statsmodels.stats.diagnostic import het_breuschpagan
+        het_breuschpagan(modelo.resid, modelo.model.exog)
   - id: dickey-fuller
     sym: 'ADF'
     nome: 'Dickey-Fuller aumentado'
@@ -881,6 +1197,14 @@ testes:
     tex: '\Delta y_t = \alpha + \gamma\, y_{t-1} + \sum_i \delta_i\, \Delta y_{t-i} + \varepsilon_t, \qquad \tau = \dfrac{\hat{\gamma}}{EP(\hat{\gamma})}'
     vars:
       - ['KPSS, com a hipótese nula invertida', kpss]
+    reporte: 'ADF = −3,62; 4 defasagens; p = 0,034: rejeita a raiz unitária'
+    codigo:
+      r: |
+        library(tseries)
+        adf.test(serie)
+      py: |
+        from statsmodels.tsa.stattools import adfuller
+        adfuller(serie)
   - id: kpss
     sym: 'KP'
     nome: 'KPSS'
@@ -895,6 +1219,14 @@ testes:
     tex: '\eta = \dfrac{1}{n^2} \dfrac{\sum_t S_t^2}{\hat{\sigma}^2}'
     vars:
       - ['Dickey-Fuller aumentado', dickey-fuller]
+    reporte: 'KPSS = 0,21; p > 0,10: não rejeita a estacionariedade'
+    codigo:
+      r: |
+        library(tseries)
+        kpss.test(serie)
+      py: |
+        from statsmodels.tsa.stattools import kpss
+        kpss(serie)
   - id: ljung-box
     sym: 'LB'
     nome: 'Ljung-Box'
@@ -909,3 +1241,10 @@ testes:
     tex: 'Q = n(n + 2) \sum_{k=1}^{h} \dfrac{\hat{\rho}_k^2}{n - k}'
     vars:
       - ['Box-Pierce, a versão original e menos precisa', null]
+    reporte: 'Q(10) = 12,4; p = 0,26'
+    codigo:
+      r: |
+        Box.test(residuos, lag = 10, type = "Ljung-Box")
+      py: |
+        from statsmodels.stats.diagnostic import acorr_ljungbox
+        acorr_ljungbox(residuos, lags=[10])
