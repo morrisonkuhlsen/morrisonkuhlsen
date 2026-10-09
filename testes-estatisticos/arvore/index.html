@@ -53,12 +53,28 @@ layout: null
   <main class="pt tr">
     <header class="pt-head">
       <h1>Qual teste estatístico usar?</h1>
-      <p class="pt-lede">Responda as perguntas, uma por vez, até chegar a um teste. Cada resposta abre a próxima pergunta; o teste no fim leva à ficha completa no <a href="../">catálogo de testes estatísticos</a>, com hipótese nula, pressupostos e fórmula.</p>
+      <p class="pt-lede">Comece pela primeira pergunta e siga as setas até chegar a um teste. O teste no fim leva à ficha completa no <a href="../">catálogo de testes estatísticos</a>, com hipótese nula, pressupostos e fórmula.</p>
+      <p class="tr-views" role="group" aria-label="Formato da árvore" hidden>
+        <button type="button" data-vista="fluxo" aria-pressed="true">Fluxograma</button>
+        <button type="button" data-vista="passos" aria-pressed="false">Passo a passo</button>
+      </p>
       <p class="tr-tools" hidden>
         <button type="button" class="fd-ref" data-acao="abrir">Expandir tudo</button>
         <button type="button" class="fd-ref" data-acao="fechar">Recolher tudo</button>
       </p>
     </header>
+
+    <section class="fc-scroll" aria-label="Fluxograma de decisão" hidden>
+      <div class="fc">
+        <svg class="fc-lines" aria-hidden="true">
+          <defs>
+            <marker id="fc-seta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="currentColor"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </section>
 
     <nav class="tr-tree" aria-label="Árvore de decisão">
       {%- include arvore-no.html no=site.data.arvore_testes %}

@@ -662,6 +662,148 @@ a {
   font-size: .85rem;
 }
 
+/* Formato: fluxograma ou passo a passo, como um controle segmentado. */
+.tr-views {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0 0 .9rem;
+}
+
+.tr-views[hidden] {
+  display: none;
+}
+
+.tr-views button {
+  padding: .45rem .9rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.tr-views button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.tr-views button:last-child {
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.tr-views button[aria-pressed="true"] {
+  background: var(--text-strong);
+  color: var(--bg);
+  border-color: var(--text-strong);
+}
+
+/* Fluxograma: as caixas são posicionadas pelo arvore.js; as setas, num SVG
+   do mesmo tamanho por baixo delas. Mais largo que a tela, rola de lado. */
+.fc-scroll {
+  overflow-x: auto;
+  padding: .5rem 0 1rem;
+}
+
+.fc-scroll[hidden] {
+  display: none;
+}
+
+.fc {
+  position: relative;
+  margin: 0 auto;
+}
+
+.fc-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.fc-edge {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.fc-node {
+  position: absolute;
+  width: 230px;
+  margin: 0;
+  padding: .55rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: .82rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.fc-node[hidden] {
+  display: none;
+}
+
+.fc-q {
+  cursor: pointer;
+}
+
+.fc-q:hover,
+.fc-q[aria-expanded="true"] {
+  border-color: var(--text-muted);
+}
+
+.fc-root {
+  border-color: var(--text-strong);
+}
+
+.fc-ans {
+  display: block;
+  margin-bottom: .2rem;
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+
+.fc-text {
+  display: block;
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.fc-more {
+  display: block;
+  margin-top: .35rem;
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+
+.fc-t {
+  border-left: 4px solid var(--c);
+  background: color-mix(in srgb, var(--c) 10%, var(--surface));
+}
+
+.fc-t a {
+  display: block;
+  font-weight: 700;
+}
+
+.fc-fam {
+  display: block;
+  font-size: .72rem;
+  color: var(--text-muted);
+}
+
+.fc-t p {
+  margin: .3rem 0 0;
+  font-size: .72rem;
+}
+
 .tr .pt-notes {
   margin-top: 2.5rem;
 }
