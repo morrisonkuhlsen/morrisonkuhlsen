@@ -279,10 +279,11 @@
   // cuja ficha fechou. Sem isso, a ficha que sobe de baixo no celular fica
   // fora do alcance de quem navega por teclado ou leitor de tela.
   // A tabela do site que dá os valores críticos, quando a distribuição de
-  // referência tem uma: t, F ou normal padrão.
+  // referência tem uma: t, F, qui-quadrado ou normal padrão.
   function tabela(dist) {
     if (/^t\(/.test(dist)) return { nome: "t", url: "/ttable.html" };
     if (/^F\b/.test(dist)) return { nome: "F", url: "/ftable.html" };
+    if (dist.startsWith("χ²")) return { nome: "χ²", url: "/chitable.html" };
     if (dist.includes("N(0, 1)")) return { nome: "Z", url: "/ztable.html" };
     return null;
   }

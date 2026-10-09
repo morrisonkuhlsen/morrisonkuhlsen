@@ -1,4 +1,4 @@
-/* Núcleo das calculadoras das tabelas (z, t e o que vier). Sem dependências.
+/* Núcleo das calculadoras das tabelas (z, t, F, qui-quadrado e o que vier). Sem dependências.
    Publica window.MKCalc: distribuições, desenho da curva, notação, estado na
    URL e as miudezas de interface que as três páginas repetiriam.
 
@@ -230,6 +230,106 @@
       var d = fpdf(meio, d1, d2);
       if (!(d > 0)) break;
       var ajuste = (fcdf(meio, d1, d2) - p) / d;
+      if (!isFinite(ajuste) || meio - ajuste <= 0) break;
+      meio -= ajuste;
+    }
+    return meio;
+  }
+
+  /* ── Qui-quadrado ────────────────────────────────────────────────────────
+     Sai da gama incompleta regularizada: P(χ² < x) = P(k/2, x/2). Abaixo de
+     a + 1 a série converge depressa; acima, a fração contínua de Lentz. As
+     duas caudas são calculadas cada uma pelo seu lado, e não como 1 − a
+     outra: o valor-p de um χ² grande vive na cauda direita, e 1 − 0,9999999
+     jogaria fora as casas que interessam. */
+  function gser(a, x) {
+    var ap = a, soma = 1 / a, del = soma;
+    for (var n = 0; n < 1000; n++) {
+      ap += 1;
+      del *= x / ap;
+      soma += del;
+      if (Math.abs(del) < Math.abs(soma) * 1e-16) break;
+    }
+    return soma * Math.exp(-x + a * Math.log(x) - lgamma(a));
+  }
+
+  function gcf(a, x) {
+    var FPMIN = 1e-300;
+    var b = x + 1 - a, c = 1 / FPMIN, d = 1 / b, h = d, an, del;
+    for (var i = 1; i < 1000; i++) {
+      an = -i * (i - a);
+      b += 2;
+      d = an * d + b;
+      if (Math.abs(d) < FPMIN) d = FPMIN;
+      c = b + an / c;
+      if (Math.abs(c) < FPMIN) c = FPMIN;
+      d = 1 / d;
+      del = d * c;
+      h *= del;
+      if (Math.abs(del - 1) < 1e-16) break;
+    }
+    return Math.exp(-x + a * Math.log(x) - lgamma(a)) * h;
+  }
+
+  /* P(a, x) e Q(a, x) = 1 − P(a, x), cada uma pelo lado em que é exata.
+     Abaixo de 1e-300 o double já está nos subnormais, sem casa confiável:
+     vira zero. */
+  var piso = function (v) { return v < 1e-300 ? 0 : v; };
+
+  function gammp(a, x) {
+    if (!(x > 0)) return 0;
+    return piso(x < a + 1 ? gser(a, x) : 1 - gcf(a, x));
+  }
+
+  function gammq(a, x) {
+    if (!(x > 0)) return 1;
+    return piso(x < a + 1 ? 1 - gser(a, x) : gcf(a, x));
+  }
+
+  /* P(χ² < x) e P(χ² > x) com k graus de liberdade. */
+  function chi2cdf(x, k) {
+    if (!(k > 0)) return NaN;
+    return gammp(k / 2, x / 2);
+  }
+
+  function chi2sf(x, k) {
+    if (!(k > 0)) return NaN;
+    return gammq(k / 2, x / 2);
+  }
+
+  /* Densidade em log, pelo mesmo motivo da F: com k alto, Γ(k/2) estoura. */
+  function chi2pdf(x, k) {
+    if (!(x > 0) || !(k > 0)) return 0;
+    return Math.exp((k / 2 - 1) * Math.log(x) - x / 2 - (k / 2) * Math.LN2 - lgamma(k / 2));
+  }
+
+  /* Quantil, por bisseção e Newton como na F. Acima da mediana a busca usa a
+     cauda direita, que ali é a conta exata — mesmo raciocínio do tinv. */
+  function chi2inv(p, k) {
+    if (!(p > 0 && p < 1) || !(k > 0)) return NaN;
+    var direita = p > 0.5;
+    var alvo = direita ? 1 - p : p;
+    var f = direita ? function (x) { return chi2sf(x, k); } : function (x) { return chi2cdf(x, k); };
+    /* f cresce com x à esquerda e decresce à direita. */
+    var abaixo = direita ? function (x) { return f(x) > alvo; } : function (x) { return f(x) < alvo; };
+
+    var lo = 0, hi = Math.max(1, k), passo = 0;
+    while (abaixo(hi) && passo++ < 200) hi *= 2;
+    if (passo >= 200) return NaN;
+
+    /* Tolerância relativa: com k = 1 e p pequeno o quantil fica perto de
+       1e-16, e uma tolerância absoluta pararia longe dele. */
+    var meio = (lo + hi) / 2;
+    for (var i = 0; i < 2000; i++) {
+      meio = (lo + hi) / 2;
+      if (abaixo(meio)) lo = meio; else hi = meio;
+      if (hi - lo < 1e-15 * hi) break;
+    }
+
+    for (var j = 0; j < 2; j++) {
+      var d = chi2pdf(meio, k);
+      if (!(d > 0)) break;
+      var ajuste = direita ? (alvo - chi2sf(meio, k)) / d : (chi2cdf(meio, k) - alvo) / d;
       if (!isFinite(ajuste) || meio - ajuste <= 0) break;
       meio -= ajuste;
     }
@@ -494,6 +594,7 @@
     erfc: erfc, ncdf: ncdf, npdf: npdf, ninv: ninv,
     lgamma: lgamma, betai: betai, tcdf: tcdf, tpdf: tpdf, tinv: tinv,
     fcdf: fcdf, fpdf: fpdf, finv: finv,
+    chi2cdf: chi2cdf, chi2sf: chi2sf, chi2pdf: chi2pdf, chi2inv: chi2inv,
     fmt: fmt, limitar: limitar, enxuto: enxuto, num: num,
     plot: plot, pintar: pintar, tex: tex, formulasFixas: formulasFixas,
     parear: parear, linhas: linhas, copiar: copiar,

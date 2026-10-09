@@ -6,6 +6,7 @@ pt:
   - { name: "Standard Normal Table", url: "/ztable.html" }
   - { name: "Student's T Table",     url: "/ttable.html" }
   - { name: "Snedecor F Table",      url: "/ftable.html" }
+  - { name: "Chi-Square Table",      url: "/chitable.html" }
   - { name: "Fórmulas",              url: "/formulas/" }
   - { name: "Testes estatísticos",   url: "/testes-estatisticos/" }
   - { name: "Glossário",             url: "/pt/glossario" }
@@ -15,5 +16,6 @@ en:
   - { name: "Standard Normal Table", url: "/ztable.html" }
   - { name: "Student's T Table",     url: "/ttable.html" }
   - { name: "Snedecor F Table",      url: "/ftable.html" }
+  - { name: "Chi-Square Table",      url: "/chitable.html" }
   - { name: "Formulas",              url: "/en/formulas/" }
   - { name: "Weekly Problem",        url: "/problema-semanal/", external: true, featured: true }

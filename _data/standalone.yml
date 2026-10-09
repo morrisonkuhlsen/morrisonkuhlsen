@@ -137,6 +137,11 @@
   description: "Tabela F de Snedecor com calculadoras: p-valor a partir de um F, F crítico para qualquer α e graus de liberdade, e teste F de duas variâncias."
   tags: "tabela f snedecor"
   lang: pt
+- title: "Chi-Square Distribution | χ² Table"
+  url: "/chitable.html"
+  description: "Tabela qui-quadrado com calculadoras: p-valor a partir de um χ², χ² crítico para qualquer α e graus de liberdade, e intervalo de confiança para uma variância."
+  tags: "tabela qui-quadrado chi-square chi2 valor crítico"
+  lang: pt
 - title: "Morrison Kühlsen | Alfabeto Grego"
   url: "/greek-alphabet.html"
   description: ""

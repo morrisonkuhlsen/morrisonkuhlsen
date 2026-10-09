@@ -1,4 +1,4 @@
-# Gera os valores de referência das três distribuições com Distributions.jl,
+# Gera os valores de referência das distribuições (normal, t, F e qui-quadrado) com Distributions.jl,
 # para conferir a implementação em JavaScript que roda nas tabelas.
 #
 #   julia scripts/validacao/gera-referencia.jl
@@ -39,6 +39,17 @@ open(saida, "w") do io
             for p in [0.001, 0.01, 0.025, 0.05, 0.1, 0.5, 0.9, 0.95, 0.975, 0.99, 0.999]
                 @printf(io, "f,quantil,%d,%d,%.17g,%.17g\n", v1, v2, p, quantile(FDist(v1, v2), p))
             end
+        end
+    end
+
+    for k in [1, 2, 3, 4, 5, 7, 10, 15, 20, 30, 50, 100, 250, 1000]
+        for x in vcat([1e-6, 1e-3, 0.01, 0.1], 0.25:0.25:4.0, 5.0:1.0:30.0, [40.0, 60.0, 100.0, 150.0, 300.0, 1200.0])
+            @printf(io, "chi2,cdf,%d,0,%.10f,%.17g\n", k, x, cdf(Chisq(k), x))
+            @printf(io, "chi2,sf,%d,0,%.10f,%.17g\n", k, x, ccdf(Chisq(k), x))
+        end
+        for p in [1e-8, 1e-6, 1e-4, 0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5,
+                  0.75, 0.9, 0.95, 0.975, 0.99, 0.995, 0.999, 0.9999, 1 - 1e-6, 1 - 1e-8]
+            @printf(io, "chi2,quantil,%d,0,%.17g,%.17g\n", k, p, quantile(Chisq(k), p))
         end
     end
 end

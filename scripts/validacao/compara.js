@@ -37,6 +37,7 @@ for (const linha of fs.readFileSync(referencia, 'utf8').trim().split('\n').slice
   const obtido =
     familia === 'normal' ? (funcao === 'cdf' ? M.ncdf(X) : M.ninv(X)) :
     familia === 't'      ? (funcao === 'cdf' ? M.tcdf(X, A) : M.tinv(X, A)) :
+    familia === 'chi2'   ? (funcao === 'cdf' ? M.chi2cdf(X, A) : funcao === 'sf' ? M.chi2sf(X, A) : M.chi2inv(X, A)) :
                            (funcao === 'cdf' ? M.fcdf(X, A, B) : M.finv(X, A, B));
 
   const chave = familia + ' ' + funcao;
@@ -50,7 +51,7 @@ for (const linha of fs.readFileSync(referencia, 'utf8').trim().split('\n').slice
   if (rel > 1e-9) divergentes.push({ familia, funcao, A, B, X, esperado, obtido, rel });
 
   /* Como a interface mostra o número. */
-  const naTela = v => funcao === 'cdf'
+  const naTela = v => funcao === 'cdf' || funcao === 'sf'
     ? M.fmt(v)
     : (Math.abs(v) >= 1e6 ? v.toExponential(5) : v.toFixed(5));
   if (naTela(obtido) === naTela(esperado)) iguaisNaTela++; else diferentesNaTela++;
