@@ -733,7 +733,7 @@ a {
 
 .fc-node {
   position: absolute;
-  width: 230px;
+  width: 190px;
   margin: 0;
   padding: .55rem .7rem;
   border: 1px solid var(--border);

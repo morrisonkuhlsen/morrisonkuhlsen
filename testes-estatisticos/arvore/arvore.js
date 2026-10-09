@@ -2,8 +2,8 @@
  *
  * O HTML traz a árvore em <details> aninhados, gerada pelo Jekyll: é o modo
  * "passo a passo", que funciona sem JavaScript. Daqui sai o modo fluxograma,
- * lido desse mesmo HTML (não há outra cópia dos dados): caixas da esquerda
- * para a direita, ligadas por setas. Cada caixa leva no alto a resposta que
+ * lido desse mesmo HTML (não há outra cópia dos dados): caixas de cima para
+ * baixo, ligadas por setas. Cada caixa leva no alto a resposta que
  * conduz a ela; uma pergunta abre e recolhe os caminhos que saem dela, e as
  * folhas são os testes, na cor da família. */
 (() => {
@@ -75,7 +75,7 @@
       b.appendChild(el("span", "fc-text", no.pergunta));
       no.more = el("span", "fc-more");
       b.appendChild(no.more);
-      b.addEventListener("click", () => { no.open = !no.open; desenhar(); });
+      b.addEventListener("click", () => alternar(no));
       no.el = b;
       no.kids.forEach(k => montar(k, no));
     }
@@ -86,70 +86,85 @@
 
   /* ---------------------------------------------------------------- fluxograma: layout */
 
-  // Layout de árvore da esquerda para a direita: cada coluna é um nível; as
-  // folhas visíveis (e as perguntas recolhidas) empilham de cima para baixo,
-  // e cada pergunta aberta fica centrada na altura dos seus filhos.
-  const W = 230, GX = 64, GY = 14;
-  const visivel = no => !no.pai || (no.pai.open && visivel(no.pai));
+  // De cima para baixo: cada nível é uma linha, com a altura da maior caixa
+  // visível nele. Na horizontal, as folhas visíveis (e as perguntas
+  // recolhidas) enfileiram da esquerda para a direita, e cada pergunta aberta
+  // fica centrada sobre os seus filhos.
+  const W = 190, GX = 16, GY = 44;
+  // Seguindo um caminho, as respostas não escolhidas saem de cena: aparece o
+  // caminho percorrido e, embaixo, as opções da pergunta atual. Com "Expandir
+  // tudo", aparece a árvore inteira.
+  let tudo = false;
+  const escolhida = (pai, k) => tudo || !pai.kids.some(o => o !== k && o.open);
+  const visivel = no => !no.pai || (no.pai.open && escolhida(no.pai, no) && visivel(no.pai));
+  const abertos = no => (no.kids && no.open ? no.kids.filter(k => !k.el.hidden) : []);
 
   function desenhar() {
+    for (const no of todos) no.el.hidden = !visivel(no);
     for (const no of todos) {
-      no.el.hidden = !visivel(no);
-      if (no.kids) {
-        no.el.setAttribute("aria-expanded", String(no.open));
-        no.more.textContent = no.open ? "− recolher" : `+ ${no.kids.length} caminhos`;
-      }
+      if (!no.kids) continue;
+      no.el.setAttribute("aria-expanded", String(no.open));
+      no.more.textContent = !no.open ? `+ ${no.kids.length} caminhos`
+        : !no.pai || tudo ? "− recolher" : "↺ trocar esta resposta";
     }
 
-    let cursor = 0, fundo = 0;
-    const descer = (no, dy) => {
-      no.y += dy;
-      if (no.kids && no.open) no.kids.forEach(k => descer(k, dy));
-    };
-    const posicionar = (no, nivel) => {
-      no.x = nivel * (W + GX);
+    const alturas = [];
+    const medir = (no, nivel) => {
+      no.nivel = nivel;
       no.h = no.el.offsetHeight;
-      fundo = Math.max(fundo, no.x + W);
-      const inicio = cursor;
-      if (no.kids && no.open) {
-        no.kids.forEach(k => posicionar(k, nivel + 1));
-        const a = no.kids[0], z = no.kids[no.kids.length - 1];
-        no.y = (a.y + a.h / 2 + z.y + z.h / 2) / 2 - no.h / 2;
-        if (no.y < inicio) {
-          no.kids.forEach(k => descer(k, inicio - no.y));
-          cursor += inicio - no.y;
-          no.y = inicio;
-        }
-        cursor = Math.max(cursor, no.y + no.h + GY);
+      alturas[nivel] = Math.max(alturas[nivel] || 0, no.h);
+      abertos(no).forEach(k => medir(k, nivel + 1));
+    };
+    medir(raiz, 0);
+    const topo = [0];
+    alturas.forEach((h, n) => { topo[n + 1] = topo[n] + h + GY; });
+
+    let cursor = 0;
+    const posicionar = no => {
+      no.y = topo[no.nivel];
+      const kids = abertos(no);
+      if (kids.length) {
+        kids.forEach(posicionar);
+        no.x = (kids[0].x + kids[kids.length - 1].x) / 2;
       } else {
-        no.y = cursor;
-        cursor += no.h + GY;
+        no.x = cursor;
+        cursor += W + GX;
       }
     };
-    posicionar(raiz, 0);
+    posicionar(raiz);
 
-    fc.style.width = `${fundo}px`;
-    fc.style.height = `${cursor - GY}px`;
+    fc.style.width = `${cursor - GX}px`;
+    fc.style.height = `${topo[alturas.length] - GY}px`;
     for (const no of todos) {
       if (no.el.hidden) continue;
       no.el.style.left = `${no.x}px`;
       no.el.style.top = `${no.y}px`;
     }
 
-    // Setas em ângulo reto: saem do meio da direita do pai, dobram no meio do
-    // vão entre as colunas e chegam ao meio da esquerda do filho.
+    // Setas em ângulo reto: descem do meio da base do pai até o meio do vão
+    // entre as linhas, correm na horizontal e descem ao meio do topo do filho.
     svg.querySelectorAll("path.fc-edge").forEach(p => p.remove());
     for (const no of todos) {
-      if (!no.kids || !no.open || no.el.hidden) continue;
-      const x1 = no.x + W, y1 = no.y + no.h / 2, xm = x1 + GX / 2;
-      for (const k of no.kids) {
+      if (no.el.hidden) continue;
+      const x1 = no.x + W / 2, y1 = no.y + no.h, ym = topo[no.nivel + 1] - GY / 2;
+      for (const k of abertos(no)) {
         const p = document.createElementNS(SVG, "path");
         p.setAttribute("class", "fc-edge");
-        p.setAttribute("d", `M${x1} ${y1} H${xm} V${k.y + k.h / 2} H${k.x - 2}`);
+        p.setAttribute("d", `M${x1} ${y1} V${ym} H${k.x + W / 2} V${k.y - 2}`);
         p.setAttribute("marker-end", "url(#fc-seta)");
         svg.appendChild(p);
       }
     }
+  }
+
+  // Abrir uma pergunta fecha as outras do mesmo nível; fechar uma do caminho
+  // traz de volta as alternativas dela. Depois, as caixas novas vêm à vista.
+  function alternar(no) {
+    tudo = false;
+    no.open = !no.open;
+    if (no.open && no.pai) no.pai.kids.forEach(k => { if (k !== no && k.kids) k.open = false; });
+    desenhar();
+    if (no.open) no.kids[0].el.scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 
   /* ---------------------------------------------------------------- formato e ferramentas */
@@ -181,6 +196,7 @@
     const abrir = acao === "abrir";
     tree.querySelectorAll("details").forEach(d => { d.open = abrir; });
     todos.forEach(no => { if (no.kids) no.open = abrir || !no.pai; });
+    tudo = abrir;
     if (vista === "fluxo") desenhar();
   });
 
