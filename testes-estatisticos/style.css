@@ -332,7 +332,9 @@ a {
   color: var(--text);
 }
 
+/* A busca abre a linha, à esquerda; o guia de leitura vem ao lado. */
 .pt-tabela-topo .pt-search {
+  order: -1;
   flex: 0 1 22rem;
 }
 
