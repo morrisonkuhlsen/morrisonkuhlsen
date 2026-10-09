@@ -188,6 +188,10 @@
     grid.style.height = `${Math.max(0, innerHeight - topo - 16)}px`;
   }
   addEventListener("resize", ajustarAltura);
+  // Abrir e fechar a ficha muda a largura da página (ver .ficha-aberta no CSS).
+  document.querySelector(".pt").addEventListener("transitionend", e => {
+    if (e.propertyName === "margin-right") ajustarAltura();
+  });
   ajustarAltura();
   if (document.fonts) document.fonts.ready.then(ajustarAltura);
 
@@ -206,6 +210,7 @@
     });
     ficha.appendChild(ul);
     ficha.classList.remove("is-open");
+    document.body.classList.remove("ficha-aberta");
   }
 
   function sec(parent, title) {
@@ -356,6 +361,7 @@
 
     ficha.replaceChildren(box);
     ficha.classList.add("is-open");
+    document.body.classList.add("ficha-aberta");
   }
 
   // `push` marca uma ação de quem usa a página (e não a leitura do hash): só
