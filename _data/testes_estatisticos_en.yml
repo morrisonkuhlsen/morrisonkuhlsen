@@ -1,0 +1,1036 @@
+# English text for the statistical tests catalog (/en/statistical-tests/).
+#
+# Only the words live here. Position, family, symbol, links between tests and
+# formulas come from _data/testes_estatisticos.yml; _plugins/paginas_testes.rb
+# merges both and fails the build if a test or a field is missing.
+#
+# Per test, keyed by the Portuguese id:
+#   slug     the English URL (/en/statistical-tests/<slug>/)
+#   nome, titulo, quando, h0, pres, reporte, codigo   as in Portuguese
+#   vars     the variant texts only, in the same order as the Portuguese ones
+#   efeito   texto (and tex, when the formula has words in it)
+#   dist, tex   only when the Portuguese one has words to translate
+# In code, `stats` is scipy.stats and `np` is numpy, as in Portuguese.
+
+familias:
+  medias:
+    nome: 'Means'
+    sub: 'parametric'
+    dica: 'Parametric tests assume a model for the data, usually the normal distribution, and compare its parameters, such as the mean. When the assumption holds, they are the most powerful.'
+  postos:
+    nome: 'Ranks'
+    sub: 'nonparametric'
+    dica: 'Nonparametric tests assume no distribution for the data. They replace each value by its rank, its position in order (1st, 2nd, 3rd…), which protects them from extreme values and makes them fit ordinal data.'
+  prop:
+    nome: 'Proportions'
+    sub: 'counts'
+    dica: 'For categorical answers, such as yes or no, hit or miss: the data are how often each category appears, and the test compares proportions.'
+  vari:
+    nome: 'Variances'
+    sub: 'spread'
+    dica: 'They compare how spread out the data are, not the center. Useful on their own, as in quality control, and to check the equal-variance assumption of other tests.'
+  ader:
+    nome: 'Goodness of fit and normality'
+    dica: 'Goodness of fit: do the data follow the expected distribution? Normality tests are the most common case and check an assumption of parametric tests.'
+  assoc:
+    nome: 'Association and correlation'
+    dica: 'Instead of comparing groups, they measure whether two variables move together, and how strongly.'
+  modelos:
+    nome: 'Models and regression'
+    dica: 'Tests run inside a fitted model: whether a coefficient matters, whether the model explains anything and whether the residuals meet the assumptions.'
+  series:
+    nome: 'Time series'
+    dica: 'For observations ordered in time, where neighboring values tend to be correlated: they test stationarity and autocorrelation.'
+linhas:
+  - nome: 'One sample'
+    dica: 'A single group compared with a reference value set in advance, such as a target or a standard.'
+  - nome: 'Two independent samples'
+    dica: 'Two groups of different individuals, unrelated to each other, such as treatment and control.'
+  - nome: 'Two paired samples'
+    dica: 'Two measurements linked in pairs: the same individual before and after, or matched pairs, such as twins. The test uses the difference within each pair.'
+  - nome: 'Three or more independent groups'
+    dica: 'Several groups of different individuals, tested at once: one test per pair would inflate the type I error.'
+  - nome: 'Three or more repeated measures'
+    dica: 'The same individuals measured under three or more conditions or time points: the paired design with more than two measurements.'
+  - nome: 'Multiple comparisons'
+    dica: 'Post hoc tests: after rejecting that all groups are equal, they point out which pairs differ, controlling the error of the whole set of comparisons.'
+
+testes:
+
+  # ------------------------------------------------------------------ means
+  t-uma-amostra:
+    slug: one-sample-t-test
+    nome: 'One-sample t'
+    titulo: 'One-sample t-test'
+    dist: 't(n−1)'
+    quando: 'Compare the mean of a sample with a reference value when the population standard deviation is unknown.'
+    h0: 'The population mean equals the reference value: μ = μ₀.'
+    pres:
+      - 'Independent observations'
+      - 'Approximately normal data, or large n (≳ 30)'
+    efeito:
+      texto: 'Cohen’s d: the difference in standard deviations. Usual benchmarks: 0.2 small, 0.5 medium and 0.8 large.'
+    vars:
+      - 'Z-test, when σ is known'
+      - 'Sign test, without assuming normality'
+    reporte: 't(24) = 2.31, p = .030, d = 0.46'
+    codigo:
+      r: |
+        t.test(x, mu = 50)
+      py: |
+        stats.ttest_1samp(x, popmean=50)
+  t-independente:
+    slug: independent-samples-t-test
+    nome: 'Two-sample t'
+    titulo: 'Independent samples t-test'
+    dist: 't(df)'
+    quando: 'Compare the means of two different groups, such as treatment and control.'
+    h0: 'The two population means are equal: μ₁ = μ₂.'
+    pres:
+      - 'Groups independent of each other'
+      - 'Normality in each group, or large samples'
+    efeito:
+      texto: 'Cohen’s d with the pooled standard deviation; Hedges’ g corrects its bias in small samples.'
+    vars:
+      - 'Welch (above): does not assume equal variances and is the recommended default'
+      - 'Classic Student, with pooled variance, if the variances are equal'
+      - 'Mann-Whitney U, without assuming normality'
+      - 'TOST (two one-sided t-tests), to show equivalence within a margin instead of a difference'
+    reporte: 't(37.8) = 2.15, p = .038, d = 0.68 (Welch)'
+    codigo:
+      r: |
+        t.test(y ~ group, data = df)  # Welch is the default
+      py: |
+        stats.ttest_ind(a, b, equal_var=False)  # Welch
+  t-pareado:
+    slug: paired-t-test
+    nome: 'Paired t'
+    titulo: 'Paired t-test'
+    quando: 'Compare two measurements taken on the same individuals, such as before and after an intervention.'
+    h0: 'The mean of the differences is zero: μ_d = 0.'
+    pres:
+      - 'Pairs independent of each other'
+      - 'Approximately normal differences'
+    efeito:
+      texto: 'd_z, on the scale of the differences.'
+    vars:
+      - 'Wilcoxon signed-rank, without assuming normality'
+    reporte: 't(14) = 3.02, p = .009, d_z = 0.78'
+    codigo:
+      r: |
+        t.test(after, before, paired = TRUE)
+      py: |
+        stats.ttest_rel(after, before)
+  anova:
+    slug: one-way-anova
+    nome: 'One-way ANOVA'
+    titulo: 'One-way ANOVA'
+    quando: 'Compare the means of three or more independent groups at once, without inflating the type I error with several t-tests.'
+    h0: 'All means are equal: μ₁ = μ₂ = … = μₖ.'
+    pres:
+      - 'Independent groups'
+      - 'Normal residuals'
+      - 'Equal variances (check with Levene)'
+    tex: 'F = \dfrac{MS_{\text{between}}}{MS_{\text{within}}}'
+    efeito:
+      texto: 'η²: the share of the total variation explained by the groups. ω² is less biased. Benchmarks: 0.01, 0.06 and 0.14.'
+      tex: '\eta^2 = \dfrac{SS_{\text{between}}}{SS_{\text{total}}}'
+    vars:
+      - 'Welch’s ANOVA, when the variances differ'
+      - 'Kruskal-Wallis, without assuming normality'
+      - 'After rejecting H₀'
+      - 'With two factors and their interaction'
+    reporte: 'F(2, 42) = 4.87, p = .013, η² = .19'
+    codigo:
+      r: |
+        summary(aov(y ~ group, data = df))
+      py: |
+        stats.f_oneway(a, b, c)
+  anova-mr:
+    slug: repeated-measures-anova
+    nome: 'Repeated measures ANOVA'
+    titulo: 'Repeated measures ANOVA'
+    quando: 'Compare three or more conditions measured on the same individuals, such as several time points in a follow-up.'
+    h0: 'The means of all conditions are equal.'
+    pres:
+      - 'Normal residuals'
+      - 'Sphericity (check with Mauchly)'
+    tex: 'F = \dfrac{MS_{\text{conditions}}}{MS_{\text{error}}}'
+    efeito:
+      texto: 'Partial η²: the variation due to conditions relative to itself plus the error.'
+      tex: '\eta^2_p = \dfrac{SS_{\text{conditions}}}{SS_{\text{conditions}} + SS_{\text{error}}}'
+    vars:
+      - 'Greenhouse-Geisser or Huynh-Feldt corrections, if sphericity fails'
+      - 'Friedman, without assuming normality'
+      - 'Mauchly’s sphericity, to check the assumption'
+    reporte: 'F(2, 38) = 6.12, p = .005, η²p = .24 (with the Greenhouse-Geisser correction, report the corrected df)'
+    codigo:
+      r: |
+        library(afex)
+        aov_ez("id", "y", df, within = "time")
+      py: |
+        from statsmodels.stats.anova import AnovaRM
+        AnovaRM(df, "y", "id", within=["time"]).fit()
+  tukey:
+    slug: tukey-hsd
+    nome: 'Tukey HSD'
+    titulo: 'Tukey’s HSD test'
+    dist: 'q (studentized range)'
+    quando: 'After a significant ANOVA, find out which pairs of groups differ, controlling the error of the whole set of comparisons.'
+    h0: 'For each pair: μᵢ = μⱼ.'
+    pres:
+      - 'The same as the ANOVA'
+      - 'Groups of similar size (Tukey-Kramer adjusts for unequal ones)'
+    tex: 'q = \dfrac{\bar{x}_i - \bar{x}_j}{\sqrt{MS_{\text{within}} / n}}'
+    efeito:
+      texto: 'Cohen’s d for each pair, with the standard deviation estimated by the ANOVA.'
+      tex: 'd_{ij} = \dfrac{\bar{x}_i - \bar{x}_j}{\sqrt{MS_{\text{within}}}}'
+    vars:
+      - 'Games-Howell, with unequal variances'
+      - 'Dunnett, comparing every group against a control'
+      - 'Bonferroni, more conservative and general'
+    reporte: 'B − A = 4.2, 95% CI [1.1, 7.3], adjusted p = .006'
+    codigo:
+      r: |
+        TukeyHSD(aov(y ~ group, data = df))
+      py: |
+        from statsmodels.stats.multicomp import pairwise_tukeyhsd
+        pairwise_tukeyhsd(df["y"], df["group"])
+
+  # ------------------------------------------------------------------ ranks
+  sinal:
+    slug: sign-test
+    nome: 'Sign test'
+    titulo: 'Sign test'
+    quando: 'Test the median of a sample without assuming anything about the shape of the distribution; it only uses whether each value is above or below.'
+    h0: 'The population median equals m₀.'
+    pres:
+      - 'Independent observations'
+      - 'At least ordinal variable'
+    efeito:
+      texto: 'Cohen’s g: how far the proportion of positive signs is from ½.'
+    vars:
+      - 'Wilcoxon signed-rank, more powerful if the distribution is symmetric'
+    reporte: '15 of 20 above the reference value, sign test p = .041'
+    codigo:
+      r: |
+        binom.test(sum(x > m0), sum(x != m0), p = 0.5)
+      py: |
+        stats.binomtest(int((x > m0).sum()), int((x != m0).sum()), p=0.5)
+  mann-whitney:
+    slug: mann-whitney-u-test
+    nome: 'Mann-Whitney U'
+    titulo: 'Mann-Whitney U test'
+    dist: 'U (normal for large n)'
+    quando: 'Compare two independent groups when the data are not normal, have extreme values or are ordinal.'
+    h0: 'A value drawn from one group is equally likely to be larger or smaller than one from the other.'
+    pres:
+      - 'Independent groups'
+      - 'At least ordinal variable'
+    efeito:
+      texto: 'r, from the z of the normal approximation (N is the total of both samples); the rank-biserial correlation is another option.'
+    vars:
+      - 'Also called the Wilcoxon rank-sum test'
+      - 'Parametric version'
+    reporte: 'U = 112, z = −2.38, p = .017, r = .38'
+    codigo:
+      r: |
+        wilcox.test(y ~ group, data = df)
+      py: |
+        stats.mannwhitneyu(a, b, alternative="two-sided")
+  wilcoxon:
+    slug: wilcoxon-signed-rank-test
+    nome: 'Wilcoxon signed-rank'
+    titulo: 'Wilcoxon signed-rank test'
+    dist: 'W (normal for large n)'
+    quando: 'Compare two paired measurements without assuming the differences are normal.'
+    h0: 'The distribution of the differences is symmetric around zero.'
+    pres:
+      - 'Independent pairs'
+      - 'Symmetric distribution of the differences'
+    tex: 'W = \sum_{d_i > 0} \operatorname{rank}(|d_i|)'
+    efeito:
+      texto: 'r, from the z of the normal approximation (n is the number of pairs).'
+    vars:
+      - 'Sign test, if not even symmetry is reasonable'
+      - 'Parametric version'
+    reporte: 'V = 21, z = −2.21, p = .027, r = .57'
+    codigo:
+      r: |
+        wilcox.test(after, before, paired = TRUE)
+      py: |
+        stats.wilcoxon(after, before)
+  kruskal-wallis:
+    slug: kruskal-wallis-test
+    nome: 'Kruskal-Wallis'
+    titulo: 'Kruskal-Wallis test'
+    quando: 'Compare three or more independent groups without assuming normality: it is the ANOVA done on ranks.'
+    h0: 'All groups come from the same distribution.'
+    pres:
+      - 'Independent groups'
+      - 'At least ordinal variable'
+    efeito:
+      texto: 'ε²: the rank version of η².'
+    vars:
+      - 'After rejecting H₀'
+      - 'Parametric version'
+    reporte: 'H(2) = 8.43, p = .015, ε² = .19'
+    codigo:
+      r: |
+        kruskal.test(y ~ group, data = df)
+      py: |
+        stats.kruskal(a, b, c)
+  friedman:
+    slug: friedman-test
+    nome: 'Friedman'
+    titulo: 'Friedman test'
+    quando: 'Compare three or more conditions measured on the same individuals without assuming normality.'
+    h0: 'The conditions have the same distribution.'
+    pres:
+      - 'Independent blocks (individuals)'
+      - 'At least ordinal variable'
+    efeito:
+      texto: 'Kendall’s W: the agreement among blocks, from 0 to 1.'
+    vars:
+      - 'Nemenyi or Conover post hoc test'
+      - 'Parametric version'
+    reporte: 'χ²F(2) = 9.10, p = .011, Kendall’s W = .23'
+    codigo:
+      r: |
+        friedman.test(y ~ time | id, data = df)
+      py: |
+        stats.friedmanchisquare(t1, t2, t3)
+  dunn:
+    slug: dunn-test
+    nome: 'Dunn’s test'
+    titulo: 'Dunn’s test'
+    quando: 'After a significant Kruskal-Wallis, find out which pairs of groups differ.'
+    h0: 'For each pair, the mean ranks are equal.'
+    pres:
+      - 'The same as Kruskal-Wallis'
+    efeito:
+      texto: 'r for each pair, from the z of the test.'
+    vars:
+      - 'Adjust the p-values of the comparisons (Bonferroni, Holm)'
+      - 'Conover-Iman, slightly more powerful'
+    reporte: 'B − A: z = 2.74, Holm-adjusted p = .018'
+    codigo:
+      r: |
+        library(FSA)
+        dunnTest(y ~ group, data = df, method = "holm")
+      py: |
+        import scikit_posthocs as sp
+        sp.posthoc_dunn(df, val_col="y", group_col="group", p_adjust="holm")
+
+  # ------------------------------------------------------------------ proportions
+  binomial:
+    slug: binomial-test
+    nome: 'Binomial / one-proportion Z'
+    titulo: 'Binomial test and one-proportion Z-test'
+    dist: 'Binomial or N(0, 1)'
+    quando: 'Compare the proportion in a sample with a reference value, such as a pass rate against 50%.'
+    h0: 'The population proportion is p₀.'
+    pres:
+      - 'Independent observations'
+      - 'For the Z-test: np₀ and n(1 − p₀) at least 10; otherwise, use the exact binomial'
+    efeito:
+      texto: 'Cohen’s h: the difference between the proportions on the arcsine scale. Benchmarks: 0.2, 0.5 and 0.8.'
+    vars:
+      - 'Exact binomial test, for small samples'
+    reporte: '62 of 100 (62%), binomial test against 50%, p = .021, h = 0.24'
+    codigo:
+      r: |
+        binom.test(62, 100, p = 0.5)  # exact; prop.test() does the Z-test
+      py: |
+        stats.binomtest(62, 100, p=0.5)
+  z-duas-proporcoes:
+    slug: two-proportion-z-test
+    nome: 'Two-proportion Z'
+    titulo: 'Two-proportion Z-test'
+    quando: 'Compare the success rate of two independent groups, such as the conversion of two versions of a web page.'
+    h0: 'The two proportions are equal: p₁ = p₂.'
+    pres:
+      - 'Independent groups'
+      - 'At least 5 to 10 successes and failures in each group'
+    efeito:
+      texto: 'Cohen’s h; the difference in proportions, the relative risk and the odds ratio are also reported.'
+    vars:
+      - 'Chi-square of independence, equivalent in a 2 × 2 table'
+      - 'Fisher’s exact test, with small counts'
+    reporte: '45% vs. 30%, z = 2.19, p = .029, h = 0.31'
+    codigo:
+      r: |
+        prop.test(c(45, 30), c(100, 100), correct = FALSE)
+      py: |
+        from statsmodels.stats.proportion import proportions_ztest
+        proportions_ztest([45, 30], [100, 100])
+  mcnemar:
+    slug: mcnemar-test
+    nome: 'McNemar'
+    titulo: 'McNemar’s test'
+    quando: 'Compare a proportion measured twice on the same individuals, such as opinion before and after a campaign.'
+    h0: 'The proportion did not change: switches in one direction and the other are equally likely.'
+    pres:
+      - 'Paired binary response'
+      - 'b + c not too small (otherwise, the exact version)'
+    efeito:
+      texto: 'Paired odds ratio: how many times one switch is more common than the other.'
+    vars:
+      - 'Exact binomial version, for small b + c'
+    reporte: 'b = 18, c = 6, χ²(1) = 6.00, p = .014, OR = 3.0'
+    codigo:
+      r: |
+        mcnemar.test(table, correct = FALSE)
+      py: |
+        from statsmodels.stats.contingency_tables import mcnemar
+        mcnemar(table, exact=False, correction=False)
+  qui-quadrado-homogeneidade:
+    slug: chi-square-test-of-homogeneity
+    nome: 'Chi-square of homogeneity'
+    titulo: 'Chi-square test of homogeneity'
+    quando: 'Compare the distribution of a categorical variable across three or more independent groups.'
+    h0: 'The proportion of each category is the same in every group.'
+    pres:
+      - 'Independent observations'
+      - 'Expected frequencies of at least 5'
+    efeito:
+      texto: 'Cramér’s V, from 0 to 1.'
+    vars:
+      - 'Chi-square of independence, which uses the same computation'
+      - 'After rejecting H₀'
+    reporte: 'χ²(4, N = 300) = 11.2, p = .024, V = .14'
+    codigo:
+      r: |
+        chisq.test(table)
+      py: |
+        stats.chi2_contingency(table)
+  cochran-q:
+    slug: cochran-q-test
+    nome: 'Cochran’s Q'
+    titulo: 'Cochran’s Q test'
+    quando: 'Compare a proportion measured under three or more conditions on the same individuals, such as passes in several exams.'
+    h0: 'The success rate is the same under all conditions.'
+    pres:
+      - 'Binary response'
+      - 'Independent blocks (individuals)'
+    vars:
+      - 'McNemar, the case with two conditions'
+    reporte: 'Q(2) = 7.6, p = .022'
+    codigo:
+      r: |
+        library(rstatix)
+        cochran_qtest(df, response ~ condition | id)
+      py: |
+        from statsmodels.stats.contingency_tables import cochrans_q
+        cochrans_q(matrix)  # rows = individuals, columns = conditions
+  marascuilo:
+    slug: marascuilo-procedure
+    nome: 'Marascuilo'
+    titulo: 'Marascuilo procedure'
+    quando: 'After a significant chi-square test of homogeneity across three or more groups, find out which pairs of proportions differ.'
+    h0: 'For each pair: pᵢ = pⱼ.'
+    pres:
+      - 'The same as the chi-square test of homogeneity'
+      - 'Binary response in each group'
+    vars:
+      - 'With repeated measures, pairwise McNemar with adjusted p-values'
+    reporte: 'A − C: |0.42 − 0.25| = 0.17, above the critical value of 0.15: they differ at 5%'
+    codigo:
+      r: |
+        # no standard function: compare each |p[i] - p[j]| with
+        sqrt(qchisq(0.95, k - 1)) * sqrt(p[i]*(1-p[i])/n[i] + p[j]*(1-p[j])/n[j])
+      py: |
+        # no standard function: compare each |p[i] - p[j]| with
+        np.sqrt(stats.chi2.ppf(0.95, k - 1)) * np.sqrt(p[i]*(1-p[i])/n[i] + p[j]*(1-p[j])/n[j])
+
+  # ------------------------------------------------------------------ variances
+  qui-quadrado-variancia:
+    slug: chi-square-test-for-variance
+    nome: 'Chi-square for one variance'
+    titulo: 'Chi-square test for one variance'
+    quando: 'Test whether the variance of a process is at the specified value, as in quality control.'
+    h0: 'The population variance is σ₀².'
+    pres:
+      - 'Normal data: the test is very sensitive to departures from normality'
+    vars: []
+    reporte: 'χ²(24) = 38.9, p = .056'
+    codigo:
+      r: |
+        library(EnvStats)
+        varTest(x, sigma.squared = 4)
+      py: |
+        q = (len(x) - 1) * x.var(ddof=1) / 4
+        p = 2 * min(stats.chi2.cdf(q, len(x) - 1), stats.chi2.sf(q, len(x) - 1))
+  f-variancias:
+    slug: f-test-for-variances
+    nome: 'F for two variances'
+    titulo: 'F-test for two variances'
+    quando: 'Compare the spread of two independent groups.'
+    h0: 'The variances are equal: σ₁² = σ₂².'
+    pres:
+      - 'Independent groups'
+      - 'Normal data (fragile without it)'
+    vars:
+      - 'Levene, robust to non-normality'
+      - 'Pitman-Morgan, with paired samples'
+    reporte: 'F(15, 20) = 2.22, p = .097'
+    codigo:
+      r: |
+        var.test(a, b)
+      py: |
+        f = a.var(ddof=1) / b.var(ddof=1)
+        p = 2 * min(stats.f.cdf(f, len(a) - 1, len(b) - 1), stats.f.sf(f, len(a) - 1, len(b) - 1))
+  pitman-morgan:
+    slug: pitman-morgan-test
+    nome: 'Pitman-Morgan'
+    titulo: 'Pitman-Morgan test'
+    quando: 'Compare the variances of two paired measurements, such as the precision of two instruments applied to the same samples.'
+    h0: 'The two variances are equal: σ₁² = σ₂².'
+    pres:
+      - 'Pairs independent of each other'
+      - 'Bivariate normality'
+    vars:
+      - 'F for two variances, with independent samples'
+    reporte: 'r(D, S) = .48, t(18) = 2.32, p = .032'
+    codigo:
+      r: |
+        cor.test(x - y, x + y)
+      py: |
+        stats.pearsonr(x - y, x + y)
+  levene:
+    slug: levene-test
+    nome: 'Levene'
+    titulo: 'Levene’s test'
+    quando: 'Check whether two or more groups have the same variance, for example before an ANOVA.'
+    h0: 'All variances are equal.'
+    pres:
+      - 'Independent groups'
+    vars:
+      - 'Brown-Forsythe, with deviations from the median (more robust)'
+      - 'Bartlett, more powerful but requires normality'
+    reporte: 'F(2, 42) = 1.36, p = .27'
+    codigo:
+      r: |
+        library(car)
+        leveneTest(y ~ group, data = df, center = mean)  # center = median is Brown-Forsythe
+      py: |
+        stats.levene(a, b, c, center="mean")  # "median" is Brown-Forsythe
+  mauchly:
+    slug: mauchly-sphericity-test
+    nome: 'Mauchly’s sphericity'
+    titulo: 'Mauchly’s test of sphericity'
+    quando: 'Check sphericity before a repeated measures ANOVA: the variances of the differences between conditions must be equal.'
+    h0: 'The covariance matrix is spherical.'
+    pres:
+      - 'Multivariate normality'
+      - 'At least three conditions'
+    vars:
+      - 'Repeated measures ANOVA, with the Greenhouse-Geisser or Huynh-Feldt correction if sphericity fails'
+    reporte: 'W = 0.71, χ²(2) = 6.2, p = .045, Greenhouse-Geisser ε = 0.78'
+    codigo:
+      r: |
+        library(afex)
+        summary(aov_ez("id", "y", df, within = "time"))  # includes Mauchly's test
+      py: |
+        import pingouin as pg
+        pg.sphericity(df, dv="y", subject="id", within="time")
+
+  # ------------------------------------------------------------------ goodness of fit and normality
+  shapiro-wilk:
+    slug: shapiro-wilk-test
+    nome: 'Shapiro-Wilk'
+    titulo: 'Shapiro-Wilk test'
+    dist: 'W (tabulated)'
+    quando: 'Check whether a sample comes from a normal distribution; it is the most powerful normality test for small and medium samples.'
+    h0: 'The data come from a normal distribution.'
+    pres:
+      - 'Independent observations'
+      - 'With very large n, it rejects irrelevant departures: look at the Q-Q plot too'
+    vars: []
+    reporte: 'W = 0.96, p = .31'
+    codigo:
+      r: |
+        shapiro.test(x)
+      py: |
+        stats.shapiro(x)
+  kolmogorov-smirnov:
+    slug: kolmogorov-smirnov-test
+    nome: 'Kolmogorov-Smirnov'
+    titulo: 'Kolmogorov-Smirnov test'
+    quando: 'Compare a sample with a fully specified theoretical distribution.'
+    h0: 'The data follow the distribution F₀.'
+    pres:
+      - 'F₀ continuous, with parameters known in advance'
+    vars:
+      - 'Lilliefors, when the parameters are estimated from the data'
+      - 'Two-sample version, which compares the two empirical distributions: D = sup |F₁(x) − F₂(x)|'
+    reporte: 'D = 0.12, p = .43'
+    codigo:
+      r: |
+        ks.test(x, "pnorm", mean = 0, sd = 1)
+      py: |
+        stats.kstest(x, "norm", args=(0, 1))
+  anderson-darling:
+    slug: anderson-darling-test
+    nome: 'Anderson-Darling'
+    titulo: 'Anderson-Darling test'
+    dist: 'A² (tabulated)'
+    quando: 'Test goodness of fit to a distribution, giving more weight to the tails than Kolmogorov-Smirnov.'
+    h0: 'The data follow the distribution F.'
+    pres:
+      - 'Independent observations'
+    vars: []
+    reporte: 'A² = 0.52, p = .18'
+    codigo:
+      r: |
+        library(nortest)
+        ad.test(x)
+      py: |
+        stats.anderson(x, dist="norm")  # returns critical values, not the p-value
+  qui-quadrado-aderencia:
+    slug: chi-square-goodness-of-fit-test
+    nome: 'Chi-square goodness of fit'
+    titulo: 'Chi-square goodness-of-fit test'
+    quando: 'Check whether the observed frequencies in categories match the ones a theory expects, such as a fair die.'
+    h0: 'The category proportions are the specified ones.'
+    pres:
+      - 'Independent observations'
+      - 'Expected frequencies of at least 5'
+    vars: []
+    reporte: 'χ²(5, N = 120) = 4.8, p = .44'
+    codigo:
+      r: |
+        chisq.test(observed, p = expected_proportions)
+      py: |
+        stats.chisquare(observed, f_exp=expected)
+  jarque-bera:
+    slug: jarque-bera-test
+    nome: 'Jarque-Bera'
+    titulo: 'Jarque-Bera test'
+    quando: 'Test normality through skewness and kurtosis; common in econometrics, with large samples.'
+    h0: 'Zero skewness and kurtosis of 3, as in the normal.'
+    pres:
+      - 'Large samples: in small samples the test is unreliable'
+    vars: []
+    reporte: 'JB = 3.1, p = .21'
+    codigo:
+      r: |
+        library(tseries)
+        jarque.bera.test(x)
+      py: |
+        stats.jarque_bera(x)
+  lilliefors:
+    slug: lilliefors-test
+    nome: 'Lilliefors'
+    titulo: 'Lilliefors test'
+    quando: 'Test normality when the mean and standard deviation are estimated from the sample itself.'
+    h0: 'The data come from some normal distribution.'
+    pres:
+      - 'Independent observations'
+    vars:
+      - 'Kolmogorov-Smirnov with corrected critical values'
+    reporte: 'D = 0.09, p = .38'
+    codigo:
+      r: |
+        library(nortest)
+        lillie.test(x)
+      py: |
+        from statsmodels.stats.diagnostic import lilliefors
+        lilliefors(x)
+  grubbs:
+    slug: grubbs-test
+    nome: 'Grubbs'
+    titulo: 'Grubbs’ test'
+    dist: 'G (critical value via t)'
+    quando: 'Check whether the most extreme value in a sample is an outlier, that is, too far away to come from the same normal distribution as the others.'
+    h0: 'There is no outlier: all values come from the same normal distribution.'
+    pres:
+      - 'Normal data, apart from the possible outlier'
+      - 'It looks for one outlier at a time: repeating the test after removing one inflates the type I error'
+    vars:
+      - 'Dixon’s Q, for very small samples'
+      - 'Rosner’s generalized ESD, to look for several outliers at once'
+    reporte: 'G = 2.91, n = 20, p = .017: the largest value is an outlier'
+    codigo:
+      r: |
+        library(outliers)
+        grubbs.test(x)
+      py: |
+        n = len(x)
+        G = np.abs(x - x.mean()).max() / x.std(ddof=1)
+        t = stats.t.ppf(1 - 0.05 / (2 * n), n - 2)
+        G_crit = (n - 1) / np.sqrt(n) * np.sqrt(t**2 / (n - 2 + t**2))
+
+  # ------------------------------------------------------------------ association and correlation
+  pearson:
+    slug: pearson-correlation
+    nome: 'Pearson correlation'
+    titulo: 'Pearson correlation'
+    quando: 'Measure and test the linear relationship between two quantitative variables.'
+    h0: 'There is no linear correlation: ρ = 0.'
+    pres:
+      - 'Linear relationship'
+      - 'Bivariate normality (for the test)'
+      - 'No influential extreme values'
+    efeito:
+      texto: 'r itself; r² is the share of the variance of one variable explained by the other.'
+    vars:
+      - 'Spearman correlation, for monotonic relationships or ordinal data'
+    reporte: 'r(28) = .42, p = .021'
+    codigo:
+      r: |
+        cor.test(x, y)
+      py: |
+        stats.pearsonr(x, y)
+  spearman:
+    slug: spearman-correlation
+    nome: 'Spearman correlation'
+    titulo: 'Spearman correlation'
+    dist: 't(n−2) approx.'
+    quando: 'Measure the monotonic relationship between two variables, even if non-linear or ordinal: it is Pearson computed on ranks.'
+    h0: 'There is no monotonic association.'
+    pres:
+      - 'At least ordinal variables'
+      - 'Independent pairs'
+    efeito:
+      texto: 'ρ itself.'
+    vars:
+      - 'Kendall’s tau, more stable with small samples and ties'
+    reporte: 'ρ = .51, n = 30, p = .004'
+    codigo:
+      r: |
+        cor.test(x, y, method = "spearman")
+      py: |
+        stats.spearmanr(x, y)
+  kendall:
+    slug: kendall-tau
+    nome: 'Kendall’s tau'
+    titulo: 'Kendall’s tau'
+    dist: 'N(0, 1) approx.'
+    quando: 'Measure the agreement in order between two variables, counting concordant and discordant pairs.'
+    h0: 'There is no association: τ = 0.'
+    pres:
+      - 'At least ordinal variables'
+    efeito:
+      texto: 'τ itself.'
+    vars:
+      - 'Tau-b, which corrects for ties in the denominator and is what most software computes'
+    reporte: 'τ = .33, n = 30, p = .010'
+    codigo:
+      r: |
+        cor.test(x, y, method = "kendall")
+      py: |
+        stats.kendalltau(x, y)
+  qui-quadrado-independencia:
+    slug: chi-square-test-of-independence
+    nome: 'Chi-square of independence'
+    titulo: 'Chi-square test of independence'
+    quando: 'Check whether two categorical variables are associated, in a contingency table.'
+    h0: 'The two variables are independent.'
+    pres:
+      - 'Independent observations'
+      - 'Expected frequencies of at least 5'
+    efeito:
+      texto: 'Cramér’s V, from 0 to 1; in a 2 × 2 table, it is φ.'
+    vars:
+      - 'Fisher’s exact test, for 2 × 2 tables with small counts'
+      - 'Cramér’s V, to measure the strength of the association'
+    reporte: 'χ²(2, N = 200) = 7.4, p = .025, V = .19'
+    codigo:
+      r: |
+        chisq.test(table(df$a, df$b))
+      py: |
+        stats.chi2_contingency(pd.crosstab(df["a"], df["b"]))
+  fisher:
+    slug: fisher-exact-test
+    nome: 'Fisher’s exact'
+    titulo: 'Fisher’s exact test'
+    dist: 'Hypergeometric'
+    quando: 'Test association in a 2 × 2 table with small counts, where the chi-square test does not hold.'
+    h0: 'The two variables are independent.'
+    pres:
+      - 'Fixed margin totals (or treated as fixed): the p-value adds up the tables with those margins that are as likely as the observed one or less'
+    efeito:
+      texto: 'Odds ratio of the 2 × 2 table.'
+    vars:
+      - 'Chi-square of independence, with larger counts'
+    reporte: 'OR = 6.4, p = .028 (Fisher’s exact test, two-sided)'
+    codigo:
+      r: |
+        fisher.test(table)
+      py: |
+        stats.fisher_exact(table)
+  ponto-bisserial:
+    slug: point-biserial-correlation
+    nome: 'Point-biserial correlation'
+    titulo: 'Point-biserial correlation'
+    quando: 'Measure the relationship between a binary and a quantitative variable; it is equivalent to the two-sample t-test.'
+    h0: 'There is no correlation.'
+    pres:
+      - 'Quantitative variable normal in each group'
+    efeito:
+      texto: 'r_pb itself.'
+    vars:
+      - 'Equivalent test'
+    reporte: 'r_pb(38) = .33, p = .038'
+    codigo:
+      r: |
+        cor.test(y, as.numeric(group == "B"))
+      py: |
+        stats.pointbiserialr(binary, y)
+  kappa:
+    slug: cohens-kappa
+    nome: 'Cohen’s kappa'
+    titulo: 'Cohen’s kappa'
+    dist: 'N(0, 1) approx.'
+    quando: 'Measure the agreement between two raters who classify the same items into categories, discounting the agreement expected by chance.'
+    h0: 'The agreement is only that of chance: κ = 0.'
+    pres:
+      - 'The same items classified by both raters'
+      - 'Fixed, mutually exclusive categories'
+      - 'Ratings independent of each other'
+    efeito:
+      texto: 'κ itself. By the Landis and Koch benchmark, above 0.6 is substantial agreement and above 0.8, almost perfect.'
+    vars:
+      - 'Weighted kappa, for ordinal categories'
+      - 'Fleiss’ kappa, for more than two raters'
+    reporte: 'κ = .68, 95% CI [.52, .84]: substantial agreement'
+    codigo:
+      r: |
+        library(irr)
+        kappa2(df[, c("rater1", "rater2")])
+      py: |
+        from sklearn.metrics import cohen_kappa_score
+        cohen_kappa_score(rater1, rater2)
+
+  # ------------------------------------------------------------------ models and regression
+  t-coeficiente:
+    slug: regression-coefficient-t-test
+    nome: 't for a coefficient'
+    titulo: 't-test for a regression coefficient'
+    quando: 'Test whether an explanatory variable has an effect in a regression, holding the others fixed.'
+    h0: 'The coefficient is zero: βⱼ = 0.'
+    pres:
+      - 'Independent, normal residuals with constant variance'
+    tex: 't = \dfrac{\hat{\beta}_j}{SE(\hat{\beta}_j)}'
+    efeito:
+      texto: 'Standardized coefficient: the effect in standard deviations of y per standard deviation of x.'
+    vars:
+      - 'Wald, the version for generalized models'
+    reporte: 'b = 1.85, SE = 0.62, t(47) = 2.98, p = .005'
+    codigo:
+      r: |
+        summary(lm(y ~ x1 + x2, data = df))
+      py: |
+        import statsmodels.formula.api as smf
+        smf.ols("y ~ x1 + x2", data=df).fit().summary()
+  f-global:
+    slug: regression-f-test
+    nome: 'Overall regression F'
+    titulo: 'Overall F-test of a regression'
+    quando: 'Test whether the regression model as a whole explains anything, or whether all coefficients may be zero.'
+    h0: 'All coefficients (except the intercept) are zero.'
+    pres:
+      - 'The same as linear regression'
+    efeito:
+      texto: 'Cohen’s f². Benchmarks: 0.02, 0.15 and 0.35.'
+    vars:
+      - 'Partial F, to compare nested models'
+    reporte: 'F(2, 47) = 9.4, p < .001, R² = .29'
+    codigo:
+      r: |
+        summary(lm(y ~ x1 + x2, data = df))  # the F is on the last line
+      py: |
+        import statsmodels.formula.api as smf
+        m = smf.ols("y ~ x1 + x2", data=df).fit()
+        m.fvalue, m.f_pvalue
+  anova-dois-fatores:
+    slug: two-way-anova
+    nome: 'Two-way ANOVA'
+    titulo: 'Two-way ANOVA'
+    quando: 'Assess at once the effect of two factors on a numeric response, and whether they interact, such as dose and sex in a trial.'
+    h0: 'For each factor, the level means are equal; for the interaction, the effect of one factor does not depend on the level of the other.'
+    pres:
+      - 'Independent observations'
+      - 'Normal residuals'
+      - 'Equal variances across cells'
+    tex: 'F_A = \dfrac{MS_A}{MS_{\text{error}}}, \quad F_B = \dfrac{MS_B}{MS_{\text{error}}}, \quad F_{AB} = \dfrac{MS_{AB}}{MS_{\text{error}}}'
+    efeito:
+      texto: 'Partial η² of each effect: factor A, factor B and the interaction.'
+      tex: '\eta^2_p = \dfrac{SS_A}{SS_A + SS_{\text{error}}}'
+    vars:
+      - 'One-way ANOVA, with a single factor'
+      - 'ANCOVA, when there is also a numeric covariate'
+    reporte: 'Dose: F(2, 54) = 7.9, p = .001, η²p = .23. Interaction: F(2, 54) = 1.1, p = .34'
+    codigo:
+      r: |
+        summary(aov(y ~ dose * sex, data = df))
+      py: |
+        import statsmodels.api as sm
+        import statsmodels.formula.api as smf
+        m = smf.ols("y ~ C(dose) * C(sex)", data=df).fit()
+        sm.stats.anova_lm(m, typ=2)
+  razao-verossimilhanca:
+    slug: likelihood-ratio-test
+    nome: 'Likelihood ratio'
+    titulo: 'Likelihood ratio test'
+    dist: 'χ²(df)'
+    quando: 'Compare two nested models fitted by maximum likelihood, as in a logistic regression.'
+    h0: 'The smaller model is enough.'
+    pres:
+      - 'Nested models'
+      - 'Large sample'
+    tex: 'G^2 = 2\left(\ell_{\text{full}} - \ell_{\text{reduced}}\right)'
+    efeito:
+      texto: 'McFadden’s pseudo-R², compared with the intercept-only model.'
+      tex: 'R^2_{\text{McF}} = 1 - \dfrac{\ell_{\text{full}}}{\ell_{\text{null}}}'
+    vars:
+      - 'Wald and score, approximations of the same test'
+    reporte: 'G²(2) = 9.8, p = .007'
+    codigo:
+      r: |
+        anova(reduced, full, test = "LRT")
+      py: |
+        G2 = 2 * (full.llf - reduced.llf)
+        p = stats.chi2.sf(G2, full.df_model - reduced.df_model)
+  wald:
+    slug: wald-test
+    nome: 'Wald'
+    titulo: 'Wald test'
+    dist: 'χ²(1) or N(0, 1)'
+    quando: 'Test a coefficient of a model fitted by maximum likelihood using only the full model.'
+    h0: 'The coefficient is zero.'
+    pres:
+      - 'Large sample'
+      - 'May fail with perfect separation in logistic regression'
+    tex: 'W = \left(\dfrac{\hat{\beta}}{SE(\hat{\beta})}\right)^2'
+    efeito:
+      texto: 'In logistic regression, the odds ratio of the coefficient.'
+    vars:
+      - 'Likelihood ratio, more reliable'
+    reporte: 'b = 0.74, SE = 0.29, z = 2.55, p = .011, OR = 2.10'
+    codigo:
+      r: |
+        summary(glm(y ~ x, family = binomial, data = df))
+      py: |
+        import statsmodels.formula.api as smf
+        smf.logit("y ~ x", data=df).fit().summary()
+  hosmer-lemeshow:
+    slug: hosmer-lemeshow-test
+    nome: 'Hosmer-Lemeshow'
+    titulo: 'Hosmer-Lemeshow test'
+    quando: 'Check whether the probabilities predicted by a logistic regression match the observed frequencies, grouping the cases by risk band.'
+    h0: 'The model fits well: observed and predicted frequencies agree.'
+    pres:
+      - 'Large sample'
+      - 'The result depends on the number of groups g, usually 10'
+    vars:
+      - 'Likelihood ratio, to compare nested models'
+    reporte: 'χ²(8) = 6.3, p = .61: no evidence of poor fit'
+    codigo:
+      r: |
+        library(ResourceSelection)
+        hoslem.test(model$y, fitted(model), g = 10)
+      py: |
+        # not in statsmodels: group by deciles of p_hat
+        g = pd.qcut(p_hat, 10, labels=False)
+        t = pd.DataFrame({"y": y, "p": p_hat, "g": g}).groupby("g").agg(o=("y", "sum"), e=("p", "sum"), n=("y", "size"))
+        HL = ((t.o - t.e)**2 / (t.e * (1 - t.e / t.n))).sum()
+        p = stats.chi2.sf(HL, 10 - 2)
+  durbin-watson:
+    slug: durbin-watson-test
+    nome: 'Durbin-Watson'
+    titulo: 'Durbin-Watson test'
+    dist: 'd (tabulated)'
+    quando: 'Check for first-order autocorrelation in the residuals of a regression, common with data over time.'
+    h0: 'The residuals have no autocorrelation.'
+    pres:
+      - 'Regression with an intercept'
+      - 'No lagged response among the explanatory variables'
+    vars:
+      - 'Breusch-Godfrey, for higher lags'
+      - 'Ljung-Box, on the residuals of time series'
+    reporte: 'd = 1.32, p = .004'
+    codigo:
+      r: |
+        library(lmtest)
+        dwtest(model)
+      py: |
+        from statsmodels.stats.stattools import durbin_watson
+        durbin_watson(model.resid)  # the statistic only, no p-value
+  breusch-pagan:
+    slug: breusch-pagan-test
+    nome: 'Breusch-Pagan'
+    titulo: 'Breusch-Pagan test'
+    quando: 'Check whether the variance of the residuals of a regression is constant (homoscedasticity).'
+    h0: 'The residuals are homoscedastic.'
+    pres:
+      - 'Approximately normal residuals'
+    vars:
+      - 'White, without assuming a form for the heteroscedasticity'
+    reporte: 'BP(2) = 8.9, p = .012'
+    codigo:
+      r: |
+        library(lmtest)
+        bptest(model)
+      py: |
+        from statsmodels.stats.diagnostic import het_breuschpagan
+        het_breuschpagan(model.resid, model.model.exog)
+
+  # ------------------------------------------------------------------ time series
+  dickey-fuller:
+    slug: augmented-dickey-fuller-test
+    nome: 'Augmented Dickey-Fuller'
+    titulo: 'Augmented Dickey-Fuller test (ADF)'
+    quando: 'Check whether a time series has a unit root, that is, whether it is non-stationary.'
+    h0: 'The series has a unit root (it is not stationary).'
+    pres:
+      - 'Choose the number of lags carefully'
+      - 'State whether there is a constant and a trend'
+    tex: '\Delta y_t = \alpha + \gamma\, y_{t-1} + \sum_i \delta_i\, \Delta y_{t-i} + \varepsilon_t, \qquad \tau = \dfrac{\hat{\gamma}}{SE(\hat{\gamma})}'
+    vars:
+      - 'KPSS, with the null hypothesis reversed'
+    reporte: 'ADF = −3.62, 4 lags, p = .034: rejects the unit root'
+    codigo:
+      r: |
+        library(tseries)
+        adf.test(series)
+      py: |
+        from statsmodels.tsa.stattools import adfuller
+        adfuller(series)
+  kpss:
+    slug: kpss-test
+    nome: 'KPSS'
+    titulo: 'KPSS test'
+    dist: 'η (tabulated)'
+    quando: 'Check the stationarity of a series with the null hypothesis reversed relative to the ADF; the two together complement each other.'
+    h0: 'The series is stationary.'
+    pres:
+      - 'Choose the window of the long-run variance'
+    vars:
+      - 'Augmented Dickey-Fuller'
+    reporte: 'KPSS = 0.21, p > .10: does not reject stationarity'
+    codigo:
+      r: |
+        library(tseries)
+        kpss.test(series)
+      py: |
+        from statsmodels.tsa.stattools import kpss
+        kpss(series)
+  ljung-box:
+    slug: ljung-box-test
+    nome: 'Ljung-Box'
+    titulo: 'Ljung-Box test'
+    quando: 'Check whether a series, or the residuals of a model, still have autocorrelation over several lags.'
+    h0: 'The autocorrelations up to lag h are all zero (white noise).'
+    pres:
+      - 'On the residuals of an ARMA model, subtract the estimated parameters from the df'
+    vars:
+      - 'Box-Pierce, the original and less accurate version'
+    reporte: 'Q(10) = 12.4, p = .26'
+    codigo:
+      r: |
+        Box.test(residuals, lag = 10, type = "Ljung-Box")
+      py: |
+        from statsmodels.stats.diagnostic import acorr_ljungbox
+        acorr_ljungbox(residuals, lags=[10])

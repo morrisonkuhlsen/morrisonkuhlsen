@@ -1,9 +1,12 @@
 {%- comment -%}
-  Um nó da árvore de decisão (/testes-estatisticos/arvore/): a pergunta e uma
-  resposta por <details>. Uma resposta abre outro nó (este include chama a si
-  mesmo) ou termina num teste do catálogo. Ver _data/arvore_testes.yml.
+  Um nó da árvore de decisão (/testes-estatisticos/arvore/ e a versão em
+  inglês): a pergunta e uma resposta por <details>. Uma resposta abre outro
+  nó (este include chama a si mesmo) ou termina num teste do catálogo.
+  Recebe o nó, o catálogo (cat) e os textos da língua (ui, de
+  _data/testes_ui.yml). Ver _data/arvore_testes.yml.
 {%- endcomment -%}
-{%- assign cat = site.data.testes_estatisticos -%}
+{%- assign cat = include.cat -%}
+{%- assign ui = include.ui -%}
 <p class="tr-q">{{ include.no.pergunta | escape }}</p>
 <ul class="tr-ops">
   {%- for op in include.no.opcoes %}
@@ -14,24 +17,24 @@
       {%- assign t = cat.testes | where: "id", op.teste | first %}
       {%- assign fam = cat.familias[t.fam] %}
       <div class="tr-leaf" data-cor="{{ fam.cor }}">
-        <p class="tr-test"><a href="/testes-estatisticos/{{ t.id }}/">{{ t.nome | escape }}</a> <span>{{ fam.nome }}</span></p>
+        <p class="tr-test"><a href="{{ ui.base }}{{ t.id }}/">{{ t.nome | escape }}</a> <span>{{ fam.nome }}</span></p>
         <p>{{ t.quando | escape }}</p>
         {%- if op.nota %}
         <p class="tr-nota">{{ op.nota | escape }}</p>
         {%- endif %}
         {%- if op.confira %}
-        <p class="tr-extra"><strong>Confira antes:</strong> {% include arvore-links.html ids=op.confira %}</p>
+        <p class="tr-extra"><strong>{{ ui.folha.confira }}</strong> {% include arvore-links.html ids=op.confira cat=cat ui=ui %}</p>
         {%- endif %}
         {%- if op.depois %}
-        <p class="tr-extra"><strong>Se rejeitar H₀:</strong> {% include arvore-links.html ids=op.depois %}</p>
+        <p class="tr-extra"><strong>{{ ui.folha.depois }}</strong> {% include arvore-links.html ids=op.depois cat=cat ui=ui %}</p>
         {%- endif %}
         {%- if op.tambem %}
-        <p class="tr-extra"><strong>Também serve:</strong> {% include arvore-links.html ids=op.tambem %}</p>
+        <p class="tr-extra"><strong>{{ ui.folha.tambem }}</strong> {% include arvore-links.html ids=op.tambem cat=cat ui=ui %}</p>
         {%- endif %}
       </div>
       {%- else %}
       <div class="tr-sub">
-        {%- include arvore-no.html no=op %}
+        {%- include arvore-no.html no=op cat=cat ui=ui %}
       </div>
       {%- endif %}
     </details>

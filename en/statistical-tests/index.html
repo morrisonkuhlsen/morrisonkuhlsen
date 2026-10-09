@@ -1,0 +1,115 @@
+---
+layout: null
+---
+{%- comment -%}
+  English version of /testes-estatisticos/. The data are
+  site.data.catalogo_en, merged by _plugins/paginas_testes.rb from
+  _data/testes_estatisticos.yml (structure) and _data/testes_estatisticos_en.yml
+  (text). The table itself is the same script.js, which picks its English
+  strings from the page's lang.
+{%- endcomment -%}
+{%- assign cat = site.data.catalogo_en -%}
+{%- capture desc -%}A catalog of {{ cat.testes | size }} statistical tests organized by type of data and study design: when to use each one, hypotheses, assumptions, formula and R and Python code.{%- endcapture -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Statistical Tests Catalog</title>
+  <meta name="description" content="{{ desc }}">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/statistical-tests/">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/testes-estatisticos/">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/statistical-tests/">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/testes-estatisticos/">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/statistical-tests/">
+  <meta property="og:title" content="Statistical Tests Catalog">
+  <meta property="og:description" content="{{ desc }}">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Statistical Tests Catalog">
+  <meta name="twitter:description" content="{{ desc }}">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/testes-estatisticos/style.css">
+  <script defer src="dados.js"></script>
+  <script defer src="/testes-estatisticos/script.js"></script>
+</head>
+<body>
+  <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/testes-estatisticos/" hreflang="pt-BR" lang="pt-BR">Português</a>
+
+  <main class="pt">
+    <header class="pt-head">
+      <h1>Statistical tests catalog</h1>
+      <p class="pt-lede">Where a test sits tells you something. Each <strong>column</strong> is a family of tests and each <strong>row</strong> a study design: find the crossing that matches your case and tap the test to see when to use it, the null hypothesis, the assumptions and the formula. The strips at the bottom gather the tests that do not depend on how many groups there are.</p>
+      <p class="pt-lede">Not sure where to start? Answer a few questions in the <a href="decision-tree/">decision tree</a>.</p>
+      <label class="pt-search">
+        <span class="visually-hidden">Search tests</span>
+        <input type="search" id="busca" placeholder="Search: normality, paired, proportion…" autocomplete="off">
+      </label>
+      <p class="pt-count" aria-live="polite"></p>
+    </header>
+
+    <div class="pt-scroll">
+      <div class="pt-grid" id="tabela">
+        <aside class="pt-detail" id="ficha" aria-live="polite" tabindex="-1"></aside>
+      </div>
+    </div>
+
+    <noscript><p>Without JavaScript the table does not show, but the full list of tests is right below.</p></noscript>
+
+    <section class="pt-notes">
+      <h2>How to read it</h2>
+      <ul>
+        <li><strong>Number and symbol</strong> follow the reading order of the table; the symbol recalls the test statistic.</li>
+        <li><strong>Under the name</strong> is the reference distribution used for the p-value.</li>
+        <li><strong>Means × ranks:</strong> in the same row, the ranks column has the alternative that does not assume normality.</li>
+        <li><strong>Gaps</strong> are crossings without a test in common use.</li>
+      </ul>
+      <p>To do the math, see the <a href="/en/formulas/">interactive formulas</a> and the <a href="/ztable.html">Z</a>, <a href="/ttable.html">t</a>, <a href="/ftable.html">F</a> and <a href="/chitable.html">χ²</a> tables.</p>
+    </section>
+
+    <section class="pt-index" aria-labelledby="todos">
+      <h2 id="todos">All tests</h2>
+      {%- for par in cat.familias %}
+      {%- assign fam = par[1] %}
+      {%- assign grupo = cat.testes | where: "fam", par[0] %}
+      <h3 data-cor="{{ fam.cor }}">{{ fam.nome }}{% if fam.sub %} <span>({{ fam.sub }})</span>{% endif %}</h3>
+      <p class="pt-index-dica">{{ fam.dica | escape }}</p>
+      <ul>
+        {%- for t in grupo %}
+        <li>
+          <a href="{{ t.id }}/">{{ t.nome | escape }}</a>
+          {%- if t.row %}{% assign i = t.row | minus: 1 %} <span class="pt-index-row">· {{ cat.linhas[i].nome }}</span>{% endif %}
+          <p>{{ t.quando | escape }}</p>
+          <p><abbr title="Null hypothesis">H₀</abbr>: {{ t.h0 | escape }}</p>
+        </li>
+        {%- endfor %}
+      </ul>
+      {%- endfor %}
+    </section>
+  </main>
+</body>
+</html>

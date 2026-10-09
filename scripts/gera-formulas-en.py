@@ -150,8 +150,12 @@ def build(slug, d):
     for a, b in d.get("extra", []):
         s = sub1(s, a, b)
 
-    # O link para o catálogo de testes aponta para uma página só em português.
-    s = re.sub(r'    <p class="formula-catalog">.*?</p>\n\n', "", s)
+    # O link para o catálogo de testes vai para a página do teste em inglês.
+    def catalogo(m):
+        teste, texto = CATALOG[slug]
+        return (f'    <p class="formula-catalog">When to use it, assumptions and alternatives: '
+                f'<a href="/en/statistical-tests/{teste}/">{texto} in the statistical tests catalog</a>.</p>\n\n')
+    s = re.sub(r'    <p class="formula-catalog">.*?</p>\n\n', catalogo, s)
 
     def pager(m):
         kind, target = m.group(1), m.group(2)
@@ -161,6 +165,15 @@ def build(slug, d):
 
     (EN_DIR / f"{en}.html").write_text(s)
     return s
+
+
+# Fórmula com link para o catálogo de testes → (página do teste em inglês, texto do link).
+CATALOG = {
+    "t-student": ("one-sample-t-test", "the one-sample t-test"),
+    "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
+    "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),
+    "regressao-linear": ("regression-coefficient-t-test", "regression tests"),
+}
 
 
 def build_index():

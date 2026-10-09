@@ -1,15 +1,45 @@
 /* Monta o catálogo a partir de dados.js (gerado de
  * _data/testes_estatisticos.yml) e cuida da ficha, da busca e do link direto
  * (#id-do-teste). Os textos vêm do arquivo de dados, que é conteúdo nosso, mas
- * entram com textContent mesmo assim. */
+ * entram com textContent mesmo assim.
+ *
+ * Serve às duas línguas: /testes-estatisticos/ e /en/statistical-tests/, cada
+ * uma com o seu dados.js. Os textos fixos daqui saem de TXT, pelo lang da
+ * página. */
 (() => {
   const C = window.CATALOGO;
+  const TXT = {
+    pt: {
+      comoUsar: "Como usar",
+      legenda: "Toque num teste para ver quando usar, a hipótese nula, os pressupostos e a estatística. Cada cor é uma família:",
+      quando: "Quando usar", h0: "Hipótese nula", pres: "Pressupostos", estatistica: "Estatística",
+      efeito: "Tamanho de efeito", reporte: "Como reportar", codigo: "No R e no Python",
+      variantes: "Variantes e alternativas", veja: "Veja também",
+      copiar: "Copiar", copiarCodigo: "Copiar o código em", copiado: "Copiado", copieVoce: "Selecione e copie",
+      notaPy: "No Python, stats é scipy.stats e np é numpy.",
+      pagina: "Página do teste", formula: "Abrir a fórmula interativa", tabela: nome => `Tabela ${nome}`,
+      copiarLink: "Copiar link", linkCopiado: "Link copiado", copieBarra: "Copie da barra de endereço", fechar: "Fechar",
+      contagem: (n, total) => `${n} de ${total} testes`, nenhum: "Nenhum teste com esses termos.",
+    },
+    en: {
+      comoUsar: "How to use",
+      legenda: "Tap a test to see when to use it, the null hypothesis, the assumptions and the test statistic. Each color is a family:",
+      quando: "When to use it", h0: "Null hypothesis", pres: "Assumptions", estatistica: "Test statistic",
+      efeito: "Effect size", reporte: "How to report it", codigo: "In R and Python",
+      variantes: "Variants and alternatives", veja: "See also",
+      copiar: "Copy", copiarCodigo: "Copy the code in", copiado: "Copied", copieVoce: "Select and copy",
+      notaPy: "In Python, stats is scipy.stats and np is numpy.",
+      pagina: "Test page", formula: "Open the interactive formula", tabela: nome => `${nome} table`,
+      copiarLink: "Copy link", linkCopiado: "Link copied", copieBarra: "Copy it from the address bar", fechar: "Close",
+      contagem: (n, total) => `${n} of ${total} tests`, nenhum: "No test matches these terms.",
+    },
+  }[document.documentElement.lang.startsWith("en") ? "en" : "pt"];
   const grid = document.getElementById("tabela");
   const ficha = document.getElementById("ficha");
   const busca = document.getElementById("busca");
   const count = document.querySelector(".pt-count");
   const byId = new Map(C.testes.map(t => [t.id, t]));
-  const formulas = new Map(C.formulas.map(f => [f.url.replace(/^\/formulas\/|\.html$/g, ""), f.title]));
+  const formulas = new Map(C.formulas.map(f => [f.url.replace(/^.*\/|\.html$/g, ""), f.title]));
   const tiles = new Map();
   let current = null;
 
@@ -147,8 +177,8 @@
   function legend() {
     ficha.replaceChildren();
     delete ficha.dataset.cor;
-    ficha.append(el("h2", null, "Como usar"));
-    ficha.append(el("p", null, "Toque num teste para ver quando usar, a hipótese nula, os pressupostos e a estatística. Cada cor é uma família:"));
+    ficha.append(el("h2", null, TXT.comoUsar));
+    ficha.append(el("p", null, TXT.legenda));
     const ul = el("ul", "legend");
     Object.values(C.familias).forEach(f => {
       const li = el("li", null, f.sub ? `${f.nome} (${f.sub})` : f.nome);
@@ -178,21 +208,21 @@
     top.append(badge, titles);
     box.appendChild(top);
 
-    sec(box, "Quando usar");
+    sec(box, TXT.quando);
     box.appendChild(el("p", null, t.quando));
-    sec(box, "Hipótese nula");
+    sec(box, TXT.h0);
     box.appendChild(el("p", null, t.h0));
-    sec(box, "Pressupostos");
+    sec(box, TXT.pres);
     const ul = el("ul");
     t.pres.forEach(p => ul.appendChild(el("li", null, p)));
     box.appendChild(ul);
-    sec(box, "Estatística");
+    sec(box, TXT.estatistica);
     const tex = el("div", "fd-tex");
     math(tex, `\\displaystyle ${t.tex}`);
     box.appendChild(tex);
 
     if (t.efeito) {
-      sec(box, "Tamanho de efeito");
+      sec(box, TXT.efeito);
       box.appendChild(el("p", null, t.efeito.texto));
       if (t.efeito.tex) {
         const ef = el("div", "fd-tex");
@@ -202,26 +232,26 @@
     }
 
     if (t.reporte) {
-      sec(box, "Como reportar");
+      sec(box, TXT.reporte);
       box.appendChild(el("p", "fd-report", t.reporte));
     }
 
     if (t.codigo) {
-      sec(box, "No R e no Python");
+      sec(box, TXT.codigo);
       [["r", "R"], ["py", "Python"]].forEach(([chave, rotulo]) => {
         const texto = (t.codigo[chave] || "").trimEnd();
         if (!texto) return;
         const bloco = el("div", "fd-code");
         const topo = el("div", "fd-code-head");
-        const copiar = el("button", "fd-ref", "Copiar");
+        const copiar = el("button", "fd-ref", TXT.copiar);
         copiar.type = "button";
-        copiar.setAttribute("aria-label", `Copiar o código em ${rotulo}`);
+        copiar.setAttribute("aria-label", `${TXT.copiarCodigo} ${rotulo}`);
         copiar.addEventListener("click", async () => {
           try {
             await navigator.clipboard.writeText(texto);
-            copiar.textContent = "Copiado";
+            copiar.textContent = TXT.copiado;
           } catch {
-            copiar.textContent = "Selecione e copie";
+            copiar.textContent = TXT.copieVoce;
           }
         });
         topo.append(el("span", null, rotulo), copiar);
@@ -230,11 +260,11 @@
         bloco.append(topo, pre);
         box.appendChild(bloco);
       });
-      box.appendChild(el("p", "fd-code-nota", "No Python, stats é scipy.stats e np é numpy."));
+      box.appendChild(el("p", "fd-code-nota", TXT.notaPy));
     }
 
     if (t.vars.length) {
-      sec(box, "Variantes e alternativas");
+      sec(box, TXT.variantes);
       const vl = el("ul");
       t.vars.forEach(([texto, ref]) => {
         const li = el("li");
@@ -257,11 +287,11 @@
 
     const veja = (t.veja || []).filter(slug => formulas.has(slug));
     if (veja.length) {
-      sec(box, "Veja também");
+      sec(box, TXT.veja);
       const ul = el("ul");
       veja.forEach(slug => {
         const a = el("a", null, formulas.get(slug));
-        a.href = `/formulas/${slug}.html`;
+        a.href = `${C.formulaBase}${slug}.html`;
         const li = el("li");
         li.appendChild(a);
         ul.appendChild(li);
@@ -270,36 +300,36 @@
     }
 
     const actions = el("div", "fd-actions");
-    const pagina = el("a", null, "Página do teste");
+    const pagina = el("a", null, TXT.pagina);
     pagina.href = `${t.id}/`;
     actions.appendChild(pagina);
     if (t.page) {
-      const a = el("a", null, "Abrir a fórmula interativa");
-      a.href = `/formulas/${t.page}.html`;
+      const a = el("a", null, TXT.formula);
+      a.href = `${C.formulaBase}${t.page}.html`;
       actions.appendChild(a);
     }
     const tab = tabela(t.dist);
     if (tab) {
-      const a = el("a", null, `Tabela ${tab.nome}`);
+      const a = el("a", null, TXT.tabela(tab.nome));
       a.href = tab.url;
       actions.appendChild(a);
     }
     // Copia em vez de navegar: um <a href="#id"> empilharia uma entrada no
     // histórico, e o resto da página troca o hash sem empilhar.
-    const link = el("button", "fd-ref", "Copiar link");
+    const link = el("button", "fd-ref", TXT.copiarLink);
     link.type = "button";
     link.addEventListener("click", async () => {
       const url = `${location.origin}${location.pathname}#${t.id}`;
       try {
         await navigator.clipboard.writeText(url);
-        link.textContent = "Link copiado";
+        link.textContent = TXT.linkCopiado;
       } catch {
         history.replaceState(null, "", `#${t.id}`);
-        link.textContent = "Copie da barra de endereço";
+        link.textContent = TXT.copieBarra;
       }
     });
     actions.appendChild(link);
-    const close = el("button", "fd-ref fd-close", "Fechar");
+    const close = el("button", "fd-ref fd-close", TXT.fechar);
     close.type = "button";
     close.addEventListener("click", () => select(null, true));
     actions.appendChild(close);
@@ -358,7 +388,7 @@
       b.classList.toggle("is-dim", !ok);
       if (ok) n++;
     });
-    count.textContent = terms.length ? (n ? `${n} de ${C.testes.length} testes` : "Nenhum teste com esses termos.") : "";
+    count.textContent = terms.length ? (n ? TXT.contagem(n, C.testes.length) : TXT.nenhum) : "";
   });
 
   document.addEventListener("keydown", e => {

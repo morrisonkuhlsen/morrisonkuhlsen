@@ -18,4 +18,5 @@ en:
   - { name: "Snedecor F Table",      url: "/ftable.html" }
   - { name: "Chi-Square Table",      url: "/chitable.html" }
   - { name: "Formulas",              url: "/en/formulas/" }
+  - { name: "Statistical tests",     url: "/en/statistical-tests/" }
   - { name: "Weekly Problem",        url: "/problema-semanal/", external: true, featured: true }

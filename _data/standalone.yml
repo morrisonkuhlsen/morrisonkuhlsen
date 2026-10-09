@@ -170,6 +170,18 @@
   tags: "testes estatísticos árvore de decisão qual teste usar escolha do teste fluxograma"
   lang: pt
 
+- title: "Statistical tests catalog"
+  url: "/en/statistical-tests/"
+  description: "A catalog of 48 statistical tests organized by type of data and study design: when to use each one, hypotheses, assumptions, formula and R and Python code."
+  tags: "statistical tests catalog hypothesis test choosing a test"
+  lang: en
+
+- title: "Which statistical test should I use?"
+  url: "/en/statistical-tests/decision-tree/"
+  description: "A decision tree to choose the right statistical test: answer what you want to do, the type of data and the study design, and get to one of the 48 tests in the catalog."
+  tags: "statistical tests decision tree which test to use flowchart"
+  lang: en
+
 # Versões em inglês das fórmulas (/en/formulas/), geradas das portuguesas.
 - title: "Interactive Formulas"
   url: "/en/formulas/"

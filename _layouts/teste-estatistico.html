@@ -1,21 +1,29 @@
 {%- comment -%}
-  Página de um teste do catálogo (/testes-estatisticos/<id>/), criada pelo
-  plugin _plugins/paginas_testes.rb a partir de _data/testes_estatisticos.yml.
-  O conteúdo é o da ficha da tabela, em HTML estático, mais o lugar do teste
-  no catálogo e os caminhos da árvore de decisão que chegam a ele.
+  Página de um teste do catálogo, em português (/testes-estatisticos/<id>/)
+  ou inglês (/en/statistical-tests/<slug>/), criada pelo plugin
+  _plugins/paginas_testes.rb. O conteúdo é o da ficha da tabela, em HTML
+  estático, mais o lugar do teste no catálogo e os caminhos da árvore de
+  decisão que chegam a ele. Os textos fixos vêm de _data/testes_ui.yml.
 {%- endcomment -%}
 {%- assign t = page.teste -%}
 {%- assign fam = page.familia -%}
-{%- capture titulo_aba -%}{{ t.titulo }}: quando usar, fórmula e código em R e Python{%- endcapture -%}
-{%- assign canonica = page.url | prepend: "https://morrisonkuhlsen.com" -%}
+{%- assign u = page.ui -%}
+{%- capture titulo_aba -%}{{ t.titulo }}: {{ u.titulo_fim }}{%- endcapture -%}
+{%- assign site_url = "https://morrisonkuhlsen.com" -%}
+{%- assign canonica = page.url | prepend: site_url -%}
+{%- assign traducao = page.traducao | prepend: site_url -%}
+{%- if page.lang == "pt" %}{% assign url_pt = canonica %}{% else %}{% assign url_pt = traducao %}{% endif -%}
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ u.html_lang }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{ titulo_aba | escape }}</title>
   <meta name="description" content="{{ page.description | escape }}">
   <link rel="canonical" href="{{ canonica }}">
+  <link rel="alternate" hreflang="{{ u.html_lang }}" href="{{ canonica }}">
+  <link rel="alternate" hreflang="{{ u.hreflang_outra }}" href="{{ traducao }}">
+  <link rel="alternate" hreflang="x-default" href="{{ url_pt }}">
   <!-- OpenGraph / Twitter -->
   <meta property="og:site_name" content="MorrisonKühlsen">
   <meta property="og:type" content="article">
@@ -25,7 +33,7 @@
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale" content="{{ u.og_locale }}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="{{ titulo_aba | escape }}">
@@ -42,7 +50,7 @@
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "MorrisonKühlsen", "item": "https://morrisonkuhlsen.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Catálogo de testes estatísticos", "item": "https://morrisonkuhlsen.com/testes-estatisticos/" },
+      { "@type": "ListItem", "position": 2, "name": {{ u.catalogo | jsonify }}, "item": {{ u.base | prepend: site_url | jsonify }} },
       { "@type": "ListItem", "position": 3, "name": {{ t.titulo | jsonify }}, "item": {{ canonica | jsonify }} }
     ]
   }
@@ -59,15 +67,16 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <link rel="stylesheet" href="../style.css">
-  <script defer src="../teste.js"></script>
+  <link rel="stylesheet" href="/testes-estatisticos/style.css">
+  <script defer src="/testes-estatisticos/teste.js"></script>
 </head>
 <body>
-  <a href="../" class="back-link" aria-label="Voltar ao catálogo" title="Voltar ao catálogo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a href="{{ u.base }}" class="back-link" aria-label="{{ u.voltar }}" title="{{ u.voltar }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="{{ page.traducao }}" hreflang="{{ u.hreflang_outra }}" lang="{{ u.hreflang_outra }}">{{ u.outra_lingua }}</a>
 
   <main class="tp">
-    <nav class="tp-trilha" aria-label="Trilha">
-      <a href="../">Catálogo de testes estatísticos</a> › <a href="../#{{ t.id }}">{{ fam.nome }}{% if page.linha %} · {{ page.linha.nome }}{% endif %}</a>
+    <nav class="tp-trilha" aria-label="{{ u.trilha }}">
+      <a href="{{ u.base }}">{{ u.catalogo }}</a> › <a href="{{ u.base }}#{{ t.id }}">{{ fam.nome }}{% if page.linha %} · {{ page.linha.nome }}{% endif %}</a>
     </nav>
 
     <article class="fd" data-cor="{{ fam.cor }}">
@@ -75,28 +84,28 @@
         <div class="fd-badge" aria-hidden="true"><span>{{ page.n }}</span><strong>{{ t.sym }}</strong></div>
         <div>
           <h1 class="fd-name">{{ t.titulo | escape }}</h1>
-          <p class="fd-fam">{{ fam.nome }}{% if fam.sub %} ({{ fam.sub }}){% endif %}{% if page.linha %} · {{ page.linha.nome }}{% endif %} · distribuição de referência: {{ t.dist }}</p>
+          <p class="fd-fam">{{ fam.nome }}{% if fam.sub %} ({{ fam.sub }}){% endif %}{% if page.linha %} · {{ page.linha.nome }}{% endif %} · {{ u.dist }}: {{ t.dist }}</p>
         </div>
       </header>
 
-      <h2 class="fd-sec">Quando usar</h2>
+      <h2 class="fd-sec">{{ u.quando }}</h2>
       <p>{{ t.quando | escape }}</p>
 
-      <h2 class="fd-sec">Hipótese nula</h2>
+      <h2 class="fd-sec">{{ u.h0 }}</h2>
       <p>{{ t.h0 | escape }}</p>
 
-      <h2 class="fd-sec">Pressupostos</h2>
+      <h2 class="fd-sec">{{ u.pres }}</h2>
       <ul>
         {%- for p in t.pres %}
         <li>{{ p | escape }}</li>
         {%- endfor %}
       </ul>
 
-      <h2 class="fd-sec">Estatística</h2>
+      <h2 class="fd-sec">{{ u.estatistica }}</h2>
       <div class="fd-tex" data-tex="{{ t.tex | escape }}"><code>{{ t.tex | escape }}</code></div>
 
       {%- if t.efeito %}
-      <h2 class="fd-sec">Tamanho de efeito</h2>
+      <h2 class="fd-sec">{{ u.efeito }}</h2>
       <p>{{ t.efeito.texto | escape }}</p>
       {%- if t.efeito.tex %}
       <div class="fd-tex" data-tex="{{ t.efeito.tex | escape }}"><code>{{ t.efeito.tex | escape }}</code></div>
@@ -104,29 +113,29 @@
       {%- endif %}
 
       {%- if t.reporte %}
-      <h2 class="fd-sec">Como reportar</h2>
+      <h2 class="fd-sec">{{ u.reporte }}</h2>
       <p class="fd-report">{{ t.reporte | escape }}</p>
       {%- endif %}
 
       {%- if t.codigo %}
-      <h2 class="fd-sec">No R e no Python</h2>
+      <h2 class="fd-sec">{{ u.codigo }}</h2>
       {%- if t.codigo.r %}
       <div class="fd-code">
-        <div class="fd-code-head"><span>R</span><button type="button" class="fd-ref" aria-label="Copiar o código em R" hidden>Copiar</button></div>
+        <div class="fd-code-head"><span>R</span><button type="button" class="fd-ref" aria-label="{{ u.copiar_codigo }} R" hidden>{{ u.copiar }}</button></div>
         <pre><code>{{ t.codigo.r | rstrip | escape }}</code></pre>
       </div>
       {%- endif %}
       {%- if t.codigo.py %}
       <div class="fd-code">
-        <div class="fd-code-head"><span>Python</span><button type="button" class="fd-ref" aria-label="Copiar o código em Python" hidden>Copiar</button></div>
+        <div class="fd-code-head"><span>Python</span><button type="button" class="fd-ref" aria-label="{{ u.copiar_codigo }} Python" hidden>{{ u.copiar }}</button></div>
         <pre><code>{{ t.codigo.py | rstrip | escape }}</code></pre>
       </div>
       {%- endif %}
-      <p class="fd-code-nota">No Python, stats é scipy.stats e np é numpy.</p>
+      <p class="fd-code-nota">{{ u.nota_py }}</p>
       {%- endif %}
 
       {%- if page.variantes.size > 0 %}
-      <h2 class="fd-sec">Variantes e alternativas</h2>
+      <h2 class="fd-sec">{{ u.variantes }}</h2>
       <ul>
         {%- for v in page.variantes %}
         <li>{% if v.url %}{{ v.antes | escape }}<a href="{{ v.url }}">{{ v.link | escape }}</a>{{ v.depois | escape }}{% else %}{{ v.texto | escape }}{% endif %}</li>
@@ -134,14 +143,14 @@
       </ul>
       {%- endif %}
 
-      <h2 class="fd-sec">Onde fica no catálogo</h2>
+      <h2 class="fd-sec">{{ u.onde }}</h2>
       <p><strong>{{ fam.nome }}{% if fam.sub %} ({{ fam.sub }}){% endif %}.</strong> {{ fam.dica | escape }}</p>
       {%- if page.linha %}
       <p class="tp-mais"><strong>{{ page.linha.nome }}.</strong> {{ page.linha.dica | escape }}</p>
       {%- endif %}
 
       {%- if page.caminhos.size > 0 or page.mencoes.size > 0 %}
-      <h2 class="fd-sec">Na árvore de decisão</h2>
+      <h2 class="fd-sec">{{ u.na_arvore }}</h2>
       {%- for c in page.caminhos %}
       <ol class="tp-caminho">
         {%- for passo in c %}
@@ -150,36 +159,36 @@
       </ol>
       {%- endfor %}
       {%- if page.mencoes.size > 0 %}
-      <p class="tp-mais">{% if page.caminhos.size > 0 %}Também aparece{% else %}Não tem caminho próprio na árvore, mas aparece{% endif %} junto de outros testes:</p>
+      <p class="tp-mais">{% if page.caminhos.size > 0 %}{{ u.tambem_aparece }}{% else %}{{ u.so_aparece }}{% endif %}</p>
       <ul class="tp-mencoes">
         {%- for m in page.mencoes %}
         <li>{{ m.tipo }} {% for x in m.testes %}<a href="{{ x.url }}">{{ x.nome | escape }}</a>{% unless forloop.last %}, {% endunless %}{% endfor %}.</li>
         {%- endfor %}
       </ul>
       {%- endif %}
-      <p class="tp-mais"><a href="../arvore/">Abrir a árvore de decisão</a></p>
+      <p class="tp-mais"><a href="{{ u.arvore }}">{{ u.abrir_arvore }}</a></p>
       {%- endif %}
 
       <div class="fd-actions">
-        {%- if t.page %}
-        <a href="/formulas/{{ t.page }}.html">Abrir a fórmula interativa</a>
+        {%- if page.formula %}
+        <a href="{{ page.formula }}">{{ u.formula_interativa }}</a>
         {%- endif %}
         {%- if page.tabela %}
-        <a href="{{ page.tabela.url }}">Tabela {{ page.tabela.nome }}</a>
+        <a href="{{ page.tabela.url }}">{{ page.tabela.nome }}</a>
         {%- endif %}
         {%- for f in page.veja %}
         <a href="{{ f.url }}">{{ f.titulo | escape }}</a>
         {%- endfor %}
-        <a href="../#{{ t.id }}">Ver na tabela do catálogo</a>
+        <a href="{{ u.base }}#{{ t.id }}">{{ u.ver_na_tabela }}</a>
       </div>
     </article>
 
-    <nav class="tp-pager" aria-label="Outros testes">
+    <nav class="tp-pager" aria-label="{{ u.outros }}">
       {%- if page.anterior %}
-      <a href="{{ page.anterior.url }}" rel="prev"><span>Anterior</span>{{ page.anterior.nome | escape }}</a>
+      <a href="{{ page.anterior.url }}" rel="prev"><span>{{ u.anterior }}</span>{{ page.anterior.nome | escape }}</a>
       {%- endif %}
       {%- if page.proximo %}
-      <a href="{{ page.proximo.url }}" rel="next" class="tp-next"><span>Próximo</span>{{ page.proximo.nome | escape }}</a>
+      <a href="{{ page.proximo.url }}" rel="next" class="tp-next"><span>{{ u.proximo }}</span>{{ page.proximo.nome | escape }}</a>
       {%- endif %}
     </nav>
   </main>

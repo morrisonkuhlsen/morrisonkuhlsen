@@ -1,0 +1,99 @@
+---
+layout: null
+---
+{%- comment -%}
+  English version of /testes-estatisticos/arvore/. The tree is
+  site.data.arvore_en, built by _plugins/paginas_testes.rb from
+  _data/arvore_testes.yml (structure) and _data/arvore_testes_en.yml (text),
+  rendered by the same recursive include; arvore.js adds the behavior and
+  picks its English strings from the page's lang.
+{%- endcomment -%}
+{%- capture desc -%}A decision tree to choose the right statistical test: answer what you want to do, the type of data and the study design, and get to one of the {{ site.data.catalogo_en.testes | size }} tests in the catalog.{%- endcapture -%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Which Statistical Test Should I Use?</title>
+  <meta name="description" content="{{ desc }}">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/statistical-tests/decision-tree/">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/testes-estatisticos/arvore/">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/statistical-tests/decision-tree/">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/testes-estatisticos/arvore/">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/statistical-tests/decision-tree/">
+  <meta property="og:title" content="Which Statistical Test Should I Use?">
+  <meta property="og:description" content="{{ desc }}">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Which Statistical Test Should I Use?">
+  <meta name="twitter:description" content="{{ desc }}">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="/testes-estatisticos/style.css">
+  <script defer src="/testes-estatisticos/arvore/arvore.js"></script>
+</head>
+<body>
+  <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/testes-estatisticos/arvore/" hreflang="pt-BR" lang="pt-BR">Português</a>
+
+  <main class="pt tr">
+    <header class="pt-head">
+      <h1>Which statistical test should I use?</h1>
+      <p class="pt-lede">Start with the first question and follow the arrows until you reach a test. The test at the end leads to its page, with the null hypothesis, assumptions, formula and R and Python code. All tests are in the <a href="../">statistical tests catalog</a>.</p>
+      <p class="tr-views" role="group" aria-label="Tree format" hidden>
+        <button type="button" data-vista="fluxo" aria-pressed="true">Flowchart</button>
+        <button type="button" data-vista="passos" aria-pressed="false">Step by step</button>
+      </p>
+      <p class="tr-tools" hidden>
+        <button type="button" class="fd-ref" data-acao="abrir">Expand all</button>
+        <button type="button" class="fd-ref" data-acao="fechar">Collapse all</button>
+      </p>
+    </header>
+
+    <section class="fc-scroll" aria-label="Decision flowchart" hidden>
+      <div class="fc">
+        <svg class="fc-lines" aria-hidden="true">
+          <defs>
+            <marker id="fc-seta" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0 0 L8 4 L0 8 z" fill="currentColor"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+    </section>
+
+    <nav class="tr-tree" aria-label="Decision tree">
+      {%- include arvore-no.html no=site.data.arvore_en cat=site.data.catalogo_en ui=site.data.testes_ui.en %}
+    </nav>
+
+    <section class="pt-notes">
+      <h2>Before following the tree</h2>
+      <ul>
+        <li><strong>Normal or not?</strong> With large samples, tests of means tolerate non-normality well. When in doubt, look at the histogram and the Q-Q plot before relying on a normality test alone.</li>
+        <li><strong>Independent or paired?</strong> If each value in one group has a natural partner in the other, such as the same patient before and after, the samples are paired.</li>
+        <li><strong>The tree is a starting point.</strong> It covers the usual cases; the study design and the research question may call for another test.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
