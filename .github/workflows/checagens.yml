@@ -1,0 +1,68 @@
+name: Checagens do site
+
+# Fica fora do deploy de propósito: um link quebrado não deve impedir um post
+# agendado de sair. Falhou, o GitHub manda e-mail para quem fez o push (ou,
+# nas rodadas semanais, para o dono do repositório).
+
+on:
+  push:
+    branches: ["master"]
+  schedule:
+    - cron: '0 10 * * 1'  # Toda segunda-feira às 10:00 UTC (07:00 BRT)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    name: Links e imagens internos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler-cache: true
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
+
+      - name: Install html-proofer
+        run: gem install html-proofer -v '~> 5.2' --no-document
+
+      # Só links internos: os externos caem e voltam sozinhos e deixariam a
+      # checagem vermelha sem ninguém ter mudado nada. As âncoras (#…) ficam
+      # de fora porque o catálogo de testes as cria em JavaScript.
+      #
+      # FIGURAS_PENDENTES são imagens que as páginas já citam, mas que nunca
+      # foram geradas. Ao criar uma, tire-a da lista.
+      - name: Check links
+        env:
+          FIGURAS_PENDENTES: >-
+            /sd-altura\.avif/,/valor-p\.png/,/teste-media\.png/,/predictive\.png/,
+            /espaco_amostral\.png/,/operacoes_eventos\.png/,/grafico_pizza\.png/,
+            /images\/histograma\.png/,/images\/boxplot\.png/,/scatter_plot\.png/,
+            /linha_temporal\.png/
+        run: >-
+          htmlproofer _site
+          --disable-external
+          --no-check-internal-hash
+          --checks Links,Images,Scripts
+          --ignore-files "/google420a39717b8e1fc8\.html/"
+          --ignore-urls "${FIGURAS_PENDENTES// /}"
+
+  dns:
+    name: Subdomínios pendurados
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Check CNAMEs
+        run: bash scripts/checa-dns.sh
