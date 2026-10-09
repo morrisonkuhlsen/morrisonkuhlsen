@@ -268,7 +268,7 @@
       float along = dot(qf, ue), across = dot(qf, vec2(-ue.y, ue.x));
       refl += vec3(0.3, 0.55, 1.0) * 0.12 * exp(-across * across / (2.0 * pow(4.0 * e, 2.0))) *
               exp(-along * along / (2.0 * pow(60.0 * e, 2.0)));
-      vec3 g = refl * uVis * uVis * (1.0 + 0.9 * uRealce);
+      vec3 g = refl * uVis * uVis * (1.0 + 0.35 * uRealce);
       g = pow(aces(g * 0.9), vec3(1.0 / 2.2));
       vec3 cor = 1.0 - (1.0 - base) * (1.0 - g);
 
@@ -531,7 +531,7 @@
   // lente. Com o mouse sobre o hero, esse centro vai em parte na direção
   // do cursor, com inércia, e os reflexos se acendem um pouco; ao sair,
   // voltam ao centro da tela. Só esta etapa leve é refeita. No toque, nada muda.
-  const SEGUE = 0.35;
+  const SEGUE = 0.15;
   let eixo = null, alvo = null, realce = 0, alvoRealce = 0, passoPendente = 0;
 
   function compor() {
@@ -549,7 +549,7 @@
   function passoReflexos() {
     passoPendente = 0;
     const destino = alvo || [W / 2, H / 2];
-    const k = parado ? 1 : 0.12;
+    const k = parado ? 1 : 0.06;
     eixo[0] += (destino[0] - eixo[0]) * k;
     eixo[1] += (destino[1] - eixo[1]) * k;
     realce += (alvoRealce - realce) * (parado ? 1 : 0.1);
