@@ -299,12 +299,12 @@ a {
 }
 
 .pt-btn-escuro {
-  background: #2c1820;
-  color: #f1d9df;
+  background: #23262e;
+  color: #d9dce4;
 }
 
 .pt-btn-escuro:hover {
-  background: #3a2029;
+  background: #2e323c;
 }
 
 /* A tabela começa com o guia de leitura e a busca numa linha só. */

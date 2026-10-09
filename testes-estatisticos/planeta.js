@@ -170,13 +170,17 @@
       float hsol = max(0.0, length(o + uSun * tcs) - RP);
       vec2 odSol = vec2(HR, HM) * sqrt(2.0 * PI * (RP + hsol) / vec2(HR, HM)) * exp(-hsol / vec2(HR, HM));
       vec3 corSol = exp(-(BR * odSol.x + BM * 1.1 * odSol.y)) * uVis;
+      // Sobre o planeta, o clarão e os raios ficam bem mais fracos: sem
+      // isso, com o sol ainda atrás da borda, o brilho aparecia em cima do
+      // planeta. Contínuo na borda (1) e caindo para 25% logo para dentro.
+      corSol *= chao ? 0.25 + 0.75 * exp(-(RP - dmin) / 8.0) : 1.0;
 
       // Brilho em camadas em volta do sol (o espalhamento dentro da lente).
       cor += corSol * (6.0 * exp(-ang / 0.0035) + 1.2 * exp(-ang / 0.012) +
                        0.12 * exp(-ang / 0.05) + 0.02 * exp(-ang / 0.25));
       // A câmera satura o sol: os efeitos de lente saem quase brancos,
       // levemente dourados, mesmo com o sol avermelhado.
-      vec3 corLente = mix(corSol, vec3(1.0, 0.9, 0.75) * uVis, 0.6);
+      vec3 corLente = mix(corSol, vec3(1.0, 0.9, 0.75) * uVis * (chao ? 0.25 + 0.75 * exp(-(RP - dmin) / 8.0) : 1.0), 0.6);
       // Brilho branco largo em volta do núcleo, que é o que faz o sol
       // parecer forte numa foto.
       cor += corLente * (8.0 * exp(-ang / 0.011) + 1.0 * exp(-ang / 0.035) + 0.04 * exp(-ang / 0.12));
@@ -270,17 +274,7 @@
               exp(-along * along / (2.0 * pow(60.0 * e, 2.0)));
       vec3 g = refl * uVis * uVis * (1.0 + 0.35 * uRealce);
       g = pow(aces(g * 0.9), vec3(1.0 / 2.2));
-      vec3 cor = 1.0 - (1.0 - base) * (1.0 - g);
-
-      // Gradação de cor da imagem toda nos tons do rosa #E2768B: o brilho de
-      // cada ponto é mantido e o tom vem de uma rampa (preto, vinho, o rosa,
-      // branco-rosado). Fica 15% da cor original, para não chapar.
-      float l = dot(cor, vec3(0.2126, 0.7152, 0.0722));
-      vec3 vinho = vec3(0.32, 0.07, 0.14), rosa = vec3(0.886, 0.463, 0.545), claro = vec3(1.0, 0.93, 0.95);
-      vec3 tom = l < 0.25 ? mix(vec3(0.0), vinho, l / 0.25)
-               : l < 0.6 ? mix(vinho, rosa, (l - 0.25) / 0.35)
-               : mix(rosa, claro, (l - 0.6) / 0.4);
-      gl_FragColor = vec4(mix(cor, tom, 0.85), 1.0);
+      gl_FragColor = vec4(1.0 - (1.0 - base) * (1.0 - g), 1.0);
     }`;
 
   const compilar = (tipo, fonte) => {
