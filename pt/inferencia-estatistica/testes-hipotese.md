@@ -1059,8 +1059,7 @@ teste_correlacao()</code></pre>
 
 ### 11.1 Árvore de Decisão
 
-![Árvore de decisão para escolha de testes]({{ site.baseurl }}/assets/images/arvore-testes.png){:style="max-width: 600px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Árvore de decisão para seleção do teste estatístico apropriado</div>
+A [árvore de decisão interativa]({{ site.baseurl }}/testes-estatisticos/arvore/) leva, em poucas perguntas — o que você quer fazer, o tipo de dado e o delineamento —, a um dos testes do [catálogo]({{ site.baseurl }}/testes-estatisticos/).
 
 ### 11.2 Critérios de Seleção
 

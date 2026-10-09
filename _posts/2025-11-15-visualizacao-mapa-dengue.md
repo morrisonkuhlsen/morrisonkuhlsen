@@ -10,7 +10,7 @@ author: dante-bertuzzi
 description: "Um guia completo para visualizar dados de saúde pública em nível municipal com Julia. Aprenda a limpar dados do SIH/SUS, juntá-los com malhas geográficas e criar um mapa temático da incidência de dengue em Pernambuco."
 ---
 
-<img src="../assets/images/dengue-mapa.png" alt="Mapa estilizado mostrando a incidência de dengue no estado de Pernambuco" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 1em auto; border-radius: 8px;">
+<img src="/assets/images/dengue-mapa.avif" alt="Mapa estilizado mostrando a incidência de dengue no estado de Pernambuco" style="max-width: 800px; width: 100%; height: auto; display: block; margin: 1em auto; border-radius: 8px;">
 
 No nosso [post anterior](https://morrisonkuhlsen.com/visualizacao-pib-brasil-julia/), criamos um mapa do PIB por estado. Agora, vamos aprofundar nossa análise geoespacial para um nível mais granular e impactante: a saúde pública municipal.
 
@@ -32,7 +32,7 @@ O TabNet é uma ferramenta poderosa, porém sua interface pode ser pouco intuiti
 </figure>
 
 Você pode explorar e extrair dados semelhantes diretamente da fonte:
-- **Fonte dos Dados:** [SIH/SUS - Morbidade Hospitalar por Local de Residência](http://tabnet.datasus.gov.br/cgi/deftohtm.exe?sih/cnv/nrbr.def)
+- **Fonte dos Dados:** [SIH/SUS - Morbidade Hospitalar por Local de Residência](https://tabnet.datasus.gov.br/cgi/deftohtm.exe?sih/cnv/nrbr.def)
 
 ## O Desafio: Dados Públicos do Mundo Real
 

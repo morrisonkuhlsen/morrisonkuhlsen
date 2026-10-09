@@ -295,4 +295,4 @@ A visualização de dados é uma habilidade essencial para qualquer pessoa que t
 2. Cairo, A. (2016). *The Truthful Art: Data, Charts, and Maps for Communication*. New Riders.
 3. Healy, K. (2018). *Data Visualization: A Practical Introduction*. Princeton University Press.
 4. Wilke, C. O. (2019). *Fundamentals of Data Visualization*. O'Reilly Media.
-5. Documentação oficial do [Plots.jl](http://docs.juliaplots.org/latest/)
+5. Documentação oficial do [Plots.jl](https://docs.juliaplots.org/latest/)
