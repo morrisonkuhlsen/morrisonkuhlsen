@@ -114,6 +114,23 @@ body {
   color: var(--text-strong);
 }
 
+/* Link para a mesma página na outra língua, no canto oposto ao de voltar. */
+.lang-link {
+  position: absolute;
+  top: 22px;
+  right: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: .85rem;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.lang-link:hover,
+.lang-link:focus-visible {
+  color: var(--text-strong);
+}
+
 a {
   color: var(--text-strong);
   text-underline-offset: 3px;
@@ -868,9 +885,47 @@ a {
 
 /* Fluxograma: as caixas são posicionadas pelo arvore.js; as setas, num SVG
    do mesmo tamanho por baixo delas. Mais largo que a tela, rola de lado. */
+/* Janela do fluxograma: rola nos dois eixos, com altura limitada para a
+   roda do mouse dar zoom sem prender a página inteira. */
 .fc-scroll {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: 80vh;
   padding: .5rem 0 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: grab;
+  overscroll-behavior: contain;
+}
+
+.fc-scroll.is-arrastando {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.fc-sizer {
+  margin: 0 auto;
+}
+
+.fc-zoom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem .9rem;
+  margin: 0 0 .5rem;
+  font-size: .82rem;
+}
+
+.fc-zoom[hidden] {
+  display: none;
+}
+
+.fc-zoom button {
+  min-width: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-zoom-dica {
+  color: var(--text-muted);
 }
 
 .fc-scroll[hidden] {
@@ -879,7 +934,7 @@ a {
 
 .fc {
   position: relative;
-  margin: 0 auto;
+  transform-origin: 0 0;
 }
 
 .fc-lines {

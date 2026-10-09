@@ -5,8 +5,22 @@
  * lido desse mesmo HTML (não há outra cópia dos dados): caixas de cima para
  * baixo, ligadas por setas. Cada caixa leva no alto a resposta que
  * conduz a ela; uma pergunta abre e recolhe os caminhos que saem dela, e as
- * folhas são os testes, na cor da família. */
+ * folhas são os testes, na cor da família.
+ *
+ * Serve às duas línguas; os textos fixos saem de TXT, pelo lang da página. */
 (() => {
+  const TXT = {
+    pt: {
+      caminhos: n => `+ ${n} caminhos`, recolher: "− recolher", trocar: "↺ trocar esta resposta",
+      zoom: "Zoom do fluxograma", menos: "Diminuir", mais: "Aumentar", real: "Tamanho real",
+      ajustar: "Ajustar à largura", dica: "Role sobre o fluxograma para dar zoom; arraste para mover.",
+    },
+    en: {
+      caminhos: n => `+ ${n} paths`, recolher: "− collapse", trocar: "↺ change this answer",
+      zoom: "Flowchart zoom", menos: "Zoom out", mais: "Zoom in", real: "Actual size",
+      ajustar: "Fit to width", dica: "Scroll over the flowchart to zoom; drag to move it.",
+    },
+  }[document.documentElement.lang.startsWith("en") ? "en" : "pt"];
   const tree = document.querySelector(".tr-tree");
   const tools = document.querySelector(".tr-tools");
   const views = document.querySelector(".tr-views");
@@ -104,8 +118,8 @@
     for (const no of todos) {
       if (!no.kids) continue;
       no.el.setAttribute("aria-expanded", String(no.open));
-      no.more.textContent = !no.open ? `+ ${no.kids.length} caminhos`
-        : !no.pai || tudo ? "− recolher" : "↺ trocar esta resposta";
+      no.more.textContent = !no.open ? TXT.caminhos(no.kids.length)
+        : !no.pai || tudo ? TXT.recolher : TXT.trocar;
     }
 
     const alturas = [];
@@ -155,7 +169,112 @@
         svg.appendChild(p);
       }
     }
+    aplicarZoom();
   }
+
+  /* ---------------------------------------------------------------- fluxograma: zoom */
+
+  // O .fc é desenhado em tamanho real e encolhido ou ampliado com transform;
+  // em volta dele, o .fc-sizer tem o tamanho já escalado, para a rolagem do
+  // .fc-scroll saber até onde ir. A roda do mouse sobre o fluxograma dá zoom
+  // em torno do cursor, e arrastar move o desenho. No toque, fica a rolagem
+  // nativa.
+  const ZMIN = 0.1, ZMAX = 2;
+  let zoom = 1;
+  const sizer = el("div", "fc-sizer");
+  fc.before(sizer);
+  sizer.appendChild(fc);
+
+  const barra = el("div", "fc-zoom");
+  barra.setAttribute("role", "group");
+  barra.setAttribute("aria-label", TXT.zoom);
+  const botao = (texto, rotulo, acao) => {
+    const b = el("button", "fd-ref", texto);
+    b.type = "button";
+    if (rotulo) b.setAttribute("aria-label", rotulo);
+    b.addEventListener("click", acao);
+    barra.appendChild(b);
+    return b;
+  };
+  const centro = () => {
+    const r = scroll.getBoundingClientRect();
+    return [r.left + r.width / 2, r.top + r.height / 2];
+  };
+  botao("−", TXT.menos, () => zoomEm(zoom / 1.25, ...centro()));
+  const pct = botao("100%", TXT.real, () => zoomEm(1, ...centro()));
+  botao("+", TXT.mais, () => zoomEm(zoom * 1.25, ...centro()));
+  botao(TXT.ajustar, null, ajustar);
+  barra.appendChild(el("span", "fc-zoom-dica", TXT.dica));
+  scroll.before(barra);
+
+  function aplicarZoom() {
+    fc.style.transform = zoom === 1 ? "" : `scale(${zoom})`;
+    sizer.style.width = `${fc.offsetWidth * zoom}px`;
+    sizer.style.height = `${fc.offsetHeight * zoom}px`;
+    pct.textContent = `${Math.round(zoom * 100)}%`;
+  }
+
+  // Muda o zoom mantendo parado o ponto (x, y) da tela.
+  function zoomEm(novo, x, y) {
+    novo = Math.min(ZMAX, Math.max(ZMIN, novo));
+    if (novo === zoom) return;
+    const a = sizer.getBoundingClientRect();
+    const px = (x - a.left) / zoom, py = (y - a.top) / zoom;
+    zoom = novo;
+    aplicarZoom();
+    const b = sizer.getBoundingClientRect();
+    scroll.scrollLeft += b.left + px * zoom - x;
+    scroll.scrollTop += b.top + py * zoom - y;
+  }
+
+  function ajustar() {
+    zoomEm(Math.min(1, (scroll.clientWidth - 8) / fc.offsetWidth), ...centro());
+  }
+
+  scroll.addEventListener("wheel", e => {
+    e.preventDefault();
+    const d = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+    zoomEm(zoom * Math.exp(-d * 0.0015), e.clientX, e.clientY);
+  }, { passive: false });
+
+  // Arrastar move o desenho. Só com mouse ou caneta, fora dos botões e links
+  // e fora das barras de rolagem (cujo alvo é o próprio .fc-scroll). Se o
+  // ponteiro andou, o clique que vem no fim do arrasto é descartado.
+  let arrasto = null;
+  scroll.addEventListener("pointerdown", e => {
+    if (e.pointerType === "touch" || e.button !== 0 || e.target === scroll) return;
+    if (e.target.closest("a")) return;
+    arrasto = { x: e.clientX, y: e.clientY, l: scroll.scrollLeft, t: scroll.scrollTop, moveu: false, id: e.pointerId };
+  });
+  scroll.addEventListener("pointermove", e => {
+    if (!arrasto || e.pointerId !== arrasto.id) return;
+    const dx = e.clientX - arrasto.x, dy = e.clientY - arrasto.y;
+    if (!arrasto.moveu && Math.hypot(dx, dy) < 4) return;
+    if (!arrasto.moveu) {
+      arrasto.moveu = true;
+      scroll.setPointerCapture(e.pointerId);
+      scroll.classList.add("is-arrastando");
+    }
+    scroll.scrollLeft = arrasto.l - dx;
+    scroll.scrollTop = arrasto.t - dy;
+  });
+  let engolir = false;
+  scroll.addEventListener("click", e => {
+    if (!engolir) return;
+    e.stopPropagation();
+    e.preventDefault();
+  }, true);
+  const soltar = () => {
+    if (arrasto && arrasto.moveu) {
+      scroll.classList.remove("is-arrastando");
+      // O clique, se vier, chega logo depois do pointerup.
+      engolir = true;
+      setTimeout(() => { engolir = false; });
+    }
+    arrasto = null;
+  };
+  scroll.addEventListener("pointerup", soltar);
+  scroll.addEventListener("pointercancel", soltar);
 
   // Abrir uma pergunta fecha as outras do mesmo nível; fechar uma do caminho
   // traz de volta as alternativas dela. Depois, as caixas novas vêm à vista.
@@ -178,6 +297,7 @@
   function mostrar(v) {
     vista = v;
     scroll.hidden = v !== "fluxo";
+    barra.hidden = v !== "fluxo";
     tree.hidden = v !== "passos";
     views.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.vista === v)));
     if (v === "fluxo") desenhar();
@@ -197,7 +317,10 @@
     tree.querySelectorAll("details").forEach(d => { d.open = abrir; });
     todos.forEach(no => { if (no.kids) no.open = abrir || !no.pai; });
     tudo = abrir;
-    if (vista === "fluxo") desenhar();
+    if (vista !== "fluxo") return;
+    desenhar();
+    if (abrir) ajustar();
+    else zoomEm(1, ...centro());
   });
 
   views.hidden = false;
