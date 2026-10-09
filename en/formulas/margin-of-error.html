@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Margin of Error — Interactive</title>
+  <meta name="description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
+  <meta property="og:title" content="Margin of Error — Interactive">
+  <meta property="og:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Margin of Error — Interactive">
+  <meta name="twitter:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/margem-de-erro.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Margin of Error</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive margin of error formula">
+        <span class="part" data-part="margin" data-tone="1" data-tex="E"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="z_margin" data-tone="2" data-tex="z_{\alpha/2}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="se_prop" data-tone="3" data-tex="\sqrt{\dfrac{\hat{p}\,(1 - \hat{p})}{n}}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="fpc_factor" data-tone="4" data-tex="\sqrt{\dfrac{N - n}{N - 1}}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com simulação; estado em ?n=&p=&conf=&N=. A cobertura é a
+         exata (soma sobre todos os resultados possíveis); os 100 intervalos do
+         gráfico são sorteados com semente fixa, então os mesmos valores dão o
+         mesmo gráfico. -->
+    <section class="calc" data-calc="margem" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a pollster interviewed 1,000 voters in a city of 100,000, and 50% said they would vote for candidate A. What is the margin of error at 95% confidence? Leave the population blank for a very large one. Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Sample size <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Observed proportion <i>p̂</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="50" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Confidence (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Population <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="100000" placeholder="optional" data-optional autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="margin" data-tone="1">Margin of Error (E)</dt>
+          <dd>How far the sample proportion can be from the population proportion, at the chosen confidence level. It is the "plus or minus 3 points" of election polls: half the width of the confidence interval.</dd>
+          <dt data-part="z_margin" data-tone="2">Critical Value (z<sub>α/2</sub>)</dt>
+          <dd>The standard normal value that leaves α/2 in each tail. At 95% confidence, z<sub>α/2</sub> ≈ 1.96; at 99%, ≈ 2.58. More confidence calls for a wider margin.</dd>
+          <dt data-part="se_prop" data-tone="3">Standard Error of the Proportion</dt>
+          <dd>The standard deviation of p̂ across different samples. It peaks at p̂ = 50% and falls with the square root of n: to halve the margin, you need four times the sample.</dd>
+          <dt data-part="fpc_factor" data-tone="4">Finite Population Correction</dt>
+          <dd>Shrinks the margin when the sample is a large slice of the population N. With 1,000 out of 100,000 (1%), the factor is 0.995 and changes almost nothing, which is why population size matters so little. For a very large population, it equals 1. See also the <a href="finite-population-correction.html">correction applied to the sample size</a>.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="cochran-formula.html" rel="prev"><span>Previous</span>Cochran&#x27;s Formula</a>
+      <a class="pager-next" href="finite-population-correction.html" rel="next"><span>Next</span>Finite Population Correction</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Margem de Erro — Interativo</title>
+  <meta name="description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
+  <meta property="og:title" content="Margem de Erro — Interativo">
+  <meta property="og:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Margem de Erro — Interativo">
+  <meta name="twitter:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/margin-of-error.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Margem de Erro</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da margem de erro interativa">
+        <span class="part" data-part="margin" data-tone="1" data-tex="E"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="z_margin" data-tone="2" data-tex="z_{\alpha/2}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="se_prop" data-tone="3" data-tex="\sqrt{\dfrac{\hat{p}\,(1 - \hat{p})}{n}}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="fpc_factor" data-tone="4" data-tex="\sqrt{\dfrac{N - n}{N - 1}}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com simulação; estado em ?n=&p=&conf=&N=. A cobertura é a
+         exata (soma sobre todos os resultados possíveis); os 100 intervalos do
+         gráfico são sorteados com semente fixa, então os mesmos valores dão o
+         mesmo gráfico. -->
+    <section class="calc" data-calc="margem" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um instituto ouviu 1.000 eleitores de uma cidade com 100.000, e 50% disseram que votam no candidato A. Qual é a margem de erro, com 95% de confiança? Deixe a população em branco para uma população muito grande. Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Tamanho da amostra <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Proporção observada <i>p̂</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="50" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Confiança (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>População <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="100000" placeholder="opcional" data-optional autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="margin" data-tone="1">Margem de Erro (E)</dt>
+          <dd>Quanto a proporção da amostra pode se afastar da proporção da população, no nível de confiança escolhido. É o "mais ou menos 3 pontos" das pesquisas eleitorais: metade da largura do intervalo de confiança.</dd>
+          <dt data-part="z_margin" data-tone="2">Valor Crítico (z<sub>α/2</sub>)</dt>
+          <dd>O valor da normal padrão que deixa α/2 em cada cauda. Para 95% de confiança, z<sub>α/2</sub> ≈ 1,96; para 99%, ≈ 2,58. Mais confiança pede uma margem mais larga.</dd>
+          <dt data-part="se_prop" data-tone="3">Erro Padrão da Proporção</dt>
+          <dd>O desvio padrão de p̂ entre amostras diferentes. Ele é máximo quando p̂ = 50% e cai com a raiz de n: para cortar a margem pela metade, é preciso quadruplicar a amostra.</dd>
+          <dt data-part="fpc_factor" data-tone="4">Correção para População Finita</dt>
+          <dd>Encolhe a margem quando a amostra é uma fatia grande da população N. Com 1.000 de 100.000 (1%), o fator é 0,995 e quase não muda nada; por isso o tamanho da população importa tão pouco. Para população muito grande, vale 1. Veja também a <a href="correcao-populacao-finita.html">correção aplicada ao tamanho da amostra</a>.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="cochran-formula.html" rel="prev"><span>Anterior</span>Fórmula de Cochran</a>
+      <a class="pager-next" href="correcao-populacao-finita.html" rel="next"><span>Próxima</span>Correção para População Finita</a>
+    </nav>
+  </main>
+</body>
+</html>

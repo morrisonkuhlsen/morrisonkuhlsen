@@ -20,6 +20,7 @@
     "teorema-bayes": "bayes-theorem", "distribuicao-binomial": "binomial-distribution",
     "correcao-populacao-finita": "finite-population-correction", "coeficiente-pearson": "pearson-correlation",
     "regressao-linear": "linear-regression", "z-score": "z-score", "t-student": "students-t-test",
+    "cochran-formula": "cochran-formula",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -579,6 +580,105 @@
           + ` Se a população for pequena, a amostra pode ser menor: <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">aplique a correção para população finita</a>.`,
           `With ${fmt(n)} people, the proportion is estimated within ±${fmt(e, 2)} percentage points at ${fmt(conf, 2)}% confidence, in a large population.`
           + ` If the population is small, the sample can be smaller: <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">apply the finite population correction</a>.`),
+      };
+    },
+
+    // Margem de erro de uma proporção (intervalo de Wald), com a correção para
+    // população finita quando N é informado. A cobertura sai exata: soma a
+    // probabilidade de cada contagem possível k cujo intervalo contém o p real
+    // (binomial sem N, hipergeométrica com N, que é amostragem sem reposição).
+    margem({ n, p, conf, N }) {
+      if (!Number.isInteger(n) || n < 2) return { error: T("O tamanho da amostra precisa ser um inteiro maior ou igual a 2.", "The sample size must be an integer of at least 2.") };
+      if (n > 1e6) return { error: T("Use n de no máximo 1.000.000.", "Use n of at most 1,000,000.") };
+      if (p <= 0 || p >= 100) return { error: T("A proporção precisa estar entre 0 e 100%, sem os extremos.", "The proportion must be strictly between 0 and 100%.") };
+      if (conf <= 0 || conf >= 100) return confError;
+      if (N !== null && (!Number.isInteger(N) || N <= n)) return { error: T("A população precisa ser um inteiro maior que a amostra, ou ficar em branco.", "The population must be an integer larger than the sample, or left blank.") };
+      const z = zCrit(conf);
+      const ph = p / 100;
+      const se = Math.sqrt(ph * (1 - ph) / n);
+      const f = N === null ? 1 : Math.sqrt((N - n) / (N - 1));
+      const e = z * se * f;
+      const Z = tone(texNum(z), 2), P = tone(texNum(ph, 6), 3), NN = tone(texNum(n), 3);
+      const pp = x => `${fmt(x * 100, 2)}`;
+      const confTxt = `${fmt(conf, 2)}%`;
+
+      // Distribuição de k, a contagem de "sim" na amostra, quando o p real é p̂.
+      // Só a faixa de ±12 desvios importa; fora dela a probabilidade é nula.
+      const K = N === null ? null : Math.round(ph * N);
+      const truth = N === null ? ph : K / N;
+      const lc = (a, b) => lgamma(a + 1) - lgamma(b + 1) - lgamma(a - b + 1);
+      const sd = Math.sqrt(n * truth * (1 - truth)) * f;
+      let k0 = Math.max(0, Math.floor(n * truth - 12 * sd - 1)), k1 = Math.min(n, Math.ceil(n * truth + 12 * sd + 1));
+      if (K !== null) { k0 = Math.max(k0, n - (N - K)); k1 = Math.min(k1, K); }
+      const pmf = [];
+      for (let k = k0; k <= k1; k++) {
+        pmf.push(K === null ? binPmf(n, truth, k) : Math.exp(lc(K, k) + lc(N - K, n - k) - lc(N, n)));
+      }
+      const tot = pmf.reduce((a, b) => a + b, 0);
+      const ivl = k => { const q = k / n, h = z * Math.sqrt(q * (1 - q) / n) * f; return [q - h, q + h]; };
+      let cover = 0;
+      pmf.forEach((w, i) => { const [lo, hi] = ivl(k0 + i); if (lo <= truth && truth <= hi) cover += w; });
+      cover /= tot;
+
+      // 100 pesquisas sorteadas pela inversa da acumulada.
+      const cdf = [];
+      pmf.reduce((acc, w, i) => (cdf[i] = acc + w / tot), 0);
+      const rand = rng(n * 7919 + Math.round(p * 100) * 104729 + Math.round(conf * 100) + (N || 0));
+      const draw = () => {
+        const u = rand();
+        let a = 0, b = cdf.length - 1;
+        while (a < b) { const m = (a + b) >> 1; if (cdf[m] < u) a = m + 1; else b = m; }
+        return k0 + a;
+      };
+      const rows = Array.from({ length: 100 }, () => {
+        const k = draw(), [lo, hi] = ivl(k);
+        return { lo, hi, mid: k / n, hit: lo <= truth && truth <= hi };
+      });
+      const misses = rows.filter(r => !r.hit).length;
+      const span = Math.max(...rows.map(r => Math.max(truth - r.lo, r.hi - truth)));
+
+      const steps = [
+        [T(`Encontre o valor crítico para ${confTxt} de confiança, como na tabela Z:`, `Find the critical value for ${confTxt} confidence, as in the Z table:`), `z_{\\alpha/2} \\approx ${Z}`],
+        [T("Calcule o erro padrão da proporção:", "Compute the standard error of the proportion:"),
+          `\\sqrt{\\dfrac{${P} \\cdot (1 - ${texNum(ph, 6)})}{${NN}}} ${approx(se, 6)} ${tone(texNum(se, 6), 3)}`],
+      ];
+      if (N !== null) {
+        steps.push([T(`A amostra é ${fmt(n / N * 100, 2)}% da população; calcule o fator de correção:`, `The sample is ${fmt(n / N * 100, 2)}% of the population; compute the correction factor:`),
+          `\\sqrt{\\dfrac{${texNum(N)} - ${texNum(n)}}{${texNum(N)} - 1}} ${approx(f, 6)} ${tone(texNum(f, 6), 4)}`]);
+      }
+      steps.push([T("Multiplique tudo:", "Multiply everything:"),
+        `E = ${Z} \\cdot ${tone(texNum(se, 6), 3)}${N !== null ? ` \\cdot ${tone(texNum(f, 6), 4)}` : ""} ${approx(e, 6)} ${tone(texNum(e, 6), 1)}`]);
+      steps.push([T("Em pontos percentuais, o intervalo é p̂ ± E:", "In percentage points, the interval is p̂ ± E:"),
+        `${texNum(ph * 100, 2)}\\% \\pm ${tone(`${texNum(e * 100, 2)}`, 1)} ${approx(e * 100, 2)} \\left[\\,${texNum(ph * 100 - e * 100, 2)}${T("\\,;", ",")}\\ ${texNum(ph * 100 + e * 100, 2)}\\,\\right]`]);
+
+      const gap = Math.abs(cover * 100 - conf);
+      let note = T(`Com ${fmt(n)} entrevistas, a margem é de ±${pp(e)} pontos percentuais com ${confTxt} de confiança.`,
+        `With ${fmt(n)} interviews, the margin is ±${pp(e)} percentage points at ${confTxt} confidence.`);
+      note += T(` No gráfico, 100 pesquisas sorteadas de uma população em que o p real é ${pp(truth)}%: ${misses} ${misses === 1 ? "intervalo não o contém" : "intervalos não o contêm"}.`,
+        ` The chart shows 100 polls drawn from a population whose true p is ${pp(truth)}%: ${misses} interval${misses === 1 ? " misses" : "s miss"} it.`);
+      note += T(` Somando todos os resultados possíveis, a cobertura exata é ${fmt(cover * 100, 2)}%`,
+        ` Adding up every possible outcome, the exact coverage is ${fmt(cover * 100, 2)}%`)
+        + (gap >= 0.1
+          ? T(`, não ${confTxt}: a fórmula usa a aproximação normal e um z arredondado, e a contagem k só anda de 1 em 1.`, `, not ${confTxt}: the formula relies on the normal approximation and a rounded z, and the count k moves in steps of 1.`)
+          : ".");
+      if (n * Math.min(ph, 1 - ph) < 10) note += ` ${warn} ${T("com menos de 10 casos esperados de um dos lados, a aproximação normal falha e a cobertura pode ficar bem abaixo do nominal.", "with fewer than 10 expected cases on one side, the normal approximation breaks down and coverage can fall well below nominal.")}`;
+      note += T(` Para o caminho inverso, da margem para o tamanho da amostra, use a <a href="${PAGE("cochran-formula")}?conf=${conf}&amp;p=${p}&amp;e=${(e * 100).toFixed(2)}">fórmula de Cochran</a>.`,
+        ` For the reverse, from the margin to the sample size, use <a href="${PAGE("cochran-formula")}?conf=${conf}&amp;p=${p}&amp;e=${(e * 100).toFixed(2)}">Cochran's formula</a>.`);
+
+      return {
+        result: `E ${approx(e * 100, 2)} \\pm ${tone(texNum(e * 100, 2), 1)} \\text{ p.p.}`,
+        chart: {
+          type: "intervals", height: 330,
+          label: T(`100 intervalos de confiança de ${confTxt} de pesquisas sorteadas; ${misses} não contêm o p real de ${pp(truth)}%`,
+            `100 ${confTxt} confidence intervals from simulated polls; ${misses} miss the true p of ${pp(truth)}%`),
+          xLabel: T("proporção (%)", "proportion (%)"),
+          xMin: (truth - span * 1.1) * 100, xMax: (truth + span * 1.1) * 100, truth: truth * 100,
+          rows: rows.map(r => ({ lo: r.lo * 100, hi: r.hi * 100, mid: r.mid * 100, hit: r.hit })),
+          tip: (r, i) => [`${fmt(r.lo, 2)}% – ${fmt(r.hi, 2)}%`,
+            T(`pesquisa ${i + 1}: p̂ = ${fmt(r.mid, 2)}%${r.hit ? "" : ", erra o p real"}`, `poll ${i + 1}: p̂ = ${fmt(r.mid, 2)}%${r.hit ? "" : ", misses the true p"}`)],
+        },
+        steps,
+        note,
       };
     },
 
@@ -1316,7 +1416,7 @@
   function renderChart(box, spec) {
     box.replaceChildren();
     if (!spec) return;
-    const W = 640, H = 230, m = { l: 48, r: 14, t: 14, b: 34 };
+    const W = 640, H = spec.height || 230, m = { l: 48, r: 14, t: 14, b: 34 };
     const iw = W - m.l - m.r, ih = H - m.t - m.b;
     const root = svg("svg", { viewBox: `0 0 ${W} ${H}`, class: "chart", role: "img", "aria-label": spec.label }, box);
     const tip = document.createElement("div");
@@ -1331,7 +1431,7 @@
 
     // Grade e eixo y: linhas finas, recessivas.
     const ys = niceStep(yMax, 4);
-    for (let v = 0; v <= yMax + 1e-12; v += ys) {
+    for (let v = 0; spec.type !== "intervals" && v <= yMax + 1e-12; v += ys) {
       svg("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: v === 0 ? "chart-axis" : "chart-grid" }, root);
       svg("text", { x: m.l - 6, y: Y(v) + 4, class: "chart-label", "text-anchor": "end" }, root).textContent = fmt(v, 4);
     }
@@ -1386,6 +1486,19 @@
       }
       svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
 
+      // Um segmento por intervalo, empilhados; os que erram o valor real
+      // ganham a cor de destaque, e a linha vertical marca esse valor.
+      if (spec.type === "intervals") {
+        const rh = ih / spec.rows.length;
+        svg("line", { x1: X(spec.truth), x2: X(spec.truth), y1: m.t, y2: m.t + ih, class: "chart-truth" }, root);
+        spec.rows.forEach((r, i) => {
+          const y = m.t + (i + 0.5) * rh;
+          svg("line", { x1: X(r.lo), x2: X(r.hi), y1: y, y2: y, class: r.hit ? "chart-seg" : "chart-seg is-miss" }, root);
+          const hit = svg("rect", { x: m.l, y: y - rh / 2, width: iw, height: rh, class: "chart-hit" }, root);
+          const t = spec.tip(r, i);
+          hit.addEventListener("pointermove", e => showTip(e, t[0], t[1]));
+        });
+      }
       if (spec.type === "hist") {
         spec.bins.forEach(b => {
           const x0 = X(b.x0) + 1, w = Math.max(1, X(b.x1) - X(b.x0) - 2);
@@ -1395,7 +1508,7 @@
           hit.addEventListener("pointermove", e => showTip(e, T(`${fmt(b.count)} médias`, `${fmt(b.count)} means`), T(`entre ${fmt(b.x0, 2)} e ${fmt(b.x1, 2)}`, `between ${fmt(b.x0, 2)} and ${fmt(b.x1, 2)}`)));
         });
       }
-      const line = spec.pts.map(([x, y], i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("");
+      const line = (spec.pts || []).map(([x, y], i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("");
       if (spec.shadeTo != null) {
         const under = spec.pts.filter(([x]) => x <= spec.shadeTo);
         if (under.length > 1) {
@@ -1404,7 +1517,7 @@
           svg("path", { d, class: "chart-area" }, root);
         }
       }
-      svg("path", { d: line, class: "chart-line" }, root);
+      if (line) svg("path", { d: line, class: "chart-line" }, root);
       if (spec.marker) {
         const [mx, my] = spec.marker;
         svg("line", { x1: X(mx), x2: X(mx), y1: Y(0), y2: Y(my), class: "chart-rule" }, root);
@@ -1460,9 +1573,10 @@
       return Number(EN ? t.replace(/,/g, "") : t.replace(",", "."));
     };
     // Campo com data-list vira um array, separado por espaço ou ponto e vírgula
-    // (e, em inglês, também por vírgula). Com data-optional, pode ficar vazio.
+    // (e, em inglês, também por vírgula). Com data-optional, pode ficar vazio:
+    // a lista vira [], o número vira null.
     const read = i => {
-      if (!("list" in i.dataset)) return parse(i.value);
+      if (!("list" in i.dataset)) return "optional" in i.dataset && i.value.trim() === "" ? null : parse(i.value);
       const xs = i.value.split(EN ? /[\s;,]+/ : /[\s;]+/).filter(Boolean).map(parse);
       return xs.some(Number.isNaN) || (!xs.length && !("optional" in i.dataset)) ? NaN : xs;
     };

@@ -62,6 +62,11 @@
   description: "Intervalo de confiança para a média explicado termo a termo, com calculadora, valor crítico z, margem de erro e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Margem de Erro"
+  url: "/formulas/margem-de-erro.html"
+  description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança."
+  tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
+  lang: pt
 - title: "Média Harmônica"
   url: "/formulas/media-harmonica.html"
   description: "Média harmônica explicada termo a termo, com calculadora, passo a passo e comparação com a média aritmética."
@@ -262,6 +267,11 @@
   url: "/en/formulas/cochran-formula.html"
   description: "Cochran's formula explained term by term, with a calculator for the sample size needed to estimate a proportion, step by step."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Margin of Error"
+  url: "/en/formulas/margin-of-error.html"
+  description: "The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals."
+  tags: "formula interactive calculator step by step poll margin of error"
   lang: en
 - title: "Finite Population Correction"
   url: "/en/formulas/finite-population-correction.html"
