@@ -54,28 +54,40 @@ layout: null
   <link rel="stylesheet" href="style.css">
   <script defer src="dados.js"></script>
   <script defer src="script.js"></script>
+  <script defer src="planeta.js"></script>
 </head>
 <body>
-  <a href="/" class="back-link" aria-label="Voltar ao site" title="Voltar ao site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <a class="lang-link" href="/en/statistical-tests/" hreflang="en" lang="en">English</a>
+  <header class="pt-hero">
+    <canvas class="pt-hero-ceu" aria-hidden="true"></canvas>
+    <a href="/" class="back-link" aria-label="Voltar ao site" title="Voltar ao site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+    <a class="lang-link" href="/en/statistical-tests/" hreflang="en" lang="en">English</a>
+    <div class="pt-hero-conteudo">
+      <h1>Catálogo de testes estatísticos</h1>
+      <p class="pt-hero-sub">{{ cat.testes | size }} testes organizados pelo tipo de dado e pelo delineamento do estudo, com hipóteses, pressupostos, fórmula e código em R e Python.</p>
+      <p class="pt-hero-acoes">
+        <a class="pt-btn pt-btn-claro" href="#tabela-sec">Explorar a tabela</a>
+        <a class="pt-btn pt-btn-escuro" href="arvore/">Qual teste usar?</a>
+      </p>
+    </div>
+  </header>
 
   <main class="pt">
-    <header class="pt-head">
-      <h1>Catálogo de testes estatísticos</h1>
-      <p class="pt-lede">A posição de cada teste diz alguma coisa. Cada <strong>linha</strong> é uma família de testes e cada <strong>coluna</strong>, o delineamento do estudo: ache o cruzamento do seu caso e toque no teste para ver quando usar, a hipótese nula, os pressupostos e a fórmula. O bloco da direita reúne os testes que não dependem de quantos grupos há.</p>
-      <p class="pt-lede">Não sabe por onde começar? Responda algumas perguntas na <a href="arvore/">árvore de decisão</a>.</p>
-      <label class="pt-search">
-        <span class="visually-hidden">Buscar teste</span>
-        <input type="search" id="busca" placeholder="Buscar: normalidade, pareado, proporção…" autocomplete="off">
-      </label>
-      <p class="pt-count" aria-live="polite"></p>
-    </header>
-
-    <div class="pt-scroll">
-      <div class="pt-grid" id="tabela">
-        <aside class="pt-detail" id="ficha" aria-live="polite" tabindex="-1"></aside>
+    <section class="pt-tabela" id="tabela-sec" aria-labelledby="tabela-titulo">
+      <div class="pt-tabela-topo">
+        <p class="pt-tabela-guia"><strong id="tabela-titulo">Como achar o teste.</strong> Cada <strong>linha</strong> é uma família e cada <strong>coluna</strong>, o delineamento do estudo; o bloco da direita reúne os testes que não dependem de quantos grupos há. Toque num teste para ver a ficha.</p>
+        <label class="pt-search">
+          <span class="visually-hidden">Buscar teste</span>
+          <input type="search" id="busca" placeholder="Buscar: normalidade, pareado, proporção…" autocomplete="off">
+        </label>
+        <p class="pt-count" aria-live="polite"></p>
       </div>
-    </div>
+
+      <div class="pt-scroll">
+        <div class="pt-grid" id="tabela">
+          <aside class="pt-detail" id="ficha" aria-live="polite" tabindex="-1"></aside>
+        </div>
+      </div>
+    </section>
 
     <noscript><p>Sem JavaScript a tabela não aparece, mas a lista completa dos testes está logo abaixo.</p></noscript>
 

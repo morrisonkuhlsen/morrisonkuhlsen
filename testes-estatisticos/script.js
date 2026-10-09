@@ -175,17 +175,23 @@
     famHeads[t.col - 1].classList.toggle("is-hot", on);
   }
 
-  // Em tela de computador, a tabela vai até o pé da janela: as linhas
-  // dividem a altura que sobra abaixo do cabeçalho (com um mínimo, no CSS).
-  // No celular, a altura é a dos cards e a tabela rola de lado.
+  // Em tela de computador, a tabela cabe numa tela: com a seção no topo da
+  // janela (onde o "Explorar a tabela" a leva), as linhas dividem a altura
+  // que sobra abaixo da busca (com um mínimo, no CSS). No celular, a altura
+  // é a dos cards e a tabela rola de lado.
   const largo = matchMedia("(min-width: 901px)");
+  const secao = grid.closest(".pt-tabela") || grid;
   function ajustarAltura() {
     if (!largo.matches) {
       grid.style.height = "";
       return;
     }
-    const topo = grid.getBoundingClientRect().top + scrollY;
-    grid.style.height = `${Math.max(0, innerHeight - topo - 16)}px`;
+    const acima = grid.getBoundingClientRect().top - secao.getBoundingClientRect().top;
+    const margem = parseFloat(getComputedStyle(secao).scrollMarginTop) || 0;
+    // Em tela muito alta, as linhas param em ~9rem: mais que isso, os cards
+    // viram tiras compridas.
+    const teto = 64 + 4 * 144;
+    grid.style.height = `${Math.max(0, Math.min(teto, innerHeight - margem - acima - 16))}px`;
   }
   addEventListener("resize", ajustarAltura);
   // Abrir e fechar a ficha muda a largura da página (ver .ficha-aberta no CSS).

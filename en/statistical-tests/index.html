@@ -55,28 +55,40 @@ layout: null
   <link rel="stylesheet" href="/testes-estatisticos/style.css">
   <script defer src="dados.js"></script>
   <script defer src="/testes-estatisticos/script.js"></script>
+  <script defer src="/testes-estatisticos/planeta.js"></script>
 </head>
 <body>
-  <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
-  <a class="lang-link" href="/testes-estatisticos/" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <header class="pt-hero">
+    <canvas class="pt-hero-ceu" aria-hidden="true"></canvas>
+    <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+    <a class="lang-link" href="/testes-estatisticos/" hreflang="pt-BR" lang="pt-BR">Português</a>
+    <div class="pt-hero-conteudo">
+      <h1>Statistical tests catalog</h1>
+      <p class="pt-hero-sub">{{ cat.testes | size }} tests organized by type of data and study design, with hypotheses, assumptions, formula and R and Python code.</p>
+      <p class="pt-hero-acoes">
+        <a class="pt-btn pt-btn-claro" href="#tabela-sec">Explore the table</a>
+        <a class="pt-btn pt-btn-escuro" href="decision-tree/">Which test should I use?</a>
+      </p>
+    </div>
+  </header>
 
   <main class="pt">
-    <header class="pt-head">
-      <h1>Statistical tests catalog</h1>
-      <p class="pt-lede">Where a test sits tells you something. Each <strong>row</strong> is a family of tests and each <strong>column</strong> a study design: find the crossing that matches your case and tap the test to see when to use it, the null hypothesis, the assumptions and the formula. The block on the right gathers the tests that do not depend on how many groups there are.</p>
-      <p class="pt-lede">Not sure where to start? Answer a few questions in the <a href="decision-tree/">decision tree</a>.</p>
-      <label class="pt-search">
-        <span class="visually-hidden">Search tests</span>
-        <input type="search" id="busca" placeholder="Search: normality, paired, proportion…" autocomplete="off">
-      </label>
-      <p class="pt-count" aria-live="polite"></p>
-    </header>
-
-    <div class="pt-scroll">
-      <div class="pt-grid" id="tabela">
-        <aside class="pt-detail" id="ficha" aria-live="polite" tabindex="-1"></aside>
+    <section class="pt-tabela" id="tabela-sec" aria-labelledby="tabela-titulo">
+      <div class="pt-tabela-topo">
+        <p class="pt-tabela-guia"><strong id="tabela-titulo">How to find a test.</strong> Each <strong>row</strong> is a family and each <strong>column</strong> a study design; the block on the right gathers the tests that do not depend on how many groups there are. Tap a test to see its sheet.</p>
+        <label class="pt-search">
+          <span class="visually-hidden">Search tests</span>
+          <input type="search" id="busca" placeholder="Search: normality, paired, proportion…" autocomplete="off">
+        </label>
+        <p class="pt-count" aria-live="polite"></p>
       </div>
-    </div>
+
+      <div class="pt-scroll">
+        <div class="pt-grid" id="tabela">
+          <aside class="pt-detail" id="ficha" aria-live="polite" tabindex="-1"></aside>
+        </div>
+      </div>
+    </section>
 
     <noscript><p>Without JavaScript the table does not show, but the full list of tests is right below.</p></noscript>
 

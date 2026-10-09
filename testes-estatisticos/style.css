@@ -195,6 +195,157 @@ a {
   color: var(--text-muted);
 }
 
+/* ---------------------------------------------------------------- hero */
+
+/* Abertura do catálogo: céu e planeta desenhados no canvas pelo
+   planeta.js. É escuro nos dois temas (é o espaço) e se funde com o fundo
+   da página no pé. Ocupa a largura toda, apesar do padding do body. */
+.pt-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: min(100svh, 58rem);
+  min-height: 32rem;
+  margin: -4.5rem -16px 2rem;
+  overflow: hidden;
+  background: #030406;
+  color: #e9ecf3;
+  text-align: center;
+}
+
+.pt-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 18%;
+  background: linear-gradient(to bottom, rgba(3, 4, 6, 0), var(--bg));
+  pointer-events: none;
+}
+
+.pt-hero-ceu {
+  position: absolute;
+  inset: 0;
+}
+
+.pt-hero .back-link,
+.pt-hero .lang-link {
+  z-index: 2;
+  color: rgba(233, 236, 243, .6);
+}
+
+.pt-hero .back-link:hover,
+.pt-hero .lang-link:hover,
+.pt-hero .lang-link:focus-visible {
+  color: #fff;
+}
+
+.pt-hero-conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin-top: 22vh;
+  padding: 0 16px;
+}
+
+.pt-hero h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.2rem, 6vw, 4.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: #fff;
+  text-shadow: 0 2px 30px rgba(3, 4, 6, .6);
+}
+
+.pt-hero-sub {
+  margin: 0 auto 2rem;
+  max-width: 44rem;
+  font-size: clamp(1rem, 2.1vw, 1.35rem);
+  line-height: 1.5;
+  color: #b9bfcc;
+}
+
+.pt-hero-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .9rem;
+  margin: 0;
+}
+
+.pt-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.2rem;
+  padding: 0 1.9rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .15s ease, transform .15s ease;
+}
+
+.pt-btn:hover {
+  transform: translateY(-1px);
+}
+
+.pt-btn-claro {
+  background: #f3f4f7;
+  color: #12141a;
+}
+
+.pt-btn-claro:hover {
+  background: #fff;
+}
+
+.pt-btn-escuro {
+  background: #23262e;
+  color: #d9dce4;
+}
+
+.pt-btn-escuro:hover {
+  background: #2e323c;
+}
+
+/* A tabela começa com o guia de leitura e a busca numa linha só. */
+.pt-tabela {
+  scroll-margin-top: 12px;
+}
+
+.pt-tabela-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem 1.5rem;
+  margin: 0 0 .75rem;
+}
+
+.pt-tabela-guia {
+  flex: 1 1 28rem;
+  margin: 0;
+  font-size: .85rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.pt-tabela-guia strong {
+  color: var(--text);
+}
+
+.pt-tabela-topo .pt-search {
+  flex: 0 1 22rem;
+}
+
+.pt-tabela-topo .pt-count {
+  flex-basis: 100%;
+  min-height: 0;
+  margin: 0;
+}
+
+.pt-tabela-topo .pt-count:empty {
+  display: none;
+}
+
 /* ---------------------------------------------------------------- tabela */
 
 .pt-scroll {
@@ -234,6 +385,7 @@ a {
    do bloco. */
 .pt-colhead {
   justify-content: flex-end;
+  min-width: 0;
   border-bottom: 2px solid var(--border);
 }
 
