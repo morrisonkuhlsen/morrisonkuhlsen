@@ -238,12 +238,16 @@ a {
   height: 1.25rem;
 }
 
+/* Cards quadrados: a altura acompanha a largura da coluna. Se o texto não
+   couber (nome longo numa coluna estreita), o card cresce em vez de cortar. */
 .el {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 6.4rem;
+  justify-self: stretch;
+  align-self: start;
+  aspect-ratio: 1;
   padding: 6px 8px 7px;
   border: 1px solid color-mix(in srgb, var(--c) 55%, transparent);
   border-radius: 6px;
