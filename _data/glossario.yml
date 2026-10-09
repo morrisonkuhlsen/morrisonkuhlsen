@@ -6,6 +6,11 @@
 # compara por código de caractere e jogaria "Álgebra" para depois de "Z".
 # `veja` são os links internos que aprofundam o termo.
 #
+# Nos artigos, a primeira ocorrência de cada termo vira um link com a definição
+# ao passar o mouse (assets/js/glossary-tips.js). Valem o próprio termo, a sigla
+# entre parênteses e as grafias de `tambem`. `auto: false` tira do automático
+# os termos comuns demais na língua corrente ("moda", "evento", "amostra").
+#
 # A estrutura já nasce por idioma para o dia em que houver a versão em inglês.
 
 pt:
@@ -20,6 +25,7 @@ pt:
   - termo: "Amostra"
     slug: amostra
     ordem: "amostra"
+    auto: false
     def: "Subconjunto da população efetivamente observado. Toda a inferência estatística consiste em dizer algo sobre a população a partir dela — o que só é honesto quando a amostra foi obtida por um processo aleatório conhecido."
     veja:
       - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
@@ -86,6 +92,7 @@ pt:
   - termo: "Combinação"
     slug: combinacao
     ordem: "combinacao"
+    auto: false
     def: "Agrupamento em que a ordem não importa. Escolher 6 dezenas entre 60 é uma combinação — por isso a ordem do sorteio não muda a probabilidade do bilhete."
     veja:
       - { t: "Coeficiente binomial", u: "/formulas/coeficiente-binomial.html" }
@@ -94,6 +101,7 @@ pt:
   - termo: "Correção de população finita"
     slug: correcao-de-populacao-finita
     ordem: "correcao de populacao finita"
+    tambem: ["correção para população finita"]
     def: "Fator que reduz o erro padrão quando a amostra representa uma parcela grande da população. Sem ele, a incerteza de um censo quase completo sairia exagerada."
     veja:
       - { t: "Fórmula interativa", u: "/formulas/correcao-populacao-finita.html" }
@@ -123,6 +131,7 @@ pt:
   - termo: "Desigualdade de Chebyshev"
     slug: desigualdade-de-chebyshev
     ordem: "desigualdade de chebyshev"
+    tambem: ["teorema de Chebyshev"]
     def: "Garante que pelo menos 1 − 1/k² das observações ficam a k desvios padrão da média, seja qual for a distribuição. É um limite frouxo, mas que não exige suposição nenhuma."
     veja:
       - { t: "Fórmula interativa", u: "/formulas/teorema-chebyshev.html" }
@@ -196,6 +205,7 @@ pt:
   - termo: "Esperança"
     slug: esperanca
     ordem: "esperanca"
+    auto: false
     def: "O valor médio de uma variável aleatória a longo prazo, ponderando cada resultado pela sua probabilidade. Também chamada de valor esperado ou média populacional."
     veja:
       - { t: "Variáveis aleatórias", u: "/pt/probabilidade/variaveis-aleatorias" }
@@ -210,6 +220,7 @@ pt:
   - termo: "Evento"
     slug: evento
     ordem: "evento"
+    auto: false
     def: "Qualquer subconjunto do espaço amostral — o conjunto de resultados sob o qual dizemos que algo aconteceu."
     veja:
       - { t: "Eventos e espaço amostral", u: "/pt/probabilidade/eventos-espaco-amostral" }
@@ -259,6 +270,7 @@ pt:
   - termo: "Hipótese nula"
     slug: hipotese-nula
     ordem: "hipotese nula"
+    tambem: ["H₀"]
     def: "A hipótese de que não há efeito ou diferença, tomada como verdadeira enquanto os dados não a contrariarem. Um teste nunca a prova: ou a rejeita, ou deixa de rejeitá-la."
     veja:
       - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
@@ -273,6 +285,7 @@ pt:
   - termo: "Independência"
     slug: independencia
     ordem: "independencia"
+    auto: false
     def: "Dois eventos são independentes quando a ocorrência de um não altera a probabilidade do outro — isto é, quando P(A ∩ B) = P(A) · P(B)."
     veja:
       - { t: "Probabilidade condicional", u: "/pt/probabilidade/probabilidade-condicional" }
@@ -288,6 +301,7 @@ pt:
   - termo: "Intervalo de confiança"
     slug: intervalo-de-confianca
     ordem: "intervalo de confianca"
+    tambem: ["intervalos de confiança"]
     def: "Faixa de valores compatíveis com os dados para um parâmetro. A confiança de 95% é uma propriedade do método ao longo de amostras repetidas, não a probabilidade de o parâmetro estar naquele intervalo."
     veja:
       - { t: "Intervalos de confiança", u: "/pt/inferencia-estatistica/intervalos-confianca" }
@@ -339,6 +353,7 @@ pt:
   - termo: "Moda"
     slug: moda
     ordem: "moda"
+    auto: false
     def: "O valor mais frequente. É a única medida de tendência central aplicável a variáveis puramente categóricas, e um conjunto pode ter mais de uma."
     veja:
       - { t: "Medidas de tendência central", u: "/pt/estatistica-descritiva/tendencia-central" }
@@ -353,6 +368,7 @@ pt:
   - termo: "Outlier"
     slug: outlier
     ordem: "outlier"
+    tambem: ["outliers"]
     def: "Observação muito distante das demais. Pode ser erro de registro ou o dado mais informativo do conjunto — descartar sem investigar é que não vale."
     veja:
       - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
@@ -360,6 +376,7 @@ pt:
   - termo: "p-valor"
     slug: p-valor
     ordem: "p-valor"
+    tambem: ["valor-p", "p-valores", "valores-p"]
     def: "Probabilidade de observar um resultado ao menos tão extremo quanto o obtido, supondo verdadeira a hipótese nula. Não é a probabilidade de a hipótese nula ser verdadeira, nem mede o tamanho do efeito."
     veja:
       - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
@@ -367,6 +384,7 @@ pt:
   - termo: "Parâmetro"
     slug: parametro
     ordem: "parametro"
+    auto: false
     def: "Característica numérica da população, como μ ou σ: fixa e em geral desconhecida. O que se calcula na amostra é uma estatística, que a estima."
     veja:
       - { t: "Estimadores", u: "/pt/inferencia-estatistica/estimadores" }
@@ -395,6 +413,7 @@ pt:
   - termo: "População"
     slug: populacao
     ordem: "populacao"
+    auto: false
     def: "O conjunto completo de unidades sobre o qual se quer concluir algo. Defini-la com precisão é o que determina a quem as conclusões se aplicam."
     veja:
       - { t: "Amostragem", u: "/pt/inferencia-estatistica/amostragem" }
@@ -483,6 +502,7 @@ pt:
   - termo: "Teste t de Student"
     slug: teste-t-de-student
     ordem: "teste t de student"
+    tambem: ["teste t"]
     def: "Compara médias quando o desvio padrão da população é desconhecido e a amostra é pequena, usando a distribuição t, de caudas mais pesadas que a normal."
     veja:
       - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }

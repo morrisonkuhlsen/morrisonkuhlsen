@@ -145,3 +145,49 @@
 @media print {
   .glossary__tools { display: none; }
 }
+
+// ─── Termos do glossário dentro dos artigos ─────────────────────────────────
+// glossary-tips.js marca a primeira ocorrência de cada termo. O sublinhado
+// pontilhado diz "tem definição aqui" sem competir com os links de verdade.
+
+.prose a.gloss {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-decoration-color: var(--ink-faint);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.2em;
+  cursor: help;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+}
+
+.gloss-tip {
+  position: absolute;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  max-width: min(22rem, calc(100vw - 24px));
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  line-height: 1.45;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+
+  strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  &[hidden] {
+    display: none;
+  }
+}

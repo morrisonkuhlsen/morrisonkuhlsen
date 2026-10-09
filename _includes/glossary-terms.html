@@ -1,0 +1,42 @@
+{%- comment -%}
+  Termos do glossário para glossary-tips.js, que transforma a primeira
+  ocorrência de cada um no artigo num link com a definição ao passar o mouse.
+
+  Cada verbete vira { s: slug, d: definição, t: [grafias] }: o termo, a sigla
+  entre parênteses, se houver ("Intervalo interquartil (IQR)" → "Intervalo
+  interquartil" e "IQR"), e as grafias de `tambem`. Ficam de fora os verbetes
+  com `auto: false` e os que o próprio artigo aprofunda — um link do glossário
+  de volta para a página em que o leitor já está não ajuda ninguém.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign verbetes = site.data.glossario[lang] -%}
+{%- if verbetes -%}
+{%- assign aqui = page.url | remove: ".html" | split: "/" | join: "/" -%}
+{%- capture termos -%}[
+  {%- assign primeiro = true -%}
+  {%- for v in verbetes -%}
+    {%- if v.auto == false -%}{%- continue -%}{%- endif -%}
+    {%- assign proprio = false -%}
+    {%- for ref in v.veja -%}
+      {%- assign alvo = ref.u | remove: ".html" | split: "/" | join: "/" -%}
+      {%- if alvo == aqui -%}{%- assign proprio = true -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if proprio -%}{%- continue -%}{%- endif -%}
+    {%- assign grafias = "" | split: "" -%}
+    {%- if v.termo contains " (" -%}
+      {%- assign partes = v.termo | split: " (" -%}
+      {%- assign sigla = partes[1] | remove: ")" -%}
+      {%- assign grafias = grafias | push: partes[0] | push: sigla -%}
+    {%- else -%}
+      {%- assign grafias = grafias | push: v.termo -%}
+    {%- endif -%}
+    {%- for t in v.tambem -%}{%- assign grafias = grafias | push: t -%}{%- endfor -%}
+    {%- unless primeiro -%},{%- endunless -%}
+    {%- assign primeiro = false -%}
+    {"s":{{ v.slug | jsonify }},"n":{{ v.termo | jsonify }},"d":{{ v.def | jsonify }},"t":{{ grafias | jsonify }}}
+  {%- endfor -%}
+]{%- endcapture -%}
+<script type="application/json" id="glossary-terms"
+        data-base="{{ '/' | append: lang | append: '/glossario' | relative_url }}">{{ termos }}</script>
+<script src="{{ '/assets/js/glossary-tips.js' | relative_url }}" defer></script>
+{%- endif -%}
