@@ -4,7 +4,8 @@ layout: null
 {%- comment -%}
   Processado pelo Jekyll só para ler _data/testes_estatisticos.yml: a contagem
   da descrição e a lista "Todos os testes" saem de lá, em HTML estático, para
-  quem não roda JavaScript (buscadores incluídos).
+  quem não roda JavaScript (buscadores incluídos). Cada item da lista leva à
+  página do teste, gerada por _plugins/paginas_testes.rb.
 {%- endcomment -%}
 {%- assign cat = site.data.testes_estatisticos -%}
 {%- capture desc -%}Catálogo de {{ cat.testes | size }} testes estatísticos organizado pelo tipo de dado e pelo delineamento do estudo: veja quando usar cada um, hipóteses, pressupostos e fórmula.{%- endcapture -%}
@@ -95,7 +96,7 @@ layout: null
       <ul>
         {%- for t in grupo %}
         <li>
-          <a href="#{{ t.id }}">{{ t.nome | escape }}</a>
+          <a href="{{ t.id }}/">{{ t.nome | escape }}</a>
           {%- if t.row %}{% assign i = t.row | minus: 1 %} <span class="pt-index-row">· {{ cat.linhas[i].nome }}</span>{% endif %}
           <p>{{ t.quando | escape }}</p>
           <p><abbr title="Hipótese nula">H₀</abbr>: {{ t.h0 | escape }}</p>

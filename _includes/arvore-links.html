@@ -1,5 +1,5 @@
 {%- comment -%} Links para testes do catálogo, separados por vírgula. {%- endcomment -%}
 {%- for id in include.ids -%}
 {%- assign x = site.data.testes_estatisticos.testes | where: "id", id | first -%}
-<a href="/testes-estatisticos/#{{ id }}">{{ x.nome | escape }}</a>{% unless forloop.last %}, {% endunless %}
+<a href="/testes-estatisticos/{{ id }}/">{{ x.nome | escape }}</a>{% unless forloop.last %}, {% endunless %}
 {%- endfor -%}

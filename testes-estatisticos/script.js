@@ -270,6 +270,9 @@
     }
 
     const actions = el("div", "fd-actions");
+    const pagina = el("a", null, "Página do teste");
+    pagina.href = `${t.id}/`;
+    actions.appendChild(pagina);
     if (t.page) {
       const a = el("a", null, "Abrir a fórmula interativa");
       a.href = `/formulas/${t.page}.html`;
@@ -363,10 +366,10 @@
     if (!balao.hidden) esconde();
     else if (current) select(null, true);
   });
-  // O hash muda pelos links da lista "Todos os testes", que fica abaixo da
-  // tabela: o teste escolhido precisa voltar à vista junto com a ficha.
-  // Ao carregar a página, o foco fica onde está; num clique da lista, vai
-  // para a ficha.
+  // O hash abre a ficha: vem de links antigos e do "Ver na tabela do
+  // catálogo" das páginas dos testes. O teste escolhido precisa voltar à
+  // vista junto com a ficha. Ao carregar a página, o foco fica onde está; se
+  // o hash muda depois, vai para a ficha.
   const fromHash = foco => {
     select(location.hash.slice(1), false);
     if (!current) return;

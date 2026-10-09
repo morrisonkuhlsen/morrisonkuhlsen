@@ -1,11 +1,14 @@
 # Catálogo de testes estatísticos (/testes-estatisticos/).
 #
-# Fonte única: o Jekyll gera daqui o dados.js que a página usa e a lista em
-# HTML estático que fica abaixo da tabela (e que os buscadores leem).
+# Fonte única: o Jekyll gera daqui o dados.js que a página usa, a lista em
+# HTML estático que fica abaixo da tabela e, com _plugins/paginas_testes.rb,
+# uma página por teste em /testes-estatisticos/<id>/.
 #
 # Bloco principal: coluna = família, linha = delineamento. As faixas de baixo
 # guardam o que não depende de quantos grupos há.
 # Cada teste traz `row` + `col` (bloco) ou `strip` + `pos` (faixa).
+# `nome` é o rótulo curto da tabela; `titulo`, o nome completo, que encabeça
+# a página do teste.
 # `vars` lista variantes como [texto, ref]; um `ref` aponta para outro teste.
 # `efeito` é o tamanho de efeito usual: `texto` e, se houver, `tex`.
 # `reporte` é um exemplo de como escrever o resultado; `codigo` traz `r` e
@@ -75,6 +78,7 @@ testes:
   - id: t-uma-amostra
     sym: 't₁'
     nome: 't para uma amostra'
+    titulo: 'Teste t para uma amostra'
     fam: medias
     row: 1
     col: 1
@@ -102,6 +106,7 @@ testes:
   - id: t-independente
     sym: 't₂'
     nome: 't para duas amostras independentes'
+    titulo: 'Teste t para duas amostras independentes'
     fam: medias
     row: 2
     col: 1
@@ -129,6 +134,7 @@ testes:
   - id: t-pareado
     sym: 'tₚ'
     nome: 't pareado'
+    titulo: 'Teste t pareado'
     fam: medias
     row: 3
     col: 1
@@ -153,6 +159,7 @@ testes:
   - id: anova
     sym: 'F'
     nome: 'ANOVA de um fator'
+    titulo: 'ANOVA de um fator'
     fam: medias
     row: 4
     col: 1
@@ -181,6 +188,7 @@ testes:
   - id: anova-mr
     sym: 'Fᵣ'
     nome: 'ANOVA de medidas repetidas'
+    titulo: 'ANOVA de medidas repetidas'
     fam: medias
     row: 5
     col: 1
@@ -209,6 +217,7 @@ testes:
   - id: tukey
     sym: 'Tk'
     nome: 'Tukey HSD'
+    titulo: 'Teste de Tukey (HSD)'
     fam: medias
     row: 6
     col: 1
@@ -238,6 +247,7 @@ testes:
   - id: sinal
     sym: 'Sg'
     nome: 'Teste do sinal'
+    titulo: 'Teste do sinal'
     fam: postos
     row: 1
     col: 2
@@ -263,6 +273,7 @@ testes:
   - id: mann-whitney
     sym: 'U'
     nome: 'Mann-Whitney U'
+    titulo: 'Teste de Mann-Whitney'
     fam: postos
     row: 2
     col: 2
@@ -288,6 +299,7 @@ testes:
   - id: wilcoxon
     sym: 'W'
     nome: 'Wilcoxon de postos sinalizados'
+    titulo: 'Teste de Wilcoxon de postos sinalizados'
     fam: postos
     row: 3
     col: 2
@@ -313,6 +325,7 @@ testes:
   - id: kruskal-wallis
     sym: 'H'
     nome: 'Kruskal-Wallis'
+    titulo: 'Teste de Kruskal-Wallis'
     fam: postos
     row: 4
     col: 2
@@ -338,6 +351,7 @@ testes:
   - id: friedman
     sym: 'Fr'
     nome: 'Friedman'
+    titulo: 'Teste de Friedman'
     fam: postos
     row: 5
     col: 2
@@ -363,6 +377,7 @@ testes:
   - id: dunn
     sym: 'Dn'
     nome: 'Teste de Dunn'
+    titulo: 'Teste de Dunn'
     fam: postos
     row: 6
     col: 2
@@ -391,6 +406,7 @@ testes:
   - id: binomial
     sym: 'Bi'
     nome: 'Binomial / Z para uma proporção'
+    titulo: 'Teste binomial e teste Z para uma proporção'
     fam: prop
     row: 1
     col: 3
@@ -416,6 +432,7 @@ testes:
   - id: z-duas-proporcoes
     sym: 'Z₂'
     nome: 'Z para duas proporções'
+    titulo: 'Teste Z para duas proporções'
     fam: prop
     row: 2
     col: 3
@@ -442,6 +459,7 @@ testes:
   - id: mcnemar
     sym: 'Mc'
     nome: 'McNemar'
+    titulo: 'Teste de McNemar'
     fam: prop
     row: 3
     col: 3
@@ -467,6 +485,7 @@ testes:
   - id: qui-quadrado-homogeneidade
     sym: 'χ²ₕ'
     nome: 'Qui-quadrado de homogeneidade'
+    titulo: 'Teste qui-quadrado de homogeneidade'
     fam: prop
     row: 4
     col: 3
@@ -493,6 +512,7 @@ testes:
   - id: cochran-q
     sym: 'Q'
     nome: 'Q de Cochran'
+    titulo: 'Teste Q de Cochran'
     fam: prop
     row: 5
     col: 3
@@ -516,6 +536,7 @@ testes:
   - id: marascuilo
     sym: 'Ms'
     nome: 'Marascuilo'
+    titulo: 'Procedimento de Marascuilo'
     fam: prop
     row: 6
     col: 3
@@ -541,6 +562,7 @@ testes:
   - id: qui-quadrado-variancia
     sym: 'χ²ᵥ'
     nome: 'Qui-quadrado para uma variância'
+    titulo: 'Teste qui-quadrado para uma variância'
     fam: vari
     row: 1
     col: 4
@@ -562,6 +584,7 @@ testes:
   - id: f-variancias
     sym: 'Fᵥ'
     nome: 'F para duas variâncias'
+    titulo: 'Teste F para duas variâncias'
     fam: vari
     row: 2
     col: 4
@@ -585,6 +608,7 @@ testes:
   - id: pitman-morgan
     sym: 'PM'
     nome: 'Pitman-Morgan'
+    titulo: 'Teste de Pitman-Morgan'
     fam: vari
     row: 3
     col: 4
@@ -606,6 +630,7 @@ testes:
   - id: levene
     sym: 'Lv'
     nome: 'Levene'
+    titulo: 'Teste de Levene'
     fam: vari
     row: 4
     col: 4
@@ -628,6 +653,7 @@ testes:
   - id: mauchly
     sym: 'Mw'
     nome: 'Esfericidade de Mauchly'
+    titulo: 'Teste de esfericidade de Mauchly'
     fam: vari
     row: 5
     col: 4
@@ -653,6 +679,7 @@ testes:
   - id: shapiro-wilk
     sym: 'SW'
     nome: 'Shapiro-Wilk'
+    titulo: 'Teste de Shapiro-Wilk'
     fam: ader
     strip: 1
     pos: 1
@@ -674,6 +701,7 @@ testes:
   - id: kolmogorov-smirnov
     sym: 'KS'
     nome: 'Kolmogorov-Smirnov'
+    titulo: 'Teste de Kolmogorov-Smirnov'
     fam: ader
     strip: 1
     pos: 2
@@ -695,6 +723,7 @@ testes:
   - id: anderson-darling
     sym: 'AD'
     nome: 'Anderson-Darling'
+    titulo: 'Teste de Anderson-Darling'
     fam: ader
     strip: 1
     pos: 3
@@ -715,6 +744,7 @@ testes:
   - id: qui-quadrado-aderencia
     sym: 'χ²ₐ'
     nome: 'Qui-quadrado de aderência'
+    titulo: 'Teste qui-quadrado de aderência'
     fam: ader
     strip: 1
     pos: 4
@@ -736,6 +766,7 @@ testes:
   - id: jarque-bera
     sym: 'JB'
     nome: 'Jarque-Bera'
+    titulo: 'Teste de Jarque-Bera'
     fam: ader
     strip: 1
     pos: 5
@@ -757,6 +788,7 @@ testes:
   - id: lilliefors
     sym: 'Lf'
     nome: 'Lilliefors'
+    titulo: 'Teste de Lilliefors'
     fam: ader
     strip: 1
     pos: 6
@@ -779,6 +811,7 @@ testes:
   - id: grubbs
     sym: 'Gr'
     nome: 'Grubbs'
+    titulo: 'Teste de Grubbs'
     fam: ader
     strip: 1
     pos: 7
@@ -808,6 +841,7 @@ testes:
   - id: pearson
     sym: 'r'
     nome: 'Correlação de Pearson'
+    titulo: 'Correlação de Pearson'
     fam: assoc
     strip: 2
     pos: 1
@@ -834,6 +868,7 @@ testes:
   - id: spearman
     sym: 'ρ'
     nome: 'Correlação de Spearman'
+    titulo: 'Correlação de Spearman'
     fam: assoc
     strip: 2
     pos: 2
@@ -858,6 +893,7 @@ testes:
   - id: kendall
     sym: 'τ'
     nome: 'Tau de Kendall'
+    titulo: 'Tau de Kendall'
     fam: assoc
     strip: 2
     pos: 3
@@ -880,6 +916,7 @@ testes:
   - id: qui-quadrado-independencia
     sym: 'χ²ᵢ'
     nome: 'Qui-quadrado de independência'
+    titulo: 'Teste qui-quadrado de independência'
     fam: assoc
     strip: 2
     pos: 4
@@ -906,6 +943,7 @@ testes:
   - id: fisher
     sym: 'Fe'
     nome: 'Fisher exato'
+    titulo: 'Teste exato de Fisher'
     fam: assoc
     strip: 2
     pos: 5
@@ -930,6 +968,7 @@ testes:
   - id: ponto-bisserial
     sym: 'rₚᵦ'
     nome: 'Correlação ponto-bisserial'
+    titulo: 'Correlação ponto-bisserial'
     fam: assoc
     strip: 2
     pos: 6
@@ -952,6 +991,7 @@ testes:
   - id: kappa
     sym: 'κ'
     nome: 'Kappa de Cohen'
+    titulo: 'Kappa de Cohen'
     fam: assoc
     strip: 2
     pos: 7
@@ -981,6 +1021,7 @@ testes:
   - id: t-coeficiente
     sym: 'β'
     nome: 't de um coeficiente'
+    titulo: 'Teste t de um coeficiente da regressão'
     fam: modelos
     strip: 3
     pos: 1
@@ -1006,6 +1047,7 @@ testes:
   - id: f-global
     sym: 'Fg'
     nome: 'F global da regressão'
+    titulo: 'Teste F global da regressão'
     fam: modelos
     strip: 3
     pos: 2
@@ -1032,6 +1074,7 @@ testes:
   - id: anova-dois-fatores
     sym: 'F₂'
     nome: 'ANOVA de dois fatores'
+    titulo: 'ANOVA de dois fatores'
     fam: modelos
     strip: 3
     pos: 3
@@ -1061,6 +1104,7 @@ testes:
   - id: razao-verossimilhanca
     sym: 'LR'
     nome: 'Razão de verossimilhança'
+    titulo: 'Teste da razão de verossimilhança'
     fam: modelos
     strip: 3
     pos: 4
@@ -1086,6 +1130,7 @@ testes:
   - id: wald
     sym: 'Wd'
     nome: 'Wald'
+    titulo: 'Teste de Wald'
     fam: modelos
     strip: 3
     pos: 5
@@ -1111,6 +1156,7 @@ testes:
   - id: hosmer-lemeshow
     sym: 'HL'
     nome: 'Hosmer-Lemeshow'
+    titulo: 'Teste de Hosmer-Lemeshow'
     fam: modelos
     strip: 3
     pos: 6
@@ -1137,6 +1183,7 @@ testes:
   - id: durbin-watson
     sym: 'DW'
     nome: 'Durbin-Watson'
+    titulo: 'Teste de Durbin-Watson'
     fam: modelos
     strip: 3
     pos: 7
@@ -1161,6 +1208,7 @@ testes:
   - id: breusch-pagan
     sym: 'BP'
     nome: 'Breusch-Pagan'
+    titulo: 'Teste de Breusch-Pagan'
     fam: modelos
     strip: 3
     pos: 8
@@ -1185,6 +1233,7 @@ testes:
   - id: dickey-fuller
     sym: 'ADF'
     nome: 'Dickey-Fuller aumentado'
+    titulo: 'Teste de Dickey-Fuller aumentado (ADF)'
     fam: series
     strip: 4
     pos: 1
@@ -1208,6 +1257,7 @@ testes:
   - id: kpss
     sym: 'KP'
     nome: 'KPSS'
+    titulo: 'Teste KPSS'
     fam: series
     strip: 4
     pos: 2
@@ -1230,6 +1280,7 @@ testes:
   - id: ljung-box
     sym: 'LB'
     nome: 'Ljung-Box'
+    titulo: 'Teste de Ljung-Box'
     fam: series
     strip: 4
     pos: 3

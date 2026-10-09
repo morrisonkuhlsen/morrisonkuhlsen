@@ -14,7 +14,7 @@
       {%- assign t = cat.testes | where: "id", op.teste | first %}
       {%- assign fam = cat.familias[t.fam] %}
       <div class="tr-leaf" data-cor="{{ fam.cor }}">
-        <p class="tr-test"><a href="/testes-estatisticos/#{{ t.id }}">{{ t.nome | escape }}</a> <span>{{ fam.nome }}</span></p>
+        <p class="tr-test"><a href="/testes-estatisticos/{{ t.id }}/">{{ t.nome | escape }}</a> <span>{{ fam.nome }}</span></p>
         <p>{{ t.quando | escape }}</p>
         {%- if op.nota %}
         <p class="tr-nota">{{ op.nota | escape }}</p>
