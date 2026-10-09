@@ -20,7 +20,7 @@
     "teorema-bayes": "bayes-theorem", "distribuicao-binomial": "binomial-distribution",
     "correcao-populacao-finita": "finite-population-correction", "coeficiente-pearson": "pearson-correlation",
     "regressao-linear": "linear-regression", "z-score": "z-score", "t-student": "students-t-test",
-    "cochran-formula": "cochran-formula",
+    "cochran-formula": "cochran-formula", "poder-estatistico": "statistical-power",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -281,6 +281,64 @@
 
   // Valor-p bilateral da t de Student com df graus de liberdade.
   const tTwoTail = (t, df) => betainc(df / (df + t * t), df / 2, 0.5);
+
+  // t crítico bilateral: o t com P(|T| > t) = alpha, por bisseção na cauda.
+  function tCrit(alpha, df) {
+    let lo = 0, hi = 1;
+    while (tTwoTail(hi, df) > alpha) hi *= 2;
+    for (let i = 0; i < 60; i++) {
+      const m = (lo + hi) / 2;
+      if (tTwoTail(m, df) > alpha) lo = m; else hi = m;
+    }
+    return (lo + hi) / 2;
+  }
+
+  // Acumulada da t não central, P(T ≤ t) com df graus de liberdade e
+  // parâmetro de não centralidade delta: algoritmo AS 243 (Lenth, 1989).
+  function nctCdf(t, df, delta) {
+    const neg = t < 0;
+    const tt = neg ? -t : t, del = neg ? -delta : delta;
+    let tnc = 0;
+    const x = tt * tt / (tt * tt + df);
+    if (x > 0) {
+      const lambda = del * del;
+      let p = 0.5 * Math.exp(-0.5 * lambda);
+      let q = Math.sqrt(2 / Math.PI) * p * del;
+      let s = 0.5 - p;
+      let a = 0.5;
+      const b = 0.5 * df;
+      const rxb = Math.pow(1 - x, b);
+      const albeta = lgamma(a) + lgamma(b) - lgamma(a + b);
+      let xodd = betainc(x, a, b);
+      let godd = 2 * rxb * Math.exp(a * Math.log(x) - albeta);
+      let xeven = 1 - rxb;
+      let geven = b * x * rxb;
+      tnc = p * xodd + q * xeven;
+      for (let j = 1; j <= 1000; j++) {
+        a += 1;
+        xodd -= godd;
+        xeven -= geven;
+        godd *= x * (a + b - 1) / a;
+        geven *= x * (a + b - 0.5) / (a + 0.5);
+        p *= lambda / (2 * j);
+        q *= lambda / (2 * j + 1);
+        s -= p;
+        tnc += p * xodd + q * xeven;
+        if (2 * s * (xodd - godd) < 1e-12) break;
+      }
+    }
+    tnc += phi(-del);
+    return neg ? 1 - tnc : tnc;
+  }
+
+  // Poder do teste t bilateral com n por grupo (g = 1: uma amostra ou
+  // pareado; g = 2: duas amostras independentes de mesmo tamanho).
+  function tPower(d, n, alpha, g) {
+    const df = g === 2 ? 2 * n - 2 : n - 1;
+    const delta = d * Math.sqrt(n / g);
+    const tc = tCrit(alpha, df);
+    return 1 - nctCdf(tc, df, delta) + nctCdf(-tc, df, delta);
+  }
 
   // Inversa da normal padrão, pelo algoritmo de Acklam (erro relativo < 1,2·10⁻⁹).
   function probit(p) {
@@ -580,6 +638,74 @@
           + ` Se a população for pequena, a amostra pode ser menor: <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">aplique a correção para população finita</a>.`,
           `With ${fmt(n)} people, the proportion is estimated within ±${fmt(e, 2)} percentage points at ${fmt(conf, 2)}% confidence, in a large population.`
           + ` If the population is small, the sample can be smaller: <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">apply the finite population correction</a>.`),
+      };
+    },
+
+    // Tamanho de amostra pelo poder do teste t bilateral. A fórmula é a da
+    // normal; a correção de Guenther (+ z²/4 ou z²/2) a aproxima da t, e a
+    // busca final pela t não central dá o n exato que o G*Power daria.
+    poder({ d, alpha, power, g }) {
+      if (d <= 0) return { error: T("O tamanho de efeito precisa ser maior que zero.", "The effect size must be greater than zero.") };
+      if (d > 5) return { error: T("Use d de no máximo 5; efeitos maiores que isso dispensam o cálculo.", "Use d of at most 5; effects that large don't need the calculation.") };
+      if (alpha <= 0 || alpha >= 50) return { error: T("A significância precisa estar entre 0 e 50%, como 5 ou 1.", "The significance level must be between 0 and 50%, such as 5 or 1.") };
+      if (power <= alpha / 2 || power >= 100) return { error: T("O poder precisa ser menor que 100% e maior que α/2, como 80 ou 90.", "Power must be below 100% and above α/2, such as 80 or 90.") };
+      if (g !== 1 && g !== 2) return { error: T("Use g = 2 para dois grupos independentes ou g = 1 para uma amostra ou dados pareados.", "Use g = 2 for two independent groups or g = 1 for one sample or paired data.") };
+      const a = alpha / 100, pw = power / 100;
+      const zA = zCrit(100 - alpha), zB = Number(probit(pw).toFixed(2));
+      const base = g * (zA + zB) ** 2 / (d * d);
+      const corr = zA * zA / (g === 2 ? 4 : 2);
+      const guess = ceilInt(base + corr);
+
+      // Menor n (pelo menos 2) cujo poder exato alcança o pedido.
+      let n = Math.max(2, guess - 3);
+      if (n > 1e5) return { error: T("O n passa de 100.000 por grupo; aumente o efeito ou diminua o poder.", "n exceeds 100,000 per group; increase the effect or lower the power.") };
+      while (tPower(d, n, a, g) < pw) n++;
+      while (n > 2 && tPower(d, n - 1, a, g) >= pw) n--;
+      const got = tPower(d, n, a, g);
+
+      const ZA = tone(texNum(zA), 2), ZB = tone(texNum(zB), 3), D = tone(texNum(d), 4), G = tone(g, 5);
+      const steps = [
+        [T(`Encontre os valores críticos: z de α/2 = ${fmt(alpha / 2, 4)}% e z do poder, ${fmt(power, 2)}%, como na tabela Z:`, `Find the critical values: z for α/2 = ${fmt(alpha / 2, 4)}% and z for the power, ${fmt(power, 2)}%, as in the Z table:`),
+          `z_{\\alpha/2} \\approx ${ZA}, \\qquad z_{\\beta} \\approx ${ZB}`],
+        [T("Substitua na fórmula, que usa a distribuição normal:", "Plug into the formula, which uses the normal distribution:"),
+          `n = \\dfrac{${G} \\cdot (${ZA} + ${ZB})^2}{${D}^2} ${approx(base, 2)} ${texNum(base, 2)}`],
+        [T(`O teste de verdade é t, um pouco menos poderoso com amostras pequenas; a correção de Guenther soma z²/${g === 2 ? 4 : 2}:`, `The real test is a t-test, slightly less powerful with small samples; Guenther's correction adds z²/${g === 2 ? 4 : 2}:`),
+          `n \\approx ${texNum(base, 2)} + \\dfrac{${ZA}^2}{${g === 2 ? 4 : 2}} ${approx(base + corr, 2)} ${texNum(base + corr, 2)} \\;\\to\\; ${texNum(guess)}`],
+        [n === guess
+          ? T("Confira pela distribuição t não central, a do teste quando o efeito existe:", "Check with the noncentral t distribution, the test's distribution when the effect is real:")
+          : T(`Pela distribuição t não central, a do teste quando o efeito existe, o menor n que alcança o poder é ${fmt(n)}, não ${fmt(guess)}:`, `With the noncentral t distribution, the test's distribution when the effect is real, the smallest n that reaches the power is ${fmt(n)}, not ${fmt(guess)}:`),
+          `${T("\\text{poder}", "\\text{power}")}(n = ${tone(texNum(n), 1)}) \\approx ${texNum(got * 100, 2)}\\%`],
+      ];
+
+      // Curva de poder × n, até bem depois do n pedido.
+      const nMax = Math.max(10, Math.ceil(n * 2.5));
+      const stepN = Math.max(1, Math.ceil((nMax - 2) / 150));
+      const pts = [];
+      for (let k = 2; k <= nMax; k += stepN) pts.push([k, tPower(d, k, a, g)]);
+
+      const per = g === 2 ? T(" por grupo", " per group") : "";
+      const total = g === 2 ? T(` (${fmt(2 * n)} no total)`, ` (${fmt(2 * n)} in total)`) : "";
+      const size = d < 0.35 ? T("pequeno", "small") : d < 0.65 ? T("médio", "medium") : T("grande", "large");
+      let note = T(`São precisos ${fmt(n)}${per}${total} para detectar um efeito ${size} (d = ${fmt(d)}) com ${fmt(power, 2)}% de chance, num teste bilateral a ${fmt(alpha, 2)}%.`,
+        `You need ${fmt(n)}${per}${total} to detect a ${size} effect (d = ${fmt(d)}) with ${fmt(power, 2)}% probability, in a two-sided test at ${fmt(alpha, 2)}%.`);
+      note += T(` Se o efeito real for metade disso, o mesmo estudo teria só ${fmt(tPower(d / 2, n, a, g) * 100, 0)}% de poder: o d escolhido é a aposta mais importante do cálculo, e convém tirá-lo de estudos anteriores, não do otimismo.`,
+        ` If the real effect is half that, the same study would have only ${fmt(tPower(d / 2, n, a, g) * 100, 0)}% power: the chosen d is the most important bet in the calculation, and it should come from previous studies, not optimism.`);
+      note += T(` Depois de coletar, analise com o <a href="${PAGE("t-student")}">teste t</a>.`, ` Once you have the data, analyze it with the <a href="${PAGE("t-student")}">t-test</a>.`);
+
+      return {
+        result: `n = ${tone(texNum(n), 1)}${g === 2 ? T("\\text{ por grupo}", "\\text{ per group}") : ""}`,
+        chart: {
+          type: "curve",
+          label: T(`Poder do teste em função de n, para d = ${fmt(d)} e α = ${fmt(alpha, 2)}%; com n = ${fmt(n)}, o poder é ${fmt(got * 100, 1)}%`,
+            `Power of the test as a function of n, for d = ${fmt(d)} and α = ${fmt(alpha, 2)}%; with n = ${fmt(n)}, power is ${fmt(got * 100, 1)}%`),
+          xLabel: T(`n${per}`, `n${per}`), xMin: 2, xMax: nMax, yMax: 1 / 1.08, pts, marker: [n, got],
+          tipAt: v => {
+            const k = Math.max(2, Math.round(v));
+            return [`${fmt(tPower(d, k, a, g) * 100, 1)}%`, T(`poder com n = ${k}`, `power with n = ${k}`)];
+          },
+        },
+        steps,
+        note,
       };
     },
 

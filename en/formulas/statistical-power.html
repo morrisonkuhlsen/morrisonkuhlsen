@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Statistical Power — Interactive</title>
+  <meta name="description" content="Sample size from statistical power explained term by term: a calculator for one- and two-sample t-tests, a power curve and a check with the noncentral t.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/statistical-power.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/poder-estatistico.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/statistical-power.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/poder-estatistico.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/statistical-power.html">
+  <meta property="og:title" content="Statistical Power — Interactive">
+  <meta property="og:description" content="Sample size from statistical power explained term by term: a calculator for one- and two-sample t-tests, a power curve and a check with the noncentral t.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Statistical Power — Interactive">
+  <meta name="twitter:description" content="Sample size from statistical power explained term by term: a calculator for one- and two-sample t-tests, a power curve and a check with the noncentral t.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/poder-estatistico.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Statistical Power</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive sample size from power formula">
+        <span class="part" data-part="n_power" data-tone="1" data-tex="n"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="groups_factor" data-tone="5" data-tex="g"></span>
+            <span class="op">·</span>
+            <span class="op">(</span>
+            <span class="part" data-part="z_alpha_power" data-tone="2" data-tex="z_{\alpha/2}"></span>
+            <span class="op">+</span>
+            <span class="part" data-part="z_beta" data-tone="3" data-tex="z_{\beta}"></span>
+            <span class="op">)²</span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="effect_d" data-tone="4" data-tex="d^2"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com a curva de poder; estado em ?d=&alpha=&power=&g=.
+         A fórmula usa a normal; o resultado final é o menor n cujo poder,
+         pela t não central, alcança o pedido. -->
+    <section class="calc" data-calc="poder" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a trial will compare a treatment with a control and expects a medium difference (Cohen's d = 0.5). How many participants per group are needed to detect it with 80% power at 5% significance? Use g = 2 for two independent groups and g = 1 for one sample or paired data. Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="4">
+          <span>Effect size <i>d</i></span>
+          <input name="d" type="text" inputmode="decimal" value="0.5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Significance <i>α</i> (%)</span>
+          <input name="alpha" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Power (%)</span>
+          <input name="power" type="text" inputmode="decimal" value="80" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Groups <i>g</i></span>
+          <input name="g" type="text" inputmode="numeric" value="2" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="n_power" data-tone="1">Sample Size (n)</dt>
+          <dd>How many observations each group needs for the test to detect the effect with the requested power. With two groups, the total is twice that.</dd>
+          <dt data-part="groups_factor" data-tone="5">Number of Groups (g)</dt>
+          <dd>2 to compare two independent groups, such as treatment and control: each mean carries its own uncertainty, and the variance of the difference doubles. 1 for one sample against a fixed value or for paired data, where the mean of the differences is tested.</dd>
+          <dt data-part="z_alpha_power" data-tone="2">Critical Value (z<sub>α/2</sub>)</dt>
+          <dd>The threshold for rejecting H₀ in a two-sided test at level α. For α = 5%, z<sub>α/2</sub> ≈ 1.96. A smaller α pushes the threshold out and calls for more data.</dd>
+          <dt data-part="z_beta" data-tone="3">Power Quantile (z<sub>β</sub>)</dt>
+          <dd>The standard normal value with β = 1 − power below it. For 80% power, β = 20% and z<sub>β</sub> ≈ 0.84; for 90%, ≈ 1.28. It is the slack that makes the real effect clear the threshold in most samples.</dd>
+          <dt data-part="effect_d" data-tone="4">Squared Effect Size (d²)</dt>
+          <dd>Cohen's d is the difference in means divided by the standard deviation: 0.2 is small, 0.5 medium and 0.8 large. With paired data, use the d of the differences. Because it is squared, halving the effect quadruples the sample.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="confidence-interval.html" rel="prev"><span>Previous</span>Confidence Interval</a>
+      <a class="pager-next" href="chi-square-test.html" rel="next"><span>Next</span>Chi-Square Test (χ²)</a>
+    </nav>
+  </main>
+</body>
+</html>

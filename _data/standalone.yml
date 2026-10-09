@@ -67,6 +67,11 @@
   description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
   lang: pt
+- title: "Poder Estatístico"
+  url: "/formulas/poder-estatistico.html"
+  description: "Tamanho de amostra pelo poder estatístico explicado termo a termo: calculadora para testes t de uma ou duas amostras, curva de poder e conferência pela t não central."
+  tags: "fórmula interativa calculadora passo a passo poder tamanho de amostra d de cohen"
+  lang: pt
 - title: "Média Harmônica"
   url: "/formulas/media-harmonica.html"
   description: "Média harmônica explicada termo a termo, com calculadora, passo a passo e comparação com a média aritmética."
@@ -272,6 +277,11 @@
   url: "/en/formulas/margin-of-error.html"
   description: "The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals."
   tags: "formula interactive calculator step by step poll margin of error"
+  lang: en
+- title: "Statistical Power"
+  url: "/en/formulas/statistical-power.html"
+  description: "Sample size from statistical power explained term by term: a calculator for one- and two-sample t-tests, a power curve and a check with the noncentral t."
+  tags: "formula interactive calculator step by step power analysis sample size cohen's d"
   lang: en
 - title: "Finite Population Correction"
   url: "/en/formulas/finite-population-correction.html"
