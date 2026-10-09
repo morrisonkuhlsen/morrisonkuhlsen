@@ -282,10 +282,14 @@ a {
 
 /* ---------------------------------------------------------------- ficha */
 
+/* A ficha ocupa as linhas da tabela sem decidir a altura delas: sem o
+   contain, uma ficha longa esticaria as linhas e os cards mudariam de
+   tamanho conforme o teste aberto. Ela fica do tamanho das linhas e rola. */
 .pt-detail {
   grid-column: 6 / 8;
   grid-row: 1 / 8;
   align-self: stretch;
+  contain: size;
   overflow: auto;
   padding: 1rem 1.1rem;
   border: 1px solid var(--border);
@@ -981,6 +985,7 @@ a {
   }
 
   .pt-detail {
+    contain: none;
     position: fixed;
     left: 0;
     right: 0;
