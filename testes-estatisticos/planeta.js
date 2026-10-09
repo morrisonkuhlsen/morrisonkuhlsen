@@ -90,12 +90,6 @@
       return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
     }
 
-    // Distância a um hexágono regular (o diafragma da lente) de raio r.
-    float hexagono(vec2 p, float r) {
-      p = abs(p);
-      return max(p.x * 0.866025 + p.y * 0.5, p.y) - r;
-    }
-
     void main() {
       vec2 ndc = gl_FragCoord.xy / uRes * 2.0 - 1.0;
       vec3 d = normalize(uF + uR * ndc.x * uTanX + uU * ndc.y * uTanY);
@@ -185,7 +179,7 @@
       vec3 corLente = mix(corSol, vec3(1.0, 0.9, 0.75) * uVis, 0.6);
       // Brilho branco largo em volta do núcleo, que é o que faz o sol
       // parecer forte numa foto.
-      cor += corLente * (3.5 * exp(-ang / 0.007) + 0.6 * exp(-ang / 0.03));
+      cor += corLente * (8.0 * exp(-ang / 0.011) + 1.0 * exp(-ang / 0.035) + 0.04 * exp(-ang / 0.12));
 
       // Efeitos de lente, na tela, em pixels.
       vec2 dp = gl_FragCoord.xy - uSunPx;
@@ -212,26 +206,41 @@
       estrela *= smoothstep(0.5, 0.3, length(uv));
       cor += corLente * estrela * uBurstK;
 
-      // Reflexos da lente na linha que vai do sol ao centro da tela, e o
-      // anel de halo com as cores separadas.
+      // Rastro anamórfico: linha horizontal fina e azulada pelo sol.
+      cor += corLente * vec3(0.55, 0.7, 1.0) * 0.5 *
+             exp(-abs(dp.y) / (1.1 * e)) * exp(-abs(dp.x) / (420.0 * e));
+
+      // Reflexos da lente: uma fileira de discos, anéis e pontos azulados
+      // na linha que vai do sol ao centro da tela e continua do outro lado
+      // (com o sol no centro, uma fileira vertical). Cada reflexo: um disco
+      // suave, a borda mais clara e, em alguns, um ponto brilhante no meio.
       vec2 centro = uRes * 0.5;
       vec2 eixo = centro - uSunPx;
       vec3 refl = vec3(0.0);
-      for (int k = 0; k < 7; k++) {
-        float f = k == 0 ? 0.35 : k == 1 ? 0.6 : k == 2 ? 0.82 : k == 3 ? 1.15 : k == 4 ? 1.45 : k == 5 ? 1.8 : 2.2;
-        float r = (k == 0 ? 22.0 : k == 1 ? 9.0 : k == 2 ? 44.0 : k == 3 ? 16.0 : k == 4 ? 70.0 : k == 5 ? 30.0 : 110.0) * e;
-        vec3 tinta = k == 0 ? vec3(0.4, 0.7, 1.0) : k == 1 ? vec3(1.0, 0.7, 0.4) : k == 2 ? vec3(0.6, 0.45, 1.0)
-                   : k == 3 ? vec3(0.4, 1.0, 0.7) : k == 4 ? vec3(1.0, 0.6, 0.4) : k == 5 ? vec3(0.45, 0.6, 1.0) : vec3(1.0, 0.5, 0.75);
+      for (int k = 0; k < 10; k++) {
+        float f = k == 0 ? 0.2 : k == 1 ? 0.36 : k == 2 ? 0.52 : k == 3 ? 0.7 : k == 4 ? 0.9
+                : k == 5 ? 1.12 : k == 6 ? 1.33 : k == 7 ? 1.55 : k == 8 ? 1.8 : 2.1;
+        float r = (k == 0 ? 10.0 : k == 1 ? 26.0 : k == 2 ? 46.0 : k == 3 ? 20.0 : k == 4 ? 36.0
+                : k == 5 ? 24.0 : k == 6 ? 6.0 : k == 7 ? 56.0 : k == 8 ? 28.0 : 14.0) * e;
+        vec3 tinta = k == 0 ? vec3(0.6, 0.75, 1.0) : k == 1 ? vec3(0.35, 0.6, 1.0) : k == 2 ? vec3(0.3, 0.5, 1.0)
+                   : k == 3 ? vec3(0.55, 0.45, 1.0) : k == 4 ? vec3(0.3, 0.65, 0.95) : k == 5 ? vec3(0.35, 0.8, 1.0)
+                   : k == 6 ? vec3(0.9, 0.55, 1.0) : k == 7 ? vec3(0.3, 0.5, 1.0) : k == 8 ? vec3(0.4, 0.7, 1.0) : vec3(0.45, 0.6, 1.0);
+        float forca = k == 0 ? 0.10 : k == 1 ? 0.07 : k == 2 ? 0.035 : k == 3 ? 0.08 : k == 4 ? 0.045
+                    : k == 5 ? 0.09 : k == 6 ? 0.25 : k == 7 ? 0.03 : k == 8 ? 0.08 : 0.12;
+        float ponto = (k == 3 || k == 5 || k == 8) ? 1.0 : 0.0;
         vec2 q = gl_FragCoord.xy - (uSunPx + eixo * f);
-        float sd = (k == 1 || k == 3) ? length(q) - r : hexagono(q, r);
-        float corpo = (1.0 - smoothstep(-1.5, 1.5, sd)) * (0.35 + 0.65 * smoothstep(-r, 0.0, sd));
-        refl += tinta * corpo * 0.012;
+        float dq = length(q);
+        float disco = 1.0 - smoothstep(r - 1.5, r + 1.5, dq);
+        float borda = exp(-pow((dq - r * 0.94) / (r * 0.07 + 1.0), 2.0));
+        float miolo = exp(-dq * dq / (2.0 * pow(1.2 * e + 0.5, 2.0)));
+        refl += 1.6 * tinta * forca * (0.45 * disco + 0.8 * borda + 6.0 * ponto * miolo);
       }
-      float rh = min(uRes.x, uRes.y) * 0.42;
-      vec3 anel = vec3(exp(-pow((dist - rh * 0.985) / (5.0 * e), 2.0)),
-                       exp(-pow((dist - rh) / (5.0 * e), 2.0)),
-                       exp(-pow((dist - rh * 1.015) / (5.0 * e), 2.0)));
-      refl += anel * 0.003;
+      // O feixe no fim da fileira: um traço azulado alongado no eixo.
+      vec2 ue = normalize(eixo);
+      vec2 qf = gl_FragCoord.xy - (uSunPx + eixo * 1.95);
+      float along = dot(qf, ue), across = dot(qf, vec2(-ue.y, ue.x));
+      refl += vec3(0.3, 0.55, 1.0) * 0.12 * exp(-across * across / (2.0 * pow(4.0 * e, 2.0))) *
+              exp(-along * along / (2.0 * pow(60.0 * e, 2.0)));
       cor += refl * uVis * uVis;
 
       // Exposição, curva de tom, gama e um ruído leve contra faixas de cor.
@@ -276,20 +285,30 @@
   // A estrela em volta do sol, como numa foto: o padrão de difração de
   // Fraunhofer da abertura da lente, que é a intensidade da transformada de
   // Fourier do formato da abertura. Cada borda reta do diafragma dá um par
-  // de raios perpendicular a ela (aqui, duas bordas: o X); a borda redonda
+  // de raios perpendicular a ela (aqui, 7 lâminas: 14 raios); a borda redonda
   // dá os anéis; poeira e fibras na lente dão as estrias finas em volta.
-  // Calculado uma vez, com uma FFT 2D de 512 × 512, e enviado como textura.
-  const GANHO = 1400;
+  // Calculado uma vez, com uma FFT 2D de 1024 × 1024 (raios de 2 a 3 px
+  // na tela), e enviado como textura. A conta leva uns décimos de segundo:
+  // roda logo depois do primeiro quadro, com o sol ainda atrás do planeta,
+  // e até lá o ganho fica em zero.
+  const GANHO = 16000;
+  let ganho = 0;
   function estrela() {
-    const N = 512, LOG = 9, c = N / 2, r = N / 4.5;
+    const N = 1024, LOG = 10, c = N / 2, r = N / 3;
     const re = new Float32Array(N * N), im = new Float32Array(N * N);
     let semente = 101;
     const aleatorio = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
 
-    // A abertura: um disco cortado por duas faixas (as bordas retas), com a
-    // borda levemente irregular, poeira e fibras. Bordas suavizadas em 1 px
-    // para não criar falsos raios de serrilhado.
-    const faixas = [0.96, 2.18].map(a => [Math.cos(a), Math.sin(a), r * 0.8]);
+    // A abertura: um disco cortado pelas lâminas do diafragma (as bordas
+    // retas), com a borda levemente irregular, poeira e fibras. Bordas
+    // suavizadas em 1 px para não criar falsos raios de serrilhado.
+    // Diafragma de 7 lâminas, levemente desiguais: 14 raios finos de
+    // intensidades variadas.
+    const LAMINAS = 7;
+    const faixas = Array.from({ length: LAMINAS }, (_, k) => {
+      const a = 0.3 + k * 2 * Math.PI / LAMINAS + (aleatorio() - 0.5) * 0.06;
+      return [Math.cos(a), Math.sin(a), r * Math.cos(Math.PI / LAMINAS) * (0.97 + aleatorio() * 0.05)];
+    });
     const poeira = Array.from({ length: 28 }, () => {
       const a = aleatorio() * 6.283, d = Math.sqrt(aleatorio()) * r * 0.9;
       return [c + d * Math.cos(a), c + d * Math.sin(a), 0.6 + aleatorio() * 1.8];
@@ -307,7 +326,7 @@
         const rr = r * (1 + 0.008 * Math.sin(7 * th + 1) + 0.005 * Math.sin(13 * th + 2));
         let v = Math.min(1, Math.max(0, rr - d + 0.5));
         if (!v) continue;
-        for (const [cx, cy, a] of faixas) v *= Math.min(1, Math.max(0, a - Math.abs(px * cx + py * cy) + 0.5));
+        for (const [cx, cy, a] of faixas) v *= Math.min(1, Math.max(0, a - (px * cx + py * cy) + 0.5));
         for (const [qx, qy, rad] of poeira) {
           const dd = Math.hypot(x + 0.5 - qx, y + 0.5 - qy);
           if (dd < rad + 1) v *= Math.min(1, Math.max(0, dd - rad + 0.5));
@@ -384,8 +403,8 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    ganho = GANHO;
   }
-  estrela();
 
   /* ---------------------------------------------------------------- geometria */
 
@@ -393,8 +412,8 @@
   const RAIO_SOL = 0.0058;
   const FOV_Y = 38 * Math.PI / 180;
   // O horizonte fica 0.28 acima do centro da tela (em coordenadas de -1 a 1),
-  // isto é, a 36% da altura; o sol, um pouco à esquerda.
-  const HORIZONTE_Y = 0.28, SOL_X = -0.22;
+  // isto é, a 36% da altura; o sol, no centro.
+  const HORIZONTE_Y = 0.28, SOL_X = 0;
   const mergulho = Math.acos(RP / (RP + ALT)); // quanto o horizonte fica abaixo da horizontal
 
   let W = 0, H = 0, escala = 1;
@@ -438,8 +457,8 @@
     gl.uniform1f(U.uVis, vis);
     gl.uniform1f(U.uEsc, Math.min(W, 1600 * escala) / 1400);
     gl.uniform1i(U.uBurst, 0);
-    gl.uniform1f(U.uBurstPx, H * 1.9);
-    gl.uniform1f(U.uBurstK, GANHO);
+    gl.uniform1f(U.uBurstPx, H * 0.95);
+    gl.uniform1f(U.uBurstK, ganho);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
@@ -462,10 +481,12 @@
 
   medir();
   if (parado) {
+    estrela();
     fim = true;
     desenhar(E1);
   } else {
     requestAnimationFrame(quadro);
+    setTimeout(estrela, 50);
   }
   addEventListener("resize", () => {
     medir();
