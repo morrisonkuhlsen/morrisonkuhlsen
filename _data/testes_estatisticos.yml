@@ -235,8 +235,6 @@ testes:
       - ['Games-Howell, com variâncias diferentes', null]
       - ['Dunnett, comparando todos contra um controle', null]
       - ['Bonferroni, mais conservador e geral', null]
-
-  # ------------------------------------------------------------------ postos
     reporte: 'B − A = 4,2; IC 95% [1,1; 7,3]; p ajustado = 0,006'
     codigo:
       r: |
@@ -244,6 +242,8 @@ testes:
       py: |
         from statsmodels.stats.multicomp import pairwise_tukeyhsd
         pairwise_tukeyhsd(dados["y"], dados["grupo"])
+
+  # ------------------------------------------------------------------ postos
   - id: sinal
     sym: 'Sg'
     nome: 'Teste do sinal'
@@ -393,8 +393,6 @@ testes:
     vars:
       - ['Ajuste os valores-p das comparações (Bonferroni, Holm)', null]
       - ['Conover-Iman, um pouco mais poderoso', null]
-
-  # ------------------------------------------------------------------ proporções
     reporte: 'B − A: z = 2,74; p ajustado (Holm) = 0,018'
     codigo:
       r: |
@@ -403,6 +401,8 @@ testes:
       py: |
         import scikit_posthocs as sp
         sp.posthoc_dunn(dados, val_col="y", group_col="grupo", p_adjust="holm")
+
+  # ------------------------------------------------------------------ proporções
   - id: binomial
     sym: 'Bi'
     nome: 'Binomial / Z para uma proporção'
@@ -549,8 +549,6 @@ testes:
     tex: '|\hat{p}_i - \hat{p}_j| > \sqrt{\chi^2_{\alpha;\,k-1}} \, \sqrt{\dfrac{\hat{p}_i(1 - \hat{p}_i)}{n_i} + \dfrac{\hat{p}_j(1 - \hat{p}_j)}{n_j}}'
     vars:
       - ['Com medidas repetidas, McNemar par a par com ajuste dos valores-p', mcnemar]
-
-  # ------------------------------------------------------------------ variâncias
     reporte: 'A − C: |0,42 − 0,25| = 0,17, acima do valor crítico de 0,15: diferem a 5%'
     codigo:
       r: |
@@ -559,6 +557,8 @@ testes:
       py: |
         # sem função padrão: compare cada |p[i] - p[j]| com
         np.sqrt(stats.chi2.ppf(0.95, k - 1)) * np.sqrt(p[i]*(1-p[i])/n[i] + p[j]*(1-p[j])/n[j])
+
+  # ------------------------------------------------------------------ variâncias
   - id: qui-quadrado-variancia
     sym: 'χ²ᵥ'
     nome: 'Qui-quadrado para uma variância'
@@ -666,8 +666,6 @@ testes:
     tex: 'W = \dfrac{\det(\mathbf{S})}{\left(\operatorname{tr}(\mathbf{S}) / p\right)^p}'
     vars:
       - ['ANOVA de medidas repetidas, com correção de Greenhouse-Geisser ou Huynh-Feldt se a esfericidade falhar', anova-mr]
-
-  # ------------------------------------------------------------------ aderência e normalidade
     reporte: 'W = 0,71; χ²(2) = 6,2; p = 0,045; ε de Greenhouse-Geisser = 0,78'
     codigo:
       r: |
@@ -676,6 +674,8 @@ testes:
       py: |
         import pingouin as pg
         pg.sphericity(dados, dv="y", subject="id", within="tempo")
+
+  # ------------------------------------------------------------------ aderência e normalidade
   - id: shapiro-wilk
     sym: 'SW'
     nome: 'Shapiro-Wilk'
@@ -825,8 +825,6 @@ testes:
     vars:
       - ['Dixon (Q), para amostras muito pequenas', null]
       - ['ESD generalizado de Rosner, para procurar vários outliers de uma vez', null]
-
-  # ------------------------------------------------------------------ associação e correlação
     veja: [distribuicao-normal]
     reporte: 'G = 2,91; n = 20; p = 0,017: o maior valor é um outlier'
     codigo:
@@ -838,6 +836,8 @@ testes:
         G = np.abs(x - x.mean()).max() / x.std(ddof=1)
         t = stats.t.ppf(1 - 0.05 / (2 * n), n - 2)
         G_crit = (n - 1) / np.sqrt(n) * np.sqrt(t**2 / (n - 2 + t**2))
+
+  # ------------------------------------------------------------------ associação e correlação
   - id: pearson
     sym: 'r'
     nome: 'Correlação de Pearson'
@@ -1008,8 +1008,6 @@ testes:
     vars:
       - ['Kappa ponderado, para categorias ordinais', null]
       - ['Kappa de Fleiss, para mais de dois avaliadores', null]
-
-  # ------------------------------------------------------------------ modelos e regressão
     reporte: 'κ = 0,68; IC 95% [0,52; 0,84]: concordância substancial'
     codigo:
       r: |
@@ -1018,6 +1016,8 @@ testes:
       py: |
         from sklearn.metrics import cohen_kappa_score
         cohen_kappa_score(aval1, aval2)
+
+  # ------------------------------------------------------------------ modelos e regressão
   - id: t-coeficiente
     sym: 'β'
     nome: 't de um coeficiente'
@@ -1220,8 +1220,6 @@ testes:
     tex: 'LM = n\, R^2_{\text{aux}}'
     vars:
       - ['White, sem supor uma forma para a heterocedasticidade', null]
-
-  # ------------------------------------------------------------------ séries temporais
     reporte: 'BP(2) = 8,9; p = 0,012'
     codigo:
       r: |
@@ -1230,6 +1228,8 @@ testes:
       py: |
         from statsmodels.stats.diagnostic import het_breuschpagan
         het_breuschpagan(modelo.resid, modelo.model.exog)
+
+  # ------------------------------------------------------------------ séries temporais
   - id: dickey-fuller
     sym: 'ADF'
     nome: 'Dickey-Fuller aumentado'
