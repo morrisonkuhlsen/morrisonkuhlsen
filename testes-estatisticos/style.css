@@ -185,14 +185,28 @@ a {
   padding-bottom: .5rem;
 }
 
-/* Coluna 1: rótulos das linhas. Colunas 2–5: bloco principal. Colunas 6–7,
-   linhas 1–7: a ficha, no vão ao lado do bloco principal. As
-   faixas de baixo ocupam as colunas 2–7. */
+/* Onde a tabela cabe, a janela não rola de lado: assim a ficha gruda no topo
+   da página (um contêiner com overflow prenderia o sticky dentro dele). */
+@media (min-width: 1000px) {
+  .pt-scroll {
+    overflow: visible;
+  }
+
+  .pt-detail {
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+/* Coluna 1: rótulos das linhas. Colunas 2–5: os cards, de tamanho fixo
+   (--card), no bloco principal e nas faixas de baixo. Coluna 6: a ficha, de
+   cima a baixo. */
 .pt-grid {
+  --card: 7.5rem;
   display: grid;
-  grid-template-columns: minmax(7.5rem, .9fr) repeat(6, minmax(6.4rem, 1fr));
+  grid-template-columns: 7.5rem repeat(4, var(--card)) minmax(15rem, 28rem);
+  justify-content: center;
   gap: 6px;
-  min-width: 860px;
 }
 
 .pt-colhead,
@@ -303,14 +317,15 @@ a {
 
 /* ---------------------------------------------------------------- ficha */
 
-/* A ficha ocupa as linhas da tabela sem decidir a altura delas: sem o
-   contain, uma ficha longa esticaria as linhas e os cards mudariam de
-   tamanho conforme o teste aberto. Ela fica do tamanho das linhas e rola. */
+/* A ficha desce pela coluna da direita (o script.js estende grid-row até a
+   última linha) e, em tela larga, acompanha a rolagem. A altura máxima,
+   menor que a da tabela, impede que uma ficha longa estique as linhas e
+   mude o tamanho dos cards; o excesso rola dentro dela. */
 .pt-detail {
-  grid-column: 6 / 8;
+  grid-column: 6;
   grid-row: 1 / 8;
-  align-self: stretch;
-  contain: size;
+  align-self: start;
+  max-height: calc(100vh - 2rem);
   overflow: auto;
   padding: 1rem 1.1rem;
   border: 1px solid var(--border);
@@ -1039,12 +1054,11 @@ a {
 /* A tabela rola na horizontal e a ficha vira uma folha que sobe de baixo. */
 @media (max-width: 900px) {
   .pt-grid {
-    grid-template-columns: 6.5rem repeat(6, 6.2rem);
-    min-width: 0;
+    --card: 6.2rem;
+    grid-template-columns: 6.5rem repeat(4, var(--card));
   }
 
   .pt-detail {
-    contain: none;
     position: fixed;
     left: 0;
     right: 0;

@@ -125,10 +125,11 @@
     rowHeads.push(h);
   });
   // Vão entre o bloco principal e as faixas.
-  grid.appendChild(place(el("div", "pt-gap"), C.linhas.length + 2, 1, 7));
-  // Cada faixa tem 6 posições por linha da grade; a partir da 7ª, quebra para
-  // a linha de baixo e o rótulo se estende pelas duas.
-  const POR_LINHA = 6;
+  grid.appendChild(place(el("div", "pt-gap"), C.linhas.length + 2, 1, 5));
+  // Cada faixa tem 4 posições por linha da grade, as mesmas colunas do bloco
+  // principal; a partir da 5ª, quebra para a linha de baixo e o rótulo se
+  // estende pelas linhas que ela ocupa.
+  const POR_LINHA = 4;
   const stripRow = [];
   let nextRow = C.linhas.length + 3;
   C.faixas.forEach((f, i) => {
@@ -144,6 +145,8 @@
     dica(h, fam.dica, f);
     grid.appendChild(h);
   });
+  // A ficha ocupa a coluna da direita da primeira à última linha.
+  ficha.style.gridRow = `1 / ${nextRow}`;
 
   ordered.forEach(t => {
     const fam = C.familias[t.fam];
