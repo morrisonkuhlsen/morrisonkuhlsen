@@ -528,9 +528,10 @@
   /* ---------------------------------------------------------------- reflexos */
 
   // Os reflexos de uma lente ficam na linha que liga a luz ao centro da
-  // lente. Com o mouse sobre o hero, esse centro segue o cursor, com
-  // inércia, e os reflexos se acendem um pouco; ao sair, voltam ao centro
-  // da tela. Só esta etapa leve é refeita. No toque, nada muda.
+  // lente. Com o mouse sobre o hero, esse centro vai em parte na direção
+  // do cursor, com inércia, e os reflexos se acendem um pouco; ao sair,
+  // voltam ao centro da tela. Só esta etapa leve é refeita. No toque, nada muda.
+  const SEGUE = 0.35;
   let eixo = null, alvo = null, realce = 0, alvoRealce = 0, passoPendente = 0;
 
   function compor() {
@@ -562,8 +563,11 @@
   };
   hero.addEventListener("pointermove", ev => {
     if (ev.pointerType === "touch") return;
+    // Segue o cursor só em parte: o eixo vai a SEGUE do caminho entre o
+    // centro da tela e o mouse, e a fileira se inclina de leve.
     const r = canvas.getBoundingClientRect();
-    alvo = [(ev.clientX - r.left) * escala, H - (ev.clientY - r.top) * escala];
+    const mx = (ev.clientX - r.left) * escala, my = H - (ev.clientY - r.top) * escala;
+    alvo = [W / 2 + (mx - W / 2) * SEGUE, H / 2 + (my - H / 2) * SEGUE];
     alvoRealce = 1;
     mexer();
   });
