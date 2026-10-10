@@ -1456,7 +1456,22 @@
             ` ${warn} ${fmt(v)} is outside the observed range (${fmt(lo)} to ${fmt(hi)}). Extrapolating assumes the line keeps holding beyond the data, which may not be true.`);
         }
       }
-      return { result: line, steps, note };
+      // Dispersão com a reta: os pontos se arrastam e os campos x e y seguem.
+      // A previsão entra na faixa do eixo para o anel não cair fora da figura.
+      const pad = (lo, hi) => { const s = hi - lo || Math.abs(hi) || 1; return [lo - s * 0.12, hi + s * 0.12]; };
+      const pred = x0.length ? [x0[0], b0 + b1 * x0[0]] : null;
+      const [xMin, xMax] = pad(Math.min(...x, ...(pred ? [pred[0]] : [])), Math.max(...x, ...(pred ? [pred[0]] : [])));
+      const [yMin, yMax] = pad(Math.min(...y, ...(pred ? [pred[1]] : [])), Math.max(...y, ...(pred ? [pred[1]] : [])));
+      const chart = {
+        type: "scatter", height: 300, xMin, xMax, yMin, yMax, pred,
+        dots: x.map((v, i) => [v, y[i]]),
+        fields: ["x", "y"],
+        label: T("Pontos (x, y) com a reta de mínimos quadrados e os resíduos", "Points (x, y) with the least-squares line and the residuals"),
+        xLabel: "x",
+        hint: T("Arraste os pontos e veja a reta se ajustar; toque num espaço vazio para acrescentar um. Pelo teclado: setas movem o ponto em foco (com Shift, dez vezes mais), Delete o remove. As linhas tracejadas são os resíduos, cujos quadrados a reta minimiza.",
+          "Drag the points and watch the line adjust; tap an empty spot to add one. With the keyboard: arrows move the focused point (ten times as far with Shift), Delete removes it. The dashed lines are the residuals, whose squares the line minimises."),
+      };
+      return { result: line, steps, note, chart };
     },
 
     harm({ x }) {
@@ -1995,6 +2010,113 @@
     return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`;
   }
 
+  // Dispersão editável. Durante o arraste a figura não é refeita (isso
+  // soltaria o ponteiro): aqui mesmo se move o ponto e se recalcula a reta,
+  // com a escala parada. Cada passo vai para os campos por "chart-edit"; ao
+  // soltar, o desenho é refeito inteiro, já com a escala dos dados novos.
+  let clipId = 0;
+  function scatter(box, root, spec, g) {
+    const { W, H, m, iw, ih, X, Y, xMin, xMax, yMin, yMax } = g;
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    // Arredonda a um décimo da marca do eixo, para os campos não receberem
+    // quinze casas decimais a cada pixel.
+    const grain = s => { const d = Math.max(0, -Math.floor(Math.log10(s))); return v => Number((Math.round(v / s) * s).toFixed(d)); };
+    const dx = niceStep(xMax - xMin, 6) / 10, dy = niceStep(yMax - yMin, 4) / 10;
+    const sx = grain(dx), sy = grain(dy);
+    const at = e => {
+      const r = root.getBoundingClientRect();
+      const cx = (e.clientX - r.left) / r.width * W, cy = (e.clientY - r.top) / r.height * H;
+      return [sx(clamp(xMin + (cx - m.l) / iw * (xMax - xMin), xMin, xMax)),
+        sy(clamp(yMin + (m.t + ih - cy) / ih * (yMax - yMin), yMin, yMax))];
+    };
+    const coord = ([a, b]) => `(${fmt(a)}${T(";", ",")} ${fmt(b)})`;
+
+    const pts = spec.dots.map(p => p.slice());
+    const id = `chart-clip-${++clipId}`;
+    svg("rect", { x: m.l, y: m.t, width: iw, height: ih }, svg("clipPath", { id }, root));
+    const bg = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit chart-add" }, root);
+    const lay = svg("g", { "clip-path": `url(#${id})` }, root);
+    const res = pts.map(() => svg("line", { class: "chart-ref" }, lay));
+    const fit = svg("path", { class: "chart-fit" }, lay);
+    const pred = spec.pred && svg("circle", { r: 5, class: "chart-pred" }, lay);
+    const dots = pts.map(() => svg("circle", { r: 6, class: "chart-pt" }, root));
+    const hits = pts.map(() => svg("circle", { r: 16, class: "chart-hit chart-grab", tabindex: "0", role: "button" }, root));
+
+    function draw() {
+      const n = pts.length;
+      const mx = pts.reduce((s, p) => s + p[0], 0) / n, my = pts.reduce((s, p) => s + p[1], 0) / n;
+      const sxx = pts.reduce((s, p) => s + (p[0] - mx) ** 2, 0);
+      const b1 = pts.reduce((s, p) => s + (p[0] - mx) * (p[1] - my), 0) / sxx, b0 = my - b1 * mx;
+      const ok = sxx > 0;
+      const yh = v => b0 + b1 * v;
+      fit.setAttribute("d", ok ? `M${X(xMin)},${Y(yh(xMin))}L${X(xMax)},${Y(yh(xMax))}` : "");
+      pts.forEach((p, i) => {
+        const a = { x1: X(p[0]), x2: X(p[0]), y1: Y(p[1]), y2: ok ? Y(yh(p[0])) : Y(p[1]) };
+        for (const k in a) res[i].setAttribute(k, a[k]);
+        for (const c of [dots[i], hits[i]]) { c.setAttribute("cx", X(p[0])); c.setAttribute("cy", Y(p[1])); }
+        hits[i].setAttribute("aria-label", T(`Ponto ${i + 1} de ${n}: ${coord(p)}`, `Point ${i + 1} of ${n}: ${coord(p)}`));
+      });
+      if (pred) {
+        pred.setAttribute("visibility", ok ? "visible" : "hidden");
+        if (ok) { pred.setAttribute("cx", X(spec.pred[0])); pred.setAttribute("cy", Y(yh(spec.pred[0]))); }
+      }
+    }
+
+    const emit = focus => {
+      if (focus != null) box.dataset.focus = focus;
+      box.dispatchEvent(new CustomEvent("chart-edit", { bubbles: true, detail: { fields: spec.fields, pts } }));
+    };
+
+    hits.forEach((hit, i) => {
+      hit.addEventListener("pointerdown", e => {
+        e.preventDefault();
+        hit.setPointerCapture(e.pointerId);
+        box.dataset.drag = "1";
+        root.classList.add("is-dragging");
+      });
+      hit.addEventListener("pointermove", e => {
+        if (!box.dataset.drag) { g.showTip(e, coord(pts[i]), T(`ponto ${i + 1}`, `point ${i + 1}`)); return; }
+        pts[i] = at(e);
+        draw();
+        g.showTip(e, coord(pts[i]), T(`ponto ${i + 1}`, `point ${i + 1}`));
+        emit();
+      });
+      const drop = () => {
+        if (!box.dataset.drag) return;
+        delete box.dataset.drag;
+        emit();
+      };
+      hit.addEventListener("pointerup", drop);
+      hit.addEventListener("pointercancel", drop);
+      hit.addEventListener("keydown", e => {
+        const k = e.shiftKey ? 10 : 1;
+        const step = { ArrowLeft: [-dx, 0], ArrowRight: [dx, 0], ArrowUp: [0, dy], ArrowDown: [0, -dy] }[e.key];
+        if (step) {
+          pts[i] = [sx(pts[i][0] + step[0] * k), sy(pts[i][1] + step[1] * k)];
+        } else if ((e.key === "Delete" || e.key === "Backspace") && pts.length > 2) {
+          pts.splice(i, 1);
+          i = Math.min(i, pts.length - 1);
+        } else return;
+        e.preventDefault();
+        emit(i);
+      });
+    });
+    bg.addEventListener("click", e => {
+      pts.push(at(e));
+      emit();
+    });
+
+    draw();
+    const p = document.createElement("p");
+    p.className = "chart-hint";
+    p.textContent = spec.hint;
+    box.appendChild(p);
+    if (box.dataset.focus != null) {
+      hits[Math.min(Number(box.dataset.focus), hits.length - 1)].focus({ preventScroll: true });
+      delete box.dataset.focus;
+    }
+  }
+
   function renderChart(box, spec) {
     box.replaceChildren();
     if (!spec) return;
@@ -2114,6 +2236,7 @@
         svg("line", { x1: X(mx), x2: X(mx), y1: Y(0), y2: Y(my), class: "chart-rule" }, root);
         svg("circle", { cx: X(mx), cy: Y(my), r: 5, class: "chart-dot" }, root);
       }
+      if (spec.type === "scatter") scatter(box, root, spec, { W, H, m, iw, ih, X, Y, xMin, xMax, yMin, yMax, showTip, hideTip });
       if (spec.tipAt) {
         const hit = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit" }, root);
         hit.addEventListener("pointermove", e => {
@@ -2194,7 +2317,8 @@
       section.classList.toggle("has-error", !!out.error);
       steps.replaceChildren();
       // Um gráfico ou uma lista deles, cada um no seu painel.
-      if (chart) {
+      // Com um ponto sendo arrastado, quem desenha é o próprio gráfico.
+      if (chart && !chart.dataset.drag) {
         const specs = out.error ? [] : [].concat(out.chart || []);
         if (specs.length === 1) renderChart(chart, specs[0]);
         else {
@@ -2240,6 +2364,15 @@
     // parse em português leria como decimal.
     const field = name => inputs.find(i => i.name === name);
     const set = (i, v) => { i.value = String(v); section.dispatchEvent(new Event("input")); };
+    // Gráfico editável: os pontos voltam para os campos, sem separador de
+    // milhar e com o decimal do idioma.
+    section.addEventListener("chart-edit", e => {
+      const { fields: [fx, fy], pts } = e.detail;
+      const num = v => String(v).replace(".", DEC);
+      field(fx).value = pts.map(p => num(p[0])).join(" ");
+      field(fy).value = pts.map(p => num(p[1])).join(" ");
+      section.dispatchEvent(new Event("input"));
+    });
     let timer = null;
     const stop = btn => {
       clearInterval(timer);

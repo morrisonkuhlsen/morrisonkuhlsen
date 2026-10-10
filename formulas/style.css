@@ -544,6 +544,18 @@ body {
 .chart-seg.is-miss { stroke: var(--chart-hi); stroke-width: 2.5; opacity: 1; }
 .chart-hit { fill: transparent; outline: none; }
 .chart-hit:focus-visible { stroke: var(--text-strong); stroke-width: 1; }
+.chart-pt { fill: var(--tone-1); stroke: var(--surface); stroke-width: 2; pointer-events: none; }
+.chart-fit { fill: none; stroke: var(--text-strong); stroke-width: 2; }
+.chart-pred { fill: var(--surface); stroke: var(--text-strong); stroke-width: 2; }
+.chart-add { cursor: crosshair; }
+.chart-grab { cursor: grab; touch-action: none; }
+.chart.is-dragging, .chart.is-dragging .chart-grab { cursor: grabbing; }
+
+.chart-hint {
+  margin: .5rem 0 0;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
 
 .chart-label {
   font-size: 11px;
