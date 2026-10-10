@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Constantes — π, e e o Número de Ouro</title>
+  <meta name="description" content="As constantes π, e e φ construídas na tela: os polígonos de Arquimedes e as séries de π, os juros compostos que levam a e, o retângulo de Fibonacci e a razão áurea — e a constante de estrutura fina.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/constantes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/constantes.html">
+  <meta property="og:title" content="Constantes — π, e e o Número de Ouro">
+  <meta property="og:description" content="As constantes π, e e φ construídas na tela: os polígonos de Arquimedes e as séries de π, os juros compostos que levam a e, o retângulo de Fibonacci e a razão áurea — e a constante de estrutura fina.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Constantes — π, e e o Número de Ouro">
+  <meta name="twitter:description" content="As constantes π, e e φ construídas na tela: os polígonos de Arquimedes e as séries de π, os juros compostos que levam a e, o retângulo de Fibonacci e a razão áurea — e a constante de estrutura fina.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="constantes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Constantes — π, e e o Número de Ouro</h1>
+    <p class="page-lede">Alguns números aparecem em toda parte, sem que ninguém os tenha escolhido. Nenhum deles cabe numa fração — são <strong>irracionais</strong>, com infinitas casas que não se repetem —, mas todos podem ser <strong>construídos</strong>, chegando cada vez mais perto. Nas aproximações abaixo, os algarismos que já estão certos ficam <span class="dig-ok">em verde</span>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#pi">π</a>
+      <a href="#e">e</a>
+      <a href="#phi">φ</a>
+      <a href="#alpha">α</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- ================================================================ π -->
+    <section class="lesson" id="pi" aria-labelledby="pi-title">
+      <h2 id="pi-title">π ≈ 3,14159 — a constante do círculo</h2>
+      <span class="rule-tex" data-tex="\pi = \frac{C}{d} \qquad C = 2\pi r \qquad A = \pi r^2"></span>
+      <p>Em qualquer círculo, de uma moeda a uma órbita, o comprimento da circunferência dividido pelo diâmetro dá sempre o mesmo número: π. Egípcios e babilônios já tinham notado que a razão é constante, e usavam aproximações como 3 ou 25/8. A letra π, de <em>perímetro</em>, foi popularizada por Euler no século XVIII.</p>
+    </section>
+
+    <section class="calc archimedes" aria-labelledby="arq-title">
+      <h2 id="arq-title">Arquimedes: cercar o círculo</h2>
+      <p class="calc-lede">No século III a.C., Arquimedes não tinha como medir uma curva com precisão, mas sabia medir segmentos de reta. Então desenhou um polígono dentro do círculo e outro fora: o perímetro do círculo fica entre os dois.</p>
+      <div class="vars">
+        <label class="var var-wide">
+          <i>lados</i>
+          <input name="lados" type="range" min="0" max="8" step="1" value="0" aria-label="Número de lados do polígono">
+          <output class="out-lados">6</output>
+        </label>
+      </div>
+      <div class="poly-figure"></div>
+      <div class="poly-text intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="calc series" aria-labelledby="series-title">
+      <h2 id="series-title">Três séries para π</h2>
+      <p class="calc-lede">Uma série é uma soma infinita. Somar mais termos chega mais perto, e cada série chega num ritmo diferente.</p>
+      <div class="vars">
+        <label class="var var-wide">
+          <i>termos</i>
+          <input name="termos" type="range" min="1" max="30" step="1" value="3" aria-label="Número de termos">
+          <output class="out-termos">3</output>
+        </label>
+      </div>
+      <div class="approx-list">
+        <div class="approx" data-serie="leibniz">
+          <div class="approx-head"><strong>Leibniz</strong> (séc. XVII; Madhava, séc. XIV)</div>
+          <span class="approx-tex" data-tex="\pi = 4\left(1 - \tfrac{1}{3} + \tfrac{1}{5} - \tfrac{1}{7} + \cdots\right)"></span>
+          <span class="digits"></span>
+          <span class="meter"></span>
+        </div>
+        <div class="approx" data-serie="nilakantha">
+          <div class="approx-head"><strong>Nilakantha</strong> (séc. XV)</div>
+          <span class="approx-tex" data-tex="\pi = 3 + \tfrac{4}{2 \cdot 3 \cdot 4} - \tfrac{4}{4 \cdot 5 \cdot 6} + \tfrac{4}{6 \cdot 7 \cdot 8} - \cdots"></span>
+          <span class="digits"></span>
+          <span class="meter"></span>
+        </div>
+        <div class="approx" data-serie="ramanujan">
+          <div class="approx-head"><strong>Ramanujan</strong> (1914)</div>
+          <span class="approx-tex" data-tex="\frac{1}{\pi} = \frac{2\sqrt{2}}{9801} \sum_{k=0}^{\infty} \frac{(4k)!\,(1103 + 26390k)}{(k!)^4\, 396^{4k}}"></span>
+          <span class="digits"></span>
+          <span class="meter"></span>
+        </div>
+      </div>
+      <p class="calc-note series-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="pi-onde-title">
+      <h2 id="pi-onde-title">Onde π aparece</h2>
+      <p>Em tudo que é redondo ou periódico: áreas e volumes (a esfera tem volume ⁴⁄₃πr³), ângulos em radianos (uma volta completa é 2π), senos, cossenos e ondas. E na estatística, na própria <a href="/formulas/distribuicao-normal.html">distribuição normal</a>: o √(2π) do denominador é o que faz a área sob a curva dar exatamente 1.</p>
+    </section>
+
+    <!-- ================================================================ e -->
+    <section class="lesson" id="e" aria-labelledby="e-title">
+      <h2 id="e-title">e ≈ 2,71828 — a constante do crescimento</h2>
+      <span class="rule-tex" data-tex="e = \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n"></span>
+      <p>Jacob Bernoulli encontrou e em 1683 estudando juros compostos. Euler deu a ele a letra e e mostrou que o mesmo número aparece em logaritmos, em derivadas e em séries.</p>
+    </section>
+
+    <section class="calc compound" aria-labelledby="comp-title">
+      <h2 id="comp-title">Juros compostos: R$ 1 a 100% ao ano</h2>
+      <p class="calc-lede">Uma aplicação paga 100% ao ano. Se os juros entram uma vez por ano, R$ 1 vira R$ 2. Se entram duas vezes, cada metade do ano rende 50% sobre o que já rendeu: 1,5 × 1,5 = R$ 2,25. E se entrarem cada vez mais vezes?</p>
+      <div class="vars">
+        <label class="var var-wide">
+          <i>vezes</i>
+          <input name="vezes" type="range" min="0" max="8" step="1" value="3" aria-label="Quantas vezes por ano os juros entram">
+          <output class="out-vezes">12</output>
+        </label>
+      </div>
+      <span class="compound-tex calc-result"></span>
+      <div class="grow" aria-hidden="true">
+        <div class="grow-track"><div class="grow-fill"></div><span class="grow-mark is-two"></span><span class="grow-mark is-e"></span></div>
+      </div>
+      <div class="approx">
+        <span class="digits compound-digits"></span>
+        <span class="meter compound-meter"></span>
+      </div>
+      <p class="compound-text intro-text" aria-live="polite"></p>
+    </section>
+
+    <section class="calc factorial" aria-labelledby="fact-title">
+      <h2 id="fact-title">Um caminho mais rápido: os fatoriais</h2>
+      <p class="calc-lede">Os juros chegam em e muito devagar: capitalizando a cada segundo, ainda erram na sétima casa. Euler achou uma soma que converge muito mais rápido, porque os fatoriais crescem depressa e os termos somem logo.</p>
+      <span class="rule-tex" data-tex="e = \sum_{k=0}^{\infty} \frac{1}{k!} = 1 + 1 + \frac{1}{2!} + \frac{1}{3!} + \frac{1}{4!} + \cdots"></span>
+      <div class="vars">
+        <label class="var var-wide">
+          <i>parcelas</i>
+          <input name="parcelas" type="range" min="1" max="18" step="1" value="5" aria-label="Número de parcelas">
+          <output class="out-parcelas">5</output>
+        </label>
+      </div>
+      <span class="fact-tex calc-result"></span>
+      <div class="approx">
+        <span class="digits fact-digits"></span>
+        <span class="meter fact-meter"></span>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="e-onde-title">
+      <h2 id="e-onde-title">Onde e aparece</h2>
+      <p>A função eˣ é a única que é igual à própria derivada: a taxa de crescimento é o próprio valor. Por isso e aparece sempre que algo cresce ou decresce em proporção ao que já é — populações, juros contínuos, decaimento radioativo, resfriamento. Na estatística, está na <a href="/formulas/distribuicao-poisson.html">distribuição de Poisson</a> (o e<sup>−λ</sup>) e na <a href="/formulas/distribuicao-normal.html">normal</a> (o e<sup>−z²/2</sup>), e o logaritmo de base e é o “ln” das calculadoras.</p>
+    </section>
+
+    <!-- ================================================================ φ -->
+    <section class="lesson" id="phi" aria-labelledby="phi-title">
+      <h2 id="phi-title">φ ≈ 1,61803 — o número de ouro</h2>
+      <span class="rule-tex" data-tex="\varphi = \frac{1 + \sqrt{5}}{2} \qquad \frac{a + b}{a} = \frac{a}{b} = \varphi"></span>
+      <p>Os gregos chamavam de “divisão em média e extrema razão” cortar um segmento em duas partes, <i>a</i> e <i>b</i>, de modo que o todo esteja para a parte maior assim como a parte maior está para a menor. Essa razão é φ. Ela aparece no pentágono regular — a diagonal dividida pelo lado dá φ.</p>
+      <p>Chamando <i>a</i>/<i>b</i> de <i>x</i>, a condição vira <i>x</i>² − <i>x</i> − 1 = 0, uma <a href="equacao-2grau.html?a=1&amp;b=-1&amp;c=-1#parabola">equação do 2º grau</a>. φ é a raiz positiva — e daí saem duas propriedades curiosas:</p>
+      <span class="rule-tex" data-tex="\varphi^2 = \varphi + 1 \approx 2{,}618 \qquad \frac{1}{\varphi} = \varphi - 1 \approx 0{,}618"></span>
+    </section>
+
+    <section class="calc golden" aria-labelledby="fib-title">
+      <h2 id="fib-title">Fibonacci: φ montado com quadrados</h2>
+      <p class="calc-lede">Na sequência 1, 1, 2, 3, 5, 8, 13…, cada número é a soma dos dois anteriores. Encostando quadrados com esses lados, sai um retângulo que se aproxima cada vez mais da proporção áurea — e a razão entre dois termos seguidos tende a φ.</p>
+      <div class="vars">
+        <label class="var var-wide">
+          <i>n</i>
+          <input name="fib" type="range" min="2" max="30" step="1" value="7" aria-label="Quantos termos da sequência">
+          <output class="out-fib">7</output>
+        </label>
+      </div>
+      <div class="fib-figure"></div>
+      <span class="fib-tex calc-result"></span>
+      <div class="approx">
+        <span class="digits fib-digits"></span>
+        <span class="meter fib-meter"></span>
+      </div>
+      <p class="fib-text intro-text" aria-live="polite"></p>
+    </section>
+
+    <!-- ================================================================ α -->
+    <section class="lesson alpha" id="alpha" aria-labelledby="alpha-title">
+      <h2 id="alpha-title">Bônus: α ≈ 1/137 — uma constante da física</h2>
+      <p>As três constantes acima são da matemática: saem de definições, e qualquer civilização chegaria aos mesmos valores. A <strong>constante de estrutura fina</strong>, α, é diferente — é medida, não deduzida. Ela dá a intensidade da força eletromagnética entre a luz e as partículas com carga.</p>
+      <span class="rule-tex" data-tex="\alpha = \frac{e^2}{4\pi\varepsilon_0 \hbar c}"></span>
+      <p>Aqui <i>e</i> é a carga do elétron (não o número de Euler), ε₀ a permissividade do vácuo, ħ a constante de Planck reduzida e <i>c</i> a velocidade da luz. Com os valores medidos:</p>
+      <span class="alpha-tex tex-block"></span>
+      <p>As unidades dos quatro se cancelam: α é um número puro, igual em qualquer sistema de medidas. Ninguém sabe por que ele vale cerca de 1/137 — Richard Feynman o chamou de “um dos maiores mistérios da física”. Se fosse um pouco diferente, os átomos e a química seriam outros.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Uma roda de bicicleta tem 70 cm de diâmetro. Quanto ela anda em uma volta completa?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Uma volta é a circunferência: C = π · d ≈ 3,1416 × 70 ≈ <strong>219,9 cm</strong>, cerca de 2,2 m.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Por que 22/7 é uma boa aproximação de π, mas não é π?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>22/7 = 3,142857…, que acerta as duas primeiras casas (3,14). Mas é uma fração, e frações dão decimais exatos ou periódicos — o 142857 se repete para sempre. π é irracional: suas casas nunca entram num ciclo, então <strong>nenhuma fração é igual a π</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> R$ 1 a 100% ao ano, capitalizado todo mês, rende quanto ao fim do ano?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(1 + 1/12)¹² ≈ <strong>R$ 2,613</strong>. Mais que os R$ 2 da capitalização anual, menos que o limite e ≈ 2,718.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Some as cinco primeiras parcelas de 1/k! e compare com e.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>1 + 1 + 1/2 + 1/6 + 1/24 = <strong>2,7083…</strong>, que já acerta a primeira casa (2,7). Com dez parcelas, acerta seis.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Mostre que φ² = φ + 1, usando que φ é raiz de x² − x − 1 = 0.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Se φ é raiz, então φ² − φ − 1 = 0. Passando φ e 1 para o outro lado: <strong>φ² = φ + 1</strong>. Dividindo tudo por φ, sai também φ = 1 + 1/φ, ou seja, 1/φ = φ − 1.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Calcule 13/8, 21/13 e 34/21. O que acontece?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>1,625; 1,6154; 1,6190. Os valores <strong>passam alternadamente acima e abaixo de φ ≈ 1,6180</strong>, cada vez mais perto.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="conjuntos.html" rel="prev"><span>Anterior</span>Conjuntos — Diagrama de Venn Interativo</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>

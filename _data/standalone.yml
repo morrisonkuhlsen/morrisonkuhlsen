@@ -49,7 +49,7 @@
   lang: pt
 - title: "Fórmula Quadrática"
   url: "/formulas/formula-quadratica.html"
-  description: "Fórmula quadrática (Bhaskara) explicada termo a termo, com calculadora das raízes reais ou complexas e passo a passo."
+  description: "Fórmula quadrática explicada termo a termo, com calculadora das raízes reais ou complexas e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
 - title: "Fórmulas Interativas"
@@ -346,7 +346,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, frações, potências, raízes, equação do 2º grau e conjuntos."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -390,4 +390,16 @@
   url: "/matematica-basica/conjuntos.html"
   description: "Conjuntos explicados do zero com um diagrama de Venn em que se clica nas regiões: união, interseção, diferença e complemento com elementos de verdade, leis de De Morgan, contagem e a ponte para probabilidade."
   tags: "conjuntos diagrama de venn união interseção diferença complemento de morgan inclusão e exclusão eventos probabilidade"
+  lang: pt
+
+- title: "Constantes — π, e e o Número de Ouro"
+  url: "/matematica-basica/constantes.html"
+  description: "As constantes π, e e φ construídas na tela: os polígonos de Arquimedes e as séries de π, os juros compostos que levam a e, o retângulo de Fibonacci e a razão áurea — e a constante de estrutura fina."
+  tags: "constantes pi número de euler e número de ouro razão áurea phi fibonacci arquimedes série de leibniz ramanujan juros compostos constante de estrutura fina"
+  lang: pt
+
+- title: "Logaritmos — O Expoente que Falta"
+  url: "/matematica-basica/logaritmos.html"
+  description: "Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor."
+  tags: "logaritmo logaritmos log ln logaritmo natural escala logarítmica mudança de base tempo para dobrar regra do 72"
   lang: pt

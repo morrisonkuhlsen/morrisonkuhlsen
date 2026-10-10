@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Logaritmos — O Expoente que Falta</title>
+  <meta name="description" content="Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/logaritmos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/logaritmos.html">
+  <meta property="og:title" content="Logaritmos — O Expoente que Falta">
+  <meta property="og:description" content="Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Logaritmos — O Expoente que Falta">
+  <meta name="twitter:description" content="Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="logaritmos.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Logaritmos — O Expoente que Falta</h1>
+    <p class="page-lede">A potência responde “quanto dá 2 elevado a 3?”. O logaritmo faz a pergunta ao contrário: <strong>“2 elevado a quanto dá 8?”</strong>. A resposta, 3, é o logaritmo de 8 na base 2. Logaritmo é um expoente — e todas as regras saem daí.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#pergunta">A pergunta</a>
+      <a href="#regua">Escala logarítmica</a>
+      <a href="#regras">Regras</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#especiais">Casos especiais</a>
+      <a href="#dobrar">Tempo para dobrar</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\log_b x = y \iff b^y = x"></span>
+
+    <!-- 1. A escada lida ao contrário; estado em ?base=&valor=. -->
+    <section class="calc intro log-question" id="pergunta" aria-labelledby="q-title">
+      <h2 id="q-title">A pergunta do logaritmo</h2>
+      <div class="seg" role="group" aria-label="Base">
+        <button type="button" data-base="2" aria-pressed="true">base 2</button>
+        <button type="button" data-base="3" aria-pressed="false">base 3</button>
+        <button type="button" data-base="10" aria-pressed="false">base 10</button>
+        <button type="button" data-base="e" aria-pressed="false">base e (ln)</button>
+      </div>
+      <label class="var var-wide">
+        <i>x</i>
+        <input name="x" type="range" min="0" max="20" step="1" value="11" aria-label="Número x">
+        <output class="out-x">20</output>
+      </label>
+      <div class="q-head calc-result" aria-live="polite"></div>
+      <h3>As potências da base</h3>
+      <ol class="ladder-steps" aria-label="Potências da base em volta de x"></ol>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Régua. -->
+    <section class="calc log-ruler" id="regua" aria-labelledby="regua-title">
+      <h2 id="regua-title">Escala logarítmica</h2>
+      <p class="calc-lede">Numa escala logarítmica, cada passo do mesmo tamanho <em>multiplica</em> em vez de somar. É como se mede o que varia por ordens de grandeza: terremotos (Richter), som (decibéis), acidez (pH) — e muitos gráficos de dados, como PIB, preços ou casos de uma epidemia.</p>
+      <label class="var var-wide">
+        <i>x</i>
+        <input name="regua" type="range" min="0" max="3" step="0.01" value="1.3" aria-label="Valor marcado nas réguas">
+        <output class="out-regua">20</output>
+      </label>
+      <div class="ruler-figure"></div>
+      <p class="ruler-text intro-text" aria-live="polite"></p>
+    </section>
+
+    <!-- 3. Regras. -->
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras</h2>
+      <p>Como logaritmo é expoente, cada regra é uma <a href="potencias.html#regras">regra de potência</a> lida ao contrário: o produto vira soma, o quociente vira diferença, a potência vira multiplicação. Os controles abaixo (base <i>b</i>, números <i>x</i> e <i>y</i>, expoente <i>k</i>) valem para todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Logaritmo do produto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\log_b (x \cdot y) = \log_b x + \log_b y"></span>
+        <p>Foi por esta regra que os logaritmos foram inventados, por Napier, em 1614: trocar multiplicações difíceis por somas fáceis, consultando uma tabela. Até a década de 1970, era o que faziam as réguas de cálculo.</p>
+        <div class="rule-try" data-rule="produto" data-vars="b x y"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Logaritmo do quociente</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\log_b \frac{x}{y} = \log_b x - \log_b y"></span>
+        <div class="rule-try" data-rule="quociente" data-vars="b x y"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Logaritmo da potência</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\log_b \left(x^k\right) = k \cdot \log_b x"></span>
+        <div class="rule-try" data-rule="potencia" data-vars="b x k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Mudança de base</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\log_b x = \frac{\ln x}{\ln b} = \frac{\log_{10} x}{\log_{10} b}"></span>
+        <div class="rule-try" data-rule="mudanca" data-vars="b x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Logaritmo e potência se desfazem</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="b^{\log_b x} = x \qquad \log_b \left(b^k\right) = k"></span>
+        <div class="rule-try" data-rule="inverso" data-vars="b x"></div>
+      </article>
+    </section>
+
+    <!-- 4. O que não vale. -->
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas: o que não vale</h2>
+
+      <article class="rule">
+        <header><h3>Logaritmo da soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\log_b (x + y) \ne \log_b x + \log_b y"></span>
+        <div class="rule-try" data-rule="somaErrada" data-vars="b x y"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Dividir logaritmos</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{\log_b x}{\log_b y} \ne \log_b \frac{x}{y}"></span>
+        <div class="rule-try" data-rule="divisaoErrada" data-vars="b x y"></div>
+      </article>
+    </section>
+
+    <!-- 5. Casos especiais. -->
+    <section class="lesson" id="especiais" aria-labelledby="especiais-title">
+      <h2 id="especiais-title">Casos especiais e notação</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\log_b 1 = 0"></span>
+          <p>Porque b⁰ = 1 em qualquer base.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\log_b b = 1"></span>
+          <p>Porque b¹ = b.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\log_b 0,\ \log_b(-4)\ \text{?}"></span>
+          <p>Não existem: nenhuma potência de base positiva dá zero ou negativo. O domínio do logaritmo são os números positivos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\log x = \log_{10} x"></span>
+          <p>Sem base escrita, costuma ser base 10 — conta quantos algarismos tem o número (menos um).</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\ln x = \log_e x"></span>
+          <p>O logaritmo natural, na base <a href="constantes.html#e">e ≈ 2,718</a>. É o padrão em cálculo e estatística.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\log_2 x"></span>
+          <p>Em computação: quantos bits são precisos, ou quantas vezes dá para dividir ao meio.</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>E a base?</strong> Precisa ser positiva e diferente de 1: 1 elevado a qualquer coisa dá 1, então log₁ 5 não teria resposta.
+      </div>
+    </section>
+
+    <!-- 6. Calculadora; estado em ?taxa=&meta=. -->
+    <section class="calc" id="dobrar" data-calc="dobrar" aria-labelledby="dobrar-title">
+      <h2 id="dobrar-title">Em quanto tempo dobra?</h2>
+      <p class="calc-lede">Quando a incógnita está no expoente — “em quantos anos o investimento dobra?”, “quando a população chega a um milhão?” —, só o logaritmo a tira de lá.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Taxa por período (%)</span>
+          <input name="taxa" type="text" inputmode="decimal" value="6" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Multiplicar por</span>
+          <input name="meta" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false">
+          <small>2 = dobrar, 3 = triplicar…</small>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="6;2">6% ao ano, dobrar</button>
+        <button type="button" data-exemplo="1;2">1% ao mês, dobrar</button>
+        <button type="button" data-exemplo="10;10">10%, ×10</button>
+        <button type="button" data-exemplo="100;1000">100%, ×1000</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="est-title">
+      <h2 id="est-title">Logaritmos na estatística</h2>
+      <p><strong>Dados assimétricos.</strong> Renda, preços e tempos costumam ter uma cauda longa à direita: muitos valores pequenos e alguns enormes. Tirar o logaritmo traz a cauda para perto, e os dados ficam mais simétricos — mais próximos da <a href="/formulas/distribuicao-normal.html">normal</a> que muitos métodos supõem.</p>
+      <p><strong>Produtos viram somas.</strong> A probabilidade de várias observações independentes é um produto de muitos números pequenos, que no computador logo vira zero. O logaritmo transforma o produto numa soma bem-comportada: é a <em>log-verossimilhança</em>, base de boa parte da estatística moderna.</p>
+      <p><strong>Variações relativas.</strong> Num gráfico em escala log, crescer 10% é sempre a mesma distância, valha a grandeza 100 ou 1 milhão. Por isso séries que crescem em ritmo constante viram retas.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule log₂ 32 e log₃ 81.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>2⁵ = 32, então log₂ 32 = <strong>5</strong>. 3⁴ = 81, então log₃ 81 = <strong>4</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Quanto vale log₁₀ 0,001?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>0,001 = 1/1000 = 10⁻³, então o logaritmo é <strong>−3</strong>. Logaritmo negativo quer dizer número entre 0 e 1.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Sem calculadora: log 2 + log 5.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Pela regra do produto, log 2 + log 5 = log (2 · 5) = log 10 = <strong>1</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Resolva 2ˣ = 50.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Tirando o logaritmo dos dois lados: x · log 2 = log 50, então x = log 50 / log 2 ≈ 1,699 / 0,301 ≈ <strong>5,64</strong>. Confere: 50 está entre 2⁵ = 32 e 2⁶ = 64.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Um investimento rende 6% ao ano. Em quantos anos dobra?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>t = ln 2 / ln 1,06 ≈ 0,6931 / 0,0583 ≈ <strong>11,9 anos</strong> — dobra no fim do 12º ano. A regra do 72 dá 72 ÷ 6 = 12.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Quantos algarismos tem 2¹⁰⁰?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>log 2¹⁰⁰ = 100 · log 2 ≈ 100 × 0,30103 = 30,103. Um número com log entre 30 e 31 está entre 10³⁰ e 10³¹, então tem <strong>31 algarismos</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="raizes.html" rel="prev"><span>Anterior</span>Raízes — Regras de Radiciação</a>
+      <a class="pager-next" href="equacao-2grau.html" rel="next"><span>Próximo</span>Equação do 2º Grau</a>
+    </nav>
+  </main>
+</body>
+</html>

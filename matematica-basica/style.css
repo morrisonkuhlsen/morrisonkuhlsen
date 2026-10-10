@@ -247,9 +247,10 @@
   margin-bottom: .9rem;
 }
 
+/* Rótulo e valor crescem com o texto ("lados", "31.536.000"). */
 .var {
   display: grid;
-  grid-template-columns: 1.2rem 1fr 2.4rem;
+  grid-template-columns: minmax(1.2rem, auto) 1fr minmax(2.4rem, auto);
   align-items: center;
   gap: .6rem;
 }
@@ -1061,4 +1062,249 @@
 /* Quatro itens: duas colunas em vez de 3 + 1. */
 .facts.is-pairs {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+
+/* ================================================================ constantes */
+
+.intro-text {
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Algarismos: os que já batem com a constante em verde. */
+.dig-ok {
+  color: var(--tone-3);
+  font-weight: 700;
+}
+
+.dig-bad {
+  color: var(--text-muted);
+}
+
+.digits {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 1.15rem;
+  letter-spacing: .02em;
+  overflow-wrap: anywhere;
+}
+
+.approx-list {
+  display: grid;
+  gap: .8rem;
+}
+
+.approx {
+  display: grid;
+  gap: .45rem;
+  margin-top: .8rem;
+  padding: .8rem 1rem;
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.approx-list .approx {
+  margin-top: 0;
+}
+
+.approx-head {
+  color: var(--text-strong);
+  font-size: .95rem;
+}
+
+.approx-tex {
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: var(--text-strong);
+}
+
+/* Quantas casas certas, de 0 a 12. */
+.meter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: .7rem;
+}
+
+.meter-track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.meter-bar {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--tone-3);
+  transition: width .25s ease;
+}
+
+.meter-txt {
+  font-size: .8rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- Arquimedes */
+
+.poly-figure,
+.fib-figure {
+  display: flex;
+  justify-content: center;
+  margin-top: .6rem;
+}
+
+.poly {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+}
+
+.poly-circle {
+  fill: color-mix(in srgb, var(--text-muted) 8%, transparent);
+  stroke: var(--text-strong);
+  stroke-width: 2;
+}
+
+.poly-in,
+.poly-out {
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.poly-in { stroke: var(--tone-1); }
+.poly-out { stroke: var(--tone-2); }
+
+.bounds {
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-strong);
+}
+
+.bounds .is-in { color: var(--tone-1); font-weight: 600; }
+.bounds .is-out { color: var(--tone-2); font-weight: 600; }
+
+/* ---------------------------------------------------------------- juros */
+
+.grow {
+  margin: 1rem 0 .4rem;
+}
+
+/* De R$ 1 (esquerda) a R$ 3 (direita); as marcas ficam em 2 e em e. */
+.grow-track {
+  position: relative;
+  height: 14px;
+  border-radius: 7px;
+  background: var(--border);
+}
+
+.grow-fill {
+  height: 100%;
+  border-radius: 7px;
+  background: var(--tone-1);
+  transition: width .3s ease;
+}
+
+/* O rótulo de cada marca vem no ::after; o span só desenha a linha. */
+.grow-mark {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  border-left: 2px dashed var(--text-strong);
+}
+
+.grow-mark::after {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  transform: translateX(-50%);
+  font-size: .78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.grow-mark.is-two { left: 50%; }
+.grow-mark.is-two::after { content: "R$ 2"; }
+.grow-mark.is-e { left: calc((2.718281828 - 1) / 2 * 100%); }
+.grow-mark.is-e::after { content: "e ≈ 2,718"; }
+
+.grow {
+  padding-bottom: 1.2rem; /* espaço para os rótulos */
+}
+
+/* ---------------------------------------------------------------- Fibonacci */
+
+.fib {
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  max-height: 340px;
+}
+
+.fib-sq {
+  fill: color-mix(in srgb, var(--tone-2) 10%, transparent);
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.fib-num {
+  fill: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.fib-spiral {
+  fill: none;
+  stroke: var(--tone-2);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+/* ================================================================ logaritmos */
+
+.ruler-figure {
+  margin-top: .8rem;
+}
+
+.ruler {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ruler-title {
+  fill: var(--text-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.ruler-axis {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+
+.ruler-tick {
+  stroke: var(--text-strong);
+  stroke-width: 1.5;
+}
+
+.ruler-minor {
+  stroke: var(--chart-axis);
+  stroke-width: 1;
+}
+
+.ruler-num {
+  fill: var(--text);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ruler-dot {
+  fill: var(--tone-1);
+  stroke: var(--surface);
+  stroke-width: 2;
 }
