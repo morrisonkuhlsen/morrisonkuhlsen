@@ -485,7 +485,25 @@
     }
   }
 
-  body.addEventListener("input", update);
-  body.addEventListener("change", update);
+  /* Os dados vão para a barra de endereço e voltam dela: o link guarda o
+     cálculo pronto. Um select só aceita um valor que já seja opção dele — fora
+     disso ficaria sem nada selecionado. */
+  const campos = { ...inputs, ...opts, alpha: alphaSel };
+  const params = new URLSearchParams(location.search);
+  Object.entries(campos).forEach(([k, c]) => {
+    if (!params.has(k)) return;
+    const v = params.get(k);
+    if (c.tagName !== "SELECT" || Array.from(c.options).some(o => o.value === v)) c.value = v;
+  });
+
+  // replaceState, não pushState: cada tecla viraria uma entrada no histórico.
+  function guardar() {
+    const q = new URLSearchParams(location.search);
+    Object.entries(campos).forEach(([k, c]) => q.set(k, c.value));
+    history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
+  }
+
+  body.addEventListener("input", () => { update(); guardar(); });
+  body.addEventListener("change", () => { update(); guardar(); });
   update();
 })();
