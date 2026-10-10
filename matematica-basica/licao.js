@@ -8,6 +8,11 @@
  * e opcionalmente `note` (texto) e `draw` (função que desenha no card). O
  * veredito sai da comparação dos valores, não de uma frase fixa: é a conta
  * que convence. O estado fica na URL (?a=3&b=4…).
+ *
+ * `panels` são blocos que não são regras mas usam as mesmas variáveis (como
+ * o gráfico da parábola): [{ box, vars, render(estado) }]. Os controles entram
+ * no começo do box, e render roda a cada mudança. Uma variável com `skip`
+ * pula esse valor no slider (o a da equação do 2º grau nunca é 0).
  */
 window.Licao = (() => {
   // Negativo com o sinal tipográfico − (U+2212), no texto e no KaTeX.
@@ -62,12 +67,12 @@ window.Licao = (() => {
     history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
   }
 
-  function regras(VARS, RULES) {
+  function regras(VARS, RULES, panels = []) {
     const state = {};
     const params = new URLSearchParams(location.search);
     for (const [v, cfg] of Object.entries(VARS)) {
       const p = Number(params.get(v));
-      state[v] = params.has(v) && Number.isInteger(p) && p >= cfg.min && p <= cfg.max ? p : cfg.value;
+      state[v] = params.has(v) && Number.isInteger(p) && p >= cfg.min && p <= cfg.max && p !== cfg.skip ? p : cfg.value;
     }
 
     const sliders = []; // [variável, input, output]
@@ -85,6 +90,12 @@ window.Licao = (() => {
     }
 
     function set(v, value) {
+      const cfg = VARS[v];
+      if (value === cfg.skip) {
+        // Pula na direção em que o slider andou; na ponta, volta.
+        value += value > state[v] ? 1 : -1;
+        if (value > cfg.max || value < cfg.min) value = state[v];
+      }
       state[v] = value;
       sliders.forEach(([w, input, out]) => {
         if (w !== v) return;
@@ -106,7 +117,14 @@ window.Licao = (() => {
       return { rule: RULES[box.dataset.rule], lines, verdict, note, figure };
     });
 
+    panels.forEach(p => {
+      const controls = el("div", "vars");
+      p.vars.forEach(v => controls.appendChild(makeControl(v)));
+      p.box.prepend(controls);
+    });
+
     function render() {
+      panels.forEach(p => p.render(state));
       cards.forEach(c => {
         const out = c.rule(state);
         c.lines.replaceChildren();

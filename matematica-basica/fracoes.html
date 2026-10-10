@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Frações — Simplificar, Somar e Converter</title>
+  <meta name="description" content="Frações explicadas do zero com barras interativas: frações equivalentes, simplificar pelo MDC, somar pelo MMC, multiplicar e dividir, as armadilhas e a conversão entre fração, decimal e porcentagem.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/fracoes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/fracoes.html">
+  <meta property="og:title" content="Frações — Simplificar, Somar e Converter">
+  <meta property="og:description" content="Frações explicadas do zero com barras interativas: frações equivalentes, simplificar pelo MDC, somar pelo MMC, multiplicar e dividir, as armadilhas e a conversão entre fração, decimal e porcentagem.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Frações — Simplificar, Somar e Converter">
+  <meta name="twitter:description" content="Frações explicadas do zero com barras interativas: frações equivalentes, simplificar pelo MDC, somar pelo MMC, multiplicar e dividir, as armadilhas e a conversão entre fração, decimal e porcentagem.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="fracoes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Frações — Simplificar, Somar e Converter</h1>
+    <p class="page-lede">Uma fração é <strong>um inteiro cortado em pedaços iguais, dos quais pegamos alguns</strong>. O denominador diz em quantos pedaços se cortou; o numerador, quantos se pegou. Com essa imagem na cabeça, cada regra passa a ter um porquê.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#o-que-e">O que é</a>
+      <a href="#simplificar">Simplificar</a>
+      <a href="#somar">Somar e subtrair</a>
+      <a href="#regras">Multiplicar e dividir</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#converter">Decimal e %</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- 1. A barra e as frações equivalentes; estado em ?num=&den=. -->
+    <section class="calc intro" id="o-que-e" aria-labelledby="intro-title">
+      <h2 id="intro-title">O que é uma fração</h2>
+      <div class="vars">
+        <label class="var">
+          <i>n</i>
+          <input name="num" type="range" min="0" max="12" step="1" value="3" aria-label="Numerador">
+          <output class="out-num">3</output>
+        </label>
+        <label class="var">
+          <i>d</i>
+          <input name="den" type="range" min="1" max="12" step="1" value="4" aria-label="Denominador">
+          <output class="out-den">4</output>
+        </label>
+      </div>
+      <div class="intro-figure bars"></div>
+      <h3>Frações equivalentes</h3>
+      <div class="equiv-figure bars"></div>
+      <div class="intro-text lesson-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Simplificar; estado em ?sn=&sd=. -->
+    <section class="calc" id="simplificar" data-calc="simplificar" aria-labelledby="simp-title">
+      <h2 id="simp-title">Simplificar</h2>
+      <p class="calc-lede">Simplificar é trocar os pedaços pequenos por pedaços maiores, sem mudar a quantidade. O jeito mais rápido é dividir em cima e embaixo pelo <a href="mdc.html">MDC</a>, de uma vez só.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Numerador</span>
+          <input name="sn" type="text" inputmode="numeric" value="80" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Denominador</span>
+          <input name="sd" type="text" inputmode="numeric" value="115" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="6;8">6/8</button>
+        <button type="button" data-exemplo="12;18">12/18</button>
+        <button type="button" data-exemplo="80;115">80/115</button>
+        <button type="button" data-exemplo="7;9">7/9</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-figure bars"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 3. Somar e subtrair; estado em ?fa=&fb=&op=&fc=&fd=. -->
+    <section class="calc" id="somar" data-calc="somar" aria-labelledby="somar-title">
+      <h2 id="somar-title">Somar e subtrair</h2>
+      <p class="calc-lede">Só dá para somar pedaços do mesmo tamanho. Se os denominadores são diferentes, primeiro recorta-se tudo num tamanho comum — e o menor tamanho que serve para os dois vem do <a href="mmc.html">MMC</a>.</p>
+
+      <div class="frac-inputs">
+        <div class="frac-input">
+          <input name="fa" type="text" inputmode="numeric" value="1" aria-label="Numerador da primeira fração" autocomplete="off">
+          <input name="fb" type="text" inputmode="numeric" value="4" aria-label="Denominador da primeira fração" autocomplete="off">
+        </div>
+        <select name="op" aria-label="Operação">
+          <option value="+" selected>+</option>
+          <option value="-">−</option>
+        </select>
+        <div class="frac-input">
+          <input name="fc" type="text" inputmode="numeric" value="1" aria-label="Numerador da segunda fração" autocomplete="off">
+          <input name="fd" type="text" inputmode="numeric" value="6" aria-label="Denominador da segunda fração" autocomplete="off">
+        </div>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="1;2;+;1;3">1/2 + 1/3</button>
+        <button type="button" data-exemplo="3;4;-;1;6">3/4 − 1/6</button>
+        <button type="button" data-exemplo="2;5;+;3;5">2/5 + 3/5</button>
+        <button type="button" data-exemplo="5;6;+;3;4">5/6 + 3/4</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-figure bars"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 4. Regras. -->
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Equivalência, multiplicação e divisão</h2>
+      <p>Arraste os valores e veja os dois lados darem o mesmo número. Os valores são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Frações equivalentes</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} = \frac{a \cdot k}{b \cdot k}"></span>
+        <p>Multiplicar (ou dividir) em cima e embaixo pelo mesmo número não muda a fração. É o que se usa para simplificar e para achar o denominador comum.</p>
+        <div class="rule-try" data-rule="equivalente" data-vars="a b k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Multiplicação</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} \cdot \frac{c}{d} = \frac{a \cdot c}{b \cdot d}"></span>
+        <p>Numerador com numerador, denominador com denominador. Ao contrário da soma, aqui não há denominador comum.</p>
+        <div class="rule-try" data-rule="multiplicacao" data-vars="a b c d"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Divisão</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} \div \frac{c}{d} = \frac{a}{b} \cdot \frac{d}{c}"></span>
+        <p>Dividir por uma fração é multiplicar pelo inverso dela: 3 ÷ 1/2 = 3 · 2 = 6, porque meia pizza cabe 6 vezes em 3 pizzas.</p>
+        <div class="rule-try" data-rule="divisao" data-vars="a b c d"></div>
+      </article>
+    </section>
+
+    <!-- 5. O que não vale. -->
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas: o que não vale</h2>
+
+      <article class="rule">
+        <header><h3>Somar em cima e embaixo</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} + \frac{c}{d} \ne \frac{a + c}{b + d}"></span>
+        <div class="rule-try" data-rule="somaErrada" data-vars="a b c d"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Cortar uma parcela</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a + k}{b + k} \ne \frac{a}{b}"></span>
+        <p>Só se corta o que é <strong>fator</strong> — o que multiplica tudo. Em (2 · 3)/(2 · 5) o 2 sai; em (2 + 3)/(2 + 5), não.</p>
+        <div class="rule-try" data-rule="cortarSoma" data-vars="a b k"></div>
+      </article>
+    </section>
+
+    <!-- 6. Conversão; estado em ?conv=. -->
+    <section class="calc" id="converter" data-calc="converter" aria-labelledby="conv-title">
+      <h2 id="conv-title">Fração, decimal e porcentagem</h2>
+      <p class="calc-lede">São três jeitos de escrever o mesmo número. Na estatística aparecem os três o tempo todo: uma probabilidade de 1/4 é 0,25, ou 25%. Digite qualquer um deles.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Fração, decimal ou porcentagem</span>
+          <input name="conv" type="text" value="3/8" autocomplete="off" spellcheck="false">
+          <small>Ex.: 3/8, 0,375 ou 37,5%. Vírgula para os decimais.</small>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="1/3">1/3</button>
+        <button type="button" data-exemplo="0,15">0,15</button>
+        <button type="button" data-exemplo="12,5%">12,5%</button>
+        <button type="button" data-exemplo="1/6">1/6</button>
+        <button type="button" data-exemplo="7/40">7/40</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Simplifique 80/115.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>MDC(80, 115) = 5. Dividindo os dois por 5: <strong>16/23</strong>. Como 16 = 2⁴ e 23 é primo, não dá para simplificar mais.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 1/4 + 1/6.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>MMC(4, 6) = 12. 1/4 = 3/12 e 1/6 = 2/12, então a soma é <strong>5/12</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quanto é 2/3 de 3/4?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>“De” é multiplicação: 2/3 · 3/4 = 6/12 = <strong>1/2</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Uma receita usa 3/4 de xícara de açúcar. Quantas receitas dá para fazer com 6 xícaras?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Quantas vezes 3/4 cabe em 6: 6 ÷ 3/4 = 6 · 4/3 = 24/3 = <strong>8 receitas</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Um colega escreveu 1/2 + 1/3 = 2/5. Mostre que está errado sem fazer a conta certa.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Só 1/2 já é mais que 2/5 (porque 2/5 = 0,4 &lt; 0,5). Somar algo positivo não pode dar um resultado menor.</p>
+            <p>A conta certa: 3/6 + 2/6 = <strong>5/6</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Escreva 0,15 como fração irredutível e como porcentagem.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>0,15 = 15/100 = <strong>3/20</strong> (dividindo por 5) = <strong>15%</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>7.</strong> Por que 1/3 vira dízima periódica e 1/4 não?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Um decimal termina quando a fração pode ser escrita com denominador 10, 100, 1000… — e isso só acontece se o denominador tiver apenas os fatores 2 e 5. 4 = 2², então 1/4 = 25/100 = 0,25. Já 3 não divide nenhuma potência de 10, e 1/3 = 0,333…</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="mmc.html" rel="prev"><span>Anterior</span>MMC — Mínimo Múltiplo Comum</a>
+      <a class="pager-next" href="potencias.html" rel="next"><span>Próximo</span>Potências — Regras de Potenciação</a>
+    </nav>
+  </main>
+</body>
+</html>

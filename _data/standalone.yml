@@ -346,7 +346,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, potências e raízes."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, frações, potências, raízes e equação do 2º grau."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -372,4 +372,16 @@
   url: "/matematica-basica/potencias.html"
   description: "Potências explicadas do zero: por que a⁰ = 1 e o expoente negativo vira fração, as regras testadas com os seus números, o sinal da base negativa, as armadilhas e notação científica."
   tags: "potência potências potenciação expoente expoente negativo expoente zero notação científica base negativa"
+  lang: pt
+
+- title: "Frações — Simplificar, Somar e Converter"
+  url: "/matematica-basica/fracoes.html"
+  description: "Frações explicadas do zero com barras interativas: frações equivalentes, simplificar pelo MDC, somar pelo MMC, multiplicar e dividir, as armadilhas e a conversão entre fração, decimal e porcentagem."
+  tags: "fração frações simplificar fração somar frações denominador comum dízima periódica decimal porcentagem"
+  lang: pt
+
+- title: "Equação do 2º Grau — Fórmula Quadrática e Parábola"
+  url: "/matematica-basica/equacao-2grau.html"
+  description: "Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios."
+  tags: "equação do segundo grau equação quadrática fórmula quadrática discriminante delta parábola vértice raízes soma e produto completar quadrado"
   lang: pt

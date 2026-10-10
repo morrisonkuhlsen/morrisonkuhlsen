@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Equação do 2º Grau — Fórmula Quadrática e Parábola</title>
+  <meta name="description" content="Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/equacao-2grau.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/equacao-2grau.html">
+  <meta property="og:title" content="Equação do 2º Grau — Fórmula Quadrática e Parábola">
+  <meta property="og:description" content="Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Equação do 2º Grau — Fórmula Quadrática e Parábola">
+  <meta name="twitter:description" content="Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="equacao-2grau.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Equação do 2º Grau — Fórmula Quadrática e Parábola</h1>
+    <p class="page-lede">Uma equação do 2º grau tem a forma <strong>ax² + bx + c = 0</strong>, com a ≠ 0. Resolvê-la é achar os valores de x que zeram a expressão — e, no gráfico, é achar <strong>onde a parábola cruza o eixo x</strong>. Mexa em a, b e c e veja as duas coisas mudarem juntas.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#parabola">A parábola</a>
+      <a href="#de-onde-vem">De onde vem a fórmula</a>
+      <a href="#atalhos">Atalhos</a>
+      <a href="#soma-produto">Soma e produto</a>
+      <a href="#exemplo">Exemplo</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- 1. O painel: controles (de licao.js), equação, gráfico e passo a passo.
+         Estado em ?a=&b=&c=, dividido com os cards de soma e produto. -->
+    <section class="calc quad-panel" id="parabola" aria-labelledby="parabola-title">
+      <h2 id="parabola-title">A parábola e as raízes</h2>
+      <div class="panel-controls"></div>
+      <div class="eq-head">
+        <span class="eq-poly calc-result" aria-live="polite"></span>
+        <span class="badge delta-badge"></span>
+      </div>
+      <div class="plot-box"></div>
+      <div class="intro-text lesson-text" aria-live="polite"></div>
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note">Para coeficientes com vírgula ou raízes complexas, use a <a href="/formulas/formula-quadratica.html">calculadora da fórmula quadrática</a>.</p>
+    </section>
+
+    <!-- 2. Completar quadrado. -->
+    <section class="lesson" id="de-onde-vem" aria-labelledby="dv-title">
+      <h2 id="dv-title">De onde vem a fórmula</h2>
+      <p>Algumas equações do 2º grau se resolvem sem fórmula nenhuma. Se a equação fosse</p>
+      <span class="tex-block" data-tex="(x + 2)^2 = 9"></span>
+      <p>bastaria tirar a raiz dos dois lados — lembrando que tanto 3 quanto −3 elevados ao quadrado dão 9:</p>
+      <span class="tex-block" data-tex="x + 2 = \pm 3 \quad\Rightarrow\quad x = 1 \ \text{ ou } \ x = -5"></span>
+      <p>A fórmula quadrática é só isso feito em geral: <strong>transformar qualquer ax² + bx + c = 0 num quadrado perfeito igual a um número</strong> (“completar o quadrado”) e depois tirar a raiz.</p>
+      <ol>
+        <li>Divida tudo por <i>a</i> e passe o <i>c</i> para o outro lado:
+          <span class="tex-block" data-tex="x^2 + \frac{b}{a}x = -\frac{c}{a}"></span></li>
+        <li>Lembre que (<i>x</i> + <i>k</i>)² = <i>x</i>² + 2<i>k</i><i>x</i> + <i>k</i>². Para o lado esquerdo virar um quadrado, falta o <i>k</i>², com <i>k</i> = <i>b</i>/2<i>a</i>. Some nos dois lados:
+          <span class="tex-block" data-tex="x^2 + \frac{b}{a}x + \left(\frac{b}{2a}\right)^2 = \left(\frac{b}{2a}\right)^2 - \frac{c}{a}"></span></li>
+        <li>O lado esquerdo agora é um quadrado; junte o direito numa fração só:
+          <span class="tex-block" data-tex="\left(x + \frac{b}{2a}\right)^2 = \frac{b^2 - 4ac}{4a^2}"></span></li>
+        <li>Tire a raiz dos dois lados (com ±) e isole <i>x</i>:
+          <span class="tex-block" data-tex="x + \frac{b}{2a} = \pm\frac{\sqrt{b^2 - 4ac}}{2a} \quad\Rightarrow\quad x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}"></span></li>
+      </ol>
+      <div class="tip">
+        <strong>Por que o Δ manda.</strong> O passo 3 mostra que um quadrado — que nunca é negativo — tem que ser igual a Δ/4a². Se Δ &lt; 0, não há número real que sirva, e a equação não tem solução real. É o mesmo que se vê no gráfico: a parábola não chega ao eixo x.
+      </div>
+      <p>O “−b/2a” que aparece no meio da conta é o x do vértice: as duas raízes ficam à mesma distância dele, uma para cada lado. A expansão de (<i>x</i> + <i>k</i>)² é a mesma do <a href="potencias.html#armadilhas">quadrado de uma soma</a>, na página de potências.</p>
+    </section>
+
+    <!-- 3. Incompletas. -->
+    <section class="lesson" id="atalhos" aria-labelledby="atalhos-title">
+      <h2 id="atalhos-title">Atalhos: quando falta um termo</h2>
+      <p>A fórmula quadrática sempre funciona, mas quando <i>b</i> ou <i>c</i> é zero há caminhos mais curtos.</p>
+
+      <h3>Sem o termo em x (b = 0)</h3>
+      <p>Isole o <i>x</i>² e tire a raiz, sem esquecer o ±:</p>
+      <span class="tex-block" data-tex="2x^2 - 18 = 0 \;\Rightarrow\; x^2 = 9 \;\Rightarrow\; x = \pm 3"></span>
+      <p>Se o número do outro lado for negativo (como em <i>x</i>² = −4), não há raiz real.</p>
+
+      <h3>Sem o termo independente (c = 0)</h3>
+      <p>Coloque o <i>x</i> em evidência. Um produto só dá zero se um dos fatores for zero:</p>
+      <span class="tex-block" data-tex="3x^2 + 12x = 0 \;\Rightarrow\; 3x\,(x + 4) = 0 \;\Rightarrow\; x = 0 \ \text{ ou } \ x = -4"></span>
+      <p>Com <i>c</i> = 0, uma das raízes é sempre 0. E nunca se divide os dois lados por <i>x</i>: isso faria a raiz 0 desaparecer.</p>
+
+      <h3>Forma fatorada</h3>
+      <p>Sabendo as raízes, a expressão se reescreve como produto — o caminho inverso do atalho acima:</p>
+      <span class="tex-block" data-tex="ax^2 + bx + c = a\,(x - x_1)(x - x_2) \qquad\text{ex.: } 2x^2 - 5x + 2 = 2\,(x - 2)\left(x - \tfrac{1}{2}\right)"></span>
+    </section>
+
+    <!-- 4. Soma e produto: os mesmos a, b, c do gráfico. -->
+    <section class="lesson" id="soma-produto" aria-labelledby="sp-title">
+      <h2 id="sp-title">Soma e produto das raízes</h2>
+      <p>Abrindo a forma fatorada, <i>a</i>(<i>x</i> − <i>x</i>₁)(<i>x</i> − <i>x</i>₂) = <i>a</i><i>x</i>² − <i>a</i>(<i>x</i>₁ + <i>x</i>₂)<i>x</i> + <i>a</i><i>x</i>₁<i>x</i>₂. Comparando com <i>a</i><i>x</i>² + <i>b</i><i>x</i> + <i>c</i>, saem duas relações. Os controles abaixo são os mesmos do gráfico.</p>
+
+      <article class="rule">
+        <header><h3>Soma</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="x_1 + x_2 = -\frac{b}{a}"></span>
+        <div class="rule-try" data-rule="soma" data-vars="a b c"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Produto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="x_1 \cdot x_2 = \frac{c}{a}"></span>
+        <div class="rule-try" data-rule="produto" data-vars="a b c"></div>
+      </article>
+
+      <div class="tip">
+        <strong>Raízes de cabeça.</strong> Com <i>a</i> = 1, procure dois números com soma −<i>b</i> e produto <i>c</i>. Em <i>x</i>² − 5<i>x</i> + 6 = 0: soma 5 e produto 6 → <strong>2 e 3</strong>. Quando as raízes são inteiras, isso costuma ser mais rápido que a fórmula.
+      </div>
+    </section>
+
+    <!-- 5. Problema. -->
+    <section class="lesson" id="exemplo" aria-labelledby="exemplo-title">
+      <h2 id="exemplo-title">Exemplo resolvido</h2>
+      <p>Um terreno retangular tem 16 m de perímetro e 15 m² de área. Quais são as medidas dos lados?</p>
+      <p>Se um lado mede <i>x</i>, o outro mede 8 − <i>x</i> (metade do perímetro menos <i>x</i>). A área dá a equação:</p>
+      <span class="tex-block" data-tex="x\,(8 - x) = 15 \;\Rightarrow\; -x^2 + 8x - 15 = 0 \;\Rightarrow\; x^2 - 8x + 15 = 0"></span>
+      <p>Soma 8 e produto 15: as raízes são <strong>3 e 5</strong>. As duas servem — são os dois lados do mesmo terreno, de 3 m por 5 m. <a href="?a=1&amp;b=-8&amp;c=15#parabola">Veja no gráfico</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Resolva x² − 5x + 6 = 0.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Δ = 25 − 24 = 1, então x = (5 ± 1)/2: <strong>x = 2 ou x = 3</strong>. (Ou por soma e produto: soma 5, produto 6.)</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Resolva x² − 9 = 0 sem usar a fórmula quadrática.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>x² = 9, então <strong>x = 3 ou x = −3</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Resolva 2x² + 6x = 0.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>2x(x + 3) = 0, então <strong>x = 0 ou x = −3</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quantas raízes reais tem x² + 2x + 5 = 0?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Δ = 4 − 20 = −16 &lt; 0: <strong>nenhuma</strong>. A parábola abre para cima e o vértice, em (−1; 4), fica acima do eixo x.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Resolva x² − 6x + 9 = 0.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Δ = 36 − 36 = 0: raiz dupla <strong>x = 3</strong>. De fato, x² − 6x + 9 = (x − 3)².</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Escreva uma equação do 2º grau cujas raízes sejam 3 e 4.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Soma 7 e produto 12: <strong>x² − 7x + 12 = 0</strong>. Pela forma fatorada, (x − 3)(x − 4) = 0 dá o mesmo.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>7.</strong> Para que valores de k a equação x² + kx + 9 = 0 tem uma única raiz?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Raiz única quer dizer Δ = 0: k² − 36 = 0, então <strong>k = 6 ou k = −6</strong>. As equações são (x + 3)² = 0 e (x − 3)² = 0.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="raizes.html" rel="prev"><span>Anterior</span>Raízes — Regras de Radiciação</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>
