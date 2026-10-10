@@ -145,10 +145,12 @@
 }
 .home-aside__chips a:hover { background: var(--accent); color: var(--accent-ink); }
 
-/* A 90rem cabem quatro colunas de 20rem, e a lista da home tem três posts:
-   auto-fit estica os três em vez de deixar uma trilha vazia à direita. */
+/* A 90rem cabem quatro colunas de 20rem, mas a lista da home abre com três
+   posts e o "Mostrar mais" revela de três em três: com quatro colunas, cada
+   clique deixaria uma fileira pela metade. A coluna nunca fica mais estreita
+   que um terço da largura, então são no máximo três. */
 .home .grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(var(--min, 20rem), 100%), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(max(min(var(--min, 20rem), 100%), (100% - 2 * var(--grid-gap, 2rem)) / 3), 1fr));
 }
 
 /* ─── Atalhos abaixo do destaque ─────────────────────────────────────────── */
