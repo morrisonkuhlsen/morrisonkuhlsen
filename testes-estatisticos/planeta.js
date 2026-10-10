@@ -13,7 +13,8 @@
  * O sol nasce devagar, em ~30 s; depois a atmosfera para no último quadro
  * (só é refeita se a janela mudar de tamanho) e só a etapa leve continua
  * animada: os feixes de luz que respiram e os relâmpagos de uma tempestade
- * lá embaixo. Com prefers-reduced-motion, desenha direto o quadro final,
+ * lá embaixo. O ritmo de cada etapa é o que o olho precisa, não o da tela
+ * (ver laco()), e nada roda com o hero fora da tela ou a aba escondida. Com prefers-reduced-motion, desenha direto o quadro final,
  * parado e sem relâmpagos. Sem WebGL, fica só o fundo preto do CSS. */
 (() => {
   const hero = document.querySelector(".pt-hero");
@@ -251,21 +252,24 @@
       // a 680 nm, cada um pesado na sua cor) alisa o granulado de uma luz
       // pura e deixa as franjas de cor só nas pontas dos raios. Some suave
       // antes da borda da textura.
-      vec2 uv = dp / uBurstPx;
-      vec3 estrela = vec3(0.0), soma = vec3(0.0);
-      for (int i = 0; i < 10; i++) {
-        float lam = 420.0 + 28.0 * float(i);
-        vec3 w = vec3(exp(-pow((lam - 610.0) / 45.0, 2.0)),
-                      exp(-pow((lam - 545.0) / 40.0, 2.0)),
-                      exp(-pow((lam - 460.0) / 35.0, 2.0)));
-        estrela += w * difracao(uv * (550.0 / lam));
-        soma += w;
+      // (Enquanto a textura não fica pronta, uBurstK é 0 e o laço é pulado.)
+      if (uBurstK * uVis > 0.0) {
+        vec2 uv = dp / uBurstPx;
+        vec3 estrela = vec3(0.0), soma = vec3(0.0);
+        for (int i = 0; i < 10; i++) {
+          float lam = 420.0 + 28.0 * float(i);
+          vec3 w = vec3(exp(-pow((lam - 610.0) / 45.0, 2.0)),
+                        exp(-pow((lam - 545.0) / 40.0, 2.0)),
+                        exp(-pow((lam - 460.0) / 35.0, 2.0)));
+          estrela += w * difracao(uv * (550.0 / lam));
+          soma += w;
+        }
+        estrela /= soma;
+        estrela *= smoothstep(0.5, 0.3, length(uv));
+        // Os raios crescem mais devagar que o brilho: só ganham força quando
+        // boa parte do disco já saiu de trás do planeta.
+        cor += corLente * estrela * uBurstK * uVis * 0.45;
       }
-      estrela /= soma;
-      estrela *= smoothstep(0.5, 0.3, length(uv));
-      // Os raios crescem mais devagar que o brilho: só ganham força quando
-      // boa parte do disco já saiu de trás do planeta.
-      cor += corLente * estrela * uBurstK * uVis * 0.45;
 
 
       // Rastro anamórfico: um brilho horizontal fino e azulado junto ao sol,
@@ -465,9 +469,9 @@
   // de raios perpendicular a ela (aqui, 7 lâminas: 14 raios); a borda redonda
   // dá os anéis; poeira e fibras na lente dão as estrias finas em volta.
   // Calculado uma vez, com uma FFT 2D de 1024 × 1024 (raios de 2 a 3 px
-  // na tela), e enviado como textura. A conta leva uns décimos de segundo:
-  // roda logo depois do primeiro quadro, com o sol ainda atrás do planeta,
-  // e até lá os raios ficam apagados.
+  // na tela), e enviado como textura. A conta leva mais de um segundo, então
+  // roda num Worker, fora da thread principal: a página responde ao clique
+  // e à rolagem enquanto isso, e os raios ficam apagados até ela chegar.
   const GANHO = 16000;
   // Quando a textura fica pronta, os raios entram aos poucos, em 8 s, com
   // começo lento (quadrático), nunca de uma vez.
@@ -481,7 +485,8 @@
       [(35 + k * 18 + (al() - 0.5) * 12) * Math.PI / 180, 0.15 + 1.1 * al() ** 2, 90 + al() * 230, al() * 6.283]).flat());
   })();
   const ganho = () => pronta === null ? 0 : GANHO * Math.min(1, (performance.now() - pronta) / 8000) ** 2;
-  function estrela() {
+  // Sem nada de fora (nem gl): o texto desta função vira o Worker.
+  function padraoDifracao() {
     const N = 1024, LOG = 10, c = N / 2, r = N / 3;
     const re = new Float32Array(N * N), im = new Float32Array(N * N);
     let semente = 101;
@@ -564,7 +569,8 @@
         }
       }
     };
-    for (let y = 0; y < N; y++) fft(y * N, 1);
+    // Fora do disco as linhas são só zeros, e a FFT de zeros é zero.
+    for (let y = c - lim; y <= c + lim; y++) fft(y * N, 1);
     for (let x = 0; x < N; x++) fft(x, N);
 
     // Intensidade, com a frequência zero no centro, normalizada pelo pico e
@@ -582,6 +588,11 @@
         dados[y * N + x] = Math.round(255 * Math.pow(v, 0.2));
       }
     }
+    return dados;
+  }
+
+  function subirTextura(dados) {
+    const N = 1024;
     const tex = gl.createTexture();
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -592,6 +603,24 @@
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     pronta = parado ? -Infinity : performance.now();
+    if (parado) refazer = true;
+    acordar();
+  }
+
+  function estrela() {
+    const naThread = () => setTimeout(() => subirTextura(padraoDifracao()), 50);
+    try {
+      const url = URL.createObjectURL(new Blob(
+        [`onmessage = () => { const d = (${padraoDifracao})(); postMessage(d, [d.buffer]); };`],
+        { type: "text/javascript" }));
+      const w = new Worker(url);
+      const fecha = () => { w.terminate(); URL.revokeObjectURL(url); };
+      w.onmessage = ev => { fecha(); subirTextura(ev.data); };
+      w.onerror = () => { fecha(); naThread(); };
+      w.postMessage(0);
+    } catch (err) {
+      naThread(); // sem Worker (ou bloqueado): como antes, na thread principal
+    }
   }
 
   /* ---------------------------------------------------------------- geometria */
@@ -637,7 +666,8 @@
   const cam = { F: [0, 0, -1], R: [1, 0, 0], Up: [0, 1, 0], tanX: 1, tanY: 1 };
 
   // `e` é a elevação do centro do sol acima do horizonte, em radianos.
-  function desenhar(e) {
+  // Desenha só a cena (a etapa pesada); os reflexos vêm em compor().
+  function desenharCena(e) {
     const tanY = Math.tan(FOV_Y / 2), tanX = tanY * (W / H);
     const pitch = -mergulho - Math.atan(HORIZONTE_Y * tanY);
     const F = [0, Math.sin(pitch), -Math.cos(pitch)];
@@ -674,7 +704,6 @@
     gl.uniform1f(U.uBurstK, ganho());
     gl.drawArrays(gl.TRIANGLES, 0, 3);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    compor();
   }
 
   /* ---------------------------------------------------------------- reflexos */
@@ -684,7 +713,7 @@
   // do cursor, com inércia, e os reflexos se acendem um pouco; ao sair,
   // voltam ao centro da tela. Só esta etapa leve é refeita. No toque, nada muda.
   const SEGUE = 0.15;
-  let eixo = null, alvo = null, realce = 0, alvoRealce = 0, passoPendente = 0;
+  let eixo = null, alvo = null, realce = 0, alvoRealce = 0;
 
   function compor() {
     gl.useProgram(progReflexos);
@@ -708,21 +737,15 @@
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
+  // Aproxima o eixo e o realce do alvo; diz se ainda falta andar.
   function passoReflexos() {
-    passoPendente = 0;
     const destino = alvo || [W / 2, H / 2];
     const k = parado ? 1 : 0.06;
     eixo[0] += (destino[0] - eixo[0]) * k;
     eixo[1] += (destino[1] - eixo[1]) * k;
     realce += (alvoRealce - realce) * (parado ? 1 : 0.1);
-    // Durante o nascer, o quadro dele já chama compor().
-    if (fim) compor();
-    const falta = Math.hypot(destino[0] - eixo[0], destino[1] - eixo[1]) > 0.5 || Math.abs(alvoRealce - realce) > 0.005;
-    if (falta) passoPendente = requestAnimationFrame(passoReflexos);
+    return Math.hypot(destino[0] - eixo[0], destino[1] - eixo[1]) > 0.5 || Math.abs(alvoRealce - realce) > 0.005;
   }
-  const mexer = () => {
-    if (!passoPendente) passoPendente = requestAnimationFrame(passoReflexos);
-  };
   hero.addEventListener("pointermove", ev => {
     if (ev.pointerType === "touch") return;
     // Segue o cursor só em parte: o eixo vai a SEGUE do caminho entre o
@@ -731,12 +754,12 @@
     const mx = (ev.clientX - r.left) * escala, my = H - (ev.clientY - r.top) * escala;
     alvo = [W / 2 + (mx - W / 2) * SEGUE, H / 2 + (my - H / 2) * SEGUE];
     alvoRealce = 1;
-    mexer();
+    acordar();
   });
   hero.addEventListener("pointerleave", () => {
     alvo = null;
     alvoRealce = 0;
-    mexer();
+    acordar();
   });
 
   /* ---------------------------------------------------------------- tempestade */
@@ -824,21 +847,16 @@
 
   let heroVisivel = true;
   if ("IntersectionObserver" in window) {
-    new IntersectionObserver(es => { heroVisivel = es[0].isIntersecting; }).observe(hero);
+    new IntersectionObserver(es => { heroVisivel = es[0].isIntersecting; acordar(); }).observe(hero);
   }
+  document.addEventListener("visibilitychange", acordar);
   function tempestade(agora) {
     if (agora >= proxima && heroVisivel && !document.hidden) {
       descarga(agora);
       proxima = agora + sorteio(900, 5200);
+      acordar();
     }
     setTimeout(() => requestAnimationFrame(tempestade), Math.max(50, proxima - performance.now()));
-  }
-
-  // Depois do nascer, só a etapa leve (feixes, reflexos e relâmpagos) é
-  // refeita a cada quadro, e só com o hero na tela e a aba visível.
-  function animar() {
-    if (fim && heroVisivel && !document.hidden) compor();
-    requestAnimationFrame(animar);
   }
 
   /* ---------------------------------------------------------------- nascer */
@@ -858,32 +876,73 @@
     ? E0 + (EM - E0) * freia(ms / ALVORADA)
     : EM + (E1 - EM) * suaviza(Math.min(1, (ms - ALVORADA) / (DURACAO - ALVORADA)));
 
-  function quadro(ms) {
-    if (inicio === null) inicio = ms;
-    const passou = ms - inicio;
-    desenhar(elevacao(passou));
-    // Continua até o fim da subida e da entrada dos raios.
-    if (passou < DURACAO || ganho() < GANHO) requestAnimationFrame(quadro);
-    else fim = true;
+  // Um laço só para tudo o que se mexe, no ritmo que o olho precisa e não
+  // no da tela (uma tela de 120 Hz pagaria o dobro por nada):
+  // - a cena (a atmosfera, a etapa cara) vai a no máximo 30 quadros por
+  //   segundo durante o nascer — o sol anda menos de um pixel por quadro — e
+  //   para depois dele;
+  // - a etapa leve vai a 60 quando há algo rápido (relâmpago, reflexos
+  //   seguindo o mouse) e a 30 quando só os feixes respiram, devagar;
+  // - com o hero fora da tela ou a aba escondida, o laço para, e acordar()
+  //   o retoma.
+  const QUADRO_CENA = 1000 / 30, QUADRO_RAPIDO = 1000 / 60, QUADRO_CALMO = 1000 / 30;
+  const FOLGA = 2; // ms: um quadro de 60 Hz que chega um pouco antes ainda conta
+  let rodando = false, remedir = false, refazer = false, ultCena = -Infinity, ultCompor = -Infinity;
+
+  function acordar() {
+    if (!rodando) { rodando = true; requestAnimationFrame(laco); }
+  }
+
+  function laco(ms) {
+    rodando = false;
+    if (document.hidden || !heroVisivel) return;
+    if (remedir) {
+      // O canvas mudou de tamanho e foi apagado: refaz a cena neste quadro.
+      remedir = false;
+      medir();
+      ultCena = -Infinity;
+      if (fim) refazer = true;
+    }
+    let cena = false;
+    if (!fim) {
+      if (inicio === null) inicio = ms;
+      const passou = ms - inicio;
+      if (ms - ultCena >= QUADRO_CENA - FOLGA) {
+        desenharCena(elevacao(passou));
+        ultCena = ms;
+        cena = true;
+        if (passou >= DURACAO && ganho() >= GANHO) fim = true;
+      }
+    } else if (refazer) {
+      desenharCena(E1);
+      refazer = false;
+      cena = true;
+    }
+    const mexendo = passoReflexos();
+    const ritmo = mexendo || raios.length ? QUADRO_RAPIDO : QUADRO_CALMO;
+    if (cena || mexendo || ms - ultCompor >= ritmo - FOLGA) {
+      compor();
+      ultCompor = ms;
+    }
+    // Com prefers-reduced-motion não há nada animado: depois do quadro
+    // final, só se acorda de novo para os reflexos ou um redimensionamento.
+    if (!parado || !fim || mexendo || refazer) acordar();
   }
 
   medir();
   if (parado) {
-    estrela();
     fim = true;
-    desenhar(E1);
-  } else {
-    requestAnimationFrame(quadro);
-    setTimeout(estrela, 50);
+    refazer = true;
   }
+  setTimeout(estrela, 50);
+  acordar();
   // A tempestade começa depois que os olhos se acostumam ao escuro.
   if (!reduz) {
     proxima = performance.now() + 4000;
     setTimeout(() => requestAnimationFrame(tempestade), 4000);
-    requestAnimationFrame(animar);
   }
   addEventListener("resize", () => {
-    medir();
-    if (fim) desenhar(E1);
+    remedir = true;
+    acordar();
   });
 })();
