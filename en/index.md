@@ -8,6 +8,7 @@ ref: homepage
 permalink: /en/
 order: 0
 
+hero_galton: true
 hero_title: "Statistics made clear"
 hero_lede: "Technical concepts in plain language, with worked examples and interactive tools."
 hero_cta_text: "Browse the articles"

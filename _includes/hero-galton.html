@@ -1,0 +1,21 @@
+{%- comment -%}
+  Painel ao lado do título do hero: uma tábua de Galton desenhada em canvas
+  (assets/js/galton.js). Só aparece no desktop — no celular o hero é curto e
+  o painel empurraria o título para fora da primeira tela.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+<figure class="galton" aria-labelledby="galton-cap">
+  <canvas class="galton__canvas" role="img"
+          aria-label="{% if lang == 'en' %}Animated Galton board: balls bounce off pegs and pile up into a bell curve{% else %}Tábua de Galton animada: bolinhas batem nos pinos e se acumulam numa curva em sino{% endif %}"></canvas>
+  <figcaption class="galton__cap" id="galton-cap">
+    <span class="galton__count" aria-hidden="true">n = 0</span>
+    {%- if lang == 'en' -%}
+      <p>Each ball turns left or right at random, 12 times. The sum is a binomial — and the binomial becomes a normal curve.</p>
+      <a href="{{ '/en/formulas/central-limit-theorem.html' | relative_url }}">Central Limit Theorem, interactive</a>
+    {%- else -%}
+      <p>Cada bolinha desvia ao acaso para a esquerda ou a direita, 12 vezes. A soma é uma binomial — e a binomial vira uma curva normal.</p>
+      <a href="{{ '/formulas/teorema-central-limite.html' | relative_url }}">Teorema Central do Limite, interativo</a>
+    {%- endif -%}
+  </figcaption>
+</figure>
+<script src="{{ '/assets/js/galton.js' | relative_url }}" defer></script>

@@ -1,0 +1,169 @@
+/* Home: hero em duas colunas (texto + tábua de Galton) e o destaque com uma
+   coluna lateral. Tudo aqui só existe dentro de .home. */
+
+.home { --container: 90rem; }
+
+/* ─── Hero dividido ───────────────────────────────────────────────────────── */
+
+.galton { display: none; }
+
+@media (min-width: 64rem) {
+  .hero__body--split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
+    align-items: end;
+    gap: clamp(2rem, 4vw, 5rem);
+  }
+
+  .galton {
+    display: block;
+    position: relative;
+    isolation: isolate;
+    /* Sobe o painel para não ser coberto pelo destaque, que invade o hero. */
+    margin-bottom: 3rem;
+    padding: 1rem 1rem 1.1rem;
+  }
+
+  /* O vidro é uma faixa atrás do painel: entra em degradê pela esquerda e,
+     pela direita, vai até a borda da página — a distância do painel até ela
+     é a margem do container mais o gutter. O hero tem overflow: hidden, então
+     o 100vw (que conta a barra de rolagem) não cria rolagem horizontal. */
+  .galton::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0 calc(-1 * (max(0px, (100vw - var(--container)) / 2) + var(--gutter))) 0 -7rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    mask-image: linear-gradient(to right, transparent, #000 8rem);
+  }
+}
+
+.galton__canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 0.9;
+}
+
+.galton__cap {
+  margin-top: 0.75rem;
+  font-size: var(--step--1);
+  line-height: 1.45;
+  color: var(--on-dark-soft);
+}
+
+.galton__count {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--galton-curve);
+}
+
+.galton__cap a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-weight: 700;
+  color: var(--on-dark);
+}
+
+/* ─── Destaque + coluna lateral ──────────────────────────────────────────── */
+
+.home-lead { display: grid; gap: 1.5rem; }
+.home-lead__main { min-width: 0; }
+
+.home-aside { display: grid; gap: 1rem; align-content: start; }
+
+@media (min-width: 64rem) {
+  /* stretch + o último cartão com flex: 1 fazem a coluna terminar junto com
+     o destaque, qualquer que seja o tamanho do resumo do post. */
+  .home-lead { grid-template-columns: minmax(0, 1fr) 20rem; align-items: stretch; }
+  /* Acompanha o destaque, que sobe -4rem para dentro do hero. */
+  .home-aside { display: flex; flex-direction: column; position: relative; z-index: 2; margin-top: -4rem; }
+  .home-aside > :last-child { flex: 1; }
+  .home-lead__main > .feature-card { height: calc(100% + 4rem); }
+}
+
+/* Entre tablet e desktop a coluna vai para baixo, em cards lado a lado. */
+@media (min-width: 40rem) and (max-width: 63.99rem) {
+  .home-aside { grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+}
+
+.home-aside__card {
+  display: block;
+  padding: 1.25rem;
+  background: var(--paper-alt);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.home-aside__card p {
+  margin-top: 0.4rem;
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+}
+
+.home-aside__kicker {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.home-aside__card--weekly {
+  border-left: 3px solid var(--highlight);
+  transition: transform var(--speed) var(--ease);
+}
+.home-aside__card--weekly:hover { transform: translateY(-3px); }
+.home-aside__card--weekly .home-aside__kicker { color: var(--highlight); }
+.home-aside__card--weekly strong { display: block; font-size: var(--step-0); line-height: 1.3; }
+.home-aside__card--weekly .read-more { margin-top: 0.75rem; }
+
+.home-aside__term {
+  font-size: var(--step-1);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+.home-aside__term:hover { text-decoration: underline; }
+
+.home-aside__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+.home-aside__chips a {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  font-size: var(--step--1);
+  background: var(--chip-bg);
+  border-radius: 999px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.home-aside__chips a:hover { background: var(--accent); color: var(--accent-ink); }
+
+/* A 90rem cabem quatro colunas de 20rem, e a lista da home tem três posts:
+   auto-fit estica os três em vez de deixar uma trilha vazia à direita. */
+.home .grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--min, 20rem), 100%), 1fr));
+}
+
+/* ─── Atalhos abaixo do destaque ─────────────────────────────────────────── */
+
+.home-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  grid-column: 1 / -1;
+  padding: 1.25rem clamp(1.25rem, 1rem + 1vw, 2.5rem);
+  background: var(--paper-alt);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.home-tools .home-aside__kicker { margin-bottom: 0; }
+.home-tools .home-aside__chips { flex: 1; }

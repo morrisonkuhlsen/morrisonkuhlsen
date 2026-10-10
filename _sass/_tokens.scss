@@ -31,6 +31,16 @@
   --mk-tint-warn:     #fff7ed;
   --mk-tint-danger:   #fff1f2;
 
+  /* Tábua de Galton do hero. O hero é escuro nos dois temas, então estas
+     cores não mudam no tema escuro. */
+  --galton-ball:    #b8c6ff;
+  --galton-peg:     rgb(255 255 255 / 32%);
+  --galton-peg-hit: rgb(255 255 255 / 70%);
+  --galton-wall:    rgb(255 255 255 / 22%);
+  --galton-bar:     rgb(139 164 255 / 85%);
+  --galton-curve:   #ffb547;
+  --glass-bg:     rgb(12 14 20 / 58%);
+
   --code-bg:      #14161c;
   --code-ink:     #e8eaf0;
   --footer-bg:    #14161c;

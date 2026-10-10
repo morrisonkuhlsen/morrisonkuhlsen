@@ -19,7 +19,8 @@
     {%- endif -%}
   </div>
 
-  <div class="hero__body">
+  <div class="hero__body{% if page.hero_galton %} hero__body--split{% endif %}">
+    <div class="hero__text">
     <h1 class="hero__title">{{ page.hero_title | default: page.title }}</h1>
     {%- if page.hero_lede or page.description -%}
       <p class="hero__lede">{{ page.hero_lede | default: page.description }}</p>
@@ -32,6 +33,8 @@
         </a>
       </div>
     {%- endif -%}
+    </div>
+    {%- if page.hero_galton -%}{%- include hero-galton.html -%}{%- endif -%}
   </div>
 </section>
 

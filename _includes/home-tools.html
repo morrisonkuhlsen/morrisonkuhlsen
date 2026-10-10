@@ -1,0 +1,16 @@
+{%- comment -%}
+  Faixa de atalhos para as ferramentas, abaixo do destaque e da coluna
+  lateral, ocupando a largura das duas.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign tools = site.data.tools[lang] -%}
+<nav class="home-tools" aria-label="{% if lang == 'en' %}Quick access{% else %}Acesso rápido{% endif %}">
+  <span class="home-aside__kicker">{% if lang == 'en' %}Quick access{% else %}Acesso rápido{% endif %}</span>
+  <ul class="home-aside__chips">
+    {%- for t in tools -%}
+      {%- unless t.featured -%}
+        <li><a href="{{ t.url | relative_url }}">{{ t.name }}</a></li>
+      {%- endunless -%}
+    {%- endfor -%}
+  </ul>
+</nav>

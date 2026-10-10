@@ -2,10 +2,19 @@
 layout: base
 ---
 
+{%- comment -%}
+  .home alarga o --container só nesta página: a 75rem, numa tela larga, o
+  título e o destaque ficavam numa faixa estreita com as laterais vazias.
+{%- endcomment -%}
+<div class="home">
 {%- include hero.html -%}
 
 <div class="container">
-  {{ content }}
+  <div class="home-lead">
+    <div class="home-lead__main">{{ content }}</div>
+    {%- include home-aside.html -%}
+    {%- include home-tools.html -%}
+  </div>
 </div>
 
 <section class="section">
@@ -13,5 +22,6 @@ layout: base
     {%- include post-list.html limit=3 skip_featured=true -%}
   </div>
 </section>
+</div>
 
 {%- include tags-section.html -%}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  Coluna ao lado do post em destaque, na home: Problema Semanal e um verbete
+  do glossário. Os atalhos das ferramentas ficam em home-tools.html, embaixo
+  do destaque, para as duas colunas terminarem na mesma altura. O verbete é
+  escolhido pelo dia do ano no momento do build — por isso o rótulo não
+  promete "do dia".
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign tools = site.data.tools[lang] -%}
+{%- assign terms = site.data.glossario[lang] -%}
+
+<aside class="home-aside">
+  {%- assign weekly = tools | where: "featured", true | first -%}
+  {%- if weekly -%}
+    <a class="home-aside__card home-aside__card--weekly" href="{{ weekly.url | relative_url }}">
+      <span class="home-aside__kicker">{{ weekly.name }}</span>
+      <strong>{% if lang == 'en' %}A new statistics challenge every week{% else %}Um desafio de estatística novo toda semana{% endif %}</strong>
+      <span class="read-more">
+        {% if lang == 'en' %}Solve it{% else %}Resolver{% endif %}
+        <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+      </span>
+    </a>
+  {%- endif -%}
+
+  {%- if terms and terms.size > 0 -%}
+    {%- assign day = site.time | date: "%j" | plus: 0 -%}
+    {%- assign idx = day | modulo: terms.size -%}
+    {%- assign term = terms[idx] -%}
+    <div class="home-aside__card">
+      <span class="home-aside__kicker">{% if lang == 'en' %}From the glossary{% else %}Do glossário{% endif %}</span>
+      <a class="home-aside__term" href="{{ '/pt/glossario' | relative_url }}#{{ term.slug }}">{{ term.termo }}</a>
+      <p>{{ term.def | markdownify | strip_html | truncatewords: 32 }}</p>
+    </div>
+  {%- endif -%}
+</aside>
