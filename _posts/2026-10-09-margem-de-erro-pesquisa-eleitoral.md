@@ -248,6 +248,11 @@ Com essa semente, a cobertura sai 94,7%. Outra semente dá outro número: com
 5.000 pesquisas, o erro de Monte Carlo da cobertura é de uns 0,3 ponto, e é
 por isso que só a conta exata separa 94,98% de 95%.
 
+O mesmo experimento roda no navegador, no
+[simulador de pesquisa](/formulas/simulador-pesquisa.html?N=100000&P=38,6&n=1000&conf=95&M=5000&seed=2026):
+dá para sortear as pesquisas uma a uma, trocar o tamanho da amostra e ver a
+cobertura observada se aproximar da exata.
+
 ## O que a margem de erro não mede
 
 Tudo acima supõe amostragem aleatória simples com cobertura completa, sem

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Simulador de Pesquisa — Interativo</title>
+  <meta name="description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <meta property="og:title" content="Simulador de Pesquisa — Interativo">
+  <meta property="og:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Simulador de Pesquisa — Interativo">
+  <meta name="twitter:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/poll-simulator.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Simulador de Pesquisa</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da cobertura exata interativa">
+        <span class="part" data-part="coverage" data-tone="1" data-tex="C"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="cover_sum" data-tone="2" data-tex="\sum_{k\,:\;P\,\in\,\mathrm{IC}(k)}"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="ways_a" data-tone="3" data-tex="\binom{K}{k}"></span>
+            <span class="op">·</span>
+            <span class="part" data-part="ways_rest" data-tone="4" data-tex="\binom{N-K}{n-k}"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="all_samples" data-tone="5" data-tex="\binom{N}{n}"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Simulador; estado em ?N=&P=&n=&conf=&M=&seed=. A contagem de cada
+         pesquisa é sorteada pela inversa da acumulada hipergeométrica com a
+         semente do campo, então a mesma URL dá sempre as mesmas pesquisas.
+         Os botões só mudam M e a semente. -->
+    <section class="calc" data-calc="simulacao" aria-labelledby="calc-title">
+      <h2 id="calc-title">Simule</h2>
+      <p class="calc-lede">Exemplo: num eleitorado de 100.000 pessoas, 38,6% votam no candidato A. Cada pesquisa ouve 1.000 eleitores sorteados sem reposição e publica um intervalo de 95% de confiança. Sorteie pesquisas e veja quantos intervalos contêm o valor verdadeiro. Troque os valores para simular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="5">
+          <span>População <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="100000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Proporção verdadeira <i>P</i> (%)</span>
+          <input name="P" type="text" inputmode="decimal" value="38,6" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Tamanho da amostra <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Confiança (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="1">
+          <span>Pesquisas sorteadas</span>
+          <input name="M" type="text" inputmode="numeric" value="20" data-max="100000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Semente</span>
+          <input name="seed" type="text" inputmode="numeric" value="2026" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="calc-actions">
+        <button type="button" data-add="M:1">+1 pesquisa</button>
+        <button type="button" data-add="M:100">+100</button>
+        <button type="button" data-add="M:1000">+1.000</button>
+        <button type="button" data-play="M" data-label-pause="Pausar" aria-pressed="false">Sortear sem parar</button>
+        <button type="button" data-reseed="seed">Nova semente</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="coverage" data-tone="1">Cobertura Exata (C)</dt>
+          <dd>A fração de todas as amostras possíveis cujo intervalo de confiança contém o valor verdadeiro P. É o que os "95% de confiança" prometem, e quase nunca é exatamente 95%: com 1.000 de 100.000 eleitores e P = 38,6%, dá 94,98%. A cobertura observada no simulador oscila em torno dela.</dd>
+          <dt data-part="cover_sum" data-tone="2">Soma sobre os Acertos</dt>
+          <dd>Percorre só as contagens k cujo intervalo, calculado com p̂ = k/n e o erro padrão estimado pela própria pesquisa, contém P. Como k só anda de 1 em 1, a faixa de acertos é um conjunto de inteiros, e as pontas perdidas no arredondamento fazem a cobertura escapar do nominal.</dd>
+          <dt data-part="ways_a" data-tone="3">Maneiras de Escolher k Eleitores de A</dt>
+          <dd>Quantos grupos de k pessoas dá para formar com os K = P·N eleitores de A. No simulador, K é a proporção verdadeira vezes a população, arredondada.</dd>
+          <dt data-part="ways_rest" data-tone="4">Maneiras de Completar a Amostra</dt>
+          <dd>Quantos grupos de n − k pessoas dá para formar com os N − K eleitores restantes. Cada escolha de eleitores de A combina com qualquer uma destas, por isso as duas contagens se multiplicam.</dd>
+          <dt data-part="all_samples" data-tone="5">Todas as Amostras Possíveis</dt>
+          <dd>O número de amostras de tamanho n que se pode tirar de N pessoas sem reposição, todas igualmente prováveis. Com n = 1.000 e N = 100.000, passa de 10<sup>2.430</sup>. A fração inteira é a distribuição hipergeométrica, a probabilidade exata de a pesquisa encontrar k eleitores de A.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="margem-de-erro.html" rel="prev"><span>Anterior</span>Margem de Erro</a>
+      <a class="pager-next" href="correcao-populacao-finita.html" rel="next"><span>Próxima</span>Correção para População Finita</a>
+    </nav>
+  </main>
+</body>
+</html>

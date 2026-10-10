@@ -123,8 +123,10 @@ def build(slug, d):
     for a, b in COMMON + FORMULA_COMMON:
         s = sub1(s, a, b)
     if '<section class="calc"' in s:
+        # O título pode ser outro ("Simule"); quem muda traduz o seu em "extra".
         for a, b in CALC_COMMON:
-            s = sub1(s, a, b)
+            if a in s:
+                s = sub1(s, a, b)
     s = meta_text(s, d["title"], d["desc"])
     s = sub1(s, pt_url, en_url, 2)  # canonical e og:url
     s = resub(s, r'(  <link rel="canonical" href="[^"]+">\n)', lambda m: m.group(1) + hreflang(pt_url, en_url))
@@ -202,6 +204,8 @@ def build_index():
         slug, tex = m.group(1), m.group(2)
         if slug == "intervalo-confianca":
             tex = tex.replace("IC =", "CI =")
+        if slug == "simulador-pesquisa":
+            tex = tex.replace(r"\mathrm{IC}", r"\mathrm{CI}")
         d = PAGES[slug]
         return (f'<li><a class="formula-card" href="{d["en"]}.html">\n'
                 f'            <span class="card-tex" data-tex="{tex}"></span>\n'

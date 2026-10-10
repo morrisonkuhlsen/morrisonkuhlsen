@@ -67,6 +67,11 @@
   description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
   lang: pt
+- title: "Simulador de Pesquisa"
+  url: "/formulas/simulador-pesquisa.html"
+  description: "Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica."
+  tags: "simulação simulador interativo pesquisa eleitoral amostragem cobertura intervalo de confiança hipergeométrica monte carlo"
+  lang: pt
 - title: "Poder Estatístico"
   url: "/formulas/poder-estatistico.html"
   description: "Tamanho de amostra pelo poder estatístico explicado termo a termo: calculadora para testes t de uma ou duas amostras, curva de poder e conferência pela t não central."
@@ -277,6 +282,11 @@
   url: "/en/formulas/margin-of-error.html"
   description: "The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals."
   tags: "formula interactive calculator step by step poll margin of error"
+  lang: en
+- title: "Poll Simulator"
+  url: "/en/formulas/poll-simulator.html"
+  description: "Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution."
+  tags: "simulation simulator interactive election poll sampling coverage confidence interval hypergeometric monte carlo"
   lang: en
 - title: "Statistical Power"
   url: "/en/formulas/statistical-power.html"

@@ -250,6 +250,11 @@ With this seed, coverage comes out at 94.7%. Another seed gives another number:
 with 5,000 polls, the Monte Carlo error of the coverage is about 0.3 point,
 which is why only the exact calculation can tell 94.98% apart from 95%.
 
+The same experiment runs in the browser, in the
+[poll simulator](/en/formulas/poll-simulator.html?N=100000&P=38.6&n=1000&conf=95&M=5000&seed=2026):
+you can draw the polls one at a time, change the sample size and watch the
+observed coverage approach the exact value.
+
 ## What the margin of error does not measure
 
 Everything above assumes simple random sampling with full coverage, no

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Poll Simulator — Interactive</title>
+  <meta name="description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
+  <meta property="og:title" content="Poll Simulator — Interactive">
+  <meta property="og:description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Poll Simulator — Interactive">
+  <meta name="twitter:description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/simulador-pesquisa.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Poll Simulator</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive exact coverage formula">
+        <span class="part" data-part="coverage" data-tone="1" data-tex="C"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="cover_sum" data-tone="2" data-tex="\sum_{k\,:\;P\,\in\,\mathrm{CI}(k)}"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="ways_a" data-tone="3" data-tex="\binom{K}{k}"></span>
+            <span class="op">·</span>
+            <span class="part" data-part="ways_rest" data-tone="4" data-tex="\binom{N-K}{n-k}"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="all_samples" data-tone="5" data-tex="\binom{N}{n}"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Simulador; estado em ?N=&P=&n=&conf=&M=&seed=. A contagem de cada
+         pesquisa é sorteada pela inversa da acumulada hipergeométrica com a
+         semente do campo, então a mesma URL dá sempre as mesmas pesquisas.
+         Os botões só mudam M e a semente. -->
+    <section class="calc" data-calc="simulacao" aria-labelledby="calc-title">
+      <h2 id="calc-title">Simulate</h2>
+      <p class="calc-lede">Example: in an electorate of 100,000 people, 38.6% vote for candidate A. Each poll interviews 1,000 voters drawn without replacement and publishes a 95% confidence interval. Draw polls and see how many intervals contain the true value. Change the values to simulate your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="5">
+          <span>Population <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="100000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>True proportion <i>P</i> (%)</span>
+          <input name="P" type="text" inputmode="decimal" value="38.6" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Sample size <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Confidence (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="1">
+          <span>Polls drawn</span>
+          <input name="M" type="text" inputmode="numeric" value="20" data-max="100000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Seed</span>
+          <input name="seed" type="text" inputmode="numeric" value="2026" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="calc-actions">
+        <button type="button" data-add="M:1">+1 poll</button>
+        <button type="button" data-add="M:100">+100</button>
+        <button type="button" data-add="M:1000">+1,000</button>
+        <button type="button" data-play="M" data-label-pause="Pause" aria-pressed="false">Keep drawing</button>
+        <button type="button" data-reseed="seed">New seed</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="coverage" data-tone="1">Exact Coverage (C)</dt>
+          <dd>The share of all possible samples whose confidence interval contains the true value P. It is what "95% confidence" promises, and it is almost never exactly 95%: with 1,000 out of 100,000 voters and P = 38.6%, it is 94.98%. The coverage observed in the simulator fluctuates around it.</dd>
+          <dt data-part="cover_sum" data-tone="2">Sum over the Hits</dt>
+          <dd>Runs only over the counts k whose interval, computed with p̂ = k/n and the standard error estimated by the poll itself, contains P. Since k moves in steps of 1, the range of hits is a set of integers, and the ends lost to rounding make the coverage drift from the nominal level.</dd>
+          <dt data-part="ways_a" data-tone="3">Ways to Choose k Voters for A</dt>
+          <dd>How many groups of k people can be formed from the K = P·N voters for A. In the simulator, K is the true proportion times the population, rounded.</dd>
+          <dt data-part="ways_rest" data-tone="4">Ways to Complete the Sample</dt>
+          <dd>How many groups of n − k people can be formed from the other N − K voters. Every choice of voters for A pairs with any of these, so the two counts multiply.</dd>
+          <dt data-part="all_samples" data-tone="5">All Possible Samples</dt>
+          <dd>The number of samples of size n that can be drawn from N people without replacement, all equally likely. With n = 1,000 and N = 100,000, it exceeds 10<sup>2,430</sup>. The whole fraction is the hypergeometric distribution, the exact probability that the poll finds k voters for A.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="margin-of-error.html" rel="prev"><span>Previous</span>Margin of Error</a>
+      <a class="pager-next" href="finite-population-correction.html" rel="next"><span>Next</span>Finite Population Correction</a>
+    </nav>
+  </main>
+</body>
+</html>

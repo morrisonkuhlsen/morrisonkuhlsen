@@ -463,6 +463,48 @@ body {
   display: none;
 }
 
+.calc-chart-panel {
+  position: relative;
+}
+
+.calc-chart-panel + .calc-chart-panel {
+  margin-top: 1.4rem;
+}
+
+/* Botões que mexem nos campos (simulador). */
+.calc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.calc-actions button {
+  padding: .5rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.calc-actions button:hover {
+  border-color: var(--text-muted);
+}
+
+.calc-actions button:focus-visible {
+  outline: 2px solid var(--tone-1);
+  outline-offset: 1px;
+}
+
+.calc-actions button[aria-pressed="true"] {
+  border-color: var(--tone-1);
+  color: var(--tone-1);
+}
+
 .chart {
   display: block;
   width: 100%;
@@ -475,11 +517,13 @@ body {
 .chart-base { fill: var(--chart-base); }
 .chart-hi { fill: var(--chart-hi); }
 .chart-line { fill: none; stroke: var(--chart-hi); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-line.is-exact { stroke: var(--text-strong); stroke-width: 1.5; }
 .chart-area { fill: var(--chart-hi); opacity: .18; }
 .chart-rule { stroke: var(--chart-hi); stroke-width: 1; }
 .chart-dot { fill: var(--chart-hi); stroke: var(--surface); stroke-width: 2; }
 .chart-seg { stroke: var(--chart-base); stroke-width: 2; stroke-linecap: round; opacity: .55; }
 .chart-truth { stroke: var(--text-strong); stroke-width: 1.5; }
+.chart-ref { stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .chart-seg.is-miss { stroke: var(--chart-hi); stroke-width: 2.5; opacity: 1; }
 .chart-hit { fill: transparent; outline: none; }
 .chart-hit:focus-visible { stroke: var(--text-strong); stroke-width: 1; }
