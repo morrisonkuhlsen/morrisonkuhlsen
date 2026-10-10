@@ -274,6 +274,31 @@ a {
   margin: 0;
 }
 
+/* A marca do site embaixo dos botões. Aparece devagar, quando o sol já
+   clareou a cena (o nascer leva ~30 s, em planeta.js). */
+.pt-hero-marca {
+  display: inline-block;
+  margin-top: 2.6rem;
+  color: rgba(243, 244, 247, .82);
+  opacity: 0;
+  animation: pt-marca 8s ease 14s forwards;
+  transition: color .2s ease;
+}
+
+.pt-hero-marca:hover {
+  color: #fff;
+}
+
+.pt-hero-marca svg {
+  display: block;
+  width: clamp(9rem, 18vw, 12rem);
+  aspect-ratio: 3736 / 1266;
+}
+
+@keyframes pt-marca {
+  to { opacity: 1; }
+}
+
 .pt-btn {
   display: inline-flex;
   align-items: center;
@@ -1251,5 +1276,10 @@ a {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+
+  .pt-hero-marca {
+    animation: none;
+    opacity: 1;
   }
 }

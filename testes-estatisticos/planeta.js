@@ -10,7 +10,7 @@
  * reflexos da lente. A curva de tom ACES comprime o brilho como numa foto
  * exposta.
  *
- * O sol nasce em ~10 s; depois a cena para no último quadro (só volta a ser
+ * O sol nasce devagar, em ~30 s; depois a cena para no último quadro (só volta a ser
  * desenhada se a janela mudar de tamanho). Com prefers-reduced-motion,
  * desenha direto o quadro final. Sem WebGL, fica só o fundo preto do CSS. */
 (() => {
@@ -374,9 +374,10 @@
   // roda logo depois do primeiro quadro, com o sol ainda atrás do planeta,
   // e até lá os raios ficam apagados.
   const GANHO = 16000;
-  // Quando a textura fica pronta, os raios entram em 1,2 s, nunca de uma vez.
+  // Quando a textura fica pronta, os raios entram aos poucos, em 8 s, com
+  // começo lento (quadrático), nunca de uma vez.
   let pronta = null;
-  const ganho = () => pronta === null ? 0 : GANHO * Math.min(1, (performance.now() - pronta) / 1200);
+  const ganho = () => pronta === null ? 0 : GANHO * Math.min(1, (performance.now() - pronta) / 8000) ** 2;
   function estrela() {
     const N = 1024, LOG = 10, c = N / 2, r = N / 3;
     const re = new Float32Array(N * N), im = new Float32Array(N * N);
@@ -631,7 +632,7 @@
   // e fim suaves. Com o sol fundo, a luz que chega à atmosfera passa rente
   // ao planeta e chega fraca e vermelha: a faixa começa quase apagada e
   // alaranjada e vai clareando até o azul (o shader calcula isso sozinho).
-  const ALVORADA = 5000, DURACAO = 10000;
+  const ALVORADA = 12000, DURACAO = 30000;
   const E0 = -0.12, EM = -RAIO_SOL * 1.2, E1 = RAIO_SOL * 0.8;
   const freia = x => 1 - Math.pow(1 - x, 2);
   const suaviza = x => (1 - Math.cos(Math.PI * x)) / 2;
