@@ -373,7 +373,12 @@ body {
   color: var(--text-muted);
 }
 
-.calc-field input {
+.calc-field[hidden] {
+  display: none;
+}
+
+.calc-field input,
+.calc-field select {
   width: 100%;
   margin-top: auto; /* alinha os campos mesmo quando um rótulo quebra linha */
   padding: .6rem .75rem;
@@ -386,7 +391,19 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.calc-field input:focus-visible {
+.calc-field select {
+  appearance: none;
+  padding-right: 2rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%), linear-gradient(-45deg, transparent 50%, var(--text-muted) 50%);
+  background-position: calc(100% - 1rem) 55%, calc(100% - .7rem) 55%;
+  background-size: .3rem .3rem;
+  background-repeat: no-repeat;
+  font-variant-numeric: normal;
+  cursor: pointer;
+}
+
+.calc-field input:focus-visible,
+.calc-field select:focus-visible {
   outline: 2px solid var(--tone);
   outline-offset: 1px;
 }

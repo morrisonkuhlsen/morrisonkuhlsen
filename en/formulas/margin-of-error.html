@@ -114,7 +114,7 @@
           <dt data-part="fpc_factor" data-tone="4">Finite Population Correction</dt>
           <dd>Shrinks the margin when the sample is a large slice of the population N. With 1,000 out of 100,000 (1%), the factor is 0.995 and changes almost nothing, which is why population size matters so little. For a very large population, it equals 1. See also the <a href="finite-population-correction.html">correction applied to the sample size</a>.</dd>
           <dt data-part="deff" data-tone="5">Design Effect (deff)</dt>
-          <dd>How much the survey design inflates the variance compared with a simple random sample of the same size. Cluster sampling (neighbourhoods, census tracts) and weights usually give a deff between 1.5 and 3. With deff = 2, 1,000 interviews are worth 500 by simple random sampling, and the margin grows √2 ≈ 1.41 times. Left blank, it equals 1.</dd>
+          <dd>How much the survey design inflates the variance compared with a simple random sample of the same size. Cluster sampling (neighbourhoods, census tracts) and weights usually give a deff between 1.5 and 3. With deff = 2, 1,000 interviews are worth 500 by simple random sampling, and the margin grows √2 ≈ 1.41 times. Well-chosen strata do the opposite and give a deff below 1. Left blank, it equals 1. The <a href="poll-simulator.html?desenho=conglomerados&amp;M=5000">poll simulator</a> shows both cases.</dd>
       </dl>
     </section>
 

@@ -510,6 +510,50 @@
   const warn = T("<strong>Atenção:</strong>", "<strong>Note:</strong>");
   const probRange = { error: T("As probabilidades precisam estar entre 0 e 100%.", "Probabilities must be between 0 and 100%.") };
 
+  // População em bairros para o simulador: a proporção de cada bairro vem
+  // de uma Beta(média m, correlação intraclasse rho), sorteada com semente
+  // fixa, e os K eleitores de A são repartidos entre os bairros nessas
+  // proporções, sem passar do tamanho de cada um.
+  function bairros(tamanhos, K, m, rho) {
+    const C = tamanhos.length;
+    if (rho <= 0) return apportion(K, tamanhos).out;
+    const rand = rng(424242);
+    const normal = () => Math.sqrt(-2 * Math.log(1 - rand())) * Math.cos(2 * Math.PI * rand());
+    // Gama de Marsaglia–Tsang (com o truque de a < 1).
+    const gama = a => {
+      if (a < 1) return gama(a + 1) * Math.pow(1 - rand(), 1 / a);
+      const d = a - 1 / 3, c = 1 / Math.sqrt(9 * d);
+      for (;;) {
+        let x, v;
+        do { x = normal(); v = 1 + c * x; } while (v <= 0);
+        v = v * v * v;
+        const u = 1 - rand();
+        if (Math.log(u) < 0.5 * x * x + d - d * v + d * Math.log(v)) return d * v;
+      }
+    };
+    const s = (1 - rho) / rho;
+    const ps = tamanhos.map(() => { const x = gama(m * s), y = gama((1 - m) * s); return x / (x + y); });
+    let Kc = apportion(K, ps.map((p, i) => p * tamanhos[i])).out;
+    // O que passar do tamanho do bairro vai para os que têm folga.
+    for (let it = 0; it < 50; it++) {
+      let sobra = 0;
+      Kc = Kc.map((k, i) => { if (k > tamanhos[i]) { sobra += k - tamanhos[i]; return tamanhos[i]; } return k; });
+      if (!sobra) break;
+      const folga = Kc.map((k, i) => tamanhos[i] - k);
+      const extra = apportion(sobra, folga).out;
+      Kc = Kc.map((k, i) => k + extra[i]);
+    }
+    return Kc;
+  }
+
+  // Correlação intraclasse da população: a parte da variância de "vota em A"
+  // que está entre os bairros.
+  function rhoReal(tamanhos, Kc, m) {
+    const N = tamanhos.reduce((s, x) => s + x, 0);
+    const entre = tamanhos.reduce((s, x, i) => s + x * (Kc[i] / x - m) ** 2, 0) / N;
+    return entre / (m * (1 - m));
+  }
+
   const CALCS = {
     zscore({ x, mu, sd }) {
       if (sd <= 0) return sdError;
@@ -725,9 +769,10 @@
       if (p <= 0 || p >= 100) return { error: T("A proporção precisa estar entre 0 e 100%, sem os extremos.", "The proportion must be strictly between 0 and 100%.") };
       if (conf <= 0 || conf >= 100) return confError;
       if (N !== null && (!Number.isInteger(N) || N <= n)) return { error: T("A população precisa ser um inteiro maior que a amostra, ou ficar em branco.", "The population must be an integer larger than the sample, or left blank.") };
-      if (deff !== null && (deff < 1 || deff > 20)) return { error: T("O efeito de desenho precisa estar entre 1 e 20, ou ficar em branco.", "The design effect must be between 1 and 20, or left blank.") };
+      if (deff !== null && (deff < 0.1 || deff > 20)) return { error: T("O efeito de desenho precisa estar entre 0,1 e 20, ou ficar em branco.", "The design effect must be between 0.1 and 20, or left blank.") };
       const D = deff === null ? 1 : deff;
-      const nEff = Math.max(2, Math.round(n / D));
+      // Abaixo de 1 (estratos), o n efetivo passa de n, mas não da população.
+      const nEff = Math.min(N === null ? Infinity : N - 1, Math.max(2, Math.round(n / D)));
       const z = zCrit(conf);
       const ph = p / 100;
       const se = Math.sqrt(ph * (1 - ph) / n);
@@ -795,8 +840,8 @@
           `\\sqrt{\\dfrac{${texNum(N)} - ${texNum(n)}}{${texNum(N)} - 1}} ${approx(f, 6)} ${tone(texNum(f, 6), 4)}`]);
       }
       if (D !== 1) {
-        steps.push([T(`O desenho multiplica a variância por ${fmt(D)}; a margem cresce pela raiz disso, e a amostra vale tanto quanto uma aleatória simples de n/deff pessoas:`,
-          `The design multiplies the variance by ${fmt(D)}; the margin grows by its square root, and the sample is worth as much as a simple random sample of n/deff people:`),
+        steps.push([T(`O desenho multiplica a variância por ${fmt(D)}; a margem ${D > 1 ? "cresce" : "encolhe"} pela raiz disso, e a amostra vale tanto quanto uma aleatória simples de n/deff pessoas:`,
+          `The design multiplies the variance by ${fmt(D)}; the margin ${D > 1 ? "grows" : "shrinks"} by its square root, and the sample is worth as much as a simple random sample of n/deff people:`),
           `\\sqrt{${tone(texNum(D), 5)}} ${approx(Math.sqrt(D), 6)} ${tone(texNum(Math.sqrt(D), 6), 5)}, \\qquad n_{\\text{${T("ef", "eff")}}} = \\dfrac{${texNum(n)}}{${texNum(D)}} ${approx(n / D, 1)} ${texNum(n / D, 1)}`]);
       }
       const factors = `${Z} \\cdot ${tone(texNum(se, 6), 3)}${N !== null ? ` \\cdot ${tone(texNum(f, 6), 4)}` : ""}${D !== 1 ? ` \\cdot ${tone(texNum(Math.sqrt(D), 6), 5)}` : ""}`;
@@ -852,171 +897,253 @@
       };
     },
 
-    // Simulador de pesquisas: M amostras aleatórias simples sem reposição de uma
-    // população conhecida. A contagem de "sim" de cada amostra é sorteada pela
-    // inversa da acumulada hipergeométrica, que tem exatamente a distribuição
-    // do sorteio sem reposição; a semente torna o resultado reproduzível.
-    simulacao({ N, P, n, conf, M, seed }) {
-      if (!Number.isInteger(N) || N < 3 || N > 1e9) return { error: T("A população precisa ser um inteiro entre 3 e 1.000.000.000.", "The population must be an integer between 3 and 1,000,000,000.") };
+    // Simulador de pesquisas: M amostras de uma população conhecida, dividida
+    // em bairros de ~500 pessoas. A proporção de cada bairro sai de uma Beta
+    // com média P e correlação intraclasse rho (rho = 0: bairros iguais), e os
+    // eleitores de A são repartidos para o total dar exatamente round(P·N).
+    // A população é sempre a mesma (semente fixa); a semente do campo só muda
+    // as pesquisas. Três desenhos, todos com n entrevistas:
+    //   aas: amostra aleatória simples. A contagem é sorteada pela inversa da
+    //        acumulada hipergeométrica, que é exatamente o sorteio sem reposição.
+    //   conglomerados: sorteia n/b bairros e b pessoas em cada um.
+    //   estratos: os bairros, ordenados pela proporção, formam 4 regiões; cada
+    //        uma recebe uma parte de n proporcional ao tamanho.
+    // Em todos, a pesquisa publica a margem da AAS, como se não soubesse o desenho.
+    simulacao({ N, P, n, conf, M, seed, desenho, rho, b }) {
+      if (!Number.isInteger(N) || N < 1000 || N > 1e8) return { error: T("A população precisa ser um inteiro entre 1.000 e 100.000.000.", "The population must be an integer between 1,000 and 100,000,000.") };
       if (P <= 0 || P >= 100) return { error: T("A proporção verdadeira precisa estar entre 0 e 100%, sem os extremos.", "The true proportion must be strictly between 0 and 100%.") };
       if (!Number.isInteger(n) || n < 2 || n >= N) return { error: T("A amostra precisa ser um inteiro de pelo menos 2 e menor que a população.", "The sample must be an integer of at least 2 and smaller than the population.") };
       if (n > 1e6) return { error: T("Use n de no máximo 1.000.000.", "Use n of at most 1,000,000.") };
       if (conf <= 0 || conf >= 100) return confError;
       if (!Number.isInteger(M) || M < 1 || M > 100000) return { error: T("O número de pesquisas precisa ser um inteiro entre 1 e 100.000.", "The number of polls must be an integer between 1 and 100,000.") };
       if (!Number.isInteger(seed) || seed < 0) return { error: T("A semente precisa ser um inteiro não negativo.", "The seed must be a non-negative integer.") };
+      if (!["aas", "conglomerados", "estratos"].includes(desenho)) desenho = "aas";
+      if (desenho !== "aas" && (rho < 0 || rho >= 1)) return { error: T("A correlação intraclasse precisa estar entre 0 e 1 (por exemplo, 0,05).", "The intraclass correlation must be between 0 and 1 (for example, 0.05).") };
 
+      // A população em bairros.
+      const C = Math.max(4, Math.round(N / 500));
+      const tamanhos = apportion(N, new Array(C).fill(1)).out;
       const K = Math.round(P / 100 * N);
       if (K < 1 || K >= N) return { error: T("Com essa população, a proporção arredondada dá 0% ou 100% de eleitores; aumente N.", "With this population, the rounded proportion gives 0% or 100% of voters; increase N.") };
       const truth = K / N;
+      const r = desenho === "aas" ? 0 : rho;
+      const Kc = bairros(tamanhos, K, truth, r);
+
       const fpc = (N - n) / (N - 1);
       const t = tCrit(1 - conf / 100, n - 1);
       const se = Math.sqrt(fpc * truth * (1 - truth) / n);
       const confTxt = `${fmt(conf, 2)}%`;
       const pp = (x, d = 2) => fmt(x * 100, d);
+      const lc = (a, c) => lgamma(a + 1) - lgamma(c + 1) - lgamma(a - c + 1);
 
-      // Hipergeométrica de k em escala log, só na faixa de ±12 desvios.
-      const lc = (a, b) => lgamma(a + 1) - lgamma(b + 1) - lgamma(a - b + 1);
-      const sd = se * n;
-      const k0 = Math.max(0, n - (N - K), Math.floor(n * truth - 12 * sd - 1));
-      const k1 = Math.min(n, K, Math.ceil(n * truth + 12 * sd + 1));
-      const lnM = lc(N, n);
-      const pmf = [];
-      for (let k = k0; k <= k1; k++) pmf.push(Math.exp(lc(K, k) + lc(N - K, n - k) - lnM));
-      const tot = pmf.reduce((a, b) => a + b, 0);
-      const cdf = [];
-      pmf.reduce((acc, w, i) => (cdf[i] = acc + w / tot), 0);
+      // Acumulada hipergeométrica de k em m sorteios de uma urna com Nt
+      // bolas, Kt delas de A; com a faixa e o sorteio pela inversa.
+      function urna(Nt, Kt, m) {
+        const mu = m * Kt / Nt, s = Math.sqrt(Math.max(1e-12, m * (Kt / Nt) * (1 - Kt / Nt) * (Nt - m) / Math.max(1, Nt - 1)));
+        const a0 = Math.max(0, m - (Nt - Kt), Math.floor(mu - 12 * s - 1)), a1 = Math.min(m, Kt, Math.ceil(mu + 12 * s + 1));
+        const pmf = [];
+        for (let k = a0; k <= a1; k++) pmf.push(Math.exp(lc(Kt, k) + lc(Nt - Kt, m - k) - lc(Nt, m)));
+        const tot = pmf.reduce((x, y) => x + y, 0);
+        const cdf = [];
+        pmf.reduce((acc, w, i) => (cdf[i] = acc + w / tot), 0);
+        const draw = u => { let lo = 0, hi = cdf.length - 1; while (lo < hi) { const md = (lo + hi) >> 1; if (cdf[md] < u) lo = md + 1; else hi = md; } return a0 + lo; };
+        return { a0, pmf: pmf.map(w => w / tot), draw };
+      }
 
-      const ivl = k => { const q = k / n, h = t * Math.sqrt(fpc * q * (1 - q) / n); return [q - h, q + h]; };
-      const hits = pmf.map((_, i) => { const [lo, hi] = ivl(k0 + i); return lo <= truth && truth <= hi; });
-      let cover = 0, below = 0, above = 0;
-      pmf.forEach((w, i) => {
-        if (hits[i]) cover += w / tot;
-        else if (k0 + i < n * truth) below += w / tot;
-        else above += w / tot;
+      const hitOf = q => { const h = t * Math.sqrt(fpc * q * (1 - q) / n); return q - h <= truth && truth <= q + h; };
+      const rand = rng(seed);
+      const steps = [];
+      let sorteia, nota = "";
+
+      // A referência: a AAS exata, para a cobertura e a linha do histograma.
+      const ref = urna(N, K, n);
+      let coverAAS = 0, below = 0, above = 0;
+      ref.pmf.forEach((w, i) => {
+        const k = ref.a0 + i;
+        if (hitOf(k / n)) coverAAS += w; else if (k < n * truth) below += w; else above += w;
       });
-      const kIn = hits.map((h, i) => (h ? k0 + i : null)).filter(k => k !== null);
+
+      steps.push([T("Eleitores de A na população, e a proporção verdadeira:", "Voters for A in the population, and the true proportion:"),
+        `K = ${texNum(K)}, \\quad ${tone("P", 3)} = \\dfrac{${texNum(K)}}{${texNum(N)}} ${approx(truth, 6)} ${tone(texNum(truth, 6), 3)}`]);
+      steps.push([T(`Valor crítico da t com ${dof(n - 1)}, para ${confTxt}:`, `Critical value of t with ${dof(n - 1)}, for ${confTxt}:`), `t ${approx(t, 5)} ${texNum(t, 5)}`]);
+      steps.push([T("Erro padrão de p̂ numa amostra aleatória simples, com a correção de população finita:", "Standard error of p̂ in a simple random sample, with the finite population correction:"),
+        `\\sqrt{\\dfrac{${texNum(N)} - ${texNum(n)}}{${texNum(N)} - 1} \\cdot \\dfrac{${texNum(truth, 6)} \\cdot ${texNum(1 - truth, 6)}}{${texNum(n)}}} ${approx(se, 6)} ${texNum(se, 6)}`]);
+
+      if (desenho === "aas") {
+        sorteia = () => ref.draw(rand()) / n;
+        steps.push([T("Margem de uma pesquisa que acertasse p̂ = P em cheio:", "Margin of a poll that hit p̂ = P exactly:"),
+          `${texNum(t, 5)} \\cdot ${texNum(se, 6)} ${approx(t * se, 6)} ${texNum(t * se, 6)} = ${texNum(t * se * 100, 2)}\\text{ p.p.}`]);
+        const kIn = ref.pmf.map((_, i) => ref.a0 + i).filter(k => hitOf(k / n));
+        if (kIn.length) {
+          steps.push([T(`Cada pesquisa calcula a margem com o próprio p̂. O intervalo contém P quando k vai de ${fmt(kIn[0])} a ${fmt(kIn[kIn.length - 1])}; somando a probabilidade hipergeométrica desses k:`,
+            `Each poll computes the margin with its own p̂. The interval contains P when k runs from ${fmt(kIn[0])} to ${fmt(kIn[kIn.length - 1])}; adding up the hypergeometric probability of those k:`),
+            `${tone("C", 1)} = \\sum_{k=${texNum(kIn[0])}}^{${texNum(kIn[kIn.length - 1])}} \\dfrac{\\binom{K}{k}\\binom{N-K}{n-k}}{\\binom{N}{n}} ${approx(coverAAS * 100, 4)} ${tone(texNum(coverAAS * 100, 4), 1)}\\%`]);
+        }
+      } else if (desenho === "conglomerados") {
+        if (!Number.isInteger(b) || b < 1) return { error: T("As pessoas por bairro precisam ser um inteiro positivo.", "People per neighbourhood must be a positive integer.") };
+        const minTam = Math.min(...tamanhos);
+        if (b > minTam) return { error: T(`Use no máximo ${fmt(minTam)} pessoas por bairro, o tamanho do menor bairro.`, `Use at most ${fmt(minTam)} people per neighbourhood, the size of the smallest one.`) };
+        if (n % b) return { error: T(`O tamanho da amostra (${fmt(n)}) precisa ser múltiplo das pessoas por bairro (${fmt(b)}).`, `The sample size (${fmt(n)}) must be a multiple of the people per neighbourhood (${fmt(b)}).`) };
+        const m = n / b;
+        if (m > C) return { error: T(`Seriam ${fmt(m)} bairros, mas a população só tem ${fmt(C)}; aumente as pessoas por bairro.`, `That would take ${fmt(m)} neighbourhoods, but the population has only ${fmt(C)}; increase the people per neighbourhood.`) };
+        const urnas = tamanhos.map((Nt, c) => urna(Nt, Kc[c], b));
+        const idx = Array.from({ length: C }, (_, i) => i);
+        sorteia = () => {
+          let k = 0;
+          for (let i = 0; i < m; i++) {
+            const j = i + Math.floor(rand() * (C - i));
+            const x = idx[i]; idx[i] = idx[j]; idx[j] = x;
+            k += urnas[idx[i]].draw(rand());
+          }
+          return k / n;
+        };
+        const rr = rhoReal(tamanhos, Kc, truth), deffK = 1 + (b - 1) * rr;
+        // Variância exata do desenho em dois estágios (bairros sem reposição,
+        // pessoas sem reposição dentro de cada um), com o estimador p̂ = k/n.
+        const Pc = Kc.map((k, c) => k / tamanhos[c]);
+        const S1 = Pc.reduce((acc, x) => acc + (x - truth) ** 2, 0) / (C - 1);
+        const S2 = tamanhos.reduce((acc, x, c) => acc + (1 - b / x) * x / (x - 1) * Pc[c] * (1 - Pc[c]) / b, 0) / C;
+        const deffT = ((1 - m / C) * S1 / m + S2 / m) / (se * se);
+        steps.push([T(`Sorteiam-se ${fmt(m)} dos ${fmt(C)} bairros e ${fmt(b)} pessoas em cada um. Vizinhos votam parecido, e a regra de Kish dá o efeito de desenho pela correlação intraclasse ρ da população:`,
+          `${fmt(m)} of the ${fmt(C)} neighbourhoods are drawn, and ${fmt(b)} people in each. Neighbours vote alike, and Kish's rule gives the design effect from the population's intraclass correlation ρ:`),
+          `\\text{deff} \\approx 1 + (b - 1)\\,\\rho = 1 + ${texNum(b - 1)} \\cdot ${texNum(rr, 4)} ${approx(deffK, 3)} ${texNum(deffK, 3)}`]);
+        steps.push([T(`A regra supõe poucos bairros sorteados entre muitos. Aqui entram ${fmt(m / C * 100, 0)}% deles, e a variância exata dos dois estágios desconta isso:`,
+          `The rule assumes few neighbourhoods drawn out of many. Here ${fmt(m / C * 100, 0)}% of them are drawn, and the exact two-stage variance accounts for that:`),
+          `\\text{deff} = \\dfrac{\\left(1 - \\frac{${texNum(m)}}{${texNum(C)}}\\right)\\frac{S_1^2}{${texNum(m)}} + \\frac{\\bar{S}_2^2}{${texNum(m)}}}{\\operatorname{Var}_{\\text{${T("AAS", "SRS")}}}} ${approx(deffT, 3)} ${tone(texNum(deffT, 3), 5)}`]);
+        nota = T(` Pelo desenho, o efeito esperado é ${fmt(deffT, 2)}: a margem certa seria √${fmt(deffT, 2)} ≈ ${fmt(Math.sqrt(deffT), 2)} vez a publicada.`,
+          ` From the design, the expected effect is ${fmt(deffT, 2)}: the right margin would be √${fmt(deffT, 2)} ≈ ${fmt(Math.sqrt(deffT), 2)} times the published one.`);
+      } else {
+        // Quatro regiões com bairros parecidos entre si.
+        const ordem = Array.from({ length: C }, (_, i) => i).sort((x, y) => Kc[x] / tamanhos[x] - Kc[y] / tamanhos[y]);
+        const H = 4, grupos = Array.from({ length: H }, (_, h) => ordem.slice(Math.round(h * C / H), Math.round((h + 1) * C / H)));
+        const Nh = grupos.map(g => g.reduce((s, c) => s + tamanhos[c], 0));
+        const Kh = grupos.map(g => g.reduce((s, c) => s + Kc[c], 0));
+        const nh = apportion(n, Nh).out;
+        if (nh.some(x => x < 1)) return { error: T("A amostra é pequena demais para os 4 estratos; aumente n.", "The sample is too small for the 4 strata; increase n.") };
+        const urnas = Nh.map((x, h) => urna(x, Kh[h], nh[h]));
+        sorteia = () => urnas.reduce((s, u, h) => s + Nh[h] / N * u.draw(rand()) / nh[h], 0);
+        const vEst = Nh.reduce((s, x, h) => { const ph = Kh[h] / x; return s + (x / N) ** 2 * (x - nh[h]) / (x - 1) * ph * (1 - ph) / nh[h]; }, 0);
+        const deffT = vEst / (se * se);
+        steps.push([T(`Os bairros, ordenados pela proporção de A, formam 4 regiões; cada uma recebe uma parte de n proporcional ao seu tamanho (${list(nh.map(x => fmt(x)))} entrevistas), e o p̂ é a média das regiões, pesada pelo tamanho:`,
+          `The neighbourhoods, sorted by their share of A, form 4 regions; each gets a part of n proportional to its size (${list(nh.map(x => fmt(x)))} interviews), and p̂ is the size-weighted mean of the regions:`),
+          `P_h = ${Kh.map((k, h) => texNum(k / Nh[h] * 100, 1) + "\\%").join(",\\ ")}, \\qquad \\text{deff} = \\dfrac{\\operatorname{Var}_{\\text{${T("estr", "strat")}}}}{\\operatorname{Var}_{\\text{${T("AAS", "SRS")}}}} ${approx(deffT, 3)} ${tone(texNum(deffT, 3), 5)}`]);
+        nota = T(` Pelo desenho, o efeito esperado é ${fmt(deffT, 2)}: as regiões são diferentes entre si, e cada uma é medida à parte, sem o sorteio desequilibrar quanto se ouve de cada.`,
+          ` From the design, the expected effect is ${fmt(deffT, 2)}: the regions differ from each other, and each one is measured separately, without the draw unbalancing how much is heard from each.`);
+      }
 
       // As M pesquisas.
-      const rand = rng(seed);
-      const counts = new Array(pmf.length).fill(0);
+      const qs = new Float64Array(M);
       const last = [], path = [];
       let sum = 0, sum2 = 0, covered = 0;
       const every = Math.max(1, Math.floor(M / 400));
       for (let j = 1; j <= M; j++) {
-        const u = rand();
-        let a = 0, b = cdf.length - 1;
-        while (a < b) { const m = (a + b) >> 1; if (cdf[m] < u) a = m + 1; else b = m; }
-        counts[a]++;
-        const q = (k0 + a) / n;
+        const q = sorteia();
+        qs[j - 1] = q;
         sum += q; sum2 += q * q;
-        if (hits[a]) covered++;
-        if (j > M - 30) { const [lo, hi] = ivl(k0 + a); last.push({ lo, hi, mid: q, hit: hits[a], j }); }
+        const hit = hitOf(q);
+        if (hit) covered++;
+        if (j > M - 30) { const h = t * Math.sqrt(fpc * q * (1 - q) / n); last.push({ lo: q - h, hi: q + h, mid: q, hit, j }); }
         if (j % every === 0 || j === M) path.push([j, covered / j * 100]);
       }
       const mean = sum / M;
       const sdObs = M > 1 ? Math.sqrt(Math.max(0, (sum2 - M * mean * mean) / (M - 1))) : NaN;
       const covObs = covered / M;
-      const mc = Math.sqrt(cover * (1 - cover) / M);
-
-      // Histograma: uma barra por valor de k, ou por grupo de valores quando
-      // a faixa plausível passa de 70 barras. Em destaque, os k cujo
-      // intervalo não contém P.
-      let a0 = 0, a1 = pmf.length - 1;
-      while (a0 < a1 && pmf[a0] / tot < 1e-5 && !counts[a0]) a0++;
-      while (a1 > a0 && pmf[a1] / tot < 1e-5 && !counts[a1]) a1--;
-      const w = Math.ceil((a1 - a0 + 1) / 70);
-      const bins = [], pts = [];
-      for (let i = a0; i <= a1; i += w) {
-        const j1 = Math.min(i + w - 1, a1);
-        let c = 0, e = 0, miss = true;
-        for (let j = i; j <= j1; j++) { c += counts[j]; e += pmf[j] / tot; miss = miss && !hits[j]; }
-        const x0 = (k0 + i - 0.5) / n * 100, x1 = (k0 + j1 + 0.5) / n * 100;
-        bins.push({ x0, x1, y: c / M * 100, count: c, exp: e * 100, miss, k: [k0 + i, k0 + j1] });
-        pts.push([x0, e * 100], [x1, e * 100]);
+      const deffObs = sdObs * sdObs / (se * se);
+      const mc = Math.sqrt(Math.max(covObs, 0.01) * (1 - Math.min(covObs, 0.99)) / M);
+      // Cobertura se a margem levasse em conta o efeito observado.
+      let coveredD = 0;
+      if (desenho !== "aas" && M >= 30) {
+        const f = Math.sqrt(deffObs);
+        for (let j = 0; j < M; j++) { const q = qs[j], h = f * t * Math.sqrt(fpc * q * (1 - q) / n); if (q - h <= truth && truth <= q + h) coveredD++; }
       }
-      const yMax = Math.max(...bins.map(b => Math.max(b.y, b.exp)));
-      const kTxt = ([u, v]) => (u === v ? `k = ${fmt(u)}` : `k = ${fmt(u)}–${fmt(v)}`);
+
+      // Histograma de p̂, em faixas de 1/n (ou de vários 1/n), com a AAS
+      // exata em linha como referência. Em destaque, onde o intervalo erra P.
+      let lo = Math.min(truth - 5 * se, ...(M <= 5000 ? Array.from(qs) : [truth - 5 * se * Math.max(1, Math.sqrt(deffObs))]));
+      let hi = Math.max(truth + 5 * se, ...(M <= 5000 ? Array.from(qs) : [truth + 5 * se * Math.max(1, Math.sqrt(deffObs))]));
+      const w = Math.max(1, Math.ceil((hi - lo) * n / 70));
+      const bw = w / n;
+      lo = (Math.floor(lo * n / w) * w - 0.5) / n;
+      const nb = Math.ceil((hi - lo) / bw) + 1;
+      const counts = new Array(nb).fill(0), exp = new Array(nb).fill(0);
+      qs.forEach(q => { const i = Math.floor((q - lo) / bw); if (i >= 0 && i < nb) counts[i]++; });
+      ref.pmf.forEach((p, i) => { const k = (ref.a0 + i) / n, j = Math.floor((k - lo) / bw); if (j >= 0 && j < nb) exp[j] += p; });
+      const bins = [], pts = [];
+      for (let i = 0; i < nb; i++) {
+        const x0 = (lo + i * bw) * 100, x1 = (lo + (i + 1) * bw) * 100;
+        const mid = (lo + (i + 0.5) * bw);
+        bins.push({ x0, x1, y: counts[i] / M * 100, count: counts[i], exp: exp[i] * 100, miss: !hitOf(Math.min(1, Math.max(0, mid))), mid });
+        pts.push([x0, exp[i] * 100], [x1, exp[i] * 100]);
+      }
+      while (bins.length > 1 && !bins[0].count && bins[0].exp < 1e-3) { bins.shift(); pts.splice(0, 2); }
+      while (bins.length > 1 && !bins[bins.length - 1].count && bins[bins.length - 1].exp < 1e-3) { bins.pop(); pts.splice(-2, 2); }
+      const yMax = Math.max(...bins.map(x => Math.max(x.y, x.exp)));
 
       const charts = [{
         type: "hist", height: 250,
-        label: T(`Distribuição de p̂ em ${fmt(M)} pesquisas sorteadas, com a distribuição hipergeométrica exata em linha; em destaque, os resultados cujo intervalo não contém P`,
-          `Distribution of p̂ over ${fmt(M)} simulated polls, with the exact hypergeometric distribution as a line; highlighted, the outcomes whose interval misses P`),
-        xLabel: T("p̂ (%), barras: frequência observada; linha: probabilidade exata (%)", "p̂ (%), bars: observed frequency; line: exact probability (%)"),
+        label: T(`Distribuição de p̂ em ${fmt(M)} pesquisas sorteadas, com a distribuição exata da amostra aleatória simples em linha; em destaque, os resultados cujo intervalo não contém P`,
+          `Distribution of p̂ over ${fmt(M)} simulated polls, with the exact distribution under simple random sampling as a line; highlighted, the outcomes whose interval misses P`),
+        xLabel: T(`p̂ (%), barras: frequência observada; linha: ${desenho === "aas" ? "probabilidade exata" : "como seria por AAS"} (%)`, `p̂ (%), bars: observed frequency; line: ${desenho === "aas" ? "exact probability" : "what SRS would give"} (%)`),
         xMin: bins[0].x0, xMax: bins[bins.length - 1].x1, yMax,
         bins, pts, lineCls: "chart-line is-exact",
-        binTip: b => [T(`${fmt(b.count)} ${b.count === 1 ? "pesquisa" : "pesquisas"} (${fmt(b.y, 2)}%)`, `${fmt(b.count)} poll${b.count === 1 ? "" : "s"} (${fmt(b.y, 2)}%)`),
-          T(`${kTxt(b.k)}; exata: ${fmt(b.exp, 2)}%${b.miss ? "; intervalo erra P" : ""}`, `${kTxt(b.k)}; exact: ${fmt(b.exp, 2)}%${b.miss ? "; interval misses P" : ""}`)],
+        binTip: x => [T(`${fmt(x.count)} ${x.count === 1 ? "pesquisa" : "pesquisas"} (${fmt(x.y, 2)}%)`, `${fmt(x.count)} poll${x.count === 1 ? "" : "s"} (${fmt(x.y, 2)}%)`),
+          T(`p̂ entre ${fmt(x.x0, 2)}% e ${fmt(x.x1, 2)}%; AAS: ${fmt(x.exp, 2)}%${x.miss ? "; intervalo erra P" : ""}`, `p̂ between ${fmt(x.x0, 2)}% and ${fmt(x.x1, 2)}%; SRS: ${fmt(x.exp, 2)}%${x.miss ? "; interval misses P" : ""}`)],
       }];
 
-      // Cobertura acumulada; as primeiras pesquisas oscilam entre 0 e 100%
-      // e achatariam o resto, então a curva começa na 20ª quando há muitas.
       const from = M >= 100 ? 20 : 1;
       const run = path.filter(([j]) => j >= from);
       if (run.length > 1) {
-        const ys = run.map(([, y]) => y).concat(conf, cover * 100);
-        const lo = Math.min(...ys), hi = Math.max(...ys), pad = Math.max(0.3, (hi - lo) * 0.1);
+        const ys = run.map(([, y]) => y).concat(conf, coverAAS * 100);
+        const ylo = Math.min(...ys), yhi = Math.max(...ys), pad = Math.max(0.3, (yhi - ylo) * 0.1);
         charts.push({
           type: "curve", height: 210,
-          label: T(`Cobertura acumulada dos intervalos ao longo das pesquisas; linhas em ${confTxt} (nominal) e ${pp(cover)}% (exata)`,
-            `Running coverage of the intervals across polls; lines at ${confTxt} (nominal) and ${pp(cover)}% (exact)`),
-          xLabel: T(`cobertura acumulada (%) por pesquisas sorteadas${from > 1 ? ` (da ${from}ª em diante)` : ""} · tracejada: nominal · cheia: exata`,
-            `running coverage (%) by polls drawn${from > 1 ? ` (from the ${from}th on)` : ""} · dashed: nominal · solid: exact`),
+          label: T(`Cobertura acumulada dos intervalos ao longo das pesquisas; linhas em ${confTxt} (nominal) e ${pp(coverAAS)}% (exata da AAS)`,
+            `Running coverage of the intervals across polls; lines at ${confTxt} (nominal) and ${pp(coverAAS)}% (exact for SRS)`),
+          xLabel: T(`cobertura acumulada (%) por pesquisas sorteadas${from > 1 ? ` (da ${from}ª em diante)` : ""} · tracejada: nominal · cheia: exata da AAS`,
+            `running coverage (%) by polls drawn${from > 1 ? ` (from the ${from}th on)` : ""} · dashed: nominal · solid: exact for SRS`),
           xMin: run[0][0], xMax: run[run.length - 1][0],
-          yMin: Math.max(0, lo - pad), yMax: Math.min(100, hi + pad),
+          yMin: Math.max(0, ylo - pad), yMax: Math.min(100, yhi + pad),
           pts: run,
-          hlines: [
-            { y: conf, cls: "chart-ref" },
-            { y: cover * 100, cls: "chart-truth" },
-          ],
+          hlines: [{ y: conf, cls: "chart-ref" }, { y: coverAAS * 100, cls: "chart-truth" }],
           tipAt: x => {
             let best = run[0];
-            for (const r of run) if (Math.abs(r[0] - x) < Math.abs(best[0] - x)) best = r;
+            for (const rr of run) if (Math.abs(rr[0] - x) < Math.abs(best[0] - x)) best = rr;
             return [`${fmt(best[1], 2)}%`, T(`cobertura após ${fmt(best[0])} pesquisas`, `coverage after ${fmt(best[0])} polls`)];
           },
         });
       }
 
-      const span = Math.max(...last.map(r => Math.max(truth - r.lo, r.hi - truth)));
-      const lastMiss = last.filter(r => !r.hit).length;
+      const span = Math.max(...last.map(x => Math.max(truth - x.lo, x.hi - truth)));
+      const lastMiss = last.filter(x => !x.hit).length;
       charts.push({
         type: "intervals", height: 260,
         label: T(`Os últimos ${last.length} intervalos de ${confTxt}; ${lastMiss} não contêm P = ${pp(truth)}%`,
           `The last ${last.length} ${confTxt} intervals; ${lastMiss} miss P = ${pp(truth)}%`),
         xLabel: T("intervalos das últimas pesquisas (%)", "intervals of the latest polls (%)"),
         xMin: (truth - span * 1.1) * 100, xMax: (truth + span * 1.1) * 100, truth: truth * 100,
-        rows: last.map(r => ({ lo: r.lo * 100, hi: r.hi * 100, mid: r.mid * 100, hit: r.hit, j: r.j })),
-        tip: r => [`${fmt(r.lo, 2)}% – ${fmt(r.hi, 2)}%`,
-          T(`pesquisa ${fmt(r.j)}: p̂ = ${fmt(r.mid, 2)}%${r.hit ? "" : ", erra P"}`, `poll ${fmt(r.j)}: p̂ = ${fmt(r.mid, 2)}%${r.hit ? "" : ", misses P"}`)],
+        rows: last.map(x => ({ lo: x.lo * 100, hi: x.hi * 100, mid: x.mid * 100, hit: x.hit, j: x.j })),
+        tip: x => [`${fmt(x.lo, 2)}% – ${fmt(x.hi, 2)}%`,
+          T(`pesquisa ${fmt(x.j)}: p̂ = ${fmt(x.mid, 2)}%${x.hit ? "" : ", erra P"}`, `poll ${fmt(x.j)}: p̂ = ${fmt(x.mid, 2)}%${x.hit ? "" : ", misses P"}`)],
       });
 
-      const E = t * se;
-      const steps = [
-        [T(`Eleitores de A na população, e a proporção verdadeira:`, `Voters for A in the population, and the true proportion:`),
-          `K = ${texNum(K)}, \\quad ${tone("P", 3)} = \\dfrac{${texNum(K)}}{${texNum(N)}} ${approx(truth, 6)} ${tone(texNum(truth, 6), 3)}`],
-        [T(`Valor crítico da t com ${dof(n - 1)}, para ${confTxt}:`, `Critical value of t with ${dof(n - 1)}, for ${confTxt}:`),
-          `t ${approx(t, 5)} ${texNum(t, 5)}`],
-        [T("Erro padrão verdadeiro de p̂, com a correção de população finita:", "True standard error of p̂, with the finite population correction:"),
-          `\\sqrt{\\dfrac{${texNum(N)} - ${texNum(n)}}{${texNum(N)} - 1} \\cdot \\dfrac{${texNum(truth, 6)} \\cdot ${texNum(1 - truth, 6)}}{${texNum(n)}}} ${approx(se, 6)} ${texNum(se, 6)}`],
-        [T("Margem de erro de uma pesquisa que acertasse p̂ = P em cheio:", "Margin of error of a poll that hit p̂ = P exactly:"),
-          `${texNum(t, 5)} \\cdot ${texNum(se, 6)} ${approx(E, 6)} ${texNum(E, 6)} = ${texNum(E * 100, 2)}\\text{ p.p.}`],
-      ];
-      if (kIn.length) {
-        steps.push([T(`Cada pesquisa calcula a margem com o próprio p̂. O intervalo contém P quando k vai de ${fmt(kIn[0])} a ${fmt(kIn[kIn.length - 1])}; somando a probabilidade hipergeométrica desses k:`,
-          `Each poll computes the margin with its own p̂. The interval contains P when k runs from ${fmt(kIn[0])} to ${fmt(kIn[kIn.length - 1])}; adding up the hypergeometric probability of those k:`),
-          `${tone("C", 1)} = \\sum_{k=${texNum(kIn[0])}}^{${texNum(kIn[kIn.length - 1])}} \\dfrac{\\binom{K}{k}\\binom{N-K}{n-k}}{\\binom{N}{n}} ${approx(cover * 100, 4)} ${tone(texNum(cover * 100, 4), 1)}\\%`]);
-      }
-
-      let note = T(`Em ${fmt(M)} ${M === 1 ? "pesquisa" : "pesquisas"}, ${fmt(covered)} ${covered === 1 ? "intervalo conteve" : "intervalos contiveram"} P: cobertura observada de ${pp(covObs)}%, contra a exata de ${pp(cover)}%.`,
-        `In ${fmt(M)} poll${M === 1 ? "" : "s"}, ${fmt(covered)} interval${covered === 1 ? "" : "s"} contained P: observed coverage of ${pp(covObs)}%, against the exact ${pp(cover)}%.`);
+      let note = T(`Em ${fmt(M)} ${M === 1 ? "pesquisa" : "pesquisas"}, ${fmt(covered)} ${covered === 1 ? "intervalo conteve" : "intervalos contiveram"} P: cobertura observada de ${pp(covObs)}%`,
+        `In ${fmt(M)} poll${M === 1 ? "" : "s"}, ${fmt(covered)} interval${covered === 1 ? "" : "s"} contained P: observed coverage of ${pp(covObs)}%`)
+        + (desenho === "aas" ? T(`, contra a exata de ${pp(coverAAS)}%.`, `, against the exact ${pp(coverAAS)}%.`)
+          : T(`, contra ${pp(coverAAS)}% se as mesmas ${fmt(n)} entrevistas fossem uma amostra aleatória simples.`, `, against ${pp(coverAAS)}% if the same ${fmt(n)} interviews were a simple random sample.`));
       if (M >= 30) {
-        note += T(` Com esse número de pesquisas, o erro de Monte Carlo da cobertura é de ±${pp(mc)} ponto${mc * 100 >= 2 ? "s" : ""}, então diferenças menores que uns ${pp(2 * mc, 1)} ${2 * mc * 100 >= 2 ? "pontos" : "ponto"} são só sorte do sorteio.`,
-          ` With this many polls, the Monte Carlo error of the coverage is ±${pp(mc)} points, so differences smaller than about ${pp(2 * mc, 1)} points are just the luck of the draw.`);
-        note += T(` A média de p̂ foi ${pp(mean, 3)}% (P = ${pp(truth, 3)}%) e o desvio padrão observado de p̂ foi ${pp(sdObs, 3)}%, contra o erro padrão teórico de ${pp(se, 3)}%.`,
-          ` The mean of p̂ was ${pp(mean, 3)}% (P = ${pp(truth, 3)}%) and the observed standard deviation of p̂ was ${pp(sdObs, 3)}%, against the theoretical standard error of ${pp(se, 3)}%.`);
+        note += T(` Com esse número de pesquisas, o erro de Monte Carlo da cobertura é de ±${pp(mc)} ${mc * 100 >= 2 ? "pontos" : "ponto"}.`,
+          ` With this many polls, the Monte Carlo error of the coverage is ±${pp(mc)} points.`);
+        note += T(` O desvio padrão observado de p̂ foi ${pp(sdObs, 3)}%, contra ${pp(se, 3)}% da AAS`, ` The observed standard deviation of p̂ was ${pp(sdObs, 3)}%, against ${pp(se, 3)}% under SRS`)
+          + (desenho === "aas" ? "." : T(`: o efeito de desenho observado é ${fmt(deffObs, 2)}.`, `: the observed design effect is ${fmt(deffObs, 2)}.`));
+        note += nota;
+        if (desenho !== "aas") {
+          note += T(` Com a margem multiplicada por √${fmt(deffObs, 2)}, como faz a <a href="${PAGE("margem-de-erro")}?n=${n}&amp;p=${fmt(P, 4).replace(/\./g, "")}&amp;conf=${conf}&amp;N=${N}&amp;deff=${fmt(deffObs, 2)}">calculadora de margem de erro</a> com o campo deff, a cobertura seria ${pp(coveredD / M)}%.`,
+            ` With the margin multiplied by √${fmt(deffObs, 2)}, as the <a href="${PAGE("margem-de-erro")}?n=${n}&amp;p=${P}&amp;conf=${conf}&amp;N=${N}&amp;deff=${fmt(deffObs, 2)}">margin of error calculator</a> does with its deff field, the coverage would be ${pp(coveredD / M)}%.`);
+        }
       } else {
-        note += T(" Use os botões para sortear mais pesquisas e ver a cobertura observada se aproximar da exata.", " Use the buttons to draw more polls and watch the observed coverage approach the exact value.");
+        note += T(" Use os botões para sortear mais pesquisas e ver a cobertura observada se firmar.", " Use the buttons to draw more polls and watch the observed coverage settle.");
       }
-      if (Math.abs(cover * 100 - conf) >= 0.01) {
+      if (desenho === "aas" && Math.abs(coverAAS * 100 - conf) >= 0.01) {
         note += T(` A cobertura exata não é ${confTxt}: das que erram, ${pp(below)}% ficam abaixo de P e ${pp(above)}% acima, porque k só anda de 1 em 1 e o erro padrão de cada pesquisa é estimado.`,
           ` The exact coverage is not ${confTxt}: of the misses, ${pp(below)}% fall below P and ${pp(above)}% above, because k moves in steps of 1 and each poll's standard error is estimated.`);
       }
@@ -1024,7 +1151,7 @@
         ` The whole calculation, step by step, is in the post <a href="/polling-margin-of-error-sampling/">where a poll's margin of error comes from</a>.`);
 
       return {
-        result: `${T("\\text{cobertura}", "\\text{coverage}")} = ${tone(texNum(covObs * 100, 2), 1)}\\% \\quad (${T("\\text{exata}", "\\text{exact}")}\\ ${texNum(cover * 100, 2)}\\%)`,
+        result: `${T("\\text{cobertura}", "\\text{coverage}")} = ${tone(texNum(covObs * 100, 2), 1)}\\% \\quad (${desenho === "aas" ? T("\\text{exata}", "\\text{exact}") : T("\\text{AAS}", "\\text{SRS}")}\\ ${texNum(coverAAS * 100, 2)}\\%)`,
         chart: charts,
         steps,
         note,
@@ -1918,7 +2045,7 @@
 
   function initCalc(section) {
     const calc = CALCS[section.dataset.calc];
-    const inputs = Array.from(section.querySelectorAll("input[name]"));
+    const inputs = Array.from(section.querySelectorAll("input[name], select[name]"));
     const result = section.querySelector(".calc-result");
     const steps = section.querySelector(".calc-steps");
     const note = section.querySelector(".calc-note");
@@ -1934,6 +2061,7 @@
     // (e, em inglês, também por vírgula). Com data-optional, pode ficar vazio:
     // a lista vira [], o número vira null.
     const read = i => {
+      if (i.tagName === "SELECT") return i.value;
       if (!("list" in i.dataset)) return "optional" in i.dataset && i.value.trim() === "" ? null : parse(i.value);
       const xs = i.value.split(EN ? /[\s;,]+/ : /[\s;]+/).filter(Boolean).map(parse);
       return xs.some(Number.isNaN) || (!xs.length && !("optional" in i.dataset)) ? NaN : xs;
@@ -1942,7 +2070,15 @@
     const params = new URLSearchParams(location.search);
     inputs.forEach(i => { if (params.has(i.name)) i.value = params.get(i.name); });
 
+    // Campo com data-mostra="campo:valor1,valor2" só aparece quando o outro
+    // campo tem um desses valores (como as opções de cada desenho amostral).
+    const condicionais = Array.from(section.querySelectorAll("[data-mostra]"));
     function update() {
+      condicionais.forEach(el => {
+        const [nome, vals] = el.dataset.mostra.split(":");
+        const alvo = inputs.find(i => i.name === nome);
+        el.hidden = !!alvo && !vals.split(",").includes(alvo.value);
+      });
       const v = Object.fromEntries(inputs.map(i => [i.name, read(i)]));
       inputs.forEach(i => i.setAttribute("aria-invalid", String(Number.isNaN(v[i.name]))));
       const out = Object.values(v).some(Number.isNaN)

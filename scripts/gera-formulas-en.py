@@ -142,7 +142,7 @@ def build(slug, d):
     if "lede" in d:
         s = resub(s, r'(<p class="calc-lede">).*?(</p>)', lambda m: m.group(1) + d["lede"] + m.group(2), flags=re.S)
     if "labels" in d:
-        s = seq(s, r'(<label class="calc-field[^"]*" data-tone="\d">\s*<span>).*?(</span>)', d["labels"],
+        s = seq(s, r'(<label class="calc-field[^"]*"[^>]*data-tone="\d"[^>]*>\s*<span>).*?(</span>)', d["labels"],
                 lambda m, it: m.group(1) + it + m.group(2))
     s = seq(s, r'(<small>).*?(</small>)', d.get("smalls", []), lambda m, it: m.group(1) + it + m.group(2))
     s = seq(s, r'(placeholder=")[^"]*(")', d.get("ph", []), lambda m, it: m.group(1) + esc(it) + m.group(2))

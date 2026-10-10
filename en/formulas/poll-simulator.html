@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Poll Simulator — Interactive</title>
-  <meta name="description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <meta name="description" content="Election poll simulator: draw thousands of samples from a known population, by simple random, cluster or stratified sampling, and see the distribution of p̂, the coverage of the intervals and the design effect.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
   <meta property="og:title" content="Poll Simulator — Interactive">
-  <meta property="og:description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <meta property="og:description" content="Election poll simulator: draw thousands of samples from a known population, by simple random, cluster or stratified sampling, and see the distribution of p̂, the coverage of the intervals and the design effect.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Poll Simulator — Interactive">
-  <meta name="twitter:description" content="Election poll simulator: draw thousands of samples from a known population and see the distribution of p̂, the coverage of the confidence intervals and the exact calculation with the hypergeometric distribution.">
+  <meta name="twitter:description" content="Election poll simulator: draw thousands of samples from a known population, by simple random, cluster or stratified sampling, and see the distribution of p̂, the coverage of the intervals and the design effect.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -67,13 +67,13 @@
     </div>
     <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
 
-    <!-- Simulador; estado em ?N=&P=&n=&conf=&M=&seed=. A contagem de cada
+    <!-- Simulador; estado em ?N=&P=&n=&conf=&desenho=&rho=&b=&M=&seed=. A contagem de cada
          pesquisa é sorteada pela inversa da acumulada hipergeométrica com a
          semente do campo, então a mesma URL dá sempre as mesmas pesquisas.
          Os botões só mudam M e a semente. -->
     <section class="calc" data-calc="simulacao" aria-labelledby="calc-title">
       <h2 id="calc-title">Simulate</h2>
-      <p class="calc-lede">Example: in an electorate of 100,000 people, 38.6% vote for candidate A. Each poll interviews 1,000 voters drawn without replacement and publishes a 95% confidence interval. Draw polls and see how many intervals contain the true value. Change the values to simulate your own case.</p>
+      <p class="calc-lede">Example: in an electorate of 100,000 people, 38.6% vote for candidate A. Each poll interviews 1,000 voters drawn without replacement and publishes a 95% confidence interval. Draw polls and see how many intervals contain the true value. The electorate is split into neighbourhoods of about 500 people; switch the design to draw whole neighbourhoods (clusters) or to split the sample across regions (strata), and see what happens to the coverage when the poll publishes the margin of a simple random sample. The intraclass correlation says how alike neighbours vote.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="5">
@@ -91,6 +91,22 @@
         <label class="calc-field" data-tone="2">
           <span>Confidence (%)</span>
           <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="5">
+          <span>Sampling design</span>
+          <select name="desenho" autocomplete="off">
+            <option value="aas">Simple random sample</option>
+            <option value="conglomerados">Clusters (neighbourhoods)</option>
+            <option value="estratos">Strata (regions)</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="5" data-mostra="desenho:conglomerados,estratos">
+          <span>Intraclass correlation <i>ρ</i></span>
+          <input name="rho" type="text" inputmode="decimal" value="0.05" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5" data-mostra="desenho:conglomerados">
+          <span>People per neighbourhood <i>b</i></span>
+          <input name="b" type="text" inputmode="numeric" value="20" autocomplete="off" spellcheck="false">
         </label>
         <label class="calc-field" data-tone="1">
           <span>Polls drawn</span>

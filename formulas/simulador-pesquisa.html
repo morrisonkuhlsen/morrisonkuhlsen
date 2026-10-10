@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Simulador de Pesquisa — Interativo</title>
-  <meta name="description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <meta name="description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/poll-simulator.html">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/simulador-pesquisa.html">
   <meta property="og:title" content="Simulador de Pesquisa — Interativo">
-  <meta property="og:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <meta property="og:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Simulador de Pesquisa — Interativo">
-  <meta name="twitter:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida e veja a distribuição de p̂, a cobertura dos intervalos de confiança e a conta exata pela hipergeométrica.">
+  <meta name="twitter:description" content="Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -67,13 +67,13 @@
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
 
-    <!-- Simulador; estado em ?N=&P=&n=&conf=&M=&seed=. A contagem de cada
+    <!-- Simulador; estado em ?N=&P=&n=&conf=&desenho=&rho=&b=&M=&seed=. A contagem de cada
          pesquisa é sorteada pela inversa da acumulada hipergeométrica com a
          semente do campo, então a mesma URL dá sempre as mesmas pesquisas.
          Os botões só mudam M e a semente. -->
     <section class="calc" data-calc="simulacao" aria-labelledby="calc-title">
       <h2 id="calc-title">Simule</h2>
-      <p class="calc-lede">Exemplo: num eleitorado de 100.000 pessoas, 38,6% votam no candidato A. Cada pesquisa ouve 1.000 eleitores sorteados sem reposição e publica um intervalo de 95% de confiança. Sorteie pesquisas e veja quantos intervalos contêm o valor verdadeiro. Troque os valores para simular o seu caso.</p>
+      <p class="calc-lede">Exemplo: num eleitorado de 100.000 pessoas, 38,6% votam no candidato A. Cada pesquisa ouve 1.000 eleitores sorteados sem reposição e publica um intervalo de 95% de confiança. Sorteie pesquisas e veja quantos intervalos contêm o valor verdadeiro. O eleitorado é dividido em bairros de cerca de 500 pessoas; troque o desenho para sortear bairros inteiros (conglomerados) ou repartir a amostra entre regiões (estratos), e veja o que acontece com a cobertura quando a pesquisa publica a margem de uma amostra aleatória simples. A correlação intraclasse diz o quanto os vizinhos votam parecido.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="5">
@@ -91,6 +91,22 @@
         <label class="calc-field" data-tone="2">
           <span>Confiança (%)</span>
           <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="5">
+          <span>Desenho amostral</span>
+          <select name="desenho" autocomplete="off">
+            <option value="aas">Amostra aleatória simples</option>
+            <option value="conglomerados">Conglomerados (bairros)</option>
+            <option value="estratos">Estratos (regiões)</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="5" data-mostra="desenho:conglomerados,estratos">
+          <span>Correlação intraclasse <i>ρ</i></span>
+          <input name="rho" type="text" inputmode="decimal" value="0,05" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5" data-mostra="desenho:conglomerados">
+          <span>Pessoas por bairro <i>b</i></span>
+          <input name="b" type="text" inputmode="numeric" value="20" autocomplete="off" spellcheck="false">
         </label>
         <label class="calc-field" data-tone="1">
           <span>Pesquisas sorteadas</span>
