@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Conjuntos — Diagrama de Venn Interativo</title>
+  <meta name="description" content="Conjuntos explicados do zero com um diagrama de Venn em que se clica nas regiões: união, interseção, diferença e complemento com elementos de verdade, leis de De Morgan, contagem e a ponte para probabilidade.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/conjuntos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/conjuntos.html">
+  <meta property="og:title" content="Conjuntos — Diagrama de Venn Interativo">
+  <meta property="og:description" content="Conjuntos explicados do zero com um diagrama de Venn em que se clica nas regiões: união, interseção, diferença e complemento com elementos de verdade, leis de De Morgan, contagem e a ponte para probabilidade.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Conjuntos — Diagrama de Venn Interativo">
+  <meta name="twitter:description" content="Conjuntos explicados do zero com um diagrama de Venn em que se clica nas regiões: união, interseção, diferença e complemento com elementos de verdade, leis de De Morgan, contagem e a ponte para probabilidade.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="conjuntos.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Conjuntos — Diagrama de Venn Interativo</h1>
+    <p class="page-lede">Um conjunto é uma coleção de elementos, sem ordem e sem repetição. As operações entre conjuntos são o “ou”, o “e” e o “não” da língua — e são exatamente a linguagem em que a <strong>probabilidade</strong> se escreve.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#notacao">Notação</a>
+      <a href="#venn">Diagrama de Venn</a>
+      <a href="#leis">Leis</a>
+      <a href="#contagem">Contagem</a>
+      <a href="#probabilidade">Probabilidade</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- 1. Notação básica. -->
+    <section class="lesson" id="notacao" aria-labelledby="notacao-title">
+      <h2 id="notacao-title">Notação</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="A = \{2, 4, 6\}"></span>
+          <p>Os elementos vão entre chaves. A ordem não importa: {6, 2, 4} é o mesmo conjunto.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="4 \in A \qquad 5 \notin A"></span>
+          <p>∈ se lê “pertence a”: liga um <strong>elemento</strong> a um conjunto.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\{2, 4\} \subset A"></span>
+          <p>⊂ se lê “está contido em”: liga um <strong>conjunto</strong> a outro. Todo elemento de um está no outro.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="A = B \iff A \subset B \text{ e } B \subset A"></span>
+          <p>Dois conjuntos são iguais quando cada um está contido no outro: têm os mesmos elementos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\varnothing \qquad U"></span>
+          <p>O vazio não tem elemento nenhum. O universo U tem todos os que estão em jogo — o complemento é sempre relativo a ele.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|A| = 3"></span>
+          <p>As barras dão o número de elementos (a cardinalidade). É o que se conta na seção de contagem.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. O explorador. -->
+    <section class="calc venn-explorer" id="venn" aria-labelledby="venn-title">
+      <h2 id="venn-title">Diagrama de Venn: clique nas regiões</h2>
+      <div class="venn-top">
+        <div class="seg" role="group" aria-label="Número de conjuntos">
+          <button type="button" data-sets="2" aria-pressed="true">2 conjuntos</button>
+          <button type="button" data-sets="3" aria-pressed="false">3 conjuntos</button>
+        </div>
+        <label class="toggle"><input type="checkbox" name="elementos" checked> mostrar os elementos</label>
+      </div>
+      <div class="venn-stage"></div>
+      <p class="venn-legend"></p>
+
+      <div class="venn-out" aria-live="polite">
+        <span class="venn-name-out"></span>
+        <span class="venn-expr"></span>
+        <span class="venn-elements"></span>
+        <p class="venn-read"></p>
+      </div>
+
+      <h3>Regiões</h3>
+      <div class="region-chips" role="group" aria-label="Ligar ou desligar regiões"></div>
+      <h3>Atalhos</h3>
+      <div class="venn-shortcuts" role="group" aria-label="Operações prontas"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="ops-title">
+      <h2 id="ops-title">As quatro operações</h2>
+      <div class="facts is-pairs">
+        <div class="fact">
+          <span class="rule-tex" data-tex="A \cup B"></span>
+          <p><strong>União — “ou”.</strong> Está em A, em B, ou nos dois. É um “ou” inclusivo: estar nos dois também vale.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="A \cap B"></span>
+          <p><strong>Interseção — “e”.</strong> Está em A e em B ao mesmo tempo. Se for vazia, os conjuntos são <em>disjuntos</em>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="A - B"></span>
+          <p><strong>Diferença — “mas não”.</strong> Está em A, mas não em B. A ordem importa: A − B ≠ B − A.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="A^c"></span>
+          <p><strong>Complemento — “não”.</strong> Tudo do universo que não está em A: Aᶜ = U − A.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Leis: dois diagramas lado a lado. -->
+    <section class="calc laws" id="leis" aria-labelledby="leis-title">
+      <h2 id="leis-title">Leis: confira no diagrama</h2>
+      <p class="calc-lede">Uma lei de conjuntos diz que duas expressões pintam exatamente as mesmas regiões. Escolha uma e compare os dois lados — inclusive as que parecem verdade, mas não são.</p>
+      <div class="law-tabs" role="group" aria-label="Leis"></div>
+      <div class="law-panes"></div>
+      <p class="rule-verdict law-verdict" aria-live="polite"></p>
+      <p class="rule-note law-note"></p>
+    </section>
+
+    <!-- 4. Contagem. -->
+    <section class="lesson" id="contagem" aria-labelledby="contagem-title">
+      <h2 id="contagem-title">Contagem: inclusão e exclusão</h2>
+      <p>Para saber quantos elementos tem uma união, não basta somar: quem está na interseção apareceria duas vezes. Os valores abaixo são os mesmos em todos os cards; o exemplo inicial é uma turma de 40 alunos em que 25 gostam de café, 18 de chá e 8 dos dois.</p>
+      <p>Nos controles, <i>a</i> = |A|, <i>b</i> = |B|, <i>i</i> = |A ∩ B| e, na regra da probabilidade mais abaixo, <i>n</i> é o total de elementos do universo.</p>
+
+      <article class="rule">
+        <header><h3>Princípio da inclusão e exclusão</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="|A \cup B| = |A| + |B| - |A \cap B|"></span>
+        <div class="rule-try" data-rule="uniao" data-vars="a b i"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Somar direto</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="|A \cup B| \ne |A| + |B|"></span>
+        <div class="rule-try" data-rule="somaDireta" data-vars="a b i"></div>
+      </article>
+
+      <div class="tip">
+        <strong>Com três conjuntos</strong> a ideia é a mesma: soma os três, tira as três interseções de dois (contadas duas vezes) e devolve a dos três (que foi tirada demais):
+        <span class="tex-block" data-tex="|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|"></span>
+      </div>
+    </section>
+
+    <!-- 5. Ponte para probabilidade. -->
+    <section class="lesson" id="probabilidade" aria-labelledby="prob-title">
+      <h2 id="prob-title">A ponte para a probabilidade</h2>
+      <p>Em probabilidade, o universo é o <strong>espaço amostral</strong> (tudo o que pode acontecer) e cada conjunto é um <strong>evento</strong>. As operações ganham leitura de eventos:</p>
+      <div class="table-scroll">
+        <table class="plain-table">
+          <thead><tr><th>Conjuntos</th><th>Eventos</th><th>Exemplo com um dado</th></tr></thead>
+          <tbody>
+            <tr><td><span data-tex="A \cup B"></span></td><td>A <strong>ou</strong> B acontece</td><td>sair par ou maior que 3: {2, 4, 5, 6}</td></tr>
+            <tr><td><span data-tex="A \cap B"></span></td><td>A <strong>e</strong> B acontecem</td><td>sair par e maior que 3: {4, 6}</td></tr>
+            <tr><td><span data-tex="A^c"></span></td><td>A <strong>não</strong> acontece</td><td>não sair par: {1, 3, 5}</td></tr>
+            <tr><td><span data-tex="A \cap B = \varnothing"></span></td><td>A e B são <strong>mutuamente exclusivos</strong></td><td>sair 1 e sair 6 no mesmo lance</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>E a regra da inclusão e exclusão, dividida pelo total, vira a regra da soma das probabilidades:</p>
+
+      <article class="rule">
+        <header><h3>Regra da soma</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="P(A \cup B) = P(A) + P(B) - P(A \cap B)"></span>
+        <div class="rule-try" data-rule="prob" data-vars="a b i n"></div>
+      </article>
+
+      <p>Com o dado: P(par ou maior que 3) = 3/6 + 3/6 − 2/6 = 4/6. Daqui em diante a linguagem de conjuntos aparece em toda parte: na <a href="/formulas/probabilidade-condicional.html">probabilidade condicional</a>, P(A | B) = P(A ∩ B)/P(B); no <a href="/formulas/teorema-probabilidade-total.html">teorema da probabilidade total</a>, que reparte o espaço em conjuntos disjuntos; e no <a href="/formulas/teorema-bayes.html">teorema de Bayes</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Com A = {1, 2, 3, 4} e B = {3, 4, 5}, escreva A ∪ B, A ∩ B, A − B e B − A.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>A ∪ B = <strong>{1, 2, 3, 4, 5}</strong> (o 3 e o 4 não se repetem); A ∩ B = <strong>{3, 4}</strong>; A − B = <strong>{1, 2}</strong>; B − A = <strong>{5}</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Numa turma de 40 alunos, 25 gostam de café, 18 de chá e 8 dos dois. Quantos não gostam de nenhum?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>|café ∪ chá| = 25 + 18 − 8 = 35. Ficam de fora 40 − 35 = <strong>5 alunos</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Use De Morgan para reescrever “não é verdade que chove ou faz frio”.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(C ∪ F)ᶜ = Cᶜ ∩ Fᶜ: “<strong>não chove e não faz frio</strong>”. O “não” entra nos parênteses e troca o “ou” por “e”.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> É sempre verdade que A ⊂ A ∪ B? E que A ∩ B ⊂ A?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>Sim, os dois.</strong> A união só acrescenta elementos a A; a interseção só pode tirar. Por isso, em probabilidade, P(A ∩ B) ≤ P(A) ≤ P(A ∪ B).</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Se P(A) = 0,5, P(B) = 0,4 e P(A ∩ B) = 0,2, quanto vale P(A ∪ B)? E a probabilidade de não acontecer nenhum dos dois?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>P(A ∪ B) = 0,5 + 0,4 − 0,2 = <strong>0,7</strong>. Nenhum dos dois é o complemento: 1 − 0,7 = <strong>0,3</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Numa pesquisa com 100 pessoas, 50 leem jornal, 40 revista e 30 livros; 20 leem jornal e revista, 15 jornal e livros, 10 revista e livros, e 5 leem os três. Quantas leem pelo menos um?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Inclusão e exclusão com três conjuntos: 50 + 40 + 30 − 20 − 15 − 10 + 5 = <strong>80 pessoas</strong>. As outras 20 não leem nenhum.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="equacao-2grau.html" rel="prev"><span>Anterior</span>Equação do 2º Grau</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>

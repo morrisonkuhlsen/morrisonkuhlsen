@@ -346,7 +346,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, frações, potências, raízes e equação do 2º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, frações, potências, raízes, equação do 2º grau e conjuntos."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -384,4 +384,10 @@
   url: "/matematica-basica/equacao-2grau.html"
   description: "Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios."
   tags: "equação do segundo grau equação quadrática fórmula quadrática discriminante delta parábola vértice raízes soma e produto completar quadrado"
+  lang: pt
+
+- title: "Conjuntos — Diagrama de Venn Interativo"
+  url: "/matematica-basica/conjuntos.html"
+  description: "Conjuntos explicados do zero com um diagrama de Venn em que se clica nas regiões: união, interseção, diferença e complemento com elementos de verdade, leis de De Morgan, contagem e a ponte para probabilidade."
+  tags: "conjuntos diagrama de venn união interseção diferença complemento de morgan inclusão e exclusão eventos probabilidade"
   lang: pt

@@ -826,3 +826,239 @@
   fill: transparent;
   cursor: crosshair;
 }
+
+/* ================================================================ conjuntos */
+
+/* ---------------------------------------------------------------- diagrama */
+
+.venn-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem 1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.toggle input {
+  accent-color: var(--tone-1);
+}
+
+.venn-stage {
+  display: flex;
+  justify-content: center;
+  margin-top: .8rem;
+}
+
+.venn {
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  user-select: none;
+}
+
+.venn-explorer .venn {
+  cursor: pointer;
+}
+
+.venn-universe {
+  fill: var(--bg);
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+
+.venn-region {
+  fill: transparent;
+  transition: fill .15s ease;
+}
+
+.venn-region.is-hover {
+  fill: color-mix(in srgb, var(--tone-1) 14%, transparent);
+}
+
+.venn-region.is-on {
+  fill: color-mix(in srgb, var(--tone-1) 55%, transparent);
+}
+
+/* Nos diagramas de contagem a região pintada é só um fundo. */
+.venn.is-soft .venn-region.is-on {
+  fill: color-mix(in srgb, var(--tone-1) 20%, transparent);
+}
+
+.venn-circle {
+  fill: none;
+  stroke: var(--text-strong);
+  stroke-width: 2;
+}
+
+.venn-name {
+  fill: var(--text-strong);
+  font-family: KaTeX_Math, serif;
+  font-size: 20px;
+  font-style: italic;
+  pointer-events: none;
+}
+
+.venn-name.is-u {
+  fill: var(--text-muted);
+  font-size: 16px;
+}
+
+.venn-el {
+  fill: var(--text-strong);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+}
+
+.venn-el.is-big {
+  font-size: 20px;
+}
+
+.venn-legend {
+  margin: .4rem 0 0;
+  font-size: .85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.venn-out {
+  display: grid;
+  justify-items: center;
+  gap: .3rem;
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  border-radius: 10px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.venn-name-out {
+  font-size: .8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--tone-1);
+}
+
+.venn-expr {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 1.3rem;
+  color: var(--text-strong);
+}
+
+.venn-elements {
+  color: var(--text-strong);
+}
+
+.venn-read {
+  margin: .2rem 0 0;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------- botões de região */
+
+.region-chips,
+.venn-shortcuts,
+.law-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.chip {
+  padding: .3rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: .88rem;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--tone-1);
+  color: var(--text-strong);
+}
+
+.chip[aria-pressed="true"] {
+  border-color: var(--tone-1);
+  background: color-mix(in srgb, var(--tone-1) 22%, var(--bg));
+  color: var(--text-strong);
+}
+
+.chip.is-ghost {
+  border-style: dashed;
+}
+
+/* ---------------------------------------------------------------- leis */
+
+.law-panes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.law-pane {
+  margin: 0;
+  text-align: center;
+}
+
+.law-pane figcaption {
+  margin-top: .3rem;
+  color: var(--text-strong);
+  font-size: 1.1rem;
+}
+
+/* ---------------------------------------------------------------- tabela */
+
+.table-scroll {
+  margin: 0 0 1rem;
+  overflow-x: auto;
+}
+
+.plain-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .92rem;
+}
+
+.plain-table th,
+.plain-table td {
+  padding: .55rem .7rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.plain-table th {
+  font-size: .78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+}
+
+.chip .katex {
+  font-size: 1.12em;
+}
+
+/* Quatro itens: duas colunas em vez de 3 + 1. */
+.facts.is-pairs {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
