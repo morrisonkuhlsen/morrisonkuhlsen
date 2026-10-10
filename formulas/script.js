@@ -1474,6 +1474,104 @@
       return { result: line, steps, note, chart };
     },
 
+    // Problema do aniversário. A conta vai pelo complemento, fator a fator,
+    // sem fatoriais: 365! não cabe num double. A simulação usa a mesma
+    // semente para dar sempre o mesmo resultado com os mesmos valores.
+    aniversario({ n, d, seed }) {
+      if (!Number.isInteger(d) || d < 1) return { error: T("O número de dias precisa ser um inteiro positivo.", "The number of days must be a positive integer.") };
+      if (d > 1e6) return { error: T("Use no máximo 1.000.000 de dias.", "Use at most 1,000,000 days.") };
+      if (!Number.isInteger(n) || n < 1) return { error: T("O tamanho do grupo precisa ser um inteiro positivo.", "The group size must be a positive integer.") };
+      if (n > 1e5) return { error: T("Use no máximo 100.000 pessoas.", "Use at most 100,000 people.") };
+      if (!Number.isInteger(seed)) return { error: T("A semente precisa ser um número inteiro.", "The seed must be a whole number.") };
+
+      // q[k]: chance de k pessoas terem todas aniversários diferentes. A curva
+      // vai até onde a coincidência passa de 99,9% (ou um pouco além de n).
+      const q = [1];
+      let n50 = null, n99 = null;
+      for (let k = 1; k <= d + 1 && (k <= Math.ceil(n * 1.25) || q[k - 1] > 0.001); k++) {
+        q[k] = q[k - 1] * (d - k + 1) / d;
+        if (n50 === null && 1 - q[k] >= 0.5) n50 = k;
+        if (n99 === null && 1 - q[k] >= 0.99) n99 = k;
+      }
+      const qn = n > d ? 0 : q[n], p = 1 - qn;
+      const K = q.length - 1;
+      const every = Math.max(1, Math.ceil(K / 400));
+      const pts = [];
+      for (let k = 1; k <= K; k += every) pts.push([k, 100 * (1 - q[k])]);
+      if (pts[pts.length - 1][0] !== K) pts.push([K, 100 * (1 - q[K])]);
+
+      // Acima de 99,99% o arredondamento escreveria 100%, que é certeza.
+      const near = x => x > 0.9999 && x < 1;
+      const pTex = x => (near(x) ? `>${braces(fmt(99.99, 2))}\\%` : pctTex(x));
+      const pTxt = x => (near(x) ? T("mais de 99,99%", "over 99.99%") : `${fmtSci(x * 100, 2)}%`);
+
+      const D = tone(texNum(d, 0), 2), N = tone(texNum(n, 0), 3);
+      const frac = k => `\\dfrac{${texNum(d - k, 0)}}{${texNum(d, 0)}}`;
+      const prod = n <= 4
+        ? Array.from({ length: n }, (_, k) => frac(k)).join(" \\cdot ")
+        : `${frac(0)} \\cdot ${frac(1)} \\cdots ${frac(n - 1)}`;
+      const steps = n > d
+        ? [[T(`Com mais pessoas (${fmt(n)}) que dias (${fmt(d)}), algum dia se repete com certeza: é o princípio da casa dos pombos.`, `With more people (${fmt(n)}) than days (${fmt(d)}), some day must repeat: it is the pigeonhole principle.`),
+          `P(\\text{${T("todos diferentes", "all different")}}) = 0 \\quad\\Rightarrow\\quad P(A) = 1`]]
+        : [[T("Calcule a chance de todos os aniversários serem diferentes: a primeira pessoa pode nascer em qualquer dia, a segunda em qualquer um menos o da primeira, e assim por diante.",
+            "Compute the chance that all birthdays are different: the first person can be born on any day, the second on any day but the first one's, and so on."),
+          `\\dfrac{${D}!}{(${D} - ${N})!\\, ${D}^{\\,${N}}} = ${prod} ${approx(qn, 6)} ${texSci(qn, 4)}`],
+          [T("A coincidência é o complemento:", "A shared birthday is the complement:"),
+            `P(A) = 1 - ${texSci(qn, 4)} ${approx(p, 6)} ${tone(pTex(p), 1)}`]];
+
+      const pairs = n * (n - 1) / 2;
+      if (n >= 2 && n <= d) {
+        const aprox = 1 - Math.exp(-pairs / d);
+        steps.push([T(`O que pesa são os pares: ${fmt(n)} pessoas formam ${fmt(pairs)} deles, cada um com chance 1/${fmt(d)} de coincidir. Tratar os pares como independentes dá uma boa aproximação:`,
+          `What matters is the pairs: ${fmt(n)} people form ${fmt(pairs)} of them, each with a 1/${fmt(d)} chance of matching. Treating the pairs as independent gives a good approximation:`),
+        `\\dbinom{${N}}{2} = ${texNum(pairs, 0)}, \\qquad 1 - e^{-${texNum(pairs, 0)}/${texNum(d, 0)}} ${approx(aprox, 6)} ${pTex(aprox)}`]);
+      }
+
+      // Simulação: até 10 mil grupos, menos se o grupo for grande. Cada grupo
+      // para no primeiro dia repetido; o carimbo evita zerar o vetor a cada vez.
+      // Com uma pessoa só não há o que sortear.
+      const G = Math.max(20, Math.min(10000, Math.floor(2e6 / n)));
+      const rand = rng(seed), seen = new Int32Array(n >= 2 ? d : 0);
+      let hits = 0;
+      for (let g = 1; g <= G && n >= 2; g++) {
+        for (let i = 0; i < n; i++) {
+          const day = Math.floor(rand() * d);
+          if (seen[day] === g) { hits++; break; }
+          seen[day] = g;
+        }
+      }
+      if (n >= 2) steps.push([T(`Confira sorteando: em ${fmt(G)} grupos de ${fmt(n)} pessoas com aniversários ao acaso, tantos tiveram um dia repetido:`,
+        `Check it by drawing: in ${fmt(G)} groups of ${fmt(n)} people with random birthdays, this many had a repeated day:`),
+      `\\dfrac{${texNum(hits, 0)}}{${texNum(G, 0)}} ${approx(hits / G, 6)} ${pctTex(hits / G)}`]);
+
+      let note = "";
+      if (n50 && n99) note += T(`Com ${fmt(d)} dias, bastam ${fmt(n50)} pessoas para a chance passar de 50% e ${fmt(n99)} para passar de 99%.`,
+        `With ${fmt(d)} days, ${fmt(n50)} people are enough for the chance to pass 50%, and ${fmt(n99)} to pass 99%.`);
+      if (n >= 2 && d >= 2) {
+        const mine = 1 - ((d - 1) / d) ** (n - 1);
+        note += T(` O paradoxo está na pergunta: a chance de alguém do grupo fazer aniversário no <em>seu</em> dia é bem menor, ${pTxt(mine)}, porque aí só contam os ${fmt(n - 1)} pares que incluem você.`,
+          ` The paradox lies in the question: the chance that someone in the group shares <em>your</em> birthday is much lower, ${pTxt(mine)}, because then only the ${fmt(n - 1)} pairs that include you count.`);
+      }
+      note += T(" A fórmula supõe todos os dias igualmente prováveis; nos dados reais os nascimentos se concentram em alguns meses, o que só aumenta a chance de coincidência.",
+        " The formula assumes every day is equally likely; in real data births cluster in some months, which only raises the chance of a match.");
+
+      return {
+        result: `P(A) ${approx(p, 6)} ${tone(pTex(p), 1)}`,
+        steps, note,
+        chart: {
+          type: "line", xMin: 1, xMax: Math.max(2, K), yMin: 0, yMax: 100, pts,
+          marker: n <= K ? [n, 100 * p] : null,
+          hlines: [{ y: 50, cls: "chart-ref" }],
+          label: T(`Chance de coincidência de 1 a ${K} pessoas, com ${d} dias`, `Chance of a shared birthday from 1 to ${K} people, with ${d} days`),
+          xLabel: T("pessoas no grupo (n) · chance em % · tracejado: 50%", "people in the group (n) · chance in % · dashed: 50%"),
+          tipAt: x => {
+            const k = Math.min(K, Math.max(1, Math.round(x)));
+            return [pTxt(1 - q[k]), `n = ${fmt(k)}`];
+          },
+        },
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };

@@ -127,6 +127,11 @@
   description: "Teorema central do limite explicado termo a termo, com simulação: o histograma das médias amostrais vira um sino conforme n cresce."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Problema do Aniversário"
+  url: "/formulas/problema-aniversario.html"
+  description: "Problema do aniversário explicado termo a termo: a chance de duas pessoas de um grupo fazerem aniversário no mesmo dia, com calculadora, curva, passo a passo e simulação."
+  tags: "fórmula interativa calculadora paradoxo do aniversário probabilidade coincidência complemento simulação"
+  lang: pt
 - title: "Teorema de Chebyshev"
   url: "/formulas/teorema-chebyshev.html"
   description: "Teorema de Chebyshev explicado termo a termo, com calculadora: a fração mínima dos dados em μ ± kσ, para qualquer distribuição."
@@ -227,6 +232,11 @@
   url: "/en/formulas/binomial-coefficient.html"
   description: "The binomial coefficient C(n, k) explained term by term, with an exact calculator and a step-by-step cancellation of the factorials."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Birthday Problem"
+  url: "/en/formulas/birthday-problem.html"
+  description: "The birthday problem explained term by term: the chance that two people in a group share a birthday, with a calculator, a curve, step-by-step working and a simulation."
+  tags: "formula interactive calculator birthday paradox probability match complement simulation"
   lang: en
 - title: "Chebyshev's Theorem"
   url: "/en/formulas/chebyshev-theorem.html"
