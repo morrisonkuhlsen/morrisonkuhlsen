@@ -10,16 +10,19 @@
  * reflexos da lente. A curva de tom ACES comprime o brilho como numa foto
  * exposta.
  *
- * O sol nasce devagar, em ~30 s; depois a cena para no último quadro (só volta a ser
- * desenhada se a janela mudar de tamanho). Com prefers-reduced-motion,
- * desenha direto o quadro final. Sem WebGL, fica só o fundo preto do CSS. */
+ * O sol nasce devagar, em ~30 s; depois a atmosfera para no último quadro
+ * (só é refeita se a janela mudar de tamanho) e só a etapa leve continua
+ * animada: os feixes de luz que respiram e os relâmpagos de uma tempestade
+ * lá embaixo. Com prefers-reduced-motion, desenha direto o quadro final,
+ * parado e sem relâmpagos. Sem WebGL, fica só o fundo preto do CSS. */
 (() => {
   const hero = document.querySelector(".pt-hero");
   const canvas = hero && hero.querySelector(".pt-hero-ceu");
   if (!canvas) return;
   const gl = canvas.getContext("webgl", { antialias: false, alpha: false, premultipliedAlpha: false });
   if (!gl) return;
-  const parado = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const parado = reduz;
 
   const VERT = `
     attribute vec2 p;
@@ -262,12 +265,16 @@
       estrela *= smoothstep(0.5, 0.3, length(uv));
       // Os raios crescem mais devagar que o brilho: só ganham força quando
       // boa parte do disco já saiu de trás do planeta.
-      cor += corLente * estrela * uBurstK * uVis;
+      cor += corLente * estrela * uBurstK * uVis * 0.45;
+
 
       // Rastro anamórfico: um brilho horizontal fino e azulado junto ao sol,
       // que some bem antes das bordas da tela.
       cor += corLente * vec3(0.55, 0.7, 1.0) * 0.12 *
              exp(-abs(dp.y) / (1.1 * e)) * exp(-abs(dp.x) / (160.0 * e));
+      // E um véu horizontal mais largo e lilás, rente ao horizonte.
+      cor += corLente * vec3(0.85, 0.72, 1.0) * 0.07 *
+             exp(-abs(dp.y) / (7.0 * e)) * exp(-abs(dp.x) / (380.0 * e));
 
 
       // Exposição, curva de tom, gama e um ruído leve contra faixas de cor.
@@ -286,9 +293,95 @@
     uniform sampler2D uCena;
     uniform vec2 uRes, uSunPx, uEixo;
     uniform float uVis, uEsc, uRealce;
+    uniform vec3 uCam, uF, uR, uU;
+    uniform float uTanX, uTanY;
+    uniform vec4 uRaio[4];   // relâmpagos: centro na esfera (xyz) e brilho (w)
+    uniform vec4 uFeixe[7];  // feixes: ângulo (x), força (y), comprimento em px (z), fase (w)
+    uniform float uFeixeK, uTempo;
+
+    const float RC = 6383.0;  // topo das nuvens de tempestade, ~12 km
 
     vec3 aces(vec3 x) {
       return clamp((x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14), 0.0, 1.0);
+    }
+
+    float hash(vec2 p) {
+      vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+      p3 += dot(p3, p3.yzx + 33.33);
+      return fract((p3.x + p3.y) * p3.z);
+    }
+    float ruidoValor(vec2 p) {
+      vec2 i = floor(p), f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+                 mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+    }
+    float fbm(vec2 p) {
+      float s = 0.0, a = 0.5;
+      for (int i = 0; i < 5; i++) { s += a * ruidoValor(p); p *= 2.03; a *= 0.5; }
+      return s;
+    }
+
+    // Relâmpagos dentro das nuvens, vistos de cima, à noite: o clarão não
+    // aparece como um risco, mas como a nuvem acesa por dentro, branco
+    // azulado, com o miolo mais forte e o resto espalhado pela bigorna
+    // (dezenas de km). A textura de nuvem só existe onde há clarão.
+    vec3 relampagos() {
+      if (uRaio[0].w + uRaio[1].w + uRaio[2].w + uRaio[3].w <= 0.0) return vec3(0.0);
+      vec2 ndc = gl_FragCoord.xy / uRes * 2.0 - 1.0;
+      vec3 d = normalize(uF + uR * ndc.x * uTanX + uU * ndc.y * uTanY);
+      float tc = -dot(uCam, d);
+      float dmin = length(uCam + d * tc);
+      if (dmin >= RC || tc <= 0.0) return vec3(0.0);
+      vec3 P = uCam + d * (tc - sqrt((RC - dmin) * (RC + dmin)));
+      vec3 n = P / RC;
+      // Rente ao horizonte, a nuvem é vista de lado, atrás de muito ar.
+      float rasante = smoothstep(0.0, 0.3, dot(-d, n));
+      vec3 luz = vec3(0.0);
+      float dens = -1.0;
+      for (int k = 0; k < 4; k++) {
+        float I = uRaio[k].w;
+        if (I <= 0.0) continue;
+        float dist = acos(clamp(dot(n, uRaio[k].xyz), -1.0, 1.0)) * RC;
+        if (dist > 160.0) continue;
+        // Torres e bigornas: ruído em km, com contraste alto.
+        if (dens < 0.0) dens = smoothstep(0.3, 0.78, fbm(n.xz * RC / 12.0 + 7.0));
+        float g = I * (exp(-dist * dist / (2.0 * 11.0 * 11.0)) * (0.2 + 1.8 * dens)
+                     + 1.4 * exp(-dist * dist / (2.0 * 2.5 * 2.5))
+                     + 0.07 * exp(-dist * dist / (2.0 * 35.0 * 35.0)) * (0.4 + dens));
+        luz += g * vec3(0.76, 0.84, 1.0);
+      }
+      return luz * rasante;
+    }
+
+    // Feixes largos e quentes, como nas fotos do nascer do sol em órbita:
+    // poucos, abertos em leque para cima, cada um uma cunha de luz que começa
+    // branca junto ao sol e vai ficando âmbar e se apagando. É o brilho da
+    // lente espalhado em faixas (reflexos internos, sujeira no vidro). Eles
+    // respiram devagar: cada um oscila um pouco no ângulo, na força e no
+    // comprimento, em ritmos diferentes, como a luz tremulando através do ar.
+    vec3 feixes(vec2 dp, float e) {
+      vec3 soma = vec3(0.0);
+      for (int k = 0; k < 7; k++) {
+        vec4 F = uFeixe[k];
+        float t = uTempo, fase = F.w;
+        float ang = F.x + 0.03 * sin(t * (0.35 + 0.06 * float(k)) + fase)
+                        + 0.01 * sin(t * (1.1 + 0.13 * float(k)) + 2.0 * fase);
+        vec2 n = vec2(cos(ang), sin(ang));
+        float ao = dot(dp, n);
+        if (ao <= 0.0) continue;
+        float pulsa = 0.65 + 0.35 * sin(t * (0.6 + 0.09 * float(k)) + 3.0 * fase)
+                           * (0.75 + 0.25 * sin(t * (1.7 + 0.2 * float(k)) + fase));
+        float forca = F.y * pulsa;
+        float perp = abs(dp.x * n.y - dp.y * n.x);
+        float abre = 0.05 + 0.035 * F.y;
+        float a = perp / max(ao, 1.0) / abre;
+        float L = F.z * e * (0.85 + 0.15 * sin(t * (0.45 + 0.07 * float(k)) + 5.0 * fase));
+        float f = forca * exp(-a * a) * exp(-pow(ao / L, 1.6)) / (1.0 + ao / (90.0 * e))
+                * smoothstep(6.0 * e, 50.0 * e, ao);
+        soma += f * mix(vec3(1.0, 0.86, 0.66), vec3(1.0, 0.5, 0.18), smoothstep(20.0 * e, 0.6 * L, ao));
+      }
+      return soma;
     }
 
     void main() {
@@ -324,7 +417,8 @@
       float along = dot(qf, ue), across = dot(qf, vec2(-ue.y, ue.x));
       refl += vec3(0.3, 0.55, 1.0) * 0.12 * exp(-across * across / (2.0 * pow(4.0 * e, 2.0))) *
               exp(-along * along / (2.0 * pow(60.0 * e, 2.0)));
-      vec3 g = refl * uVis * uVis * (1.0 + 0.35 * uRealce);
+      vec3 g = refl * uVis * uVis * (1.0 + 0.35 * uRealce) + relampagos()
+             + feixes(gl_FragCoord.xy - uSunPx, e) * 0.5 * uVis * uFeixeK;
       g = pow(aces(g * 0.9), vec3(1.0 / 2.2));
       gl_FragColor = vec4(1.0 - (1.0 - base) * (1.0 - g), 1.0);
     }`;
@@ -360,7 +454,8 @@
   gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
   const uniformes = (p, nomes) => Object.fromEntries(nomes.map(n => [n, gl.getUniformLocation(p, n)]));
   const U = uniformes(prog, ["uRes", "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uSun", "uSunPx", "uVis", "uEsc", "uBurst", "uBurstPx", "uBurstK"]);
-  const UR = uniformes(progReflexos, ["uCena", "uRes", "uSunPx", "uEixo", "uVis", "uEsc", "uRealce"]);
+  const UR = uniformes(progReflexos, ["uCena", "uRes", "uSunPx", "uEixo", "uVis", "uEsc", "uRealce",
+    "uCam", "uF", "uR", "uU", "uTanX", "uTanY", "uRaio", "uFeixe", "uFeixeK", "uTempo"]);
 
   /* ---------------------------------------------------------------- difração */
 
@@ -377,6 +472,14 @@
   // Quando a textura fica pronta, os raios entram aos poucos, em 8 s, com
   // começo lento (quadrático), nunca de uma vez.
   let pronta = null;
+  // Os feixes largos (etapa dos reflexos): sete, abertos em leque para cima
+  // (de 35° a 145°), com força, comprimento e fase de oscilação sorteados.
+  const feixesDados = (() => {
+    let sm = 7;
+    const al = () => (sm = (sm * 16807) % 2147483647) / 2147483647;
+    return new Float32Array(Array.from({ length: 7 }, (_, k) =>
+      [(35 + k * 18 + (al() - 0.5) * 12) * Math.PI / 180, 0.15 + 1.1 * al() ** 2, 90 + al() * 230, al() * 6.283]).flat());
+  })();
   const ganho = () => pronta === null ? 0 : GANHO * Math.min(1, (performance.now() - pronta) / 8000) ** 2;
   function estrela() {
     const N = 1024, LOG = 10, c = N / 2, r = N / 3;
@@ -529,8 +632,9 @@
     eixo = alvo ? eixo : [W / 2, H / 2];
   }
 
-  // Último sol desenhado, para a etapa dos reflexos.
+  // Último sol e última câmera desenhados, para a etapa dos reflexos.
   const sol = { x: 0, y: 0, vis: 0 };
+  const cam = { F: [0, 0, -1], R: [1, 0, 0], Up: [0, 1, 0], tanX: 1, tanY: 1 };
 
   // `e` é a elevação do centro do sol acima do horizonte, em radianos.
   function desenhar(e) {
@@ -550,6 +654,7 @@
     const fr = Math.max(0, Math.min(1, (e + RAIO_SOL) / (2 * RAIO_SOL)));
     const vis = fr * fr * (3 - 2 * fr);
     Object.assign(sol, { x: sx, y: sy, vis });
+    Object.assign(cam, { F, R, Up, tanX, tanY });
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, cenaFb);
     gl.useProgram(prog);
@@ -590,6 +695,16 @@
     gl.uniform1f(UR.uVis, sol.vis);
     gl.uniform1f(UR.uEsc, Math.min(W, 1600 * escala) / 1400);
     gl.uniform1f(UR.uRealce, realce);
+    gl.uniform3f(UR.uCam, 0, RP + ALT, 0);
+    gl.uniform3fv(UR.uF, cam.F);
+    gl.uniform3fv(UR.uR, cam.R);
+    gl.uniform3fv(UR.uU, cam.Up);
+    gl.uniform1f(UR.uTanX, cam.tanX);
+    gl.uniform1f(UR.uTanY, cam.tanY);
+    gl.uniform4fv(UR.uRaio, brilhoRaios(performance.now()));
+    gl.uniform4fv(UR.uFeixe, feixesDados);
+    gl.uniform1f(UR.uFeixeK, ganho() / GANHO);
+    gl.uniform1f(UR.uTempo, reduz ? 0 : performance.now() / 1000);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
 
@@ -623,6 +738,108 @@
     alvoRealce = 0;
     mexer();
   });
+
+  /* ---------------------------------------------------------------- tempestade */
+
+  // Uma tempestade no lado noturno do planeta, abaixo do texto. Cada
+  // descarga é uma série de 1 a 4 pulsos (os "retornos" de um raio real,
+  // separados por dezenas de ms), e às vezes acende uma célula vizinha logo
+  // depois, como nas fotos da ISS. Entre descargas, nada é desenhado.
+  // Com prefers-reduced-motion, não há relâmpagos.
+  const raios = []; // { c: [x, y, z], pulsos: [[t, força]], fim }
+  let centro = null, proxima = 0;
+  const sorteio = (a, b) => a + Math.random() * (b - a);
+
+  // Ponto da nuvem sob um pixel da tela (y a partir de baixo), como no shader.
+  function pontoNaNuvem(px, py) {
+    const nx = px / W * 2 - 1, ny = py / H * 2 - 1;
+    const d = cam.F.map((f, i) => f + cam.R[i] * nx * cam.tanX + cam.Up[i] * ny * cam.tanY);
+    const l = Math.hypot(...d);
+    const o = [0, RP + ALT, 0], RC = RP + 12;
+    const dd = d.map(v => v / l);
+    const tc = -(o[0] * dd[0] + o[1] * dd[1] + o[2] * dd[2]);
+    const p = o.map((v, i) => v + dd[i] * tc);
+    const dmin = Math.hypot(...p);
+    if (dmin >= RC || tc <= 0) return null;
+    const t = tc - Math.sqrt((RC - dmin) * (RC + dmin));
+    const q = o.map((v, i) => v + dd[i] * t);
+    return q.map(v => v / RC);
+  }
+  // Desloca um ponto da esfera dx, dy km no plano tangente.
+  function deslocar(c, dx, dy) {
+    let t1 = [0, c[2], -c[1]];
+    const l = Math.hypot(...t1);
+    t1 = t1.map(v => v / l);
+    const t2 = [c[1] * t1[2] - c[2] * t1[1], c[2] * t1[0] - c[0] * t1[2], c[0] * t1[1] - c[1] * t1[0]];
+    const RC = RP + 12;
+    const q = c.map((v, i) => v + (t1[i] * dx + t2[i] * dy) / RC);
+    const m = Math.hypot(...q);
+    return q.map(v => v / m);
+  }
+
+  function descarga(agora) {
+    if (!centro) {
+      // Num dos lados, longe do texto do meio.
+      const lado = Math.random() < 0.5 ? sorteio(0.06, 0.28) : sorteio(0.72, 0.94);
+      centro = pontoNaNuvem(W * lado, H * sorteio(0.1, 0.4));
+      if (!centro) return;
+    }
+    // A tempestade anda devagar.
+    centro = deslocar(centro, sorteio(-6, 6), sorteio(-6, 6));
+    const celula = (c, atraso, forca) => {
+      const n = 1 + Math.floor(Math.random() * Math.random() * 4.5);
+      const pulsos = [];
+      let t = agora + atraso;
+      for (let i = 0; i < n; i++) {
+        pulsos.push([t, forca * sorteio(0.5, 1.2)]);
+        t += sorteio(40, 220);
+      }
+      raios.push({ c, pulsos, fim: t + 700 });
+    };
+    celula(deslocar(centro, sorteio(-45, 45), sorteio(-45, 45)), 0, sorteio(0.7, 1.6));
+    if (Math.random() < 0.35) celula(deslocar(centro, sorteio(-80, 80), sorteio(-80, 80)), sorteio(120, 500), sorteio(0.4, 1.0));
+    // Às vezes, longe dali, outra tempestade pisca fraco.
+    if (Math.random() < 0.15) {
+      const longe = pontoNaNuvem(W * sorteio(0.05, 0.95), H * sorteio(0.45, 0.6));
+      if (longe) celula(longe, sorteio(0, 900), sorteio(0.3, 0.6));
+    }
+  }
+
+  // Brilho de cada relâmpago agora: subida rápida e queda de ~60 ms por
+  // pulso, mais um resto que apaga em ~400 ms.
+  function brilhoRaios(agora) {
+    for (let i = raios.length - 1; i >= 0; i--) if (agora > raios[i].fim) raios.splice(i, 1);
+    const out = new Float32Array(16);
+    raios.slice(0, 4).forEach((r, k) => {
+      let b = 0;
+      for (const [t, f] of r.pulsos) {
+        const dt = agora - t;
+        if (dt < 0) continue;
+        b += f * (Math.min(1, dt / 8) * Math.exp(-dt / 60) + 0.18 * Math.exp(-dt / 400));
+      }
+      out.set([...r.c, b], k * 4);
+    });
+    return out;
+  }
+
+  let heroVisivel = true;
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => { heroVisivel = es[0].isIntersecting; }).observe(hero);
+  }
+  function tempestade(agora) {
+    if (agora >= proxima && heroVisivel && !document.hidden) {
+      descarga(agora);
+      proxima = agora + sorteio(900, 5200);
+    }
+    setTimeout(() => requestAnimationFrame(tempestade), Math.max(50, proxima - performance.now()));
+  }
+
+  // Depois do nascer, só a etapa leve (feixes, reflexos e relâmpagos) é
+  // refeita a cada quadro, e só com o hero na tela e a aba visível.
+  function animar() {
+    if (fim && heroVisivel && !document.hidden) compor();
+    requestAnimationFrame(animar);
+  }
 
   /* ---------------------------------------------------------------- nascer */
 
@@ -658,6 +875,12 @@
   } else {
     requestAnimationFrame(quadro);
     setTimeout(estrela, 50);
+  }
+  // A tempestade começa depois que os olhos se acostumam ao escuro.
+  if (!reduz) {
+    proxima = performance.now() + 4000;
+    setTimeout(() => requestAnimationFrame(tempestade), 4000);
+    requestAnimationFrame(animar);
   }
   addEventListener("resize", () => {
     medir();
