@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/orca.avif
+image: /assets/images/capa-orcas.avif
 title: "Cinquenta anos contando orcas: a demografia das residentes do sul em nove gráficos"
 categories: [VISUALIZAÇÃO DE DADOS, JULIA, ESTATÍSTICA]
 tags: [Análise de dados, Análise de sobrevivência]

@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/boxplot.avif
+image: /assets/images/capa-boxplot.avif
 title: "Boxplot: o que é cada elemento, como se calcula e como interpretar"
 categories: [ESTATÍSTICA, VISUALIZAÇÃO DE DADOS, JULIA]
 lang: pt

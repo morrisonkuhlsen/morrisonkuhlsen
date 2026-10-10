@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/amostragem-dashboard.png
+image: /assets/images/image-post.avif
 title: "A Thousand People, a Hundred Thousand Voters: Where a Poll's Margin of Error Comes From"
 categories: [STATISTICS, JULIA, INFERENCE]
 tags: [Inference, Julia, Statistics]

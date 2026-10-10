@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/ciclo-vida-dados.avif
+image: /assets/images/capa-ciclo-vida-dados.avif
 title: "O ciclo de vida da análise de dados: da pergunta de negócio ao monitoramento em produção"
 categories: [ANÁLISE DE DADOS, ESTATÍSTICA, GUIA]
 lang: pt

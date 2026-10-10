@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/orca.avif
+image: /assets/images/capa-orcas.avif
 title: "Fifty Years of Counting Orcas: Southern Resident Demography in Nine Charts"
 categories: [DATA VISUALIZATION, JULIA, STATISTICS]
 tags: [Data analysis, Survival analysis]

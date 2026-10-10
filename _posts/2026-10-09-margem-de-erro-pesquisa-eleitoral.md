@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/amostragem-dashboard.png
+image: /assets/images/image-post.avif
 title: "Mil pessoas, cem mil eleitores: de onde sai a margem de erro de uma pesquisa"
 categories: [ESTATÍSTICA, JULIA, INFERÊNCIA]
 tags: [Inferência, Julia, Estatística]
