@@ -21,7 +21,7 @@
     "correcao-populacao-finita": "finite-population-correction", "coeficiente-pearson": "pearson-correlation",
     "regressao-linear": "linear-regression", "z-score": "z-score", "t-student": "students-t-test",
     "cochran-formula": "cochran-formula", "poder-estatistico": "statistical-power",
-    "simulador-pesquisa": "poll-simulator",
+    "simulador-pesquisa": "poll-simulator", "duas-proporcoes": "two-proportions-sample-size",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -747,6 +747,112 @@
           tipAt: v => {
             const k = Math.max(2, Math.round(v));
             return [`${fmt(tPower(d, k, a, g) * 100, 1)}%`, T(`poder com n = ${k}`, `power with n = ${k}`)];
+          },
+        },
+        steps,
+        note,
+      };
+    },
+
+    // Tamanho de amostra para comparar duas proporções (teste z bilateral,
+    // grupos do mesmo tamanho), pela fórmula de Fleiss, que usa a variância
+    // sob H₀ (p̄ nos dois grupos) no termo de α e a variância sob H₁ no de
+    // β. O n vale para amostras aleatórias simples; com deff, multiplica.
+    // O poder é conferido somando todos os pares de contagens possíveis.
+    duasProp({ p1, p2, alpha, power, deff }) {
+      if (p1 <= 0 || p1 >= 100 || p2 <= 0 || p2 >= 100) return { error: T("As proporções precisam estar entre 0 e 100%, sem os extremos.", "The proportions must be strictly between 0 and 100%.") };
+      if (p1 === p2) return { error: T("As duas proporções são iguais: não há diferença para detectar.", "The two proportions are equal: there is no difference to detect.") };
+      if (alpha <= 0 || alpha >= 50) return { error: T("A significância precisa estar entre 0 e 50%, como 5 ou 1.", "The significance level must be between 0 and 50%, such as 5 or 1.") };
+      if (power <= alpha / 2 || power >= 100) return { error: T("O poder precisa ser menor que 100% e maior que α/2, como 80 ou 90.", "Power must be below 100% and above α/2, such as 80 or 90.") };
+      if (deff !== null && (deff < 0.1 || deff > 20)) return { error: T("O efeito de desenho precisa estar entre 0,1 e 20, ou ficar em branco.", "The design effect must be between 0.1 and 20, or left blank.") };
+      const D = deff === null ? 1 : deff;
+      const a = p1 / 100, b = p2 / 100, dif = Math.abs(a - b);
+      const pm = (a + b) / 2, v0 = 2 * pm * (1 - pm), v1 = a * (1 - a) + b * (1 - b);
+      const zA = zCrit(100 - alpha), zB = Number(probit(power / 100).toFixed(2));
+      const base = (zA * Math.sqrt(v0) + zB * Math.sqrt(v1)) ** 2 / (dif * dif);
+      const nS = ceilInt(base), n = ceilInt(base * D);
+      if (n > 1e7) return { error: T("O n passa de 10 milhões por grupo; a diferença é pequena demais para detectar.", "n exceeds 10 million per group; the difference is too small to detect.") };
+      // Com a correção de continuidade (Fleiss, Tytun e Ury), mais perto do
+      // exato de Fisher.
+      const cc = base / 4 * (1 + Math.sqrt(1 + 4 / (base * dif))) ** 2;
+      const nCC = ceilInt(cc * D);
+
+      // Poder pela normal, com n por grupo (já descontado o deff).
+      const pw = k => phi((dif * Math.sqrt(k / D) - zA * Math.sqrt(v0)) / Math.sqrt(v1));
+      // Poder exato do teste z com n por grupo, numa amostra aleatória simples.
+      function exato(m) {
+        const faixa = p => {
+          const s = Math.sqrt(m * p * (1 - p));
+          const k0 = Math.max(0, Math.floor(m * p - 9 * s - 1)), k1 = Math.min(m, Math.ceil(m * p + 9 * s + 1));
+          const ws = [];
+          for (let k = k0; k <= k1; k++) ws.push(binPmf(m, p, k));
+          return { k0, ws };
+        };
+        const A = faixa(a), B = faixa(b);
+        let tot = 0;
+        A.ws.forEach((wa, i) => {
+          const x1 = A.k0 + i;
+          B.ws.forEach((wb, j) => {
+            const x2 = B.k0 + j, pb = (x1 + x2) / (2 * m);
+            const se = Math.sqrt(pb * (1 - pb) * 2 / m);
+            if (se > 0 && Math.abs(x1 - x2) / m > zA * se) tot += wa * wb;
+          });
+        });
+        return tot;
+      }
+      const ex = nS <= 20000 ? exato(nS) : null;
+
+      const ZA = tone(texNum(zA), 2), ZB = tone(texNum(zB), 3), DD = tone(texNum(dif, 4), 4);
+      const pct = x => `${texNum(x * 100, 2)}\\%`;
+      const steps = [
+        [T(`Encontre os valores críticos: z de α/2 = ${fmt(alpha / 2, 4)}% e z do poder, ${fmt(power, 2)}%, como na tabela Z:`, `Find the critical values: z for α/2 = ${fmt(alpha / 2, 4)}% and z for the power, ${fmt(power, 2)}%, as in the Z table:`),
+          `z_{\\alpha/2} \\approx ${ZA}, \\qquad z_{\\beta} \\approx ${ZB}`],
+        [T("Sob H₀, os dois grupos teriam a proporção média; sob H₁, cada um tem a sua:", "Under H₀, both groups would have the average proportion; under H₁, each has its own:"),
+          `\\bar{p} = \\dfrac{${pct(a)} + ${pct(b)}}{2} = ${pct(pm)}, \\quad 2\\bar{p}\\bar{q} ${approx(v0, 5)} ${tone(texNum(v0, 5), 2)}, \\quad p_1q_1 + p_2q_2 ${approx(v1, 5)} ${tone(texNum(v1, 5), 3)}`],
+        [T("Substitua na fórmula, com a diferença ao quadrado embaixo:", "Plug into the formula, with the squared difference below:"),
+          `n = \\dfrac{\\left(${ZA}\\sqrt{${texNum(v0, 5)}} + ${ZB}\\sqrt{${texNum(v1, 5)}}\\right)^2}{${DD}^2} ${approx(base, 2)} ${texNum(base, 2)} \;\\to\; ${texNum(nS)}`],
+      ];
+      if (D !== 1) {
+        steps.push([T(`O desenho multiplica a variância por ${fmt(D)}, e o n também:`, `The design multiplies the variance by ${fmt(D)}, and n too:`),
+          `n = ${texNum(base, 2)} \\cdot ${tone(texNum(D), 5)} ${approx(base * D, 2)} ${texNum(base * D, 2)} \;\\to\; ${tone(texNum(n), 1)}`]);
+      }
+      if (ex !== null) {
+        steps.push([T(`Confira somando a probabilidade de todos os pares de contagens (x₁, x₂) que o teste z rejeitaria, com ${fmt(nS)} pessoas por grupo numa amostra aleatória simples:`,
+          `Check by adding up the probability of every pair of counts (x₁, x₂) the z-test would reject, with ${fmt(nS)} people per group in a simple random sample:`),
+          `${T("\\text{poder}", "\\text{power}")}(n = ${texNum(nS)}) = ${pct(ex)}`]);
+      }
+
+      const nMax = Math.max(10, Math.ceil(n * 2.5));
+      const stepN = Math.max(1, Math.ceil(nMax / 150));
+      const pts = [];
+      for (let k = stepN; k <= nMax; k += stepN) pts.push([k, pw(k)]);
+
+      let note = T(`São precisos ${fmt(n)} por grupo (${fmt(2 * n)} no total) para detectar ${fmt(p1, 2)}% contra ${fmt(p2, 2)}% com ${fmt(power, 2)}% de chance, num teste bilateral a ${fmt(alpha, 2)}%.`,
+        `You need ${fmt(n)} per group (${fmt(2 * n)} in total) to detect ${fmt(p1, 2)}% versus ${fmt(p2, 2)}% with ${fmt(power, 2)}% probability, in a two-sided test at ${fmt(alpha, 2)}%.`);
+      if (ex !== null) {
+        note += T(` Pela conta exata, ${fmt(nS)} por grupo dão ${fmt(ex * 100, 1)}% de poder numa amostra aleatória simples`, ` By the exact calculation, ${fmt(nS)} per group give ${fmt(ex * 100, 1)}% power in a simple random sample`)
+          + (Math.abs(ex * 100 - power) >= 0.5 ? T(`, não ${fmt(power, 2)}%: a fórmula usa a normal, e as contagens andam de 1 em 1.`, `, not ${fmt(power, 2)}%: the formula uses the normal, and the counts move in steps of 1.`) : ".");
+      }
+      note += T(` Com a correção de continuidade, para analisar com o qui-quadrado corrigido ou o exato de Fisher, seriam ${fmt(nCC)} por grupo.`,
+        ` With the continuity correction, to analyze with the corrected chi-square or Fisher's exact test, it would be ${fmt(nCC)} per group.`);
+      const meio = (a + b) / 2;
+      note += T(` Se a diferença real for metade (${fmt(p1, 2)}% contra ${fmt(meio * 100, 2)}%), o mesmo estudo teria só ${fmt(phi((dif / 2 * Math.sqrt(n / D) - zA * Math.sqrt(2 * ((a + meio) / 2) * (1 - (a + meio) / 2))) / Math.sqrt(a * (1 - a) + meio * (1 - meio))) * 100, 0)}% de poder: diferenças pequenas custam caro, e o n cresce com o inverso do quadrado delas.`,
+        ` If the real difference is half (${fmt(p1, 2)}% versus ${fmt(meio * 100, 2)}%), the same study would have only ${fmt(phi((dif / 2 * Math.sqrt(n / D) - zA * Math.sqrt(2 * ((a + meio) / 2) * (1 - (a + meio) / 2))) / Math.sqrt(a * (1 - a) + meio * (1 - meio))) * 100, 0)}% power: small differences are expensive, and n grows with the inverse of their square.`);
+      if (D === 1) note += T(` Se a amostra for por conglomerados, preencha o efeito de desenho; o <a href="${PAGE("simulador-pesquisa")}?desenho=conglomerados&amp;M=5000">simulador de pesquisa</a> mostra de onde ele vem.`,
+        ` If the sample is clustered, fill in the design effect; the <a href="${PAGE("simulador-pesquisa")}?desenho=conglomerados&amp;M=5000">poll simulator</a> shows where it comes from.`);
+      note += T(` Depois de coletar, analise com o <a href="/testes-estatisticos/z-duas-proporcoes/">teste z para duas proporções</a>.`,
+        ` Once you have the data, analyze it with the <a href="/en/statistical-tests/two-proportion-z-test/">two-proportion z-test</a>.`);
+
+      return {
+        result: `n = ${tone(texNum(n), 1)}${T("\\text{ por grupo}", "\\text{ per group}")}`,
+        chart: {
+          type: "curve",
+          label: T(`Poder do teste em função de n por grupo, para ${fmt(p1, 2)}% contra ${fmt(p2, 2)}% e α = ${fmt(alpha, 2)}%; com n = ${fmt(n)}, o poder é ${fmt(pw(n) * 100, 1)}%`,
+            `Power of the test as a function of n per group, for ${fmt(p1, 2)}% versus ${fmt(p2, 2)}% and α = ${fmt(alpha, 2)}%; with n = ${fmt(n)}, power is ${fmt(pw(n) * 100, 1)}%`),
+          xLabel: T("n por grupo", "n per group"), xMin: stepN, xMax: nMax, yMax: 1 / 1.08, pts, marker: [n, pw(n)],
+          tipAt: v => {
+            const k = Math.max(1, Math.round(v));
+            return [`${fmt(pw(k) * 100, 1)}%`, T(`poder com n = ${fmt(k)} por grupo`, `power with n = ${fmt(k)} per group`)];
           },
         },
         steps,

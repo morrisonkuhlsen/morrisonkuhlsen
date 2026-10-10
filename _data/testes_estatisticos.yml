@@ -460,6 +460,7 @@ testes:
     vars:
       - ['Qui-quadrado de independência, equivalente numa tabela 2 × 2', qui-quadrado-independencia]
       - ['Fisher exato, com contagens pequenas', fisher]
+    veja: [duas-proporcoes]
     reporte: '45% contra 30%; z = 2,19; p = 0,029; h = 0,31'
     codigo:
       r: |

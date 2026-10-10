@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Two Proportions — Interactive</title>
+  <meta name="description" content="Sample size to compare two proportions explained term by term: a calculator for A/B tests and polls, a power curve, the design effect and a check with the exact power.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/two-proportions-sample-size.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/duas-proporcoes.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/two-proportions-sample-size.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/duas-proporcoes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/two-proportions-sample-size.html">
+  <meta property="og:title" content="Two Proportions — Interactive">
+  <meta property="og:description" content="Sample size to compare two proportions explained term by term: a calculator for A/B tests and polls, a power curve, the design effect and a check with the exact power.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Two Proportions — Interactive">
+  <meta name="twitter:description" content="Sample size to compare two proportions explained term by term: a calculator for A/B tests and polls, a power curve, the design effect and a check with the exact power.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/duas-proporcoes.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Two Proportions</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive two-proportion sample size formula">
+        <span class="part" data-part="n_two" data-tone="1" data-tex="n"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="op">(</span>
+            <span class="part" data-part="z_alpha_two" data-tone="2" data-tex="z_{\alpha/2}\sqrt{2\bar{p}\bar{q}}"></span>
+            <span class="op">+</span>
+            <span class="part" data-part="z_beta_two" data-tone="3" data-tex="z_{\beta}\sqrt{p_1q_1 + p_2q_2}"></span>
+            <span class="op">)²</span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="diff_two" data-tone="4" data-tex="(p_1 - p_2)^2"></span>
+          </span>
+        </span>
+        <span class="op">·</span>
+        <span class="part" data-part="deff_two" data-tone="5" data-tex="\mathrm{deff}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com a curva de poder; estado em ?p1=&p2=&alpha=&power=&deff=.
+         A fórmula usa a normal; o poder é conferido somando todos os pares de
+         contagens que o teste z rejeitaria. -->
+    <section class="calc" data-calc="duasProp" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a candidate polls at 38%, and the campaign wants to know whether an ad takes that number to 41%. How many people must be heard in each group, with and without the ad, to detect the difference with 80% power at 5% significance? The same goes for a conversion A/B test. Leave the design effect blank for simple random samples. Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="4">
+          <span>Proportion in group 1 <i>p₁</i> (%)</span>
+          <input name="p1" type="text" inputmode="decimal" value="38" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Proportion in group 2 <i>p₂</i> (%)</span>
+          <input name="p2" type="text" inputmode="decimal" value="41" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Significance <i>α</i> (%)</span>
+          <input name="alpha" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Power (%)</span>
+          <input name="power" type="text" inputmode="decimal" value="80" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Design effect <i>deff</i></span>
+          <input name="deff" type="text" inputmode="decimal" value="" placeholder="optional" data-optional autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="n_two" data-tone="1">Size of Each Group (n)</dt>
+          <dd>How many people to hear in each of the two equal-sized groups for the z-test to detect the difference with the requested power. The total is twice that.</dd>
+          <dt data-part="z_alpha_two" data-tone="2">Threshold under H₀</dt>
+          <dd>The critical value z<sub>α/2</sub> times the spread of the difference when H₀ holds and both groups have the average proportion p̄ = (p₁ + p₂)/2. For α = 5%, z<sub>α/2</sub> ≈ 1.96. It is how far the observed difference can go by chance.</dd>
+          <dt data-part="z_beta_two" data-tone="3">Slack under H₁</dt>
+          <dd>The power quantile z<sub>β</sub> times the spread of the difference when each group has its own proportion. For 80% power, z<sub>β</sub> ≈ 0.84. It is the margin that makes the real difference clear the threshold in most samples.</dd>
+          <dt data-part="diff_two" data-tone="4">Squared Difference</dt>
+          <dd>The difference you want to detect, as a proportion (0.03 for 3 points). Because it is squared, halving the difference quadruples n: detecting 3 points costs four times as much as detecting 6.</dd>
+          <dt data-part="deff_two" data-tone="5">Design Effect (deff)</dt>
+          <dd>How much the survey design inflates the variance compared with a simple random sample: clusters usually give 1.5 to 3, and strata can give less than 1. It multiplies n. Left blank, it equals 1. The <a href="poll-simulator.html?desenho=conglomerados&amp;M=5000">poll simulator</a> shows where it comes from.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="statistical-power.html" rel="prev"><span>Previous</span>Statistical Power</a>
+      <a class="pager-next" href="chi-square-test.html" rel="next"><span>Next</span>Chi-Square Test (χ²)</a>
+    </nav>
+  </main>
+</body>
+</html>

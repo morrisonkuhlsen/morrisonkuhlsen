@@ -72,6 +72,11 @@
   description: "Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho."
   tags: "simulação simulador interativo pesquisa eleitoral amostragem cobertura intervalo de confiança hipergeométrica monte carlo"
   lang: pt
+- title: "Duas Proporções"
+  url: "/formulas/duas-proporcoes.html"
+  description: "Tamanho de amostra para comparar duas proporções explicado termo a termo: calculadora para testes A/B e pesquisas, curva de poder, efeito de desenho e conferência pelo poder exato."
+  tags: "fórmula interativa calculadora tamanho de amostra duas proporções teste a/b conversão poder pesquisa eleitoral efeito de desenho"
+  lang: pt
 - title: "Poder Estatístico"
   url: "/formulas/poder-estatistico.html"
   description: "Tamanho de amostra pelo poder estatístico explicado termo a termo: calculadora para testes t de uma ou duas amostras, curva de poder e conferência pela t não central."
@@ -287,6 +292,11 @@
   url: "/en/formulas/poll-simulator.html"
   description: "Election poll simulator: draw thousands of samples from a known population, by simple random, cluster or stratified sampling, and see the distribution of p̂, the coverage of the intervals and the design effect."
   tags: "simulation simulator interactive election poll sampling coverage confidence interval hypergeometric monte carlo"
+  lang: en
+- title: "Two Proportions"
+  url: "/en/formulas/two-proportions-sample-size.html"
+  description: "Sample size to compare two proportions explained term by term: a calculator for A/B tests and polls, a power curve, the design effect and a check with the exact power."
+  tags: "formula interactive calculator sample size two proportions a/b test conversion power poll design effect"
   lang: en
 - title: "Statistical Power"
   url: "/en/formulas/statistical-power.html"
