@@ -64,7 +64,7 @@
   lang: pt
 - title: "Margem de Erro"
   url: "/formulas/margem-de-erro.html"
-  description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança."
+  description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
   lang: pt
 - title: "Simulador de Pesquisa"
@@ -280,7 +280,7 @@
   lang: en
 - title: "Margin of Error"
   url: "/en/formulas/margin-of-error.html"
-  description: "The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals."
+  description: "The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction, the design effect, the Wilson interval and a simulation of 100 confidence intervals."
   tags: "formula interactive calculator step by step poll margin of error"
   lang: en
 - title: "Poll Simulator"

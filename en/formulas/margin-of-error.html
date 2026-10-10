@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Margin of Error — Interactive</title>
-  <meta name="description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <meta name="description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction, the design effect, the Wilson interval and a simulation of 100 confidence intervals.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
   <meta property="og:title" content="Margin of Error — Interactive">
-  <meta property="og:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <meta property="og:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction, the design effect, the Wilson interval and a simulation of 100 confidence intervals.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Margin of Error — Interactive">
-  <meta name="twitter:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction and a simulation of 100 confidence intervals.">
+  <meta name="twitter:description" content="The margin of error of a poll explained term by term, with a calculator for proportions, the finite population correction, the design effect, the Wilson interval and a simulation of 100 confidence intervals.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -57,6 +57,8 @@
         <span class="part" data-part="se_prop" data-tone="3" data-tex="\sqrt{\dfrac{\hat{p}\,(1 - \hat{p})}{n}}"></span>
         <span class="op">·</span>
         <span class="part" data-part="fpc_factor" data-tone="4" data-tex="\sqrt{\dfrac{N - n}{N - 1}}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="deff" data-tone="5" data-tex="\sqrt{\mathrm{deff}}"></span>
       </div>
     </div>
     <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
@@ -67,7 +69,7 @@
          mesmo gráfico. -->
     <section class="calc" data-calc="margem" aria-labelledby="calc-title">
       <h2 id="calc-title">Calculate</h2>
-      <p class="calc-lede">Example: a pollster interviewed 1,000 voters in a city of 100,000, and 50% said they would vote for candidate A. What is the margin of error at 95% confidence? Leave the population blank for a very large one. Change the values to work out your own case.</p>
+      <p class="calc-lede">Example: a pollster interviewed 1,000 voters in a city of 100,000, and 50% said they would vote for candidate A. What is the margin of error at 95% confidence? Leave the population blank for a very large one, and the design effect blank for a simple random sample. Change the values to work out your own case.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="3">
@@ -85,6 +87,10 @@
         <label class="calc-field" data-tone="4">
           <span>Population <i>N</i></span>
           <input name="N" type="text" inputmode="numeric" value="100000" placeholder="optional" data-optional autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Design effect <i>deff</i></span>
+          <input name="deff" type="text" inputmode="decimal" value="" placeholder="optional" data-optional autocomplete="off" spellcheck="false">
         </label>
       </div>
 
@@ -107,6 +113,8 @@
           <dd>The standard deviation of p̂ across different samples. It peaks at p̂ = 50% and falls with the square root of n: to halve the margin, you need four times the sample.</dd>
           <dt data-part="fpc_factor" data-tone="4">Finite Population Correction</dt>
           <dd>Shrinks the margin when the sample is a large slice of the population N. With 1,000 out of 100,000 (1%), the factor is 0.995 and changes almost nothing, which is why population size matters so little. For a very large population, it equals 1. See also the <a href="finite-population-correction.html">correction applied to the sample size</a>.</dd>
+          <dt data-part="deff" data-tone="5">Design Effect (deff)</dt>
+          <dd>How much the survey design inflates the variance compared with a simple random sample of the same size. Cluster sampling (neighbourhoods, census tracts) and weights usually give a deff between 1.5 and 3. With deff = 2, 1,000 interviews are worth 500 by simple random sampling, and the margin grows √2 ≈ 1.41 times. Left blank, it equals 1.</dd>
       </dl>
     </section>
 

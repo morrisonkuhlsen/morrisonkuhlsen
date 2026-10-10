@@ -714,43 +714,64 @@
     // população finita quando N é informado. A cobertura sai exata: soma a
     // probabilidade de cada contagem possível k cujo intervalo contém o p real
     // (binomial sem N, hipergeométrica com N, que é amostragem sem reposição).
-    margem({ n, p, conf, N }) {
+    // Com deff (efeito de desenho), a variância é deff vezes a da amostra
+    // aleatória simples, e o desenho se comporta como uma AAS de n/deff
+    // pessoas: é com esse n efetivo que a cobertura e a simulação são feitas.
+    // O intervalo de Wilson inverte o teste em vez de usar p̂ no erro padrão;
+    // com a correção de população finita f, é o Wilson usual com z·f.
+    margem({ n, p, conf, N, deff }) {
       if (!Number.isInteger(n) || n < 2) return { error: T("O tamanho da amostra precisa ser um inteiro maior ou igual a 2.", "The sample size must be an integer of at least 2.") };
       if (n > 1e6) return { error: T("Use n de no máximo 1.000.000.", "Use n of at most 1,000,000.") };
       if (p <= 0 || p >= 100) return { error: T("A proporção precisa estar entre 0 e 100%, sem os extremos.", "The proportion must be strictly between 0 and 100%.") };
       if (conf <= 0 || conf >= 100) return confError;
       if (N !== null && (!Number.isInteger(N) || N <= n)) return { error: T("A população precisa ser um inteiro maior que a amostra, ou ficar em branco.", "The population must be an integer larger than the sample, or left blank.") };
+      if (deff !== null && (deff < 1 || deff > 20)) return { error: T("O efeito de desenho precisa estar entre 1 e 20, ou ficar em branco.", "The design effect must be between 1 and 20, or left blank.") };
+      const D = deff === null ? 1 : deff;
+      const nEff = Math.max(2, Math.round(n / D));
       const z = zCrit(conf);
       const ph = p / 100;
       const se = Math.sqrt(ph * (1 - ph) / n);
       const f = N === null ? 1 : Math.sqrt((N - n) / (N - 1));
-      const e = z * se * f;
+      const e = z * se * Math.sqrt(D) * f;
       const Z = tone(texNum(z), 2), P = tone(texNum(ph, 6), 3), NN = tone(texNum(n), 3);
       const pp = x => `${fmt(x * 100, 2)}`;
       const confTxt = `${fmt(conf, 2)}%`;
 
-      // Distribuição de k, a contagem de "sim" na amostra, quando o p real é p̂.
-      // Só a faixa de ±12 desvios importa; fora dela a probabilidade é nula.
+      // Wilson para uma proporção q observada em m pessoas, com z·f.
+      const wilson = (q, m) => {
+        const zz = (z * f) ** 2 / m;
+        const c = (q + zz / 2) / (1 + zz), h = z * f / (1 + zz) * Math.sqrt(q * (1 - q) / m + (z * f) ** 2 / (4 * m * m));
+        return [c - h, c + h];
+      };
+
+      // Distribuição de k, a contagem de "sim" em nEff pessoas, quando o p
+      // real é p̂. Só a faixa de ±12 desvios importa; fora dela é nula.
       const K = N === null ? null : Math.round(ph * N);
       const truth = N === null ? ph : K / N;
       const lc = (a, b) => lgamma(a + 1) - lgamma(b + 1) - lgamma(a - b + 1);
-      const sd = Math.sqrt(n * truth * (1 - truth)) * f;
-      let k0 = Math.max(0, Math.floor(n * truth - 12 * sd - 1)), k1 = Math.min(n, Math.ceil(n * truth + 12 * sd + 1));
-      if (K !== null) { k0 = Math.max(k0, n - (N - K)); k1 = Math.min(k1, K); }
+      const sd = Math.sqrt(nEff * truth * (1 - truth)) * f;
+      let k0 = Math.max(0, Math.floor(nEff * truth - 12 * sd - 1)), k1 = Math.min(nEff, Math.ceil(nEff * truth + 12 * sd + 1));
+      if (K !== null) { k0 = Math.max(k0, nEff - (N - K)); k1 = Math.min(k1, K); }
       const pmf = [];
       for (let k = k0; k <= k1; k++) {
-        pmf.push(K === null ? binPmf(n, truth, k) : Math.exp(lc(K, k) + lc(N - K, n - k) - lc(N, n)));
+        pmf.push(K === null ? binPmf(nEff, truth, k) : Math.exp(lc(K, k) + lc(N - K, nEff - k) - lc(N, nEff)));
       }
       const tot = pmf.reduce((a, b) => a + b, 0);
-      const ivl = k => { const q = k / n, h = z * Math.sqrt(q * (1 - q) / n) * f; return [q - h, q + h]; };
-      let cover = 0;
-      pmf.forEach((w, i) => { const [lo, hi] = ivl(k0 + i); if (lo <= truth && truth <= hi) cover += w; });
+      const ivl = k => { const q = k / nEff, h = z * Math.sqrt(q * (1 - q) / nEff) * f; return [q - h, q + h]; };
+      let cover = 0, coverW = 0;
+      pmf.forEach((w, i) => {
+        const [lo, hi] = ivl(k0 + i);
+        if (lo <= truth && truth <= hi) cover += w;
+        const [wl, wh] = wilson((k0 + i) / nEff, nEff);
+        if (wl <= truth && truth <= wh) coverW += w;
+      });
       cover /= tot;
+      coverW /= tot;
 
       // 100 pesquisas sorteadas pela inversa da acumulada.
       const cdf = [];
       pmf.reduce((acc, w, i) => (cdf[i] = acc + w / tot), 0);
-      const rand = rng(n * 7919 + Math.round(p * 100) * 104729 + Math.round(conf * 100) + (N || 0));
+      const rand = rng(n * 7919 + Math.round(p * 100) * 104729 + Math.round(conf * 100) + (N || 0) + Math.round(D * 1000));
       const draw = () => {
         const u = rand();
         let a = 0, b = cdf.length - 1;
@@ -759,7 +780,7 @@
       };
       const rows = Array.from({ length: 100 }, () => {
         const k = draw(), [lo, hi] = ivl(k);
-        return { lo, hi, mid: k / n, hit: lo <= truth && truth <= hi };
+        return { lo, hi, mid: k / nEff, hit: lo <= truth && truth <= hi };
       });
       const misses = rows.filter(r => !r.hit).length;
       const span = Math.max(...rows.map(r => Math.max(truth - r.lo, r.hi - truth)));
@@ -773,25 +794,42 @@
         steps.push([T(`A amostra é ${fmt(n / N * 100, 2)}% da população; calcule o fator de correção:`, `The sample is ${fmt(n / N * 100, 2)}% of the population; compute the correction factor:`),
           `\\sqrt{\\dfrac{${texNum(N)} - ${texNum(n)}}{${texNum(N)} - 1}} ${approx(f, 6)} ${tone(texNum(f, 6), 4)}`]);
       }
-      steps.push([T("Multiplique tudo:", "Multiply everything:"),
-        `E = ${Z} \\cdot ${tone(texNum(se, 6), 3)}${N !== null ? ` \\cdot ${tone(texNum(f, 6), 4)}` : ""} ${approx(e, 6)} ${tone(texNum(e, 6), 1)}`]);
-      steps.push([T("Em pontos percentuais, o intervalo é p̂ ± E:", "In percentage points, the interval is p̂ ± E:"),
+      if (D !== 1) {
+        steps.push([T(`O desenho multiplica a variância por ${fmt(D)}; a margem cresce pela raiz disso, e a amostra vale tanto quanto uma aleatória simples de n/deff pessoas:`,
+          `The design multiplies the variance by ${fmt(D)}; the margin grows by its square root, and the sample is worth as much as a simple random sample of n/deff people:`),
+          `\\sqrt{${tone(texNum(D), 5)}} ${approx(Math.sqrt(D), 6)} ${tone(texNum(Math.sqrt(D), 6), 5)}, \\qquad n_{\\text{${T("ef", "eff")}}} = \\dfrac{${texNum(n)}}{${texNum(D)}} ${approx(n / D, 1)} ${texNum(n / D, 1)}`]);
+      }
+      const factors = `${Z} \\cdot ${tone(texNum(se, 6), 3)}${N !== null ? ` \\cdot ${tone(texNum(f, 6), 4)}` : ""}${D !== 1 ? ` \\cdot ${tone(texNum(Math.sqrt(D), 6), 5)}` : ""}`;
+      steps.push([T("Multiplique tudo:", "Multiply everything:"), `E = ${factors} ${approx(e, 6)} ${tone(texNum(e, 6), 1)}`]);
+      steps.push([T("Em pontos percentuais, o intervalo de Wald é p̂ ± E:", "In percentage points, the Wald interval is p̂ ± E:"),
         `${texNum(ph * 100, 2)}\\% \\pm ${tone(`${texNum(e * 100, 2)}`, 1)} ${approx(e * 100, 2)} \\left[\\,${texNum(ph * 100 - e * 100, 2)}${T("\\,;", ",")}\\ ${texNum(ph * 100 + e * 100, 2)}\\,\\right]`]);
+      const [wl, wh] = wilson(ph, n / D);
+      const zz = (z * f) ** 2 / (n / D);
+      steps.push([T("O intervalo de Wilson não é simétrico: o centro é puxado para 50% e a meia-largura sai da mesma equação:",
+        "The Wilson interval is not symmetric: its centre is pulled toward 50% and its half-width comes from the same equation:"),
+        `\\dfrac{\\hat{p} + \\frac{z^2}{2n}}{1 + \\frac{z^2}{n}} \\pm \\dfrac{z}{1 + \\frac{z^2}{n}}\\sqrt{\\dfrac{\\hat{p}(1-\\hat{p})}{n} + \\dfrac{z^2}{4n^2}}`
+        + ` = ${texNum((ph + zz / 2) / (1 + zz) * 100, 2)}\\% \\pm ${texNum((wh - wl) / 2 * 100, 2)} = \\left[\\,${texNum(wl * 100, 2)}${T("\\,;", ",")}\\ ${texNum(wh * 100, 2)}\\,\\right]`]);
 
       const gap = Math.abs(cover * 100 - conf);
       let note = T(`Com ${fmt(n)} entrevistas, a margem é de ±${pp(e)} pontos percentuais com ${confTxt} de confiança.`,
         `With ${fmt(n)} interviews, the margin is ±${pp(e)} percentage points at ${confTxt} confidence.`);
+      if (D !== 1) {
+        note += T(` Com efeito de desenho ${fmt(D)}, a amostra rende como ${fmt(nEff)} entrevistas por amostragem aleatória simples; sem ele, a margem seria ±${pp(e / Math.sqrt(D))}. O gráfico e as coberturas abaixo tratam o desenho como uma amostra aleatória simples de ${fmt(nEff)}, o que é uma aproximação.`,
+          ` With a design effect of ${fmt(D)}, the sample is worth ${fmt(nEff)} interviews by simple random sampling; without it, the margin would be ±${pp(e / Math.sqrt(D))}. The chart and the coverages below treat the design as a simple random sample of ${fmt(nEff)}, which is an approximation.`);
+      }
       note += T(` No gráfico, 100 pesquisas sorteadas de uma população em que o p real é ${pp(truth)}%: ${misses} ${misses === 1 ? "intervalo não o contém" : "intervalos não o contêm"}.`,
         ` The chart shows 100 polls drawn from a population whose true p is ${pp(truth)}%: ${misses} interval${misses === 1 ? " misses" : "s miss"} it.`);
-      note += T(` Somando todos os resultados possíveis, a cobertura exata é ${fmt(cover * 100, 2)}%`,
-        ` Adding up every possible outcome, the exact coverage is ${fmt(cover * 100, 2)}%`)
+      note += T(` Somando todos os resultados possíveis, a cobertura exata do intervalo de Wald é ${fmt(cover * 100, 2)}%`,
+        ` Adding up every possible outcome, the exact coverage of the Wald interval is ${fmt(cover * 100, 2)}%`)
         + (gap >= 0.1
           ? T(`, não ${confTxt}: a fórmula usa a aproximação normal e um z arredondado, e a contagem k só anda de 1 em 1.`, `, not ${confTxt}: the formula relies on the normal approximation and a rounded z, and the count k moves in steps of 1.`)
           : ".");
-      if (n * Math.min(ph, 1 - ph) < 10) note += ` ${warn} ${T("com menos de 10 casos esperados de um dos lados, a aproximação normal falha e a cobertura pode ficar bem abaixo do nominal.", "with fewer than 10 expected cases on one side, the normal approximation breaks down and coverage can fall well below nominal.")}`;
+      note += T(` A do intervalo de Wilson, [${fmt(wl * 100, 2)}; ${fmt(wh * 100, 2)}], é ${fmt(coverW * 100, 2)}%.`,
+        ` That of the Wilson interval, [${fmt(wl * 100, 2)}, ${fmt(wh * 100, 2)}], is ${fmt(coverW * 100, 2)}%.`);
+      if (nEff * Math.min(ph, 1 - ph) < 10) note += ` ${warn} ${T("com menos de 10 casos esperados de um dos lados, a aproximação normal falha e a cobertura do Wald pode ficar bem abaixo do nominal; prefira o intervalo de Wilson.", "with fewer than 10 expected cases on one side, the normal approximation breaks down and the Wald coverage can fall well below nominal; prefer the Wilson interval.")}`;
       note += T(` Para o caminho inverso, da margem para o tamanho da amostra, use a <a href="${PAGE("cochran-formula")}?conf=${conf}&amp;p=${p}&amp;e=${(e * 100).toFixed(2)}">fórmula de Cochran</a>.`,
         ` For the reverse, from the margin to the sample size, use <a href="${PAGE("cochran-formula")}?conf=${conf}&amp;p=${p}&amp;e=${(e * 100).toFixed(2)}">Cochran's formula</a>.`);
-      if (N !== null && N <= 1e9) {
+      if (N !== null && N <= 1e9 && D === 1) {
         const sim = `${PAGE("simulador-pesquisa")}?N=${N}&amp;P=${p}&amp;n=${n}&amp;conf=${conf}&amp;M=1000&amp;seed=2026`;
         note += T(` Para sortear milhares de pesquisas e ver a cobertura se formar, abra o <a href="${sim}">simulador de pesquisa</a>.`,
           ` To draw thousands of polls and watch the coverage take shape, open the <a href="${sim}">poll simulator</a>.`);

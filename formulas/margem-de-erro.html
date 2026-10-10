@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Margem de Erro — Interativo</title>
-  <meta name="description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <meta name="description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
   <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
   <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/margin-of-error.html">
@@ -14,7 +14,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/margem-de-erro.html">
   <meta property="og:title" content="Margem de Erro — Interativo">
-  <meta property="og:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <meta property="og:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -22,7 +22,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Margem de Erro — Interativo">
-  <meta name="twitter:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita e simulação de 100 intervalos de confiança.">
+  <meta name="twitter:description" content="Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -57,6 +57,8 @@
         <span class="part" data-part="se_prop" data-tone="3" data-tex="\sqrt{\dfrac{\hat{p}\,(1 - \hat{p})}{n}}"></span>
         <span class="op">·</span>
         <span class="part" data-part="fpc_factor" data-tone="4" data-tex="\sqrt{\dfrac{N - n}{N - 1}}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="deff" data-tone="5" data-tex="\sqrt{\mathrm{deff}}"></span>
       </div>
     </div>
     <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
@@ -67,7 +69,7 @@
          mesmo gráfico. -->
     <section class="calc" data-calc="margem" aria-labelledby="calc-title">
       <h2 id="calc-title">Calcule</h2>
-      <p class="calc-lede">Exemplo: um instituto ouviu 1.000 eleitores de uma cidade com 100.000, e 50% disseram que votam no candidato A. Qual é a margem de erro, com 95% de confiança? Deixe a população em branco para uma população muito grande. Troque os valores para calcular o seu caso.</p>
+      <p class="calc-lede">Exemplo: um instituto ouviu 1.000 eleitores de uma cidade com 100.000, e 50% disseram que votam no candidato A. Qual é a margem de erro, com 95% de confiança? Deixe a população em branco para uma população muito grande, e o efeito de desenho em branco para uma amostra aleatória simples. Troque os valores para calcular o seu caso.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="3">
@@ -85,6 +87,10 @@
         <label class="calc-field" data-tone="4">
           <span>População <i>N</i></span>
           <input name="N" type="text" inputmode="numeric" value="100000" placeholder="opcional" data-optional autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Efeito de desenho <i>deff</i></span>
+          <input name="deff" type="text" inputmode="decimal" value="" placeholder="opcional" data-optional autocomplete="off" spellcheck="false">
         </label>
       </div>
 
@@ -107,6 +113,8 @@
           <dd>O desvio padrão de p̂ entre amostras diferentes. Ele é máximo quando p̂ = 50% e cai com a raiz de n: para cortar a margem pela metade, é preciso quadruplicar a amostra.</dd>
           <dt data-part="fpc_factor" data-tone="4">Correção para População Finita</dt>
           <dd>Encolhe a margem quando a amostra é uma fatia grande da população N. Com 1.000 de 100.000 (1%), o fator é 0,995 e quase não muda nada; por isso o tamanho da população importa tão pouco. Para população muito grande, vale 1. Veja também a <a href="correcao-populacao-finita.html">correção aplicada ao tamanho da amostra</a>.</dd>
+          <dt data-part="deff" data-tone="5">Efeito de Desenho (deff)</dt>
+          <dd>Quanto o desenho da pesquisa aumenta a variância em relação a uma amostra aleatória simples do mesmo tamanho. Sorteios por conglomerados (bairros, setores censitários) e pesos costumam dar deff entre 1,5 e 3. Com deff = 2, 1.000 entrevistas valem como 500 por amostragem aleatória simples, e a margem cresce √2 ≈ 1,41 vez. Em branco, vale 1.</dd>
       </dl>
     </section>
 
