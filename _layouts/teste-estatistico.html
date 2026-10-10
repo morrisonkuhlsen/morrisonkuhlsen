@@ -69,6 +69,10 @@
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <link rel="stylesheet" href="/testes-estatisticos/style.css">
   <script defer src="/testes-estatisticos/teste.js"></script>
+  {%- if t.calc %}
+  <script defer src="/assets/js/stat-calc-core.js"></script>
+  <script defer src="/testes-estatisticos/calc.js"></script>
+  {%- endif %}
 </head>
 <body>
   <a href="{{ u.base }}" class="back-link" aria-label="{{ u.voltar }}" title="{{ u.voltar }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
@@ -115,6 +119,14 @@
       {%- if t.reporte %}
       <h2 class="fd-sec">{{ u.reporte }}</h2>
       <p class="fd-report">{{ t.reporte | escape }}</p>
+      {%- endif %}
+
+      {%- if t.calc %}
+      <section class="tc" data-calc="{{ t.calc }}" aria-labelledby="tc-title" hidden>
+        <h2 class="fd-sec" id="tc-title">{{ u.calcule }}</h2>
+        <p class="tc-lede">{{ u.calcule_lede }}</p>
+        <div class="tc-body"></div>
+      </section>
       {%- endif %}
 
       {%- if t.codigo %}

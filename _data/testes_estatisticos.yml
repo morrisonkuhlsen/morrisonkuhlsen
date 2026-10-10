@@ -15,6 +15,8 @@
 # `efeito` é o tamanho de efeito usual: `texto` e, se houver, `tex`.
 # `reporte` é um exemplo de como escrever o resultado; `codigo` traz `r` e
 # `py` (no Python, `stats` é scipy.stats e `np`, numpy).
+# `calc` liga a calculadora "Calcule com os seus dados" da página do teste
+# (testes-estatisticos/calc.js); o valor é a chave dela em CALCS.
 # `page` é a fórmula interativa do próprio teste em /formulas/, quando existe;
 # `veja` lista fórmulas relacionadas. Os dois usam o nome do arquivo, sem .html.
 # `tex` vai entre aspas simples: assim a barra invertida do LaTeX fica literal.
@@ -113,6 +115,7 @@ testes:
       py: |
         stats.ttest_1samp(x, popmean=50)
   - id: t-independente
+    calc: t-independente
     sym: 't₂'
     nome: 't para duas amostras independentes'
     titulo: 'Teste t para duas amostras independentes'
@@ -142,6 +145,7 @@ testes:
       py: |
         stats.ttest_ind(a, b, equal_var=False)  # Welch
   - id: t-pareado
+    calc: t-pareado
     sym: 'tₚ'
     nome: 't pareado'
     titulo: 'Teste t pareado'
@@ -168,6 +172,7 @@ testes:
       py: |
         stats.ttest_rel(depois, antes)
   - id: anova
+    calc: anova
     sym: 'F'
     nome: 'ANOVA de um fator'
     titulo: 'ANOVA de um fator'
@@ -282,6 +287,7 @@ testes:
       py: |
         stats.binomtest(int((x > m0).sum()), int((x != m0).sum()), p=0.5)
   - id: mann-whitney
+    calc: mann-whitney
     sym: 'U'
     nome: 'Mann-Whitney U'
     titulo: 'Teste de Mann-Whitney'
@@ -926,6 +932,7 @@ testes:
       py: |
         stats.kendalltau(x, y)
   - id: qui-quadrado-independencia
+    calc: qui-quadrado-independencia
     sym: 'χ²ᵢ'
     nome: 'Qui-quadrado de independência'
     titulo: 'Teste qui-quadrado de independência'
