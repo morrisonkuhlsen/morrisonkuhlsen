@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MMC — Mínimo Múltiplo Comum</title>
+  <meta name="description" content="MMC (mínimo múltiplo comum) explicado do zero, com calculadora que monta a tabela de divisões sucessivas, confere pela fatoração e traz exercícios resolvidos.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/mmc.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/mmc.html">
+  <meta property="og:title" content="MMC — Mínimo Múltiplo Comum">
+  <meta property="og:description" content="MMC (mínimo múltiplo comum) explicado do zero, com calculadora que monta a tabela de divisões sucessivas, confere pela fatoração e traz exercícios resolvidos.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="MMC — Mínimo Múltiplo Comum">
+  <meta name="twitter:description" content="MMC (mínimo múltiplo comum) explicado do zero, com calculadora que monta a tabela de divisões sucessivas, confere pela fatoração e traz exercícios resolvidos.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">MMC — Mínimo Múltiplo Comum</h1>
+    <p class="page-lede">O MMC de dois ou mais números é o <strong>menor número que é múltiplo de todos eles ao mesmo tempo</strong> — o primeiro que aparece na tabuada de cada um. É a conta por trás de “quando as coisas voltam a coincidir?”.</p>
+
+    <!-- Calculadora; estado em ?n=. -->
+    <section class="calc" data-calc="mmc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Números</span>
+          <input name="n" type="text" inputmode="numeric" value="48, 84" autocomplete="off" spellcheck="false">
+          <small>Inteiros positivos, separados por vírgula ou espaço.</small>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="12, 18">12 e 18</button>
+        <button type="button" data-exemplo="15, 20, 24">15, 20 e 24</button>
+        <button type="button" data-exemplo="4, 6, 10">4, 6 e 10</button>
+        <button type="button" data-exemplo="7, 9">7 e 9</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="calc-extra" data-extra>
+        <h3>Tabela de divisões</h3>
+        <div class="ladder-box"></div>
+      </div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+
+      <div class="calc-extra" data-extra>
+        <h3>Na tabuada</h3>
+        <div class="multiples-box"></div>
+      </div>
+
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="manual-title">
+      <h2 id="manual-title">Como calcular à mão</h2>
+
+      <h3>1. Divisões sucessivas (a “tabela”)</h3>
+      <ol>
+        <li>Escreva os números lado a lado e trace uma linha vertical à direita.</li>
+        <li>Divida pelo menor primo que divide <strong>pelo menos um</strong> deles: 2, depois 3, 5, 7, 11… Quem não for divisível desce igual.</li>
+        <li>Continue até a linha de baixo ficar toda de 1.</li>
+        <li>O MMC é o produto dos primos da coluna da direita.</li>
+      </ol>
+      <p>É o método que a calculadora acima monta. Repare na diferença para o MDC: aqui basta o primo dividir <em>um</em> dos números para entrar na conta, por isso o MMC sai grande; no MDC, o primo precisa dividir <em>todos</em>.</p>
+
+      <h3>2. Decomposição em fatores primos</h3>
+      <ol>
+        <li>Fatore cada número.</li>
+        <li>Pegue <strong>todos</strong> os primos que aparecem, em qualquer um dos números.</li>
+        <li>Cada primo entra com o <strong>maior</strong> expoente em que aparece.</li>
+      </ol>
+      <p>Exemplo, MMC(12, 18):</p>
+      <span class="tex-block" data-tex="\begin{aligned} 12 &= 2^2 \cdot 3 \\ 18 &= 2 \cdot 3^2 \\ \text{MMC} &= 2^2 \cdot 3^2 = 36 \end{aligned}"></span>
+
+      <div class="tip">
+        <strong>Atalho para dois números.</strong> O produto de dois números é sempre igual ao MDC vezes o MMC: a × b = MDC(a, b) × MMC(a, b). Então, se você já sabe o MDC, MMC(12, 18) = 12 × 18 ÷ 6 = 36. E se os números são primos entre si (MDC = 1), o MMC é simplesmente o produto: MMC(7, 9) = 63.
+      </div>
+
+      <h3>Quando usar o MMC</h3>
+      <p>Sempre que a pergunta for “quando os ciclos voltam a <strong>coincidir</strong>?” ou “qual o <strong>menor</strong> tamanho em que todos cabem certinho?”: ônibus que partem em intervalos diferentes, manutenções periódicas, e o denominador comum para somar frações (1/12 + 1/18 = 3/36 + 2/36 = 5/36).</p>
+
+      <h3>Exemplo resolvido</h3>
+      <p>Três sensores de qualidade do ar enviam sinal a cada 15, 20 e 24 minutos. Todos enviaram juntos às 8h00. Quando voltam a enviar ao mesmo tempo?</p>
+      <span class="tex-block" data-tex="\begin{aligned} 15 &= 3 \cdot 5 \\ 20 &= 2^2 \cdot 5 \\ 24 &= 2^3 \cdot 3 \\ \text{MMC} &= 2^3 \cdot 3 \cdot 5 = 120 \text{ minutos} \end{aligned}"></span>
+      <p>8h00 + 120 minutos = <strong>10h00</strong>.</p>
+    </section>
+
+    <section class="lesson" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Numa fábrica, a máquina A passa por manutenção a cada 12 dias e a máquina B a cada 18 dias. Se hoje as duas passaram por manutenção, daqui a quantos dias isso volta a acontecer no mesmo dia?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>12 = 2² × 3 e 18 = 2 × 3². MMC(12, 18) = 2² × 3² = <strong>36 dias</strong>.</p>
+            <p>Nesse dia, a máquina A terá feito 36 ÷ 12 = 3 manutenções, e a B, 36 ÷ 18 = 2.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 1/4 + 1/6 + 1/10 usando o MMC dos denominadores.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>MMC(4, 6, 10) = 2² × 3 × 5 = 60.</p>
+            <p>1/4 + 1/6 + 1/10 = 15/60 + 10/60 + 6/60 = <strong>31/60</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Qual o menor número de alunos que uma turma pode ter para ser dividida, sem sobrar ninguém, tanto em grupos de 6 quanto em grupos de 8 ou de 9?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>6 = 2 × 3, 8 = 2³ e 9 = 3². MMC(6, 8, 9) = 2³ × 3² = <strong>72 alunos</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="mdc.html" rel="prev"><span>Anterior</span>MDC — Máximo Divisor Comum</a>
+      <a class="pager-next" href="potencias.html" rel="next"><span>Próximo</span>Potências — Regras de Potenciação</a>
+    </nav>
+  </main>
+</body>
+</html>

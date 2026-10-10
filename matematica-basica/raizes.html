@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Raízes — Regras de Radiciação</title>
+  <meta name="description" content="Raízes explicadas do zero: o que é uma raiz, as regras de radiciação testadas com os seus números, as armadilhas mais comuns e uma calculadora que simplifica radicais passo a passo.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/raizes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/raizes.html">
+  <meta property="og:title" content="Raízes — Regras de Radiciação">
+  <meta property="og:description" content="Raízes explicadas do zero: o que é uma raiz, as regras de radiciação testadas com os seus números, as armadilhas mais comuns e uma calculadora que simplifica radicais passo a passo.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Raízes — Regras de Radiciação">
+  <meta name="twitter:description" content="Raízes explicadas do zero: o que é uma raiz, as regras de radiciação testadas com os seus números, as armadilhas mais comuns e uma calculadora que simplifica radicais passo a passo.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="raizes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Raízes — Regras de Radiciação</h1>
+    <p class="page-lede">A raiz desfaz a potência: <strong>√a é o número que, multiplicado por ele mesmo, dá a</strong>. Aqui você vê o que isso significa, testa cada regra com os seus próprios números e aprende a reconhecer as que <em>parecem</em> valer, mas não valem.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#o-que-e">O que é</a>
+      <a href="#regras">Regras da raiz quadrada</a>
+      <a href="#indice-n">Raiz de índice n</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#simplificar">Simplificar</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- 1. A figura: área → lado (√) e volume → aresta (∛). -->
+    <section class="calc intro" id="o-que-e" aria-labelledby="intro-title">
+      <h2 id="intro-title">O que é uma raiz</h2>
+      <div class="seg" role="group" aria-label="Tipo de raiz">
+        <button type="button" data-indice="2" aria-pressed="true">Raiz quadrada √</button>
+        <button type="button" data-indice="3" aria-pressed="false">Raiz cúbica ∛</button>
+      </div>
+      <label class="var var-wide">
+        <i>a</i>
+        <input name="area" type="range" min="1" max="144" step="1" value="12" aria-label="Número dentro da raiz">
+        <output class="intro-value">12</output>
+      </label>
+      <div class="intro-figure"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Regras da raiz quadrada. Cada .rule-try ganha do script os
+         controles das variáveis em data-vars e a conta com elas. -->
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras da raiz quadrada</h2>
+      <p>Cada regra vem com controles. Arraste os valores e veja os dois lados da igualdade darem o mesmo número. Os valores são os mesmos na página inteira: mudar <i>a</i> aqui muda em todas as regras.</p>
+
+      <article class="rule">
+        <header><h3>Produto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{a \cdot b} = \sqrt{a} \cdot \sqrt{b}"></span>
+        <p>A raiz de um produto é o produto das raízes. É a regra que permite quebrar um número difícil em pedaços fáceis: √36 = √4 · √9 = 2 · 3. Vale para <i>a</i> ≥ 0 e <i>b</i> ≥ 0.</p>
+        <div class="rule-try" data-rule="produto" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Quociente</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{\frac{a}{b}} = \frac{\sqrt{a}}{\sqrt{b}}"></span>
+        <p>O mesmo vale para a divisão: √(9/4) = 3/2. Precisa de <i>a</i> ≥ 0 e <i>b</i> &gt; 0 — não dá para dividir por zero.</p>
+        <div class="rule-try" data-rule="quociente" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Tirar um fator de dentro da raiz</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{k^2 \cdot a} = k\sqrt{a}"></span>
+        <p>Um fator que está ao quadrado dentro da raiz sai dela sem o quadrado. É a regra do produto aplicada: √(k²a) = √k² · √a = k√a, para <i>k</i> ≥ 0. É assim que se simplifica √12 = √(2² · 3) = 2√3.</p>
+        <div class="rule-try" data-rule="fator" data-vars="k a"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Raiz do quadrado</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{x^2} = |x|"></span>
+        <p>E <strong>não</strong> simplesmente <i>x</i>. A raiz quadrada é sempre positiva (ou zero), mas <i>x</i> pode ser negativo: (−3)² = 9, e √9 = 3. O módulo |<i>x</i>| tira o sinal.</p>
+        <div class="rule-try" data-rule="modulo" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Quadrado da raiz</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\left(\sqrt{a}\right)^2 = a"></span>
+        <p>Na ordem contrária não há surpresa: primeiro a raiz, depois o quadrado, e volta-se ao ponto de partida. Aqui <i>a</i> ≥ 0 é exigido logo de saída, porque √<i>a</i> precisa existir.</p>
+        <div class="rule-try" data-rule="quadrado" data-vars="a"></div>
+      </article>
+    </section>
+
+    <!-- 3. Índice n e expoentes fracionários. -->
+    <section class="lesson" id="indice-n" aria-labelledby="indice-title">
+      <h2 id="indice-title">Raiz de índice n</h2>
+      <p>A raiz <i>n</i>-ésima <span class="tex-inline" data-tex="\sqrt[n]{a}"></span> é o número que, multiplicado <i>n</i> vezes por ele mesmo, dá <i>a</i>. A raiz quadrada é o caso <i>n</i> = 2 (e o 2 não se escreve). Toda raiz pode ser escrita como potência de expoente fracionário — e daí saem as outras regras.</p>
+
+      <article class="rule">
+        <header><h3>Raiz como potência</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt[n]{a} = a^{1/n}"></span>
+        <p>Por que 1/<i>n</i>? Porque (<i>a</i><sup>1/n</sup>)<sup>n</sup> = <i>a</i><sup>n/n</sup> = <i>a</i><sup>1</sup> = <i>a</i> — exatamente o que a raiz tem que fazer.</p>
+        <div class="rule-try" data-rule="potencia" data-vars="a n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Potência dentro da raiz (expoente racional)</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt[n]{a^m} = a^{m/n}"></span>
+        <p>O expoente de dentro vai para o numerador, o índice para o denominador. Lida ao contrário, é a definição de expoente fracionário: 8<sup>2/3</sup> = ∛(8²) = ∛64 = 4.</p>
+        <div class="rule-try" data-rule="potenciaM" data-vars="a m n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Produto e quociente com índice n</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt[n]{a \cdot b} = \sqrt[n]{a} \cdot \sqrt[n]{b} \qquad \sqrt[n]{\frac{a}{b}} = \frac{\sqrt[n]{a}}{\sqrt[n]{b}}"></span>
+        <p>As regras da raiz quadrada valem para qualquer índice, desde que seja o mesmo dos dois lados.</p>
+        <div class="rule-try" data-rule="produtoN" data-vars="a b n"></div>
+        <div class="rule-try" data-rule="quocienteN" data-vars="a b n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Raiz de raiz</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{\sqrt{a}} = \sqrt[4]{a} = a^{1/4}"></span>
+        <p>Os índices se multiplicam: (<i>a</i><sup>1/2</sup>)<sup>1/2</sup> = <i>a</i><sup>1/4</sup>. Em geral, <span class="tex-inline" data-tex="\sqrt[p]{\sqrt[q]{a}} = \sqrt[pq]{a}"></span>.</p>
+        <div class="rule-try" data-rule="raizDeRaiz" data-vars="a"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Quando o índice cancela o expoente</h3><span class="badge is-warn">depende</span></header>
+        <span class="rule-tex" data-tex="\sqrt[n]{x^n} = \begin{cases} x & n \text{ ímpar} \\ |x| & n \text{ par} \end{cases}"></span>
+        <p>É a generalização de √<i>x</i>² = |<i>x</i>|. Com índice ímpar a raiz de negativo existe (∛−8 = −2) e o sinal volta; com índice par, a potência apaga o sinal e ele não volta. Teste com <i>x</i> negativo e troque <i>n</i> entre par e ímpar.</p>
+        <div class="rule-try" data-rule="indice" data-vars="x n"></div>
+      </article>
+    </section>
+
+    <!-- 4. O que não vale. -->
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas: o que não vale</h2>
+      <p>A raiz se distribui sobre multiplicação e divisão, mas <strong>não sobre soma e subtração</strong>. É o erro mais comum com raízes. Tente achar valores em que os dois lados fiquem iguais.</p>
+
+      <article class="rule">
+        <header><h3>Raiz da soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{a + b} \ne \sqrt{a} + \sqrt{b}"></span>
+        <div class="rule-try" data-rule="soma" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Raiz da diferença</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{a - b} \ne \sqrt{a} - \sqrt{b}"></span>
+        <div class="rule-try" data-rule="diferenca" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>O exemplo clássico: Pitágoras</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="c = \sqrt{a^2 + b^2} \ne a + b"></span>
+        <p>A hipotenusa de um triângulo retângulo é √(<i>a</i>² + <i>b</i>²). Se a raiz “cortasse” os quadrados, ela seria <i>a</i> + <i>b</i> — o caminho pelos dois catetos, que é mais longo. Com <i>a</i> = 3 e <i>b</i> = 4, a hipotenusa é 5, não 7.</p>
+        <div class="rule-try" data-rule="pitagoras" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <!-- 5. Calculadora de simplificação; estado em ?N=&indice=. -->
+    <section class="calc" id="simplificar" data-calc="simplificar" aria-labelledby="simp-title">
+      <h2 id="simp-title">Simplifique um radical</h2>
+      <p class="calc-lede">Simplificar é tirar da raiz tudo o que dá para tirar, usando a regra do fator: √72 = √(6² · 2) = 6√2. Digite um número e veja como.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Número dentro da raiz</span>
+          <input name="N" type="text" inputmode="numeric" value="72" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Índice</span>
+          <select name="indice">
+            <option value="2" selected>2 — raiz quadrada</option>
+            <option value="3">3 — raiz cúbica</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="12:2">√12</button>
+        <button type="button" data-exemplo="180:2">√180</button>
+        <button type="button" data-exemplo="54:3">∛54</button>
+        <button type="button" data-exemplo="144:2">√144</button>
+        <button type="button" data-exemplo="30:2">√30</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Entre quais inteiros consecutivos fica √50? Sem calculadora.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>49 = 7² e 64 = 8², e 50 está entre eles. Então √50 fica entre <strong>7 e 8</strong>, bem perto de 7 (√50 ≈ 7,07).</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Simplifique √72.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>72 = 2³ × 3² = 2² × 3² × 2 = 6² × 2.</p>
+            <p>√72 = √(6² × 2) = <strong>6√2</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quanto vale √((−5)²)? E (√5)²?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>√((−5)²) = √25 = <strong>5</strong> = |−5| — não −5.</p>
+            <p>(√5)² = <strong>5</strong>: primeiro a raiz, depois o quadrado, volta-se ao 5.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Um colega escreveu √(9 + 16) = √9 + √16 = 7. Onde está o erro?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A raiz não se distribui sobre a soma. O certo é somar primeiro: √(9 + 16) = √25 = <strong>5</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Escreva ∛(<i>a</i>²) como potência e calcule para <i>a</i> = 8.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>∛(<i>a</i>²) = <i>a</i><sup>2/3</sup>. Com <i>a</i> = 8: 8<sup>2/3</sup> = (∛8)² = 2² = <strong>4</strong>.</p>
+            <p>Calcular a raiz primeiro deixa os números pequenos: ∛8 = 2 é mais fácil que ∛64.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Simplifique ∛54.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>54 = 2 × 3³ = 3³ × 2. O 3³ é um cubo completo e sai da raiz: ∛54 = <strong>3∛2</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="potencias.html" rel="prev"><span>Anterior</span>Potências — Regras de Potenciação</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>

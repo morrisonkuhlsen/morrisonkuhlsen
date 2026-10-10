@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MDC — Máximo Divisor Comum</title>
+  <meta name="description" content="MDC (máximo divisor comum) explicado do zero, com calculadora que mostra a fatoração, o algoritmo de Euclides e os divisores comuns, e exercícios resolvidos.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/mdc.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/mdc.html">
+  <meta property="og:title" content="MDC — Máximo Divisor Comum">
+  <meta property="og:description" content="MDC (máximo divisor comum) explicado do zero, com calculadora que mostra a fatoração, o algoritmo de Euclides e os divisores comuns, e exercícios resolvidos.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="MDC — Máximo Divisor Comum">
+  <meta name="twitter:description" content="MDC (máximo divisor comum) explicado do zero, com calculadora que mostra a fatoração, o algoritmo de Euclides e os divisores comuns, e exercícios resolvidos.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">MDC — Máximo Divisor Comum</h1>
+    <p class="page-lede">O MDC de dois ou mais números é o <strong>maior número inteiro que divide todos eles sem deixar resto</strong>. É a conta por trás de repartir coisas em grupos iguais, do maior tamanho possível, sem sobrar nada.</p>
+
+    <!-- Calculadora; estado em ?n=. -->
+    <section class="calc" data-calc="mdc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Números</span>
+          <input name="n" type="text" inputmode="numeric" value="48, 84" autocomplete="off" spellcheck="false">
+          <small>Inteiros positivos, separados por vírgula ou espaço.</small>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="28, 42">28 e 42</button>
+        <button type="button" data-exemplo="36, 60">36 e 60</button>
+        <button type="button" data-exemplo="12, 18, 30">12, 18 e 30</button>
+        <button type="button" data-exemplo="35, 64">35 e 64</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="calc-extra" data-extra>
+        <h3>Divisores de cada número</h3>
+        <div class="divisors-box"></div>
+      </div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="manual-title">
+      <h2 id="manual-title">Como calcular à mão</h2>
+      <p>Há dois caminhos. Os dois chegam ao mesmo número; vale saber os dois, porque cada um é mais rápido numa situação.</p>
+
+      <h3>1. Decomposição em fatores primos</h3>
+      <ol>
+        <li>Escreva cada número como produto de primos.</li>
+        <li>Separe os primos que aparecem em <strong>todos</strong> os números.</li>
+        <li>Multiplique esses primos, cada um com o <strong>menor</strong> expoente em que aparece.</li>
+      </ol>
+      <p>Exemplo, MDC(28, 42):</p>
+      <span class="tex-block" data-tex="\begin{aligned} 28 &= 2^2 \cdot 7 \\ 42 &= 2 \cdot 3 \cdot 7 \end{aligned}"></span>
+      <p>Os primos comuns são 2 e 7. O 2 aparece com expoente 2 no 28 e 1 no 42; fica o menor, 1. Então MDC(28, 42) = 2 × 7 = <strong>14</strong>.</p>
+
+      <h3>2. Algoritmo de Euclides (divisões sucessivas)</h3>
+      <ol>
+        <li>Divida o maior número pelo menor.</li>
+        <li>Troque o par: o divisor vira o novo dividendo, e o resto vira o novo divisor.</li>
+        <li>Repita até o resto dar zero. O último divisor é o MDC.</li>
+      </ol>
+      <p>Exemplo, MDC(28, 42):</p>
+      <span class="tex-block" data-tex="\begin{aligned} 42 &= 1 \cdot 28 + 14 \\ 28 &= 2 \cdot 14 + 0 \end{aligned}"></span>
+      <p>O resto zerou com divisor 14, então MDC(28, 42) = <strong>14</strong>.</p>
+      <p>Por que funciona: qualquer número que divide 42 e 28 também divide a diferença entre eles, e portanto o resto 14. O par muda, mas os divisores comuns continuam os mesmos — só que com números cada vez menores.</p>
+
+      <div class="tip">
+        <strong>Dicas.</strong> Comece sempre pelos primos pequenos: 2, 3, 5, 7, 11… Se os dois números são pares, o 2 é comum com certeza; se algum é ímpar, pule o 2. Para números grandes, Euclides costuma ser bem mais rápido que fatorar.
+      </div>
+
+      <h3>Quando usar o MDC</h3>
+      <p>Sempre que a pergunta for “qual o <strong>maior</strong> tamanho que cabe certinho em todos?”: cortar fitas de comprimentos diferentes em pedaços iguais do maior tamanho, montar kits idênticos com o que há em estoque, simplificar uma fração (dividir numerador e denominador pelo MDC leva direto à forma irredutível: 28/42 = 2/3).</p>
+    </section>
+
+    <section class="lesson" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule o MDC(36, 60).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>36 = 2² × 3² e 60 = 2² × 3 × 5. Os primos comuns são 2 e 3, com os menores expoentes 2² e 3¹.</p>
+            <p>MDC(36, 60) = 2² × 3 = <strong>12</strong>.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Você tem 12 bolas azuis e 18 bolas vermelhas e quer montar grupos iguais — mesma quantidade de azuis e de vermelhas em cada grupo —, sem sobrar nenhuma bola. Qual é o maior número de grupos que dá para formar?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O número de grupos precisa dividir 12 e 18 ao mesmo tempo, e queremos o maior: MDC(12, 18) = <strong>6 grupos</strong>.</p>
+            <p>Cada grupo fica com 12 ÷ 6 = 2 azuis e 18 ÷ 6 = 3 vermelhas.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Uma marceneira tem duas tábuas, de 120 cm e 84 cm, e quer cortá-las em pedaços todos do mesmo tamanho, o maior possível, sem desperdício. Qual o tamanho de cada pedaço e quantos pedaços saem?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Por Euclides: 120 = 1 × 84 + 36; 84 = 2 × 36 + 12; 36 = 3 × 12 + 0. MDC(120, 84) = <strong>12 cm</strong>.</p>
+            <p>Saem 120 ÷ 12 = 10 pedaços de uma tábua e 84 ÷ 12 = 7 da outra: <strong>17 pedaços</strong>.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="./" rel="prev"><span>Voltar</span>Matemática básica</a>
+      <a class="pager-next" href="mmc.html" rel="next"><span>Próximo</span>MMC — Mínimo Múltiplo Comum</a>
+    </nav>
+  </main>
+</body>
+</html>

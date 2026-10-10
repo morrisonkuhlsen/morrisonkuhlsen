@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Potências — Regras de Potenciação</title>
+  <meta name="description" content="Potências explicadas do zero: por que a⁰ = 1 e o expoente negativo vira fração, as regras testadas com os seus números, o sinal da base negativa, as armadilhas e notação científica.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/potencias.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/potencias.html">
+  <meta property="og:title" content="Potências — Regras de Potenciação">
+  <meta property="og:description" content="Potências explicadas do zero: por que a⁰ = 1 e o expoente negativo vira fração, as regras testadas com os seus números, o sinal da base negativa, as armadilhas e notação científica.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Potências — Regras de Potenciação">
+  <meta name="twitter:description" content="Potências explicadas do zero: por que a⁰ = 1 e o expoente negativo vira fração, as regras testadas com os seus números, o sinal da base negativa, as armadilhas e notação científica.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="potencias.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Potências — Regras de Potenciação</h1>
+    <p class="page-lede">Potência é multiplicação repetida: <strong>aⁿ é o a multiplicado por ele mesmo n vezes</strong>. A partir dessa ideia simples saem todas as regras — inclusive as que parecem estranhas, como a⁰ = 1 e o expoente negativo que vira fração.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#o-que-e">O que é</a>
+      <a href="#regras">Regras</a>
+      <a href="#sinal">Base negativa</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#especiais">Casos especiais</a>
+      <a href="#cientifica">Notação científica</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <!-- 1. A escada: cada degrau abaixo divide pela base. -->
+    <section class="calc intro" id="o-que-e" aria-labelledby="intro-title">
+      <h2 id="intro-title">O que é uma potência</h2>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="base" type="range" min="2" max="10" step="1" value="2" aria-label="Base">
+          <output class="out-base">2</output>
+        </label>
+        <label class="var">
+          <i>n</i>
+          <input name="expoente" type="range" min="-3" max="5" step="1" value="3" aria-label="Expoente">
+          <output class="out-expoente">3</output>
+        </label>
+      </div>
+      <div class="intro-expand calc-result" data-tone="1" aria-live="polite"></div>
+      <h3>A escada das potências</h3>
+      <ol class="ladder-steps" aria-label="Potências da base, do expoente 5 ao −3"></ol>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Regras de operação. -->
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras</h2>
+      <p>Cada regra vem com controles. Arraste os valores, inclusive para expoentes negativos e zero, e veja os dois lados darem o mesmo número. Os valores são os mesmos na página inteira.</p>
+
+      <article class="rule">
+        <header><h3>Produto de mesma base</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="a^m \cdot a^n = a^{m+n}"></span>
+        <p>Multiplicar potências de mesma base é juntar os fatores: 2³ · 2² = (2·2·2) · (2·2) = 2⁵. Os expoentes <strong>se somam</strong>.</p>
+        <div class="rule-try" data-rule="produto" data-vars="a m n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Quociente de mesma base</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a^m}{a^n} = a^{m-n}"></span>
+        <p>Dividir é cancelar fatores de cima com fatores de baixo: os expoentes <strong>se subtraem</strong>. Se embaixo houver mais, o expoente fica negativo — e é daí que vem o expoente negativo.</p>
+        <div class="rule-try" data-rule="quociente" data-vars="a m n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Expoente zero</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="a^0 = 1 \quad (a \ne 0)"></span>
+        <p>Não é uma convenção arbitrária: é o único valor que não quebra a regra do quociente.</p>
+        <div class="rule-try" data-rule="zero" data-vars="a m"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Expoente negativo</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="a^{-n} = \frac{1}{a^n}"></span>
+        <p>O sinal de menos no expoente quer dizer “inverso”: 2⁻³ = 1/2³ = 1/8. O resultado continua positivo.</p>
+        <div class="rule-try" data-rule="negativo" data-vars="a k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Potência de potência</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\left(a^m\right)^n = a^{m \cdot n}"></span>
+        <p>(2³)² é 2³ repetido duas vezes: 2³ · 2³ = 2⁶. Os expoentes <strong>se multiplicam</strong>.</p>
+        <div class="rule-try" data-rule="potPot" data-vars="a m n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Potência de um produto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(a \cdot b)^n = a^n \cdot b^n"></span>
+        <p>O expoente se distribui sobre a multiplicação: (2 · 3)² = 2·3·2·3 = 2² · 3².</p>
+        <div class="rule-try" data-rule="produtoBase" data-vars="a b n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Potência de uma fração</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\left(\frac{a}{b}\right)^n = \frac{a^n}{b^n} \qquad \left(\frac{a}{b}\right)^{-n} = \left(\frac{b}{a}\right)^n"></span>
+        <p>Eleva-se o numerador e o denominador. Com expoente negativo, inverte-se a fração antes: (3/4)⁻² = (4/3)² = 16/9.</p>
+        <div class="rule-try" data-rule="fracao" data-vars="a b n"></div>
+        <div class="rule-try" data-rule="fracaoNeg" data-vars="a b k"></div>
+      </article>
+
+      <p>E expoente fracionário é raiz: <i>a</i><sup>1/n</sup> = ⁿ√<i>a</i> e <i>a</i><sup>m/n</sup> = ⁿ√(<i>a</i><sup>m</sup>). Isso está na página de <a href="raizes.html#indice-n">raízes</a>.</p>
+    </section>
+
+    <!-- 3. Sinal. -->
+    <section class="lesson" id="sinal" aria-labelledby="sinal-title">
+      <h2 id="sinal-title">Base negativa: o expoente decide o sinal</h2>
+      <p>Menos vezes menos dá mais. Numa potência de base negativa, os sinais se cancelam aos pares: <strong>expoente par dá positivo, ímpar dá negativo</strong>.</p>
+
+      <article class="rule">
+        <header><h3>Par ou ímpar</h3><span class="badge is-warn">depende</span></header>
+        <span class="rule-tex" data-tex="(-a)^n = \begin{cases} +\,a^n & n \text{ par} \\ -\,a^n & n \text{ ímpar} \end{cases}"></span>
+        <p>O lado direito é a previsão pela regra; o esquerdo, a conta feita fator por fator.</p>
+        <div class="rule-try" data-rule="sinal" data-vars="x p"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>O erro clássico: −a² não é (−a)²</h3><span class="badge is-bad">cuidado</span></header>
+        <span class="rule-tex" data-tex="-a^2 = -(a^2) \qquad\text{mas}\qquad (-a)^2 = a^2"></span>
+        <p>O expoente só pega o que está imediatamente à esquerda dele. Sem parênteses, o sinal de menos fica de fora: −3² = −9. Com parênteses, entra: (−3)² = 9. Calculadoras e linguagens de programação seguem essa regra.</p>
+        <div class="rule-try" data-rule="semParenteses" data-vars="a p"></div>
+      </article>
+    </section>
+
+    <!-- 4. O que não vale. -->
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas: o que não vale</h2>
+      <p>Assim como a raiz, a potência se distribui sobre multiplicação e divisão, mas <strong>não sobre soma</strong>. E cada regra dos expoentes vale para uma operação só — trocar uma pela outra é o erro mais comum.</p>
+
+      <article class="rule">
+        <header><h3>Potência de uma soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="(a + b)^n \ne a^n + b^n"></span>
+        <p>Deixe <i>p</i> = 2 para ver o quadrado de lado <i>a</i> + <i>b</i>: além de <i>a</i>² e <i>b</i>², há dois retângulos <i>a</i>·<i>b</i> que a fórmula errada esquece.</p>
+        <div class="rule-try" data-rule="somaPot" data-vars="a b p"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Soma de potências</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="a^m + a^n \ne a^{m+n}"></span>
+        <div class="rule-try" data-rule="somaExp" data-vars="a m n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Multiplicar expoentes no produto</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="a^m \cdot a^n \ne a^{m \cdot n}"></span>
+        <div class="rule-try" data-rule="prodExp" data-vars="a m n"></div>
+      </article>
+    </section>
+
+    <!-- 5. Zero e um. -->
+    <section class="lesson" id="especiais" aria-labelledby="especiais-title">
+      <h2 id="especiais-title">Casos especiais: bases 0, 1 e −1</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="0^n = 0 \quad (n > 0)"></span>
+          <p>Multiplicar zero por ele mesmo dá sempre zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0^{-n} \text{ não existe}"></span>
+          <p>Seria 1/0ⁿ = 1/0: divisão por zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0^0 \;?"></span>
+          <p>Indeterminado: a regra a⁰ = 1 pede 1, a regra 0ⁿ = 0 pede 0. Em contagem e polinômios costuma-se usar 1; em limites, depende do caso.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1^n = 1"></span>
+          <p>Para qualquer <i>n</i>, inclusive negativo: 1 não cresce nem diminui. É um juro de 0%.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(-1)^n = \pm 1"></span>
+          <p>Alterna: +1 com <i>n</i> par, −1 com <i>n</i> ímpar. Útil para escrever sinais que se alternam, como +, −, +, −…</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Calculadora; estado em ?num=. -->
+    <section class="calc" id="cientifica" data-calc="cientifica" aria-labelledby="sci-title">
+      <h2 id="sci-title">Notação científica</h2>
+      <p class="calc-lede">Números muito grandes ou muito pequenos se escrevem como um número entre 1 e 10 vezes uma potência de 10: a distância da Terra ao Sol é 1,496 × 10¹¹ m, e o diâmetro de uma bactéria, cerca de 2 × 10⁻⁶ m.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Número</span>
+          <input name="num" type="text" inputmode="decimal" value="0,00052" autocomplete="off" spellcheck="false">
+          <small>Com vírgula para os decimais, sem pontos de milhar.</small>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="149600000000">Terra–Sol (m)</button>
+        <button type="button" data-exemplo="0,000002">bactéria (m)</button>
+        <button type="button" data-exemplo="6020000">6020000</button>
+        <button type="button" data-exemplo="3,7">3,7</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 7. O caso do material de estudo. -->
+    <section class="lesson" aria-labelledby="caso-title">
+      <h2 id="caso-title">Exemplo resolvido</h2>
+      <p>Num sistema de armazenamento, a cada nível a capacidade <strong>dobra</strong> e o preço por unidade <strong>cai pela metade</strong>. O nível 1 tem 1 unidade a R$ 1.024. Quanto custam os 5 primeiros níveis?</p>
+      <p>No nível <i>n</i>, a capacidade e o preço são:</p>
+      <span class="tex-block" data-tex="C_n = 2^{\,n-1} \qquad P_n = 1024 \cdot 2^{\,1-n}"></span>
+      <p>O custo do nível é o produto dos dois. Pela regra do produto de mesma base, os expoentes se somam e se anulam:</p>
+      <span class="tex-block" data-tex="C_n \cdot P_n = 1024 \cdot 2^{(n-1)+(1-n)} = 1024 \cdot 2^0 = 1024"></span>
+      <p>Todo nível custa R$ 1.024, qualquer que seja <i>n</i>. Nos 5 níveis: 5 × 1.024 = <strong>R$ 5.120</strong>. Sem as regras, seria preciso calcular 1 × 1024, 2 × 512, 4 × 256… para só então perceber o padrão.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 2³ · 2⁴.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Mesma base: somam-se os expoentes. 2³ · 2⁴ = 2⁷ = <strong>128</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Quanto vale (−2)⁴? E −2⁴?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(−2)⁴ = (−2)·(−2)·(−2)·(−2) = <strong>16</strong>: expoente par, resultado positivo.</p>
+            <p>−2⁴ = −(2⁴) = <strong>−16</strong>: sem parênteses, o sinal fica fora da potência.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Escreva 5⁻² como fração e como decimal.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>5⁻² = 1/5² = <strong>1/25 = 0,04</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Simplifique (3²)³ e calcule.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Potência de potência: multiplicam-se os expoentes. (3²)³ = 3⁶ = <strong>729</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Quanto vale (2/3)⁻²?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Inverte-se a fração e o expoente fica positivo: (3/2)² = <strong>9/4 = 2,25</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Explique, sem decorar, por que 7⁰ = 1.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>7³ ÷ 7³ = 1, porque todo número dividido por ele mesmo dá 1. Pela regra do quociente, 7³ ÷ 7³ = 7³⁻³ = 7⁰. As duas contas são a mesma divisão, então <strong>7⁰ = 1</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>7.</strong> Escreva 0,00052 em notação científica.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>A vírgula anda 4 casas para a direita até 5,2, então o expoente é −4: <strong>5,2 × 10⁻⁴</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="mmc.html" rel="prev"><span>Anterior</span>MMC — Mínimo Múltiplo Comum</a>
+      <a class="pager-next" href="raizes.html" rel="next"><span>Próximo</span>Raízes — Regras de Radiciação</a>
+    </nav>
+  </main>
+</body>
+</html>

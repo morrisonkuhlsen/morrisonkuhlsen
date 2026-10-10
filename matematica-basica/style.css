@@ -1,0 +1,631 @@
+/* Matemática básica. A base — cores, tema claro/escuro, calculadora, índice e
+   paginação — vem de /formulas/style.css, carregada antes desta. Aqui ficam
+   só as peças próprias das lições: texto corrido, tabela de divisões,
+   listas de divisores e múltiplos e exercícios. */
+
+.page-lede {
+  max-width: 640px;
+  margin: -.5rem 0 0;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- exemplos */
+
+.calc-examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+  margin-top: .7rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+.calc-examples button {
+  padding: .25rem .6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.calc-examples button:hover {
+  border-color: var(--tone-1);
+}
+
+.calc-extra[hidden] {
+  display: none;
+}
+
+/* ---------------------------------------------------------------- tabela de divisões */
+
+.ladder-box {
+  overflow-x: auto;
+}
+
+.ladder {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.ladder td {
+  min-width: 3.2rem;
+  padding: .45rem .9rem;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+
+.ladder tr:last-child td {
+  border-bottom: none;
+}
+
+/* O número que foi dividido nesta linha. */
+.ladder td.is-hit {
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+.ladder td.ladder-prime {
+  border-left: 2px solid var(--text-muted);
+  color: var(--tone-2);
+  font-weight: 700;
+  text-align: left;
+}
+
+/* ---------------------------------------------------------------- divisores e múltiplos */
+
+.chips + .chips {
+  margin-top: .9rem;
+}
+
+.chips-label {
+  display: block;
+  margin-bottom: .4rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+.chips ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  min-width: 2.2rem;
+  padding: .2rem .5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--bg);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.chips li.is-common {
+  border-color: var(--tone-1);
+  color: var(--text-strong);
+}
+
+.chips li.is-best {
+  background: var(--tone-1);
+  border-color: var(--tone-1);
+  color: var(--surface);
+  font-weight: 700;
+}
+
+.chips-legend {
+  margin: .9rem 0 0;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------- lição */
+
+.lesson {
+  width: 100%;
+  max-width: 720px;
+  line-height: 1.65;
+}
+
+.lesson h2 {
+  margin: 0 0 .9rem;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+
+.lesson h3 {
+  margin: 1.6rem 0 .5rem;
+  font-size: 1.1rem;
+  color: var(--text-strong);
+}
+
+.lesson p,
+.lesson ol,
+.lesson ul {
+  margin: 0 0 .9rem;
+}
+
+.lesson strong {
+  color: var(--text-strong);
+}
+
+.lesson .tex-block {
+  display: block;
+  margin: .4rem 0 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: var(--text-strong);
+}
+
+.tip {
+  margin: 1rem 0;
+  padding: .8rem 1rem;
+  border-left: 3px solid var(--tone-3);
+  border-radius: 0 8px 8px 0;
+  background: var(--surface);
+}
+
+/* ---------------------------------------------------------------- exercícios */
+
+.exercise {
+  margin-bottom: .9rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.exercise p {
+  margin: 0;
+}
+
+.exercise details {
+  margin-top: .8rem;
+}
+
+.exercise summary {
+  width: fit-content;
+  color: var(--tone-1);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.exercise details > div {
+  margin-top: .6rem;
+  padding-top: .6rem;
+  border-top: 1px dashed var(--border);
+}
+
+.exercise details p + p {
+  margin-top: .5rem;
+}
+
+/* ================================================================ raízes */
+
+/* ---------------------------------------------------------------- índice da página */
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .4rem;
+  max-width: 720px;
+}
+
+.toc a {
+  padding: .3rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: .85rem;
+  text-decoration: none;
+}
+
+.toc a:hover {
+  border-color: var(--tone-1);
+  color: var(--text-strong);
+}
+
+/* ---------------------------------------------------------------- controles deslizantes */
+
+.vars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: .5rem 1.2rem;
+  margin-bottom: .9rem;
+}
+
+.var {
+  display: grid;
+  grid-template-columns: 1.2rem 1fr 2.4rem;
+  align-items: center;
+  gap: .6rem;
+}
+
+.var i {
+  font-family: KaTeX_Math, serif;
+  font-size: 1.2rem;
+  color: var(--tone-2);
+}
+
+.var input {
+  width: 100%;
+  accent-color: var(--tone-2);
+}
+
+.var output {
+  color: var(--text-strong);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.var-wide {
+  max-width: 420px;
+  margin: 1rem auto 0;
+}
+
+/* ---------------------------------------------------------------- figura do início */
+
+.seg {
+  display: flex;
+  justify-content: center;
+  gap: .4rem;
+}
+
+.seg button {
+  padding: .4rem .9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.seg button[aria-pressed="true"] {
+  border-color: var(--tone-1);
+  background: var(--tone-1);
+  color: var(--surface);
+  font-weight: 600;
+}
+
+.intro-figure {
+  display: flex;
+  justify-content: center;
+  margin-top: .5rem;
+}
+
+.intro-svg,
+.tri {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  overflow: visible;
+}
+
+.intro-svg {
+  max-width: 330px;
+}
+
+.sq-fill {
+  fill: color-mix(in srgb, var(--tone-1) 18%, transparent);
+}
+
+.sq-grid {
+  stroke: color-mix(in srgb, var(--tone-1) 35%, transparent);
+  stroke-width: 1;
+}
+
+.sq-edge {
+  fill: none;
+  stroke: var(--tone-1);
+  stroke-width: 2;
+}
+
+.sq-fill.sq-edge {
+  fill: color-mix(in srgb, var(--tone-1) 18%, transparent);
+}
+
+.cube-top,
+.cube-side {
+  stroke: var(--tone-1);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.cube-top {
+  fill: color-mix(in srgb, var(--tone-1) 30%, transparent);
+}
+
+.cube-side {
+  fill: color-mix(in srgb, var(--tone-1) 10%, transparent);
+}
+
+.intro-text p {
+  margin: .6rem 0 0;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.intro-text strong {
+  color: var(--text-strong);
+}
+
+/* ---------------------------------------------------------------- regras */
+
+.rule {
+  margin-bottom: 1.1rem;
+  padding: 1.1rem 1.25rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.rule header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+}
+
+.rule h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.badge {
+  flex: none;
+  padding: .15rem .55rem;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.badge.is-ok { color: var(--tone-3); }
+.badge.is-bad { color: var(--tone-4); }
+.badge.is-warn { color: var(--tone-2); }
+
+.rule-tex {
+  display: block;
+  margin: .9rem 0 .7rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  font-size: 1.15rem;
+  color: var(--text-strong);
+  text-align: center;
+}
+
+.rule > p {
+  margin: 0 0 1rem;
+}
+
+.rule-try {
+  padding: .9rem 1rem;
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.rule-try + .rule-try {
+  margin-top: .7rem;
+}
+
+.rule-figure {
+  display: flex;
+  justify-content: center;
+  margin-bottom: .6rem;
+}
+
+.rule-figure[hidden] {
+  display: none;
+}
+
+.rule-line {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: center;
+  gap: .6rem;
+  padding: .35rem 0;
+}
+
+.rule-side {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+}
+
+.rule-math {
+  overflow-x: auto;
+  overflow-y: hidden;
+  color: var(--text-strong);
+}
+
+.rule-math [data-tone] .katex,
+.rule-math .katex [data-tone] {
+  color: var(--tone);
+}
+
+.rule-verdict {
+  margin: .6rem 0 0;
+  font-weight: 600;
+}
+
+.rule-verdict.is-ok { color: var(--tone-3); }
+.rule-verdict.is-diff { color: var(--tone-4); }
+
+.rule-note {
+  margin: .4rem 0 0;
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.rule-note:empty {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .rule-line {
+    grid-template-columns: 1fr;
+    gap: .15rem;
+  }
+}
+
+/* ---------------------------------------------------------------- triângulo */
+
+.tri-fill {
+  fill: color-mix(in srgb, var(--tone-1) 12%, transparent);
+}
+
+.tri-leg {
+  fill: none;
+  stroke: var(--tone-2);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.tri-hyp {
+  stroke: var(--tone-1);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.tri-right {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.2;
+}
+
+.tri-label {
+  fill: var(--text);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tri-label.is-hi {
+  fill: var(--tone-1);
+  font-weight: 600;
+}
+
+.sq-ref {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 4;
+}
+
+/* ================================================================ potências */
+
+/* ---------------------------------------------------------------- escada */
+
+/* Uma faixa que rola na horizontal: degrau, "÷ a", degrau… O script
+   centraliza o degrau do expoente escolhido. */
+.ladder-steps {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  margin: 0;
+  padding: .3rem .2rem .6rem;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+
+.ladder-step {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  min-width: 4.2rem;
+  padding: .55rem .5rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color .2s ease, background-color .2s ease;
+}
+
+.ladder-step.is-on {
+  border-color: var(--tone-1);
+  background: color-mix(in srgb, var(--tone-1) 14%, var(--bg));
+  color: var(--text-strong);
+}
+
+.ladder-pow {
+  font-size: .95rem;
+  color: var(--tone-2);
+}
+
+.ladder-val {
+  font-size: 1.05rem;
+  color: var(--text-strong);
+}
+
+.ladder-op {
+  flex: none;
+  font-size: .8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- (a + b)² */
+
+.sq-a,
+.sq-b,
+.sq-ab {
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.sq-a { fill: color-mix(in srgb, var(--tone-1) 35%, transparent); }
+.sq-b { fill: color-mix(in srgb, var(--tone-3) 35%, transparent); }
+.sq-ab { fill: color-mix(in srgb, var(--tone-4) 30%, transparent); }
+
+/* ---------------------------------------------------------------- casos especiais */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: .8rem;
+}
+
+.fact {
+  padding: .9rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.fact .rule-tex {
+  margin: 0 0 .5rem;
+}
+
+.fact p {
+  margin: 0;
+  font-size: .92rem;
+  line-height: 1.5;
+}
+
+.lesson a {
+  color: var(--text-strong);
+  text-underline-offset: 3px;
+}

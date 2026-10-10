@@ -343,3 +343,33 @@
   description: "L'Hôpital's rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form."
   tags: "formula interactive calculator step by step"
   lang: en
+
+- title: "Matemática Básica"
+  url: "/matematica-basica/"
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por MDC, MMC, potências e raízes."
+  tags: "matemática básica aritmética exercícios"
+  lang: pt
+
+- title: "MDC — Máximo Divisor Comum"
+  url: "/matematica-basica/mdc.html"
+  description: "MDC (máximo divisor comum) explicado do zero, com calculadora que mostra a fatoração, o algoritmo de Euclides e os divisores comuns, e exercícios resolvidos."
+  tags: "mdc máximo divisor comum euclides fatoração primos divisores calculadora"
+  lang: pt
+
+- title: "MMC — Mínimo Múltiplo Comum"
+  url: "/matematica-basica/mmc.html"
+  description: "MMC (mínimo múltiplo comum) explicado do zero, com calculadora que monta a tabela de divisões sucessivas, confere pela fatoração e traz exercícios resolvidos."
+  tags: "mmc mínimo múltiplo comum fatoração primos múltiplos frações calculadora"
+  lang: pt
+
+- title: "Raízes — Regras de Radiciação"
+  url: "/matematica-basica/raizes.html"
+  description: "Raízes explicadas do zero: o que é uma raiz, as regras de radiciação testadas com os seus números, as armadilhas mais comuns e uma calculadora que simplifica radicais passo a passo."
+  tags: "raiz raízes radiciação radical raiz quadrada raiz cúbica simplificar radicais expoente fracionário"
+  lang: pt
+
+- title: "Potências — Regras de Potenciação"
+  url: "/matematica-basica/potencias.html"
+  description: "Potências explicadas do zero: por que a⁰ = 1 e o expoente negativo vira fração, as regras testadas com os seus números, o sinal da base negativa, as armadilhas e notação científica."
+  tags: "potência potências potenciação expoente expoente negativo expoente zero notação científica base negativa"
+  lang: pt
