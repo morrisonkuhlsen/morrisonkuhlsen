@@ -311,6 +311,8 @@ testes:
     vars:
       - ['Também chamado de Wilcoxon rank-sum', null]
       - ['Versão paramétrica', t-independente]
+    page: mann-whitney
+    veja: [t-duas-amostras]
     reporte: 'U = 112; z = −2,38; p = 0,017; r = 0,38'
     codigo:
       r: |
@@ -799,7 +801,7 @@ testes:
       - 'Amostras grandes: em amostras pequenas o teste é pouco confiável'
     tex: 'JB = \dfrac{n}{6}\left(S^2 + \dfrac{(K - 3)^2}{4}\right)'
     vars: []
-    veja: [distribuicao-normal]
+    veja: [distribuicao-normal, assimetria-curtose]
     reporte: 'JB = 3,1; p = 0,21'
     codigo:
       r: |
@@ -1033,6 +1035,7 @@ testes:
     vars:
       - ['Kappa ponderado, para categorias ordinais', null]
       - ['Kappa de Fleiss, para mais de dois avaliadores', null]
+    page: kappa-cohen
     reporte: 'κ = 0,68; IC 95% [0,52; 0,84]: concordância substancial'
     codigo:
       r: |

@@ -42,6 +42,11 @@
   description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
   tags: "fórmula interativa calculadora passo a passo fatorial logaritmo"
   lang: pt
+- title: "Assimetria e Curtose"
+  url: "/formulas/assimetria-curtose.html"
+  description: "Assimetria e curtose explicadas termo a termo, com calculadora, histograma comparado à normal, versões corrigidas e o teste de Jarque–Bera."
+  tags: "fórmula interativa calculadora passo a passo assimetria curtose forma Jarque-Bera momentos"
+  lang: pt
 - title: "ANOVA de Um Fator"
   url: "/formulas/anova-um-fator.html"
   description: "ANOVA de um fator explicada termo a termo, com calculadora para três ou mais grupos, boxplots, estatística F, valor-p e η²."
@@ -77,6 +82,11 @@
   description: "Distribuição de Bernoulli explicada termo a termo, com calculadora, gráfico e passo a passo de P(X = k)."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Distribuição Beta"
+  url: "/formulas/distribuicao-beta.html"
+  description: "Distribuição Beta explicada termo a termo, com calculadora da atualização bayesiana de uma proporção, gráfico antes e depois dos dados e intervalo de credibilidade."
+  tags: "fórmula interativa calculadora passo a passo beta bayesiana proporção a priori a posteriori"
+  lang: pt
 - title: "Distribuição Binomial"
   url: "/formulas/distribuicao-binomial.html"
   description: "Distribuição binomial explicada termo a termo, com calculadora de P(X = k), probabilidades acumuladas, gráfico e passo a passo."
@@ -86,6 +96,11 @@
   url: "/formulas/distribuicao-exponencial.html"
   description: "Distribuição exponencial explicada termo a termo, com calculadora, curva e passo a passo: a densidade e a chance de esperar até x pelo próximo evento."
   tags: "fórmula interativa calculadora passo a passo tempo de espera taxa"
+  lang: pt
+- title: "Distribuição Gama"
+  url: "/formulas/distribuicao-gama.html"
+  description: "Distribuição Gama explicada termo a termo, com calculadora, curva e passo a passo: o tempo até o k-ésimo evento e a ligação com a exponencial e a Poisson."
+  tags: "fórmula interativa calculadora passo a passo gama Erlang tempo até o k-ésimo evento"
   lang: pt
 - title: "Distribuição Geométrica"
   url: "/formulas/distribuicao-geometrica.html"
@@ -112,6 +127,11 @@
   description: "Fórmula quadrática explicada termo a termo, com calculadora das raízes reais ou complexas e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Intervalo de Confiança para Proporção"
+  url: "/formulas/ic-proporcao.html"
+  description: "Intervalo de confiança para uma proporção explicado termo a termo, com calculadora pelos métodos de Wald e de Wilson e gráfico da cobertura real de cada um."
+  tags: "fórmula interativa calculadora passo a passo Wald Wilson proporção cobertura"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -127,10 +147,20 @@
   description: "Juros compostos com aportes periódicos explicados termo a termo, com calculadora, gráfico do saldo contra o total aportado e passo a passo."
   tags: "fórmula interativa calculadora passo a passo juros compostos aportes mensais investimento montante"
   lang: pt
+- title: "Kappa de Cohen"
+  url: "/formulas/kappa-cohen.html"
+  description: "Kappa de Cohen explicado termo a termo, com calculadora para a concordância entre dois avaliadores, concordância esperada por acaso e interpretação."
+  tags: "fórmula interativa calculadora passo a passo concordância entre avaliadores confiabilidade"
+  lang: pt
 - title: "Lei dos Grandes Números"
   url: "/formulas/lei-grandes-numeros.html"
   description: "Lei dos grandes números explicada termo a termo, com simulação de dados e moedas: a média acumulada se aproximando do valor esperado."
   tags: "fórmula interativa calculadora passo a passo simulação média dado moeda convergência"
+  lang: pt
+- title: "Teste de Mann-Whitney"
+  url: "/formulas/mann-whitney.html"
+  description: "Teste U de Mann-Whitney explicado termo a termo, com calculadora para dois grupos, postos, valor-p exato ou aproximado e boxplots."
+  tags: "fórmula interativa calculadora passo a passo Mann-Whitney U Wilcoxon postos não paramétrico"
   lang: pt
 - title: "Fórmulas Interativas"
   url: "/formulas/"
@@ -146,6 +176,11 @@
   url: "/formulas/margem-de-erro.html"
   description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
+  lang: pt
+- title: "Média Ponderada e Pesos Amostrais"
+  url: "/formulas/media-ponderada.html"
+  description: "Média ponderada explicada termo a termo, com calculadora e o uso em pesquisas: pesos amostrais, correção da amostra e o tamanho efetivo de Kish."
+  tags: "fórmula interativa calculadora passo a passo ponderação pesquisa tamanho efetivo Kish"
   lang: pt
 - title: "Inversa de Matriz 2×2"
   url: "/formulas/matriz-inversa-2x2.html"
@@ -201,6 +236,16 @@
   url: "/formulas/monty-hall.html"
   description: "O problema de Monty Hall explicado termo a termo: por que trocar de porta dobra a chance, com a conta exata e uma simulação que compara quem fica e quem troca."
   tags: "fórmula interativa calculadora passo a passo Monty Hall portas trocar paradoxo simulação"
+  lang: pt
+- title: "Paradoxo de Simpson"
+  url: "/formulas/paradoxo-simpson.html"
+  description: "O paradoxo de Simpson explicado termo a termo: quando um tratamento vence em todos os grupos e perde no total, com calculadora, gráfico e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo Simpson confusão inversão grupos"
+  lang: pt
+- title: "Permutações e Arranjos"
+  url: "/formulas/permutacoes-arranjos.html"
+  description: "Permutações, arranjos e combinações, com e sem repetição, explicados termo a termo, com calculadora exata para números grandes e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo permutação arranjo combinação contagem análise combinatória"
   lang: pt
 - title: "Alocação de Neyman"
   url: "/formulas/neyman-allocation.html"
@@ -266,6 +311,11 @@
   url: "/formulas/t-pareado.html"
   description: "Teste t pareado explicado termo a termo, com calculadora para medidas antes e depois, valor-p, intervalo de confiança e a comparação com o teste errado."
   tags: "fórmula interativa calculadora passo a passo antes e depois amostras pareadas"
+  lang: pt
+- title: "Teste Diagnóstico: Valores Preditivos"
+  url: "/formulas/teste-diagnostico.html"
+  description: "Sensibilidade, especificidade e valores preditivos de um teste diagnóstico explicados termo a termo, com tabela de frequências e gráfico pela prevalência."
+  tags: "fórmula interativa calculadora passo a passo sensibilidade especificidade VPP VPN prevalência falso positivo"
   lang: pt
 - title: "Teorema de Bayes"
   url: "/formulas/teorema-bayes.html"
@@ -373,6 +423,11 @@
   description: "Bayes' theorem explained term by term, with a calculator: enter the prior, sensitivity and false positive rate and get the posterior step by step."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Diagnostic Test: Predictive Values"
+  url: "/en/formulas/diagnostic-test.html"
+  description: "Sensitivity, specificity and the predictive values of a diagnostic test explained term by term, with a frequency table and a chart by prevalence."
+  tags: "formula interactive calculator step by step sensitivity specificity PPV NPV prevalence false positive"
+  lang: en
 - title: "Conditional Probability"
   url: "/en/formulas/conditional-probability.html"
   description: "Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step."
@@ -382,6 +437,16 @@
   url: "/en/formulas/law-of-total-probability.html"
   description: "The law of total probability explained term by term, with a scenario calculator, step by step, and Bayes for each scenario."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Simpson's Paradox"
+  url: "/en/formulas/simpsons-paradox.html"
+  description: "Simpson's paradox explained term by term: when a treatment wins in every group and loses overall, with a calculator, a chart and step-by-step working."
+  tags: "formula interactive calculator step by step Simpson confounding reversal groups"
+  lang: en
+- title: "Permutations and Arrangements"
+  url: "/en/formulas/permutations-arrangements.html"
+  description: "Permutations, arrangements and combinations, with and without repetition, explained term by term, with an exact calculator for large numbers and step-by-step working."
+  tags: "formula interactive calculator step by step permutation arrangement combination counting combinatorics"
   lang: en
 - title: "Binomial Coefficient"
   url: "/en/formulas/binomial-coefficient.html"
@@ -438,10 +503,20 @@
   description: "The exponential distribution explained term by term, with a calculator, a curve and step-by-step working: the density and the chance of waiting up to x for the next event."
   tags: "formula interactive calculator step by step waiting time rate"
   lang: en
+- title: "Gamma Distribution"
+  url: "/en/formulas/gamma-distribution.html"
+  description: "The Gamma distribution explained term by term, with a calculator, a curve and step-by-step working: the time until the k-th event and the link to the exponential and Poisson."
+  tags: "formula interactive calculator step by step gamma Erlang time until the k-th event"
+  lang: en
 - title: "Normal (Gaussian) Distribution"
   url: "/en/formulas/normal-distribution.html"
   description: "The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Beta Distribution"
+  url: "/en/formulas/beta-distribution.html"
+  description: "The Beta distribution explained term by term, with a calculator for the Bayesian update of a proportion, a chart before and after the data and a credible interval."
+  tags: "formula interactive calculator step by step beta Bayesian proportion prior posterior"
   lang: en
 - title: "Law of Large Numbers"
   url: "/en/formulas/law-of-large-numbers.html"
@@ -473,6 +548,11 @@
   description: "The paired t-test explained term by term, with a calculator for before-and-after measurements, p-value, confidence interval and a comparison with the wrong test."
   tags: "formula interactive calculator step by step before and after paired samples"
   lang: en
+- title: "Mann-Whitney Test"
+  url: "/en/formulas/mann-whitney-test.html"
+  description: "The Mann-Whitney U test explained term by term, with a calculator for two groups, ranks, an exact or approximate p-value and boxplots."
+  tags: "formula interactive calculator step by step Mann-Whitney U Wilcoxon ranks nonparametric"
+  lang: en
 - title: "One-Way ANOVA"
   url: "/en/formulas/one-way-anova.html"
   description: "One-way ANOVA explained term by term, with a calculator for three or more groups, boxplots, the F statistic, p-value and η²."
@@ -492,6 +572,11 @@
   url: "/en/formulas/confidence-interval.html"
   description: "The confidence interval for a mean explained term by term, with a calculator, critical z value, margin of error and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Confidence Interval for a Proportion"
+  url: "/en/formulas/proportion-confidence-interval.html"
+  description: "The confidence interval for a proportion explained term by term, with a calculator using the Wald and Wilson methods and a chart of each one's actual coverage."
+  tags: "formula interactive calculator step by step Wald Wilson proportion coverage"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"
@@ -553,6 +638,11 @@
   description: "Neyman allocation explained term by term, with a calculator that splits the sample across strata and compares it with proportional allocation."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Weighted Mean and Survey Weights"
+  url: "/en/formulas/weighted-mean.html"
+  description: "The weighted mean explained term by term, with a calculator and its use in surveys: survey weights, correcting the sample and Kish's effective sample size."
+  tags: "formula interactive calculator step by step weighting survey effective sample size Kish"
+  lang: en
 - title: "Standard Deviation"
   url: "/en/formulas/standard-deviation.html"
   description: "The sample standard deviation explained term by term, with a calculator, a table of deviations, a chart and step-by-step working from the variance to the root."
@@ -562,6 +652,11 @@
   url: "/en/formulas/quartiles-iqr.html"
   description: "Quartiles and the interquartile range (IQR) explained term by term, with a calculator, a boxplot, the outlier rule and step-by-step working."
   tags: "formula interactive calculator step by step IQR boxplot median outliers"
+  lang: en
+- title: "Skewness and Kurtosis"
+  url: "/en/formulas/skewness-kurtosis.html"
+  description: "Skewness and kurtosis explained term by term, with a calculator, a histogram compared with the normal, corrected versions and the Jarque–Bera test."
+  tags: "formula interactive calculator step by step skewness kurtosis shape Jarque-Bera moments"
   lang: en
 - title: "Covariance"
   url: "/en/formulas/covariance.html"
@@ -577,6 +672,11 @@
   url: "/en/formulas/spearman-correlation.html"
   description: "Spearman correlation explained term by term, with a calculator, a table of ranks, a comparison with Pearson and draggable points."
   tags: "formula interactive calculator step by step ranks monotonic correlation nonparametric"
+  lang: en
+- title: "Cohen's Kappa"
+  url: "/en/formulas/cohens-kappa.html"
+  description: "Cohen's kappa explained term by term, with a calculator for the agreement between two raters, the agreement expected by chance and an interpretation."
+  tags: "formula interactive calculator step by step inter-rater agreement reliability"
   lang: en
 - title: "Simple Linear Regression"
   url: "/en/formulas/linear-regression.html"

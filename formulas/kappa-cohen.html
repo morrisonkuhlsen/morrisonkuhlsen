@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Kappa de Cohen — Interativo</title>
+  <meta name="description" content="Kappa de Cohen explicado termo a termo, com calculadora para a concordância entre dois avaliadores, concordância esperada por acaso e interpretação.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/kappa-cohen.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/kappa-cohen.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/cohens-kappa.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/kappa-cohen.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/kappa-cohen.html">
+  <meta property="og:title" content="Kappa de Cohen — Interativo">
+  <meta property="og:description" content="Kappa de Cohen explicado termo a termo, com calculadora para a concordância entre dois avaliadores, concordância esperada por acaso e interpretação.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Kappa de Cohen — Interativo">
+  <meta name="twitter:description" content="Kappa de Cohen explicado termo a termo, com calculadora para a concordância entre dois avaliadores, concordância esperada por acaso e interpretação.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/cohens-kappa.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Kappa de Cohen</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Kappa de Cohen interativa">
+        <span class="part" data-part="k_kap" data-tone="1" data-tex="\kappa"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="po_kap" data-tone="2" data-tex="p_o"></span>
+            <span class="op">−</span>
+            <span class="part" data-part="pe_kap" data-tone="3" data-tex="p_e"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="den_kap" data-tone="4" data-tex="1 - p_e"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora; a tabela vai em ?o=, linhas separadas por ponto e vírgula. -->
+    <section class="calc" data-calc="kappa" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: dois radiologistas classificaram os mesmos 100 exames como normais ou alterados. Concordaram em 40 normais e 45 alterados; em 15, discordaram. Quanto eles concordam além do que o acaso explicaria? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Tabela de concordância</span>
+          <input name="o" type="text" inputmode="decimal" value="40 10; 5 45" data-matrix autocomplete="off" spellcheck="false">
+          <small>Linhas: categorias do avaliador 1; colunas: do avaliador 2, na mesma ordem. Linhas separadas por ponto e vírgula.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="k_kap" data-tone="1">Kappa (κ)</dt>
+          <dd>A concordância além do acaso, de −1 a 1: 1 é concordância perfeita, 0 é o que se esperaria de dois avaliadores chutando com as mesmas frequências, e valores negativos são piores que o acaso.</dd>
+          <dt data-part="po_kap" data-tone="2">Concordância Observada (pₒ)</dt>
+          <dd>A fração dos casos em que os dois deram a mesma classificação: a soma da diagonal dividida pelo total.</dd>
+          <dt data-part="pe_kap" data-tone="3">Concordância por Acaso (pₑ)</dt>
+          <dd>A concordância que viria só das frequências de cada avaliador, se classificassem de forma independente. Se os dois chamam quase tudo de normal, concordam muito mesmo sem critério.</dd>
+          <dt data-part="den_kap" data-tone="4">Máximo Além do Acaso (1 − pₑ)</dt>
+          <dd>Quanto de concordância ainda havia para conquistar além do acaso. O kappa é a fração disso que foi alcançada.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">Quando usar, pressupostos e alternativas: <a href="/testes-estatisticos/kappa/">kappa de Cohen no catálogo de testes estatísticos</a>.</p>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="correlacao-spearman.html" rel="prev"><span>Anterior</span>Correlação de Spearman</a>
+      <a class="pager-next" href="regressao-linear.html" rel="next"><span>Próxima</span>Regressão Linear Simples</a>
+    </nav>
+  </main>
+</body>
+</html>

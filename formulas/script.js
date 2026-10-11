@@ -31,6 +31,8 @@
     "desvio-padrao": "standard-deviation", "valor-esperado": "expected-value", "erro-padrao": "standard-error",
     "formula-quadratica": "quadratic-formula", "soma-pg": "geometric-series", "razao-chances": "odds-ratio",
     "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum", "t-duas-amostras": "two-sample-t-test",
+    "margem-de-erro": "margin-of-error", "ic-proporcao": "proportion-confidence-interval",
+    "quartis-iqr": "quartiles-iqr",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -2464,6 +2466,437 @@
       };
     },
 
+    icp({ k, n, conf }) {
+      if (!Number.isInteger(n) || n < 1 || n > 1e6) return { error: T("O tamanho da amostra precisa ser um inteiro entre 1 e 1.000.000.", "The sample size must be an integer between 1 and 1,000,000.") };
+      if (!Number.isInteger(k) || k < 0 || k > n) return { error: T(`O número de sucessos precisa ser um inteiro entre 0 e ${fmt(n)}.`, `The number of successes must be an integer between 0 and ${fmt(n)}.`) };
+      if (conf <= 0 || conf >= 100) return confError;
+      const z = zCrit(conf);
+      const wald = kk => { const p = kk / n, h = z * Math.sqrt(p * (1 - p) / n); return [p - h, p + h]; };
+      const wilson = kk => { const p = kk / n, c = 1 + z * z / n, mid = (p + z * z / (2 * n)) / c, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / c; return [Math.max(0, mid - h), Math.min(1, mid + h)]; };
+      const ph = k / n, [wl, wh] = wald(k), [sl, sh] = wilson(k);
+      const se = Math.sqrt(ph * (1 - ph) / n);
+      // Cobertura exata de cada método para cada proporção verdadeira p.
+      let chart = null;
+      if (n <= 2000) {
+        const cover = (meth, p) => { let c = 0; for (let kk = 0; kk <= n; kk++) { const [a, b] = meth(kk); if (a <= p && p <= b) c += binPmf(n, p, kk); } return c * 100; };
+        const ps = Array.from({ length: 199 }, (_, i) => 0.005 + 0.99 * i / 198);
+        const cw = ps.map(p => [p * 100, cover(wald, p)]), cs = ps.map(p => [p * 100, cover(wilson, p)]);
+        const yLo = Math.max(0, Math.min(...cw.map(q => q[1]), ...cs.map(q => q[1])) - 5);
+        chart = {
+          type: "curve", label: T(`Cobertura real dos intervalos de ${fmt(conf, 2)}% com n = ${fmt(n)}, para cada proporção verdadeira`, `Actual coverage of the ${fmt(conf, 2)}% intervals with n = ${fmt(n)}, for each true proportion`),
+          xLabel: T(`proporção verdadeira (%) · colorida: Wilson · escura: Wald · tracejada: ${fmt(conf, 2)}% prometidos`, `true proportion (%) · colored: Wilson · dark: Wald · dashed: the promised ${fmt(conf, 2)}%`),
+          xMin: 0, xMax: 100, yMin: yLo, yMax: 100, pts: cs, lines: [{ pts: cw, cls: "chart-fit" }], hlines: [{ y: conf, cls: "chart-ref" }],
+          tipAt: v => { const i = Math.max(0, Math.min(198, Math.round((v / 100 - 0.005) / 0.99 * 198))); return [`Wilson ${fmt(cs[i][1], 1)}% · Wald ${fmt(cw[i][1], 1)}%`, T(`cobertura com p = ${fmt(cs[i][0], 1)}%`, `coverage at p = ${fmt(cs[i][0], 1)}%`)]; },
+        };
+      }
+      const fora = wl < 0 || wh > 1, zero = k === 0 || k === n;
+      return {
+        result: `\\text{Wald}: ${interval(wl * 100, wh * 100)}\\%, \\qquad \\text{Wilson}: ${tone(`${interval(sl * 100, sh * 100)}\\%`, 1)}`,
+        chart,
+        steps: [
+          [T("Calcule a proporção da amostra e o erro padrão dela:", "Compute the sample proportion and its standard error:"),
+            `\\hat{p} = \\dfrac{${k}}{${n}} ${approx(ph, 6)} ${tone(texNum(ph, 6), 2)}, \\qquad \\sqrt{\\dfrac{\\hat{p}(1 - \\hat{p})}{n}} ${approx(se, 6)} ${tone(texNum(se, 6), 4)}`],
+          [T(`O intervalo de Wald é a fórmula do livro: p̂ mais ou menos z = ${fmt(z, 2)} erros padrão.`, `The Wald interval is the textbook formula: p̂ plus or minus z = ${fmt(z, 2)} standard errors.`),
+            `${tone(texNum(ph, 6), 2)} \\pm ${tone(texNum(z), 3)} \\cdot ${tone(texNum(se, 6), 4)} = ${interval(wl, wh)}`],
+          [T("O de Wilson inverte o teste da proporção: puxa o centro para 1/2 e nunca sai de [0, 1].", "Wilson's inverts the proportion test: it pulls the centre towards 1/2 and never leaves [0, 1]."),
+            `\\dfrac{\\hat{p} + \\frac{z^2}{2n} \\pm z\\sqrt{\\frac{\\hat{p}(1 - \\hat{p})}{n} + \\frac{z^2}{4n^2}}}{1 + \\frac{z^2}{n}} = ${tone(interval(sl, sh), 1)}`],
+        ],
+        note: (fora
+          ? T(`${warn} o intervalo de Wald sai de [0, 1] e inclui proporções impossíveis. `, `${warn} the Wald interval leaves [0, 1] and includes impossible proportions. `)
+          : zero
+            ? T(`${warn} com ${k === 0 ? "nenhum sucesso" : "só sucessos"}, o erro padrão de Wald é zero e o intervalo encolhe a um ponto, como se não houvesse incerteza. Wilson continua dando uma faixa razoável. `,
+              `${warn} with ${k === 0 ? "no successes" : "only successes"}, Wald's standard error is zero and the interval shrinks to a point, as if there were no uncertainty. Wilson still gives a sensible range. `)
+            : "")
+          + T(`O gráfico mostra a cobertura real de cada método: a de Wald despenca perto de 0 e de 100%, e em amostras pequenas fica abaixo dos ${fmt(conf, 2)}% prometidos mesmo no meio; a de Wilson fica perto do nível nominal quase sempre. Por isso Wilson é o recomendado.`
+            + ` Com amostras grandes e p̂ longe das pontas, os dois praticamente coincidem. Veja também a <a href="${PAGE("margem-de-erro")}">margem de erro</a> e o <a href="${PAGE("simulador-pesquisa")}">simulador de pesquisa</a>.`,
+            `The chart shows each method's actual coverage: Wald's plunges near 0 and 100%, and in small samples falls short of the promised ${fmt(conf, 2)}% even in the middle; Wilson's stays near the nominal level almost everywhere. That is why Wilson is recommended.`
+            + ` With large samples and p̂ away from the ends, the two practically coincide. See also the <a href="${PAGE("margem-de-erro")}">margin of error</a> and the <a href="${PAGE("simulador-pesquisa")}">poll simulator</a>.`),
+      };
+    },
+
+    simpson({ o }) {
+      const g = o.length;
+      if (g < 2 || g > 10) return { error: T("Informe de 2 a 10 grupos, um por linha.", "Enter from 2 to 10 groups, one per row.") };
+      if (o.some(r => r.length !== 4)) return { error: T("Cada linha precisa de quatro números: sucessos de A, total de A, sucessos de B, total de B.", "Each row needs four numbers: successes of A, total of A, successes of B, total of B.") };
+      if (o.some(([a, na, b, nb]) => [a, na, b, nb].some(v => !Number.isInteger(v) || v < 0) || na < 1 || nb < 1 || a > na || b > nb))
+        return { error: T("Use contagens inteiras, totais maiores que zero e sucessos que não passem do total.", "Use whole counts, totals above zero and successes no larger than the total.") };
+      const sum = i => o.reduce((s, r) => s + r[i], 0);
+      const A = sum(0), NA = sum(1), B = sum(2), NB = sum(3);
+      const ra = o.map(r => r[0] / r[1]), rb = o.map(r => r[2] / r[3]);
+      const ta = A / NA, tb = B / NB;
+      const aGrupos = ra.every((v, i) => v > rb[i]), bGrupos = ra.every((v, i) => v < rb[i]);
+      const inverte = (aGrupos && ta < tb) || (bGrupos && ta > tb);
+      const pct = v => texNum(v * 100, 1);
+      const rows = o.map((r, i) => `${i + 1} & ${r[0]}/${r[1]} = ${pct(ra[i])}\\% & ${r[2]}/${r[3]} = ${pct(rb[i])}\\%`).join(" \\\\ ");
+      const table = `\\begin{array}{c|c|c} ${T("\\text{grupo}", "\\text{group}")} & A & B \\\\ \\hline ${rows} \\\\ \\hline \\text{total} & ${A}/${NA} = ${tone(`${pct(ta)}\\%`, 1)} & ${B}/${NB} = ${tone(`${pct(tb)}\\%`, 1)} \\end{array}`;
+      const wA = o.map(r => r[1] / NA), wB = o.map(r => r[3] / NB);
+      const lab = [...o.map((_, i) => `${T("grupo", "group")} ${i + 1}`), "total"];
+      const pa = [...ra, ta], pb = [...rb, tb];
+      const lo = Math.min(...pa, ...pb) * 100, hi = Math.max(...pa, ...pb) * 100, pad = (hi - lo) * 0.1 || 2;
+      return {
+        result: inverte
+          ? T(`\\text{${aGrupos ? "A" : "B"} vence em todos os grupos, mas ${aGrupos ? "B" : "A"} vence no total}`, `\\text{${aGrupos ? "A" : "B"} wins in every group, but ${aGrupos ? "B" : "A"} wins overall}`)
+          : T("\\text{sem inversão: o total concorda com os grupos}", "\\text{no reversal: the total agrees with the groups}"),
+        chart: {
+          type: "intervals", height: Math.max(150, 50 + (g + 1) * 30),
+          label: T("Para cada grupo e para o total, um segmento entre as taxas de A e de B; destacados aqueles em que B é melhor", "For each group and the total, a segment between the rates of A and B; highlighted, those where B is better"),
+          xLabel: T("taxa de sucesso (%) · ponto cheio: A · vazado: B · de cima para baixo: grupos e, por último, o total", "success rate (%) · filled dot: A · hollow: B · top to bottom: the groups and, last, the total"),
+          xMin: lo - pad, xMax: hi + pad, truth: null,
+          rows: pa.map((v, i) => ({ lo: Math.min(v, pb[i]) * 100, hi: Math.max(v, pb[i]) * 100, a: v * 100, b: pb[i] * 100, hit: v >= pb[i] })),
+          tip: (r, i) => [`A ${fmt(pa[i] * 100, 1)}% · B ${fmt(pb[i] * 100, 1)}%`, lab[i]],
+        },
+        steps: [
+          [T("Calcule a taxa de sucesso de A e de B em cada grupo e no total:", "Compute the success rate of A and B in each group and overall:"), table],
+          [T("A taxa total é a média das taxas dos grupos, ponderada pela fração de casos de cada grupo — e os pesos de A e de B são diferentes:", "The overall rate is the average of the group rates, weighted by each group's share of cases — and A's and B's weights differ:"),
+            `p_A = ${o.map((_, i) => `${texNum(wA[i], 3)} \\cdot ${texNum(ra[i], 3)}`).join(" + ")} ${approx(ta, 4)} ${texNum(ta, 4)} \\\\ p_B = ${o.map((_, i) => `${texNum(wB[i], 3)} \\cdot ${texNum(rb[i], 3)}`).join(" + ")} ${approx(tb, 4)} ${texNum(tb, 4)}`.replace(/^(.*)$/, "\\begin{gathered}$1\\end{gathered}")],
+        ],
+        note: (inverte
+          ? T("É o paradoxo de Simpson. A inversão vem dos pesos: cada tratamento foi aplicado em proporções diferentes nos grupos, e os grupos têm taxas de sucesso muito diferentes entre si. O grupo funciona como uma variável de confusão.",
+            "This is Simpson's paradox. The reversal comes from the weights: each treatment was applied in different proportions across the groups, and the groups have very different success rates. The group acts as a confounding variable.")
+          : T("Aqui não há inversão, mas os pesos de cada grupo no total continuam diferentes entre A e B; mude os números para ver o paradoxo aparecer.",
+            "There is no reversal here, but each group's weight in the total still differs between A and B; change the numbers to make the paradox appear."))
+          + T(" Qual comparação vale depende da história causal: se o grupo influencia tanto a escolha do tratamento quanto o resultado, compare dentro dos grupos.",
+            " Which comparison counts depends on the causal story: if the group influences both the choice of treatment and the outcome, compare within the groups."),
+      };
+    },
+
+    kappa({ o }) {
+      const k = o.length;
+      if (k < 2 || k > 10 || o.some(r => r.length !== k)) return { error: T("Informe uma tabela quadrada, de 2 × 2 a 10 × 10: uma linha por categoria do avaliador 1, uma coluna por categoria do avaliador 2.", "Enter a square table, from 2 × 2 to 10 × 10: one row per category of rater 1, one column per category of rater 2.") };
+      if (o.flat().some(v => v < 0)) return { error: T("As contagens não podem ser negativas.", "Counts cannot be negative.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const R = o.map(sum), C = o[0].map((_, j) => sum(o.map(r => r[j]))), N = sum(R);
+      if (N <= 0) return { error: T("A tabela precisa ter pelo menos um caso.", "The table needs at least one case.") };
+      const diag = sum(o.map((r, i) => r[i]));
+      const po = diag / N, pe = sum(R.map((r, i) => r * C[i])) / (N * N);
+      if (pe === 1) return { error: T("Os dois avaliadores usaram uma única categoria: a concordância esperada é total e o kappa não se define.", "Both raters used a single category: expected agreement is total and kappa is undefined.") };
+      const kap = (po - pe) / (1 - pe);
+      const se = Math.sqrt(po * (1 - po) / (N * (1 - pe) ** 2));
+      const z = 1.96;
+      const nivel = kap < 0 ? T("pior que o acaso", "worse than chance") : kap < 0.2 ? T("leve", "slight") : kap < 0.4 ? T("razoável", "fair") : kap < 0.6 ? T("moderada", "moderate") : kap < 0.8 ? T("substancial", "substantial") : T("quase perfeita", "almost perfect");
+      const head = ` & ${o.map((_, j) => `C_{${j + 1}}`).join(" & ")} & \\text{total}`;
+      const grid = `\\begin{array}{c|${"c".repeat(k)}|c} ${head} \\\\ \\hline `
+        + o.map((r, i) => `L_{${i + 1}} & ${r.map((v, j) => (i === j ? tone(texNum(v), 2) : texNum(v))).join(" & ")} & ${texNum(R[i])}`).join(" \\\\ ")
+        + ` \\\\ \\hline \\text{total} & ${C.map(v => texNum(v)).join(" & ")} & ${texNum(N)} \\end{array}`;
+      const PO = tone(texNum(po, 4), 2), PE = tone(texNum(pe, 4), 3);
+      return {
+        result: `\\kappa ${approx(kap, 4)} ${tone(texNum(kap, 4), 1)}`,
+        steps: [
+          [T("Some a diagonal: são os casos em que os dois avaliadores concordaram.", "Add up the diagonal: these are the cases where the two raters agreed."), grid],
+          [T("A concordância observada é a fração da diagonal:", "The observed agreement is the diagonal's share:"), `p_o = \\dfrac{${texNum(diag)}}{${texNum(N)}} ${approx(po, 4)} ${PO}`],
+          [T("A esperada por acaso multiplica, em cada categoria, as frações de uso dos dois avaliadores:", "The agreement expected by chance multiplies, for each category, how often each rater used it:"),
+            `p_e = \\dfrac{${R.map((r, i) => `${texNum(r)} \\cdot ${texNum(C[i])}`).join(" + ")}}{${texNum(N)}^2} ${approx(pe, 4)} ${PE}`],
+          [T("O kappa é quanto da concordância possível além do acaso foi alcançado:", "Kappa is how much of the agreement possible beyond chance was achieved:"),
+            `\\kappa = \\dfrac{${PO} - ${PE}}{1 - ${PE}} ${approx(kap, 4)} ${tone(texNum(kap, 4), 1)}`],
+        ],
+        note: T(`Os avaliadores concordaram em ${fmt(po * 100, 1)}% dos casos, mas ${fmt(pe * 100, 1)}% já viriam do acaso. Pela escala de Landis e Koch, κ ≈ ${fmt(kap, 2)} é uma concordância ${nivel}.`
+          + ` O intervalo de 95% aproximado vai de ${fmt(kap - z * se, 3)} a ${fmt(kap + z * se, 3)}.`
+          + " Com categorias ordenadas, como leve, média e grave, o kappa ponderado dá crédito parcial a discordâncias pequenas.",
+          `The raters agreed on ${fmt(po * 100, 1)}% of the cases, but ${fmt(pe * 100, 1)}% would come from chance alone. On the Landis and Koch scale, κ ≈ ${fmt(kap, 2)} is ${nivel} agreement.`
+          + ` The approximate 95% interval runs from ${fmt(kap - z * se, 3)} to ${fmt(kap + z * se, 3)}.`
+          + " With ordered categories, such as mild, moderate and severe, weighted kappa gives partial credit to small disagreements."),
+      };
+    },
+
+    pond({ x, w, n }) {
+      if (x.length !== w.length) return { error: T(`Há ${x.length} valores e ${w.length} pesos; as listas precisam ter o mesmo tamanho.`, `There are ${x.length} values and ${w.length} weights; the lists must have the same length.`) };
+      const g = x.length;
+      if (g < 2 || g > 50) return { error: T("Informe de 2 a 50 valores.", "Enter from 2 to 50 values.") };
+      if (w.some(v => v < 0) || w.every(v => v === 0)) return { error: T("Os pesos precisam ser não negativos, e pelo menos um maior que zero.", "Weights must be non-negative, with at least one above zero.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const sw = sum(w), swx = sum(x.map((v, i) => v * w[i])), mw = swx / sw, mean = sum(x) / g;
+      const steps = [
+        [T("Multiplique cada valor pelo seu peso e some:", "Multiply each value by its weight and add up:"),
+          `\\textstyle\\sum w_i x_i = ${g <= 6 ? x.map((v, i) => `${texNum(w[i])} \\cdot ${paren(v, texNum(v))}`).join(" + ") : ""} ${approx(swx)} ${tone(texNum(swx), 2)}`],
+        [T("Divida pela soma dos pesos:", "Divide by the sum of the weights:"), `\\bar{x}_w = \\dfrac{${tone(texNum(swx), 2)}}{${tone(texNum(sw), 3)}} ${approx(mw)} ${tone(texNum(mw), 1)}`],
+      ];
+      let extra = "";
+      if (n.length) {
+        if (n.length !== g || n.some(v => !Number.isInteger(v) || v < 1)) return { error: T("Os entrevistados precisam ser um inteiro positivo por grupo, na mesma ordem.", "Respondents must be one positive integer per group, in the same order.") };
+        const N = sum(n);
+        const bruta = sum(x.map((v, i) => v * n[i])) / N;
+        // Peso de cada entrevistado: participação na população ÷ na amostra.
+        const a = w.map((v, i) => (v / sw) / (n[i] / N));
+        const neff = sum(n.map((m, i) => m * a[i])) ** 2 / sum(n.map((m, i) => m * a[i] * a[i]));
+        steps.push([T("Cada entrevistado recebe peso = participação do grupo na população ÷ participação na amostra:", "Each respondent gets weight = the group's share of the population ÷ its share of the sample:"),
+          a.slice(0, 8).map((v, i) => `a_{${i + 1}} = \\dfrac{${texNum(w[i] / sw, 4)}}{${texNum(n[i] / N, 4)}} ${approx(v, 4)} ${texNum(v, 4)}`).join(", \\quad ")]);
+        steps.push([T("O tamanho efetivo de Kish mede quanto os pesos desiguais custam em precisão:", "Kish's effective sample size measures how much unequal weights cost in precision:"),
+          `n_{\\text{${T("ef", "eff")}}} = \\dfrac{(\\sum n_i a_i)^2}{\\sum n_i a_i^2} ${approx(neff, 1)} ${texNum(neff, 1)}`]);
+        extra = T(` Sem ponderar, a média dos ${fmt(N)} entrevistados seria ${fmt(bruta)}: a amostra tem gente demais de alguns grupos e de menos de outros, e os pesos corrigem isso.`
+          + ` O preço é precisão: os ${fmt(N)} entrevistados valem como uma amostra simples de cerca de ${fmt(Math.round(neff))} (efeito de desenho ${fmt(N / neff, 2)}), e a <a href="${PAGE("margem-de-erro")}">margem de erro</a> deve usar esse tamanho.`,
+          ` Without weighting, the mean of the ${fmt(N)} respondents would be ${fmt(bruta)}: the sample has too many people from some groups and too few from others, and the weights fix that.`
+          + ` The price is precision: the ${fmt(N)} respondents count as a simple sample of about ${fmt(Math.round(neff))} (design effect ${fmt(N / neff, 2)}), and the <a href="${PAGE("margem-de-erro")}">margin of error</a> should use that size.`);
+      }
+      return {
+        result: `\\bar{x}_w ${approx(mw)} ${tone(texNum(mw), 1)}`,
+        steps,
+        note: T(`A média simples dos ${g} valores, sem pesos, seria ${fmt(mean)}. Valores com peso maior puxam a média ponderada para perto de si.`,
+          `The simple mean of the ${g} values, without weights, would be ${fmt(mean)}. Values with a larger weight pull the weighted mean towards themselves.`) + extra,
+      };
+    },
+
+    beta({ a, b, k, n }) {
+      if (a <= 0 || b <= 0) return { error: T("Os parâmetros α e β precisam ser maiores que zero.", "The parameters α and β must be greater than zero.") };
+      if (a > 1e4 || b > 1e4) return { error: T("Use α e β de no máximo 10.000.", "Use α and β of at most 10,000.") };
+      if (!Number.isInteger(n) || n < 0 || n > 1e5) return { error: T("O número de tentativas precisa ser um inteiro entre 0 e 100.000.", "The number of trials must be an integer between 0 and 100,000.") };
+      if (!Number.isInteger(k) || k < 0 || k > n) return { error: T(`Os sucessos precisam ser um inteiro entre 0 e ${fmt(n)}.`, `Successes must be an integer between 0 and ${fmt(n)}.`) };
+      const a2 = a + k, b2 = b + n - k;
+      const lB = (p, q) => lgamma(p) + lgamma(q) - lgamma(p + q);
+      const pdf = (x, p, q) => (x <= 0 || x >= 1 ? 0 : Math.exp((p - 1) * Math.log(x) + (q - 1) * Math.log(1 - x) - lB(p, q)));
+      const quant = (u, p, q) => { let lo = 0, hi = 1; for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (betainc(m, p, q) < u) lo = m; else hi = m; } return (lo + hi) / 2; };
+      const m1 = a / (a + b), m2 = a2 / (a2 + b2);
+      const lo = quant(0.025, a2, b2), hi = quant(0.975, a2, b2);
+      const xs = Array.from({ length: 401 }, (_, i) => 0.0005 + 0.999 * i / 400);
+      const post = xs.map(x => [x, pdf(x, a2, b2)]), prior = xs.map(x => [x, pdf(x, a, b)]);
+      const yMax = Math.min(Math.max(...post.map(p => p[1]), ...prior.map(p => p[1])), Math.max(...post.map(p => p[1])) * 1.5);
+      const mle = n ? k / n : NaN;
+      return {
+        result: `\\text{Beta}(${texNum(a)}, ${texNum(b)}) \\to ${tone(`\\text{Beta}(${texNum(a2)}, ${texNum(b2)})`, 1)}`,
+        chart: {
+          type: "curve", label: T(`Distribuição inicial Beta(${fmt(a)}, ${fmt(b)}) e final Beta(${fmt(a2)}, ${fmt(b2)}) da proporção`, `Prior Beta(${fmt(a)}, ${fmt(b)}) and posterior Beta(${fmt(a2)}, ${fmt(b2)}) of the proportion`),
+          xLabel: T("proporção p · escura: antes dos dados · colorida: depois", "proportion p · dark: before the data · colored: after"),
+          xMin: 0, xMax: 1, yMax, pts: post, lines: [{ pts: prior, cls: "chart-fit" }], marker: [m2, pdf(m2, a2, b2)],
+          tipAt: v => [`${fmt(pdf(v, a2, b2), 3)}`, T(`densidade final em p = ${fmt(v, 3)}; P(p ≤ ${fmt(v, 3)}) ≈ ${fmt(betainc(v, a2, b2) * 100, 1)}%`, `posterior density at p = ${fmt(v, 3)}; P(p ≤ ${fmt(v, 3)}) ≈ ${fmt(betainc(v, a2, b2) * 100, 1)}%`)],
+        },
+        steps: [
+          [T("Some os sucessos a α e os fracassos a β:", "Add the successes to α and the failures to β:"),
+            `\\alpha' = ${texNum(a)} + ${k} = ${tone(texNum(a2), 2)}, \\qquad \\beta' = ${texNum(b)} + ${n - k} = ${tone(texNum(b2), 3)}`],
+          [T("A média da proporção passa de α/(α + β) para α′/(α′ + β′):", "The mean of the proportion moves from α/(α + β) to α′/(α′ + β′):"),
+            `\\dfrac{${texNum(a)}}{${texNum(a + b)}} ${approx(m1, 4)} ${texNum(m1, 4)} \;\\to\; \\dfrac{${texNum(a2)}}{${texNum(a2 + b2)}} ${approx(m2, 4)} ${tone(texNum(m2, 4), 1)}`],
+          [T("O intervalo central de 95% da distribuição final vem dos percentis 2,5 e 97,5:", "The central 95% interval of the posterior comes from the 2.5th and 97.5th percentiles:"),
+            `P(${texNum(lo, 4)} \\le p \\le ${texNum(hi, 4)}) = 0{,}95`.replace("0{,}95", EN ? "0.95" : "0{,}95")],
+        ],
+        note: T((n ? `A média final, ${fmt(m2, 4)}, fica entre a crença inicial (${fmt(m1, 4)}) e a proporção observada (${fmt(mle, 4)})` : "Sem dados, a distribuição final é a própria inicial") + `: α e β funcionam como sucessos e fracassos “imaginários” já vistos antes, e pesam tanto quanto α + β = ${fmt(a + b)} observações.`
+          + " Com muitos dados, a inicial perde importância. Beta(1, 1) é a distribuição uniforme: nenhuma preferência por valor algum."
+          + ` É o <a href="${PAGE("teorema-bayes")}">teorema de Bayes</a> aplicado a uma proporção; compare com o <a href="${PAGE("ic-proporcao")}?k=${k}&amp;n=${n}">intervalo de confiança clássico</a>.`,
+          (n ? `The posterior mean, ${fmt(m2, 4)}, lies between the prior belief (${fmt(m1, 4)}) and the observed proportion (${fmt(mle, 4)})` : "With no data, the posterior is just the prior") + `: α and β act as “imaginary” successes and failures seen before, and weigh as much as α + β = ${fmt(a + b)} observations.`
+          + " With plenty of data, the prior fades. Beta(1, 1) is the uniform distribution: no preference for any value."
+          + ` It is <a href="${PAGE("teorema-bayes")}">Bayes' theorem</a> applied to a proportion; compare with the <a href="${PAGE("ic-proporcao")}?k=${k}&amp;n=${n}">classical confidence interval</a>.`),
+      };
+    },
+
+    diag({ sens, esp, prev }) {
+      if ([sens, esp].some(v => v <= 0 || v > 100)) return { error: T("Sensibilidade e especificidade precisam estar entre 0 e 100%, sem o zero.", "Sensitivity and specificity must be between 0 and 100%, excluding zero.") };
+      if (prev <= 0 || prev >= 100) return { error: T("A prevalência precisa estar entre 0 e 100%, sem os extremos.", "Prevalence must be strictly between 0 and 100%.") };
+      const S = sens / 100, E = esp / 100, p = prev / 100, N = 10000;
+      const doentes = N * p, sadios = N - doentes;
+      const vp = S * doentes, fn = doentes - vp, vn = E * sadios, fp = sadios - vn;
+      const vpp = vp / (vp + fp), vpn = vn / (vn + fn);
+      const lrp = E < 1 ? S / (1 - E) : Infinity;
+      const ppv = q => S * q / (S * q + (1 - E) * (1 - q)), npv = q => E * (1 - q) / (E * (1 - q) + (1 - S) * q);
+      const qs = Array.from({ length: 300 }, (_, i) => 10 ** (-1 + Math.log10(99 / 0.1) * i / 299));
+      const c = v => texNum(Math.round(v * 10) / 10);
+      const VP = tone(c(vp), 2), FP = tone(c(fp), 3);
+      return {
+        result: `VPP ${approx(vpp, 4)} ${tone(pctTex(vpp), 1)}, \\qquad VPN ${approx(vpn, 4)} ${pctTex(vpn)}`.replace(/VPP/, T("VPP", "PPV")).replace(/VPN/, T("VPN", "NPV")),
+        chart: {
+          type: "curve", label: T("Valor preditivo positivo e negativo conforme a prevalência, com esta sensibilidade e especificidade", "Positive and negative predictive value by prevalence, with this sensitivity and specificity"),
+          xLabel: T(`prevalência (%), em escala logarítmica · colorida: VPP · escura: VPN`, `prevalence (%), on a log scale · colored: PPV · dark: NPV`),
+          xMin: 0.1, xMax: 99, logX: true, yMin: 0, yMax: 100,
+          pts: qs.map(q => [q, ppv(q / 100) * 100]), lines: [{ pts: qs.map(q => [q, npv(q / 100) * 100]), cls: "chart-fit" }],
+          marker: [prev, vpp * 100],
+          tipAt: v => [`${T("VPP", "PPV")} ${fmt(ppv(v / 100) * 100, 1)}% · ${T("VPN", "NPV")} ${fmt(npv(v / 100) * 100, 1)}%`, T(`com prevalência de ${fmt(v, 2)}%`, `at a prevalence of ${fmt(v, 2)}%`)],
+        },
+        steps: [
+          [T(`Imagine ${fmt(N)} pessoas testadas. Com prevalência de ${fmt(prev)}%, quantas estão doentes, e como o teste as classifica:`, `Picture ${fmt(N)} people tested. With a prevalence of ${fmt(prev)}%, how many are ill, and how the test sorts them:`),
+            `\\begin{array}{l|c|c|c} & ${T("\\text{doentes}", "\\text{ill}")} & ${T("\\text{sadios}", "\\text{healthy}")} & \\text{total} \\\\ \\hline ${T("\\text{positivo}", "\\text{positive}")} & ${VP} & ${FP} & ${c(vp + fp)} \\\\ ${T("\\text{negativo}", "\\text{negative}")} & ${c(fn)} & ${c(vn)} & ${c(fn + vn)} \\\\ \\hline \\text{total} & ${c(doentes)} & ${c(sadios)} & ${texNum(N)} \\end{array}`],
+          [T("Entre os positivos, a fração que está de fato doente:", "Among the positives, the share actually ill:"),
+            `${T("VPP", "PPV")} = \\dfrac{${VP}}{${VP} + ${FP}} ${approx(vpp, 4)} ${tone(pctTex(vpp), 1)}`],
+          [T("Entre os negativos, a fração que está de fato sadia:", "Among the negatives, the share actually healthy:"),
+            `${T("VPN", "NPV")} = \\dfrac{${c(vn)}}{${c(vn)} + ${c(fn)}} ${approx(vpn, 4)} ${pctTex(vpn)}`],
+        ],
+        note: T(`Um positivo neste teste significa doença em ${fmt(vpp * 100, 1)}% dos casos. Sensibilidade e especificidade são do teste; os valores preditivos dependem também de quem é testado: com a doença rara, mesmo um teste muito específico produz mais falsos positivos que verdadeiros, como mostra o gráfico.`
+          + ` A razão de verossimilhança positiva, S/(1 − E) ≈ ${Number.isFinite(lrp) ? fmt(lrp, 2) : "∞"}, diz quantas vezes um positivo multiplica a chance de doença. É o <a href="${PAGE("teorema-bayes")}">teorema de Bayes</a> em forma de tabela.`,
+          `A positive on this test means illness in ${fmt(vpp * 100, 1)}% of cases. Sensitivity and specificity belong to the test; the predictive values also depend on who is tested: when the disease is rare, even a very specific test produces more false positives than true ones, as the chart shows.`
+          + ` The positive likelihood ratio, S/(1 − E) ≈ ${Number.isFinite(lrp) ? fmt(lrp, 2) : "∞"}, says how many times a positive multiplies the odds of illness. It is <a href="${PAGE("teorema-bayes")}">Bayes' theorem</a> in table form.`),
+      };
+    },
+
+    mannw({ x, y }) {
+      const n1 = x.length, n2 = y.length;
+      if (n1 < 2 || n2 < 2) return { error: T("Cada grupo precisa de pelo menos dois valores.", "Each group needs at least two values.") };
+      if (n1 + n2 > 2000) return { error: T("Use no máximo 2.000 valores ao todo.", "Use at most 2,000 values in all.") };
+      const all = x.map(v => [v, 0]).concat(y.map(v => [v, 1])).sort((p, q) => p[0] - q[0]);
+      const N = all.length, rk = new Array(N);
+      let tieSum = 0;
+      for (let i = 0; i < N;) { let j = i; while (j + 1 < N && all[j + 1][0] === all[i][0]) j++; const t = j - i + 1; tieSum += t ** 3 - t; for (let m = i; m <= j; m++) rk[m] = (i + j) / 2 + 1; i = j + 1; }
+      let R1 = 0; all.forEach((p, i) => { if (p[1] === 0) R1 += rk[i]; });
+      const U1 = R1 - n1 * (n1 + 1) / 2, U2 = n1 * n2 - U1, U = Math.min(U1, U2);
+      const mu = n1 * n2 / 2, sg = Math.sqrt(n1 * n2 / 12 * ((N + 1) - tieSum / (N * (N - 1))));
+      let p, metodo;
+      if (!tieSum && n1 <= 25 && n2 <= 25) {
+        // Distribuição exata de U sem empates: f(i, j, u) = f(i − 1, j, u − j) + f(i, j − 1, u).
+        let prev = Array.from({ length: n2 + 1 }, () => [1]);
+        for (let i = 1; i <= n1; i++) {
+          const cur = [[1]];
+          for (let j = 1; j <= n2; j++) {
+            const a = prev[j], b = cur[j - 1], row = new Array(i * j + 1).fill(0);
+            for (let u = 0; u <= i * j; u++) row[u] = (u - j >= 0 && u - j < a.length ? a[u - j] : 0) + (u < b.length ? b[u] : 0);
+            cur.push(row);
+          }
+          prev = cur;
+        }
+        const dist = prev[n2], tot = dist.reduce((s, v) => s + v, 0);
+        let le = 0; for (let u = 0; u <= Math.floor(U + 1e-9); u++) le += dist[u];
+        p = Math.min(1, 2 * le / tot); metodo = "exato";
+      } else {
+        const zc = (Math.abs(U1 - mu) - 0.5) / sg;
+        p = Math.min(1, 2 * (1 - phi(Math.max(0, zc)))); metodo = "normal";
+      }
+      const z = (U1 - mu) / sg;
+      const ps = U1 / (n1 * n2);
+      const all2 = x.concat(y), lo = Math.min(...all2), hi = Math.max(...all2), span = hi - lo || 1;
+      const R1T = tone(texNum(R1), 2);
+      const rankList = all.length <= 30 ? all.map((q, i) => `${q[1] ? "" : "\\underline{"}${texNum(q[0])}${q[1] ? "" : "}"}_{(${texNum(rk[i])})}`).join(",\\ ") : "";
+      return {
+        result: `U ${approx(U)} ${tone(texNum(U), 1)}, \\qquad ${T("\\text{valor-p}", "\\text{p-value}")} ${p < 0.0001 ? "<" : "\\approx"} ${texNum(Math.max(p, 0.0001), 4)}`,
+        chart: {
+          type: "box", height: 170, xMin: lo - span * 0.06, xMax: hi + span * 0.06,
+          boxes: [{ ...boxStats(x), label: T("Grupo 1", "Group 1") }, { ...boxStats(y), label: T("Grupo 2", "Group 2") }],
+          label: T("Boxplot de cada grupo", "Boxplot of each group"), xLabel: T("valores · em cima: grupo 1 · embaixo: grupo 2", "values · top: group 1 · bottom: group 2"), tip: null,
+        },
+        steps: [
+          [T("Junte os dois grupos, ordene e dê a cada valor sua posição (empates recebem a média). Sublinhados, os do grupo 1:", "Pool the two groups, sort them and give each value its position (ties get the average). Underlined, those from group 1:"),
+            rankList || T(`\\text{(${N} valores: a lista ficaria longa demais)}`, `\\text{(${N} values: the list would be too long)}`)],
+          [T("Some as posições do grupo 1:", "Add up the positions of group 1:"), `R_1 = ${R1T}`],
+          [T("Desconte a menor soma possível para o grupo 1; o resultado é quantas vezes um valor do grupo 1 supera um do grupo 2:", "Subtract the smallest sum group 1 could have; the result is how many times a value from group 1 beats one from group 2:"),
+            `U_1 = ${R1T} - \\dfrac{${tone(n1, 3)}(${n1} + 1)}{2} ${approx(U1)} ${texNum(U1)}, \\qquad U_2 = ${n1} \\cdot ${n2} - U_1 ${approx(U2)} ${texNum(U2)}`],
+        ],
+        note: T(`O valor-p ${metodo === "exato" ? "é exato, pela contagem de todas as ordenações possíveis" : `vem da aproximação normal, z ≈ ${fmt(z, 3)}${tieSum ? ", com correção para os empates" : ""}`}: ${pValueText(p)}. ${p < 0.05 ? "Ao nível de 5%, os dois grupos diferem." : "Ao nível de 5%, não há evidência de diferença."}`
+          + ` A chance de um valor do grupo 1 superar um do grupo 2 é U₁/(n₁n₂) ≈ ${fmt(ps * 100, 1)}%; sem diferença nenhuma, seria 50%.`
+          + ` Não supõe normalidade, e um valor extremo pesa só como “o maior”. Com dados normais, o <a href="${PAGE("t-duas-amostras")}">teste t</a> tem um pouco mais de poder.`,
+          `The p-value ${metodo === "exato" ? "is exact, from counting every possible ordering" : `comes from the normal approximation, z ≈ ${fmt(z, 3)}${tieSum ? ", corrected for ties" : ""}`}: ${pValueText(p)}. ${p < 0.05 ? "At the 5% level, the two groups differ." : "At the 5% level, there is no evidence of a difference."}`
+          + ` The chance that a value from group 1 beats one from group 2 is U₁/(n₁n₂) ≈ ${fmt(ps * 100, 1)}%; with no difference at all, it would be 50%.`
+          + ` It doesn't assume normality, and an extreme value counts only as “the largest”. With normal data, the <a href="${PAGE("t-duas-amostras")}">t-test</a> has a bit more power.`),
+      };
+    },
+
+    perm({ n, k, tipo }) {
+      if (!Number.isInteger(n) || n < 0 || n > 1000) return { error: T("n precisa ser um inteiro entre 0 e 1.000.", "n must be an integer between 0 and 1,000.") };
+      if (tipo !== "perm" && (!Number.isInteger(k) || k < 0 || k > 1000)) return { error: T("k precisa ser um inteiro entre 0 e 1.000.", "k must be an integer between 0 and 1,000.") };
+      if ((tipo === "arr" || tipo === "comb") && k > n) return { error: T("Sem repetição, k não pode passar de n.", "Without repetition, k cannot exceed n.") };
+      const prod = (a, b) => { let r = 1n; for (let i = BigInt(a); i <= BigInt(b); i++) r *= i; return r; };
+      const fact = m => prod(1, m);
+      // Número inteiro exato; grande demais, vira notação científica.
+      const big = v => { const s = v.toString(); if (s.length <= 18) return texNum(Number(v)); return `${texNum(Number(s.slice(0, 5)) / 1e4, 4)} \\times 10^{${s.length - 1}}`; };
+      const bigTxt = v => { const s = v.toString(); return s.length <= 18 ? fmt(Number(v)) : `${fmt(Number(s.slice(0, 5)) / 1e4, 4)} × 10^${s.length - 1} (${fmt(s.length)} ${T("dígitos", "digits")})`; };
+      const val = {
+        perm: fact(n),
+        arr: k <= n ? prod(n - k + 1, n) : 0n,
+        arrrep: BigInt(n) ** BigInt(k),
+        comb: k <= n ? prod(n - k + 1, n) / fact(k) : 0n,
+        combrep: n + k - 1 >= 0 && n > 0 ? prod(n, n + k - 1) / fact(k) : (k === 0 ? 1n : 0n),
+      };
+      const res = val[tipo];
+      const R = tone(big(res), 1);
+      const step = {
+        perm: [T(`Permutação: todas as ordens possíveis dos ${n} itens. O primeiro lugar tem ${n} opções, o segundo ${Math.max(n - 1, 0)}, e assim por diante:`, `Permutation: every possible order of the ${n} items. The first place has ${n} options, the second ${Math.max(n - 1, 0)}, and so on:`),
+          `P_{${n}} = ${n}! = ${R}`],
+        arr: [T(`Arranjo: escolher ${k} dos ${n} itens, e a ordem importa. São ${n} opções para o primeiro, ${Math.max(n - 1, 0)} para o segundo, até ${n - k + 1} para o último:`, `Arrangement: choose ${k} of the ${n} items, and order matters. There are ${n} options for the first, ${Math.max(n - 1, 0)} for the second, down to ${n - k + 1} for the last:`),
+          `A_{${n},${k}} = \\dfrac{${tone(`${n}!`, 2)}}{${tone(`${n - k}!`, 3)}} = ${R}`],
+        arrrep: [T(`Com repetição e ordem, cada uma das ${k} posições tem as ${n} opções:`, `With repetition and order, each of the ${k} positions has all ${n} options:`), `${n}^{${k}} = ${R}`],
+        comb: [T(`Combinação: escolher ${k} dos ${n} itens sem importar a ordem. É o arranjo dividido pelas ${k}! ordens de cada escolha:`, `Combination: choose ${k} of the ${n} items regardless of order. It is the arrangement divided by the ${k}! orders of each choice:`),
+          `\\dbinom{${n}}{${k}} = \\dfrac{${n}!}{${k}!\\,(${n - k})!} = ${R}`],
+        combrep: [T(`Combinação com repetição: escolher ${k} itens entre ${n} tipos, podendo repetir e sem ordem — o mesmo que distribuir ${k} bolinhas em ${n} caixas:`, `Combination with repetition: choose ${k} items from ${n} kinds, repeats allowed and order ignored — the same as putting ${k} balls into ${n} boxes:`),
+          `\\dbinom{${n} + ${k} - 1}{${k}} = ${R}`],
+      }[tipo];
+      const nomes = { perm: T("permutações", "permutations"), arr: T("arranjos", "arrangements"), arrrep: T("arranjos com repetição", "arrangements with repetition"), comb: T("combinações", "combinations"), combrep: T("combinações com repetição", "combinations with repetition") };
+      const outros = Object.keys(val).filter(t => t !== tipo && !(t === "perm") && !((t === "arr" || t === "comb") && k > n));
+      return {
+        result: `${R}\\ \\text{${nomes[tipo]}}`,
+        steps: [step],
+        note: T(`Para comparar, com n = ${n} e k = ${k}: ${outros.map(t => `${nomes[t]}, ${bigTxt(val[t])}`).join("; ")}.`
+          + " As perguntas que decidem a fórmula são duas: a ordem importa (senha, pódio) ou não (time, mão de cartas)? Pode repetir (dígitos de um PIN) ou não (pessoas de uma fila)?"
+          + ` Veja também o <a href="${PAGE("coeficiente-binomial")}?n=${n}&amp;k=${Math.min(k, n)}">coeficiente binomial</a>.`,
+          `For comparison, with n = ${n} and k = ${k}: ${outros.map(t => `${nomes[t]}, ${bigTxt(val[t])}`).join("; ")}.`
+          + " Two questions decide the formula: does order matter (password, podium) or not (team, hand of cards)? Can items repeat (digits of a PIN) or not (people in a queue)?"
+          + ` See also the <a href="${PAGE("coeficiente-binomial")}?n=${n}&amp;k=${Math.min(k, n)}">binomial coefficient</a>.`),
+      };
+    },
+
+    gama({ k, lambda, x }) {
+      if (k <= 0 || k > 1000) return { error: T("A forma k precisa estar entre 0 e 1.000, sem o zero.", "The shape k must be between 0 and 1,000, excluding zero.") };
+      if (lambda <= 0) return { error: T("A taxa λ precisa ser maior que zero.", "The rate λ must be greater than zero.") };
+      if (x < 0) return { error: T("x precisa ser maior ou igual a zero.", "x must be zero or more.") };
+      const lpdf = v => k * Math.log(lambda) + (k - 1) * Math.log(v) - lambda * v - lgamma(k);
+      const pdf = v => (v <= 0 ? (k === 1 ? lambda : k < 1 ? Infinity : 0) : Math.exp(lpdf(v)));
+      const cdf = v => 1 - gammaQ(k, lambda * v);
+      const f = pdf(x), F = x > 0 ? cdf(x) : 0;
+      const mean = k / lambda, sd = Math.sqrt(k) / lambda;
+      const hi = Math.max(x * 1.15, mean + 4 * sd);
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = hi * (i + (k < 1 ? 0.5 : 0)) / 240; return [v, pdf(v)]; }).filter(p => Number.isFinite(p[1]));
+      const yMax = Math.min(Math.max(...pts.map(p => p[1])), k < 1 ? pdf(mean) * 6 : Infinity);
+      const inteiro = Number.isInteger(k);
+      let pois = "";
+      if (inteiro && x > 0) {
+        let s = 0; for (let j = 0; j < k; j++) s += poisPmf(lambda * x, j);
+        pois = T(` Com k inteiro, esperar o ${k}º evento passar de x é o mesmo que ter menos de ${k} eventos até x: P(X ≤ ${fmt(x)}) = 1 − P(Poisson(${fmt(lambda * x)}) < ${k}) = 1 − ${fmt(s, 4)}, como dá a <a href="${PAGE("distribuicao-poisson")}?lambda=${Number((lambda * x).toFixed(6))}&amp;k=${k - 1}">Poisson</a>.`,
+          ` With integer k, waiting past x for event number ${k} is the same as having fewer than ${k} events by x: P(X ≤ ${fmt(x)}) = 1 − P(Poisson(${fmt(lambda * x)}) < ${k}) = 1 − ${fmt(s, 4)}, as the <a href="${PAGE("distribuicao-poisson")}?lambda=${Number((lambda * x).toFixed(6))}&amp;k=${k - 1}">Poisson</a> gives.`);
+      }
+      const K = texNum(k), L = texNum(lambda), X = texNum(x);
+      return {
+        result: `f(${X}) ${approx(f, 6)} ${tone(texSci(f, 6), 1)}, \\qquad P(X \\le ${X}) ${approx(F, 6)} ${pctTex(F)}`,
+        chart: {
+          type: "curve", label: T(`Densidade Gama com forma ${fmt(k)} e taxa ${fmt(lambda)}; área sombreada até x = ${fmt(x)}`, `Gamma density with shape ${fmt(k)} and rate ${fmt(lambda)}; area shaded up to x = ${fmt(x)}`),
+          xLabel: "x", xMin: 0, xMax: hi, yMax, pts, shadeTo: x, marker: Number.isFinite(f) && f <= yMax ? [x, f] : null,
+          tipAt: v => [`f = ${fmtSci(pdf(v), 4)}`, `x = ${fmt(v, 2)}, P(X ≤ x) ≈ ${fmt(cdf(v) * 100, 1)}%`],
+        },
+        steps: [
+          [T("Calcule cada parte da densidade:", "Compute each part of the density:"),
+            `\\lambda^k = ${L}^{${K}} ${approx(lambda ** k, 6)} ${tone(texSci(lambda ** k, 4), 2)}, \\quad x^{k-1} = ${X}^{${texNum(k - 1)}} ${approx(x ** (k - 1), 6)} ${tone(texSci(x ** (k - 1), 4), 3)}, \\quad e^{-\\lambda x} ${approx(Math.exp(-lambda * x), 6)} ${tone(texSci(Math.exp(-lambda * x), 4), 4)}, \\quad \\Gamma(${K}) ${approx(Math.exp(lgamma(k)), 6)} ${tone(texSci(Math.exp(lgamma(k)), 4), 5)}`],
+          [T("Junte tudo:", "Put it all together:"), `f(${X}) ${approx(f, 6)} ${tone(texSci(f, 6), 1)}`],
+          [T("A probabilidade acumulada é a área sombreada, pela função gama incompleta:", "The cumulative probability is the shaded area, from the incomplete gamma function:"),
+            `P(X \\le ${X}) ${approx(F, 6)} ${texNum(F, 6)}`],
+        ],
+        note: T(`A média é k/λ = ${fmt(mean, 4)} e o desvio padrão √k/λ = ${fmt(sd, 4)}.${inteiro ? ` Com k inteiro, a Gama é a soma de ${k} esperas <a href="${PAGE("distribuicao-exponencial")}?lambda=${lambda}&amp;x=${x}">exponenciais</a> de taxa λ: o tempo até o ${k}º evento.` : ""} Com k = 1, ela é a própria exponencial; com k grande, fica parecida com uma normal.`,
+          `The mean is k/λ = ${fmt(mean, 4)} and the standard deviation √k/λ = ${fmt(sd, 4)}.${inteiro ? ` With integer k, the Gamma is the sum of ${k} <a href="${PAGE("distribuicao-exponencial")}?lambda=${lambda}&amp;x=${x}">exponential</a> waits with rate λ: the time until event number ${k}.` : ""} With k = 1 it is the exponential itself; with large k it looks like a normal.`) + pois,
+      };
+    },
+
+    forma({ x }) {
+      const n = x.length;
+      if (n < 4) return { error: T("Informe pelo menos quatro valores.", "Enter at least four values.") };
+      if (n > 5000) return { error: T("Use no máximo 5.000 valores.", "Use at most 5,000 values.") };
+      const mean = x.reduce((s, v) => s + v, 0) / n;
+      const mom = r => x.reduce((s, v) => s + (v - mean) ** r, 0) / n;
+      const m2 = mom(2), m3 = mom(3), m4 = mom(4);
+      if (m2 === 0) return { error: T("Todos os valores são iguais: não há forma para medir.", "All the values are equal: there is no shape to measure.") };
+      const g1 = m3 / m2 ** 1.5, g2 = m4 / (m2 * m2) - 3;
+      const G1 = g1 * Math.sqrt(n * (n - 1)) / (n - 2), G2 = ((n + 1) * g2 + 6) * (n - 1) / ((n - 2) * (n - 3));
+      const jb = n / 6 * (g1 * g1 + g2 * g2 / 4), pjb = chiSurvival(jb, 2);
+      const sd = Math.sqrt(m2 * n / (n - 1));
+      const lo = Math.min(...x), hi = Math.max(...x), span = hi - lo, B = Math.max(5, Math.min(30, Math.round(Math.sqrt(n) * 1.5))), w = span / B;
+      const counts = new Array(B).fill(0); x.forEach(v => { counts[Math.min(B - 1, Math.floor((v - lo) / w))]++; });
+      const bins = counts.map((c, i) => ({ x0: lo + i * w, x1: lo + (i + 1) * w, count: c, y: c / (n * w) }));
+      const pts = Array.from({ length: 161 }, (_, i) => { const v = lo - span * 0.1 + span * 1.2 * i / 160; return [v, normPdf(v, mean, sd)]; });
+      const lado = Math.abs(g1) < 0.5 ? T("quase simétrica", "nearly symmetric") : g1 > 0 ? T("assimétrica à direita: a cauda longa fica nos valores altos", "right-skewed: the long tail is on the high side") : T("assimétrica à esquerda: a cauda longa fica nos valores baixos", "left-skewed: the long tail is on the low side");
+      const cauda = g2 > 0.5 ? T("caudas mais pesadas que as da normal (mais valores extremos)", "heavier tails than the normal (more extreme values)") : g2 < -0.5 ? T("caudas mais leves que as da normal", "lighter tails than the normal") : T("caudas parecidas com as da normal", "tails similar to the normal's");
+      const qs = new URLSearchParams({ x: x.join(" ") });
+      return {
+        result: `g_1 ${approx(g1)} ${tone(texNum(g1), 1)}, \\qquad g_2 ${approx(g2)} ${texNum(g2)}`,
+        chart: {
+          type: "hist", label: T("Histograma dos dados com a curva normal de mesma média e desvio padrão", "Histogram of the data with the normal curve of the same mean and standard deviation"),
+          xLabel: T("valores · curva: normal de mesma média e desvio padrão", "values · curve: normal with the same mean and standard deviation"),
+          xMin: lo - span * 0.1, xMax: hi + span * 0.1, yMax: Math.max(...bins.map(b => b.y), normPdf(mean, mean, sd)), bins, pts,
+          binTip: b => [T(`${b.count} ${b.count === 1 ? "valor" : "valores"}`, `${b.count} value${b.count === 1 ? "" : "s"}`), T(`entre ${fmt(b.x0, 2)} e ${fmt(b.x1, 2)}`, `between ${fmt(b.x0, 2)} and ${fmt(b.x1, 2)}`)],
+        },
+        steps: [
+          [T("Calcule a média e os momentos centrais: a média das potências 2, 3 e 4 dos desvios.", "Compute the mean and the central moments: the mean of the 2nd, 3rd and 4th powers of the deviations."),
+            `\\bar{x} ${approx(mean)} ${texNum(mean)}, \\quad m_2 ${approx(m2)} ${tone(texNum(m2), 3)}, \\quad m_3 ${approx(m3)} ${tone(texNum(m3), 2)}, \\quad m_4 ${approx(m4)} ${texNum(m4)}`],
+          [T("A assimetria divide m₃ pelo desvio padrão ao cubo; a curtose, m₄ pelo desvio padrão à quarta, menos 3 (o valor da normal):", "Skewness divides m₃ by the standard deviation cubed; kurtosis, m₄ by the standard deviation to the fourth, minus 3 (the normal's value):"),
+            `g_1 = \\dfrac{${tone(texNum(m3), 2)}}{${tone(texNum(m2), 3)}^{3/2}} ${approx(g1)} ${tone(texNum(g1), 1)}, \\qquad g_2 = \\dfrac{${texNum(m4)}}{${texNum(m2)}^2} - 3 ${approx(g2)} ${texNum(g2)}`],
+          [T("Programas como Excel e SPSS mostram as versões corrigidas para amostra:", "Software such as Excel and SPSS shows the sample-corrected versions:"),
+            `G_1 ${approx(G1)} ${texNum(G1)}, \\qquad G_2 ${n > 3 ? `${approx(G2)} ${texNum(G2)}` : ""}`],
+        ],
+        note: T(`A distribuição é ${lado}, com ${cauda}. Na normal, as duas medidas valem 0.`
+          + ` O teste de Jarque–Bera junta as duas: JB = n/6 · (g₁² + g₂²/4) ≈ ${fmt(jb, 3)}, valor-p ${pValueText(pjb)}${pjb < 0.05 ? ", e a normalidade é rejeitada a 5%" : ""}.`
+          + ` Com dados assimétricos, a média é puxada pela cauda: vale olhar a mediana e os <a href="${PAGE("quartis-iqr")}?${qs}">quartis destes valores</a>.`,
+          `The distribution is ${lado}, with ${cauda}. For the normal, both measures are 0.`
+          + ` The Jarque–Bera test combines them: JB = n/6 · (g₁² + g₂²/4) ≈ ${fmt(jb, 3)}, p-value ${pValueText(pjb)}${pjb < 0.05 ? ", and normality is rejected at 5%" : ""}.`
+          + ` With skewed data, the mean is dragged by the tail: it is worth looking at the median and the <a href="${PAGE("quartis-iqr")}?${qs}">quartiles of these values</a>.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -3767,10 +4200,15 @@
       // ganham a cor de destaque, e a linha vertical marca esse valor.
       if (spec.type === "intervals") {
         const rh = ih / spec.rows.length;
-        svg("line", { x1: X(spec.truth), x2: X(spec.truth), y1: m.t, y2: m.t + ih, class: "chart-truth" }, root);
+        if (spec.truth != null) svg("line", { x1: X(spec.truth), x2: X(spec.truth), y1: m.t, y2: m.t + ih, class: "chart-truth" }, root);
         spec.rows.forEach((r, i) => {
           const y = m.t + (i + 0.5) * rh;
           svg("line", { x1: X(r.lo), x2: X(r.hi), y1: y, y2: y, class: r.hit ? "chart-seg" : "chart-seg is-miss" }, root);
+          // Com a e b, as pontas viram pontos: cheio para a, vazado para b.
+          if (r.a != null) {
+            svg("circle", { cx: X(r.a), cy: y, r: 5, class: "chart-dot" }, root);
+            svg("circle", { cx: X(r.b), cy: y, r: 5, class: "chart-dot-b" }, root);
+          }
           const hit = svg("rect", { x: m.l, y: y - rh / 2, width: iw, height: rh, class: "chart-hit" }, root);
           const t = spec.tip(r, i);
           hit.addEventListener("pointermove", e => showTip(e, t[0], t[1]));

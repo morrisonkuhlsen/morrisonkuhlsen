@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">59 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">69 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -62,6 +62,11 @@
             <span class="card-name">Bayes&#x27; Theorem</span>
             <span class="card-blurb">Updates the probability of a hypothesis after seeing evidence.</span>
           </a></li>
+          <li><a class="formula-card" href="diagnostic-test.html">
+            <span class="card-tex" data-tex="PPV = \dfrac{S \cdot p}{S \cdot p + (1 - E)(1 - p)}"></span>
+            <span class="card-name">Diagnostic Test: Predictive Values</span>
+            <span class="card-blurb">What a positive is worth, depending on how rare the disease is.</span>
+          </a></li>
           <li><a class="formula-card" href="conditional-probability.html">
             <span class="card-tex" data-tex="P(A\mid B) = \dfrac{P(A \cap B)}{P(B)}"></span>
             <span class="card-name">Conditional Probability</span>
@@ -71,6 +76,16 @@
             <span class="card-tex" data-tex="P(B) = \sum_{i=1}^{n} P(B\mid A_i) \cdot P(A_i)"></span>
             <span class="card-name">Law of Total Probability</span>
             <span class="card-blurb">Adds up the probability of B across every scenario of a partition.</span>
+          </a></li>
+          <li><a class="formula-card" href="simpsons-paradox.html">
+            <span class="card-tex" data-tex="p_{\text{total}} = \sum_g \dfrac{n_g}{N} \cdot p_g"></span>
+            <span class="card-name">Simpson&#x27;s Paradox</span>
+            <span class="card-blurb">When the winner in every group loses overall.</span>
+          </a></li>
+          <li><a class="formula-card" href="permutations-arrangements.html">
+            <span class="card-tex" data-tex="A_{n,k} = \dfrac{n!}{(n - k)!}"></span>
+            <span class="card-name">Permutations and Arrangements</span>
+            <span class="card-blurb">Counting with or without order, with or without repetition.</span>
           </a></li>
           <li><a class="formula-card" href="binomial-coefficient.html">
             <span class="card-tex" data-tex="\binom{n}{k} = \dfrac{n!}{k! \cdot (n-k)!}"></span>
@@ -132,10 +147,20 @@
             <span class="card-name">Exponential Distribution</span>
             <span class="card-blurb">The waiting time until the next event.</span>
           </a></li>
+          <li><a class="formula-card" href="gamma-distribution.html">
+            <span class="card-tex" data-tex="f(x) = \dfrac{\lambda^k x^{k-1} e^{-\lambda x}}{\Gamma(k)}"></span>
+            <span class="card-name">Gamma Distribution</span>
+            <span class="card-blurb">The time until the k-th event.</span>
+          </a></li>
           <li><a class="formula-card" href="normal-distribution.html">
             <span class="card-tex" data-tex="f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}"></span>
             <span class="card-name">Normal (Gaussian) Distribution</span>
             <span class="card-blurb">The bell curve defined by its mean and standard deviation.</span>
+          </a></li>
+          <li><a class="formula-card" href="beta-distribution.html">
+            <span class="card-tex" data-tex="f(p) = \dfrac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha, \beta)}"></span>
+            <span class="card-name">Beta Distribution</span>
+            <span class="card-blurb">The uncertainty about a proportion, updated with the data.</span>
           </a></li>
           <li><a class="formula-card" href="law-of-large-numbers.html">
             <span class="card-tex" data-tex="\bar{X}_n \xrightarrow{\,n \to \infty\,} \mu"></span>
@@ -172,6 +197,11 @@
             <span class="card-name">Paired t-Test</span>
             <span class="card-blurb">Compares before and after in the same people.</span>
           </a></li>
+          <li><a class="formula-card" href="mann-whitney-test.html">
+            <span class="card-tex" data-tex="U_1 = R_1 - \dfrac{n_1(n_1 + 1)}{2}"></span>
+            <span class="card-name">Mann-Whitney Test</span>
+            <span class="card-blurb">Compares two groups by ranks, without assuming normality.</span>
+          </a></li>
           <li><a class="formula-card" href="one-way-anova.html">
             <span class="card-tex" data-tex="F = \dfrac{SS_{\text{between}} / (k - 1)}{SS_{\text{within}} / (N - k)}"></span>
             <span class="card-name">One-Way ANOVA</span>
@@ -191,6 +221,11 @@
             <span class="card-tex" data-tex="CI = \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Confidence Interval</span>
             <span class="card-blurb">A range of plausible values for the population mean.</span>
+          </a></li>
+          <li><a class="formula-card" href="proportion-confidence-interval.html">
+            <span class="card-tex" data-tex="CI = \hat{p} \pm z \sqrt{\dfrac{\hat{p}(1 - \hat{p})}{n}}"></span>
+            <span class="card-name">Confidence Interval for a Proportion</span>
+            <span class="card-blurb">The Wald and Wilson methods, and why the second is better.</span>
           </a></li>
           <li><a class="formula-card" href="bootstrap.html">
             <span class="card-tex" data-tex="CI = \left[\hat{\theta}^*_{(\alpha/2)};\ \hat{\theta}^*_{(1-\alpha/2)}\right]"></span>
@@ -257,6 +292,11 @@
             <span class="card-name">Neyman Allocation</span>
             <span class="card-blurb">Splits the sample across strata by size and variability.</span>
           </a></li>
+          <li><a class="formula-card" href="weighted-mean.html">
+            <span class="card-tex" data-tex="\bar{x}_w = \dfrac{\sum w_i x_i}{\sum w_i}"></span>
+            <span class="card-name">Weighted Mean and Survey Weights</span>
+            <span class="card-blurb">Means with weights, correcting polls and the effective sample size.</span>
+          </a></li>
         </ul>
       </section>
       <section class="formula-group">
@@ -272,6 +312,11 @@
             <span class="card-name">Quartiles and Interquartile Range</span>
             <span class="card-blurb">The middle half of the data, the boxplot and the outliers.</span>
           </a></li>
+          <li><a class="formula-card" href="skewness-kurtosis.html">
+            <span class="card-tex" data-tex="g_1 = \dfrac{\frac{1}{n}\sum (x_i - \bar{x})^3}{\left[\frac{1}{n}\sum (x_i - \bar{x})^2\right]^{3/2}}"></span>
+            <span class="card-name">Skewness and Kurtosis</span>
+            <span class="card-blurb">The shape of the data: which way it leans and how heavy its tails are.</span>
+          </a></li>
           <li><a class="formula-card" href="covariance.html">
             <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>
             <span class="card-name">Covariance</span>
@@ -286,6 +331,11 @@
             <span class="card-tex" data-tex="r_s = 1 - \dfrac{6 \sum d_i^2}{n(n^2 - 1)}"></span>
             <span class="card-name">Spearman Correlation</span>
             <span class="card-blurb">Correlation by ranks: catches increasing relationships that aren&#x27;t straight.</span>
+          </a></li>
+          <li><a class="formula-card" href="cohens-kappa.html">
+            <span class="card-tex" data-tex="\kappa = \dfrac{p_o - p_e}{1 - p_e}"></span>
+            <span class="card-name">Cohen&#x27;s Kappa</span>
+            <span class="card-blurb">The agreement between two raters, net of chance.</span>
           </a></li>
           <li><a class="formula-card" href="linear-regression.html">
             <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>

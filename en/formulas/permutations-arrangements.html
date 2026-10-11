@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Permutations and Arrangements — Interactive</title>
+  <meta name="description" content="Permutations, arrangements and combinations, with and without repetition, explained term by term, with an exact calculator for large numbers and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/permutations-arrangements.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/permutacoes-arranjos.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/permutations-arrangements.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/permutacoes-arranjos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/permutations-arrangements.html">
+  <meta property="og:title" content="Permutations and Arrangements — Interactive">
+  <meta property="og:description" content="Permutations, arrangements and combinations, with and without repetition, explained term by term, with an exact calculator for large numbers and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Permutations and Arrangements — Interactive">
+  <meta name="twitter:description" content="Permutations, arrangements and combinations, with and without repetition, explained term by term, with an exact calculator for large numbers and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/permutacoes-arranjos.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Permutations and Arrangements</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive arrangement formula">
+        <span class="part" data-part="a_pa" data-tone="1" data-tex="A_{n,k}"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="n_pa" data-tone="2" data-tex="n!"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="nk_pa" data-tone="3" data-tex="(n - k)!"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com contagem exata; estado em ?n=&k=&tipo=. -->
+    <section class="calc" data-calc="perm" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a 4-digit password, all digits different, chosen from 0 to 9. How many are there? And if digits could repeat? Change the values and the kind of count to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Items available <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Items chosen <i>k</i></span>
+          <input name="k" type="text" inputmode="numeric" value="4" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Kind of count</span>
+          <select name="tipo" autocomplete="off">
+            <option value="arr">Arrangement: order matters, no repetition</option>
+            <option value="arrrep">Arrangement with repetition</option>
+            <option value="comb">Combination: no order, no repetition</option>
+            <option value="combrep">Combination with repetition</option>
+            <option value="perm">Permutation of all n</option>
+          </select>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="a_pa" data-tone="1">Arrangement (A(n, k))</dt>
+          <dd>How many ordered sequences of k different items can be formed from n items: podiums, passwords without repeats, queues.</dd>
+          <dt data-part="n_pa" data-tone="2">Factorial of n (n!)</dt>
+          <dd>Every possible order of the n items: n · (n − 1) · … · 1. When k = n, the arrangement is the permutation, n!.</dd>
+          <dt data-part="nk_pa" data-tone="3">Factorial of What Is Left ((n − k)!)</dt>
+          <dd>Cancels the factors of the items left out. What remains is n · (n − 1) · … · (n − k + 1): n options for the first position, one fewer for each next one.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="simpsons-paradox.html" rel="prev"><span>Previous</span>Simpson&#x27;s Paradox</a>
+      <a class="pager-next" href="binomial-coefficient.html" rel="next"><span>Next</span>Binomial Coefficient</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Skewness and Kurtosis — Interactive</title>
+  <meta name="description" content="Skewness and kurtosis explained term by term, with a calculator, a histogram compared with the normal, corrected versions and the Jarque–Bera test.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/skewness-kurtosis.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/assimetria-curtose.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/skewness-kurtosis.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/assimetria-curtose.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/skewness-kurtosis.html">
+  <meta property="og:title" content="Skewness and Kurtosis — Interactive">
+  <meta property="og:description" content="Skewness and kurtosis explained term by term, with a calculator, a histogram compared with the normal, corrected versions and the Jarque–Bera test.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Skewness and Kurtosis — Interactive">
+  <meta name="twitter:description" content="Skewness and kurtosis explained term by term, with a calculator, a histogram compared with the normal, corrected versions and the Jarque–Bera test.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/assimetria-curtose.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Skewness and Kurtosis</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive skewness formula">
+        <span class="part" data-part="g1" data-tone="1" data-tex="g_1"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="m3" data-tone="2" data-tex="\tfrac{1}{n} \sum (x_i - \bar{x})^3"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="m2" data-tone="3" data-tex="\left[\tfrac{1}{n} \sum (x_i - \bar{x})^2\right]^{3/2}"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com histograma; estado em ?x=. -->
+    <section class="calc" data-calc="forma" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the monthly income, in thousands, of fifteen families. Most earn little and a few earn a lot. How skewed is this distribution, and how heavy are its tails? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Values <i>x<sub>i</sub></i></span>
+          <input name="x" type="text" inputmode="decimal" value="1.8 2.1 2.3 2.5 2.6 2.9 3.1 3.4 3.8 4.2 4.9 5.6 7.5 9.8 15" data-list autocomplete="off" spellcheck="false">
+          <small>At least four, separated by spaces or commas.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="g1" data-tone="1">Skewness (g₁)</dt>
+          <dd>Positive when the long tail is on the right (rare, distant high values, like income); negative when it is on the left; near zero, symmetric. Kurtosis, g₂, similarly measures how heavy the tails are.</dd>
+          <dt data-part="m3" data-tone="2">Third Moment</dt>
+          <dd>The mean of the cubed deviations. Cubing keeps the sign and magnifies large deviations, so the longer tail decides the result.</dd>
+          <dt data-part="m2" data-tone="3">Standard Deviation Cubed</dt>
+          <dd>Divides the third moment by the scale of the data, raised to the same power: that way skewness has no unit and doesn't change whether the data are in dollars or thousands of dollars.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="quartiles-iqr.html" rel="prev"><span>Previous</span>Quartiles and Interquartile Range</a>
+      <a class="pager-next" href="covariance.html" rel="next"><span>Next</span>Covariance</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -176,6 +176,8 @@ CATALOG = {
     "t-pareado": ("paired-t-test", "the paired t-test"),
     "anova-um-fator": ("one-way-anova", "one-way ANOVA"),
     "correlacao-spearman": ("spearman-correlation", "Spearman correlation"),
+    "kappa-cohen": ("cohens-kappa", "Cohen's kappa"),
+    "mann-whitney": ("mann-whitney-u-test", "the Mann-Whitney U test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
     "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),
@@ -213,6 +215,10 @@ def build_index():
             tex = tex.replace(r"\text{ganhar trocando}", r"\text{win by switching}")
         if slug == "comparacoes-multiplas":
             tex = tex.replace(r"\text{falso positivo}", r"\text{false positive}")
+        if slug == "ic-proporcao":
+            tex = tex.replace("IC =", "CI =")
+        if slug == "teste-diagnostico":
+            tex = tex.replace("VPP =", "PPV =")
         if slug == "bootstrap":
             tex = tex.replace("IC =", "CI =")
         if slug == "anova-um-fator":
