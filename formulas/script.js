@@ -22,6 +22,9 @@
     "regressao-linear": "linear-regression", "z-score": "z-score", "t-student": "students-t-test",
     "cochran-formula": "cochran-formula", "poder-estatistico": "statistical-power",
     "simulador-pesquisa": "poll-simulator", "duas-proporcoes": "two-proportions-sample-size",
+    "teorema-chebyshev": "chebyshev-theorem", "distribuicao-bernoulli": "bernoulli-distribution",
+    "distribuicao-poisson": "poisson-distribution", "intervalo-confianca": "confidence-interval",
+    "teorema-central-limite": "central-limit-theorem", "media-harmonica": "harmonic-mean",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -1572,6 +1575,374 @@
       };
     },
 
+    dp({ x }) {
+      const n = x.length;
+      if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
+      if (n > 200) return { error: T("Use no máximo 200 valores.", "Use at most 200 values.") };
+      const sum = x.reduce((a, b) => a + b, 0);
+      const mean = sum / n;
+      const dev = x.map(v => v - mean);
+      const ss = dev.reduce((a, d) => a + d * d, 0);
+      const v = ss / (n - 1), s = Math.sqrt(v), pop = Math.sqrt(ss / n);
+      const near = dev.filter(d => Math.abs(d) <= s + 1e-9).length;
+      const SS = tone(texNum(ss), 3), N1 = tone(n - 1, 4);
+      const meanLine = n <= 6
+        ? `\\bar{x} = \\dfrac{${x.map(u => paren(u, texNum(u))).join(" + ")}}{${n}} ${approx(mean)} ${texNum(mean)}`
+        : `\\bar{x} = \\dfrac{${texNum(sum)}}{${n}} ${approx(mean)} ${texNum(mean)}`;
+      const table = n > MAX_TABLE
+        ? T(`\\textstyle\\sum (x_i - \\bar{x})^2 ${approx(ss)} ${SS} \\quad \\text{(${n} valores: a tabela ficaria longa demais)}`,
+          `\\textstyle\\sum (x_i - \\bar{x})^2 ${approx(ss)} ${SS} \\quad \\text{(${n} values: the table would be too long)}`)
+        : `\\begin{array}{c|c|c|c} i & x_i & x_i - \\bar{x} & (x_i - \\bar{x})^2 \\\\ \\hline `
+          + x.map((u, i) => `${i + 1} & ${texNum(u)} & ${texNum(dev[i])} & ${texNum(dev[i] ** 2)}`).join(" \\\\ ")
+          + ` \\\\ \\hline \\Sigma & & & ${SS} \\end{array}`;
+      const lo = Math.min(...x, mean - s), hi = Math.max(...x, mean + s);
+      const pad = (hi - lo) * 0.06 || 1;
+      const r4 = u => Number(u.toFixed(4));
+      return {
+        result: `s ${approx(s)} ${tone(texNum(s), 1)}`,
+        chart: {
+          type: "intervals", height: Math.max(150, Math.min(320, 50 + n * 22)),
+          label: T(`Cada valor ligado à média ${fmt(mean)} por um segmento; destacados os ${n - near} que ficam a mais de um desvio padrão dela`,
+            `Each value joined to the mean ${fmt(mean)} by a segment; highlighted, the ${n - near} lying more than one standard deviation from it`),
+          xLabel: T("valores · linha vertical: média · destaque: a mais de 1 s da média", "values · vertical line: mean · highlighted: more than 1 s from the mean"),
+          xMin: lo - pad, xMax: hi + pad, truth: mean,
+          rows: x.map(u => ({ lo: Math.min(u, mean), hi: Math.max(u, mean), hit: Math.abs(u - mean) <= s + 1e-9 })),
+          tip: (r, i) => [fmt(x[i]), T(`valor ${i + 1}: desvio de ${fmt(dev[i])} (${fmt(s ? dev[i] / s : 0, 2)} s)`, `value ${i + 1}: deviation of ${fmt(dev[i])} (${fmt(s ? dev[i] / s : 0, 2)} s)`)],
+        },
+        steps: [
+          [T("Calcule a média:", "Compute the mean:"), meanLine],
+          [T("Subtraia a média de cada valor e eleve ao quadrado; some os quadrados:", "Subtract the mean from each value and square it; add up the squares:"), table],
+          [T("Divida pela quantidade de valores menos um. O resultado é a variância:", "Divide by the number of values minus one. The result is the variance:"),
+            `s^2 = \\dfrac{${SS}}{${N1}} ${approx(v)} ${texNum(v)}`],
+          [T("Tire a raiz quadrada, para voltar à unidade dos dados:", "Take the square root, to get back to the units of the data:"),
+            `s = \\sqrt{${texNum(v)}} ${approx(s)} ${tone(texNum(s), 1)}`],
+        ],
+        note: T(`${near} de ${n} valores estão a até um desvio padrão da média, entre ${fmt(mean - s)} e ${fmt(mean + s)}.`
+          + ` Dividir por n − 1, e não por n, compensa o fato de os desvios serem medidos a partir de x̄, que fica mais perto dos dados do que a média verdadeira:`
+          + ` sem essa correção, a amostra subestimaria a variabilidade. Se os valores forem a população inteira, divida por n: σ ${approx(pop) === "=" ? "=" : "≈"} ${fmt(pop)}.`
+          + (s > 0 ? ` Com estes valores, veja o <a href="${PAGE("z-score")}?mu=${r4(mean)}&amp;sd=${r4(s)}&amp;x=${x[0]}">z-score</a>`
+          + ` ou o <a href="${PAGE("teorema-chebyshev")}?mu=${r4(mean)}&amp;sd=${r4(s)}&amp;k=2">teorema de Chebyshev</a>.` : ""),
+          `${near} of ${n} values lie within one standard deviation of the mean, between ${fmt(mean - s)} and ${fmt(mean + s)}.`
+          + ` Dividing by n − 1 rather than n makes up for the deviations being measured from x̄, which sits closer to the data than the true mean does:`
+          + ` without that correction, the sample would understate the spread. If the values are the whole population, divide by n: σ ${approx(pop) === "=" ? "=" : "≈"} ${fmt(pop)}.`
+          + (s > 0 ? ` With these values, see the <a href="${PAGE("z-score")}?mu=${r4(mean)}&amp;sd=${r4(s)}&amp;x=${x[0]}">z-score</a>`
+          + ` or <a href="${PAGE("teorema-chebyshev")}?mu=${r4(mean)}&amp;sd=${r4(s)}&amp;k=2">Chebyshev's theorem</a>.` : "")),
+      };
+    },
+
+    esperanca({ x, p }) {
+      if (x.length !== p.length) return { error: T(`Há ${x.length} valores e ${p.length} probabilidades; as listas precisam ter o mesmo tamanho.`, `There are ${x.length} values and ${p.length} probabilities; the lists must have the same length.`) };
+      const n = x.length;
+      if (n < 2) return { error: T("Informe pelo menos dois valores possíveis.", "Enter at least two possible values.") };
+      if (n > 50) return { error: T("Use no máximo 50 valores.", "Use at most 50 values.") };
+      if (p.some(v => v < 0)) return { error: T("As probabilidades não podem ser negativas.", "Probabilities cannot be negative.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const tot = sum(p);
+      const pct = Math.abs(tot - 100) < 1e-6;
+      if (!pct && Math.abs(tot - 1) > 1e-6) return { error: T(`As probabilidades somam ${fmt(tot, 6)}; precisam somar 1 (ou 100, em %).`, `The probabilities add up to ${fmt(tot, 6)}; they must add up to 1 (or 100, in %).`) };
+      const ps = pct ? p.map(v => v / 100) : p;
+      const prod = x.map((v, i) => v * ps[i]);
+      const e = sum(prod);
+      const e2 = sum(x.map((v, i) => v * v * ps[i]));
+      const sd = Math.sqrt(Math.max(0, e2 - e * e));
+      const E = tone(texNum(e), 1);
+      const table = n > MAX_TABLE
+        ? `\\textstyle\\sum x_i \\cdot P(x_i) ${approx(e)} ${E}`
+        : `\\begin{array}{c|c|c} ${tone("x_i", 3)} & ${tone("P(x_i)", 4)} & x_i \\cdot P(x_i) \\\\ \\hline `
+          + x.map((v, i) => `${texNum(v)} & ${texNum(ps[i], 6)} & ${texNum(prod[i], 6)}`).join(" \\\\ ")
+          + ` \\\\ \\hline & ${texNum(sum(ps), 6)} & ${E} \\end{array}`;
+      const steps = [];
+      if (pct) steps.push([T("As probabilidades vieram em %; escreva-as como proporção:", "The probabilities came in %; write them as proportions:"),
+        ps.slice(0, 8).map((v, i) => `P(${texNum(x[i])}) = ${texNum(v, 6)}`).join(", \\quad ") + (n > 8 ? ", \\quad \\ldots" : "")]);
+      steps.push([T("Multiplique cada valor pela sua probabilidade:", "Multiply each value by its probability:"), table]);
+      steps.push([T("Some os produtos:", "Add up the products:"), n <= 6
+        ? `E[X] = ${prod.map(v => paren(v, texNum(v, 6))).join(" + ")} ${approx(e)} ${E}`
+        : `E[X] = \\textstyle\\sum x_i \\cdot P(x_i) ${approx(e)} ${E}`]);
+      // Valores inteiros e próximos viram barras; o resto fica sem gráfico.
+      let chart;
+      const lo = Math.min(...x), hi = Math.max(...x);
+      if (x.every(Number.isInteger) && hi - lo <= 60) {
+        const xs = Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+        const ys = xs.map(k => sum(ps.filter((_, i) => x[i] === k)));
+        chart = discreteChart(T(`Distribuição de X; valor esperado ${fmt(e)}`, `Distribution of X; expected value ${fmt(e)}`),
+          T(`valor de X · valor esperado: ${fmt(e)}`, `value of X · expected value: ${fmt(e)}`), xs, ys, Math.round(e), "X");
+      }
+      const r4 = u => Number(u.toFixed(4));
+      const possible = x.some(v => Math.abs(v - e) < 1e-9);
+      return {
+        result: `E[X] ${approx(e)} ${E}`,
+        chart,
+        steps,
+        note: T(`É a média de longo prazo: repetindo o experimento muitas vezes, a média dos resultados se aproxima de ${fmt(e)}.`
+          + (possible ? "" : " Repare que esse valor nem precisa ser um resultado possível de X.")
+          + ` A dispersão em torno dele vem da variância, E[X²] − E[X]² ≈ ${fmt(sd * sd)}, cuja raiz é o desvio padrão σ ≈ ${fmt(sd)}.`
+          + (sd > 0 ? ` Com essa média e esse desvio, o <a href="${PAGE("teorema-chebyshev")}?mu=${r4(e)}&amp;sd=${r4(sd)}&amp;k=2">teorema de Chebyshev</a> garante quanto da distribuição fica perto de ${fmt(e)}.` : ""),
+          `It is the long-run average: repeat the experiment many times and the mean of the outcomes approaches ${fmt(e)}.`
+          + (possible ? "" : " Note that this value need not even be a possible outcome of X.")
+          + ` The spread around it comes from the variance, E[X²] − E[X]² ≈ ${fmt(sd * sd)}, whose square root is the standard deviation σ ≈ ${fmt(sd)}.`
+          + (sd > 0 ? ` With this mean and standard deviation, <a href="${PAGE("teorema-chebyshev")}?mu=${r4(e)}&amp;sd=${r4(sd)}&amp;k=2">Chebyshev's theorem</a> guarantees how much of the distribution lies near ${fmt(e)}.` : "")),
+      };
+    },
+
+    geom({ p, k }) {
+      if (p <= 0 || p > 100) return { error: T("A probabilidade de sucesso precisa ser maior que 0 e no máximo 100%.", "The probability of success must be above 0 and at most 100%.") };
+      if (!Number.isInteger(k) || k < 1) return { error: T("k precisa ser um inteiro positivo: o primeiro sucesso vem na 1ª, 2ª, 3ª… tentativa.", "k must be a positive integer: the first success comes on trial 1, 2, 3…") };
+      if (k > 500) return { error: T("Use k de no máximo 500.", "Use k of at most 500.") };
+      const pp = p / 100, q = 1 - pp;
+      const pmf = i => (i === 1 ? pp : q ** (i - 1) * pp);
+      const res = pmf(k);
+      // Até onde vai 99% da distribuição, sem passar de 200 barras (ou de k).
+      const q99 = q > 0 ? Math.ceil(Math.log(0.01) / Math.log(q)) : 1;
+      const top = Math.max(k, Math.min(q99, 200), 5);
+      const xs = Array.from({ length: top }, (_, i) => i + 1);
+      const ys = xs.map(pmf);
+      const fail = q ** (k - 1);
+      const P = tone(texNum(pp, 6), 2), Q = texNum(q, 6);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart(T(`Distribuição geométrica com p = ${fmt(pp, 4)}`, `Geometric distribution with p = ${fmt(pp, 4)}`), T("tentativa do primeiro sucesso k", "trial of the first success k"), xs, ys, k, "X"),
+        steps: [
+          [T("Escreva p como proporção; a falha tem probabilidade 1 − p:", "Write p as a proportion; failure has probability 1 − p:"), `p = ${P}, \\qquad 1 - p = ${Q}`],
+          [k === 1
+            ? T("Com k = 1 não há falhas antes: o termo das falhas vira 1.", "With k = 1 there are no failures first: the failure term becomes 1.")
+            : T(`As ${k - 1} primeiras tentativas precisam falhar:`, `The first ${k - 1} trials must fail:`),
+            `(1-p)^{k-1} = ${Q}^{${k - 1}} ${approx(fail, 6)} ${tone(texSci(fail, 6), 4)}`],
+          [T(`Multiplique pela chance de acertar justamente na ${k}ª:`, `Multiply by the chance of succeeding on trial ${k}:`),
+            `P(X = ${k}) = ${tone(texSci(fail, 6), 4)} \\cdot ${P} ${approx(res, 6)} ${tone(texSci(res, 6), 1)}`],
+        ],
+        note: T(`Acumulando: a chance de o primeiro sucesso vir até a ${k}ª tentativa é P(X ≤ ${k}) = 1 − (1 − p)^${k} ≈ ${fmt((1 - q ** k) * 100, 2)}%.`
+          + ` Em média, são 1/p = ${fmt(1 / pp, 2)} tentativas até o primeiro sucesso.`
+          + " A geométrica não tem memória: depois de várias falhas, a chance de acertar na próxima continua sendo p — não existe sucesso “atrasado”."
+          + ` Cada tentativa é uma <a href="${PAGE("distribuicao-bernoulli")}?p=${p}&amp;k=1">Bernoulli</a>.`,
+          `Cumulative: the chance that the first success comes by trial ${k} is P(X ≤ ${k}) = 1 − (1 − p)^${k} ≈ ${fmt((1 - q ** k) * 100, 2)}%.`
+          + ` On average, it takes 1/p = ${fmt(1 / pp, 2)} trials to get the first success.`
+          + " The geometric distribution has no memory: after many failures, the chance of success on the next trial is still p — no success is ever “due”."
+          + ` Each trial is a <a href="${PAGE("distribuicao-bernoulli")}?p=${p}&amp;k=1">Bernoulli</a> trial.`),
+      };
+    },
+
+    expo({ lambda, x }) {
+      if (lambda <= 0) return { error: T("A taxa λ precisa ser maior que zero.", "The rate λ must be greater than zero.") };
+      if (x < 0) return { error: T("x precisa ser maior ou igual a zero: a exponencial mede tempos e distâncias.", "x must be zero or more: the exponential measures times and distances.") };
+      const lx = lambda * x;
+      const ex = Math.exp(-lx), f = lambda * ex, cdf = 1 - ex;
+      const hi = Math.max(x * 1.15, 5 / lambda);
+      const pts = Array.from({ length: 201 }, (_, i) => { const v = hi * i / 200; return [v, lambda * Math.exp(-lambda * v)]; });
+      const L = tone(texNum(lambda), 2), X = texNum(x);
+      const EX = tone(texSci(ex, 6), 3);
+      return {
+        result: `f(${X}) ${approx(f, 6)} ${tone(texSci(f, 6), 1)}, \\qquad P(X \\le ${X}) ${approx(cdf, 6)} ${pctTex(cdf)}`,
+        chart: {
+          type: "curve", label: T(`Densidade exponencial com taxa ${fmt(lambda)}; área sombreada até x = ${fmt(x)}`, `Exponential density with rate ${fmt(lambda)}; area shaded up to x = ${fmt(x)}`),
+          xLabel: "x", xMin: 0, xMax: hi, yMax: lambda, pts, shadeTo: x, marker: [x, f],
+          tipAt: v => [`f = ${fmtSci(lambda * Math.exp(-lambda * v), 6)}`, `x = ${fmt(v, 2)}, P(X ≤ x) ≈ ${fmt((1 - Math.exp(-lambda * v)) * 100, 1)}%`],
+        },
+        steps: [
+          [T("Multiplique a taxa pelo valor:", "Multiply the rate by the value:"), `\\lambda x = ${L} \\cdot ${X} ${approx(lx)} ${texNum(lx)}`],
+          [T("Calcule a exponencial:", "Compute the exponential:"), `e^{-\\lambda x} = e^{-${texNum(lx)}} ${approx(ex, 6)} ${EX}`],
+          [T("Multiplique pela taxa para obter a densidade:", "Multiply by the rate to get the density:"), `f(${X}) = ${L} \\cdot ${EX} ${approx(f, 6)} ${tone(texSci(f, 6), 1)}`],
+          [T("A área sob a curva até x é a probabilidade acumulada:", "The area under the curve up to x is the cumulative probability:"),
+            `P(X \\le ${X}) = 1 - e^{-\\lambda x} = 1 - ${EX} ${approx(cdf, 6)} ${texSci(cdf, 6)}`],
+        ],
+        note: T(`f(x) é densidade, não probabilidade; a probabilidade é a área sombreada. A chance de passar de ${fmt(x)} é e^(−λx) ≈ ${fmt(ex * 100, 2)}%.`
+          + ` A média é 1/λ = ${fmt(1 / lambda, 4)} e o desvio padrão também. Como a geométrica, a exponencial não tem memória:`
+          + ` já ter esperado não muda quanto falta esperar. Se os eventos chegam numa <a href="${PAGE("distribuicao-poisson")}?lambda=${lambda}&amp;k=1">Poisson de taxa λ</a>, o tempo entre eles é exponencial com essa mesma taxa.`,
+          `f(x) is a density, not a probability; the probability is the shaded area. The chance of going past ${fmt(x)} is e^(−λx) ≈ ${fmt(ex * 100, 2)}%.`
+          + ` The mean is 1/λ = ${fmt(1 / lambda, 4)}, and so is the standard deviation. Like the geometric, the exponential has no memory:`
+          + ` having waited already doesn't change how much longer the wait is. If events arrive as a <a href="${PAGE("distribuicao-poisson")}?lambda=${lambda}&amp;k=1">Poisson process with rate λ</a>, the time between them is exponential with that same rate.`),
+      };
+    },
+
+    ep({ sd, n }) {
+      if (sd <= 0) return sdError;
+      if (!Number.isInteger(n) || n < 1) return { error: T("O tamanho da amostra precisa ser um inteiro positivo.", "The sample size must be a positive integer.") };
+      if (n > 1e7) return { error: T("Use n de no máximo 10.000.000.", "Use n of at most 10,000,000.") };
+      const rn = Math.sqrt(n), se = sd / rn;
+      const top = Math.max(4 * n, 20);
+      const at = m => sd / Math.sqrt(m);
+      const pts = Array.from({ length: 201 }, (_, i) => { const m = 1 + (top - 1) * i / 200; return [m, at(m)]; });
+      const S = tone(texNum(sd), 2), RN = tone(texNum(rn), 3);
+      return {
+        result: `${T("EP", "SE")} ${approx(se)} ${tone(texNum(se), 1)}`,
+        chart: {
+          type: "curve", label: T(`Erro padrão em função do tamanho da amostra, com σ = ${fmt(sd)}; marcado n = ${fmt(n)}`, `Standard error as a function of the sample size, with σ = ${fmt(sd)}; n = ${fmt(n)} marked`),
+          xLabel: T("tamanho da amostra n", "sample size n"), xMin: 1, xMax: top, yMax: sd, pts, marker: [n, se],
+          tipAt: m => { const k = Math.max(1, Math.round(m)); return [fmt(at(k)), `n = ${fmt(k)}`]; },
+        },
+        steps: [
+          [T("Tire a raiz quadrada do tamanho da amostra:", "Take the square root of the sample size:"), `\\sqrt{n} = \\sqrt{${texNum(n)}} ${approx(rn)} ${RN}`],
+          [T("Divida o desvio padrão por ela:", "Divide the standard deviation by it:"), `${T("EP", "SE")} = \\dfrac{${S}}{${RN}} ${approx(se)} ${tone(texNum(se), 1)}`],
+        ],
+        note: T(`O desvio padrão mede a variação de cada valor; o erro padrão, a variação da média de ${fmt(n)} valores — ${fmt(sd / se, 2)} vezes menor.`
+          + ` Com 95% de confiança, a média da amostra fica a até 1,96 · EP ≈ ${fmt(1.96 * se)} da média verdadeira.`
+          + ` Como o n está sob a raiz, cortar o erro pela metade exige quadruplicar a amostra: com n = ${fmt(4 * n)}, ele cai para ${fmt(se / 2)}.`
+          + ` Veja o <a href="${PAGE("intervalo-confianca")}?sd=${sd}&amp;n=${n}">intervalo de confiança com estes valores</a> e o <a href="${PAGE("teorema-central-limite")}">teorema central do limite</a>, que explica por que a média se comporta assim.`,
+          `The standard deviation measures how much each value varies; the standard error, how much the mean of ${fmt(n)} values varies — ${fmt(sd / se, 2)} times less.`
+          + ` At 95% confidence, the sample mean lies within 1.96 · SE ≈ ${fmt(1.96 * se)} of the true mean.`
+          + ` Since n sits under the root, halving the error takes four times the sample: with n = ${fmt(4 * n)}, it drops to ${fmt(se / 2)}.`
+          + ` See the <a href="${PAGE("intervalo-confianca")}?sd=${sd}&amp;n=${n}">confidence interval with these values</a> and the <a href="${PAGE("teorema-central-limite")}">central limit theorem</a>, which explains why the mean behaves this way.`),
+      };
+    },
+
+    geo({ x }) {
+      const n = x.length;
+      if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
+      if (n > 200) return { error: T("Use no máximo 200 valores.", "Use at most 200 values.") };
+      if (x.some(v => v <= 0)) return { error: T("A média geométrica só faz sentido para valores positivos.", "The geometric mean only makes sense for positive values.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const ls = sum(x.map(Math.log));
+      const g = Math.exp(ls / n);
+      const prod = x.reduce((a, b) => a * b, 1);
+      const arith = sum(x) / n, harm = n / sum(x.map(v => 1 / v));
+      const G = tone(texNum(g), 1);
+      const direct = n <= 6 && prod > 1e-9 && prod < 1e15;
+      const steps = direct
+        ? [[T("Multiplique os valores:", "Multiply the values:"), `${x.map(v => texNum(v)).join(" \\cdot ")} ${approx(prod, 6)} ${tone(texNum(prod, 6), 3)}`],
+          [T(`Tire a raiz de índice ${n}, o número de valores:`, `Take the root of index ${n}, the number of values:`),
+            `G = \\sqrt[${tone(n, 2)}]{${tone(texNum(prod, 6), 3)}} ${approx(g)} ${G}`]]
+        : [[T("O produto ficaria grande ou pequeno demais; some os logaritmos, que dá no mesmo:", "The product would get too large or too small; add up the logarithms instead, which is equivalent:"),
+            `\\textstyle\\sum \\ln x_i ${approx(ls, 6)} ${tone(texNum(ls, 6), 3)}`],
+          [T("Divida por n e volte com a exponencial:", "Divide by n and undo the logarithm with the exponential:"),
+            `G = e^{${tone(texNum(ls, 6), 3)} / ${tone(n, 2)}} ${approx(g)} ${G}`]];
+      const q = new URLSearchParams({ x: x.join(" ") });
+      return {
+        result: `G ${approx(g)} ${G}`,
+        steps,
+        note: T(`Para estes valores, a média aritmética é ${fmt(arith)} e a <a href="${PAGE("media-harmonica")}?${q}">harmônica</a> é ${fmt(harm)}: sempre harmônica ≤ geométrica ≤ aritmética, com igualdade só se os valores forem todos iguais.`
+          + ` A geométrica é a média certa para fatores que se multiplicam. Se os valores forem fatores de crescimento, como 1,10 para +10%,`
+          + ` G − 1 ≈ ${fmt((g - 1) * 100, 2)}% é a taxa média por período: aplicada todo período, leva ao mesmo resultado final.`
+          + ` A média aritmética dos fatores daria ${fmt((arith - 1) * 100, 2)}% e superestimaria o crescimento.`,
+          `For these values, the arithmetic mean is ${fmt(arith)} and the <a href="${PAGE("media-harmonica")}?${q}">harmonic mean</a> is ${fmt(harm)}: always harmonic ≤ geometric ≤ arithmetic, with equality only when all values are equal.`
+          + ` The geometric mean is the right average for factors that multiply. If the values are growth factors, such as 1.10 for +10%,`
+          + ` G − 1 ≈ ${fmt((g - 1) * 100, 2)}% is the average rate per period: applied every period, it leads to the same final result.`
+          + ` The arithmetic mean of the factors would give ${fmt((arith - 1) * 100, 2)}% and overstate the growth.`),
+      };
+    },
+
+    // Tabela de contingência: uma linha por categoria da primeira variável.
+    chiind({ o }) {
+      const r = o.length, c = o[0].length;
+      if (o.some(row => row.length !== c)) return { error: T("Todas as linhas precisam ter o mesmo número de valores.", "Every row must have the same number of values.") };
+      if (r < 2 || c < 2) return { error: T("A tabela precisa de pelo menos 2 linhas e 2 colunas. Separe as linhas com ponto e vírgula.", "The table needs at least 2 rows and 2 columns. Separate the rows with semicolons.") };
+      if (r > 10 || c > 10) return { error: T("Use no máximo 10 linhas e 10 colunas.", "Use at most 10 rows and 10 columns.") };
+      if (o.some(row => row.some(v => v < 0))) return { error: T("As frequências não podem ser negativas.", "Frequencies cannot be negative.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const R = o.map(sum), C = o[0].map((_, j) => sum(o.map(row => row[j]))), N = sum(R);
+      if (R.some(v => v <= 0) || C.some(v => v <= 0)) return { error: T("Toda linha e toda coluna precisa ter total maior que zero.", "Every row and every column must have a total above zero.") };
+      const E = R.map(ri => C.map(cj => ri * cj / N));
+      const parts = o.map((row, i) => row.map((v, j) => (v - E[i][j]) ** 2 / E[i][j]));
+      const chi2 = sum(parts.map(sum));
+      const df = (r - 1) * (c - 1);
+      const p = chiSurvival(chi2, df);
+      const V = Math.sqrt(chi2 / (N * (Math.min(r, c) - 1)));
+      // Com totals, a tabela ganha a coluna e a linha dos totais.
+      const head = ` & ${o[0].map((_, j) => `C_{${j + 1}}`).join(" & ")}`;
+      const grid = (f, totals) => `\\begin{array}{c|${"c".repeat(c)}${totals ? "|c" : ""}} ${head}${totals ? " & \\text{total}" : ""} \\\\ \\hline `
+        + o.map((row, i) => `L_{${i + 1}} & ${row.map((v, j) => f(i, j)).join(" & ")}${totals ? ` & ${texNum(R[i])}` : ""}`).join(" \\\\ ")
+        + (totals ? ` \\\\ \\hline \\text{total} & ${C.map(v => texNum(v)).join(" & ")} & ${texNum(N)}` : "")
+        + " \\end{array}";
+      const X2 = tone(texNum(chi2), 1);
+      const pequenas = E.flat().some(v => v < 5)
+        ? T(` ${warn} há frequência esperada menor que 5; a aproximação pela qui-quadrado fica pouco confiável. Numa tabela 2 × 2, use o teste exato de Fisher.`,
+          ` ${warn} some expected frequency is below 5; the chi-square approximation becomes unreliable. In a 2 × 2 table, use Fisher's exact test.`)
+        : "";
+      const veredito = p < 0.05
+        ? T("Ao nível de 5%, rejeita-se H₀: as duas variáveis parecem associadas.", "At the 5% level, H₀ is rejected: the two variables appear to be associated.")
+        : T("Ao nível de 5%, não se rejeita H₀: os dados são compatíveis com variáveis independentes.", "At the 5% level, H₀ is not rejected: the data are consistent with independent variables.");
+      return {
+        result: `\\chi^2 ${approx(chi2)} ${X2}`,
+        steps: [
+          [T("Some cada linha e cada coluna:", "Add up each row and each column:"), grid((i, j) => tone(texNum(o[i][j]), 3), true)],
+          [T("Se as variáveis fossem independentes, cada célula receberia (total da linha × total da coluna) / total geral:", "If the variables were independent, each cell would get (row total × column total) / grand total:"),
+            `\\begin{gathered} E_{11} = \\dfrac{${texNum(R[0])} \\cdot ${texNum(C[0])}}{${texNum(N)}} ${approx(E[0][0])} ${texNum(E[0][0])} \\\\[0.8em] `
+            + grid((i, j) => tone(texNum(E[i][j]), 4)) + " \\end{gathered}"],
+          [T("Calcule a parcela de cada célula, (O − E)² / E:", "Compute each cell's term, (O − E)² / E:"), grid((i, j) => texNum(parts[i][j]))],
+          [T("Some todas as parcelas:", "Add up all the terms:"),
+            r * c <= 6
+              ? `\\chi^2 = ${parts.flat().map(v => texNum(v)).join(" + ")} ${approx(chi2)} ${X2}`
+              : `\\chi^2 = \\textstyle\\sum_{i,j} \\dfrac{(O_{ij} - E_{ij})^2}{E_{ij}} ${approx(chi2)} ${X2}`],
+        ],
+        note: T(`Com (r − 1)(c − 1) = ${dof(df)}, o valor-p é ${pValueText(p)}. ${veredito}`
+          + ` A força da associação vem do V de Cramér: V = √(χ² / (N · (min(r, c) − 1))) ≈ ${fmt(V, 3)}, de 0 (nenhuma) a 1 (total).`
+          + (r === 2 && c === 2 ? " O cálculo é sem a correção de continuidade de Yates." : "") + pequenas,
+          `With (r − 1)(c − 1) = ${dof(df)}, the p-value is ${pValueText(p)}. ${veredito}`
+          + ` The strength of the association comes from Cramér's V: V = √(χ² / (N · (min(r, c) − 1))) ≈ ${fmt(V, 3)}, from 0 (none) to 1 (complete).`
+          + (r === 2 && c === 2 ? " The calculation has no Yates continuity correction." : "") + pequenas),
+      };
+    },
+
+    nmedia({ conf, sd, e }) {
+      if (conf <= 0 || conf >= 100) return confError;
+      if (sd <= 0) return sdError;
+      if (e <= 0) return { error: T("A margem de erro precisa ser maior que zero, na mesma unidade dos dados.", "The margin of error must be greater than zero, in the same units as the data.") };
+      const z = zCrit(conf);
+      const num = z * z * sd * sd, den = e * e;
+      const n0 = num / den, n = ceilInt(n0);
+      const Z = tone(texNum(z), 2), S = tone(texNum(sd), 3), Ee = tone(texNum(e), 4);
+      return {
+        result: `n = ${tone(texNum(n), 1)}`,
+        steps: [
+          [T(`Encontre o valor crítico para ${fmt(conf, 2)}% de confiança, como na tabela Z:`, `Find the critical value for ${fmt(conf, 2)}% confidence, as in the Z table:`), `z \\approx ${Z}`],
+          [T("Substitua na fórmula:", "Plug into the formula:"),
+            `n = \\dfrac{${Z}^2 \\cdot ${S}^2}{${Ee}^2} ${approx(num, 6)} \\dfrac{${texNum(num, 6)}}{${texNum(den, 6)}} ${approx(n0, 2)} ${texNum(n0, 2)}`],
+          [T("Arredonde sempre para cima: para baixo, a margem ficaria maior que a pedida.", "Always round up: rounding down would leave the margin larger than requested."), `n = ${tone(texNum(n), 1)}`],
+        ],
+        note: T(`Com ${fmt(n)} observações, a média fica estimada com margem de ±${fmt(e)} e ${fmt(conf, 2)}% de confiança, numa população grande.`
+          + " O σ costuma vir de um estudo piloto ou de pesquisas anteriores; na dúvida, erre para mais."
+          + ` Como E está ao quadrado, pedir o dobro de precisão (E = ${fmt(e / 2)}) quadruplica a amostra.`
+          + ` Se a população for pequena, <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">aplique a correção para população finita</a>;`
+          + ` para estimar uma proporção, use a <a href="${PAGE("cochran-formula")}">fórmula de Cochran</a>.`,
+          `With ${fmt(n)} observations, the mean is estimated within ±${fmt(e)} at ${fmt(conf, 2)}% confidence, in a large population.`
+          + " σ usually comes from a pilot study or earlier research; if in doubt, err on the high side."
+          + ` Since E is squared, asking for twice the precision (E = ${fmt(e / 2)}) quadruples the sample.`
+          + ` If the population is small, <a href="${PAGE("correcao-populacao-finita")}?n0=${n}">apply the finite population correction</a>;`
+          + ` to estimate a proportion, use <a href="${PAGE("cochran-formula")}">Cochran's formula</a>.`),
+      };
+    },
+
+    hiper({ N, K, n, k }) {
+      const int = v => Number.isInteger(v) && v >= 0;
+      if (!int(N) || N < 1) return { error: T("O tamanho da população N precisa ser um inteiro positivo.", "The population size N must be a positive integer.") };
+      if (N > 1e6) return { error: T("Use N de no máximo 1.000.000.", "Use N of at most 1,000,000.") };
+      if (!int(K) || K > N) return { error: T(`K precisa ser um inteiro entre 0 e ${fmt(N)}.`, `K must be an integer between 0 and ${fmt(N)}.`) };
+      if (!int(n) || n < 1 || n > N) return { error: T(`O tamanho da amostra n precisa ser um inteiro entre 1 e ${fmt(N)}.`, `The sample size n must be an integer between 1 and ${fmt(N)}.`) };
+      const lo = Math.max(0, n - (N - K)), hi = Math.min(n, K);
+      if (!Number.isInteger(k) || k < lo || k > hi) return { error: T(`Com esses valores, k precisa ser um inteiro entre ${lo} e ${hi}.`, `With these values, k must be an integer between ${lo} and ${hi}.`) };
+      const lc = (a, b) => lgamma(a + 1) - lgamma(b + 1) - lgamma(a - b + 1);
+      const pmf = j => Math.exp(lc(K, j) + lc(N - K, n - j) - lc(N, n));
+      const mean = n * K / N;
+      const sd = Math.sqrt(mean * (1 - K / N) * (N - n) / Math.max(1, N - 1));
+      const a = hi - lo <= 200 ? lo : Math.max(lo, Math.min(k, Math.floor(mean - 6 * sd)));
+      const b = hi - lo <= 200 ? hi : Math.min(hi, Math.max(k, Math.ceil(mean + 6 * sd)));
+      const xs = Array.from({ length: b - a + 1 }, (_, i) => a + i);
+      const ys = xs.map(pmf);
+      const res = pmf(k);
+      let le = 0;
+      for (let j = lo; j <= k; j++) le += pmf(j);
+      const ge = 1 - le + res;
+      const comb = (x, y) => { const v = Math.exp(lc(x, y)); return v < 1e15 ? texNum(Math.round(v)) : texSci(v); };
+      const A = tone(comb(K, k), 2), B = tone(comb(N - K, n - k), 3), D = tone(comb(N, n), 4);
+      const pb = K / N;
+      const bin = binPmf(n, pb, k);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart(T(`Distribuição hipergeométrica com N = ${fmt(N)}, K = ${fmt(K)} e n = ${fmt(n)}`, `Hypergeometric distribution with N = ${fmt(N)}, K = ${fmt(K)} and n = ${fmt(n)}`),
+          T("número de sucessos na amostra k", "number of successes in the sample k"), xs, ys, k, "X"),
+        steps: [
+          [T(`Conte as formas de tirar ${k} dos ${fmt(K)} sucessos:`, `Count the ways to draw ${k} of the ${fmt(K)} successes:`), `\\dbinom{${K}}{${k}} = ${A}`],
+          [T(`Conte as formas de completar a amostra com ${n - k} dos ${fmt(N - K)} fracassos:`, `Count the ways to fill the rest of the sample with ${n - k} of the ${fmt(N - K)} failures:`), `\\dbinom{${N - K}}{${n - k}} = ${B}`],
+          [T(`Conte todas as amostras possíveis de ${fmt(n)} entre ${fmt(N)}:`, `Count every possible sample of ${fmt(n)} out of ${fmt(N)}:`), `\\dbinom{${N}}{${n}} = ${D}`],
+          [T("Divida os casos favoráveis pelo total:", "Divide the favorable cases by the total:"), `P(X = ${k}) = \\dfrac{${A} \\cdot ${B}}{${D}} ${approx(res, 6)} ${tone(texSci(res, 6), 1)}`],
+        ],
+        note: T(`Acumulando: P(X ≤ ${k}) ≈ ${fmt(le * 100, 2)}% e P(X ≥ ${k}) ≈ ${fmt(ge * 100, 2)}%. A média é n · K/N = ${fmt(mean, 3)}.`
+          + ` O sorteio é sem reposição: cada item tirado muda a composição do que sobra. Com reposição, valeria a <a href="${PAGE("distribuicao-binomial")}?n=${n}&amp;p=${Number((pb * 100).toFixed(4))}&amp;k=${k}">binomial com p = K/N</a>,`
+          + ` que daria ${fmt(bin * 100, 2)}%. A diferença some quando a amostra é uma fração pequena da população; a variância da hipergeométrica é a da binomial vezes (N − n)/(N − 1), a correção para população finita.`,
+          `Cumulative: P(X ≤ ${k}) ≈ ${fmt(le * 100, 2)}% and P(X ≥ ${k}) ≈ ${fmt(ge * 100, 2)}%. The mean is n · K/N = ${fmt(mean, 3)}.`
+          + ` The draw is without replacement: every item taken changes what is left. With replacement, the <a href="${PAGE("distribuicao-binomial")}?n=${n}&amp;p=${Number((pb * 100).toFixed(4))}&amp;k=${k}">binomial with p = K/N</a> would apply,`
+          + ` giving ${fmt(bin * 100, 2)}%. The gap vanishes when the sample is a small fraction of the population; the hypergeometric variance is the binomial one times (N − n)/(N − 1), the finite population correction.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -2384,11 +2755,18 @@
       const t = s.replace(/[\s%]/g, "").replace("−", "-");
       return Number(EN ? t.replace(/,/g, "") : t.replace(",", "."));
     };
+    // Campo com data-matrix vira uma tabela: linhas separadas por ponto e
+    // vírgula (ou quebra de linha), valores por espaço (e, em inglês, vírgula).
     // Campo com data-list vira um array, separado por espaço ou ponto e vírgula
     // (e, em inglês, também por vírgula). Com data-optional, pode ficar vazio:
     // a lista vira [], o número vira null.
     const read = i => {
       if (i.tagName === "SELECT") return i.value;
+      if ("matrix" in i.dataset) {
+        const rows = i.value.split(/[;\n]+/).map(r => r.trim()).filter(Boolean)
+          .map(r => r.split(EN ? /[\s,]+/ : /\s+/).filter(Boolean).map(parse));
+        return !rows.length || rows.some(r => r.some(Number.isNaN)) ? NaN : rows;
+      }
       if (!("list" in i.dataset)) return "optional" in i.dataset && i.value.trim() === "" ? null : parse(i.value);
       const xs = i.value.split(EN ? /[\s;,]+/ : /[\s;]+/).filter(Boolean).map(parse);
       return xs.some(Number.isNaN) || (!xs.length && !("optional" in i.dataset)) ? NaN : xs;

@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">28 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">37 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -82,6 +82,11 @@
             <span class="card-name">Birthday Problem</span>
             <span class="card-blurb">The chance that two people in a group share a birthday.</span>
           </a></li>
+          <li><a class="formula-card" href="expected-value.html">
+            <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
+            <span class="card-name">Expected Value</span>
+            <span class="card-blurb">The long-run average of a random variable.</span>
+          </a></li>
           <li><a class="formula-card" href="chebyshev-theorem.html">
             <span class="card-tex" data-tex="P \left( |X - \mu| \ge k \sigma \right) \le \dfrac{1}{k^2}"></span>
             <span class="card-name">Chebyshev&#x27;s Theorem</span>
@@ -102,10 +107,25 @@
             <span class="card-name">Binomial Distribution</span>
             <span class="card-blurb">The number of successes in n independent trials.</span>
           </a></li>
+          <li><a class="formula-card" href="geometric-distribution.html">
+            <span class="card-tex" data-tex="P(X=k) = (1-p)^{k-1} \cdot p"></span>
+            <span class="card-name">Geometric Distribution</span>
+            <span class="card-blurb">How many trials until the first success.</span>
+          </a></li>
+          <li><a class="formula-card" href="hypergeometric-distribution.html">
+            <span class="card-tex" data-tex="P(X=k) = \dfrac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}"></span>
+            <span class="card-name">Hypergeometric Distribution</span>
+            <span class="card-blurb">Successes in a sample drawn without replacement.</span>
+          </a></li>
           <li><a class="formula-card" href="poisson-distribution.html">
             <span class="card-tex" data-tex="P(X=k) = \dfrac{\lambda^k \cdot e^{-\lambda}}{k!}"></span>
             <span class="card-name">Poisson Distribution</span>
             <span class="card-blurb">The number of events in an interval, given a mean rate.</span>
+          </a></li>
+          <li><a class="formula-card" href="exponential-distribution.html">
+            <span class="card-tex" data-tex="f(x) = \lambda e^{-\lambda x}"></span>
+            <span class="card-name">Exponential Distribution</span>
+            <span class="card-blurb">The waiting time until the next event.</span>
           </a></li>
           <li><a class="formula-card" href="normal-distribution.html">
             <span class="card-tex" data-tex="f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}"></span>
@@ -132,6 +152,11 @@
             <span class="card-name">Student&#x27;s t-Test</span>
             <span class="card-blurb">Compares a sample mean with a hypothesized value when σ is unknown.</span>
           </a></li>
+          <li><a class="formula-card" href="standard-error.html">
+            <span class="card-tex" data-tex="SE = \dfrac{\sigma}{\sqrt{n}}"></span>
+            <span class="card-name">Standard Error of the Mean</span>
+            <span class="card-blurb">How much the mean of a sample varies from one sample to the next.</span>
+          </a></li>
           <li><a class="formula-card" href="confidence-interval.html">
             <span class="card-tex" data-tex="CI = \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Confidence Interval</span>
@@ -152,6 +177,11 @@
             <span class="card-name">Chi-Square Test (χ²)</span>
             <span class="card-blurb">Measures the gap between observed and expected frequencies.</span>
           </a></li>
+          <li><a class="formula-card" href="chi-square-independence.html">
+            <span class="card-tex" data-tex="\chi^2 = \sum_{i,j} \dfrac{(O_{ij} - E_{ij})^2}{E_{ij}}"></span>
+            <span class="card-name">Chi-Square Test of Independence</span>
+            <span class="card-blurb">Whether two categorical variables are associated, in a contingency table.</span>
+          </a></li>
         </ul>
       </section>
       <section class="formula-group">
@@ -161,6 +191,11 @@
             <span class="card-tex" data-tex="n_0 = \dfrac{Z^2 \cdot \hat{p} \cdot \hat{q}}{e^2}"></span>
             <span class="card-name">Cochran&#x27;s Formula</span>
             <span class="card-blurb">Sample size to estimate a proportion with a given margin of error.</span>
+          </a></li>
+          <li><a class="formula-card" href="sample-size-mean.html">
+            <span class="card-tex" data-tex="n = \dfrac{z^2 \cdot \sigma^2}{E^2}"></span>
+            <span class="card-name">Sample Size for a Mean</span>
+            <span class="card-blurb">How many observations to estimate a mean within a given margin of error.</span>
           </a></li>
           <li><a class="formula-card" href="margin-of-error.html">
             <span class="card-tex" data-tex="E = z_{\alpha/2} \sqrt{\dfrac{\hat{p}(1 - \hat{p})}{n}}"></span>
@@ -187,6 +222,11 @@
       <section class="formula-group">
         <h2>Association and means</h2>
         <ul class="formula-list">
+          <li><a class="formula-card" href="standard-deviation.html">
+            <span class="card-tex" data-tex="s = \sqrt{\dfrac{\sum (x_i - \bar{x})^2}{n - 1}}"></span>
+            <span class="card-name">Standard Deviation</span>
+            <span class="card-blurb">How far the values spread around the mean.</span>
+          </a></li>
           <li><a class="formula-card" href="covariance.html">
             <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>
             <span class="card-name">Covariance</span>
@@ -201,6 +241,11 @@
             <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>
             <span class="card-name">Simple Linear Regression</span>
             <span class="card-blurb">The line that predicts y from x.</span>
+          </a></li>
+          <li><a class="formula-card" href="geometric-mean.html">
+            <span class="card-tex" data-tex="G = \sqrt[n]{\prod_{i=1}^{n} x_i}"></span>
+            <span class="card-name">Geometric Mean</span>
+            <span class="card-blurb">The right average for growth rates and factors that multiply.</span>
           </a></li>
           <li><a class="formula-card" href="harmonic-mean.html">
             <span class="card-tex" data-tex="H = \dfrac{n}{\sum_{i=1}^{n} \frac{1}{x_i}}"></span>

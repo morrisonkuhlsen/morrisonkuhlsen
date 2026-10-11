@@ -248,6 +248,42 @@ body {
   font-size: .75em;
 }
 
+/* Raiz que abraça termos clicáveis: o sinal é um SVG esticado à altura do
+   radicando, e a barra de cima é a borda dele, como a da fração. */
+.radical {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+.radical > svg {
+  flex: none;
+  width: .7em;
+  overflow: visible;
+}
+
+.radical > svg path {
+  fill: none;
+  stroke: var(--tone-0);
+  stroke-width: 2px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Índice da raiz (a n-ésima): pequeno, por cima do gancho do sinal. */
+.radical-index {
+  align-self: center;
+  margin-right: -.9em;
+  font-size: .5em;
+  transform: translateY(35%);
+}
+
+.radicand {
+  display: flex;
+  align-items: center;
+  border-top: 2px solid var(--tone-0);
+  padding: .1em .1em 0;
+}
+
 .formula-hint {
   margin: -.5rem 0 0;
   font-size: .9rem;

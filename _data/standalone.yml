@@ -27,6 +27,16 @@
   description: "Covariância explicada termo a termo, com calculadora a partir de listas de x e y, tabela de desvios e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Desvio Padrão"
+  url: "/formulas/desvio-padrao.html"
+  description: "Desvio padrão amostral explicado termo a termo, com calculadora, tabela dos desvios, gráfico e passo a passo da variância à raiz."
+  tags: "fórmula interativa calculadora passo a passo variância dispersão amostral"
+  lang: pt
+- title: "Erro Padrão da Média"
+  url: "/formulas/erro-padrao.html"
+  description: "Erro padrão da média explicado termo a termo, com calculadora, curva de como ele cai com o tamanho da amostra e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo erro padrão desvio padrão da média amostra"
+  lang: pt
 - title: "Distribuição de Bernoulli"
   url: "/formulas/distribuicao-bernoulli.html"
   description: "Distribuição de Bernoulli explicada termo a termo, com calculadora, gráfico e passo a passo de P(X = k)."
@@ -36,6 +46,21 @@
   url: "/formulas/distribuicao-binomial.html"
   description: "Distribuição binomial explicada termo a termo, com calculadora de P(X = k), probabilidades acumuladas, gráfico e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Distribuição Exponencial"
+  url: "/formulas/distribuicao-exponencial.html"
+  description: "Distribuição exponencial explicada termo a termo, com calculadora, curva e passo a passo: a densidade e a chance de esperar até x pelo próximo evento."
+  tags: "fórmula interativa calculadora passo a passo tempo de espera taxa"
+  lang: pt
+- title: "Distribuição Geométrica"
+  url: "/formulas/distribuicao-geometrica.html"
+  description: "Distribuição geométrica explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de o primeiro sucesso vir na k-ésima tentativa."
+  tags: "fórmula interativa calculadora passo a passo primeiro sucesso tentativas"
+  lang: pt
+- title: "Distribuição Hipergeométrica"
+  url: "/formulas/distribuicao-hipergeometrica.html"
+  description: "Distribuição hipergeométrica explicada termo a termo, com calculadora, gráfico, passo a passo e comparação com a binomial: sorteios sem reposição."
+  tags: "fórmula interativa calculadora passo a passo sem reposição amostra lote controle de qualidade"
   lang: pt
 - title: "Distribuição Normal"
   url: "/formulas/distribuicao-normal.html"
@@ -67,10 +92,20 @@
   description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
   lang: pt
+- title: "Média Geométrica"
+  url: "/formulas/media-geometrica.html"
+  description: "Média geométrica explicada termo a termo, com calculadora, passo a passo, taxa média de crescimento e comparação com as médias aritmética e harmônica."
+  tags: "fórmula interativa calculadora passo a passo taxa média de crescimento juros compostos"
+  lang: pt
 - title: "Simulador de Pesquisa"
   url: "/formulas/simulador-pesquisa.html"
   description: "Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho."
   tags: "simulação simulador interativo pesquisa eleitoral amostragem cobertura intervalo de confiança hipergeométrica monte carlo"
+  lang: pt
+- title: "Tamanho de Amostra para a Média"
+  url: "/formulas/tamanho-amostra-media.html"
+  description: "Tamanho de amostra para estimar uma média explicado termo a termo, com calculadora pela confiança, desvio padrão e margem de erro, e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo tamanho da amostra média margem de erro"
   lang: pt
 - title: "Duas Proporções"
   url: "/formulas/duas-proporcoes.html"
@@ -101,6 +136,11 @@
   url: "/formulas/qui-quadrado.html"
   description: "Teste qui-quadrado de aderência explicado termo a termo, com calculadora, tabela de parcelas, valor-p e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Qui-Quadrado de Independência"
+  url: "/formulas/qui-quadrado-independencia.html"
+  description: "Teste qui-quadrado de independência explicado termo a termo, com calculadora para tabelas de contingência, esperados, valor-p, V de Cramér e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo tabela de contingência associação V de Cramér"
   lang: pt
 - title: "Regra de L'Hôpital"
   url: "/formulas/regra-lhopital.html"
@@ -141,6 +181,11 @@
   url: "/formulas/teorema-probabilidade-total.html"
   description: "Lei da probabilidade total explicada termo a termo, com calculadora por cenários, passo a passo e o Bayes de cada cenário."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Valor Esperado"
+  url: "/formulas/valor-esperado.html"
+  description: "Valor esperado E[X] explicado termo a termo, com calculadora, tabela dos produtos, gráfico da distribuição e a variância de brinde."
+  tags: "fórmula interativa calculadora passo a passo esperança média variável aleatória"
   lang: pt
 - title: "Z-Score"
   url: "/formulas/z-score.html"
@@ -238,6 +283,11 @@
   description: "The birthday problem explained term by term: the chance that two people in a group share a birthday, with a calculator, a curve, step-by-step working and a simulation."
   tags: "formula interactive calculator birthday paradox probability match complement simulation"
   lang: en
+- title: "Expected Value"
+  url: "/en/formulas/expected-value.html"
+  description: "The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus."
+  tags: "formula interactive calculator step by step expectation mean random variable"
+  lang: en
 - title: "Chebyshev's Theorem"
   url: "/en/formulas/chebyshev-theorem.html"
   description: "Chebyshev's theorem explained term by term, with a calculator: the minimum share of the data within μ ± kσ, for any distribution."
@@ -253,10 +303,25 @@
   description: "The binomial distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Geometric Distribution"
+  url: "/en/formulas/geometric-distribution.html"
+  description: "The geometric distribution explained term by term, with a calculator, a chart and step-by-step working: the chance that the first success comes on trial k."
+  tags: "formula interactive calculator step by step first success trials"
+  lang: en
+- title: "Hypergeometric Distribution"
+  url: "/en/formulas/hypergeometric-distribution.html"
+  description: "The hypergeometric distribution explained term by term, with a calculator, a chart, step-by-step working and a comparison with the binomial: draws without replacement."
+  tags: "formula interactive calculator step by step without replacement sample batch quality control"
+  lang: en
 - title: "Poisson Distribution"
   url: "/en/formulas/poisson-distribution.html"
   description: "The Poisson distribution explained term by term, with a calculator for P(X = k), cumulative probabilities, a chart and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Exponential Distribution"
+  url: "/en/formulas/exponential-distribution.html"
+  description: "The exponential distribution explained term by term, with a calculator, a curve and step-by-step working: the density and the chance of waiting up to x for the next event."
+  tags: "formula interactive calculator step by step waiting time rate"
   lang: en
 - title: "Normal (Gaussian) Distribution"
   url: "/en/formulas/normal-distribution.html"
@@ -278,6 +343,11 @@
   description: "Student's t-test explained term by term, with a calculator for the t statistic, degrees of freedom, p-value and step-by-step working."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Standard Error of the Mean"
+  url: "/en/formulas/standard-error.html"
+  description: "The standard error of the mean explained term by term, with a calculator, a curve of how it falls with the sample size, and step-by-step working."
+  tags: "formula interactive calculator step by step standard error of the mean sample"
+  lang: en
 - title: "Confidence Interval"
   url: "/en/formulas/confidence-interval.html"
   description: "The confidence interval for a mean explained term by term, with a calculator, critical z value, margin of error and step-by-step working."
@@ -288,10 +358,20 @@
   description: "The chi-square goodness-of-fit test explained term by term, with a calculator, a table of terms, p-value and step-by-step working."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Chi-Square Test of Independence"
+  url: "/en/formulas/chi-square-independence.html"
+  description: "The chi-square test of independence explained term by term, with a calculator for contingency tables, expected counts, p-value, Cramér's V and step-by-step working."
+  tags: "formula interactive calculator step by step contingency table association Cramér's V"
+  lang: en
 - title: "Cochran's Formula"
   url: "/en/formulas/cochran-formula.html"
   description: "Cochran's formula explained term by term, with a calculator for the sample size needed to estimate a proportion, step by step."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Sample Size for a Mean"
+  url: "/en/formulas/sample-size-mean.html"
+  description: "The sample size to estimate a mean explained term by term, with a calculator from the confidence level, standard deviation and margin of error, and step-by-step working."
+  tags: "formula interactive calculator step by step sample size mean margin of error"
   lang: en
 - title: "Margin of Error"
   url: "/en/formulas/margin-of-error.html"
@@ -323,6 +403,11 @@
   description: "Neyman allocation explained term by term, with a calculator that splits the sample across strata and compares it with proportional allocation."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Standard Deviation"
+  url: "/en/formulas/standard-deviation.html"
+  description: "The sample standard deviation explained term by term, with a calculator, a table of deviations, a chart and step-by-step working from the variance to the root."
+  tags: "formula interactive calculator step by step variance spread sample"
+  lang: en
 - title: "Covariance"
   url: "/en/formulas/covariance.html"
   description: "Covariance explained term by term, with a calculator that takes lists of x and y, a table of deviations and step-by-step working."
@@ -337,6 +422,11 @@
   url: "/en/formulas/linear-regression.html"
   description: "Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Geometric Mean"
+  url: "/en/formulas/geometric-mean.html"
+  description: "The geometric mean explained term by term, with a calculator, step-by-step working, the average growth rate and a comparison with the arithmetic and harmonic means."
+  tags: "formula interactive calculator step by step average growth rate compound interest"
   lang: en
 - title: "Harmonic Mean"
   url: "/en/formulas/harmonic-mean.html"

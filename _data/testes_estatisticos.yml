@@ -520,7 +520,7 @@ testes:
     vars:
       - ['Qui-quadrado de independência, que usa a mesma conta', qui-quadrado-independencia]
       - ['Depois de rejeitar H₀', marascuilo]
-    veja: [qui-quadrado]
+    veja: [qui-quadrado, qui-quadrado-independencia]
     reporte: 'χ²(4, N = 300) = 11,2; p = 0,024; V = 0,14'
     codigo:
       r: |
@@ -952,6 +952,7 @@ testes:
     vars:
       - ['Fisher exato, para tabelas 2 × 2 com contagens pequenas', fisher]
       - ['V de Cramér, para medir a força da associação', null]
+    page: qui-quadrado-independencia
     veja: [qui-quadrado]
     reporte: 'χ²(2, N = 200) = 7,4; p = 0,025; V = 0,19'
     codigo:
@@ -977,7 +978,7 @@ testes:
       tex: 'OR = \dfrac{a\,d}{b\,c}'
     vars:
       - ['Qui-quadrado de independência, com contagens maiores', qui-quadrado-independencia]
-    veja: [coeficiente-binomial]
+    veja: [coeficiente-binomial, distribuicao-hipergeometrica]
     reporte: 'OR = 6,4; p = 0,028 (Fisher exato, bilateral)'
     codigo:
       r: |

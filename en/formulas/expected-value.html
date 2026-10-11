@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Expected Value — Interactive</title>
+  <meta name="description" content="The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/expected-value.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/valor-esperado.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/expected-value.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/valor-esperado.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/expected-value.html">
+  <meta property="og:title" content="Expected Value — Interactive">
+  <meta property="og:description" content="The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Expected Value — Interactive">
+  <meta name="twitter:description" content="The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/valor-esperado.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Expected Value</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive expected value formula">
+        <span class="part" data-part="ev" data-tone="1" data-tex="E[X]"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="sum_ev" data-tone="2" data-tex="\sum_{i}"></span>
+        <span class="part" data-part="x_ev" data-tone="3" data-tex="x_i"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="p_ev" data-tone="4" data-tex="P(x_i)"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?x=&p=. -->
+    <section class="calc" data-calc="esperanca" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a shop sells 0, 1, 2 or 3 units of a product a day, with chances of 10%, 30%, 40% and 20%. How many units does it sell per day, on average? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="3">
+          <span>Possible values <i>x<sub>i</sub></i></span>
+          <input name="x" type="text" inputmode="decimal" value="0 1 2 3" data-list autocomplete="off" spellcheck="false">
+          <small>Separated by spaces or commas.</small>
+        </label>
+        <label class="calc-field wide" data-tone="4">
+          <span>Probabilities <i>P(x<sub>i</sub>)</i></span>
+          <input name="p" type="text" inputmode="decimal" value="10 30 40 20" data-list autocomplete="off" spellcheck="false">
+          <small>In the same order as the values, adding up to 1 or 100 (in %).</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="ev" data-tone="1">Expected Value (E[X])</dt>
+          <dd>The long-run average of the random variable X: the value the mean of the outcomes settles around when the experiment is repeated many times. Also written μ.</dd>
+          <dt data-part="sum_ev" data-tone="2">Summation (Σ)</dt>
+          <dd>Adds over every possible value of X. The probabilities of all of them must add up to 1.</dd>
+          <dt data-part="x_ev" data-tone="3">Possible Value (xᵢ)</dt>
+          <dd>Each outcome X can take, such as the number of sales in a day or the prize in a game.</dd>
+          <dt data-part="p_ev" data-tone="4">Probability (P(xᵢ))</dt>
+          <dd>The chance that X equals exactly xᵢ. It works as a weight: more likely values pull the expected value towards themselves.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="birthday-problem.html" rel="prev"><span>Previous</span>Birthday Problem</a>
+      <a class="pager-next" href="chebyshev-theorem.html" rel="next"><span>Next</span>Chebyshev&#x27;s Theorem</a>
+    </nav>
+  </main>
+</body>
+</html>

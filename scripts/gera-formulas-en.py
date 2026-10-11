@@ -173,6 +173,7 @@ def build(slug, d):
 CATALOG = {
     "t-student": ("one-sample-t-test", "the one-sample t-test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
+    "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
     "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),
     "regressao-linear": ("regression-coefficient-t-test", "regression tests"),
 }
@@ -204,6 +205,8 @@ def build_index():
         slug, tex = m.group(1), m.group(2)
         if slug == "intervalo-confianca":
             tex = tex.replace("IC =", "CI =")
+        if slug == "erro-padrao":
+            tex = tex.replace("EP =", "SE =")
         if slug == "simulador-pesquisa":
             tex = tex.replace(r"\mathrm{IC}", r"\mathrm{CI}")
         d = PAGES[slug]
@@ -218,7 +221,7 @@ def build_index():
     return s
 
 
-ALLOWED = ("Hôpital", "Português", "L&#x27;Hôpital")
+ALLOWED = ("Hôpital", "Português", "L&#x27;Hôpital", "Cramér")
 
 
 def check(name, s):
