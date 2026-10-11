@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">69 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">72 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -356,6 +356,26 @@
             <span class="card-tex" data-tex="H = \dfrac{n}{\sum_{i=1}^{n} \frac{1}{x_i}}"></span>
             <span class="card-name">Média Harmônica</span>
             <span class="card-blurb">A média certa para taxas e razões.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Séries temporais</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="media-movel.html">
+            <span class="card-tex" data-tex="MM_t = \dfrac{x_t + x_{t-1} + \cdots + x_{t-k+1}}{k}"></span>
+            <span class="card-name">Média Móvel</span>
+            <span class="card-blurb">A tendência de uma série, sem as oscilações curtas.</span>
+          </a></li>
+          <li><a class="formula-card" href="suavizacao-exponencial.html">
+            <span class="card-tex" data-tex="S_t = \alpha x_t + (1 - \alpha) S_{t-1}"></span>
+            <span class="card-name">Suavização Exponencial</span>
+            <span class="card-blurb">Suaviza e prevê, dando mais peso ao recente.</span>
+          </a></li>
+          <li><a class="formula-card" href="autocorrelacao.html">
+            <span class="card-tex" data-tex="r_k = \dfrac{\sum (x_t - \bar{x})(x_{t+k} - \bar{x})}{\sum (x_t - \bar{x})^2}"></span>
+            <span class="card-name">Autocorrelação</span>
+            <span class="card-blurb">Quanto a série se parece com ela mesma k períodos depois.</span>
           </a></li>
         </ul>
       </section>

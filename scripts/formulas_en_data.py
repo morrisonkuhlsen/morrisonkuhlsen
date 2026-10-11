@@ -677,12 +677,39 @@ PAGES = {
   lede="Example: the monthly income, in thousands, of fifteen families. Most earn little and a few earn a lot. How skewed is this distribution, and how heavy are its tails? Change the values to work out your own case.",
   labels=["Values <i>x<sub>i</sub></i>"], smalls=["At least four, separated by spaces or commas."],
   values={"x": ("1,8 2,1 2,3 2,5 2,6 2,9 3,1 3,4 3,8 4,2 4,9 5,6 7,5 9,8 15", "1.8 2.1 2.3 2.5 2.6 2.9 3.1 3.4 3.8 4.2 4.9 5.6 7.5 9.8 15")}),
+ "media-movel": dict(
+  en="moving-average", h1="Moving Average", title="Moving Average — Interactive", aria="Interactive moving average formula",
+  desc="The moving average explained term by term, with a calculator, a chart of the series and the smoothed average, and how to choose the window.",
+  dl=[("Moving Average (MAₜ)", "The mean of the k most recent values up to period t. Computed period by period, it forms a smoother series than the original."),
+      ("Values in the Window", "The last k values of the series. Each period, the oldest leaves and the newest comes in: the window “moves”."),
+      ("Window Size (k)", "How many periods go into each average. A larger window removes more noise, but reacts more slowly to real changes.")],
+  lede="Example: a shop's monthly sales over a year go up, but swing from one month to the next. Does the 3-month moving average show the trend without the back-and-forth? Change the series and the window to work out your own case.",
+  labels=["Series <i>x<sub>t</sub></i>", "Window <i>k</i>"], smalls=["In time order, separated by spaces or commas."],
+  extra=[('data-tex="MM_t"', 'data-tex="MA_t"')]),
+ "suavizacao-exponencial": dict(
+  en="exponential-smoothing", h1="Exponential Smoothing", title="Exponential Smoothing — Interactive", aria="Interactive exponential smoothing formula",
+  desc="Simple exponential smoothing explained term by term, with a calculator, a chart, a forecast for the next period and the α that minimizes the error.",
+  dl=[("Smoothed Value (Sₜ)", "The estimate of the series' level at period t, and the forecast for t + 1."),
+      ("Smoothing Constant (α)", "Between 0 and 1: how much weight to give the new observation. A high α reacts fast and copies the noise; a low α is stable and slow to notice changes."),
+      ("Current Observation (xₜ)", "The value that has just arrived."),
+      ("Weight of the Past (1 − α)", "The weight the previous smoothed value keeps. Since it already blends the earlier ones, each old observation loses weight in a geometric progression."),
+      ("Previous Smoothed Value (Sₜ₋₁)", "The summary of the whole series up to the previous period. It is the method's memory: a single calculation per period, without storing the whole series.")],
+  lede="Example: the same monthly sales of a shop. With α = 0.3, what is the sales forecast for next month? Change the series and α to work out your own case.",
+  labels=["Series <i>x<sub>t</sub></i>", "Smoothing <i>α</i>"], smalls=["In time order, separated by spaces or commas."], values={"alpha": ("0,3", "0.3")}),
+ "autocorrelacao": dict(
+  en="autocorrelation", h1="Autocorrelation", title="Autocorrelation — Interactive", aria="Interactive autocorrelation formula",
+  desc="Autocorrelation explained term by term, with a calculator, a correlogram with significance bands and the Ljung–Box test.",
+  dl=[("Autocorrelation at Lag k (rₖ)", "The correlation of the series with itself k periods later, from −1 to 1. Positive at k = 1 means inertia; a spike at k = 4 or 12, seasonality."),
+      ("Lagged Products", "Multiplies each period's deviation by the deviation k periods ahead. If high values tend to be followed, k periods later, by high values, the sum comes out positive."),
+      ("Total Variation", "The sum of the squared deviations of the whole series. It is the same denominator for every lag, which keeps rₖ between −1 and 1.")],
+  lede="Example: an ice-cream shop's quarterly sales over three years, always higher in summer. Does the autocorrelation show this 4-quarter cycle? Change the series and the maximum lag to work out your own case.",
+  labels=["Series <i>x<sub>t</sub></i>", "Maximum lag"], smalls=["In time order, separated by spaces or commas."]),
 }
 
 # Índice
 CATEGORIES = {
  "Probabilidade": "Probability", "Distribuições": "Distributions", "Inferência": "Inference",
- "Amostragem": "Sampling", "Associação e médias": "Association and means", "Álgebra": "Algebra", "Cálculo": "Calculus",
+ "Amostragem": "Sampling", "Associação e médias": "Association and means", "Séries temporais": "Time series", "Álgebra": "Algebra", "Cálculo": "Calculus",
 }
 BLURBS = {
  "teorema-bayes": "Updates the probability of a hypothesis after seeing evidence.",
@@ -741,6 +768,9 @@ BLURBS = {
  "coeficiente-determinacao": "What share of the variation in y the line explains.",
  "media-geometrica": "The right average for growth rates and factors that multiply.",
  "media-harmonica": "The right average for rates and ratios.",
+ "media-movel": "The trend of a series, without the short swings.",
+ "suavizacao-exponencial": "Smooths and forecasts, giving more weight to recent values.",
+ "autocorrelacao": "How much a series resembles itself k periods later.",
  "formula-quadratica": "The roots of ax² + bx + c = 0.",
  "soma-pg": "The sum of terms multiplied by a fixed ratio, finite or infinite.",
  "juros-aportes": "What an initial amount plus regular deposits grows to.",

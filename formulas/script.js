@@ -32,7 +32,7 @@
     "formula-quadratica": "quadratic-formula", "soma-pg": "geometric-series", "razao-chances": "odds-ratio",
     "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum", "t-duas-amostras": "two-sample-t-test",
     "margem-de-erro": "margin-of-error", "ic-proporcao": "proportion-confidence-interval",
-    "quartis-iqr": "quartiles-iqr",
+    "quartis-iqr": "quartiles-iqr", "suavizacao-exponencial": "exponential-smoothing",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -2897,6 +2897,121 @@
       };
     },
 
+    mm({ x, k }) {
+      const n = x.length;
+      if (n < 3) return { error: T("Informe pelo menos três valores da série.", "Enter at least three values of the series.") };
+      if (n > 2000) return { error: T("Use no máximo 2.000 valores.", "Use at most 2,000 values.") };
+      if (!Number.isInteger(k) || k < 2 || k > n) return { error: T(`A janela k precisa ser um inteiro entre 2 e ${n}.`, `The window k must be an integer between 2 and ${n}.`) };
+      const mm = [];
+      let s = 0;
+      for (let t = 0; t < n; t++) { s += x[t]; if (t >= k) s -= x[t - k]; if (t >= k - 1) mm.push([t + 1, s / k]); }
+      const lo = Math.min(...x), hi = Math.max(...x), pad = (hi - lo) * 0.1 || 1;
+      const last = mm[mm.length - 1][1];
+      const show = n - k + 1 <= 6 ? mm : [mm[0], mm[1], null, mm[mm.length - 1]];
+      // Janela longa vira "primeiro + ⋯ + último".
+      const soma = t => (k > 6 ? `${texNum(x[t - k])} + \\cdots + ${texNum(x[t - 1])}` : x.slice(t - k, t).map(u => texNum(u)).join(" + "));
+      const line = ([t, v]) => `${T("MM", "MA")}_{${t}} = \\dfrac{${soma(t)}}{${tone(k, 2)}} ${approx(v)} ${tone(texNum(v), 1)}`;
+      return {
+        result: `${T("MM", "MA")}_{${n}} ${approx(last)} ${tone(texNum(last), 1)}`,
+        chart: {
+          type: "curve", label: T(`Série de ${n} valores e a média móvel de ${k} períodos`, `Series of ${n} values and its ${k}-period moving average`),
+          xLabel: T(`período · escura: a série · colorida: média móvel de ${k}`, `period · dark: the series · colored: ${k}-period moving average`),
+          xMin: 1, xMax: n, yMin: lo - pad, yMax: hi + pad, pts: mm, lines: [{ pts: x.map((v, i) => [i + 1, v]), cls: "chart-fit" }],
+          tipAt: v => { const t = Math.min(n, Math.max(1, Math.round(v))); const m = mm.find(p => p[0] === t); return [m ? fmt(m[1]) : "—", T(`período ${t}: valor ${fmt(x[t - 1])}`, `period ${t}: value ${fmt(x[t - 1])}`)]; },
+        },
+        steps: [
+          [T(`Cada ponto é a média dos ${k} valores mais recentes; a janela anda um período por vez:`, `Each point is the mean of the ${k} most recent values; the window moves one period at a time:`),
+            `\\begin{gathered}${show.map(p => (p ? line(p) : "\\vdots")).join(" \\\\ ")}\\end{gathered}`],
+        ],
+        note: T(`A média móvel apaga as oscilações curtas e deixa a tendência. Janela maior suaviza mais, mas reage mais devagar: a média de ${k} períodos fica atrasada cerca de ${fmt((k - 1) / 2, 1)} período(s) em relação à série.`
+          + " Com dados sazonais, uma janela do tamanho do ciclo (12 meses, 4 trimestres, 7 dias) cancela a sazonalidade inteira."
+          + ` A última média, ${fmt(last)}, é uma previsão ingênua para o próximo período; a <a href="${PAGE("suavizacao-exponencial")}?x=${encodeURIComponent(x.join(" "))}">suavização exponencial</a> faz isso dando mais peso ao recente.`,
+          `The moving average wipes out short swings and leaves the trend. A larger window smooths more but reacts more slowly: a ${k}-period average lags the series by about ${fmt((k - 1) / 2, 1)} period(s).`
+          + " With seasonal data, a window the length of the cycle (12 months, 4 quarters, 7 days) cancels the seasonality entirely."
+          + ` The last average, ${fmt(last)}, is a naive forecast for the next period; <a href="${PAGE("suavizacao-exponencial")}?x=${encodeURIComponent(x.join(" "))}">exponential smoothing</a> does the same while giving more weight to recent values.`),
+      };
+    },
+
+    ses({ x, alpha }) {
+      const n = x.length;
+      if (n < 3) return { error: T("Informe pelo menos três valores da série.", "Enter at least three values of the series.") };
+      if (n > 2000) return { error: T("Use no máximo 2.000 valores.", "Use at most 2,000 values.") };
+      if (!(alpha > 0 && alpha <= 1)) return { error: T("α precisa estar entre 0 e 1, sem o zero; 0,3 é um ponto de partida comum.", "α must be between 0 and 1, excluding zero; 0.3 is a common starting point.") };
+      const run = a => { const S = [x[0]]; let sse = 0; for (let t = 1; t < n; t++) { sse += (x[t] - S[t - 1]) ** 2; S.push(a * x[t] + (1 - a) * S[t - 1]); } return { S, sse }; };
+      const { S, sse } = run(alpha);
+      let best = 0.01, bestSse = Infinity;
+      for (let a = 0.01; a <= 1.0001; a += 0.01) { const r = run(a).sse; if (r < bestSse) { bestSse = r; best = a; } }
+      const lo = Math.min(...x), hi = Math.max(...x), pad = (hi - lo) * 0.1 || 1;
+      const A = tone(texNum(alpha), 2), A1 = tone(texNum(1 - alpha, 4), 4);
+      const ex = [1, 2].filter(t => t < n).map(t => `S_{${t + 1}} = ${A} \\cdot ${tone(texNum(x[t]), 3)} + ${A1} \\cdot ${tone(texNum(S[t - 1]), 5)} ${approx(S[t])} ${texNum(S[t])}`);
+      const rmse = Math.sqrt(sse / (n - 1));
+      return {
+        result: `${T("\\text{previsão}", "\\text{forecast}")} = S_{${n}} ${approx(S[n - 1])} ${tone(texNum(S[n - 1]), 1)}`,
+        chart: {
+          type: "curve", label: T(`Série de ${n} valores e a suavização exponencial com α = ${fmt(alpha)}`, `Series of ${n} values and its exponential smoothing with α = ${fmt(alpha)}`),
+          xLabel: T(`período · escura: a série · colorida: suavizada (α = ${fmt(alpha)})`, `period · dark: the series · colored: smoothed (α = ${fmt(alpha)})`),
+          xMin: 1, xMax: n, yMin: lo - pad, yMax: hi + pad, pts: S.map((v, i) => [i + 1, v]), lines: [{ pts: x.map((v, i) => [i + 1, v]), cls: "chart-fit" }],
+          tipAt: v => { const t = Math.min(n, Math.max(1, Math.round(v))); return [fmt(S[t - 1]), T(`período ${t}: valor ${fmt(x[t - 1])}`, `period ${t}: value ${fmt(x[t - 1])}`)]; },
+        },
+        steps: [
+          [T("Comece com o primeiro valor da série:", "Start with the first value of the series:"), `S_1 = x_1 = ${texNum(x[0])}`],
+          [T("Cada novo valor suavizado mistura a observação nova (peso α) com o suavizado anterior (peso 1 − α):", "Each new smoothed value blends the new observation (weight α) with the previous smoothed value (weight 1 − α):"),
+            `\\begin{gathered}${ex.join(" \\\\ ")}${n > 3 ? " \\\\ \\vdots" : ""}\\end{gathered}`],
+          [T(`O último valor suavizado é a previsão para o período ${n + 1}:`, `The last smoothed value is the forecast for period ${n + 1}:`), `S_{${n}} ${approx(S[n - 1])} ${tone(texNum(S[n - 1]), 1)}`],
+        ],
+        note: T(`Desdobrando a conta, o valor de j períodos atrás pesa α(1 − α)ʲ: os pesos caem em <a href="${PAGE("soma-pg")}?a=${alpha}&amp;r=${Number((1 - alpha).toFixed(6))}&amp;n=${n}">progressão geométrica</a> e somam 1. α perto de 1 segue a série de perto; perto de 0, suaviza muito.`
+          + ` Com α = ${fmt(alpha)}, o erro típico das previsões um passo à frente é ${fmt(rmse)}; o α que minimiza esse erro nesta série é ${fmt(best, 2)}.`
+          + " A previsão é uma linha reta horizontal: com tendência ou sazonalidade, use as extensões de Holt e de Holt–Winters.",
+          `Unrolling the calculation, the value from j periods ago weighs α(1 − α)ʲ: the weights fall in a <a href="${PAGE("soma-pg")}?a=${alpha}&amp;r=${Number((1 - alpha).toFixed(6))}&amp;n=${n}">geometric series</a> and add up to 1. α near 1 follows the series closely; near 0, it smooths a lot.`
+          + ` With α = ${fmt(alpha)}, the typical one-step-ahead forecast error is ${fmt(rmse)}; the α that minimizes that error on this series is ${fmt(best, 2)}.`
+          + " The forecast is a flat line: with trend or seasonality, use Holt's and Holt–Winters' extensions."),
+      };
+    },
+
+    acf({ x, L }) {
+      const n = x.length;
+      if (n < 5) return { error: T("Informe pelo menos cinco valores da série.", "Enter at least five values of the series.") };
+      if (n > 5000) return { error: T("Use no máximo 5.000 valores.", "Use at most 5,000 values.") };
+      if (!Number.isInteger(L) || L < 1 || L > n - 2) return { error: T(`A defasagem máxima precisa ser um inteiro entre 1 e ${n - 2}.`, `The maximum lag must be an integer between 1 and ${n - 2}.`) };
+      const mean = x.reduce((s, v) => s + v, 0) / n;
+      const d = x.map(v => v - mean), den = d.reduce((s, v) => s + v * v, 0);
+      if (den === 0) return { error: T("Todos os valores são iguais: não há variação para correlacionar.", "All the values are equal: there is no variation to correlate.") };
+      const r = Array.from({ length: L }, (_, i) => { const k = i + 1; let s = 0; for (let t = 0; t < n - k; t++) s += d[t] * d[t + k]; return s / den; });
+      const band = 1.96 / Math.sqrt(n);
+      const Q = n * (n + 2) * r.reduce((s, v, i) => s + v * v / (n - i - 1), 0), pQ = chiSurvival(Q, L);
+      const kmax = r.reduce((b, v, i) => (Math.abs(v) > Math.abs(r[b]) ? i : b), 0) + 1;
+      const fora = r.map((v, i) => i + 1).filter(k => Math.abs(r[k - 1]) > band);
+      const num1 = d.slice(0, n - 1).reduce((s, v, t) => s + v * d[t + 1], 0);
+      const yl = Math.max(1, ...r.map(Math.abs)) * 1;
+      return {
+        result: `r_1 ${approx(r[0], 4)} ${tone(texNum(r[0], 4), 1)}, \\qquad Q(${L}) ${approx(Q, 3)} ${texNum(Q, 3)}`,
+        chart: {
+          type: "bars", label: T(`Autocorrelação nas defasagens 1 a ${L}, com as faixas de ±${fmt(band, 3)}`, `Autocorrelation at lags 1 to ${L}, with the ±${fmt(band, 3)} bands`),
+          xLabel: T(`defasagem k · tracejadas: ±1,96/√n · destaque: fora da faixa`, `lag k · dashed: ±1.96/√n · highlighted: outside the band`),
+          xs: r.map((_, i) => i + 1), ys: r, xMin: 0.5, xMax: L + 0.5, yMin: -yl, yMax: yl,
+          hlines: [{ y: band, cls: "chart-ref" }, { y: -band, cls: "chart-ref" }],
+          hi: k => Math.abs(r[k - 1]) > band,
+          tip: (k, v) => [fmt(v, 4), T(`autocorrelação na defasagem ${k}`, `autocorrelation at lag ${k}`)],
+        },
+        steps: [
+          [T("Subtraia a média de cada valor e some os quadrados: é o denominador comum.", "Subtract the mean from each value and add up the squares: this is the common denominator."),
+            `\\bar{x} ${approx(mean)} ${texNum(mean)}, \\qquad \\textstyle\\sum (x_t - \\bar{x})^2 ${approx(den)} ${tone(texNum(den), 3)}`],
+          [T("Para a defasagem 1, multiplique cada desvio pelo do período seguinte e some:", "For lag 1, multiply each deviation by the next period's and add up:"),
+            `r_1 = \\dfrac{${tone(texNum(num1), 2)}}{${tone(texNum(den), 3)}} ${approx(r[0], 4)} ${tone(texNum(r[0], 4), 1)}`],
+          [T(`Repita para as outras defasagens, até ${L}:`, `Repeat for the other lags, up to ${L}:`),
+            r.slice(0, 8).map((v, i) => `r_{${i + 1}} ${approx(v, 4)} ${texNum(v, 4)}`).join(", \\quad ") + (L > 8 ? ", \\quad \\ldots" : "")],
+          [T("O teste de Ljung–Box junta as defasagens para perguntar se há autocorrelação em alguma delas:", "The Ljung–Box test pools the lags to ask whether there is autocorrelation at any of them:"),
+            `Q = n(n + 2) \\textstyle\\sum_{k=1}^{${L}} \\dfrac{r_k^2}{n - k} ${approx(Q, 3)} ${texNum(Q, 3)}`],
+        ],
+        note: T(`A maior autocorrelação, em módulo, está na defasagem ${kmax} (r ≈ ${fmt(r[kmax - 1], 3)})${fora.length ? `; ${fora.length === 1 ? "a defasagem" : "as defasagens"} ${list(fora.map(String))} ${fora.length === 1 ? "sai" : "saem"} da faixa de ±1,96/√n` : "; nenhuma sai da faixa de ±1,96/√n"}.`
+          + ` Um pico numa defasagem como 4 ou 12 sugere sazonalidade trimestral ou anual. Pelo Ljung–Box, com ${dof(L)}, o valor-p é ${pValueText(pQ)}${pQ < 0.05 ? ": a série não é ruído branco" : ": os dados são compatíveis com ruído branco"}.`
+          + " Em resíduos de regressão, r₁ é o que o teste de Durbin–Watson examina: d ≈ 2(1 − r₁).",
+          `The largest autocorrelation in absolute value is at lag ${kmax} (r ≈ ${fmt(r[kmax - 1], 3)})${fora.length ? `; lag${fora.length === 1 ? "" : "s"} ${list(fora.map(String))} ${fora.length === 1 ? "falls" : "fall"} outside the ±1.96/√n band` : "; none falls outside the ±1.96/√n band"}.`
+          + ` A spike at a lag such as 4 or 12 suggests quarterly or yearly seasonality. By Ljung–Box, with ${dof(L)}, the p-value is ${pValueText(pQ)}${pQ < 0.05 ? ": the series is not white noise" : ": the data are consistent with white noise"}.`
+          + " In regression residuals, r₁ is what the Durbin–Watson test examines: d ≈ 2(1 − r₁)."),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -4163,9 +4278,9 @@
       const every = Math.ceil(n / 12);
       spec.xs.forEach((x, i) => {
         const y = spec.ys[i];
-        const cx = X(x), h = Math.max(0, Y(0) - Y(y));
+        const cx = X(x), top = Math.min(Y(y), Y(0)), h = Math.abs(Y(0) - Y(y));
         const hi = spec.hi(x);
-        if (h > 0) svg("path", { d: barPath(cx - bw / 2, Y(y), bw, h), class: hi ? "chart-hi" : "chart-base" }, root);
+        if (h > 0) svg("path", { d: barPath(cx - bw / 2, top, bw, h), class: hi ? "chart-hi" : "chart-base" }, root);
         if (i % every === 0 || hi) {
           svg("text", { x: cx, y: H - m.b + 16, class: hi ? "chart-label is-hi" : "chart-label", "text-anchor": "middle" }, root).textContent = fmt(x);
         }
@@ -4180,6 +4295,9 @@
           hit.addEventListener("focus", show);
           hit.addEventListener("blur", hideTip);
         }
+      });
+      (spec.hlines || []).forEach(h => {
+        svg("line", { x1: m.l, x2: W - m.r, y1: Y(h.y), y2: Y(h.y), class: h.cls }, root);
       });
       svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
     } else {

@@ -47,6 +47,11 @@
   description: "Assimetria e curtose explicadas termo a termo, com calculadora, histograma comparado à normal, versões corrigidas e o teste de Jarque–Bera."
   tags: "fórmula interativa calculadora passo a passo assimetria curtose forma Jarque-Bera momentos"
   lang: pt
+- title: "Autocorrelação"
+  url: "/formulas/autocorrelacao.html"
+  description: "Autocorrelação explicada termo a termo, com calculadora, correlograma com as faixas de significância e o teste de Ljung–Box."
+  tags: "fórmula interativa calculadora passo a passo séries temporais correlograma ACF Ljung-Box sazonalidade"
+  lang: pt
 - title: "ANOVA de Um Fator"
   url: "/formulas/anova-um-fator.html"
   description: "ANOVA de um fator explicada termo a termo, com calculadora para três ou mais grupos, boxplots, estatística F, valor-p e η²."
@@ -197,6 +202,11 @@
   description: "Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho."
   tags: "simulação simulador interativo pesquisa eleitoral amostragem cobertura intervalo de confiança hipergeométrica monte carlo"
   lang: pt
+- title: "Suavização Exponencial"
+  url: "/formulas/suavizacao-exponencial.html"
+  description: "Suavização exponencial simples explicada termo a termo, com calculadora, gráfico, previsão para o próximo período e o α que minimiza o erro."
+  tags: "fórmula interativa calculadora passo a passo séries temporais previsão alfa suavização"
+  lang: pt
 - title: "Soma da Progressão Geométrica"
   url: "/formulas/soma-pg.html"
   description: "Soma da progressão geométrica explicada termo a termo, com calculadora, gráfico das somas parciais, soma infinita e passo a passo."
@@ -226,6 +236,11 @@
   url: "/formulas/media-harmonica.html"
   description: "Média harmônica explicada termo a termo, com calculadora, passo a passo e comparação com a média aritmética."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Média Móvel"
+  url: "/formulas/media-movel.html"
+  description: "Média móvel explicada termo a termo, com calculadora, gráfico da série e da média suavizada, e como escolher a janela."
+  tags: "fórmula interativa calculadora passo a passo séries temporais média móvel tendência suavização"
   lang: pt
 - title: "Método de Newton"
   url: "/formulas/metodo-newton.html"
@@ -697,6 +712,21 @@
   url: "/en/formulas/harmonic-mean.html"
   description: "The harmonic mean explained term by term, with a calculator, step-by-step working and a comparison with the arithmetic mean."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Moving Average"
+  url: "/en/formulas/moving-average.html"
+  description: "The moving average explained term by term, with a calculator, a chart of the series and the smoothed average, and how to choose the window."
+  tags: "formula interactive calculator step by step time series moving average trend smoothing"
+  lang: en
+- title: "Exponential Smoothing"
+  url: "/en/formulas/exponential-smoothing.html"
+  description: "Simple exponential smoothing explained term by term, with a calculator, a chart, a forecast for the next period and the α that minimizes the error."
+  tags: "formula interactive calculator step by step time series forecast alpha smoothing"
+  lang: en
+- title: "Autocorrelation"
+  url: "/en/formulas/autocorrelation.html"
+  description: "Autocorrelation explained term by term, with a calculator, a correlogram with significance bands and the Ljung–Box test."
+  tags: "formula interactive calculator step by step time series correlogram ACF Ljung-Box seasonality"
   lang: en
 - title: "Quadratic Formula"
   url: "/en/formulas/quadratic-formula.html"

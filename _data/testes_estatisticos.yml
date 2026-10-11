@@ -1225,6 +1225,7 @@ testes:
     vars:
       - ['Breusch-Godfrey, para defasagens maiores', null]
       - ['Ljung-Box, nos resíduos de séries', ljung-box]
+    veja: [autocorrelacao]
     reporte: 'd = 1,32; p = 0,004'
     codigo:
       r: |
@@ -1320,6 +1321,7 @@ testes:
     tex: 'Q = n(n + 2) \sum_{k=1}^{h} \dfrac{\hat{\rho}_k^2}{n - k}'
     vars:
       - ['Box-Pierce, a versão original e menos precisa', null]
+    page: autocorrelacao
     reporte: 'Q(10) = 12,4; p = 0,26'
     codigo:
       r: |

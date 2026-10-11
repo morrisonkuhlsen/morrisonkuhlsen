@@ -178,6 +178,7 @@ CATALOG = {
     "correlacao-spearman": ("spearman-correlation", "Spearman correlation"),
     "kappa-cohen": ("cohens-kappa", "Cohen's kappa"),
     "mann-whitney": ("mann-whitney-u-test", "the Mann-Whitney U test"),
+    "autocorrelacao": ("ljung-box-test", "the Ljung–Box test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
     "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),
@@ -219,6 +220,8 @@ def build_index():
             tex = tex.replace("IC =", "CI =")
         if slug == "teste-diagnostico":
             tex = tex.replace("VPP =", "PPV =")
+        if slug == "media-movel":
+            tex = tex.replace("MM_t =", "MA_t =")
         if slug == "bootstrap":
             tex = tex.replace("IC =", "CI =")
         if slug == "anova-um-fator":

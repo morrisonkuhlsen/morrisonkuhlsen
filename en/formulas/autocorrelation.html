@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Autocorrelation — Interactive</title>
+  <meta name="description" content="Autocorrelation explained term by term, with a calculator, a correlogram with significance bands and the Ljung–Box test.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/autocorrelation.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/autocorrelacao.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/autocorrelation.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/autocorrelacao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/autocorrelation.html">
+  <meta property="og:title" content="Autocorrelation — Interactive">
+  <meta property="og:description" content="Autocorrelation explained term by term, with a calculator, a correlogram with significance bands and the Ljung–Box test.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Autocorrelation — Interactive">
+  <meta name="twitter:description" content="Autocorrelation explained term by term, with a calculator, a correlogram with significance bands and the Ljung–Box test.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/autocorrelacao.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Autocorrelation</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive autocorrelation formula">
+        <span class="part" data-part="r_acf" data-tone="1" data-tex="r_k"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="num_acf" data-tone="2" data-tex="\sum_{t=1}^{n-k} (x_t - \bar{x})(x_{t+k} - \bar{x})"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="den_acf" data-tone="3" data-tex="\sum_{t=1}^{n} (x_t - \bar{x})^2"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com correlograma; estado em ?x=&L=. -->
+    <section class="calc" data-calc="acf" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: an ice-cream shop's quarterly sales over three years, always higher in summer. Does the autocorrelation show this 4-quarter cycle? Change the series and the maximum lag to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Series <i>x<sub>t</sub></i></span>
+          <input name="x" type="text" inputmode="decimal" value="20 35 50 30 22 38 55 33 25 40 58 36" data-list autocomplete="off" spellcheck="false">
+          <small>In time order, separated by spaces or commas.</small>
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Maximum lag</span>
+          <input name="L" type="text" inputmode="numeric" value="8" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="r_acf" data-tone="1">Autocorrelation at Lag k (rₖ)</dt>
+          <dd>The correlation of the series with itself k periods later, from −1 to 1. Positive at k = 1 means inertia; a spike at k = 4 or 12, seasonality.</dd>
+          <dt data-part="num_acf" data-tone="2">Lagged Products</dt>
+          <dd>Multiplies each period's deviation by the deviation k periods ahead. If high values tend to be followed, k periods later, by high values, the sum comes out positive.</dd>
+          <dt data-part="den_acf" data-tone="3">Total Variation</dt>
+          <dd>The sum of the squared deviations of the whole series. It is the same denominator for every lag, which keeps rₖ between −1 and 1.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">When to use it, assumptions and alternatives: <a href="/en/statistical-tests/ljung-box-test/">the Ljung–Box test in the statistical tests catalog</a>.</p>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="exponential-smoothing.html" rel="prev"><span>Previous</span>Exponential Smoothing</a>
+      <a class="pager-next" href="quadratic-formula.html" rel="next"><span>Next</span>Quadratic Formula</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">69 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">72 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -356,6 +356,26 @@
             <span class="card-tex" data-tex="H = \dfrac{n}{\sum_{i=1}^{n} \frac{1}{x_i}}"></span>
             <span class="card-name">Harmonic Mean</span>
             <span class="card-blurb">The right average for rates and ratios.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Time series</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="moving-average.html">
+            <span class="card-tex" data-tex="MA_t = \dfrac{x_t + x_{t-1} + \cdots + x_{t-k+1}}{k}"></span>
+            <span class="card-name">Moving Average</span>
+            <span class="card-blurb">The trend of a series, without the short swings.</span>
+          </a></li>
+          <li><a class="formula-card" href="exponential-smoothing.html">
+            <span class="card-tex" data-tex="S_t = \alpha x_t + (1 - \alpha) S_{t-1}"></span>
+            <span class="card-name">Exponential Smoothing</span>
+            <span class="card-blurb">Smooths and forecasts, giving more weight to recent values.</span>
+          </a></li>
+          <li><a class="formula-card" href="autocorrelation.html">
+            <span class="card-tex" data-tex="r_k = \dfrac{\sum (x_t - \bar{x})(x_{t+k} - \bar{x})}{\sum (x_t - \bar{x})^2}"></span>
+            <span class="card-name">Autocorrelation</span>
+            <span class="card-blurb">How much a series resembles itself k periods later.</span>
           </a></li>
         </ul>
       </section>
