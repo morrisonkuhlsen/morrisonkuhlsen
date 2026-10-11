@@ -22,6 +22,11 @@
   description: "Correção para população finita explicada termo a termo, com calculadora que reduz o tamanho de amostra e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Aproximação de Stirling"
+  url: "/formulas/aproximacao-stirling.html"
+  description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
+  tags: "fórmula interativa calculadora passo a passo fatorial logaritmo"
+  lang: pt
 - title: "Covariância"
   url: "/formulas/covariancia.html"
   description: "Covariância explicada termo a termo, com calculadora a partir de listas de x e y, tabela de desvios e passo a passo."
@@ -102,6 +107,16 @@
   description: "Simulador de pesquisa eleitoral: sorteie milhares de amostras de uma população conhecida, por amostragem aleatória simples, conglomerados ou estratos, e veja a distribuição de p̂, a cobertura dos intervalos e o efeito de desenho."
   tags: "simulação simulador interativo pesquisa eleitoral amostragem cobertura intervalo de confiança hipergeométrica monte carlo"
   lang: pt
+- title: "Soma da Progressão Geométrica"
+  url: "/formulas/soma-pg.html"
+  description: "Soma da progressão geométrica explicada termo a termo, com calculadora, gráfico das somas parciais, soma infinita e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo PG série geométrica soma infinita"
+  lang: pt
+- title: "Soma de Riemann"
+  url: "/formulas/soma-riemann.html"
+  description: "Soma de Riemann explicada termo a termo, com calculadora, gráfico dos retângulos sob a curva, comparação com a integral exata e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo integral área sob a curva retângulos"
+  lang: pt
 - title: "Tamanho de Amostra para a Média"
   url: "/formulas/tamanho-amostra-media.html"
   description: "Tamanho de amostra para estimar uma média explicado termo a termo, com calculadora pela confiança, desvio padrão e margem de erro, e passo a passo."
@@ -127,6 +142,11 @@
   description: "Alocação de Neyman explicada termo a termo, com calculadora que divide a amostra entre estratos e compara com a proporcional."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "O Limite que Define e"
+  url: "/formulas/numero-e.html"
+  description: "O número e como limite de (1 + 1/n)ⁿ, explicado termo a termo, com calculadora, gráfico da convergência e os juros compostos que deram origem a ele."
+  tags: "fórmula interativa calculadora passo a passo número de Euler juros compostos limite"
+  lang: pt
 - title: "Probabilidade Condicional"
   url: "/formulas/probabilidade-condicional.html"
   description: "Probabilidade condicional P(A|B) explicada termo a termo, com calculadora a partir de contagens e passo a passo."
@@ -151,6 +171,11 @@
   url: "/formulas/regressao-linear.html"
   description: "Regressão linear simples explicada termo a termo, com calculadora da reta de mínimos quadrados, previsão e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Série de Taylor"
+  url: "/formulas/serie-taylor.html"
+  description: "Série de Taylor explicada termo a termo, com calculadora para eˣ, seno, cosseno e ln(1 + x), gráfico do polinômio colando na curva e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo polinômio de Taylor Maclaurin aproximação"
   lang: pt
 - title: "Teste t de Student"
   url: "/formulas/t-student.html"
@@ -438,10 +463,35 @@
   description: "The quadratic formula explained term by term, with a calculator for real or complex roots and step-by-step working."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Geometric Series"
+  url: "/en/formulas/geometric-series.html"
+  description: "The sum of a geometric series explained term by term, with a calculator, a chart of the partial sums, the infinite sum and step-by-step working."
+  tags: "formula interactive calculator step by step geometric sum infinite series"
+  lang: en
+- title: "The Limit That Defines e"
+  url: "/en/formulas/number-e-limit.html"
+  description: "The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from."
+  tags: "formula interactive calculator step by step Euler's number compound interest limit"
+  lang: en
+- title: "Stirling's Approximation"
+  url: "/en/formulas/stirling-approximation.html"
+  description: "Stirling's approximation for n! explained term by term, with a calculator, a comparison with the exact value and a chart of the relative error."
+  tags: "formula interactive calculator step by step factorial logarithm"
+  lang: en
 - title: "L'Hôpital's Rule"
   url: "/en/formulas/lhopital-rule.html"
   description: "L'Hôpital's rule explained term by term, with worked examples of 0/0 and ∞/∞ and the common mistake of using it without an indeterminate form."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Taylor Series"
+  url: "/en/formulas/taylor-series.html"
+  description: "The Taylor series explained term by term, with a calculator for eˣ, sine, cosine and ln(1 + x), a chart of the polynomial hugging the curve and step-by-step working."
+  tags: "formula interactive calculator step by step Taylor polynomial Maclaurin approximation"
+  lang: en
+- title: "Riemann Sum"
+  url: "/en/formulas/riemann-sum.html"
+  description: "The Riemann sum explained term by term, with a calculator, a chart of the rectangles under the curve, a comparison with the exact integral and step-by-step working."
+  tags: "formula interactive calculator step by step integral area under the curve rectangles"
   lang: en
 
 - title: "Matemática Básica"

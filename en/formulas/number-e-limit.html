@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>The Limit That Defines e — Interactive</title>
+  <meta name="description" content="The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/number-e-limit.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/numero-e.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/number-e-limit.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/numero-e.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/number-e-limit.html">
+  <meta property="og:title" content="The Limit That Defines e — Interactive">
+  <meta property="og:description" content="The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="The Limit That Defines e — Interactive">
+  <meta name="twitter:description" content="The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/numero-e.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">The Limit That Defines e</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive formula of the limit that defines e">
+        <span class="part" data-part="e_lim" data-tone="1" data-tex="e"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="lim_e" data-tone="2" data-tex="\lim_{n \to \infty}"></span>
+        <span class="part" data-part="pow_e" data-tone="3" data-tex="\left(1 + \dfrac{1}{n}\right)^{n}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico da convergência; estado em ?n=. -->
+    <section class="calc" data-calc="elim" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: $1 invested at 100% a year, with interest compounded n times a year. Compounding every month (n = 12), what does it grow to in a year? And if n kept growing? Change the value to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>Compounding periods per year <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="12" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="e_lim" data-tone="1">Euler's Number (e)</dt>
+          <dd>The constant e ≈ 2.71828, base of the natural logarithm and of the exponential function. It shows up whenever something grows at a rate proportional to its own size.</dd>
+          <dt data-part="lim_e" data-tone="2">Limit (n → ∞)</dt>
+          <dd>The value the expression approaches as n grows without end. No finite n reaches e, but it can get as close as you like.</dd>
+          <dt data-part="pow_e" data-tone="3">Compound Interest ((1 + 1/n)ⁿ)</dt>
+          <dd>$1 at 100% a year, split into n compounding periods of 1/n each. More periods earn more, but less and less more each time: the total never passes e.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="geometric-series.html" rel="prev"><span>Previous</span>Geometric Series</a>
+      <a class="pager-next" href="stirling-approximation.html" rel="next"><span>Next</span>Stirling&#x27;s Approximation</a>
+    </nav>
+  </main>
+</body>
+</html>

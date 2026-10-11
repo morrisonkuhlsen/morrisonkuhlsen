@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Taylor Series — Interactive</title>
+  <meta name="description" content="The Taylor series explained term by term, with a calculator for eˣ, sine, cosine and ln(1 + x), a chart of the polynomial hugging the curve and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/taylor-series.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/serie-taylor.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/taylor-series.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/serie-taylor.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/taylor-series.html">
+  <meta property="og:title" content="Taylor Series — Interactive">
+  <meta property="og:description" content="The Taylor series explained term by term, with a calculator for eˣ, sine, cosine and ln(1 + x), a chart of the polynomial hugging the curve and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Taylor Series — Interactive">
+  <meta name="twitter:description" content="The Taylor series explained term by term, with a calculator for eˣ, sine, cosine and ln(1 + x), a chart of the polynomial hugging the curve and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/serie-taylor.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Taylor Series</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive Taylor series formula">
+        <span class="part" data-part="f_tay" data-tone="1" data-tex="f(x)"></span>
+        <span class="op">≈</span>
+        <span class="part" data-part="sum_tay" data-tone="2" data-tex="\sum_{k=0}^{N}"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="der_tay" data-tone="3" data-tex="f^{(k)}(0)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="fact_tay" data-tone="4" data-tex="k!"></span>
+          </span>
+        </span>
+        <span class="part" data-part="pow_tay" data-tone="5" data-tex="x^k"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico da função e do polinômio; estado em ?f=&x=&N=. -->
+    <section class="calc" data-calc="taylor" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: approximate e = e¹ by adding only the terms up to x⁴/4!. How close does it get? Change the function, the point and the degree to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="1">
+          <span>Function</span>
+          <select name="f" autocomplete="off">
+            <option value="exp">eˣ</option>
+            <option value="sin">sin x</option>
+            <option value="cos">cos x</option>
+            <option value="ln">ln(1 + x)</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Point <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Degree <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="4" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="f_tay" data-tone="1">Function (f(x))</dt>
+          <dd>The function to approximate. Here the series is around 0 (also called the Maclaurin series), so the approximation is best near x = 0.</dd>
+          <dt data-part="sum_tay" data-tone="2">Sum up to Degree N</dt>
+          <dd>Adds the terms from degree 0 to N. Each extra term corrects the previous ones; with infinitely many terms, the sum reproduces the function wherever the series converges.</dd>
+          <dt data-part="der_tay" data-tone="3">Derivative at 0 (f⁽ᵏ⁾(0))</dt>
+          <dd>The k-th derivative of the function at 0. It makes the polynomial have, at 0, the same value, the same slope, the same curvature and so on as the function.</dd>
+          <dt data-part="fact_tay" data-tone="4">Factorial (k!)</dt>
+          <dd>Makes up for the fact that differentiating xᵏ k times gives k!. That is why the coefficients shrink fast and high-degree terms weigh little near 0.</dd>
+          <dt data-part="pow_tay" data-tone="5">Power (xᵏ)</dt>
+          <dd>Carries the term away from 0. The farther the point, the larger the powers and the more terms are needed for a good approximation.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="lhopital-rule.html" rel="prev"><span>Previous</span>L&#x27;Hôpital&#x27;s Rule</a>
+      <a class="pager-next" href="riemann-sum.html" rel="next"><span>Next</span>Riemann Sum</a>
+    </nav>
+  </main>
+</body>
+</html>

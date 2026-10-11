@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">37 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">42 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -255,17 +255,47 @@
         </ul>
       </section>
       <section class="formula-group">
-        <h2>Álgebra e cálculo</h2>
+        <h2>Álgebra</h2>
         <ul class="formula-list">
           <li><a class="formula-card" href="formula-quadratica.html">
             <span class="card-tex" data-tex="x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"></span>
             <span class="card-name">Fórmula Quadrática</span>
             <span class="card-blurb">As raízes de ax² + bx + c = 0.</span>
           </a></li>
+          <li><a class="formula-card" href="soma-pg.html">
+            <span class="card-tex" data-tex="S_n = a \cdot \dfrac{1 - r^n}{1 - r}"></span>
+            <span class="card-name">Soma da Progressão Geométrica</span>
+            <span class="card-blurb">Soma de termos que se multiplicam por uma razão fixa, finita ou infinita.</span>
+          </a></li>
+        </ul>
+      </section>
+      <section class="formula-group">
+        <h2>Cálculo</h2>
+        <ul class="formula-list">
+          <li><a class="formula-card" href="numero-e.html">
+            <span class="card-tex" data-tex="e = \lim_{n \to \infty} \left(1 + \dfrac{1}{n}\right)^n"></span>
+            <span class="card-name">O Limite que Define e</span>
+            <span class="card-blurb">Juros compostos cada vez mais frequentes levam ao número e.</span>
+          </a></li>
+          <li><a class="formula-card" href="aproximacao-stirling.html">
+            <span class="card-tex" data-tex="n! \approx \sqrt{2\pi n} \left(\dfrac{n}{e}\right)^n"></span>
+            <span class="card-name">Aproximação de Stirling</span>
+            <span class="card-blurb">Uma fórmula para fatoriais grandes demais para calcular.</span>
+          </a></li>
           <li><a class="formula-card" href="regra-lhopital.html">
             <span class="card-tex" data-tex="\lim_{x\to c}\frac{f(x)}{g(x)} = \lim_{x\to c}\frac{f&#x27;(x)}{g&#x27;(x)}"></span>
             <span class="card-name">Regra de L'Hôpital</span>
             <span class="card-blurb">Resolve limites indeterminados do tipo 0/0 ou ∞/∞.</span>
+          </a></li>
+          <li><a class="formula-card" href="serie-taylor.html">
+            <span class="card-tex" data-tex="f(x) \approx \sum_{k=0}^{N} \dfrac{f^{(k)}(0)}{k!}\, x^k"></span>
+            <span class="card-name">Série de Taylor</span>
+            <span class="card-blurb">Aproxima uma função por um polinômio.</span>
+          </a></li>
+          <li><a class="formula-card" href="soma-riemann.html">
+            <span class="card-tex" data-tex="\int_a^b f(x)\,dx \approx \sum_{i=1}^{n} f(x_i^*)\,\Delta x"></span>
+            <span class="card-name">Soma de Riemann</span>
+            <span class="card-blurb">A área sob uma curva, aproximada por retângulos.</span>
           </a></li>
         </ul>
       </section>

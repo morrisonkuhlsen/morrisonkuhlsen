@@ -25,6 +25,9 @@
     "teorema-chebyshev": "chebyshev-theorem", "distribuicao-bernoulli": "bernoulli-distribution",
     "distribuicao-poisson": "poisson-distribution", "intervalo-confianca": "confidence-interval",
     "teorema-central-limite": "central-limit-theorem", "media-harmonica": "harmonic-mean",
+    "distribuicao-geometrica": "geometric-distribution", "distribuicao-exponencial": "exponential-distribution",
+    "distribuicao-normal": "normal-distribution", "coeficiente-binomial": "binomial-coefficient",
+    "problema-aniversario": "birthday-problem",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -1972,6 +1975,225 @@
       };
     },
 
+    pg({ a, r, n }) {
+      if (!Number.isInteger(n) || n < 1) return { error: T("O número de termos n precisa ser um inteiro positivo.", "The number of terms n must be a positive integer.") };
+      if (n > 1000) return { error: T("Use n de no máximo 1.000.", "Use n of at most 1,000.") };
+      if (a === 0) return { error: T("O primeiro termo a precisa ser diferente de zero.", "The first term a must not be zero.") };
+      const sums = [];
+      let s = 0, term = a;
+      for (let k = 1; k <= n; k++) { s += term; sums.push([k, s]); term *= r; }
+      const rn = r ** n;
+      const S = sums[n - 1][1];
+      const A = tone(texNum(a), 2), R = paren(r, texNum(r));
+      const conv = Math.abs(r) < 1, lim = a / (1 - r);
+      const ys = sums.map(p => p[1]).concat(conv ? [lim] : []);
+      const lo = Math.min(0, ...ys), hi = Math.max(...ys);
+      const pad = (hi - lo) * 0.08 || 1;
+      const steps = r === 1
+        ? [[T("Com r = 1, todos os termos são iguais a a; a fórmula dividiria por zero, e a soma é só n · a:", "With r = 1, every term equals a; the formula would divide by zero, and the sum is just n · a:"),
+          `S_{${n}} = ${n} \\cdot ${A} = ${tone(texNum(S), 1)}`]]
+        : [[T(`Calcule a razão elevada a n = ${n}:`, `Raise the ratio to the power n = ${n}:`), `r^{n} = ${R}^{${n}} ${approx(rn, 6)} ${texSci(rn, 6)}`],
+          [T("Calcule o numerador e o denominador:", "Compute the numerator and the denominator:"),
+            `1 - r^{n} ${approx(1 - rn, 6)} ${tone(texSci(1 - rn, 6), 3)}, \\qquad 1 - r = ${tone(texNum(1 - r, 6), 4)}`],
+          [T("Junte tudo:", "Put it all together:"),
+            `S_{${n}} = ${A} \\cdot \\dfrac{${tone(texSci(1 - rn, 6), 3)}}{${tone(texNum(1 - r, 6), 4)}} ${approx(S, 6)} ${tone(texSci(S, 6), 1)}`]];
+      if (conv) steps.push([T("Como |r| < 1, rⁿ vai a zero quando n cresce, e a soma infinita converge:", "Since |r| < 1, rⁿ goes to zero as n grows, and the infinite sum converges:"),
+        `S_{\\infty} = \\dfrac{${A}}{1 - ${R}} ${approx(lim, 6)} ${texNum(lim, 6)}`]);
+      return {
+        result: `S_{${n}} ${approx(S, 6)} ${tone(texSci(S, 6), 1)}`,
+        chart: {
+          type: "curve", label: T(`Somas parciais da progressão geométrica com a = ${fmt(a)} e r = ${fmt(r)}${conv ? `; linha no limite ${fmt(lim)}` : ""}`, `Partial sums of the geometric series with a = ${fmt(a)} and r = ${fmt(r)}${conv ? `; line at the limit ${fmt(lim)}` : ""}`),
+          xLabel: T(`número de termos somados${conv ? " · tracejada: soma infinita" : ""}`, `number of terms added${conv ? " · dashed: infinite sum" : ""}`),
+          xMin: 1, xMax: Math.max(n, 2), yMin: lo - pad, yMax: hi + pad, pts: sums,
+          hlines: conv ? [{ y: lim, cls: "chart-ref" }] : [], marker: [n, S],
+          tipAt: v => { const k = Math.min(n, Math.max(1, Math.round(v))); return [fmt(sums[k - 1][1], 6), T(`soma dos ${k} primeiros termos`, `sum of the first ${k} terms`)]; },
+        },
+        steps,
+        note: (conv
+          ? T(`Faltam ${fmtSci(Math.abs(lim - S), 3)} para a soma infinita, ${fmt(lim, 6)}: cada termo novo cobre uma fração fixa do que falta.`,
+            `The infinite sum, ${fmt(lim, 6)}, is ${fmtSci(Math.abs(lim - S), 3)} away: each new term covers a fixed share of what is left.`)
+          : T("Como |r| ≥ 1, os termos não encolhem e a soma infinita não converge: ela cresce sem limite ou oscila.",
+            "Since |r| ≥ 1, the terms don't shrink and the infinite sum doesn't converge: it grows without bound or oscillates."))
+          + T(` A mesma soma aparece na estatística: na <a href="${PAGE("distribuicao-geometrica")}">distribuição geométrica</a>, a chance de o primeiro sucesso vir até a tentativa k é p(1 + q + … + q^(k−1)) = 1 − q^k.`,
+            ` The same sum shows up in statistics: in the <a href="${PAGE("distribuicao-geometrica")}">geometric distribution</a>, the chance that the first success comes by trial k is p(1 + q + … + q^(k−1)) = 1 − q^k.`),
+      };
+    },
+
+    stirling({ n }) {
+      if (!Number.isInteger(n) || n < 1) return { error: T("n precisa ser um inteiro positivo.", "n must be a positive integer.") };
+      if (n > 1e6) return { error: T("Use n de no máximo 1.000.000.", "Use n of at most 1,000,000.") };
+      const lnExact = lgamma(n + 1);
+      const lnRoot = 0.5 * Math.log(2 * Math.PI * n), lnPow = n * (Math.log(n) - 1);
+      const lnApprox = lnRoot + lnPow;
+      const rel = n2 => 1 - Math.exp(0.5 * Math.log(2 * Math.PI * n2) + n2 * (Math.log(n2) - 1) - lgamma(n2 + 1));
+      const err = rel(n);
+      // Número grande pela mantissa e pelo expoente, já que n! passa de 1e308.
+      const big = ln => { const l10 = ln / Math.LN10, e = Math.floor(l10); return e < 15 ? texNum(Math.exp(ln), e < 0 ? 6 : 4) : `${texNum(10 ** (l10 - e), 4)} \\times 10^{${e}}`; };
+      const exactTex = n <= 20 ? texNum(Math.round(Math.exp(lnExact))) : big(lnExact);
+      const top = Math.max(20, Math.min(2 * n, 200));
+      const pts = Array.from({ length: top }, (_, i) => [i + 1, rel(i + 1) * 100]);
+      return {
+        result: `${n}! \\approx ${tone(big(lnApprox), 1)}`,
+        chart: {
+          type: "curve", label: T("Erro relativo da aproximação de Stirling, em %, para cada n", "Relative error of Stirling's approximation, in %, for each n"),
+          xLabel: T("n · erro relativo (%)", "n · relative error (%)"), xMin: 1, xMax: top, yMax: rel(1) * 100, pts,
+          marker: n <= top ? [n, err * 100] : null,
+          tipAt: v => { const k = Math.min(top, Math.max(1, Math.round(v))); return [`${fmt(rel(k) * 100, 3)}%`, `n = ${k}`]; },
+        },
+        steps: [
+          [T("Calcule a raiz:", "Compute the root:"), `\\sqrt{2\\pi \\cdot ${n}} ${approx(Math.exp(lnRoot))} ${tone(texNum(Math.exp(lnRoot)), 2)}`],
+          [T("Calcule a potência; e ≈ 2,71828:", "Compute the power; e ≈ 2.71828:"), `\\left(\\dfrac{${n}}{e}\\right)^{${n}} \\approx ${tone(big(lnPow), 3)}`],
+          [T("Multiplique:", "Multiply:"), `${n}! \\approx ${tone(texNum(Math.exp(lnRoot)), 2)} \\cdot ${tone(big(lnPow), 3)} \\approx ${tone(big(lnApprox), 1)}`],
+          [T("Compare com o valor exato:", "Compare with the exact value:"), `${n}! = ${exactTex}, \\qquad \\text{${T("erro relativo", "relative error")}} \\approx ${texNum(err * 100, 4)}\\%`],
+        ],
+        note: T(`A aproximação fica abaixo do valor exato por cerca de 1/(12n) ≈ ${fmt(100 / (12 * n), 4)}%: o erro relativo some conforme n cresce, embora a diferença absoluta continue enorme.`
+          + " É assim que se lida com fatoriais grandes demais para a calculadora: em logaritmos, ln n! ≈ n ln n − n + ½ ln(2πn)."
+          + ` É o que está por trás das contas do <a href="${PAGE("coeficiente-binomial")}">coeficiente binomial</a>, da <a href="${PAGE("distribuicao-binomial")}">binomial</a> e do <a href="${PAGE("problema-aniversario")}">problema do aniversário</a> com números grandes.`,
+          `The approximation falls short of the exact value by about 1/(12n) ≈ ${fmt(100 / (12 * n), 4)}%: the relative error vanishes as n grows, even though the absolute gap stays huge.`
+          + " This is how factorials too large for a calculator are handled: in logarithms, ln n! ≈ n ln n − n + ½ ln(2πn)."
+          + ` It is what lies behind the calculations of the <a href="${PAGE("coeficiente-binomial")}">binomial coefficient</a>, the <a href="${PAGE("distribuicao-binomial")}">binomial distribution</a> and the <a href="${PAGE("problema-aniversario")}">birthday problem</a> with large numbers.`),
+      };
+    },
+
+    elim({ n }) {
+      if (!(n >= 1)) return { error: T("n precisa ser maior ou igual a 1.", "n must be at least 1.") };
+      if (n > 1e12) return { error: T("Use n de no máximo 10¹².", "Use n of at most 10¹².") };
+      // log1p evita perder casas em 1 + 1/n quando n é grande.
+      const val = m => Math.exp(m * Math.log1p(1 / m));
+      const v = val(n), gap = Math.E - v;
+      const top = Math.max(30, Math.min(n, 1000));
+      const pts = Array.from({ length: 300 }, (_, i) => { const m = 1 + (top - 1) * i / 299; return [m, val(m)]; });
+      const casos = [[1, T("anual", "yearly")], [12, T("mensal", "monthly")], [365, T("diária", "daily")], [8760, T("por hora", "hourly")]];
+      return {
+        result: `\\left(1 + \\dfrac{1}{${texNum(n)}}\\right)^{${texNum(n)}} ${approx(v, 8)} ${tone(texNum(v, 8), 3)}`,
+        chart: {
+          type: "curve", label: T(`Valor de (1 + 1/n)^n de n = 1 a ${fmt(top)}, aproximando-se de e`, `Value of (1 + 1/n)^n from n = 1 to ${fmt(top)}, approaching e`),
+          xLabel: T("n · tracejada: e ≈ 2,71828", "n · dashed: e ≈ 2.71828"), xMin: 1, xMax: top, yMin: 1.9, yMax: 2.8, pts,
+          hlines: [{ y: Math.E, cls: "chart-ref" }], marker: n <= top ? [n, v] : null,
+          tipAt: m => { const k = Math.max(1, Math.round(m)); return [fmt(val(k), 6), `n = ${fmt(k)}`]; },
+        },
+        steps: [
+          [T("Divida 1 por n e some 1:", "Divide 1 by n and add 1:"), `1 + \\dfrac{1}{${texNum(n)}} ${approx(1 + 1 / n, 10)} ${texNum(1 + 1 / n, 10)}`],
+          [T(`Eleve a ${fmt(n)}:`, `Raise it to the power ${fmt(n)}:`), `\\left(${texNum(1 + 1 / n, 10)}\\right)^{${texNum(n)}} ${approx(v, 8)} ${tone(texNum(v, 8), 3)}`],
+          [T("Compare com e:", "Compare with e:"), `${tone("e", 1)} - ${texNum(v, 8)} ${approx(gap, 8)} ${texSci(gap, 4)}`],
+        ],
+        note: T(`Ainda faltam ${fmtSci(gap, 3)} para e, perto de e/(2n) ≈ ${fmtSci(Math.E / (2 * n), 3)}: o limite chega devagar.`
+          + ` Em juros, é R$ 1 a 100% ao ano: capitalizando ${casos.map(([m, t]) => `${t}, vira R$ ${fmt(val(m), 4)}`).join("; ")}; e, de forma contínua, R$ e ≈ ${fmt(Math.E, 4)}.`
+          + ` Com taxa r, o limite vira e^r. É de onde vêm a <a href="${PAGE("distribuicao-exponencial")}">distribuição exponencial</a> e a <a href="${PAGE("distribuicao-poisson")}">de Poisson</a>.`,
+          `e is still ${fmtSci(gap, 3)} away, close to e/(2n) ≈ ${fmtSci(Math.E / (2 * n), 3)}: the limit arrives slowly.`
+          + ` In interest terms, it is $1 at 100% a year: compounded ${casos.map(([m, t]) => `${t}, it becomes $${fmt(val(m), 4)}`).join("; ")}; and, continuously, $e ≈ ${fmt(Math.E, 4)}.`
+          + ` With a rate r, the limit becomes e^r. This is where the <a href="${PAGE("distribuicao-exponencial")}">exponential</a> and <a href="${PAGE("distribuicao-poisson")}">Poisson</a> distributions come from.`),
+      };
+    },
+
+    riemann({ f, a, b, n, m }) {
+      const FUNCS = {
+        x2: { tex: "x^2", f: x => x * x, F: x => x ** 3 / 3 },
+        exp: { tex: "e^{x}", f: Math.exp, F: Math.exp },
+        inv: { tex: "\\tfrac{1}{x}", f: x => 1 / x, F: Math.log, min: 0, strict: true },
+        sqrt: { tex: "\\sqrt{x}", f: Math.sqrt, F: x => 2 / 3 * x ** 1.5, min: 0 },
+        normal: { tex: "\\varphi(x)", f: x => normPdf(x, 0, 1), F: phi },
+      };
+      const fn = FUNCS[f];
+      const nome = { x2: "x²", exp: "eˣ", inv: "1/x", sqrt: "√x", normal: "φ(x)" }[f];
+      if (!(a < b)) return { error: T("O início a precisa ser menor que o fim b.", "The start a must be less than the end b.") };
+      if (fn.min != null && (fn.strict ? a <= fn.min : a < fn.min)) return { error: T(`Para ${nome}, o intervalo precisa começar em ${f === "inv" ? "um valor maior que 0" : "0 ou depois"}.`, `For ${nome}, the interval must start ${f === "inv" ? "above 0" : "at 0 or later"}.`) };
+      if (b - a > 1000) return { error: T("Use um intervalo de no máximo 1.000 de largura.", "Use an interval at most 1,000 wide.") };
+      if (f === "exp" && b > 50) return { error: T("Para eˣ, use b de no máximo 50.", "For eˣ, use b of at most 50.") };
+      if (!Number.isInteger(n) || n < 1 || n > 500) return { error: T("O número de retângulos precisa ser um inteiro entre 1 e 500.", "The number of rectangles must be an integer between 1 and 500.") };
+      const off = { esq: 0, meio: 0.5, dir: 1 }[m];
+      const area = k => { const d = (b - a) / k; let s = 0; for (let i = 0; i < k; i++) s += fn.f(a + (i + off) * d) * d; return s; };
+      const dx = (b - a) / n, S = area(n);
+      const exact = fn.F(b) - fn.F(a), err = S - exact, err2 = area(2 * n) - exact;
+      const xi = i => a + (i + off) * dx;
+      const bins = Array.from({ length: n }, (_, i) => ({ x0: a + i * dx, x1: a + (i + 1) * dx, y: fn.f(xi(i)), count: 0, i }));
+      const pts = Array.from({ length: 201 }, (_, i) => { const x = a + (b - a) * i / 200; return [x, fn.f(x)]; });
+      const yMax = Math.max(...pts.map(p => p[1]), ...bins.map(q => q.y));
+      const where = { esq: T("na borda esquerda", "at the left edge"), meio: T("no ponto médio", "at the midpoint"), dir: T("na borda direita", "at the right edge") }[m];
+      const show = n <= 4 ? bins.map(q => q.i) : [0, 1, n - 1];
+      const DX = tone(texNum(dx, 6), 4);
+      return {
+        result: `\\int_{${texNum(a)}}^{${texNum(b)}} ${fn.tex}\\,dx \\approx ${tone(texNum(S, 6), 1)}`,
+        chart: {
+          type: "hist", label: T(`${n} retângulos sob a curva de ${nome} entre ${fmt(a)} e ${fmt(b)}, com altura tomada ${where}`, `${n} rectangles under the curve of ${nome} between ${fmt(a)} and ${fmt(b)}, with the height taken ${where}`),
+          xLabel: "x", xMin: a, xMax: b, yMax, bins, pts,
+          binTip: q => [fmt(q.y * dx, 6), T(`retângulo ${q.i + 1}: altura ${fmt(q.y, 4)}, de x = ${fmt(q.x0, 3)} a ${fmt(q.x1, 3)}`, `rectangle ${q.i + 1}: height ${fmt(q.y, 4)}, from x = ${fmt(q.x0, 3)} to ${fmt(q.x1, 3)}`)],
+        },
+        steps: [
+          [T("Divida o intervalo em n partes iguais:", "Split the interval into n equal parts:"), `\\Delta x = \\dfrac{${texNum(b)} - ${paren(a, texNum(a))}}{${n}} ${approx(dx, 6)} ${DX}`],
+          [T(`Em cada parte, tome a altura da curva ${where}:`, `In each part, take the height of the curve ${where}:`),
+            show.map(i => `f(${texNum(xi(i), 4)}) ${approx(fn.f(xi(i)), 4)} ${tone(texNum(fn.f(xi(i)), 4), 3)}`).join(", \\quad ").replace(/(.*), \\quad /, n > 4 ? "$1, \\quad \\ldots, \\quad " : "$1, \\quad ")],
+          [T("Some as áreas dos retângulos, altura vezes largura:", "Add up the areas of the rectangles, height times width:"),
+            `${tone("\\textstyle\\sum", 2)} f(x_i^*) \\cdot ${DX} ${approx(S, 6)} ${tone(texNum(S, 6), 1)}`],
+          [T("Compare com a área exata, pela primitiva:", "Compare with the exact area, from the antiderivative:"),
+            `\\int_{${texNum(a)}}^{${texNum(b)}} ${fn.tex}\\,dx ${approx(exact, 6)} ${texNum(exact, 6)}, \\qquad \\text{${T("erro", "error")}} ${approx(err, 6)} ${texSci(err, 4)}`],
+        ],
+        note: T(`Com ${2 * n} retângulos, o erro seria ${fmtSci(err2, 3)}: ${m === "meio" ? "pelo ponto médio, dobrar n divide o erro por cerca de 4" : "pela borda, dobrar n divide o erro por cerca de 2; o ponto médio converge bem mais rápido"}.`
+          + ` No limite, com n indo ao infinito, a soma vira a integral. É a ideia por trás de "probabilidade é área sob a curva": escolha φ(x) e o resultado é a chance de uma <a href="${PAGE("distribuicao-normal")}">normal padrão</a> cair entre a e b.`,
+          `With ${2 * n} rectangles, the error would be ${fmtSci(err2, 3)}: ${m === "meio" ? "with the midpoint, doubling n divides the error by about 4" : "with an edge, doubling n divides the error by about 2; the midpoint converges much faster"}.`
+          + ` In the limit, as n goes to infinity, the sum becomes the integral. It is the idea behind "probability is area under the curve": pick φ(x) and the result is the chance that a <a href="${PAGE("distribuicao-normal")}">standard normal</a> falls between a and b.`),
+      };
+    },
+
+    taylor({ f, x, N }) {
+      const FUNCS = {
+        exp: { tex: "e^{x}", f: Math.exp, c: k => 1 / Math.exp(lgamma(k + 1)), lo: -3, hi: 3 },
+        sin: { tex: "\\operatorname{sen} x", en: "\\sin x", f: Math.sin, c: k => (k % 2 ? (-1) ** ((k - 1) / 2) / Math.exp(lgamma(k + 1)) : 0), lo: -2 * Math.PI, hi: 2 * Math.PI },
+        cos: { tex: "\\cos x", f: Math.cos, c: k => (k % 2 ? 0 : (-1) ** (k / 2) / Math.exp(lgamma(k + 1))), lo: -2 * Math.PI, hi: 2 * Math.PI },
+        ln: { tex: "\\ln(1 + x)", f: Math.log1p, c: k => (k ? (-1) ** (k + 1) / k : 0), lo: -0.95, hi: 2 },
+      };
+      const fn = FUNCS[f];
+      const nome = { exp: "eˣ", sin: T("sen x", "sin x"), cos: "cos x", ln: "ln(1 + x)" }[f];
+      const ftex = EN && fn.en ? fn.en : fn.tex;
+      if (!Number.isInteger(N) || N < 0 || N > 40) return { error: T("O grau N precisa ser um inteiro entre 0 e 40.", "The degree N must be an integer between 0 and 40.") };
+      if (Math.abs(x) > 20) return { error: T("Use x entre −20 e 20.", "Use x between −20 and 20.") };
+      if (f === "ln" && x <= -1) return { error: T("ln(1 + x) só existe para x maior que −1.", "ln(1 + x) only exists for x greater than −1.") };
+      const poly = v => { let s = 0; for (let k = 0; k <= N; k++) s += fn.c(k) * v ** k; return s; };
+      const P = poly(x), exact = fn.f(x), err = P - exact;
+      const terms = [];
+      for (let k = 0; k <= N; k++) if (fn.c(k) !== 0) terms.push(k);
+      const termTex = k => {
+        const c = fn.c(k);
+        const den = f === "ln" ? k : `${k}!`;
+        const body = k === 0 ? "1" : `\\dfrac{${tone(`x^{${k}}`, 5)}}{${tone(den, 4)}}`;
+        return { sign: c < 0 ? "-" : "+", body };
+      };
+      const shown = terms.slice(0, 6).map(termTex);
+      const poly_tex = shown.map((t, i) => (i === 0 ? (t.sign === "-" ? "-" : "") : ` ${t.sign} `) + t.body).join("") + (terms.length > 6 ? " + \\cdots" : "");
+      const lo = Math.max(fn.lo === -0.95 ? -0.95 : -20, Math.min(fn.lo, x - 1)), hi = Math.min(20, Math.max(fn.hi, x + 1));
+      const fpts = Array.from({ length: 241 }, (_, i) => { const v = lo + (hi - lo) * i / 240; return [v, fn.f(v)]; });
+      const ppts = fpts.map(([v]) => [v, poly(v)]);
+      const fy = fpts.map(p => p[1]);
+      const yLo = Math.min(...fy, P), yHi = Math.max(...fy, P), pad = (yHi - yLo) * 0.15 || 1;
+      const diverge = f === "ln" && x > 1;
+      return {
+        result: `P_{${N}}(${texNum(x)}) ${approx(P, 6)} ${tone(texNum(P, 6), 1)}`,
+        chart: {
+          type: "curve", label: T(`Curva de ${nome} e polinômio de Taylor de grau ${N} em torno de 0`, `Curve of ${nome} and Taylor polynomial of degree ${N} around 0`),
+          xLabel: T(`x · cheia colorida: a função · escura: o polinômio de grau ${N}`, `x · colored: the function · dark: the degree-${N} polynomial`),
+          xMin: lo, xMax: hi, yMin: yLo - pad, yMax: yHi + pad, pts: fpts, lines: [{ pts: ppts, cls: "chart-fit" }],
+          tipAt: v => [`P = ${fmt(poly(v), 4)}`, T(`f(x) = ${fmt(fn.f(v), 4)} em x = ${fmt(v, 2)}`, `f(x) = ${fmt(fn.f(v), 4)} at x = ${fmt(v, 2)}`)],
+        },
+        steps: [
+          [T(`Escreva os termos até o grau ${N}${f === "sin" || f === "cos" ? "; as derivadas de seno e cosseno em 0 alternam entre 0, 1 e −1, então metade dos termos some" : ""}:`,
+            `Write out the terms up to degree ${N}${f === "sin" || f === "cos" ? "; the derivatives of sine and cosine at 0 cycle through 0, 1 and −1, so half the terms drop out" : ""}:`),
+            terms.length ? `P_{${N}}(x) = ${poly_tex}` : `P_{${N}}(x) = 0`],
+          [T(`Substitua x = ${fmt(x)} e some:`, `Plug in x = ${fmt(x)} and add up:`), `P_{${N}}(${texNum(x)}) ${approx(P, 6)} ${tone(texNum(P, 6), 1)}`],
+          [T("Compare com o valor exato:", "Compare with the exact value:"),
+            `${ftex.replace(/x/g, `{${texNum(x)}}`)} ${approx(exact, 6)} ${texNum(exact, 6)}, \\qquad \\text{${T("erro", "error")}} ${approx(err, 6)} ${texSci(err, 4)}`],
+        ],
+        note: (diverge
+          ? T(`${warn} a série de ln(1 + x) só converge para −1 < x ≤ 1. Com x = ${fmt(x)}, somar mais termos piora o resultado em vez de melhorar.`,
+            `${warn} the series for ln(1 + x) only converges for −1 < x ≤ 1. With x = ${fmt(x)}, adding more terms makes the result worse, not better.`)
+          : T(`Perto de 0 o polinômio cola na curva; longe, ele se descola. Cada termo a mais estende a faixa em que a aproximação é boa — suba N e veja no gráfico.`,
+            `Near 0 the polynomial hugs the curve; further out, it peels away. Each extra term widens the range where the approximation is good — raise N and watch the chart.`))
+          + (f === "exp"
+            ? T(` A série de eˣ é a que faz as probabilidades da <a href="${PAGE("distribuicao-poisson")}">Poisson</a> somarem 1: Σ λᵏ/k! = e^λ.`,
+              ` The series for eˣ is what makes the <a href="${PAGE("distribuicao-poisson")}">Poisson</a> probabilities add up to 1: Σ λᵏ/k! = e^λ.`)
+            : ""),
+      };
+    },
+
     quad({ a, b, c }) {
       if (a === 0) {
         return { error: b === 0
@@ -2696,6 +2918,17 @@
         }
       }
       if (line) svg("path", { d: line, class: spec.lineCls || "chart-line" }, root);
+      // Linhas extras (como o polinômio de Taylor), interrompidas onde saem
+      // da faixa do eixo y em vez de riscar o gráfico.
+      (spec.lines || []).forEach(l => {
+        let d = "", pen = false;
+        l.pts.forEach(([x, y]) => {
+          if (!Number.isFinite(y) || y < yMin || y > yMax) { pen = false; return; }
+          d += `${pen ? "L" : "M"}${X(x).toFixed(1)},${Y(y).toFixed(1)}`;
+          pen = true;
+        });
+        if (d) svg("path", { d, class: l.cls }, root);
+      });
       // Linhas horizontais de referência; a legenda delas vai no xLabel.
       (spec.hlines || []).forEach(h => {
         svg("line", { x1: m.l, x2: W - m.r, y1: Y(h.y), y2: Y(h.y), class: h.cls }, root);

@@ -383,12 +383,60 @@ PAGES = {
       ("All Samples (C(N, n))", "How many samples of n items there are in all. Since they are all equally likely, the probability is favorable cases over possible cases.")],
   lede="Example: in a batch of 50 parts, 5 are defective. The inspector draws 10 parts without replacement. What is the chance of finding exactly 1 defective? Change the values to work out your own case.",
   labels=["Population size <i>N</i>", "Successes in the population <i>K</i>", "Sample size <i>n</i>", "Successes in the sample <i>k</i>"]),
+ "soma-pg": dict(
+  en="geometric-series", h1="Geometric Series", title="Geometric Series — Interactive", aria="Interactive geometric series formula",
+  desc="The sum of a geometric series explained term by term, with a calculator, a chart of the partial sums, the infinite sum and step-by-step working.",
+  dl=[("Sum of the First n Terms (Sₙ)", "The total of a + ar + ar² + … + arⁿ⁻¹: n terms, each one the previous multiplied by the ratio r."),
+      ("First Term (a)", "The term that opens the sequence. All the others are it multiplied by powers of r."),
+      ("Numerator (1 − rⁿ)", "It comes from a trick: multiplying the sum by r, almost every term repeats, and the difference Sₙ − rSₙ leaves only a − arⁿ. When |r| < 1, rⁿ goes to zero and the numerator becomes 1."),
+      ("Denominator (1 − r)", "It completes the trick: Sₙ(1 − r) = a(1 − rⁿ). With r = 1 the formula doesn't hold, and the sum is simply n · a. With |r| < 1, the infinite sum is a / (1 − r).")],
+  lede="Example: to cross a room, you walk half the way, then half of what is left, and so on. After 10 stages, how much of the room have you covered? And if the stages never ended? Change the values to work out your own case.",
+  labels=["First term <i>a</i>", "Ratio <i>r</i>", "Number of terms <i>n</i>"], values={"a": ("0,5", "0.5"), "r": ("0,5", "0.5")}),
+ "numero-e": dict(
+  en="number-e-limit", h1="The Limit That Defines e", title="The Limit That Defines e — Interactive", aria="Interactive formula of the limit that defines e",
+  desc="The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from.",
+  dl=[("Euler's Number (e)", "The constant e ≈ 2.71828, base of the natural logarithm and of the exponential function. It shows up whenever something grows at a rate proportional to its own size."),
+      ("Limit (n → ∞)", "The value the expression approaches as n grows without end. No finite n reaches e, but it can get as close as you like."),
+      ("Compound Interest ((1 + 1/n)ⁿ)", "$1 at 100% a year, split into n compounding periods of 1/n each. More periods earn more, but less and less more each time: the total never passes e.")],
+  lede="Example: $1 invested at 100% a year, with interest compounded n times a year. Compounding every month (n = 12), what does it grow to in a year? And if n kept growing? Change the value to work out your own case.",
+  labels=["Compounding periods per year <i>n</i>"]),
+ "aproximacao-stirling": dict(
+  en="stirling-approximation", h1="Stirling's Approximation", title="Stirling's Approximation — Interactive", aria="Interactive Stirling's approximation formula",
+  desc="Stirling's approximation for n! explained term by term, with a calculator, a comparison with the exact value and a chart of the relative error.",
+  dl=[("Factorial (n!)", "The product 1 · 2 · 3 · … · n. It grows so fast that 171! is already beyond the largest number an ordinary calculator stores."),
+      ("Correction Factor (√(2πn))", "Adjusts the scale of the approximation. The π comes from the same integral that gives the √(2π) in the normal distribution."),
+      ("Main Term ((n/e)ⁿ)", "Carries almost all of the factorial's size. In logarithms it becomes n ln n − n, which is how statistical software handles large factorials.")],
+  lede="Example: what is 10! by the approximation, and how close does it get to the exact value, 3,628,800? Change the value to work out your own case — try n = 1,000, a number with more than 2,500 digits.",
+  labels=["<i>n</i>"]),
+ "serie-taylor": dict(
+  en="taylor-series", h1="Taylor Series", title="Taylor Series — Interactive", aria="Interactive Taylor series formula",
+  desc="The Taylor series explained term by term, with a calculator for eˣ, sine, cosine and ln(1 + x), a chart of the polynomial hugging the curve and step-by-step working.",
+  dl=[("Function (f(x))", "The function to approximate. Here the series is around 0 (also called the Maclaurin series), so the approximation is best near x = 0."),
+      ("Sum up to Degree N", "Adds the terms from degree 0 to N. Each extra term corrects the previous ones; with infinitely many terms, the sum reproduces the function wherever the series converges."),
+      ("Derivative at 0 (f⁽ᵏ⁾(0))", "The k-th derivative of the function at 0. It makes the polynomial have, at 0, the same value, the same slope, the same curvature and so on as the function."),
+      ("Factorial (k!)", "Makes up for the fact that differentiating xᵏ k times gives k!. That is why the coefficients shrink fast and high-degree terms weigh little near 0."),
+      ("Power (xᵏ)", "Carries the term away from 0. The farther the point, the larger the powers and the more terms are needed for a good approximation.")],
+  lede="Example: approximate e = e¹ by adding only the terms up to x⁴/4!. How close does it get? Change the function, the point and the degree to work out your own case.",
+  labels=["Function", "Point <i>x</i>", "Degree <i>N</i>"], extra=[(">sen x</option>", ">sin x</option>")]),
+ "soma-riemann": dict(
+  en="riemann-sum", h1="Riemann Sum", title="Riemann Sum — Interactive", aria="Interactive Riemann sum formula",
+  desc="The Riemann sum explained term by term, with a calculator, a chart of the rectangles under the curve, a comparison with the exact integral and step-by-step working.",
+  dl=[("Definite Integral (∫ₐᵇ f(x) dx)", "The area under the curve of f between a and b. It is the value the sum of the rectangles approximates, and reaches as n goes to infinity."),
+      ("Sum of the Rectangles (Σ)", "Adds the areas of the n rectangles that cover the interval, from i = 1 to i = n."),
+      ("Height (f(xᵢ*))", "The value of the function at a point xᵢ* chosen inside each part: the left edge, the right edge or the midpoint. The midpoint usually errs much less."),
+      ("Width (Δx)", "The width of each rectangle: (b − a) / n. The more rectangles, the narrower they are and the tighter the approximation.")],
+  lede="Example: the area under the curve y = x² between 0 and 2 is exactly 8/3 ≈ 2.667. With 8 rectangles, how close does it get? Change the function, the interval and the number of rectangles to work out your own case.",
+  labels=["Function <i>f(x)</i>", "Start <i>a</i>", "End <i>b</i>", "Rectangles <i>n</i>", "Height taken"],
+  extra=[(">φ(x), densidade normal padrão</option>", ">φ(x), standard normal density</option>"),
+         (">na borda esquerda</option>", ">at the left edge</option>"),
+         (">no ponto médio</option>", ">at the midpoint</option>"),
+         (">na borda direita</option>", ">at the right edge</option>")]),
 }
 
 # Índice
 CATEGORIES = {
  "Probabilidade": "Probability", "Distribuições": "Distributions", "Inferência": "Inference",
- "Amostragem": "Sampling", "Associação e médias": "Association and means", "Álgebra e cálculo": "Algebra and calculus",
+ "Amostragem": "Sampling", "Associação e médias": "Association and means", "Álgebra": "Algebra", "Cálculo": "Calculus",
 }
 BLURBS = {
  "teorema-bayes": "Updates the probability of a hypothesis after seeing evidence.",
@@ -427,7 +475,12 @@ BLURBS = {
  "media-geometrica": "The right average for growth rates and factors that multiply.",
  "media-harmonica": "The right average for rates and ratios.",
  "formula-quadratica": "The roots of ax² + bx + c = 0.",
+ "soma-pg": "The sum of terms multiplied by a fixed ratio, finite or infinite.",
+ "numero-e": "Ever more frequent compounding leads to the number e.",
+ "aproximacao-stirling": "A formula for factorials too large to compute.",
  "regra-lhopital": "Resolves indeterminate limits of the form 0/0 or ∞/∞.",
+ "serie-taylor": "Approximates a function with a polynomial.",
+ "soma-riemann": "The area under a curve, approximated by rectangles.",
 }
 INDEX = dict(
  title="Interactive Formulas",
