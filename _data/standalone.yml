@@ -97,6 +97,11 @@
   description: "Margem de erro de uma pesquisa explicada termo a termo, com calculadora para proporções, correção para população finita, efeito de desenho, intervalo de Wilson e simulação de 100 intervalos de confiança."
   tags: "fórmula interativa calculadora passo a passo pesquisa eleitoral margem de erro"
   lang: pt
+- title: "Inversa de Matriz 2×2"
+  url: "/formulas/matriz-inversa-2x2.html"
+  description: "Determinante e inversa de uma matriz 2×2 explicados termo a termo, com calculadora, resolução de sistema, gráfico da transformação e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo determinante matriz inversa sistema linear"
+  lang: pt
 - title: "Média Geométrica"
   url: "/formulas/media-geometrica.html"
   description: "Média geométrica explicada termo a termo, com calculadora, passo a passo, taxa média de crescimento e comparação com as médias aritmética e harmônica."
@@ -467,6 +472,11 @@
   url: "/en/formulas/geometric-series.html"
   description: "The sum of a geometric series explained term by term, with a calculator, a chart of the partial sums, the infinite sum and step-by-step working."
   tags: "formula interactive calculator step by step geometric sum infinite series"
+  lang: en
+- title: "Inverse of a 2×2 Matrix"
+  url: "/en/formulas/inverse-2x2-matrix.html"
+  description: "The determinant and inverse of a 2×2 matrix explained term by term, with a calculator, solving a system, a chart of the transformation and step-by-step working."
+  tags: "formula interactive calculator step by step determinant inverse matrix linear system"
   lang: en
 - title: "The Limit That Defines e"
   url: "/en/formulas/number-e-limit.html"

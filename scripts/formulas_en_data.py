@@ -431,6 +431,15 @@ PAGES = {
          (">na borda esquerda</option>", ">at the left edge</option>"),
          (">no ponto médio</option>", ">at the midpoint</option>"),
          (">na borda direita</option>", ">at the right edge</option>")]),
+ "matriz-inversa-2x2": dict(
+  en="inverse-2x2-matrix", h1="Inverse of a 2×2 Matrix", title="Inverse of a 2×2 Matrix — Interactive", aria="Interactive inverse of a 2×2 matrix formula",
+  desc="The determinant and inverse of a 2×2 matrix explained term by term, with a calculator, solving a system, a chart of the transformation and step-by-step working.",
+  dl=[("Inverse Matrix (A⁻¹)", "The matrix that undoes A: multiplied by A, it gives the identity. With it, the system A · x = y is solved in one step, x = A⁻¹ · y."),
+      ("One Over the Determinant", "The whole inverse is divided by the determinant. That is why it only exists when the determinant is not zero."),
+      ("Determinant (ad − bc)", "The main diagonal minus the other one. It measures how much the matrix stretches areas: the unit square becomes a parallelogram of area |ad − bc|. If it is zero, the matrix flattens the plane onto a line and there is no way back."),
+      ("Adjugate Matrix", "The original matrix with the entries on the main diagonal swapped and the other two with their sign flipped. Multiplied by A, it gives the determinant times the identity.")],
+  lede="Example: solve the system 2x₁ + x₂ = 5 and x₁ + 3x₂ = 10. The coefficient matrix is A = (2 1; 1 3), and its inverse delivers the solution in one go. Leave y blank to compute just the inverse, or change the values to work out your own case.",
+  labels=["<i>a</i> (row 1, column 1)", "<i>b</i> (row 1, column 2)", "<i>c</i> (row 2, column 1)", "<i>d</i> (row 2, column 2)", "<i>y</i><sub>1</sub> (optional)", "<i>y</i><sub>2</sub> (optional)"]),
 }
 
 # Índice
@@ -476,6 +485,7 @@ BLURBS = {
  "media-harmonica": "The right average for rates and ratios.",
  "formula-quadratica": "The roots of ax² + bx + c = 0.",
  "soma-pg": "The sum of terms multiplied by a fixed ratio, finite or infinite.",
+ "matriz-inversa-2x2": "The determinant, the inverse and the solution of a 2 × 2 system.",
  "numero-e": "Ever more frequent compounding leads to the number e.",
  "aproximacao-stirling": "A formula for factorials too large to compute.",
  "regra-lhopital": "Resolves indeterminate limits of the form 0/0 or ∞/∞.",

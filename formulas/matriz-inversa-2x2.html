@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Inversa de Matriz 2×2 — Interativa</title>
+  <meta name="description" content="Determinante e inversa de uma matriz 2×2 explicados termo a termo, com calculadora, resolução de sistema, gráfico da transformação e passo a passo.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/matriz-inversa-2x2.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/matriz-inversa-2x2.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/inverse-2x2-matrix.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/matriz-inversa-2x2.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/matriz-inversa-2x2.html">
+  <meta property="og:title" content="Inversa de Matriz 2×2 — Interativa">
+  <meta property="og:description" content="Determinante e inversa de uma matriz 2×2 explicados termo a termo, com calculadora, resolução de sistema, gráfico da transformação e passo a passo.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Inversa de Matriz 2×2 — Interativa">
+  <meta name="twitter:description" content="Determinante e inversa de uma matriz 2×2 explicados termo a termo, com calculadora, resolução de sistema, gráfico da transformação e passo a passo.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/inverse-2x2-matrix.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Inversa de Matriz 2×2</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Inversa de Matriz 2×2 interativa">
+        <span class="part" data-part="inv_m" data-tone="1" data-tex="A^{-1}"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="one_m" data-tone="0" data-tex="1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="det_m" data-tone="2" data-tex="ad - bc"></span>
+          </span>
+        </span>
+        <span class="part" data-part="adj_m" data-tone="3" data-tex="\begin{pmatrix} d & -b \\ -c & a \end{pmatrix}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com o quadrado unitário transformado; estado em ?a=&b=&c=&d=&y1=&y2=. -->
+    <section class="calc" data-calc="inv2" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: resolva o sistema 2x₁ + x₂ = 5 e x₁ + 3x₂ = 10. A matriz dos coeficientes é A = (2 1; 1 3), e a inversa dela entrega a solução de uma vez. Deixe y em branco para calcular só a inversa, ou troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span><i>a</i> (linha 1, coluna 1)</span>
+          <input name="a" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>b</i> (linha 1, coluna 2)</span>
+          <input name="b" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>c</i> (linha 2, coluna 1)</span>
+          <input name="c" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>d</i> (linha 2, coluna 2)</span>
+          <input name="d" type="text" inputmode="decimal" value="3" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>y</i><sub>1</sub> (opcional)</span>
+          <input name="y1" type="text" inputmode="decimal" value="5" data-optional autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>y</i><sub>2</sub> (opcional)</span>
+          <input name="y2" type="text" inputmode="decimal" value="10" data-optional autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="inv_m" data-tone="1">Matriz Inversa (A⁻¹)</dt>
+          <dd>A matriz que desfaz A: multiplicada por A, dá a identidade. Com ela, o sistema A · x = y se resolve numa conta só, x = A⁻¹ · y.</dd>
+          <dt data-part="one_m" data-tone="0">Um Sobre o Determinante</dt>
+          <dd>Toda a inversa é dividida pelo determinante. Por isso ela só existe quando o determinante não é zero.</dd>
+          <dt data-part="det_m" data-tone="2">Determinante (ad − bc)</dt>
+          <dd>A diagonal principal menos a secundária. Mede quanto a matriz estica as áreas: o quadrado unitário vira um paralelogramo de área |ad − bc|. Se for zero, a matriz achata o plano numa reta e não tem volta.</dd>
+          <dt data-part="adj_m" data-tone="3">Matriz Adjunta</dt>
+          <dd>A matriz original com os elementos da diagonal principal trocados de lugar e os outros dois com o sinal invertido. Multiplicada por A, dá o determinante vezes a identidade.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="soma-pg.html" rel="prev"><span>Anterior</span>Soma da Progressão Geométrica</a>
+      <a class="pager-next" href="numero-e.html" rel="next"><span>Próxima</span>O Limite que Define e</a>
+    </nav>
+  </main>
+</body>
+</html>

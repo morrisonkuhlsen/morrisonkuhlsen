@@ -2194,6 +2194,78 @@
       };
     },
 
+    inv2({ a, b, c, d, y1, y2 }) {
+      if ((y1 == null) !== (y2 == null)) return { error: T("Preencha y₁ e y₂, ou deixe os dois em branco para calcular só a inversa.", "Fill in both y₁ and y₂, or leave both blank to compute just the inverse.") };
+      const det = a * d - b * c;
+      const mat = (m, t) => `\\begin{pmatrix} ${m.map(r => r.map(v => (t ? t(v) : texNum(v, 6))).join(" & ")).join(" \\\\ ")} \\end{pmatrix}`;
+      const A = mat([[a, b], [c, d]]);
+      const D = tone(texNum(det, 6), 2);
+      // Paralelogramo: para onde a matriz leva o quadrado unitário.
+      const par = [[0, 0], [a, c], [a + b, c + d], [b, d], [0, 0]];
+      const sq = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]];
+      const xs = par.concat(sq).map(p => p[0]), ys = par.concat(sq).map(p => p[1]);
+      const span = (v) => { const lo = Math.min(...v), hi = Math.max(...v), pad = (hi - lo) * 0.1 || 1; return [lo - pad, hi + pad]; };
+      let [x0, x1] = span(xs), [yMin, yMax] = span(ys);
+      // Mesma escala nos dois eixos, para o quadrado parecer quadrado: a área
+      // útil do gráfico mede 578 × 232 (veja renderChart).
+      const ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      if ((x1 - x0) / (yMax - yMin) < ratio) { const h = (yMax - yMin) * ratio / 2, m = (x0 + x1) / 2; x0 = m - h; x1 = m + h; }
+      else { const h = (x1 - x0) / ratio / 2, m = (yMin + yMax) / 2; yMin = m - h; yMax = m + h; }
+      const chart = {
+        type: "curve", height: 280,
+        label: T(`O quadrado unitário e o paralelogramo em que a matriz o transforma, de área ${fmt(Math.abs(det))}`, `The unit square and the parallelogram the matrix turns it into, with area ${fmt(Math.abs(det))}`),
+        xLabel: T(`escura: quadrado unitário · colorida: sua imagem, área |det| = ${fmt(Math.abs(det))}`, `dark: unit square · colored: its image, area |det| = ${fmt(Math.abs(det))}`),
+        xMin: x0, xMax: x1, yMin, yMax, pts: par, lines: [{ pts: sq, cls: "chart-fit" }],
+      };
+      const detStep = [T("Calcule o determinante: diagonal principal menos diagonal secundária.", "Compute the determinant: main diagonal minus the other diagonal."),
+        `\\det A = ${paren(a, texNum(a))} \\cdot ${paren(d, texNum(d))} - ${paren(b, texNum(b))} \\cdot ${paren(c, texNum(c))} ${approx(det, 6)} ${D}`];
+      if (Math.abs(det) < 1e-12) {
+        return {
+          error: T("O determinante é zero: a matriz não tem inversa. Ela achata o plano numa reta (as duas colunas são proporcionais), e não há como desfazer isso. Um sistema com essa matriz tem infinitas soluções ou nenhuma.",
+            "The determinant is zero: the matrix has no inverse. It flattens the plane onto a line (the two columns are proportional), and that can't be undone. A system with this matrix has infinitely many solutions or none."),
+        };
+      }
+      const inv = [[d / det, -b / det], [-c / det, a / det]];
+      const eq = inv.flat().every(v => approx(v, 6) === "=") ? "=" : "\\approx";
+      const steps = [
+        detStep,
+        [T("Troque de lugar os elementos da diagonal principal e mude o sinal dos outros dois:", "Swap the entries on the main diagonal and change the sign of the other two:"),
+          tone(mat([[d, -b], [-c, a]]), 3)],
+        [T("Divida tudo pelo determinante:", "Divide everything by the determinant:"),
+          `A^{-1} = \\dfrac{1}{${D}} ${tone(mat([[d, -b], [-c, a]]), 3)} ${eq} ${tone(mat(inv), 1)}`],
+        [T("Confira: A vezes a inversa dá a identidade.", "Check: A times its inverse gives the identity."),
+          `${A} \\cdot ${mat(inv)} = \\begin{pmatrix} 1 & 0 \\\\ 0 & 1 \\end{pmatrix}`],
+      ];
+      const hasY = y1 != null && y2 != null;
+      let sol = "";
+      if (hasY) {
+        const s1 = inv[0][0] * y1 + inv[0][1] * y2, s2 = inv[1][0] * y1 + inv[1][1] * y2;
+        steps.push([T("Para resolver o sistema A · x = y, multiplique a inversa pelo vetor y:", "To solve the system A · x = y, multiply the inverse by the vector y:"),
+          `\\begin{pmatrix} x_1 \\\\ x_2 \\end{pmatrix} = ${mat(inv)} ${mat([[y1], [y2]])} ${approx(s1, 6) === "=" && approx(s2, 6) === "=" ? "=" : "\\approx"} ${mat([[s1], [s2]], v => tone(texNum(v, 6), 1))}`]);
+        // Equação legível: sem "1x", sem "+ −2x" e sem o termo de coeficiente zero.
+        const co = v => (v === 1 ? "" : v === -1 ? "−" : fmt(v).replace("-", "−"));
+        const eqn = (p, q, y) => {
+          const t1 = p ? `${co(p)}x₁` : "", t2 = q ? `${co(Math.abs(q))}x₂` : "";
+          const mid = t1 && t2 ? ` ${q < 0 ? "−" : "+"} ${t2}` : t2 ? `${q < 0 ? "−" : ""}${t2}` : "";
+          return `${t1}${mid} = ${fmt(y)}`;
+        };
+        sol = T(` O sistema ${eqn(a, b, y1)} e ${eqn(c, d, y2)} tem solução única: x₁ = ${fmt(s1, 6)} e x₂ = ${fmt(s2, 6)}.`,
+          ` The system ${eqn(a, b, y1)} and ${eqn(c, d, y2)} has a unique solution: x₁ = ${fmt(s1, 6)} and x₂ = ${fmt(s2, 6)}.`);
+      }
+      return {
+        result: `\\det A ${approx(det, 6)} ${D}, \\qquad A^{-1} ${eq} ${tone(mat(inv), 1)}`,
+        chart,
+        steps,
+        note: T(`O determinante diz quanto a matriz estica as áreas: o quadrado unitário vira um paralelogramo de área |det A| = ${fmt(Math.abs(det))}${det < 0 ? ", espelhado (o sinal negativo inverte a orientação)" : ""}.`
+          + " A inversa desfaz a transformação, por isso divide pelo determinante — e não existe quando ele é zero.",
+          `The determinant says how much the matrix stretches areas: the unit square becomes a parallelogram of area |det A| = ${fmt(Math.abs(det))}${det < 0 ? ", mirrored (the negative sign flips the orientation)" : ""}.`
+          + " The inverse undoes the transformation, which is why it divides by the determinant — and doesn't exist when that is zero.")
+          + sol
+          + T(` Na estatística, é um sistema 2 × 2 assim que dá os coeficientes da <a href="${PAGE("regressao-linear")}">regressão linear simples</a>: as equações normais têm a matriz (n, Σx; Σx, Σx²), de determinante n · Σ(x − x̄)².`,
+            ` In statistics, a 2 × 2 system like this gives the coefficients of <a href="${PAGE("regressao-linear")}">simple linear regression</a>: the normal equations have the matrix (n, Σx; Σx, Σx²), with determinant n · Σ(x − x̄)².`),
+      };
+    },
+
     quad({ a, b, c }) {
       if (a === 0) {
         return { error: b === 0
