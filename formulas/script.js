@@ -27,7 +27,8 @@
     "teorema-central-limite": "central-limit-theorem", "media-harmonica": "harmonic-mean",
     "distribuicao-geometrica": "geometric-distribution", "distribuicao-exponencial": "exponential-distribution",
     "distribuicao-normal": "normal-distribution", "coeficiente-binomial": "binomial-coefficient",
-    "problema-aniversario": "birthday-problem",
+    "problema-aniversario": "birthday-problem", "qui-quadrado-independencia": "chi-square-independence",
+    "desvio-padrao": "standard-deviation", "valor-esperado": "expected-value", "erro-padrao": "standard-error",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -1946,6 +1947,247 @@
       };
     },
 
+    welch({ x1, s1, n1, x2, s2, n2 }) {
+      if (s1 <= 0 || s2 <= 0) return sdError;
+      if (![n1, n2].every(v => Number.isInteger(v) && v >= 2)) return { error: T("Cada grupo precisa de um tamanho inteiro de pelo menos 2.", "Each group needs an integer size of at least 2.") };
+      const v1 = s1 * s1 / n1, v2 = s2 * s2 / n2;
+      const se = Math.sqrt(v1 + v2), diff = x1 - x2, t = diff / se;
+      const df = (v1 + v2) ** 2 / (v1 * v1 / (n1 - 1) + v2 * v2 / (n2 - 1));
+      const p = tTwoTail(Math.abs(t), df);
+      const tc = tCrit(0.05, df);
+      const lo = diff - tc * se, hi = diff + tc * se;
+      const sp = Math.sqrt(((n1 - 1) * s1 * s1 + (n2 - 1) * s2 * s2) / (n1 + n2 - 2));
+      const dC = diff / sp;
+      const tpdf = v => Math.exp(lgamma((df + 1) / 2) - lgamma(df / 2) - 0.5 * Math.log(df * Math.PI) - (df + 1) / 2 * Math.log1p(v * v / df));
+      const R = Math.max(4, Math.abs(t) + 1);
+      const pts = Array.from({ length: 201 }, (_, i) => { const v = -R + 2 * R * i / 200; return [v, tpdf(v)]; });
+      const vline = v => ({ pts: [[v, 0], [v, tpdf(v)]], cls: "chart-fit" });
+      const SE = tone(texNum(se), 3), DF = tone(texNum(df, 2), 4);
+      const veredito = p < 0.05
+        ? T("Ao nível de 5%, rejeita-se H₀: as médias dos dois grupos diferem.", "At the 5% level, H₀ is rejected: the two group means differ.")
+        : T("Ao nível de 5%, não se rejeita H₀: a diferença observada é compatível com o acaso.", "At the 5% level, H₀ is not rejected: the observed difference is consistent with chance.");
+      return {
+        result: `t ${approx(t)} ${tone(texNum(t), 1)}, \\qquad ${T("gl", "df")} ${approx(df, 2)} ${DF}`,
+        chart: {
+          type: "curve", label: T(`Distribuição t com ${fmt(df, 1)} graus de liberdade; marcado t = ${fmt(t, 3)} e, em linhas, os valores críticos ±${fmt(tc, 3)}`, `t distribution with ${fmt(df, 1)} degrees of freedom; t = ${fmt(t, 3)} marked and, as lines, the critical values ±${fmt(tc, 3)}`),
+          xLabel: T(`t · linhas escuras: valores críticos de 5% (±${fmt(tc, 2)})`, `t · dark lines: 5% critical values (±${fmt(tc, 2)})`),
+          xMin: -R, xMax: R, yMax: tpdf(0), pts, marker: [t, tpdf(t)], lines: [vline(-tc), vline(tc)],
+          tipAt: v => [`t = ${fmt(v, 2)}`, T(`P(|T| ≥ ${fmt(Math.abs(v), 2)}) ≈ ${fmt(tTwoTail(Math.abs(v), df), 4)}`, `P(|T| ≥ ${fmt(Math.abs(v), 2)}) ≈ ${fmt(tTwoTail(Math.abs(v), df), 4)}`)],
+        },
+        steps: [
+          [T("Calcule a variância da média de cada grupo, s²/n:", "Compute the variance of each group's mean, s²/n:"),
+            `\\dfrac{s_1^2}{n_1} = \\dfrac{${texNum(s1)}^2}{${n1}} ${approx(v1)} ${texNum(v1)}, \\qquad \\dfrac{s_2^2}{n_2} = \\dfrac{${texNum(s2)}^2}{${n2}} ${approx(v2)} ${texNum(v2)}`],
+          [T("Some e tire a raiz: é o erro padrão da diferença.", "Add them and take the root: this is the standard error of the difference."),
+            `${T("EP", "SE")} = \\sqrt{${texNum(v1)} + ${texNum(v2)}} ${approx(se)} ${SE}`],
+          [T("Divida a diferença das médias pelo erro padrão:", "Divide the difference of the means by the standard error:"),
+            `t = \\dfrac{${tone(texNum(x1), 2)} - ${paren(x2, tone(texNum(x2), 2))}}{${SE}} ${approx(t)} ${tone(texNum(t), 1)}`],
+          [T("Os graus de liberdade vêm da aproximação de Welch–Satterthwaite:", "The degrees of freedom come from the Welch–Satterthwaite approximation:"),
+            `${T("gl", "df")} = \\dfrac{(${texNum(v1)} + ${texNum(v2)})^2}{\\dfrac{${texNum(v1)}^2}{${n1 - 1}} + \\dfrac{${texNum(v2)}^2}{${n2 - 1}}} ${approx(df, 2)} ${DF}`],
+        ],
+        note: T(`Com ${fmt(df, 2)} graus de liberdade, o valor-p bilateral é ${pValueText(p)}. ${veredito}`
+          + ` O intervalo de 95% para a diferença μ₁ − μ₂ vai de ${fmt(lo)} a ${fmt(hi)}${lo > 0 || hi < 0 ? ", e não contém o zero" : ", e contém o zero"}.`
+          + ` O tamanho do efeito é d de Cohen ≈ ${fmt(dC, 2)}; para planejar um estudo que detecte esse efeito, use o <a href="${PAGE("poder-estatistico")}?d=${Math.abs(Number(dC.toFixed(2)))}&amp;g=2">poder estatístico</a>.`
+          + " Welch não supõe variâncias iguais nos dois grupos, e por isso é o padrão recomendado (e o do R).",
+          `With ${fmt(df, 2)} degrees of freedom, the two-sided p-value is ${pValueText(p)}. ${veredito}`
+          + ` The 95% interval for the difference μ₁ − μ₂ runs from ${fmt(lo)} to ${fmt(hi)}${lo > 0 || hi < 0 ? ", and doesn't contain zero" : ", and contains zero"}.`
+          + ` The effect size is Cohen's d ≈ ${fmt(dC, 2)}; to plan a study that detects this effect, use <a href="${PAGE("poder-estatistico")}?d=${Math.abs(Number(dC.toFixed(2)))}&amp;g=2">statistical power</a>.`
+          + " Welch doesn't assume equal variances in the two groups, which is why it is the recommended default (and R's)."),
+      };
+    },
+
+    r2({ x, y }) {
+      const d = paired(x, y, v => `\\bar{${v}}`);
+      if (d.error) return d;
+      if (d.sxx === 0) return { error: T("Os valores de x são todos iguais: não há reta para ajustar.", "The x values are all equal: there is no line to fit.") };
+      if (d.syy === 0) return { error: T("Os valores de y são todos iguais: não há variação para explicar.", "The y values are all equal: there is no variation to explain.") };
+      const b1 = d.sxy / d.sxx, b0 = d.my - b1 * d.mx;
+      const yh = x.map(v => b0 + b1 * v), res = y.map((v, i) => v - yh[i]);
+      const sqt = d.syy, sqres = res.reduce((s, v) => s + v * v, 0), sqreg = sqt - sqres;
+      const r2v = sqreg / sqt, n = d.n;
+      const adj = n > 2 ? 1 - (1 - r2v) * (n - 1) / (n - 2) : NaN;
+      const T1 = tone(texNum(sqt), 3), T2 = tone(texNum(sqres), 2);
+      const table = d.table([
+        ["i", i => i + 1, "\\Sigma"],
+        ["y_i", i => texNum(y[i])],
+        ["(y_i - \\bar{y})^2", i => texNum(d.dy[i] ** 2), T1],
+        ["\\hat{y}_i", i => texNum(yh[i])],
+        ["(y_i - \\hat{y}_i)^2", i => texNum(res[i] ** 2), T2],
+      ]);
+      const pad = (lo, hi) => { const s = hi - lo || Math.abs(hi) || 1; return [lo - s * 0.12, hi + s * 0.12]; };
+      const [xMin, xMax] = pad(Math.min(...x), Math.max(...x));
+      const [yMin, yMax] = pad(Math.min(...y), Math.max(...y));
+      return {
+        result: `R^2 ${approx(r2v)} ${tone(texNum(r2v), 1)}`,
+        chart: {
+          type: "scatter", height: 300, xMin, xMax, yMin, yMax, pred: null,
+          dots: x.map((v, i) => [v, y[i]]), fields: ["x", "y"],
+          label: T("Pontos (x, y) com a reta de mínimos quadrados e os resíduos", "Points (x, y) with the least-squares line and the residuals"),
+          xLabel: "x",
+          hint: T("Arraste os pontos e veja o R² mudar: quanto menores os resíduos (as linhas tracejadas) perto da variação total de y, mais perto de 1. Toque num espaço vazio para acrescentar um ponto; pelo teclado, as setas movem o ponto em foco e Delete o remove.",
+            "Drag the points and watch R² change: the smaller the residuals (the dashed lines) next to the total variation of y, the closer it gets to 1. Tap an empty spot to add a point; with the keyboard, the arrows move the focused point and Delete removes it."),
+        },
+        steps: [
+          d.meansStep,
+          [T("Ajuste a reta de mínimos quadrados e compare, ponto a ponto, a variação total de y com o que sobra depois da reta:", "Fit the least-squares line and compare, point by point, the total variation of y with what is left after the line:"),
+            `\\hat{y} = ${texNum(b0)} ${b1 < 0 ? "-" : "+"} ${texNum(Math.abs(b1))}\\,x \\qquad ${table}`],
+          [T("Divida a soma dos quadrados dos resíduos pela soma total e subtraia de 1:", "Divide the residual sum of squares by the total sum and subtract from 1:"),
+            `R^2 = 1 - \\dfrac{${T2}}{${T1}} ${approx(r2v)} ${tone(texNum(r2v), 1)}`],
+        ],
+        note: T(`A reta explica ${fmt(r2v * 100, 1)}% da variação de y; os outros ${fmt((1 - r2v) * 100, 1)}% ficam nos resíduos.`
+          + ` Na regressão simples, R² é o quadrado do <a href="${d.link(PAGE("coeficiente-pearson"))}">coeficiente de Pearson</a> (r ≈ ${fmt(Math.sign(b1) * Math.sqrt(r2v), 4)}) — mas perde o sinal: não diz se a relação sobe ou desce.`
+          + (n > 2 ? ` O R² ajustado, que desconta o número de parâmetros, é ${fmt(adj)}.` : "")
+          + ` R² alto não prova causa nem que a reta seja o modelo certo: confira os resíduos na <a href="${d.link(PAGE("regressao-linear"))}">regressão linear</a>.`,
+          `The line explains ${fmt(r2v * 100, 1)}% of the variation in y; the other ${fmt((1 - r2v) * 100, 1)}% stays in the residuals.`
+          + ` In simple regression, R² is the square of the <a href="${d.link(PAGE("coeficiente-pearson"))}">Pearson coefficient</a> (r ≈ ${fmt(Math.sign(b1) * Math.sqrt(r2v), 4)}) — but it loses the sign: it doesn't say whether the relationship goes up or down.`
+          + (n > 2 ? ` The adjusted R², which discounts the number of parameters, is ${fmt(adj)}.` : "")
+          + ` A high R² proves neither cause nor that a line is the right model: check the residuals in <a href="${d.link(PAGE("regressao-linear"))}">linear regression</a>.`),
+      };
+    },
+
+    odds({ o, conf }) {
+      if (conf <= 0 || conf >= 100) return confError;
+      if (o.length !== 2 || o.some(r => r.length !== 2)) return { error: T("Informe uma tabela 2 × 2: duas linhas de dois valores, separadas por ponto e vírgula.", "Enter a 2 × 2 table: two rows of two values, separated by a semicolon.") };
+      if (o.flat().some(v => v < 0 || !Number.isInteger(v))) return { error: T("As contagens precisam ser inteiros não negativos.", "The counts must be non-negative integers.") };
+      let [[a, b], [c, dd]] = o;
+      if (a + b === 0 || c + dd === 0) return { error: T("Cada grupo precisa ter pelo menos uma pessoa.", "Each group needs at least one person.") };
+      // Célula zero: correção de Haldane, meio a mais em todas as células.
+      const zero = [a, b, c, dd].includes(0);
+      if (zero) { a += 0.5; b += 0.5; c += 0.5; dd += 0.5; }
+      const z = zCrit(conf);
+      const or = a * dd / (b * c);
+      const p1 = a / (a + b), p0 = c / (c + dd), rr = p1 / p0;
+      const seOr = Math.sqrt(1 / a + 1 / b + 1 / c + 1 / dd);
+      const seRr = Math.sqrt(1 / a - 1 / (a + b) + 1 / c - 1 / (c + dd));
+      const ciOr = [Math.exp(Math.log(or) - z * seOr), Math.exp(Math.log(or) + z * seOr)];
+      const ciRr = [Math.exp(Math.log(rr) - z * seRr), Math.exp(Math.log(rr) + z * seRr)];
+      const excl = ci => ci[0] > 1 || ci[1] < 1;
+      const A = tone(texNum(a), 2), D = tone(texNum(dd), 2), B = tone(texNum(b), 3), C = tone(texNum(c), 3);
+      const lo = Math.min(ciOr[0], ciRr[0], 1), hi = Math.max(ciOr[1], ciRr[1], 1);
+      const confTxt = `${fmt(conf, 2)}%`;
+      return {
+        result: `OR ${approx(or)} ${tone(texNum(or), 1)}, \\qquad RR ${approx(rr)} ${texNum(rr)}`,
+        chart: {
+          type: "intervals", height: 150,
+          label: T(`Intervalos de ${confTxt} para a razão de chances e o risco relativo; a linha vertical marca 1, nenhuma associação`, `${confTxt} intervals for the odds ratio and the relative risk; the vertical line marks 1, no association`),
+          xLabel: T("linha vertical: 1 (sem associação) · em cima: OR · embaixo: RR · destaque: o intervalo não contém 1", "vertical line: 1 (no association) · top: OR · bottom: RR · highlighted: the interval excludes 1"),
+          xMin: Math.max(0, lo - (hi - lo) * 0.08), xMax: hi + (hi - lo) * 0.08, truth: 1,
+          rows: [{ lo: ciOr[0], hi: ciOr[1], hit: !excl(ciOr) }, { lo: ciRr[0], hi: ciRr[1], hit: !excl(ciRr) }],
+          tip: (r, i) => [`${fmt(r.lo, 3)} – ${fmt(r.hi, 3)}`, i ? T("risco relativo", "relative risk") : T("razão de chances", "odds ratio")],
+        },
+        steps: [
+          ...(zero ? [[T("Há uma célula com zero, que zeraria ou tornaria infinita a razão: some 0,5 a todas as células (correção de Haldane).", "There is a cell with zero, which would make the ratio zero or infinite: add 0.5 to every cell (Haldane's correction)."),
+            `a = ${texNum(a)}, \\quad b = ${texNum(b)}, \\quad c = ${texNum(c)}, \\quad d = ${texNum(dd)}`]] : []),
+          [T("A razão de chances multiplica a diagonal principal e divide pela outra:", "The odds ratio multiplies the main diagonal and divides by the other one:"),
+            `OR = \\dfrac{${A} \\cdot ${D}}{${B} \\cdot ${C}} ${approx(or)} ${tone(texNum(or), 1)}`],
+          [T("O risco relativo compara as proporções com o desfecho em cada grupo:", "The relative risk compares the share with the outcome in each group:"),
+            `RR = \\dfrac{${texNum(a)} / ${texNum(a + b)}}{${texNum(c)} / ${texNum(c + dd)}} = \\dfrac{${texNum(p1)}}{${texNum(p0)}} ${approx(rr)} ${texNum(rr)}`],
+          [T(`O intervalo de ${confTxt} se calcula na escala do logaritmo e depois volta com a exponencial:`, `The ${confTxt} interval is computed on the log scale and then brought back with the exponential:`),
+            `e^{\\ln OR \\,\\pm\\, ${texNum(z)} \\sqrt{\\frac{1}{a} + \\frac{1}{b} + \\frac{1}{c} + \\frac{1}{d}}} = ${interval(ciOr[0], ciOr[1])}`],
+        ],
+        note: T(`No grupo exposto, a chance do desfecho é ${fmt(or, 2)} vezes a do grupo não exposto; o risco, ${fmt(rr, 2)} vezes.`
+          + ` O intervalo de ${confTxt} da razão de chances vai de ${fmt(ciOr[0], 3)} a ${fmt(ciOr[1], 3)}${excl(ciOr) ? " e não contém 1: a associação é significativa" : " e contém 1: os dados são compatíveis com nenhuma associação"}.`
+          + ` As duas medidas só ficam parecidas quando o desfecho é raro. Num estudo de caso-controle, em que as proporções de doentes foram escolhidas pelo pesquisador, só a razão de chances vale.`
+          + ` Para testar a associação, veja o <a href="${PAGE("qui-quadrado-independencia")}?o=${encodeURIComponent(o.map(r => r.join(" ")).join("; "))}">qui-quadrado com esta tabela</a>.`,
+          `In the exposed group, the odds of the outcome are ${fmt(or, 2)} times those of the unexposed group; the risk, ${fmt(rr, 2)} times.`
+          + ` The ${confTxt} interval for the odds ratio runs from ${fmt(ciOr[0], 3)} to ${fmt(ciOr[1], 3)}${excl(ciOr) ? " and excludes 1: the association is significant" : " and includes 1: the data are consistent with no association"}.`
+          + ` The two measures only agree when the outcome is rare. In a case-control study, where the share of cases was chosen by the researcher, only the odds ratio is valid.`
+          + ` To test the association, see the <a href="${PAGE("qui-quadrado-independencia")}?o=${encodeURIComponent(o.map(r => r.join(" ")).join("; "))}">chi-square with this table</a>.`),
+      };
+    },
+
+    quartis({ x }) {
+      const n = x.length;
+      if (n < 4) return { error: T("Informe pelo menos quatro valores.", "Enter at least four values.") };
+      if (n > 1000) return { error: T("Use no máximo 1.000 valores.", "Use at most 1,000 values.") };
+      const s = x.slice().sort((p, q) => p - q);
+      // Método 7 de Hyndman e Fan, o padrão do R e do QUARTIL do Excel.
+      const q = p => { const h = (n - 1) * p, lo = Math.floor(h); return s[lo] + (h - lo) * ((s[lo + 1] ?? s[lo]) - s[lo]); };
+      const q1 = q(0.25), q2 = q(0.5), q3 = q(0.75), iqr = q3 - q1;
+      const f1 = q1 - 1.5 * iqr, f2 = q3 + 1.5 * iqr;
+      const out = s.filter(v => v < f1 || v > f2);
+      const inside = s.filter(v => v >= f1 && v <= f2);
+      const wLo = Math.min(...inside), wHi = Math.max(...inside);
+      const pos = p => { const h = (n - 1) * p, lo = Math.floor(h), fr = h - lo;
+        return fr < 1e-9
+          ? `Q = x_{(${lo + 1})} = ${texNum(s[lo])}`
+          : `Q = x_{(${lo + 1})} + ${texNum(fr, 4)} \\cdot (x_{(${lo + 2})} - x_{(${lo + 1})}) = ${texNum(s[lo])} + ${texNum(fr, 4)} \\cdot (${texNum(s[lo + 1])} - ${paren(s[lo], texNum(s[lo]))}) ${approx(q(p))} ${texNum(q(p))}`; };
+      const sorted = n <= 20 ? s.map(v => texNum(v)).join(",\\ ") : `${s.slice(0, 5).map(v => texNum(v)).join(",\\ ")},\\ \\ldots,\\ ${s.slice(-3).map(v => texNum(v)).join(",\\ ")}`;
+      const span = Math.max(...s) - Math.min(...s) || 1;
+      const Q1 = tone(texNum(q1), 2), Q3 = tone(texNum(q3), 3);
+      const qs = new URLSearchParams({ x: x.join(" ") });
+      return {
+        result: `Q_1 ${approx(q1)} ${Q1}, \\quad Q_3 ${approx(q3)} ${Q3}, \\quad IQR ${approx(iqr)} ${tone(texNum(iqr), 1)}`,
+        chart: {
+          type: "box", height: 150, xMin: Math.min(...s) - span * 0.06, xMax: Math.max(...s) + span * 0.06,
+          label: T(`Boxplot: caixa de ${fmt(q1)} a ${fmt(q3)}, mediana ${fmt(q2)}, ${out.length} ${out.length === 1 ? "valor atípico" : "valores atípicos"}`, `Boxplot: box from ${fmt(q1)} to ${fmt(q3)}, median ${fmt(q2)}, ${out.length} outlier${out.length === 1 ? "" : "s"}`),
+          xLabel: T("valores · caixa: Q₁ a Q₃ · traço: mediana · pontos: valores atípicos", "values · box: Q₁ to Q₃ · line: median · dots: outliers"),
+          box: { q1, q2, q3, wLo, wHi, out },
+          tip: [`IQR = ${fmt(iqr)}`, T(`Q₁ = ${fmt(q1)}, mediana = ${fmt(q2)}, Q₃ = ${fmt(q3)}`, `Q₁ = ${fmt(q1)}, median = ${fmt(q2)}, Q₃ = ${fmt(q3)}`)],
+        },
+        steps: [
+          [T(`Ordene os ${n} valores:`, `Sort the ${n} values:`), sorted],
+          [T(`Q₁ fica na posição 1 + (n − 1) · 0,25 = ${fmt(1 + (n - 1) * 0.25, 2)}; entre dois valores, interpole:`, `Q₁ sits at position 1 + (n − 1) · 0.25 = ${fmt(1 + (n - 1) * 0.25, 2)}; between two values, interpolate:`), pos(0.25).replace("Q =", "Q_1 =")],
+          [T(`A mediana fica na posição ${fmt(1 + (n - 1) * 0.5, 2)}, e Q₃ na ${fmt(1 + (n - 1) * 0.75, 2)}:`, `The median sits at position ${fmt(1 + (n - 1) * 0.5, 2)}, and Q₃ at ${fmt(1 + (n - 1) * 0.75, 2)}:`),
+            `${pos(0.5).replace("Q =", "Q_2 =")} \\\\ ${pos(0.75).replace("Q =", "Q_3 =")}`.replace(/^(.*)$/, "\\begin{gathered}$1\\end{gathered}")],
+          [T("A amplitude interquartil é a largura da caixa:", "The interquartile range is the width of the box:"), `IQR = ${Q3} - ${paren(q1, Q1)} ${approx(iqr)} ${tone(texNum(iqr), 1)}`],
+          [T("Valores além de 1,5 · IQR das bordas da caixa são atípicos:", "Values more than 1.5 · IQR beyond the edges of the box are outliers:"),
+            `${texNum(q1)} - 1{,}5 \\cdot ${texNum(iqr)} ${approx(f1)} ${texNum(f1)}, \\qquad ${texNum(q3)} + 1{,}5 \\cdot ${texNum(iqr)} ${approx(f2)} ${texNum(f2)}`.replace(/1\{,\}5/g, EN ? "1.5" : "1{,}5")],
+        ],
+        note: (out.length
+          ? T(`${out.length === 1 ? "Um valor fica" : `${out.length} valores ficam`} fora dessa faixa e ${out.length === 1 ? "aparece" : "aparecem"} como ponto no boxplot: ${list(out.map(v => fmt(v)))}.`,
+            `${out.length === 1 ? "One value lies" : `${out.length} values lie`} outside that range and ${out.length === 1 ? "shows" : "show"} as a dot in the boxplot: ${list(out.map(v => fmt(v)))}.`)
+          : T("Nenhum valor fica fora dessa faixa; os bigodes vão do mínimo ao máximo.", "No value lies outside that range; the whiskers run from the minimum to the maximum."))
+          + T(` Metade dos dados está entre ${fmt(q1)} e ${fmt(q3)}. Diferente do <a href="${PAGE("desvio-padrao")}?${qs}">desvio padrão destes valores</a>, a IQR quase não se mexe com valores extremos.`
+            + " Há vários métodos de quartil, que dão números um pouco diferentes em amostras pequenas; este é o padrão do R e da função QUARTIL do Excel.",
+            ` Half the data lie between ${fmt(q1)} and ${fmt(q3)}. Unlike the <a href="${PAGE("desvio-padrao")}?${qs}">standard deviation of these values</a>, the IQR barely moves with extreme values.`
+            + " There are several quartile methods, which give slightly different numbers in small samples; this is the default in R and in Excel's QUARTILE."),
+      };
+    },
+
+    lgn({ tipo, n, seed }) {
+      if (!Number.isInteger(n) || n < 1 || n > 100000) return { error: T("O número de lançamentos precisa ser um inteiro entre 1 e 100.000.", "The number of throws must be an integer between 1 and 100,000.") };
+      if (!Number.isInteger(seed) || seed < 0) return { error: T("A semente precisa ser um inteiro não negativo.", "The seed must be a non-negative integer.") };
+      const dado = tipo === "dado";
+      const mu = dado ? 3.5 : 0.5, sd = dado ? Math.sqrt(35 / 12) : 0.5;
+      const rand = rng(seed);
+      // Guarda a média acumulada em ~400 pontos, mais densos no começo.
+      const keep = new Set(Array.from({ length: 400 }, (_, i) => Math.max(1, Math.round(n ** (i / 399)))));
+      const path = [];
+      let sum = 0;
+      for (let k = 1; k <= n; k++) {
+        sum += dado ? Math.floor(rand() * 6) + 1 : (rand() < 0.5 ? 1 : 0);
+        if (keep.has(k)) path.push([k, sum / k]);
+      }
+      const mean = sum / n, err = mean - mu, se = sd / Math.sqrt(n);
+      const band = s => ({ pts: path.map(([k]) => [k, mu + s * 2 * sd / Math.sqrt(k)]), cls: "chart-band" });
+      const lo = dado ? 1 : 0, hi = dado ? 6 : 1;
+      const MU = tone(texNum(mu), 2);
+      return {
+        result: `\\bar{X}_{${texNum(n)}} ${approx(mean, 6)} ${tone(texNum(mean, 6), 1)}`,
+        chart: {
+          type: "curve", label: T(`Média acumulada de ${fmt(n)} ${dado ? "lançamentos de um dado" : "lançamentos de uma moeda (1 = cara)"}, aproximando-se de ${fmt(mu)}`, `Running mean of ${fmt(n)} ${dado ? "rolls of a die" : "tosses of a coin (1 = heads)"}, approaching ${fmt(mu)}`),
+          xLabel: T(`lançamentos, em escala logarítmica · tracejada fina: ±2 erros padrão em torno de ${fmt(mu)}`, `throws, on a log scale · thin dashed: ±2 standard errors around ${fmt(mu)}`),
+          xMin: 1, xMax: Math.max(n, 2), logX: true, yMin: lo, yMax: hi, pts: path,
+          hlines: [{ y: mu, cls: "chart-ref" }], lines: [band(1), band(-1)],
+          tipAt: v => { let best = path[0]; for (const p of path) if (Math.abs(p[0] - v) < Math.abs(best[0] - v)) best = p; return [fmt(best[1], 4), T(`média após ${fmt(best[0])} lançamentos`, `mean after ${fmt(best[0])} throws`)]; },
+        },
+        steps: [
+          [T(`Cada ${dado ? "lançamento do dado" : "lançamento da moeda"} tem valor esperado e desvio padrão:`, `Each ${dado ? "roll of the die" : "toss of the coin"} has an expected value and a standard deviation:`),
+            `\\mu = ${MU}, \\qquad \\sigma ${approx(sd, 4)} ${texNum(sd, 4)}`],
+          [T(`A simulação fez ${fmt(n)} lançamentos e tirou a média:`, `The simulation made ${fmt(n)} throws and took the mean:`),
+            `\\bar{X}_{${texNum(n)}} = \\dfrac{${texNum(sum)}}{${texNum(n)}} ${approx(mean, 6)} ${tone(texNum(mean, 6), 1)}`],
+          [T("Compare o erro com o erro padrão σ/√n, a distância típica nessa altura:", "Compare the error with the standard error σ/√n, the typical distance at this point:"),
+            `\\bar{X}_{${texNum(n)}} - \\mu ${approx(err, 6)} ${texNum(err, 6)}, \\qquad \\dfrac{\\sigma}{\\sqrt{n}} ${approx(se, 6)} ${texNum(se, 6)}`],
+        ],
+        note: T(`A média acumulada oscila muito no começo e vai se acomodando em torno de ${fmt(mu)}: a faixa tracejada encolhe como 1/√n. Aumente n ou sorteie de novo para ver outro caminho chegar ao mesmo lugar.`
+          + " A lei não diz que os resultados “compensam”: depois de uma sequência de valores altos, o próximo lançamento não fica mais propenso a dar baixo. As sequências passadas só ficam diluídas entre muitos lançamentos novos."
+          + ` Veja o <a href="${PAGE("valor-esperado")}">valor esperado</a>, para onde a média vai, e o <a href="${PAGE("erro-padrao")}">erro padrão</a>, o quanto ela ainda erra.`,
+          `The running mean swings a lot at first and settles around ${fmt(mu)}: the dashed band shrinks like 1/√n. Increase n or draw again to watch another path reach the same place.`
+          + " The law doesn't say outcomes “even out”: after a streak of high values, the next throw is no more likely to come out low. Past streaks just get diluted among many new throws."
+          + ` See the <a href="${PAGE("valor-esperado")}">expected value</a>, where the mean is headed, and the <a href="${PAGE("erro-padrao")}">standard error</a>, how far off it still is.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -2896,12 +3138,17 @@
     // a faixa é exatamente [yMin, yMax].
     const yMin = spec.yMin ?? 0;
     const yMax = spec.yMin == null ? spec.yMax * 1.08 || 1 : spec.yMax;
-    const X = v => m.l + (v - xMin) / (xMax - xMin) * iw;
+    // Com logX (só para xMin > 0), o eixo x é logarítmico: potências de 10
+    // ficam igualmente espaçadas.
+    const X = spec.logX
+      ? v => m.l + Math.log(v / xMin) / Math.log(xMax / xMin) * iw
+      : v => m.l + (v - xMin) / (xMax - xMin) * iw;
+    const xAt = f => (spec.logX ? xMin * (xMax / xMin) ** f : xMin + f * (xMax - xMin));
     const Y = v => m.t + ih - (v - yMin) / (yMax - yMin) * ih;
 
     // Grade e eixo y: linhas finas, recessivas.
     const ys = niceStep(yMax - yMin, 4);
-    for (let v = Math.ceil(yMin / ys - 1e-9) * ys; spec.type !== "intervals" && v <= yMax + 1e-12; v += ys) {
+    for (let v = Math.ceil(yMin / ys - 1e-9) * ys; !["intervals", "box"].includes(spec.type) && v <= yMax + 1e-12; v += ys) {
       svg("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), class: v === 0 ? "chart-axis" : "chart-grid" }, root);
       svg("text", { x: m.l - 6, y: Y(v) + 4, class: "chart-label", "text-anchor": "end" }, root).textContent = fmt(v, 4);
     }
@@ -2950,10 +3197,16 @@
       svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
     } else {
       // Eixo x numérico.
-      const xs = niceStep(xMax - xMin, 6);
-      for (let v = Math.ceil(xMin / xs) * xs; v <= xMax + 1e-9; v += xs) {
-        svg("text", { x: X(v), y: H - m.b + 16, class: "chart-label", "text-anchor": "middle" }, root).textContent = fmt(v, 2);
+      const ticks = [];
+      if (spec.logX) {
+        for (let v = 10 ** Math.ceil(Math.log10(xMin) - 1e-9); v <= xMax * (1 + 1e-9); v *= 10) ticks.push(v);
+      } else {
+        const xs = niceStep(xMax - xMin, 6);
+        for (let v = Math.ceil(xMin / xs) * xs; v <= xMax + 1e-9; v += xs) ticks.push(v);
       }
+      ticks.forEach(v => {
+        svg("text", { x: X(v), y: H - m.b + 16, class: "chart-label", "text-anchor": "middle" }, root).textContent = fmt(v, 2);
+      });
       svg("text", { x: m.l + iw / 2, y: H - 2, class: "chart-label", "text-anchor": "middle" }, root).textContent = spec.xLabel;
 
       // Um segmento por intervalo, empilhados; os que erram o valor real
@@ -2968,6 +3221,20 @@
           const t = spec.tip(r, i);
           hit.addEventListener("pointermove", e => showTip(e, t[0], t[1]));
         });
+      }
+      // Boxplot horizontal: caixa de Q1 a Q3, traço na mediana, bigodes até
+      // o último valor dentro de 1,5 · IQR e os atípicos como pontos.
+      if (spec.type === "box") {
+        const { q1, q2, q3, wLo, wHi, out } = spec.box;
+        const cy = m.t + ih / 2, bh = Math.min(56, ih * 0.6);
+        svg("line", { x1: X(wLo), x2: X(q1), y1: cy, y2: cy, class: "chart-whisker" }, root);
+        svg("line", { x1: X(q3), x2: X(wHi), y1: cy, y2: cy, class: "chart-whisker" }, root);
+        [wLo, wHi].forEach(v => svg("line", { x1: X(v), x2: X(v), y1: cy - bh / 4, y2: cy + bh / 4, class: "chart-whisker" }, root));
+        svg("rect", { x: X(q1), y: cy - bh / 2, width: Math.max(1, X(q3) - X(q1)), height: bh, rx: 3, class: "chart-box" }, root);
+        svg("line", { x1: X(q2), x2: X(q2), y1: cy - bh / 2, y2: cy + bh / 2, class: "chart-truth" }, root);
+        out.forEach(v => svg("circle", { cx: X(v), cy, r: 4, class: "chart-dot" }, root));
+        const hit = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit" }, root);
+        hit.addEventListener("pointermove", e => showTip(e, spec.tip[0], spec.tip[1]));
       }
       if (spec.type === "hist") {
         spec.bins.forEach(b => {
@@ -3015,7 +3282,7 @@
         const hit = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit" }, root);
         hit.addEventListener("pointermove", e => {
           const r = root.getBoundingClientRect();
-          const x = xMin + ((e.clientX - r.left) / r.width * W - m.l) / iw * (xMax - xMin);
+          const x = xAt(((e.clientX - r.left) / r.width * W - m.l) / iw);
           const t = spec.tipAt(x);
           showTip(e, t[0], t[1]);
         });

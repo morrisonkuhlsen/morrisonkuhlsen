@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Teste t para Duas Amostras — Interativo</title>
+  <meta name="description" content="Teste t de Welch para duas amostras independentes explicado termo a termo, com calculadora, graus de liberdade, valor-p, intervalo de confiança e d de Cohen.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/t-duas-amostras.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/t-duas-amostras.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/two-sample-t-test.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/t-duas-amostras.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/t-duas-amostras.html">
+  <meta property="og:title" content="Teste t para Duas Amostras — Interativo">
+  <meta property="og:description" content="Teste t de Welch para duas amostras independentes explicado termo a termo, com calculadora, graus de liberdade, valor-p, intervalo de confiança e d de Cohen.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Teste t para Duas Amostras — Interativo">
+  <meta name="twitter:description" content="Teste t de Welch para duas amostras independentes explicado termo a termo, com calculadora, graus de liberdade, valor-p, intervalo de confiança e d de Cohen.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/two-sample-t-test.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Teste t para Duas Amostras</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula do Teste t para Duas Amostras interativa">
+        <span class="part" data-part="t_w" data-tone="1" data-tex="t"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="diff_w" data-tone="2" data-tex="\bar{x}_1 - \bar{x}_2"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="se_w" data-tone="3" data-tex="\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com a distribuição t; estado em ?x1=&s1=&n1=&x2=&s2=&n2=. -->
+    <section class="calc" data-calc="welch" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: duas turmas fizeram a mesma prova. A turma A, com 20 alunos, teve média 72 e desvio padrão 10; a B, com 22 alunos, média 65 e desvio padrão 12. A diferença é real ou pode ser acaso? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Média do grupo 1 <i>x̄</i><sub>1</sub></span>
+          <input name="x1" type="text" inputmode="decimal" value="72" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Desvio padrão <i>s</i><sub>1</sub></span>
+          <input name="s1" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Tamanho <i>n</i><sub>1</sub></span>
+          <input name="n1" type="text" inputmode="numeric" value="20" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Média do grupo 2 <i>x̄</i><sub>2</sub></span>
+          <input name="x2" type="text" inputmode="decimal" value="65" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Desvio padrão <i>s</i><sub>2</sub></span>
+          <input name="s2" type="text" inputmode="decimal" value="12" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Tamanho <i>n</i><sub>2</sub></span>
+          <input name="n2" type="text" inputmode="numeric" value="22" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="t_w" data-tone="1">Estatística t</dt>
+          <dd>Quantos erros padrão separam as duas médias. Comparada com a distribuição t, dá o valor-p: a chance de uma diferença assim só por acaso, se as médias verdadeiras fossem iguais.</dd>
+          <dt data-part="diff_w" data-tone="2">Diferença das Médias (x̄₁ − x̄₂)</dt>
+          <dd>O que se observou: o quanto a média de um grupo ficou acima da do outro, na unidade dos dados.</dd>
+          <dt data-part="se_w" data-tone="3">Erro Padrão da Diferença</dt>
+          <dd>O quanto a diferença das médias varia de amostra para amostra. Soma as variâncias das duas médias sem supor que os grupos tenham a mesma variância — é isso que define o teste de Welch.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">Quando usar, pressupostos e alternativas: <a href="/testes-estatisticos/t-independente/">teste t para duas amostras independentes no catálogo de testes estatísticos</a>.</p>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="t-student.html" rel="prev"><span>Anterior</span>Teste t de Student</a>
+      <a class="pager-next" href="erro-padrao.html" rel="next"><span>Próxima</span>Erro Padrão da Média</a>
+    </nav>
+  </main>
+</body>
+</html>

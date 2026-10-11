@@ -172,6 +172,7 @@ def build(slug, d):
 # Fórmula com link para o catálogo de testes → (página do teste em inglês, texto do link).
 CATALOG = {
     "t-student": ("one-sample-t-test", "the one-sample t-test"),
+    "t-duas-amostras": ("independent-samples-t-test", "the independent-samples t-test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
     "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),

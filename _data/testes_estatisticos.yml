@@ -132,7 +132,8 @@ testes:
     efeito:
       texto: 'd de Cohen com o desvio padrão combinado; o g de Hedges corrige o viés em amostras pequenas.'
       tex: 'd = \dfrac{\bar{x}_1 - \bar{x}_2}{s_p}, \qquad s_p = \sqrt{\dfrac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}}'
-    veja: [poder-estatistico]
+    page: t-duas-amostras
+    veja: [poder-estatistico, erro-padrao]
     vars:
       - ['Welch (acima): não supõe variâncias iguais e é o padrão recomendado', null]
       - ['Student clássico, com variância combinada, se as variâncias forem iguais', null]
@@ -953,7 +954,7 @@ testes:
       - ['Fisher exato, para tabelas 2 × 2 com contagens pequenas', fisher]
       - ['V de Cramér, para medir a força da associação', null]
     page: qui-quadrado-independencia
-    veja: [qui-quadrado]
+    veja: [qui-quadrado, razao-chances]
     reporte: 'χ²(2, N = 200) = 7,4; p = 0,025; V = 0,19'
     codigo:
       r: |
@@ -978,7 +979,7 @@ testes:
       tex: 'OR = \dfrac{a\,d}{b\,c}'
     vars:
       - ['Qui-quadrado de independência, com contagens maiores', qui-quadrado-independencia]
-    veja: [coeficiente-binomial, distribuicao-hipergeometrica]
+    veja: [coeficiente-binomial, distribuicao-hipergeometrica, razao-chances]
     reporte: 'OR = 6,4; p = 0,028 (Fisher exato, bilateral)'
     codigo:
       r: |
@@ -1082,7 +1083,7 @@ testes:
       tex: 'f^2 = \dfrac{R^2}{1 - R^2}'
     vars:
       - ['F parcial, para comparar modelos aninhados', null]
-    veja: [regressao-linear]
+    veja: [regressao-linear, coeficiente-determinacao]
     reporte: 'F(2, 47) = 9,4; p < 0,001; R² = 0,29'
     codigo:
       r: |

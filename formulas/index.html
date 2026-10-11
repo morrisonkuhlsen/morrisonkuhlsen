@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">43 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">48 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -132,6 +132,11 @@
             <span class="card-name">Distribuição Normal (Gaussiana)</span>
             <span class="card-blurb">A curva em sino definida pela média e pelo desvio padrão.</span>
           </a></li>
+          <li><a class="formula-card" href="lei-grandes-numeros.html">
+            <span class="card-tex" data-tex="\bar{X}_n \xrightarrow{\,n \to \infty\,} \mu"></span>
+            <span class="card-name">Lei dos Grandes Números</span>
+            <span class="card-blurb">A média de muitas repetições se aproxima do valor esperado.</span>
+          </a></li>
           <li><a class="formula-card" href="teorema-central-limite.html">
             <span class="card-tex" data-tex="\bar{X}_n \sim \mathcal{N} \left( \mu ,\, \dfrac{\sigma^2}{n} \right)"></span>
             <span class="card-name">Teorema Central do Limite</span>
@@ -151,6 +156,11 @@
             <span class="card-tex" data-tex="t = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}}"></span>
             <span class="card-name">Teste t de Student</span>
             <span class="card-blurb">Compara a média amostral com um valor hipotético quando σ é desconhecido.</span>
+          </a></li>
+          <li><a class="formula-card" href="t-duas-amostras.html">
+            <span class="card-tex" data-tex="t = \dfrac{\bar{x}_1 - \bar{x}_2}{\sqrt{s_1^2/n_1 + s_2^2/n_2}}"></span>
+            <span class="card-name">Teste t para Duas Amostras</span>
+            <span class="card-blurb">Compara as médias de dois grupos independentes (Welch).</span>
           </a></li>
           <li><a class="formula-card" href="erro-padrao.html">
             <span class="card-tex" data-tex="EP = \dfrac{\sigma}{\sqrt{n}}"></span>
@@ -181,6 +191,11 @@
             <span class="card-tex" data-tex="\chi^2 = \sum_{i,j} \dfrac{(O_{ij} - E_{ij})^2}{E_{ij}}"></span>
             <span class="card-name">Qui-Quadrado de Independência</span>
             <span class="card-blurb">Se duas variáveis categóricas estão associadas, numa tabela de contingência.</span>
+          </a></li>
+          <li><a class="formula-card" href="razao-chances.html">
+            <span class="card-tex" data-tex="OR = \dfrac{a \cdot d}{b \cdot c}"></span>
+            <span class="card-name">Razão de Chances e Risco Relativo</span>
+            <span class="card-blurb">Quanto uma exposição aumenta a chance ou o risco de um desfecho.</span>
           </a></li>
         </ul>
       </section>
@@ -227,6 +242,11 @@
             <span class="card-name">Desvio Padrão</span>
             <span class="card-blurb">O quanto os valores se espalham em torno da média.</span>
           </a></li>
+          <li><a class="formula-card" href="quartis-iqr.html">
+            <span class="card-tex" data-tex="IQR = Q_3 - Q_1"></span>
+            <span class="card-name">Quartis e Amplitude Interquartil</span>
+            <span class="card-blurb">A metade central dos dados, o boxplot e os valores atípicos.</span>
+          </a></li>
           <li><a class="formula-card" href="covariancia.html">
             <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>
             <span class="card-name">Covariância</span>
@@ -241,6 +261,11 @@
             <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>
             <span class="card-name">Regressão Linear Simples</span>
             <span class="card-blurb">A reta que prevê y a partir de x.</span>
+          </a></li>
+          <li><a class="formula-card" href="coeficiente-determinacao.html">
+            <span class="card-tex" data-tex="R^2 = 1 - \dfrac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}"></span>
+            <span class="card-name">Coeficiente de Determinação (R²)</span>
+            <span class="card-blurb">Que fração da variação de y a reta explica.</span>
           </a></li>
           <li><a class="formula-card" href="media-geometrica.html">
             <span class="card-tex" data-tex="G = \sqrt[n]{\prod_{i=1}^{n} x_i}"></span>

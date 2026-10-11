@@ -27,6 +27,11 @@
   description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
   tags: "fórmula interativa calculadora passo a passo fatorial logaritmo"
   lang: pt
+- title: "Coeficiente de Determinação (R²)"
+  url: "/formulas/coeficiente-determinacao.html"
+  description: "Coeficiente de determinação R² explicado termo a termo, com calculadora, gráfico de pontos arrastáveis, R² ajustado e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo R quadrado regressão variação explicada"
+  lang: pt
 - title: "Covariância"
   url: "/formulas/covariancia.html"
   description: "Covariância explicada termo a termo, com calculadora a partir de listas de x e y, tabela de desvios e passo a passo."
@@ -81,6 +86,11 @@
   url: "/formulas/formula-quadratica.html"
   description: "Fórmula quadrática explicada termo a termo, com calculadora das raízes reais ou complexas e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Lei dos Grandes Números"
+  url: "/formulas/lei-grandes-numeros.html"
+  description: "Lei dos grandes números explicada termo a termo, com simulação de dados e moedas: a média acumulada se aproximando do valor esperado."
+  tags: "fórmula interativa calculadora passo a passo simulação média dado moeda convergência"
   lang: pt
 - title: "Fórmulas Interativas"
   url: "/formulas/"
@@ -167,6 +177,16 @@
   description: "Teste qui-quadrado de independência explicado termo a termo, com calculadora para tabelas de contingência, esperados, valor-p, V de Cramér e passo a passo."
   tags: "fórmula interativa calculadora passo a passo tabela de contingência associação V de Cramér"
   lang: pt
+- title: "Quartis e Amplitude Interquartil"
+  url: "/formulas/quartis-iqr.html"
+  description: "Quartis e amplitude interquartil (IQR) explicados termo a termo, com calculadora, boxplot, critério de valores atípicos e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo IQR boxplot mediana valores atípicos outliers"
+  lang: pt
+- title: "Razão de Chances e Risco Relativo"
+  url: "/formulas/razao-chances.html"
+  description: "Razão de chances (odds ratio) e risco relativo explicados termo a termo, com calculadora para tabelas 2 × 2, intervalos de confiança e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo odds ratio risco relativo tabela 2x2 epidemiologia"
+  lang: pt
 - title: "Regra de L'Hôpital"
   url: "/formulas/regra-lhopital.html"
   description: "Regra de L'Hôpital explicada termo a termo, com exemplos resolvidos de 0/0 e ∞/∞ e o erro comum de aplicá-la sem indeterminação."
@@ -186,6 +206,11 @@
   url: "/formulas/t-student.html"
   description: "Teste t de Student explicado termo a termo, com calculadora da estatística t, graus de liberdade, valor-p e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Teste t para Duas Amostras"
+  url: "/formulas/t-duas-amostras.html"
+  description: "Teste t de Welch para duas amostras independentes explicado termo a termo, com calculadora, graus de liberdade, valor-p, intervalo de confiança e d de Cohen."
+  tags: "fórmula interativa calculadora passo a passo Welch duas médias grupos independentes"
   lang: pt
 - title: "Teorema de Bayes"
   url: "/formulas/teorema-bayes.html"
@@ -358,6 +383,11 @@
   description: "The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working."
   tags: "formula interactive calculator step by step"
   lang: en
+- title: "Law of Large Numbers"
+  url: "/en/formulas/law-of-large-numbers.html"
+  description: "The law of large numbers explained term by term, with a simulation of dice and coins: the running mean approaching the expected value."
+  tags: "formula interactive calculator step by step simulation mean die coin convergence"
+  lang: en
 - title: "Central Limit Theorem"
   url: "/en/formulas/central-limit-theorem.html"
   description: "The central limit theorem explained term by term, with a simulation: the histogram of sample means turns into a bell as n grows."
@@ -372,6 +402,11 @@
   url: "/en/formulas/students-t-test.html"
   description: "Student's t-test explained term by term, with a calculator for the t statistic, degrees of freedom, p-value and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Two-Sample t-Test"
+  url: "/en/formulas/two-sample-t-test.html"
+  description: "Welch's t-test for two independent samples explained term by term, with a calculator, degrees of freedom, p-value, confidence interval and Cohen's d."
+  tags: "formula interactive calculator step by step Welch two means independent groups"
   lang: en
 - title: "Standard Error of the Mean"
   url: "/en/formulas/standard-error.html"
@@ -392,6 +427,11 @@
   url: "/en/formulas/chi-square-independence.html"
   description: "The chi-square test of independence explained term by term, with a calculator for contingency tables, expected counts, p-value, Cramér's V and step-by-step working."
   tags: "formula interactive calculator step by step contingency table association Cramér's V"
+  lang: en
+- title: "Odds Ratio and Relative Risk"
+  url: "/en/formulas/odds-ratio.html"
+  description: "The odds ratio and relative risk explained term by term, with a calculator for 2 × 2 tables, confidence intervals and step-by-step working."
+  tags: "formula interactive calculator step by step odds ratio relative risk 2x2 table epidemiology"
   lang: en
 - title: "Cochran's Formula"
   url: "/en/formulas/cochran-formula.html"
@@ -438,6 +478,11 @@
   description: "The sample standard deviation explained term by term, with a calculator, a table of deviations, a chart and step-by-step working from the variance to the root."
   tags: "formula interactive calculator step by step variance spread sample"
   lang: en
+- title: "Quartiles and Interquartile Range"
+  url: "/en/formulas/quartiles-iqr.html"
+  description: "Quartiles and the interquartile range (IQR) explained term by term, with a calculator, a boxplot, the outlier rule and step-by-step working."
+  tags: "formula interactive calculator step by step IQR boxplot median outliers"
+  lang: en
 - title: "Covariance"
   url: "/en/formulas/covariance.html"
   description: "Covariance explained term by term, with a calculator that takes lists of x and y, a table of deviations and step-by-step working."
@@ -452,6 +497,11 @@
   url: "/en/formulas/linear-regression.html"
   description: "Simple linear regression explained term by term, with a calculator for the least-squares line, a prediction and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Coefficient of Determination (R²)"
+  url: "/en/formulas/coefficient-of-determination.html"
+  description: "The coefficient of determination R² explained term by term, with a calculator, a chart of draggable points, adjusted R² and step-by-step working."
+  tags: "formula interactive calculator step by step R squared regression explained variation"
   lang: en
 - title: "Geometric Mean"
   url: "/en/formulas/geometric-mean.html"
