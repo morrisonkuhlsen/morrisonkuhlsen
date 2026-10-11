@@ -29,6 +29,8 @@
     "distribuicao-normal": "normal-distribution", "coeficiente-binomial": "binomial-coefficient",
     "problema-aniversario": "birthday-problem", "qui-quadrado-independencia": "chi-square-independence",
     "desvio-padrao": "standard-deviation", "valor-esperado": "expected-value", "erro-padrao": "standard-error",
+    "formula-quadratica": "quadratic-formula", "soma-pg": "geometric-series", "razao-chances": "odds-ratio",
+    "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -2505,6 +2507,284 @@
           + sol
           + T(` Na estatística, é um sistema 2 × 2 assim que dá os coeficientes da <a href="${PAGE("regressao-linear")}">regressão linear simples</a>: as equações normais têm a matriz (n, Σx; Σx, Σx²), de determinante n · Σ(x − x̄)².`,
             ` In statistics, a 2 × 2 system like this gives the coefficients of <a href="${PAGE("regressao-linear")}">simple linear regression</a>: the normal equations have the matrix (n, Σx; Σx, Σx²), with determinant n · Σ(x − x̄)².`),
+      };
+    },
+
+    logistica({ b0, b1, x }) {
+      const z = b0 + b1 * x, ez = Math.exp(-z), p = 1 / (1 + ez), odds = Math.exp(z);
+      const mid = b1 !== 0 ? -b0 / b1 : x;
+      const w = b1 !== 0 ? Math.min(1e6, 6 / Math.abs(b1)) : 5;
+      const lo = Math.min(x, mid - w), hi = Math.max(x, mid + w);
+      const sig = v => 1 / (1 + Math.exp(-(b0 + b1 * v)));
+      const pts = Array.from({ length: 201 }, (_, i) => { const v = lo + (hi - lo) * i / 200; return [v, sig(v)]; });
+      const Z = tone(texNum(z), 3);
+      const fator = Math.exp(b1);
+      return {
+        result: `p ${approx(p, 6)} ${tone(texNum(p, 6), 1)}, \\qquad ${T("chance", "odds")} = \\dfrac{p}{1 - p} ${approx(odds, 6)} ${texNum(odds, 6)}`,
+        chart: {
+          type: "curve", label: T(`Curva logística com β₀ = ${fmt(b0)} e β₁ = ${fmt(b1)}; marcado x = ${fmt(x)}`, `Logistic curve with β₀ = ${fmt(b0)} and β₁ = ${fmt(b1)}; x = ${fmt(x)} marked`),
+          xLabel: T("x · tracejada: p = 0,5", "x · dashed: p = 0.5"), xMin: lo, xMax: hi, yMin: 0, yMax: 1, pts, marker: [x, p],
+          hlines: [{ y: 0.5, cls: "chart-ref" }],
+          tipAt: v => [`p ≈ ${fmt(sig(v), 4)}`, `x = ${fmt(v, 2)}`],
+        },
+        steps: [
+          [T("Calcule o preditor linear z:", "Compute the linear predictor z:"), `z = ${texNum(b0)} + ${paren(b1, texNum(b1))} \\cdot ${paren(x, texNum(x))} ${approx(z)} ${Z}`],
+          [T("Calcule a exponencial de −z:", "Compute the exponential of −z:"), `e^{-z} = e^{${texNum(-z)}} ${approx(ez, 6)} ${tone(texSci(ez, 6), 2)}`],
+          [T("Aplique a função logística, que leva qualquer número para entre 0 e 1:", "Apply the logistic function, which maps any number to between 0 and 1:"),
+            `p = \\dfrac{1}{1 + ${tone(texSci(ez, 6), 2)}} ${approx(p, 6)} ${tone(texNum(p, 6), 1)}`],
+          [T("A chance é p/(1 − p), que é o mesmo que eᶻ:", "The odds are p/(1 − p), the same as eᶻ:"), `\\dfrac{${texNum(p, 6)}}{${texNum(1 - p, 6)}} = e^{${texNum(z)}} ${approx(odds, 6)} ${texNum(odds, 6)}`],
+        ],
+        note: T(`O logaritmo da chance, ln(p/(1 − p)) = z, é uma reta em x: cada unidade a mais em x soma β₁ ao log da chance e multiplica a chance por e^β₁ ≈ ${fmt(fator, 4)}.`
+          + ` Esse fator é uma <a href="${PAGE("razao-chances")}">razão de chances</a>, e é assim que se lêem os coeficientes de uma regressão logística.`
+          + (b1 !== 0 ? ` A chance chega a 50% em x = −β₀/β₁ ≈ ${fmt(mid, 4)}.` : "")
+          + " Perto de p = 0,5 a curva é quase reta; nas pontas, achata: somar a z mexe pouco numa probabilidade que já está perto de 0 ou de 1.",
+          `The log of the odds, ln(p/(1 − p)) = z, is a straight line in x: each extra unit of x adds β₁ to the log-odds and multiplies the odds by e^β₁ ≈ ${fmt(fator, 4)}.`
+          + ` That factor is an <a href="${PAGE("razao-chances")}">odds ratio</a>, and it is how the coefficients of a logistic regression are read.`
+          + (b1 !== 0 ? ` The chance reaches 50% at x = −β₀/β₁ ≈ ${fmt(mid, 4)}.` : "")
+          + " Near p = 0.5 the curve is almost straight; at the ends it flattens: adding to z barely moves a probability already close to 0 or 1."),
+      };
+    },
+
+    aportes({ P, A, i, n }) {
+      if (!Number.isInteger(n) || n < 1 || n > 1200) return { error: T("O número de períodos precisa ser um inteiro entre 1 e 1.200.", "The number of periods must be an integer between 1 and 1,200.") };
+      if (P < 0 || A < 0) return { error: T("O valor inicial e o aporte não podem ser negativos.", "The initial amount and the contribution cannot be negative.") };
+      if (i <= -100) return { error: T("A taxa precisa ser maior que −100%.", "The rate must be greater than −100%.") };
+      const r = i / 100, f = (1 + r) ** n;
+      const fvP = P * f, fvA = r === 0 ? A * n : A * (f - 1) / r;
+      const M = fvP + fvA, pago = P + A * n, juros = M - pago;
+      const cur = T("R\\$\\,", "\\$");
+      const money = v => `${cur}${texNum(v, 2)}`;
+      const moneyTxt = v => `${T("R$ ", "$")}${fmt(v, 2)}`;
+      const saldo = k => P * (1 + r) ** k + (r === 0 ? A * k : A * ((1 + r) ** k - 1) / r);
+      const step = Math.max(1, Math.ceil(n / 300));
+      const ks = []; for (let k = 0; k <= n; k += step) ks.push(k); if (ks[ks.length - 1] !== n) ks.push(n);
+      const F = tone(texNum(f, 6), 4);
+      return {
+        result: `M ${approx(M, 2)} ${tone(money(M), 1)}`,
+        chart: {
+          type: "curve", label: T(`Saldo ao longo de ${n} períodos e total aportado`, `Balance over ${n} periods and total contributed`),
+          xLabel: T("períodos · colorida: saldo · escura: total aportado", "periods · colored: balance · dark: total contributed"),
+          xMin: 0, xMax: n, yMax: Math.max(M, pago), pts: ks.map(k => [k, saldo(k)]),
+          lines: [{ pts: ks.map(k => [k, P + A * k]), cls: "chart-fit" }], marker: [n, M],
+          tipAt: v => { const k = Math.min(n, Math.max(0, Math.round(v))); return [moneyTxt(saldo(k)), T(`após ${k} períodos (aportado: ${moneyTxt(P + A * k)})`, `after ${k} periods (contributed: ${moneyTxt(P + A * k)})`)]; },
+        },
+        steps: [
+          [T("Calcule o fator de crescimento do período inteiro:", "Compute the growth factor over the whole term:"), `(1 + i)^n = ${texNum(1 + r, 6)}^{${n}} ${approx(f, 6)} ${F}`],
+          [T("O valor inicial cresce por esse fator:", "The initial amount grows by that factor:"), `${tone(texNum(P, 2), 2)} \\cdot ${F} ${approx(fvP, 2)} ${money(fvP)}`],
+          [r === 0
+            ? T("Com taxa zero, os aportes só se somam:", "With a zero rate, the contributions just add up:")
+            : T("Cada aporte cresce pelo tempo que ainda falta; somados, formam uma progressão geométrica:", "Each contribution grows for the time still left; added up, they form a geometric series:"),
+            r === 0 ? `${tone(texNum(A, 2), 3)} \\cdot ${n} = ${money(fvA)}`
+              : `${tone(texNum(A, 2), 3)} \\cdot \\dfrac{${F} - 1}{${tone(texNum(r, 6), 5)}} ${approx(fvA, 2)} ${money(fvA)}`],
+          [T("Some as duas partes:", "Add the two parts:"), `M = ${money(fvP)} + ${money(fvA)} ${approx(M, 2)} ${tone(money(M), 1)}`],
+        ],
+        note: T(`Do total, ${moneyTxt(pago)} saíram do bolso (${moneyTxt(P)} no início e ${n} aportes de ${moneyTxt(A)}) e ${moneyTxt(juros)} são juros, ${fmt(pago ? juros / M * 100 : 0, 1)}% do saldo final.`
+          + " Os juros ganham peso com o tempo: no gráfico, o saldo se afasta da linha do que foi aportado cada vez mais depressa."
+          + (r > 0 ? ` A parte dos aportes é uma <a href="${PAGE("soma-pg")}?a=${A}&amp;r=${Number((1 + r).toFixed(8))}&amp;n=${n}">soma de progressão geométrica</a> de razão 1 + i.` : "")
+          + " A taxa e os aportes precisam estar no mesmo período: com taxa mensal, aportes mensais e n em meses.",
+          `Of the total, ${moneyTxt(pago)} came out of pocket (${moneyTxt(P)} up front and ${n} contributions of ${moneyTxt(A)}) and ${moneyTxt(juros)} is interest, ${fmt(pago ? juros / M * 100 : 0, 1)}% of the final balance.`
+          + " Interest gains weight over time: in the chart, the balance pulls away from the contributed line faster and faster."
+          + (r > 0 ? ` The contributions part is a <a href="${PAGE("soma-pg")}?a=${A}&amp;r=${Number((1 + r).toFixed(8))}&amp;n=${n}">geometric series</a> with ratio 1 + i.` : "")
+          + " The rate and the contributions must use the same period: with a monthly rate, monthly contributions and n in months."),
+      };
+    },
+
+    derivada({ f, x, h }) {
+      const FUNCS = {
+        x2: { tex: "x^2", f: v => v * v, d: v => 2 * v },
+        x3: { tex: "x^3", f: v => v ** 3, d: v => 3 * v * v },
+        exp: { tex: "e^{x}", f: Math.exp, d: Math.exp },
+        sin: { tex: T("\\operatorname{sen} x", "\\sin x"), f: Math.sin, d: Math.cos },
+        ln: { tex: "\\ln x", f: Math.log, d: v => 1 / v, pos: true },
+        sqrt: { tex: "\\sqrt{x}", f: Math.sqrt, d: v => 0.5 / Math.sqrt(v), pos: true },
+      };
+      const fn = FUNCS[f];
+      if (h === 0) return { error: T("h não pode ser zero: a conta viraria 0/0. A derivada é o limite quando h se aproxima de zero.", "h cannot be zero: the calculation would become 0/0. The derivative is the limit as h approaches zero.") };
+      if (Math.abs(h) > 10 || Math.abs(x) > 50) return { error: T("Use |x| ≤ 50 e |h| ≤ 10.", "Use |x| ≤ 50 and |h| ≤ 10.") };
+      if (fn.pos && (x <= 0 || x + h <= 0)) return { error: T("Para ln x e √x, x e x + h precisam ser positivos.", "For ln x and √x, x and x + h must be positive.") };
+      const fx = fn.f(x), fxh = fn.f(x + h), q = (fxh - fx) / h, exact = fn.d(x), err = q - exact;
+      const cen = fn.pos && x - h <= 0 ? NaN : (fn.f(x + h) - fn.f(x - h)) / (2 * h);
+      const w = Math.max(2, Math.abs(h) * 1.6);
+      let lo = x - w, hi = x + w;
+      if (fn.pos) lo = Math.max(lo, Math.min(x, x + h) / 4);
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = lo + (hi - lo) * i / 240; return [v, fn.f(v)]; });
+      const ys = pts.map(p => p[1]).filter(Number.isFinite);
+      const yLo = Math.min(...ys), yHi = Math.max(...ys), pad = (yHi - yLo) * 0.12 || 1;
+      // Reta de inclinação m pelo ponto (x0, y0), em vários pontos para ser
+      // cortada direito onde sai da faixa do eixo y.
+      const line = (m, x0, y0) => Array.from({ length: 81 }, (_, j) => { const v = lo + (hi - lo) * j / 80; return [v, y0 + m * (v - x0)]; });
+      const ftex = fn.tex;
+      const at = v => ftex.replace(/x/g, `{${texNum(v, 6)}}`);
+      return {
+        result: `\\dfrac{f(x + h) - f(x)}{h} ${approx(q, 6)} ${tone(texNum(q, 6), 1)}, \\qquad f'(${texNum(x)}) ${approx(exact, 6)} ${texNum(exact, 6)}`,
+        chart: {
+          type: "curve", label: T(`Curva de f, a secante entre x = ${fmt(x)} e x + h = ${fmt(x + h)} e a tangente em x`, `Curve of f, the secant between x = ${fmt(x)} and x + h = ${fmt(x + h)}, and the tangent at x`),
+          xLabel: T("x · escura: secante · tracejada: tangente", "x · dark: secant · dashed: tangent"),
+          xMin: lo, xMax: hi, yMin: yLo - pad, yMax: yHi + pad, pts,
+          lines: [{ pts: line(q, x, fx), cls: "chart-fit" }, { pts: line(exact, x, fx), cls: "chart-tangent" }],
+          tipAt: v => [`f = ${fmt(fn.f(v), 4)}`, `x = ${fmt(v, 2)}`],
+        },
+        steps: [
+          [T("Calcule a função no ponto e um passo h adiante:", "Evaluate the function at the point and one step h ahead:"),
+            `f(${texNum(x)}) = ${at(x)} ${approx(fx, 6)} ${texNum(fx, 6)}, \\qquad f(${texNum(x + h, 6)}) = ${at(x + h)} ${approx(fxh, 6)} ${tone(texNum(fxh, 6), 3)}`],
+          [T("Divida a variação de f pela variação de x: é a inclinação da secante.", "Divide the change in f by the change in x: this is the slope of the secant."),
+            `\\dfrac{${tone(texNum(fxh, 6), 3)} - ${paren(fx, texNum(fx, 6))}}{${tone(texNum(h, 6), 4)}} ${approx(q, 6)} ${tone(texNum(q, 6), 1)}`],
+          [T("Compare com a derivada exata, o limite com h indo a zero:", "Compare with the exact derivative, the limit as h goes to zero:"),
+            `f'(${texNum(x)}) ${approx(exact, 6)} ${texNum(exact, 6)}, \\qquad \\text{${T("erro", "error")}} ${approx(err, 6)} ${texSci(err, 4)}`],
+        ],
+        note: T(`Diminua h e veja a secante girar até coincidir com a tangente: o erro cai mais ou menos na proporção de h.`
+          + (Number.isFinite(cen) ? ` A diferença central, [f(x + h) − f(x − h)] / (2h) ≈ ${fmt(cen, 6)}, erra bem menos, na proporção de h².` : "")
+          + ` Com h = 0 a conta vira 0/0, a mesma indeterminação que a <a href="${PAGE("regra-lhopital")}">regra de L'Hôpital</a> resolve. Cuidado com h pequeno demais, como 10⁻¹²: o arredondamento do computador passa a dominar.`,
+          `Shrink h and watch the secant swing round until it matches the tangent: the error falls roughly in proportion to h.`
+          + (Number.isFinite(cen) ? ` The central difference, [f(x + h) − f(x − h)] / (2h) ≈ ${fmt(cen, 6)}, errs much less, in proportion to h².` : "")
+          + ` With h = 0 the calculation becomes 0/0, the same indeterminate form <a href="${PAGE("regra-lhopital")}">L'Hôpital's rule</a> resolves. Beware of h too small, like 10⁻¹²: the computer's rounding starts to dominate.`),
+      };
+    },
+
+    newton({ a, b, c, x0, k }) {
+      if (a === 0 && b === 0) return { error: T("Com a = b = 0 não há equação para resolver.", "With a = b = 0 there is no equation to solve.") };
+      if (!Number.isInteger(k) || k < 1 || k > 50) return { error: T("O número de iterações precisa ser um inteiro entre 1 e 50.", "The number of iterations must be an integer between 1 and 50.") };
+      const f = v => a * v * v + b * v + c, d = v => 2 * a * v + b;
+      const it = [];
+      let xn = x0, stop = "";
+      for (let j = 0; j < k; j++) {
+        const fv = f(xn), dv = d(xn);
+        if (dv === 0) { stop = "zero"; break; }
+        const nx = xn - fv / dv;
+        it.push({ j, xn, fv, dv, nx });
+        if (!Number.isFinite(nx) || Math.abs(nx) > 1e12) { stop = "diverge"; break; }
+        if (Math.abs(nx - xn) < 1e-14 * Math.max(1, Math.abs(nx))) { xn = nx; stop = "ok"; break; }
+        xn = nx;
+      }
+      const disc = b * b - 4 * a * c;
+      const roots = a === 0 ? [-c / b] : disc >= 0 ? [(-b - Math.sqrt(disc)) / (2 * a), (-b + Math.sqrt(disc)) / (2 * a)] : [];
+      const show = it.slice(0, 6);
+      const xsAll = [x0, ...show.map(r => r.nx), ...roots].filter(v => Math.abs(v) < 1e6);
+      const lo0 = Math.min(...xsAll), hi0 = Math.max(...xsAll), sp = (hi0 - lo0) || 2;
+      const lo = lo0 - sp * 0.25, hi = hi0 + sp * 0.25;
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = lo + (hi - lo) * i / 240; return [v, f(v)]; });
+      const ys = pts.map(p => p[1]).concat(0);
+      const yLo = Math.min(...ys), yHi = Math.max(...ys), pad = (yHi - yLo) * 0.1 || 1;
+      const seg = (p, q) => Array.from({ length: 41 }, (_, j) => [p[0] + (q[0] - p[0]) * j / 40, p[1] + (q[1] - p[1]) * j / 40]);
+      const lines = show.flatMap(r => [{ pts: seg([r.xn, r.fv], [r.nx, 0]), cls: "chart-fit" }, { pts: seg([r.nx, 0], [r.nx, f(r.nx)]), cls: "chart-tangent" }]);
+      const rows = it.slice(0, 12).map(r => `${r.j} & ${texNum(r.xn, 10)} & ${texSci(r.fv, 3)} & ${texNum(r.dv, 6)} & ${texNum(r.nx, 10)}`).join(" \\\\ ");
+      const table = `\\begin{array}{c|c|c|c|c} n & x_n & f(x_n) & f'(x_n) & x_{n+1} \\\\ \\hline ${rows}${it.length > 12 ? " \\\\ \\vdots & & & & " : ""} \\end{array}`;
+      const last = it.length ? it[it.length - 1].nx : x0;
+      // ax² + bx + c sem coeficiente 1 escrito e sem os termos zerados.
+      const ftx = [[a, "x^2"], [b, "x"], [c, ""]].filter(([v]) => v !== 0).map(([v, x], j) => {
+        const mag = Math.abs(v) === 1 && x ? "" : texNum(Math.abs(v));
+        return `${j ? (v < 0 ? " - " : " + ") : (v < 0 ? "-" : "")}${mag}${x}`;
+      }).join("");
+      const near = roots.length ? roots.reduce((p, q) => (Math.abs(q - last) < Math.abs(p - last) ? q : p)) : NaN;
+      const qs = `a=${a}&amp;b=${b}&amp;c=${c}`;
+      return {
+        result: stop === "zero" && !it.length ? `f'(x_0) = 0` : `x_{${it.length}} ${approx(last, 10)} ${tone(texNum(last, 10), 1)}`,
+        chart: {
+          type: "curve", height: 280, label: T("Curva de f e as tangentes de cada iteração até o eixo x", "Curve of f and the tangent of each iteration down to the x axis"),
+          xLabel: T("x · escuras: tangentes de cada iteração · tracejada: subida até a curva", "x · dark: each iteration's tangent · dashed: back up to the curve"),
+          xMin: lo, xMax: hi, yMin: yLo - pad, yMax: yHi + pad, pts, lines, hlines: [{ y: 0, cls: "chart-ref" }],
+          tipAt: v => [`f = ${fmt(f(v), 4)}`, `x = ${fmt(v, 3)}`],
+        },
+        steps: [
+          [T("Para f(x) = ax² + bx + c, a derivada é f'(x) = 2ax + b. Cada passo segue a tangente até o eixo x:", "For f(x) = ax² + bx + c, the derivative is f'(x) = 2ax + b. Each step follows the tangent down to the x axis:"),
+            `f(x) = ${ftx}, \\qquad x_{n+1} = x_n - \\dfrac{f(x_n)}{f'(x_n)}`],
+          ...(it.length ? [[T("Itere a partir do chute inicial:", "Iterate from the initial guess:"), table]] : []),
+        ],
+        note: (stop === "zero"
+          ? T(`${warn} a derivada zerou em x = ${fmt(xn)}: a tangente é horizontal e não cruza o eixo x. Tente outro chute inicial.`, `${warn} the derivative hit zero at x = ${fmt(xn)}: the tangent is horizontal and never crosses the x axis. Try another initial guess.`)
+          : stop === "diverge"
+            ? T(`${warn} as iterações escaparam para muito longe. Tente um chute mais perto da raiz.`, `${warn} the iterations ran off very far. Try a guess closer to the root.`)
+            : !roots.length
+              ? T(`${warn} esta equação não tem raiz real (discriminante ${fmt(disc)} < 0), e as iterações ficam vagando sem convergir.`, `${warn} this equation has no real root (discriminant ${fmt(disc)} < 0), and the iterations wander without converging.`)
+              : T(`A raiz exata mais próxima é ${fmt(near, 12)}; o erro final é ${fmtSci(Math.abs(last - near), 2)}. Perto da raiz, o número de casas certas mais ou menos dobra a cada passo.`,
+                `The nearest exact root is ${fmt(near, 12)}; the final error is ${fmtSci(Math.abs(last - near), 2)}. Near the root, the number of correct digits roughly doubles each step.`))
+          + T(` Para conferir, veja a <a href="${PAGE("formula-quadratica")}?${qs}">fórmula quadrática com estes coeficientes</a>. Newton vale para qualquer função derivável, não só para polinômios de grau 2 — é assim que calculadoras e programas acham raízes.`,
+            ` To check, see the <a href="${PAGE("formula-quadratica")}?${qs}">quadratic formula with these coefficients</a>. Newton works for any differentiable function, not just degree-2 polynomials — it is how calculators and software find roots.`),
+      };
+    },
+
+    gauss({ a, L, n }) {
+      if (a <= 0) return { error: T("a precisa ser maior que zero; com a ≤ 0, a área é infinita.", "a must be greater than zero; with a ≤ 0, the area is infinite.") };
+      if (L <= 0 || L > 50) return { error: T("O limite L precisa estar entre 0 e 50.", "The limit L must be between 0 and 50.") };
+      if (!Number.isInteger(n) || n < 1 || n > 500) return { error: T("O número de retângulos precisa ser um inteiro entre 1 e 500.", "The number of rectangles must be an integer between 1 and 500.") };
+      const g = v => Math.exp(-a * v * v);
+      const dx = 2 * L / n;
+      let S = 0;
+      const bins = [];
+      for (let i = 0; i < n; i++) { const m = -L + (i + 0.5) * dx, y = g(m); S += y * dx; bins.push({ x0: -L + i * dx, x1: -L + (i + 1) * dx, y, count: 0, i }); }
+      const full = Math.sqrt(Math.PI / a), finite = full * (2 * phi(L * Math.sqrt(2 * a)) - 1);
+      const R = Math.max(L, 3 / Math.sqrt(a));
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = -R + 2 * R * i / 240; return [v, g(v)]; });
+      const sigma = 1 / Math.sqrt(2 * a);
+      // Com a = 1, e^{-x^2} e √π, sem o “1” escrito.
+      const A = a === 1 ? "" : texNum(a), PI = a === 1 ? "\\sqrt{\\pi}" : `\\sqrt{\\pi / ${texNum(a)}}`;
+      return {
+        result: `\\int_{-${texNum(L)}}^{${texNum(L)}} e^{-${A}x^2}\\,dx \\approx ${tone(texNum(S, 6), 1)}, \\qquad ${PI} ${approx(full, 6)} ${texNum(full, 6)}`,
+        chart: {
+          type: "hist", label: T(`${n} retângulos sob e^(−${fmt(a)}x²) entre −${fmt(L)} e ${fmt(L)}`, `${n} rectangles under e^(−${fmt(a)}x²) between −${fmt(L)} and ${fmt(L)}`),
+          xLabel: "x", xMin: -R, xMax: R, yMax: 1, bins, pts,
+          binTip: q => [fmt(q.y * dx, 6), T(`retângulo ${q.i + 1}: altura ${fmt(q.y, 4)}`, `rectangle ${q.i + 1}: height ${fmt(q.y, 4)}`)],
+        },
+        steps: [
+          [T("Não há primitiva elementar de e^(−ax²); some retângulos pelo ponto médio:", "e^(−ax²) has no elementary antiderivative; add up rectangles at the midpoint:"),
+            `\\Delta x = \\dfrac{2 \\cdot ${texNum(L)}}{${n}} ${approx(dx, 6)} ${tone(texNum(dx, 6), 4)}, \\qquad \\textstyle\\sum e^{-${A}\\,x_i^2} \\cdot \\Delta x ${approx(S, 6)} ${tone(texNum(S, 6), 1)}`],
+          [T("Fora de [−L, L] a curva quase some: a área exata nesse trecho é", "Outside [−L, L] the curve almost vanishes: the exact area over that stretch is"),
+            `\\int_{-${texNum(L)}}^{${texNum(L)}} e^{-${A}x^2}\\,dx ${approx(finite, 6)} ${texNum(finite, 6)}`],
+          [T("E a área na reta inteira, pelo truque de Gauss (elevar ao quadrado e passar a coordenadas polares):", "And the area over the whole line, by Gauss's trick (square it and switch to polar coordinates):"),
+            `\\int_{-\\infty}^{\\infty} e^{-${A}x^2}\\,dx = ${tone(PI, 2)} ${approx(full, 6)} ${texNum(full, 6)}`],
+        ],
+        note: T(`A soma erra a área entre −${fmt(L)} e ${fmt(L)} por ${fmtSci(S - finite, 2)}, e a cauda além de ±${fmt(L)} vale ${fmtSci(full - finite, 2)}.`
+          + ` Com a = 1/(2σ²) — aqui, σ ≈ ${fmt(sigma, 4)} —, a área √(π/a) vira σ√(2π): é exatamente o número que divide a densidade da <a href="${PAGE("distribuicao-normal")}">distribuição normal</a>, para a área total sob ela dar 1.`
+          + ` Para ver a mesma soma com outras funções, use a <a href="${PAGE("soma-riemann")}">soma de Riemann</a>.`,
+          `The sum misses the area between −${fmt(L)} and ${fmt(L)} by ${fmtSci(S - finite, 2)}, and the tail beyond ±${fmt(L)} is worth ${fmtSci(full - finite, 2)}.`
+          + ` With a = 1/(2σ²) — here, σ ≈ ${fmt(sigma, 4)} — the area √(π/a) becomes σ√(2π): exactly the number that divides the density of the <a href="${PAGE("distribuicao-normal")}">normal distribution</a>, so that the total area under it is 1.`
+          + ` To see the same sum with other functions, use the <a href="${PAGE("soma-riemann")}">Riemann sum</a>.`),
+      };
+    },
+
+    monty({ d, n, seed }) {
+      if (!Number.isInteger(d) || d < 3 || d > 100) return { error: T("O número de portas precisa ser um inteiro entre 3 e 100.", "The number of doors must be an integer between 3 and 100.") };
+      if (!Number.isInteger(n) || n < 1 || n > 100000) return { error: T("O número de jogos precisa ser um inteiro entre 1 e 100.000.", "The number of games must be an integer between 1 and 100,000.") };
+      if (!Number.isInteger(seed) || seed < 0) return { error: T("A semente precisa ser um inteiro não negativo.", "The seed must be a non-negative integer.") };
+      const fica = 1 / d, troca = 1 - fica;
+      const rand = rng(seed);
+      const keep = new Set(Array.from({ length: 400 }, (_, i) => Math.max(1, Math.round(n ** (i / 399)))));
+      const pFica = [], pTroca = [];
+      let wf = 0;
+      for (let k = 1; k <= n; k++) {
+        // O apresentador abre todas as outras portas vazias menos uma: quem
+        // fica ganha só se acertou de primeira; quem troca ganha nos outros casos.
+        const carro = Math.floor(rand() * d), escolha = Math.floor(rand() * d);
+        if (carro === escolha) wf++;
+        if (keep.has(k)) { pFica.push([k, wf / k]); pTroca.push([k, 1 - wf / k]); }
+      }
+      const sf = wf / n, st = 1 - sf;
+      const F = tone(texNum(fica, 4), 3), Tr = tone(texNum(troca, 4), 1);
+      const abre = d - 2;
+      return {
+        result: `P(\\text{${T("ganhar trocando", "win by switching")}}) = 1 - \\dfrac{1}{${tone(d, 2)}} ${approx(troca, 4)} ${tone(pctTex(troca), 1)}`,
+        chart: {
+          type: "curve", label: T(`Fração de vitórias ao longo de ${fmt(n)} jogos com ${d} portas, para quem troca e para quem fica`, `Share of wins over ${fmt(n)} games with ${d} doors, for switching and for staying`),
+          xLabel: T(`jogos, em escala logarítmica · colorida: troca · escura: fica · tracejadas: ${fmt(troca * 100, 1)}% e ${fmt(fica * 100, 1)}%`, `games, on a log scale · colored: switch · dark: stay · dashed: ${fmt(troca * 100, 1)}% and ${fmt(fica * 100, 1)}%`),
+          xMin: 1, xMax: Math.max(n, 2), logX: true, yMin: 0, yMax: 1, pts: pTroca,
+          lines: [{ pts: pFica, cls: "chart-fit" }], hlines: [{ y: troca, cls: "chart-ref" }, { y: fica, cls: "chart-ref" }],
+          tipAt: v => { let j = 0; for (let i = 0; i < pTroca.length; i++) if (Math.abs(pTroca[i][0] - v) < Math.abs(pTroca[j][0] - v)) j = i; return [`${fmt(pTroca[j][1] * 100, 1)}% × ${fmt(pFica[j][1] * 100, 1)}%`, T(`troca × fica, após ${fmt(pTroca[j][0])} jogos`, `switch × stay, after ${fmt(pTroca[j][0])} games`)]; },
+        },
+        steps: [
+          [T(`Sua primeira escolha acerta o carro com chance 1 em ${d}, e nada do que o apresentador faz depois muda isso:`, `Your first pick finds the car with a 1 in ${d} chance, and nothing the host does afterwards changes that:`),
+            `P(\\text{${T("ganhar ficando", "win by staying")}}) = \\dfrac{1}{${d}} ${approx(fica, 4)} ${F}`],
+          [T(`O apresentador, que sabe onde está o carro, abre ${abre} ${abre === 1 ? "porta vazia" : "portas vazias"} entre as outras. Se você errou de primeira, a porta que sobra fechada é o carro:`,
+            `The host, who knows where the car is, opens ${abre} empty door${abre === 1 ? "" : "s"} among the others. If your first pick was wrong, the door left closed is the car:`),
+            `P(\\text{${T("ganhar trocando", "win by switching")}}) = P(\\text{${T("errar de primeira", "first pick wrong")}}) = 1 - \\dfrac{1}{${d}} ${approx(troca, 4)} ${Tr}`],
+          [T(`A simulação jogou ${fmt(n)} vezes:`, `The simulation played ${fmt(n)} times:`),
+            `\\text{${T("ficando", "staying")}}: ${texNum(sf * 100, 2)}\\%, \\qquad \\text{${T("trocando", "switching")}}: ${texNum(st * 100, 2)}\\%`],
+        ],
+        note: T(`Trocar ganha ${fmt(troca * 100, 1)}% das vezes, ${fmt(troca / fica, 2)} vezes mais que ficar. A intuição de “agora é 50%” falha porque o apresentador não abre portas ao acaso: ele evita o carro, e isso concentra na porta que sobra toda a chance das que ele abriu.`
+          + " Se ele abrisse uma porta qualquer e por sorte ela estivesse vazia, aí sim trocar e ficar empatariam."
+          + ` É uma conta de probabilidade condicional, que o <a href="${PAGE("teorema-bayes")}">teorema de Bayes</a> faz formalmente. Com mais portas a vantagem fica gritante: experimente 100.`,
+          `Switching wins ${fmt(troca * 100, 1)}% of the time, ${fmt(troca / fica, 2)} times as often as staying. The “it's 50-50 now” intuition fails because the host doesn't open doors at random: he avoids the car, which concentrates on the remaining door all the chance of the ones he opened.`
+          + " If he opened any door and it just happened to be empty, then switching and staying would be even."
+          + ` It is a conditional probability calculation, which <a href="${PAGE("teorema-bayes")}">Bayes' theorem</a> does formally. With more doors the advantage becomes glaring: try 100.`),
       };
     },
 

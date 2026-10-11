@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">48 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">54 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -81,6 +81,11 @@
             <span class="card-tex" data-tex="P(A) = 1 - \dfrac{d!}{(d-n)!\, d^{\,n}}"></span>
             <span class="card-name">Birthday Problem</span>
             <span class="card-blurb">The chance that two people in a group share a birthday.</span>
+          </a></li>
+          <li><a class="formula-card" href="monty-hall.html">
+            <span class="card-tex" data-tex="P(\text{win by switching}) = 1 - \dfrac{1}{d}"></span>
+            <span class="card-name">Monty Hall Problem</span>
+            <span class="card-blurb">Why switching doors doubles your chance of winning the car.</span>
           </a></li>
           <li><a class="formula-card" href="expected-value.html">
             <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
@@ -292,10 +297,20 @@
             <span class="card-name">Geometric Series</span>
             <span class="card-blurb">The sum of terms multiplied by a fixed ratio, finite or infinite.</span>
           </a></li>
+          <li><a class="formula-card" href="compound-interest-contributions.html">
+            <span class="card-tex" data-tex="M = P(1+i)^n + A \cdot \dfrac{(1+i)^n - 1}{i}"></span>
+            <span class="card-name">Compound Interest with Contributions</span>
+            <span class="card-blurb">What an initial amount plus regular deposits grows to.</span>
+          </a></li>
           <li><a class="formula-card" href="inverse-2x2-matrix.html">
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>
             <span class="card-name">Inverse of a 2×2 Matrix</span>
             <span class="card-blurb">The determinant, the inverse and the solution of a 2 × 2 system.</span>
+          </a></li>
+          <li><a class="formula-card" href="logistic-function.html">
+            <span class="card-tex" data-tex="p = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}"></span>
+            <span class="card-name">Logistic Function and Odds</span>
+            <span class="card-blurb">The S-curve that turns any number into a probability.</span>
           </a></li>
         </ul>
       </section>
@@ -306,6 +321,16 @@
             <span class="card-tex" data-tex="e = \lim_{n \to \infty} \left(1 + \dfrac{1}{n}\right)^n"></span>
             <span class="card-name">The Limit That Defines e</span>
             <span class="card-blurb">Ever more frequent compounding leads to the number e.</span>
+          </a></li>
+          <li><a class="formula-card" href="derivative-definition.html">
+            <span class="card-tex" data-tex="f'(x) = \lim_{h \to 0} \dfrac{f(x+h) - f(x)}{h}"></span>
+            <span class="card-name">Derivative from the Definition</span>
+            <span class="card-blurb">The slope of a curve as a limit of secants.</span>
+          </a></li>
+          <li><a class="formula-card" href="newton-method.html">
+            <span class="card-tex" data-tex="x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}"></span>
+            <span class="card-name">Newton&#x27;s Method</span>
+            <span class="card-blurb">Finds roots by following tangents down to the x axis.</span>
           </a></li>
           <li><a class="formula-card" href="stirling-approximation.html">
             <span class="card-tex" data-tex="n! \approx \sqrt{2\pi n} \left(\dfrac{n}{e}\right)^n"></span>
@@ -326,6 +351,11 @@
             <span class="card-tex" data-tex="\int_a^b f(x)\,dx \approx \sum_{i=1}^{n} f(x_i^*)\,\Delta x"></span>
             <span class="card-name">Riemann Sum</span>
             <span class="card-blurb">The area under a curve, approximated by rectangles.</span>
+          </a></li>
+          <li><a class="formula-card" href="gaussian-integral.html">
+            <span class="card-tex" data-tex="\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}"></span>
+            <span class="card-name">Gaussian Integral</span>
+            <span class="card-blurb">The area under the bell, and where the √(2π) of the normal comes from.</span>
           </a></li>
         </ul>
       </section>

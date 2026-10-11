@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Juros Compostos com Aportes — Interativo</title>
+  <meta name="description" content="Juros compostos com aportes periódicos explicados termo a termo, com calculadora, gráfico do saldo contra o total aportado e passo a passo.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/compound-interest-contributions.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <meta property="og:title" content="Juros Compostos com Aportes — Interativo">
+  <meta property="og:description" content="Juros compostos com aportes periódicos explicados termo a termo, com calculadora, gráfico do saldo contra o total aportado e passo a passo.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Juros Compostos com Aportes — Interativo">
+  <meta name="twitter:description" content="Juros compostos com aportes periódicos explicados termo a termo, com calculadora, gráfico do saldo contra o total aportado e passo a passo.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/compound-interest-contributions.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Juros Compostos com Aportes</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula dos Juros Compostos com Aportes interativa">
+        <span class="part" data-part="m_jur" data-tone="1" data-tex="M"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="p_jur" data-tone="2" data-tex="P"></span>
+        <span class="part" data-part="f_jur" data-tone="4" data-tex="(1 + i)^n"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="a_jur" data-tone="3" data-tex="A"></span>
+        <span class="op">·</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="pg_jur" data-tone="4" data-tex="(1 + i)^n - 1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="i_jur" data-tone="5" data-tex="i"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico do saldo; estado em ?P=&A=&i=&n=. -->
+    <section class="calc" data-calc="aportes" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: você começa com R$ 1.000 e guarda mais R$ 200 todo mês, a 0,8% ao mês. Quanto terá em 10 anos (120 meses), e quanto disso são juros? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Valor inicial <i>P</i></span>
+          <input name="P" type="text" inputmode="decimal" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Aporte por período <i>A</i></span>
+          <input name="A" type="text" inputmode="decimal" value="200" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Taxa por período <i>i</i> (%)</span>
+          <input name="i" type="text" inputmode="decimal" value="0,8" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Períodos <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="120" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="m_jur" data-tone="1">Montante (M)</dt>
+          <dd>O saldo ao fim dos n períodos: o valor inicial e todos os aportes, cada um com os juros do tempo que ficou aplicado.</dd>
+          <dt data-part="p_jur" data-tone="2">Valor Inicial (P)</dt>
+          <dd>O que é aplicado no começo. Fica rendendo os n períodos inteiros.</dd>
+          <dt data-part="f_jur" data-tone="4">Fator de Crescimento ((1 + i)ⁿ)</dt>
+          <dd>Quanto R$ 1 vira depois de n períodos a juros compostos: os juros de cada período passam a render juros nos seguintes.</dd>
+          <dt data-part="a_jur" data-tone="3">Aporte Periódico (A)</dt>
+          <dd>O valor depositado ao fim de cada período. O primeiro rende n − 1 períodos, o último não rende nada.</dd>
+          <dt data-part="pg_jur" data-tone="4">Soma dos Fatores ((1 + i)ⁿ − 1)</dt>
+          <dd>Junto com a divisão por i, soma 1 + (1 + i) + (1 + i)² + … + (1 + i)ⁿ⁻¹: o crescimento de todos os aportes. É a soma de uma progressão geométrica de razão 1 + i.</dd>
+          <dt data-part="i_jur" data-tone="5">Taxa por Período (i)</dt>
+          <dd>A taxa de juros na mesma unidade dos períodos e dos aportes: mensal com aportes mensais, anual com aportes anuais.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="soma-pg.html" rel="prev"><span>Anterior</span>Soma da Progressão Geométrica</a>
+      <a class="pager-next" href="matriz-inversa-2x2.html" rel="next"><span>Próxima</span>Inversa de Matriz 2×2</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Gaussian Integral — Interactive</title>
+  <meta name="description" content="The Gaussian integral, the area under e^(−x²) equal to √π, explained term by term, with a rectangle calculator and the link to the normal distribution.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/gaussian-integral.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/integral-gaussiana.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/gaussian-integral.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/integral-gaussiana.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/gaussian-integral.html">
+  <meta property="og:title" content="Gaussian Integral — Interactive">
+  <meta property="og:description" content="The Gaussian integral, the area under e^(−x²) equal to √π, explained term by term, with a rectangle calculator and the link to the normal distribution.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Gaussian Integral — Interactive">
+  <meta name="twitter:description" content="The Gaussian integral, the area under e^(−x²) equal to √π, explained term by term, with a rectangle calculator and the link to the normal distribution.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/integral-gaussiana.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Gaussian Integral</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive Gaussian integral formula">
+        <span class="part" data-part="int_ga" data-tone="2" data-tex="\int_{-\infty}^{\infty}"></span>
+        <span class="part" data-part="exp_ga" data-tone="3" data-tex="e^{-x^2}\,dx"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="sqrt_ga" data-tone="1" data-tex="\sqrt{\pi}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com retângulos sob a curva; estado em ?a=&L=&n=. -->
+    <section class="calc" data-calc="gauss" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the area under the curve y = e^(−x²) over the whole line is exactly √π ≈ 1.772454. Adding up 12 rectangles between −3 and 3, how close does it get? Change the values to work out your own case, including the a in e^(−ax²).</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span><i>a</i> in <i>e</i><sup>−<i>ax</i>²</sup></span>
+          <input name="a" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Limit <i>L</i> (from −<i>L</i> to <i>L</i>)</span>
+          <input name="L" type="text" inputmode="decimal" value="3" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Rectangles <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="12" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="int_ga" data-tone="2">Integral over the Whole Line</dt>
+          <dd>The area under the curve from −∞ to +∞. The curve falls so fast that almost all the area is near zero: between −3 and 3 lies 99.998% of it.</dd>
+          <dt data-part="exp_ga" data-tone="3">Gaussian Curve (e^(−x²))</dt>
+          <dd>The bell without scaling. It has no antiderivative written with elementary functions, so the area doesn't come out of the usual integration rules.</dd>
+          <dt data-part="sqrt_ga" data-tone="1">Square Root of Pi (√π)</dt>
+          <dd>The exact value, which Gauss got by squaring the integral: it becomes a double integral over the plane, which polar coordinates solve. This is where the √(2π) of the normal distribution comes from.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="riemann-sum.html" rel="prev"><span>Previous</span>Riemann Sum</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Compound Interest with Contributions — Interactive</title>
+  <meta name="description" content="Compound interest with regular contributions explained term by term, with a calculator, a chart of the balance against the total contributed and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/compound-interest-contributions.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/compound-interest-contributions.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/juros-aportes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/compound-interest-contributions.html">
+  <meta property="og:title" content="Compound Interest with Contributions — Interactive">
+  <meta property="og:description" content="Compound interest with regular contributions explained term by term, with a calculator, a chart of the balance against the total contributed and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Compound Interest with Contributions — Interactive">
+  <meta name="twitter:description" content="Compound interest with regular contributions explained term by term, with a calculator, a chart of the balance against the total contributed and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/juros-aportes.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Compound Interest with Contributions</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive compound interest with contributions formula">
+        <span class="part" data-part="m_jur" data-tone="1" data-tex="M"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="p_jur" data-tone="2" data-tex="P"></span>
+        <span class="part" data-part="f_jur" data-tone="4" data-tex="(1 + i)^n"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="a_jur" data-tone="3" data-tex="A"></span>
+        <span class="op">·</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="pg_jur" data-tone="4" data-tex="(1 + i)^n - 1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="i_jur" data-tone="5" data-tex="i"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico do saldo; estado em ?P=&A=&i=&n=. -->
+    <section class="calc" data-calc="aportes" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: you start with $1,000 and save another $200 every month, at 0.8% a month. How much will you have in 10 years (120 months), and how much of it is interest? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Initial amount <i>P</i></span>
+          <input name="P" type="text" inputmode="decimal" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Contribution per period <i>A</i></span>
+          <input name="A" type="text" inputmode="decimal" value="200" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Rate per period <i>i</i> (%)</span>
+          <input name="i" type="text" inputmode="decimal" value="0.8" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Periods <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="120" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="m_jur" data-tone="1">Future Value (M)</dt>
+          <dd>The balance at the end of the n periods: the initial amount and every contribution, each with the interest of the time it stayed invested.</dd>
+          <dt data-part="p_jur" data-tone="2">Initial Amount (P)</dt>
+          <dd>What is invested at the start. It earns interest for all n periods.</dd>
+          <dt data-part="f_jur" data-tone="4">Growth Factor ((1 + i)ⁿ)</dt>
+          <dd>What $1 becomes after n periods of compound interest: each period's interest earns interest in the following ones.</dd>
+          <dt data-part="a_jur" data-tone="3">Regular Contribution (A)</dt>
+          <dd>The amount deposited at the end of each period. The first one earns n − 1 periods of interest, the last one none.</dd>
+          <dt data-part="pg_jur" data-tone="4">Sum of the Factors ((1 + i)ⁿ − 1)</dt>
+          <dd>Together with the division by i, it adds up 1 + (1 + i) + (1 + i)² + … + (1 + i)ⁿ⁻¹: the growth of all the contributions. It is the sum of a geometric series with ratio 1 + i.</dd>
+          <dt data-part="i_jur" data-tone="5">Rate per Period (i)</dt>
+          <dd>The interest rate in the same unit as the periods and the contributions: monthly with monthly contributions, yearly with yearly ones.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="geometric-series.html" rel="prev"><span>Previous</span>Geometric Series</a>
+      <a class="pager-next" href="inverse-2x2-matrix.html" rel="next"><span>Next</span>Inverse of a 2×2 Matrix</a>
+    </nav>
+  </main>
+</body>
+</html>

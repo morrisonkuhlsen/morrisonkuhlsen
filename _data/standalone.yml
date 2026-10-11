@@ -22,6 +22,11 @@
   description: "Correção para população finita explicada termo a termo, com calculadora que reduz o tamanho de amostra e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Derivada pela Definição"
+  url: "/formulas/derivada.html"
+  description: "A derivada como limite do quociente de diferenças, explicada termo a termo, com calculadora, gráfico da secante virando tangente e comparação com o valor exato."
+  tags: "fórmula interativa calculadora passo a passo derivada limite secante tangente inclinação"
+  lang: pt
 - title: "Aproximação de Stirling"
   url: "/formulas/aproximacao-stirling.html"
   description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
@@ -87,6 +92,21 @@
   description: "Fórmula quadrática explicada termo a termo, com calculadora das raízes reais ou complexas e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Função Logística e Chances"
+  url: "/formulas/funcao-logistica.html"
+  description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
+  tags: "fórmula interativa calculadora passo a passo sigmoide regressão logística odds chance"
+  lang: pt
+- title: "Integral Gaussiana"
+  url: "/formulas/integral-gaussiana.html"
+  description: "A integral gaussiana, a área sob e^(−x²) igual a √π, explicada termo a termo, com calculadora por retângulos e a ligação com a distribuição normal."
+  tags: "fórmula interativa calculadora passo a passo integral gaussiana raiz de pi área sob o sino"
+  lang: pt
+- title: "Juros Compostos com Aportes"
+  url: "/formulas/juros-aportes.html"
+  description: "Juros compostos com aportes periódicos explicados termo a termo, com calculadora, gráfico do saldo contra o total aportado e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo juros compostos aportes mensais investimento montante"
+  lang: pt
 - title: "Lei dos Grandes Números"
   url: "/formulas/lei-grandes-numeros.html"
   description: "Lei dos grandes números explicada termo a termo, com simulação de dados e moedas: a média acumulada se aproximando do valor esperado."
@@ -151,6 +171,16 @@
   url: "/formulas/media-harmonica.html"
   description: "Média harmônica explicada termo a termo, com calculadora, passo a passo e comparação com a média aritmética."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Método de Newton"
+  url: "/formulas/metodo-newton.html"
+  description: "Método de Newton para achar raízes explicado termo a termo, com calculadora, tabela das iterações e gráfico das tangentes, conferido com a fórmula quadrática."
+  tags: "fórmula interativa calculadora passo a passo Newton-Raphson raiz equação iteração"
+  lang: pt
+- title: "Problema de Monty Hall"
+  url: "/formulas/monty-hall.html"
+  description: "O problema de Monty Hall explicado termo a termo: por que trocar de porta dobra a chance, com a conta exata e uma simulação que compara quem fica e quem troca."
+  tags: "fórmula interativa calculadora passo a passo Monty Hall portas trocar paradoxo simulação"
   lang: pt
 - title: "Alocação de Neyman"
   url: "/formulas/neyman-allocation.html"
@@ -338,6 +368,11 @@
   description: "The birthday problem explained term by term: the chance that two people in a group share a birthday, with a calculator, a curve, step-by-step working and a simulation."
   tags: "formula interactive calculator birthday paradox probability match complement simulation"
   lang: en
+- title: "Monty Hall Problem"
+  url: "/en/formulas/monty-hall.html"
+  description: "The Monty Hall problem explained term by term: why switching doors doubles the chance, with the exact calculation and a simulation comparing staying and switching."
+  tags: "formula interactive calculator step by step Monty Hall doors switch paradox simulation"
+  lang: en
 - title: "Expected Value"
   url: "/en/formulas/expected-value.html"
   description: "The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus."
@@ -523,15 +558,35 @@
   description: "The sum of a geometric series explained term by term, with a calculator, a chart of the partial sums, the infinite sum and step-by-step working."
   tags: "formula interactive calculator step by step geometric sum infinite series"
   lang: en
+- title: "Compound Interest with Contributions"
+  url: "/en/formulas/compound-interest-contributions.html"
+  description: "Compound interest with regular contributions explained term by term, with a calculator, a chart of the balance against the total contributed and step-by-step working."
+  tags: "formula interactive calculator step by step compound interest monthly contributions investment"
+  lang: en
 - title: "Inverse of a 2×2 Matrix"
   url: "/en/formulas/inverse-2x2-matrix.html"
   description: "The determinant and inverse of a 2×2 matrix explained term by term, with a calculator, solving a system, a chart of the transformation and step-by-step working."
   tags: "formula interactive calculator step by step determinant inverse matrix linear system"
   lang: en
+- title: "Logistic Function and Odds"
+  url: "/en/formulas/logistic-function.html"
+  description: "The logistic function and odds explained term by term, with a calculator, the S-shaped curve and how to read the coefficients of a logistic regression."
+  tags: "formula interactive calculator step by step sigmoid logistic regression odds"
+  lang: en
 - title: "The Limit That Defines e"
   url: "/en/formulas/number-e-limit.html"
   description: "The number e as the limit of (1 + 1/n)ⁿ, explained term by term, with a calculator, a chart of the convergence and the compound interest it came from."
   tags: "formula interactive calculator step by step Euler's number compound interest limit"
+  lang: en
+- title: "Derivative from the Definition"
+  url: "/en/formulas/derivative-definition.html"
+  description: "The derivative as the limit of a difference quotient, explained term by term, with a calculator, a chart of the secant turning into the tangent and a comparison with the exact value."
+  tags: "formula interactive calculator step by step derivative limit secant tangent slope"
+  lang: en
+- title: "Newton's Method"
+  url: "/en/formulas/newton-method.html"
+  description: "Newton's method for finding roots explained term by term, with a calculator, a table of iterations and a chart of the tangents, checked against the quadratic formula."
+  tags: "formula interactive calculator step by step Newton-Raphson root equation iteration"
   lang: en
 - title: "Stirling's Approximation"
   url: "/en/formulas/stirling-approximation.html"
@@ -552,6 +607,11 @@
   url: "/en/formulas/riemann-sum.html"
   description: "The Riemann sum explained term by term, with a calculator, a chart of the rectangles under the curve, a comparison with the exact integral and step-by-step working."
   tags: "formula interactive calculator step by step integral area under the curve rectangles"
+  lang: en
+- title: "Gaussian Integral"
+  url: "/en/formulas/gaussian-integral.html"
+  description: "The Gaussian integral, the area under e^(−x²) equal to √π, explained term by term, with a rectangle calculator and the link to the normal distribution."
+  tags: "formula interactive calculator step by step Gaussian integral square root of pi area under the bell"
   lang: en
 
 - title: "Matemática Básica"

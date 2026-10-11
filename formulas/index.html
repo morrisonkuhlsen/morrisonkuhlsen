@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">48 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">54 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -81,6 +81,11 @@
             <span class="card-tex" data-tex="P(A) = 1 - \dfrac{d!}{(d-n)!\, d^{\,n}}"></span>
             <span class="card-name">Problema do Aniversário</span>
             <span class="card-blurb">A chance de duas pessoas de um grupo fazerem aniversário no mesmo dia.</span>
+          </a></li>
+          <li><a class="formula-card" href="monty-hall.html">
+            <span class="card-tex" data-tex="P(\text{ganhar trocando}) = 1 - \dfrac{1}{d}"></span>
+            <span class="card-name">Problema de Monty Hall</span>
+            <span class="card-blurb">Por que trocar de porta dobra a chance de ganhar o carro.</span>
           </a></li>
           <li><a class="formula-card" href="valor-esperado.html">
             <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
@@ -292,10 +297,20 @@
             <span class="card-name">Soma da Progressão Geométrica</span>
             <span class="card-blurb">Soma de termos que se multiplicam por uma razão fixa, finita ou infinita.</span>
           </a></li>
+          <li><a class="formula-card" href="juros-aportes.html">
+            <span class="card-tex" data-tex="M = P(1+i)^n + A \cdot \dfrac{(1+i)^n - 1}{i}"></span>
+            <span class="card-name">Juros Compostos com Aportes</span>
+            <span class="card-blurb">Quanto rende um valor inicial mais depósitos periódicos.</span>
+          </a></li>
           <li><a class="formula-card" href="matriz-inversa-2x2.html">
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>
             <span class="card-name">Inversa de Matriz 2×2</span>
             <span class="card-blurb">O determinante, a inversa e a solução de um sistema 2 × 2.</span>
+          </a></li>
+          <li><a class="formula-card" href="funcao-logistica.html">
+            <span class="card-tex" data-tex="p = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}"></span>
+            <span class="card-name">Função Logística e Chances</span>
+            <span class="card-blurb">A curva em S que transforma qualquer número numa probabilidade.</span>
           </a></li>
         </ul>
       </section>
@@ -306,6 +321,16 @@
             <span class="card-tex" data-tex="e = \lim_{n \to \infty} \left(1 + \dfrac{1}{n}\right)^n"></span>
             <span class="card-name">O Limite que Define e</span>
             <span class="card-blurb">Juros compostos cada vez mais frequentes levam ao número e.</span>
+          </a></li>
+          <li><a class="formula-card" href="derivada.html">
+            <span class="card-tex" data-tex="f'(x) = \lim_{h \to 0} \dfrac{f(x+h) - f(x)}{h}"></span>
+            <span class="card-name">Derivada pela Definição</span>
+            <span class="card-blurb">A inclinação de uma curva como limite de secantes.</span>
+          </a></li>
+          <li><a class="formula-card" href="metodo-newton.html">
+            <span class="card-tex" data-tex="x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}"></span>
+            <span class="card-name">Método de Newton</span>
+            <span class="card-blurb">Acha raízes seguindo tangentes até o eixo x.</span>
           </a></li>
           <li><a class="formula-card" href="aproximacao-stirling.html">
             <span class="card-tex" data-tex="n! \approx \sqrt{2\pi n} \left(\dfrac{n}{e}\right)^n"></span>
@@ -326,6 +351,11 @@
             <span class="card-tex" data-tex="\int_a^b f(x)\,dx \approx \sum_{i=1}^{n} f(x_i^*)\,\Delta x"></span>
             <span class="card-name">Soma de Riemann</span>
             <span class="card-blurb">A área sob uma curva, aproximada por retângulos.</span>
+          </a></li>
+          <li><a class="formula-card" href="integral-gaussiana.html">
+            <span class="card-tex" data-tex="\int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}"></span>
+            <span class="card-name">Integral Gaussiana</span>
+            <span class="card-blurb">A área sob o sino, e de onde vem o √(2π) da normal.</span>
           </a></li>
         </ul>
       </section>

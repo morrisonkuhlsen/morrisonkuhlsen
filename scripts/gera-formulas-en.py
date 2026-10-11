@@ -206,6 +206,8 @@ def build_index():
         slug, tex = m.group(1), m.group(2)
         if slug == "intervalo-confianca":
             tex = tex.replace("IC =", "CI =")
+        if slug == "monty-hall":
+            tex = tex.replace(r"\text{ganhar trocando}", r"\text{win by switching}")
         if slug == "erro-padrao":
             tex = tex.replace("EP =", "SE =")
         if slug == "simulador-pesquisa":

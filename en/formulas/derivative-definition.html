@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Derivative from the Definition — Interactive</title>
+  <meta name="description" content="The derivative as the limit of a difference quotient, explained term by term, with a calculator, a chart of the secant turning into the tangent and a comparison with the exact value.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/derivative-definition.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/derivada.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/derivative-definition.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/derivada.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/derivative-definition.html">
+  <meta property="og:title" content="Derivative from the Definition — Interactive">
+  <meta property="og:description" content="The derivative as the limit of a difference quotient, explained term by term, with a calculator, a chart of the secant turning into the tangent and a comparison with the exact value.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Derivative from the Definition — Interactive">
+  <meta name="twitter:description" content="The derivative as the limit of a difference quotient, explained term by term, with a calculator, a chart of the secant turning into the tangent and a comparison with the exact value.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/derivada.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Derivative from the Definition</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive derivative definition formula">
+        <span class="part" data-part="d_der" data-tone="1" data-tex="f'(x)"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="lim_der" data-tone="2" data-tex="\lim_{h \to 0}"></span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="num_der" data-tone="3" data-tex="f(x + h) - f(x)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="h_der" data-tone="4" data-tex="h"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com secante e tangente; estado em ?f=&x=&h=. -->
+    <section class="calc" data-calc="derivada" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the slope of y = x² at x = 1 is exactly 2. With a step h = 0.1, what does the secant give? Change the function, the point and the step to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="1">
+          <span>Function</span>
+          <select name="f" autocomplete="off">
+            <option value="x2">x²</option>
+            <option value="x3">x³</option>
+            <option value="exp">eˣ</option>
+            <option value="sin">sin x</option>
+            <option value="ln">ln x</option>
+            <option value="sqrt">√x</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Point <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Step <i>h</i></span>
+          <input name="h" type="text" inputmode="decimal" value="0.1" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="d_der" data-tone="1">Derivative (f′(x))</dt>
+          <dd>The instantaneous rate of change of f at x: the slope of the tangent line to the curve there.</dd>
+          <dt data-part="lim_der" data-tone="2">Limit (h → 0)</dt>
+          <dd>The value the quotient approaches as the step h shrinks to zero. At exactly h = 0 the calculation would be 0/0; the limit gets around that.</dd>
+          <dt data-part="num_der" data-tone="3">Change in f (f(x + h) − f(x))</dt>
+          <dd>How much the function changes when moving h away from x: the vertical side of the triangle under the secant.</dd>
+          <dt data-part="h_der" data-tone="4">Step (h)</dt>
+          <dd>How far to move in x. Dividing the change in f by h gives the slope of the secant, the line through (x, f(x)) and (x + h, f(x + h)).</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="number-e-limit.html" rel="prev"><span>Previous</span>The Limit That Defines e</a>
+      <a class="pager-next" href="newton-method.html" rel="next"><span>Next</span>Newton&#x27;s Method</a>
+    </nav>
+  </main>
+</body>
+</html>
