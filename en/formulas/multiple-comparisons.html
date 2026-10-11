@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Multiple Comparisons and Bonferroni — Interactive</title>
+  <meta name="description" content="Multiple comparisons and the Bonferroni correction explained term by term, with a calculator, a chart and a simulation of false positives across many tests.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/multiple-comparisons.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/comparacoes-multiplas.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/multiple-comparisons.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/comparacoes-multiplas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/multiple-comparisons.html">
+  <meta property="og:title" content="Multiple Comparisons and Bonferroni — Interactive">
+  <meta property="og:description" content="Multiple comparisons and the Bonferroni correction explained term by term, with a calculator, a chart and a simulation of false positives across many tests.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Multiple Comparisons and Bonferroni — Interactive">
+  <meta name="twitter:description" content="Multiple comparisons and the Bonferroni correction explained term by term, with a calculator, a chart and a simulation of false positives across many tests.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/comparacoes-multiplas.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Multiple Comparisons and Bonferroni</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive multiple comparisons formula">
+        <span class="part" data-part="p_mc" data-tone="1" data-tex="P(\text{false positive})"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="one_mc" data-tone="0" data-tex="1"></span>
+        <span class="op">−</span>
+        <span class="part" data-part="all_mc" data-tone="3" data-tex="(1 - \alpha)^k"></span>
+        <span class="op">,</span>
+        <span class="part" data-part="bon_mc" data-tone="4" data-tex="\alpha' = \alpha / k"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com simulação; estado em ?k=&alpha=&seed=. -->
+    <section class="calc" data-calc="multiplas" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a researcher tests 20 hypotheses at 5% significance, and none of them has a real effect. What is the chance that at least one result comes out “significant” anyway? Change the values or draw again.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span>Number of tests <i>k</i></span>
+          <input name="k" type="text" inputmode="numeric" value="20" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Significance <i>α</i> (%)</span>
+          <input name="alpha" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Simulation seed</span>
+          <input name="seed" type="text" inputmode="numeric" value="2026" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="calc-actions">
+        <button type="button" data-reseed="seed">Draw again</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="p_mc" data-tone="1">Chance of At Least One False Positive</dt>
+          <dd>The probability that, among k tests with no real effect, at least one comes out “significant”. Also called the family-wise error rate.</dd>
+          <dt data-part="one_mc" data-tone="0">Complement (1 −)</dt>
+          <dd>Easier than counting the cases with one, two or more false positives is computing the chance of none and subtracting it from 1.</dd>
+          <dt data-part="all_mc" data-tone="3">No False Positive ((1 − α)ᵏ)</dt>
+          <dd>Each test with no effect gets it right with chance 1 − α; with k independent tests, all get it right with chance (1 − α)ᵏ, which shrinks fast.</dd>
+          <dt data-part="bon_mc" data-tone="4">Bonferroni Correction (α′ = α/k)</dt>
+          <dd>Requiring a p-value below α/k in each test keeps the chance of any false positive below α. The price is losing power to find real effects.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="one-way-anova.html" rel="prev"><span>Previous</span>One-Way ANOVA</a>
+      <a class="pager-next" href="standard-error.html" rel="next"><span>Next</span>Standard Error of the Mean</a>
+    </nav>
+  </main>
+</body>
+</html>

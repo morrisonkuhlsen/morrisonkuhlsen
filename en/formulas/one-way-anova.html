@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>One-Way ANOVA — Interactive</title>
+  <meta name="description" content="One-way ANOVA explained term by term, with a calculator for three or more groups, boxplots, the F statistic, p-value and η².">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/one-way-anova.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/anova-um-fator.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/one-way-anova.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/anova-um-fator.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/one-way-anova.html">
+  <meta property="og:title" content="One-Way ANOVA — Interactive">
+  <meta property="og:description" content="One-way ANOVA explained term by term, with a calculator for three or more groups, boxplots, the F statistic, p-value and η².">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="One-Way ANOVA — Interactive">
+  <meta name="twitter:description" content="One-way ANOVA explained term by term, with a calculator for three or more groups, boxplots, the F statistic, p-value and η².">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/anova-um-fator.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">One-Way ANOVA</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive one-way ANOVA formula">
+        <span class="part" data-part="f_an" data-tone="1" data-tex="F"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="ent_an" data-tone="2" data-tex="SS_{\text{between}} / (k - 1)"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="den_an" data-tone="3" data-tex="SS_{\text{within}} / (N - k)"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com um boxplot por grupo; os grupos vão em ?o=, separados por ponto e vírgula. -->
+    <section class="calc" data-calc="anova" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: three fertilizers were tested on five plants each, and the final height, in centimeters, was measured. Does any fertilizer make a difference? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Groups (one per row)</span>
+          <input name="o" type="text" inputmode="decimal" value="20 22 19 24 21; 25 27 24 26 28; 21 23 22 20 24" data-matrix autocomplete="off" spellcheck="false">
+          <small>Values in each group separated by spaces or commas; groups separated by semicolons. Groups may have different sizes.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="f_an" data-tone="1">F Statistic</dt>
+          <dd>The ratio of the variation between groups to the variation within them, each per degree of freedom. Near 1, the means differ as much as chance would explain; well above 1, there is evidence of a difference.</dd>
+          <dt data-part="ent_an" data-tone="2">Between-Group Variation</dt>
+          <dd>The size-weighted sum of the squared distances from each group mean to the grand mean, divided by k − 1, with k groups.</dd>
+          <dt data-part="den_an" data-tone="3">Within-Group Variation</dt>
+          <dd>The sum of the squared distances from each value to its own group's mean, divided by N − k, with N values in all. It is the noise the differences are compared against.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">When to use it, assumptions and alternatives: <a href="/en/statistical-tests/one-way-anova/">one-way ANOVA in the statistical tests catalog</a>.</p>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="paired-t-test.html" rel="prev"><span>Previous</span>Paired t-Test</a>
+      <a class="pager-next" href="multiple-comparisons.html" rel="next"><span>Next</span>Multiple Comparisons and Bonferroni</a>
+    </nav>
+  </main>
+</body>
+</html>

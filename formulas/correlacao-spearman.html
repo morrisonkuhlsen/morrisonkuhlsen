@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Correlação de Spearman — Interativa</title>
+  <meta name="description" content="Correlação de Spearman explicada termo a termo, com calculadora, tabela de postos, comparação com Pearson e pontos arrastáveis.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/correlacao-spearman.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/correlacao-spearman.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/spearman-correlation.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/correlacao-spearman.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/correlacao-spearman.html">
+  <meta property="og:title" content="Correlação de Spearman — Interativa">
+  <meta property="og:description" content="Correlação de Spearman explicada termo a termo, com calculadora, tabela de postos, comparação com Pearson e pontos arrastáveis.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Correlação de Spearman — Interativa">
+  <meta name="twitter:description" content="Correlação de Spearman explicada termo a termo, com calculadora, tabela de postos, comparação com Pearson e pontos arrastáveis.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/spearman-correlation.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Correlação de Spearman</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Correlação de Spearman interativa">
+        <span class="part" data-part="rs" data-tone="1" data-tex="r_s"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="one_rs" data-tone="0" data-tex="1"></span>
+        <span class="op">−</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="d_rs" data-tone="2" data-tex="6 \sum d_i^2"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="n_rs" data-tone="3" data-tex="n(n^2 - 1)"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com dispersão de pontos arrastáveis; estado em ?x=&y=. -->
+    <section class="calc" data-calc="spearman" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um número de seguidores que quase dobra a cada mês: 2, 3, 5, 9, 17, 33 e 65 mil em sete meses. A relação com o tempo é perfeitamente crescente, mas não é uma reta. O que dizem Spearman e Pearson? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Valores de <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1 2 3 4 5 6 7" data-list autocomplete="off" spellcheck="false">
+          <small>Um valor por observação, separados por espaço ou ponto e vírgula.</small>
+        </label>
+        <label class="calc-field wide" data-tone="0">
+          <span>Valores de <i>y</i></span>
+          <input name="y" type="text" inputmode="decimal" value="2 3 5 9 17 33 65" data-list autocomplete="off" spellcheck="false">
+          <small>Na mesma ordem dos valores de x.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="rs" data-tone="1">Correlação de Spearman (rₛ)</dt>
+          <dd>De −1 a 1, mede se y tende a subir (ou descer) quando x sobe, qualquer que seja o formato da relação. É a correlação de Pearson calculada sobre os postos.</dd>
+          <dt data-part="one_rs" data-tone="0">Um Menos a Discordância</dt>
+          <dd>Quando as duas ordens coincidem, todas as diferenças são zero e rₛ = 1. Quanto mais as ordens discordam, mais se subtrai.</dd>
+          <dt data-part="d_rs" data-tone="2">Diferenças de Posto (6Σdᵢ²)</dt>
+          <dd>dᵢ é a diferença entre a posição de xᵢ na ordem dos x e a de yᵢ na ordem dos y. Usar posições, e não valores, faz um valor extremo pesar só como “o maior”.</dd>
+          <dt data-part="n_rs" data-tone="3">Normalização (n(n² − 1))</dt>
+          <dd>O maior valor que 6Σdᵢ² pode chegar a ter, dividido por 2: com ele, ordens exatamente invertidas dão rₛ = −1. Com empates, a fórmula é só aproximada.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">Quando usar, pressupostos e alternativas: <a href="/testes-estatisticos/spearman/">correlação de Spearman no catálogo de testes estatísticos</a>.</p>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="coeficiente-pearson.html" rel="prev"><span>Anterior</span>Coeficiente de Correlação de Pearson (r)</a>
+      <a class="pager-next" href="regressao-linear.html" rel="next"><span>Próxima</span>Regressão Linear Simples</a>
+    </nav>
+  </main>
+</body>
+</html>

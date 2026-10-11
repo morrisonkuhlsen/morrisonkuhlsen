@@ -173,6 +173,9 @@ def build(slug, d):
 CATALOG = {
     "t-student": ("one-sample-t-test", "the one-sample t-test"),
     "t-duas-amostras": ("independent-samples-t-test", "the independent-samples t-test"),
+    "t-pareado": ("paired-t-test", "the paired t-test"),
+    "anova-um-fator": ("one-way-anova", "one-way ANOVA"),
+    "correlacao-spearman": ("spearman-correlation", "Spearman correlation"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
     "coeficiente-pearson": ("pearson-correlation", "Pearson correlation"),
@@ -208,6 +211,12 @@ def build_index():
             tex = tex.replace("IC =", "CI =")
         if slug == "monty-hall":
             tex = tex.replace(r"\text{ganhar trocando}", r"\text{win by switching}")
+        if slug == "comparacoes-multiplas":
+            tex = tex.replace(r"\text{falso positivo}", r"\text{false positive}")
+        if slug == "bootstrap":
+            tex = tex.replace("IC =", "CI =")
+        if slug == "anova-um-fator":
+            tex = tex.replace(r"SQ_{\text{entre}}", r"SS_{\text{between}}").replace(r"SQ_{\text{dentro}}", r"SS_{\text{within}}")
         if slug == "erro-padrao":
             tex = tex.replace("EP =", "SE =")
         if slug == "simulador-pesquisa":

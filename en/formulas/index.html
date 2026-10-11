@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">54 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">59 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -167,6 +167,21 @@
             <span class="card-name">Two-Sample t-Test</span>
             <span class="card-blurb">Compares the means of two independent groups (Welch).</span>
           </a></li>
+          <li><a class="formula-card" href="paired-t-test.html">
+            <span class="card-tex" data-tex="t = \dfrac{\bar{d}}{s_d / \sqrt{n}}"></span>
+            <span class="card-name">Paired t-Test</span>
+            <span class="card-blurb">Compares before and after in the same people.</span>
+          </a></li>
+          <li><a class="formula-card" href="one-way-anova.html">
+            <span class="card-tex" data-tex="F = \dfrac{SS_{\text{between}} / (k - 1)}{SS_{\text{within}} / (N - k)}"></span>
+            <span class="card-name">One-Way ANOVA</span>
+            <span class="card-blurb">Compares the means of three or more groups.</span>
+          </a></li>
+          <li><a class="formula-card" href="multiple-comparisons.html">
+            <span class="card-tex" data-tex="P(\text{false positive}) = 1 - (1 - \alpha)^k"></span>
+            <span class="card-name">Multiple Comparisons and Bonferroni</span>
+            <span class="card-blurb">Why many tests find effects that aren&#x27;t there.</span>
+          </a></li>
           <li><a class="formula-card" href="standard-error.html">
             <span class="card-tex" data-tex="SE = \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Standard Error of the Mean</span>
@@ -176,6 +191,11 @@
             <span class="card-tex" data-tex="CI = \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Confidence Interval</span>
             <span class="card-blurb">A range of plausible values for the population mean.</span>
+          </a></li>
+          <li><a class="formula-card" href="bootstrap.html">
+            <span class="card-tex" data-tex="CI = \left[\hat{\theta}^*_{(\alpha/2)};\ \hat{\theta}^*_{(1-\alpha/2)}\right]"></span>
+            <span class="card-name">Bootstrap</span>
+            <span class="card-blurb">A confidence interval by resampling, with no standard-error formula.</span>
           </a></li>
           <li><a class="formula-card" href="statistical-power.html">
             <span class="card-tex" data-tex="n = \dfrac{g \cdot (z_{\alpha/2} + z_{\beta})^2}{d^2}"></span>
@@ -261,6 +281,11 @@
             <span class="card-tex" data-tex="r_{xy} = \dfrac{Cov(X,Y)}{\sigma_x \cdot \sigma_y}"></span>
             <span class="card-name">Pearson Correlation Coefficient (r)</span>
             <span class="card-blurb">Strength and direction of a linear relationship, from −1 to 1.</span>
+          </a></li>
+          <li><a class="formula-card" href="spearman-correlation.html">
+            <span class="card-tex" data-tex="r_s = 1 - \dfrac{6 \sum d_i^2}{n(n^2 - 1)}"></span>
+            <span class="card-name">Spearman Correlation</span>
+            <span class="card-blurb">Correlation by ranks: catches increasing relationships that aren&#x27;t straight.</span>
           </a></li>
           <li><a class="formula-card" href="linear-regression.html">
             <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>

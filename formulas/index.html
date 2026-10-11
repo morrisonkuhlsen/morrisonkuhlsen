@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">54 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">59 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -167,6 +167,21 @@
             <span class="card-name">Teste t para Duas Amostras</span>
             <span class="card-blurb">Compara as médias de dois grupos independentes (Welch).</span>
           </a></li>
+          <li><a class="formula-card" href="t-pareado.html">
+            <span class="card-tex" data-tex="t = \dfrac{\bar{d}}{s_d / \sqrt{n}}"></span>
+            <span class="card-name">Teste t Pareado</span>
+            <span class="card-blurb">Compara antes e depois nas mesmas pessoas.</span>
+          </a></li>
+          <li><a class="formula-card" href="anova-um-fator.html">
+            <span class="card-tex" data-tex="F = \dfrac{SQ_{\text{entre}} / (k - 1)}{SQ_{\text{dentro}} / (N - k)}"></span>
+            <span class="card-name">ANOVA de Um Fator</span>
+            <span class="card-blurb">Compara as médias de três ou mais grupos.</span>
+          </a></li>
+          <li><a class="formula-card" href="comparacoes-multiplas.html">
+            <span class="card-tex" data-tex="P(\text{falso positivo}) = 1 - (1 - \alpha)^k"></span>
+            <span class="card-name">Comparações Múltiplas e Bonferroni</span>
+            <span class="card-blurb">Por que muitos testes acham efeitos que não existem.</span>
+          </a></li>
           <li><a class="formula-card" href="erro-padrao.html">
             <span class="card-tex" data-tex="EP = \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Erro Padrão da Média</span>
@@ -176,6 +191,11 @@
             <span class="card-tex" data-tex="IC = \bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}"></span>
             <span class="card-name">Intervalo de Confiança</span>
             <span class="card-blurb">Faixa de valores plausíveis para a média populacional.</span>
+          </a></li>
+          <li><a class="formula-card" href="bootstrap.html">
+            <span class="card-tex" data-tex="IC = \left[\hat{\theta}^*_{(\alpha/2)};\ \hat{\theta}^*_{(1-\alpha/2)}\right]"></span>
+            <span class="card-name">Bootstrap</span>
+            <span class="card-blurb">Intervalo de confiança por reamostragem, sem fórmula de erro padrão.</span>
           </a></li>
           <li><a class="formula-card" href="poder-estatistico.html">
             <span class="card-tex" data-tex="n = \dfrac{g \cdot (z_{\alpha/2} + z_{\beta})^2}{d^2}"></span>
@@ -261,6 +281,11 @@
             <span class="card-tex" data-tex="r_{xy} = \dfrac{Cov(X,Y)}{\sigma_x \cdot \sigma_y}"></span>
             <span class="card-name">Coeficiente de Correlação de Pearson (r)</span>
             <span class="card-blurb">Força e direção da relação linear, de −1 a 1.</span>
+          </a></li>
+          <li><a class="formula-card" href="correlacao-spearman.html">
+            <span class="card-tex" data-tex="r_s = 1 - \dfrac{6 \sum d_i^2}{n(n^2 - 1)}"></span>
+            <span class="card-name">Correlação de Spearman</span>
+            <span class="card-blurb">Correlação pelos postos: capta relações crescentes que não são retas.</span>
           </a></li>
           <li><a class="formula-card" href="regressao-linear.html">
             <span class="card-tex" data-tex="\hat{y} = \beta_0 + \beta_1 x"></span>

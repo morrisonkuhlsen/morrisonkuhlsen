@@ -30,7 +30,7 @@
     "problema-aniversario": "birthday-problem", "qui-quadrado-independencia": "chi-square-independence",
     "desvio-padrao": "standard-deviation", "valor-esperado": "expected-value", "erro-padrao": "standard-error",
     "formula-quadratica": "quadratic-formula", "soma-pg": "geometric-series", "razao-chances": "odds-ratio",
-    "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum",
+    "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum", "t-duas-amostras": "two-sample-t-test",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -475,6 +475,17 @@
     return `${fmt(x / 10 ** e, 3)} × 10${String(e).replace(/./g, c => SUP[c])}`;
   };
   const pctTex = (x, d = 2) => `${texSci(x * 100, d)}\\%`;
+
+  // Resumo de um boxplot: quartis pelo método 7 (o do R), bigodes até o
+  // último valor dentro de 1,5 · IQR e os atípicos.
+  function boxStats(xs) {
+    const s = xs.slice().sort((p, q) => p - q), n = s.length;
+    const q = p => { const h = (n - 1) * p, lo = Math.floor(h); return s[lo] + (h - lo) * ((s[lo + 1] ?? s[lo]) - s[lo]); };
+    const q1 = q(0.25), q2 = q(0.5), q3 = q(0.75), iqr = q3 - q1;
+    const f1 = q1 - 1.5 * iqr, f2 = q3 + 1.5 * iqr;
+    const inside = s.filter(v => v >= f1 && v <= f2);
+    return { q1, q2, q3, iqr, f1, f2, wLo: Math.min(...inside), wHi: Math.max(...inside), out: s.filter(v => v < f1 || v > f2) };
+  }
 
   // Em escala log, para n grande não estourar nem zerar no meio da conta.
   function binPmf(n, p, k) {
@@ -2190,6 +2201,269 @@
       };
     },
 
+    anova({ o }) {
+      const k = o.length;
+      if (k < 2) return { error: T("Informe pelo menos dois grupos, um por linha, separados por ponto e vírgula.", "Enter at least two groups, one per row, separated by semicolons.") };
+      if (k > 12) return { error: T("Use no máximo 12 grupos.", "Use at most 12 groups.") };
+      if (o.some(g => g.length < 2)) return { error: T("Cada grupo precisa de pelo menos dois valores.", "Each group needs at least two values.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const N = sum(o.map(g => g.length));
+      if (N > 2000) return { error: T("Use no máximo 2.000 valores ao todo.", "Use at most 2,000 values in all.") };
+      const ns = o.map(g => g.length), means = o.map(g => sum(g) / g.length);
+      const grand = sum(o.map(sum)) / N;
+      const sqe = sum(ns.map((n, i) => n * (means[i] - grand) ** 2));
+      const sqdg = o.map((g, i) => sum(g.map(v => (v - means[i]) ** 2)));
+      const sqd = sum(sqdg), sqt = sqe + sqd;
+      const df1 = k - 1, df2 = N - k;
+      if (sqd === 0) return { error: T("Não há variação dentro dos grupos: todos os valores de cada grupo são iguais.", "There is no variation within the groups: every value in each group is the same.") };
+      const qme = sqe / df1, qmd = sqd / df2, F = qme / qmd;
+      const p = betainc(df2 / (df2 + df1 * F), df2 / 2, df1 / 2);
+      const eta = sqe / sqt;
+      const all = o.flat(), lo = Math.min(...all), hi = Math.max(...all), span = hi - lo || 1;
+      const boxes = o.map((g, i) => ({ ...boxStats(g), label: `${T("Grupo", "Group")} ${i + 1}` }));
+      const SE = tone(texNum(sqe), 2), SD = tone(texNum(sqd), 3), Fv = tone(texNum(F), 1);
+      const groupRows = o.map((g, i) => `${i + 1} & ${ns[i]} & ${texNum(means[i])} & ${texNum(sqdg[i])}`).join(" \\\\ ");
+      const veredito = p < 0.05
+        ? T("Ao nível de 5%, rejeita-se H₀: pelo menos uma média difere das outras. A ANOVA não diz qual; para isso há os testes de comparações múltiplas, como o de Tukey.",
+          "At the 5% level, H₀ is rejected: at least one mean differs from the others. ANOVA doesn't say which; that is what multiple-comparison tests such as Tukey's are for.")
+        : T("Ao nível de 5%, não se rejeita H₀: as diferenças entre as médias são compatíveis com o acaso.", "At the 5% level, H₀ is not rejected: the differences between the means are consistent with chance.");
+      return {
+        result: `F ${approx(F)} ${Fv}, \\qquad \\text{${T("valor-p", "p-value")}} ${p < 0.0001 ? "< 0{,}0001".replace("{,}", EN ? "." : "{,}") : `${approx(p, 4)} ${texNum(p, 4)}`}`,
+        chart: {
+          type: "box", height: Math.min(360, 60 + k * 50), xMin: lo - span * 0.06, xMax: hi + span * 0.06, boxes, truth: grand,
+          label: T(`Boxplot de cada um dos ${k} grupos, com a média geral ${fmt(grand)} marcada`, `Boxplot of each of the ${k} groups, with the grand mean ${fmt(grand)} marked`),
+          xLabel: T(`valores · um boxplot por grupo, de cima para baixo · linha vertical: média geral`, `values · one boxplot per group, top to bottom · vertical line: grand mean`),
+          tip: null,
+        },
+        steps: [
+          [T("Calcule o tamanho, a média e a soma dos quadrados dentro de cada grupo:", "Compute the size, mean and within sum of squares of each group:"),
+            `\\begin{array}{c|c|c|c} ${T("\\text{grupo}", "\\text{group}")} & n_i & \\bar{x}_i & \\sum (x - \\bar{x}_i)^2 \\\\ \\hline ${groupRows} \\\\ \\hline & ${N} & \\bar{x} = ${texNum(grand)} & ${SD} \\end{array}`],
+          [T("A variação entre grupos mede o quanto as médias se afastam da média geral:", "The between-group variation measures how far the means are from the grand mean:"),
+            `${T("SQ", "SS")}_{\\text{${T("entre", "between")}}} = \\textstyle\\sum n_i (\\bar{x}_i - \\bar{x})^2 ${approx(sqe)} ${SE}`],
+          [T("Divida cada soma pelos seus graus de liberdade e faça a razão:", "Divide each sum by its degrees of freedom and take the ratio:"),
+            `F = \\dfrac{${SE} / ${df1}}{${SD} / ${df2}} = \\dfrac{${texNum(qme)}}{${texNum(qmd)}} ${approx(F)} ${Fv}`],
+        ],
+        note: T(`Com ${df1} e ${df2} graus de liberdade, o valor-p é ${pValueText(p)}. ${veredito}`
+          + ` As diferenças entre grupos explicam η² ≈ ${fmt(eta * 100, 1)}% da variação total.`
+          + ` O valor crítico também pode ser lido na <a href="/ftable.html">tabela F</a>. Com só dois grupos, a ANOVA equivale ao teste t com variâncias iguais: F = t².`,
+          `With ${df1} and ${df2} degrees of freedom, the p-value is ${pValueText(p)}. ${veredito}`
+          + ` Differences between groups explain η² ≈ ${fmt(eta * 100, 1)}% of the total variation.`
+          + ` The critical value can also be read from the <a href="/ftable.html">F table</a>. With only two groups, ANOVA is equivalent to the equal-variance t-test: F = t².`),
+      };
+    },
+
+    tpar({ x, y }) {
+      if (x.length !== y.length) return { error: T(`Há ${x.length} valores antes e ${y.length} depois; cada pessoa precisa dos dois.`, `There are ${x.length} values before and ${y.length} after; each person needs both.`) };
+      const n = x.length;
+      if (n < 2) return { error: T("Informe pelo menos dois pares.", "Enter at least two pairs.") };
+      if (n > 500) return { error: T("Use no máximo 500 pares.", "Use at most 500 pairs.") };
+      const sum = a => a.reduce((s, v) => s + v, 0);
+      const d = y.map((v, i) => v - x[i]);
+      const md = sum(d) / n, sd = Math.sqrt(sum(d.map(v => (v - md) ** 2)) / (n - 1));
+      if (sd === 0) return { error: T("Todas as diferenças são iguais: sem variação, o teste não se aplica.", "All the differences are equal: with no variation, the test doesn't apply.") };
+      const se = sd / Math.sqrt(n), t = md / se, df = n - 1;
+      const p = tTwoTail(Math.abs(t), df), tc = tCrit(0.05, df);
+      // O teste errado, tratando antes e depois como grupos independentes (Welch).
+      const mx = sum(x) / n, my = sum(y) / n;
+      const vx = sum(x.map(v => (v - mx) ** 2)) / (n - 1), vy = sum(y.map(v => (v - my) ** 2)) / (n - 1);
+      const seW = Math.sqrt(vx / n + vy / n), tW = (my - mx) / seW;
+      const dfW = (vx / n + vy / n) ** 2 / ((vx / n) ** 2 / (n - 1) + (vy / n) ** 2 / (n - 1));
+      const pW = tTwoTail(Math.abs(tW), dfW);
+      const lo = Math.min(0, ...d), hi = Math.max(0, ...d), pad = (hi - lo) * 0.08 || 1;
+      const table = n > MAX_TABLE
+        ? T(`\\text{(${n} pares: a tabela ficaria longa demais)}`, `\\text{(${n} pairs: the table would be too long)}`)
+        : `\\begin{array}{c|c|c|c} i & ${T("\\text{antes}", "\\text{before}")} & ${T("\\text{depois}", "\\text{after}")} & d_i \\\\ \\hline `
+          + x.map((v, i) => `${i + 1} & ${texNum(v)} & ${texNum(y[i])} & ${tone(texNum(d[i]), 2)}`).join(" \\\\ ") + " \\end{array}";
+      const SE = tone(texNum(se), 3);
+      return {
+        result: `t ${approx(t)} ${tone(texNum(t), 1)}, \\qquad ${T("gl", "df")} = ${df}`,
+        chart: {
+          type: "intervals", height: Math.max(150, Math.min(320, 50 + n * 22)),
+          label: T("A diferença de cada pessoa, de zero até o valor dela; destacadas as que diminuíram", "Each person's difference, from zero to its value; the decreases highlighted"),
+          xLabel: T("diferença depois − antes · linha vertical: zero · destaque: diminuiu", "difference after − before · vertical line: zero · highlighted: decreased"),
+          xMin: lo - pad, xMax: hi + pad, truth: 0,
+          rows: d.map(v => ({ lo: Math.min(0, v), hi: Math.max(0, v), hit: v >= 0 })),
+          tip: (r, i) => [fmt(d[i]), T(`pessoa ${i + 1}: de ${fmt(x[i])} para ${fmt(y[i])}`, `person ${i + 1}: from ${fmt(x[i])} to ${fmt(y[i])}`)],
+        },
+        steps: [
+          [T("Calcule a diferença de cada pessoa, depois menos antes:", "Compute each person's difference, after minus before:"), table],
+          [T("Tire a média e o desvio padrão das diferenças:", "Take the mean and standard deviation of the differences:"),
+            `\\bar{d} ${approx(md)} ${tone(texNum(md), 2)}, \\qquad s_d ${approx(sd)} ${texNum(sd)}`],
+          [T("Divida a média pelo erro padrão, como num teste t de uma amostra:", "Divide the mean by its standard error, as in a one-sample t-test:"),
+            `t = \\dfrac{${tone(texNum(md), 2)}}{${texNum(sd)} / \\sqrt{${n}}} = \\dfrac{${tone(texNum(md), 2)}}{${SE}} ${approx(t)} ${tone(texNum(t), 1)}`],
+        ],
+        note: T(`Com ${dof(df)}, o valor-p bilateral é ${pValueText(p)}; ${p < 0.05 ? "a mudança média é significativa a 5%" : "a mudança média não é significativa a 5%"}.`
+          + ` O intervalo de 95% para a mudança média vai de ${fmt(md - tc * se)} a ${fmt(md + tc * se)}.`
+          + ` Se os mesmos dados fossem tratados, por engano, como dois grupos independentes, o <a href="${PAGE("t-duas-amostras")}">teste de Welch</a> daria t ≈ ${fmt(tW, 3)} e p ≈ ${fmt(pW, 4)}:`
+          + " a variação entre pessoas, que o pareamento elimina, voltaria a esconder a mudança.",
+          `With ${dof(df)}, the two-sided p-value is ${pValueText(p)}; ${p < 0.05 ? "the mean change is significant at 5%" : "the mean change is not significant at 5%"}.`
+          + ` The 95% interval for the mean change runs from ${fmt(md - tc * se)} to ${fmt(md + tc * se)}.`
+          + ` If the same data were wrongly treated as two independent groups, <a href="${PAGE("t-duas-amostras")}">Welch's test</a> would give t ≈ ${fmt(tW, 3)} and p ≈ ${fmt(pW, 4)}:`
+          + " the variation between people, which pairing removes, would hide the change again."),
+      };
+    },
+
+    spearman({ x, y }) {
+      const d0 = paired(x, y, v => `\\bar{${v}}`);
+      if (d0.error) return d0;
+      const n = x.length;
+      const rank = a => {
+        const idx = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]);
+        const r = new Array(a.length);
+        for (let i = 0; i < idx.length;) {
+          let j = i; while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
+          for (let m = i; m <= j; m++) r[idx[m][1]] = (i + j) / 2 + 1;
+          i = j + 1;
+        }
+        return r;
+      };
+      const rx = rank(x), ry = rank(y);
+      const corr = (a, b) => { const ma = a.reduce((s, v) => s + v, 0) / a.length, mb = b.reduce((s, v) => s + v, 0) / b.length;
+        let sab = 0, saa = 0, sbb = 0; a.forEach((v, i) => { sab += (v - ma) * (b[i] - mb); saa += (v - ma) ** 2; sbb += (b[i] - mb) ** 2; });
+        return saa && sbb ? sab / Math.sqrt(saa * sbb) : NaN; };
+      const rs = corr(rx, ry), rp = corr(x, y);
+      if (!Number.isFinite(rs)) return { error: T("Todos os valores de x ou de y são iguais: não há ordem para correlacionar.", "All the x or y values are equal: there is no order to correlate.") };
+      const dd = rx.map((v, i) => v - ry[i]), sd2 = dd.reduce((s, v) => s + v * v, 0);
+      const ties = new Set(x).size < n || new Set(y).size < n;
+      const short = 1 - 6 * sd2 / (n * (n * n - 1));
+      const tS = n > 2 && Math.abs(rs) < 1 ? rs * Math.sqrt((n - 2) / (1 - rs * rs)) : Infinity;
+      const p = n > 2 ? (Number.isFinite(tS) ? tTwoTail(Math.abs(tS), n - 2) : 0) : NaN;
+      const table = n > MAX_TABLE
+        ? T(`\\textstyle\\sum d_i^2 = ${texNum(sd2)} \\quad \\text{(${n} pares: a tabela ficaria longa demais)}`, `\\textstyle\\sum d_i^2 = ${texNum(sd2)} \\quad \\text{(${n} pairs: the table would be too long)}`)
+        : `\\begin{array}{c|c|c|c|c|c} x_i & ${T("\\text{posto}", "\\text{rank}")}(x_i) & y_i & ${T("\\text{posto}", "\\text{rank}")}(y_i) & d_i & d_i^2 \\\\ \\hline `
+          + x.map((v, i) => `${texNum(v)} & ${texNum(rx[i])} & ${texNum(y[i])} & ${texNum(ry[i])} & ${texNum(dd[i])} & ${texNum(dd[i] ** 2)}`).join(" \\\\ ")
+          + ` \\\\ \\hline & & & & & ${tone(texNum(sd2), 2)} \\end{array}`;
+      const pad = (a, b) => { const s = b - a || Math.abs(b) || 1; return [a - s * 0.12, b + s * 0.12]; };
+      const [xMin, xMax] = pad(Math.min(...x), Math.max(...x));
+      const [yMin, yMax] = pad(Math.min(...y), Math.max(...y));
+      return {
+        result: `r_s ${approx(rs)} ${tone(texNum(rs), 1)}, \\qquad r_{\\text{Pearson}} ${approx(rp)} ${texNum(rp)}`,
+        chart: {
+          type: "scatter", height: 300, xMin, xMax, yMin, yMax, pred: null,
+          dots: x.map((v, i) => [v, y[i]]), fields: ["x", "y"],
+          label: T("Pontos (x, y) com a reta de Pearson", "Points (x, y) with the Pearson line"), xLabel: "x",
+          hint: T("Arraste um ponto para bem longe dos outros e compare: a correlação de Pearson despenca, a de Spearman quase não muda. Toque num espaço vazio para acrescentar um ponto; pelo teclado, as setas movem o ponto em foco e Delete o remove.",
+            "Drag one point far away from the rest and compare: Pearson's correlation plunges, Spearman's barely moves. Tap an empty spot to add a point; with the keyboard, the arrows move the focused point and Delete removes it."),
+        },
+        steps: [
+          [T("Troque cada valor pela sua posição na ordem (o posto); empates recebem a média das posições. Depois, subtraia os postos de cada par:", "Replace each value by its position in order (its rank); ties get the average of their positions. Then subtract the ranks in each pair:"), table],
+          [ties
+            ? T("Com empates, a fórmula curta é só uma aproximação; o valor exato é a correlação de Pearson calculada sobre os postos:", "With ties, the short formula is only an approximation; the exact value is Pearson's correlation computed on the ranks:")
+            : T("Aplique a fórmula:", "Apply the formula:"),
+            `1 - \\dfrac{6 \\cdot ${tone(texNum(sd2), 2)}}{${tone(n, 3)}(${n}^2 - 1)} ${approx(short)} ${texNum(short)}${ties ? `, \\qquad r_s ${approx(rs)} ${tone(texNum(rs), 1)}` : ""}`],
+        ],
+        note: T(`Spearman mede se y sobe (ou desce) junto com x, de qualquer forma; Pearson, se sobe em linha reta.`
+          + ` Aqui, r_s ≈ ${fmt(rs, 3)} e r ≈ ${fmt(rp, 3)}${Math.abs(rs) - Math.abs(rp) > 0.05 ? ": a relação é monótona, mas não é uma reta" : ""}.`
+          + (n > 2 ? ` Pela aproximação t com ${n - 2} graus de liberdade, o valor-p é ${Number.isFinite(p) ? pValueText(p) : "0"}.` : "")
+          + ` Veja a <a href="${d0.link(PAGE("coeficiente-pearson"))}">correlação de Pearson com estes dados</a>.`,
+          `Spearman measures whether y rises (or falls) along with x, in any shape; Pearson, whether it rises in a straight line.`
+          + ` Here, r_s ≈ ${fmt(rs, 3)} and r ≈ ${fmt(rp, 3)}${Math.abs(rs) - Math.abs(rp) > 0.05 ? ": the relationship is monotonic, but not a straight line" : ""}.`
+          + (n > 2 ? ` By the t approximation with ${n - 2} degrees of freedom, the p-value is ${Number.isFinite(p) ? pValueText(p) : "0"}.` : "")
+          + ` See the <a href="${d0.link(PAGE("coeficiente-pearson"))}">Pearson correlation with these data</a>.`),
+      };
+    },
+
+    multiplas({ k, alpha, seed }) {
+      if (!Number.isInteger(k) || k < 1 || k > 1000) return { error: T("O número de testes precisa ser um inteiro entre 1 e 1.000.", "The number of tests must be an integer between 1 and 1,000.") };
+      if (alpha <= 0 || alpha >= 100) return { error: T("O nível de significância precisa estar entre 0 e 100%, como 5.", "The significance level must be between 0 and 100%, such as 5.") };
+      if (!Number.isInteger(seed) || seed < 0) return { error: T("A semente precisa ser um inteiro não negativo.", "The seed must be a non-negative integer.") };
+      const a = alpha / 100, fw = 1 - (1 - a) ** k, ab = a / k, fwB = 1 - (1 - ab) ** k;
+      const top = Math.max(50, Math.min(1000, 2 * k));
+      const ptsN = Array.from({ length: 200 }, (_, i) => { const m = 1 + (top - 1) * i / 199; return [m, (1 - (1 - a) ** m) * 100]; });
+      const ptsB = ptsN.map(([m]) => [m, (1 - (1 - a / m) ** m) * 100]);
+      // Simulação: 1.000 estudos, cada um com k testes em que nada acontece
+      // de verdade; sob H₀ o valor-p é uniforme entre 0 e 1.
+      const rand = rng(seed), S = 1000;
+      let hit = 0, hitB = 0;
+      for (let s = 0; s < S; s++) {
+        let mn = 1;
+        for (let j = 0; j < k; j++) mn = Math.min(mn, rand());
+        if (mn < a) hit++;
+        if (mn < ab) hitB++;
+      }
+      const A = tone(texNum(a, 4), 2);
+      return {
+        result: `P(\\text{${T("pelo menos um falso positivo", "at least one false positive")}}) ${approx(fw, 4)} ${tone(pctTex(fw), 1)}`,
+        chart: {
+          type: "curve", label: T(`Chance de pelo menos um falso positivo conforme o número de testes, com α = ${fmt(alpha)}%, sem e com a correção de Bonferroni`, `Chance of at least one false positive by number of tests, with α = ${fmt(alpha)}%, without and with the Bonferroni correction`),
+          xLabel: T(`número de testes · colorida: sem correção · escura: com Bonferroni · tracejada: ${fmt(alpha)}%`, `number of tests · colored: uncorrected · dark: with Bonferroni · dashed: ${fmt(alpha)}%`),
+          xMin: 1, xMax: top, yMin: 0, yMax: 100, pts: ptsN, lines: [{ pts: ptsB, cls: "chart-fit" }], hlines: [{ y: alpha, cls: "chart-ref" }],
+          marker: k <= top ? [k, fw * 100] : null,
+          tipAt: m => { const kk = Math.max(1, Math.round(m)); return [`${fmt((1 - (1 - a) ** kk) * 100, 1)}%`, T(`com ${kk} testes; com Bonferroni, ${fmt((1 - (1 - a / kk) ** kk) * 100, 2)}%`, `with ${kk} tests; with Bonferroni, ${fmt((1 - (1 - a / kk) ** kk) * 100, 2)}%`)]; },
+        },
+        steps: [
+          [T(`Num teste sem efeito real, a chance de não dar falso positivo é 1 − α. Com ${k} testes independentes, todos precisam acertar:`, `In a test with no real effect, the chance of no false positive is 1 − α. With ${k} independent tests, all must get it right:`),
+            `(1 - ${A})^{${k}} ${approx(1 - fw, 4)} ${tone(texNum(1 - fw, 4), 3)}`],
+          [T("A chance de pelo menos um falso positivo é o complemento:", "The chance of at least one false positive is the complement:"),
+            `1 - ${tone(texNum(1 - fw, 4), 3)} ${approx(fw, 4)} ${tone(pctTex(fw), 1)}`],
+          [T(`Bonferroni divide o nível pelo número de testes; a chance de algum falso positivo volta a ficar abaixo de α:`, `Bonferroni divides the level by the number of tests; the chance of any false positive goes back below α:`),
+            `\\alpha' = \\dfrac{${texNum(a, 4)}}{${k}} ${approx(ab, 6)} ${tone(texSci(ab, 4), 4)}, \\qquad 1 - (1 - \\alpha')^{${k}} ${approx(fwB, 4)} ${pctTex(fwB)}`],
+          [T(`A simulação fez ${fmt(S)} estudos de ${k} testes, todos sem efeito nenhum:`, `The simulation ran ${fmt(S)} studies of ${k} tests, all with no effect at all:`),
+            `\\text{${T("sem correção", "uncorrected")}}: ${texNum(hit / S * 100, 1)}\\%, \\qquad \\text{${T("com Bonferroni", "with Bonferroni")}}: ${texNum(hitB / S * 100, 1)}\\%`],
+        ],
+        note: T(`Fazendo ${k} testes a ${fmt(alpha)}% sem que nada esteja acontecendo, ${fmt(fw * 100, 1)}% das vezes ao menos um sai “significativo” por puro acaso — é assim que nascem muitas descobertas que não se repetem.`
+          + " Bonferroni resolve exigindo valor-p abaixo de α/k em cada teste. É simples e seguro, mas conservador: com muitos testes, perde a capacidade de achar efeitos reais."
+          + " Alternativas menos rígidas são o método de Holm e, para controlar a proporção de falsos positivos entre os achados, o de Benjamini–Hochberg.",
+          `Running ${k} tests at ${fmt(alpha)}% when nothing is going on, ${fmt(fw * 100, 1)}% of the time at least one comes out “significant” by pure chance — this is how many findings that fail to replicate are born.`
+          + " Bonferroni fixes it by requiring a p-value below α/k in each test. It is simple and safe, but conservative: with many tests, it loses the power to find real effects."
+          + " Less rigid alternatives are Holm's method and, to control the share of false positives among the findings, Benjamini–Hochberg's."),
+      };
+    },
+
+    bootstrap({ x, stat, B, conf, seed }) {
+      const n = x.length;
+      if (n < 3) return { error: T("Informe pelo menos três valores.", "Enter at least three values.") };
+      if (n > 1000) return { error: T("Use no máximo 1.000 valores.", "Use at most 1,000 values.") };
+      if (!Number.isInteger(B) || B < 100 || B > 20000) return { error: T("O número de reamostragens precisa ser um inteiro entre 100 e 20.000.", "The number of resamples must be an integer between 100 and 20,000.") };
+      if (conf <= 0 || conf >= 100) return confError;
+      if (!Number.isInteger(seed) || seed < 0) return { error: T("A semente precisa ser um inteiro não negativo.", "The seed must be a non-negative integer.") };
+      const media = stat === "media";
+      const f = a => { if (media) return a.reduce((s, v) => s + v, 0) / a.length; const s = a.slice().sort((p, q) => p - q), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+      const theta = f(x);
+      const rand = rng(seed);
+      const boot = new Float64Array(B), buf = new Array(n);
+      for (let b = 0; b < B; b++) { for (let i = 0; i < n; i++) buf[i] = x[Math.floor(rand() * n)]; boot[b] = f(buf); }
+      const sorted = Array.from(boot).sort((p, q) => p - q);
+      const al = (1 - conf / 100) / 2;
+      const q = p => { const h = (B - 1) * p, lo = Math.floor(h); return sorted[lo] + (h - lo) * ((sorted[lo + 1] ?? sorted[lo]) - sorted[lo]); };
+      const lo = q(al), hi = q(1 - al);
+      const mb = sorted.reduce((s, v) => s + v, 0) / B, seB = Math.sqrt(sorted.reduce((s, v) => s + (v - mb) ** 2, 0) / (B - 1));
+      const mn = sorted[0], mx = sorted[B - 1], span = mx - mn || 1, NB = 30, w = span / NB;
+      const counts = new Array(NB).fill(0);
+      sorted.forEach(v => { counts[Math.min(NB - 1, Math.floor((v - mn) / w))]++; });
+      const bins = counts.map((c, i) => { const x0 = mn + i * w, x1 = x0 + w; return { x0, x1, count: c, y: c, miss: x1 <= lo || x0 >= hi }; });
+      const nome = media ? T("média", "mean") : T("mediana", "median");
+      let tLine = "";
+      if (media) {
+        const s = Math.sqrt(x.reduce((a, v) => a + (v - theta) ** 2, 0) / (n - 1));
+        const tc = tCrit(1 - conf / 100, n - 1);
+        tLine = T(` O intervalo t clássico, que supõe normalidade, daria de ${fmt(theta - tc * s / Math.sqrt(n))} a ${fmt(theta + tc * s / Math.sqrt(n))}.`,
+          ` The classic t interval, which assumes normality, would give ${fmt(theta - tc * s / Math.sqrt(n))} to ${fmt(theta + tc * s / Math.sqrt(n))}.`);
+      }
+      return {
+        result: `IC_{${texNum(conf, 2)}\\%} ${approx(lo) === "=" && approx(hi) === "=" ? "=" : "\\approx"} ${tone(interval(lo, hi), 1)}`.replace("IC_", T("IC_", "CI_")),
+        chart: {
+          type: "hist", label: T(`Histograma das ${fmt(B)} ${nome}s reamostradas; destacadas as que ficam fora do intervalo de ${fmt(conf, 2)}%`, `Histogram of the ${fmt(B)} resampled ${nome}s; highlighted, those outside the ${fmt(conf, 2)}% interval`),
+          xLabel: T(`${nome} de cada reamostragem · destaque: fora do intervalo`, `${nome} of each resample · highlighted: outside the interval`),
+          xMin: mn, xMax: mx + w * 0.001, yMax: Math.max(...counts), bins, pts: [],
+          binTip: bb => [T(`${fmt(bb.count)} reamostragens`, `${fmt(bb.count)} resamples`), T(`${nome} entre ${fmt(bb.x0, 2)} e ${fmt(bb.x1, 2)}`, `${nome} between ${fmt(bb.x0, 2)} and ${fmt(bb.x1, 2)}`)],
+        },
+        steps: [
+          [T(`Calcule a ${nome} da amostra original, de ${n} valores:`, `Compute the ${nome} of the original sample of ${n} values:`), `\\hat{\\theta} ${approx(theta)} ${texNum(theta)}`],
+          [T(`Sorteie ${fmt(B)} novas amostras de ${n} valores, com reposição, a partir dos próprios dados, e calcule a ${nome} de cada uma:`, `Draw ${fmt(B)} new samples of ${n} values, with replacement, from the data themselves, and compute the ${nome} of each:`),
+            `\\hat{\\theta}^*_1, \\ldots, \\hat{\\theta}^*_{${B}}, \\qquad \\text{${T("desvio padrão", "standard deviation")}} ${approx(seB)} ${texNum(seB)}`],
+          [T(`Ordene-as e corte ${fmt(al * 100, 2)}% de cada ponta:`, `Sort them and cut ${fmt(al * 100, 2)}% off each end:`),
+            `\\hat{\\theta}^*_{(${texNum(al, 4)})} ${approx(lo)} ${tone(texNum(lo), 2)}, \\qquad \\hat{\\theta}^*_{(${texNum(1 - al, 4)})} ${approx(hi)} ${tone(texNum(hi), 3)}`],
+        ],
+        note: T(`O bootstrap trata a amostra como se fosse a população e repete o sorteio no computador: a dispersão das ${nome}s reamostradas, ${fmt(seB)}, estima o erro padrão sem fórmula nenhuma.`
+          + tLine
+          + ` A vantagem é valer para estatísticas sem fórmula simples de erro padrão, como a mediana; a limitação é depender de a amostra representar bem a população — com poucos dados, o intervalo fica estreito demais. Sorteie de novo para ver quanto ele oscila.`,
+          `The bootstrap treats the sample as if it were the population and repeats the draw on the computer: the spread of the resampled ${nome}s, ${fmt(seB)}, estimates the standard error with no formula at all.`
+          + tLine
+          + ` Its strength is working for statistics with no simple standard-error formula, such as the median; its limitation is relying on the sample representing the population well — with little data, the interval comes out too narrow. Draw again to see how much it moves.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -3504,17 +3778,25 @@
       }
       // Boxplot horizontal: caixa de Q1 a Q3, traço na mediana, bigodes até
       // o último valor dentro de 1,5 · IQR e os atípicos como pontos.
+      // Com boxes (vários grupos), um boxplot por faixa, de cima para baixo,
+      // e truth vira uma linha vertical de referência.
       if (spec.type === "box") {
-        const { q1, q2, q3, wLo, wHi, out } = spec.box;
-        const cy = m.t + ih / 2, bh = Math.min(56, ih * 0.6);
-        svg("line", { x1: X(wLo), x2: X(q1), y1: cy, y2: cy, class: "chart-whisker" }, root);
-        svg("line", { x1: X(q3), x2: X(wHi), y1: cy, y2: cy, class: "chart-whisker" }, root);
-        [wLo, wHi].forEach(v => svg("line", { x1: X(v), x2: X(v), y1: cy - bh / 4, y2: cy + bh / 4, class: "chart-whisker" }, root));
-        svg("rect", { x: X(q1), y: cy - bh / 2, width: Math.max(1, X(q3) - X(q1)), height: bh, rx: 3, class: "chart-box" }, root);
-        svg("line", { x1: X(q2), x2: X(q2), y1: cy - bh / 2, y2: cy + bh / 2, class: "chart-truth" }, root);
-        out.forEach(v => svg("circle", { cx: X(v), cy, r: 4, class: "chart-dot" }, root));
-        const hit = svg("rect", { x: m.l, y: m.t, width: iw, height: ih, class: "chart-hit" }, root);
-        hit.addEventListener("pointermove", e => showTip(e, spec.tip[0], spec.tip[1]));
+        const boxes = spec.boxes || [spec.box];
+        const rh = ih / boxes.length;
+        if (spec.truth != null) svg("line", { x1: X(spec.truth), x2: X(spec.truth), y1: m.t, y2: m.t + ih, class: "chart-ref" }, root);
+        boxes.forEach((bx, i) => {
+          const { q1, q2, q3, wLo, wHi, out } = bx;
+          const cy = m.t + (i + 0.5) * rh, bh = Math.min(56, rh * 0.6);
+          svg("line", { x1: X(wLo), x2: X(q1), y1: cy, y2: cy, class: "chart-whisker" }, root);
+          svg("line", { x1: X(q3), x2: X(wHi), y1: cy, y2: cy, class: "chart-whisker" }, root);
+          [wLo, wHi].forEach(v => svg("line", { x1: X(v), x2: X(v), y1: cy - bh / 4, y2: cy + bh / 4, class: "chart-whisker" }, root));
+          svg("rect", { x: X(q1), y: cy - bh / 2, width: Math.max(1, X(q3) - X(q1)), height: bh, rx: 3, class: "chart-box" }, root);
+          svg("line", { x1: X(q2), x2: X(q2), y1: cy - bh / 2, y2: cy + bh / 2, class: "chart-truth" }, root);
+          out.forEach(v => svg("circle", { cx: X(v), cy, r: 4, class: "chart-dot" }, root));
+          const t = spec.tip || [bx.label, T(`Q₁ = ${fmt(q1)}, mediana = ${fmt(q2)}, Q₃ = ${fmt(q3)}`, `Q₁ = ${fmt(q1)}, median = ${fmt(q2)}, Q₃ = ${fmt(q3)}`)];
+          const hit = svg("rect", { x: m.l, y: cy - rh / 2, width: iw, height: rh, class: "chart-hit" }, root);
+          hit.addEventListener("pointermove", e => showTip(e, t[0], t[1]));
+        });
       }
       if (spec.type === "hist") {
         spec.bins.forEach(b => {

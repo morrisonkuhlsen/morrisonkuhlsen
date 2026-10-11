@@ -163,7 +163,8 @@ testes:
     efeito:
       texto: 'd_z, na escala das diferenças.'
       tex: 'd_z = \dfrac{\bar{d}}{s_d}'
-    veja: [poder-estatistico]
+    page: t-pareado
+    veja: [poder-estatistico, t-duas-amostras]
     vars:
       - ['Wilcoxon de postos sinalizados, sem supor normalidade', wilcoxon]
     reporte: 't(14) = 3,02; p = 0,009; d_z = 0,78'
@@ -196,6 +197,8 @@ testes:
       - ['Kruskal-Wallis, sem supor normalidade', kruskal-wallis]
       - ['Depois de rejeitar H₀', tukey]
       - ['Com dois fatores e a interação entre eles', anova-dois-fatores]
+    page: anova-um-fator
+    veja: [comparacoes-multiplas]
     reporte: 'F(2, 42) = 4,87; p = 0,013; η² = 0,19'
     codigo:
       r: |
@@ -902,6 +905,7 @@ testes:
       texto: 'O próprio ρ.'
     vars:
       - ['Tau de Kendall, mais estável com amostras pequenas e empates', kendall]
+    page: correlacao-spearman
     veja: [coeficiente-pearson]
     reporte: 'ρ = 0,51; n = 30; p = 0,004'
     codigo:

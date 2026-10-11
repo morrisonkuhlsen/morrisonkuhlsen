@@ -17,10 +17,20 @@
   description: "Coeficiente de correlação de Pearson explicado termo a termo, com calculadora, r², interpretação da força e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Comparações Múltiplas e Bonferroni"
+  url: "/formulas/comparacoes-multiplas.html"
+  description: "Comparações múltiplas e a correção de Bonferroni explicadas termo a termo, com calculadora, gráfico e simulação de falsos positivos em muitos testes."
+  tags: "fórmula interativa calculadora passo a passo Bonferroni falsos positivos múltiplos testes simulação"
+  lang: pt
 - title: "Correção para População Finita"
   url: "/formulas/correcao-populacao-finita.html"
   description: "Correção para população finita explicada termo a termo, com calculadora que reduz o tamanho de amostra e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Correlação de Spearman"
+  url: "/formulas/correlacao-spearman.html"
+  description: "Correlação de Spearman explicada termo a termo, com calculadora, tabela de postos, comparação com Pearson e pontos arrastáveis."
+  tags: "fórmula interativa calculadora passo a passo postos correlação monótona não paramétrica"
   lang: pt
 - title: "Derivada pela Definição"
   url: "/formulas/derivada.html"
@@ -31,6 +41,16 @@
   url: "/formulas/aproximacao-stirling.html"
   description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
   tags: "fórmula interativa calculadora passo a passo fatorial logaritmo"
+  lang: pt
+- title: "ANOVA de Um Fator"
+  url: "/formulas/anova-um-fator.html"
+  description: "ANOVA de um fator explicada termo a termo, com calculadora para três ou mais grupos, boxplots, estatística F, valor-p e η²."
+  tags: "fórmula interativa calculadora passo a passo análise de variância teste F três grupos"
+  lang: pt
+- title: "Bootstrap"
+  url: "/formulas/bootstrap.html"
+  description: "O bootstrap explicado termo a termo: intervalo de confiança por reamostragem, com calculadora para média ou mediana, histograma e comparação com o intervalo t."
+  tags: "fórmula interativa calculadora passo a passo reamostragem intervalo de confiança simulação mediana"
   lang: pt
 - title: "Coeficiente de Determinação (R²)"
   url: "/formulas/coeficiente-determinacao.html"
@@ -242,6 +262,11 @@
   description: "Teste t de Welch para duas amostras independentes explicado termo a termo, com calculadora, graus de liberdade, valor-p, intervalo de confiança e d de Cohen."
   tags: "fórmula interativa calculadora passo a passo Welch duas médias grupos independentes"
   lang: pt
+- title: "Teste t Pareado"
+  url: "/formulas/t-pareado.html"
+  description: "Teste t pareado explicado termo a termo, com calculadora para medidas antes e depois, valor-p, intervalo de confiança e a comparação com o teste errado."
+  tags: "fórmula interativa calculadora passo a passo antes e depois amostras pareadas"
+  lang: pt
 - title: "Teorema de Bayes"
   url: "/formulas/teorema-bayes.html"
   description: "Teorema de Bayes explicado termo a termo, com calculadora: informe prior, sensibilidade e falso positivo e veja o posterior passo a passo."
@@ -443,6 +468,21 @@
   description: "Welch's t-test for two independent samples explained term by term, with a calculator, degrees of freedom, p-value, confidence interval and Cohen's d."
   tags: "formula interactive calculator step by step Welch two means independent groups"
   lang: en
+- title: "Paired t-Test"
+  url: "/en/formulas/paired-t-test.html"
+  description: "The paired t-test explained term by term, with a calculator for before-and-after measurements, p-value, confidence interval and a comparison with the wrong test."
+  tags: "formula interactive calculator step by step before and after paired samples"
+  lang: en
+- title: "One-Way ANOVA"
+  url: "/en/formulas/one-way-anova.html"
+  description: "One-way ANOVA explained term by term, with a calculator for three or more groups, boxplots, the F statistic, p-value and η²."
+  tags: "formula interactive calculator step by step analysis of variance F test three groups"
+  lang: en
+- title: "Multiple Comparisons and Bonferroni"
+  url: "/en/formulas/multiple-comparisons.html"
+  description: "Multiple comparisons and the Bonferroni correction explained term by term, with a calculator, a chart and a simulation of false positives across many tests."
+  tags: "formula interactive calculator step by step Bonferroni false positives multiple testing simulation"
+  lang: en
 - title: "Standard Error of the Mean"
   url: "/en/formulas/standard-error.html"
   description: "The standard error of the mean explained term by term, with a calculator, a curve of how it falls with the sample size, and step-by-step working."
@@ -452,6 +492,11 @@
   url: "/en/formulas/confidence-interval.html"
   description: "The confidence interval for a mean explained term by term, with a calculator, critical z value, margin of error and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Bootstrap"
+  url: "/en/formulas/bootstrap.html"
+  description: "The bootstrap explained term by term: a confidence interval by resampling, with a calculator for the mean or median, a histogram and a comparison with the t interval."
+  tags: "formula interactive calculator step by step resampling confidence interval simulation median"
   lang: en
 - title: "Chi-Square Test (χ²)"
   url: "/en/formulas/chi-square-test.html"
@@ -527,6 +572,11 @@
   url: "/en/formulas/pearson-correlation.html"
   description: "The Pearson correlation coefficient explained term by term, with a calculator, r², an interpretation of strength and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Spearman Correlation"
+  url: "/en/formulas/spearman-correlation.html"
+  description: "Spearman correlation explained term by term, with a calculator, a table of ranks, a comparison with Pearson and draggable points."
+  tags: "formula interactive calculator step by step ranks monotonic correlation nonparametric"
   lang: en
 - title: "Simple Linear Regression"
   url: "/en/formulas/linear-regression.html"
