@@ -15,7 +15,7 @@
 
   var ROWS = 12;
   var BINS = ROWS + 1;
-  var PER_ROW = 5;        // bolinhas lado a lado dentro de uma canaleta
+  var PER_ROW = 4;        // bolinhas lado a lado dentro de uma canaleta
   var SPAWN_MS = 40;      // intervalo entre bolinhas
   var STEP_MS = 85;       // tempo de um pino ao seguinte
   var HOLD_MS = 2800;     // pausa com as pilhas completas
@@ -24,6 +24,10 @@
 
   var mean = ROWS / 2, sd = Math.sqrt(ROWS) / 2;
   var SQRT2PI = Math.sqrt(2 * Math.PI);
+  // P(canaleta central) = C(ROWS, ROWS/2) / 2^ROWS.
+  var P_MID = 1;
+  for (var u = 1; u <= ROWS / 2; u++) P_MID = P_MID * (ROWS / 2 + u) / u;
+  P_MID /= Math.pow(2, ROWS);
 
   var styles = getComputedStyle(document.documentElement);
   function token(name) { return styles.getPropertyValue(name).trim(); }
@@ -38,6 +42,8 @@
 
   // Geometria, recalculada em layout().
   var W, H, dpr, cx, dx, dy, r, pegR, rowH, pegTop, binTop, binBottom, capRows, g;
+  // Sprites das bolinhas e dos pinos, refeitos em layout().
+  var S = {};
   // Camada com as bolinhas já assentadas: desenhada uma vez, copiada a cada quadro.
   var layer = document.createElement('canvas');
   var lctx = layer.getContext('2d');
@@ -57,9 +63,9 @@
 
     cx = W / 2;
     dx = (W - 12) / BINS;
-    r = (dx / PER_ROW) * 0.46;
+    r = (dx / PER_ROW) * 0.47;
     rowH = r * 2;
-    pegR = Math.max(1.8, r * 0.8);
+    pegR = Math.max(2, r * 0.7);
     binBottom = H - 1;
     binTop = H * 0.6;
     pegTop = H * 0.1;
@@ -67,14 +73,60 @@
     capRows = Math.floor((binBottom - binTop) / rowH);
     // Gravidade que leva uma bolinha parada um pino abaixo em STEP_MS.
     g = 2 * dy / (STEP_MS * STEP_MS);
+
+    S.ball = sprite(C.ball, r, r * 1.6);
+    S.stack = sprite(C.stack, r, 0);
+    S.peg = sprite(C.peg, pegR, 0);
+    S.pegHit = sprite(C.pegHit, pegR * 1.2, pegR * 2);
     return true;
   }
 
-  // Quantas bolinhas cabem: a canaleta central, a mais cheia, deve terminar
-  // com folga de ~15% abaixo da borda.
+  // Bolinha com volume (luz de cima à esquerda, sombra na borda) e, se glow,
+  // um halo da própria cor. Desenhada uma vez por tamanho; cada quadro só
+  // copia o bitmap, que é bem mais barato que shadowBlur por bolinha.
+  function sprite(color, rad, glow) {
+    var half = rad + glow + 1;
+    var size = Math.ceil(half * 2 * dpr);
+    var body = document.createElement('canvas');
+    body.width = body.height = size;
+    var b = body.getContext('2d');
+    b.scale(dpr, dpr);
+    b.fillStyle = color;
+    dot(b, half, half, rad);
+    b.globalCompositeOperation = 'source-atop';
+    var hl = b.createRadialGradient(half - rad * 0.35, half - rad * 0.4, 0, half - rad * 0.35, half - rad * 0.4, rad);
+    hl.addColorStop(0, 'rgba(255,255,255,0.65)');
+    hl.addColorStop(1, 'rgba(255,255,255,0)');
+    b.fillStyle = hl;
+    b.fillRect(0, 0, half * 2, half * 2);
+    var sh = b.createRadialGradient(half, half, rad * 0.55, half, half, rad);
+    sh.addColorStop(0, 'rgba(0,0,0,0)');
+    sh.addColorStop(1, 'rgba(0,0,0,0.3)');
+    b.fillStyle = sh;
+    b.fillRect(0, 0, half * 2, half * 2);
+    if (!glow) return { img: body, half: half };
+
+    var out = document.createElement('canvas');
+    out.width = out.height = size;
+    var o = out.getContext('2d');
+    o.shadowColor = color;
+    o.shadowBlur = glow * dpr;
+    o.drawImage(body, 0, 0);
+    return { img: out, half: half };
+  }
+
+  function blit(c, s, x, y, scale) {
+    var h = s.half * (scale || 1);
+    c.drawImage(s.img, x - h, y - h, h * 2, h * 2);
+  }
+
+  // Quantas bolinhas cabem: a canaleta central, a mais cheia, recebe em média
+  // mu = N·P_MID com desvio ~√mu. Escolhe N para que mu + 3√mu caiba nela —
+  // a pilha quase nunca passa da borda.
   function fitN() {
     var cap = capRows * PER_ROW;
-    return Math.floor((cap / 1.15) * sd * SQRT2PI);
+    var s = (-3 + Math.sqrt(9 + 4 * cap)) / 2;
+    return Math.floor(s * s / P_MID);
   }
 
   function pegX(row, i) { return cx + (i - row / 2) * dx; }
@@ -117,11 +169,10 @@
 
   function paintLayer() {
     lctx.clearRect(0, 0, W, H);
-    lctx.fillStyle = C.stack;
     for (var k = 0; k < BINS; k++) {
       for (var i = 0; i < settled[k].length; i++) {
         var p = slotPos(k, settled[k][i]);
-        dot(lctx, p.x, p.y, r);
+        blit(lctx, S.stack, p.x, p.y);
       }
     }
   }
@@ -129,8 +180,7 @@
   function settle(k, slot) {
     settled[k].push(slot);
     var p = slotPos(k, slot);
-    lctx.fillStyle = C.stack;
-    dot(lctx, p.x, p.y, r);
+    blit(lctx, S.stack, p.x, p.y);
   }
 
   function drawFrame(now) {
@@ -155,12 +205,9 @@
       for (var i = 0; i <= j; i++) {
         var age = now - pegHit[j][i];
         if (age < FLASH_MS) {
-          ctx.globalAlpha = 1;
-          ctx.fillStyle = C.pegHit;
-          dot(ctx, pegX(j, i), pegY(j), pegR * (1 + 0.2 * (1 - age / FLASH_MS)));
+          blit(ctx, S.pegHit, pegX(j, i), pegY(j), 1 + 0.15 * (1 - age / FLASH_MS));
         } else {
-          ctx.fillStyle = C.peg;
-          dot(ctx, pegX(j, i), pegY(j), pegR);
+          blit(ctx, S.peg, pegX(j, i), pegY(j));
         }
       }
     }
@@ -170,12 +217,9 @@
     ctx.drawImage(layer, 0, 0, W, H);
     ctx.globalAlpha = 1;
 
-    // Curva: a altura que cada pilha deve atingir com N bolinhas.
+    // Curva: a altura que cada pilha deve atingir com N bolinhas, com um
+    // véu claro por baixo.
     ctx.save();
-    ctx.strokeStyle = C.curve;
-    ctx.lineWidth = 2;
-    ctx.shadowColor = C.curve;
-    ctx.shadowBlur = 6;
     ctx.beginPath();
     for (var s = 0; s <= 160; s++) {
       var kk = -0.5 + (BINS * s) / 160;
@@ -185,16 +229,21 @@
       var x = cx + (kk - mean) * dx;
       if (s) ctx.lineTo(x, y); else ctx.moveTo(x, y);
     }
+    ctx.strokeStyle = ctx.fillStyle = C.curve;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = C.curve;
+    ctx.shadowBlur = 6;
     ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.lineTo(binX(ROWS) + dx / 2, binBottom);
+    ctx.lineTo(binX(0) - dx / 2, binBottom);
+    ctx.globalAlpha = 0.07;
+    ctx.fill();
     ctx.restore();
 
     // Bolinhas em voo, com um leve brilho.
-    ctx.save();
-    ctx.fillStyle = C.ball;
-    ctx.shadowColor = C.ball;
-    ctx.shadowBlur = 5;
-    for (var q = 0; q < balls.length; q++) dot(ctx, balls[q].x, balls[q].y, r);
-    ctx.restore();
+    for (var q = 0; q < balls.length; q++) blit(ctx, S.ball, balls[q].x, balls[q].y);
 
     var n = 0;
     for (var m = 0; m < BINS; m++) n += settled[m].length;
@@ -334,7 +383,8 @@
 
   window.addEventListener('resize', function () {
     if (!layout()) return;
-    paintLayer();
+    // Se a canaleta mudou de altura, o N antigo pode não caber: recomeça.
+    if (fitN() !== N) reset(); else paintLayer();
     if (!running) drawFrame(performance.now());
   });
 })();
