@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Markov&#x27;s Inequality — Interactive</title>
+  <meta name="description" content="Markov&#x27;s inequality explained term by term, with a calculator and a chart: a ceiling on the chance of high values, knowing only the mean.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/markov-inequality.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/desigualdade-markov.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/markov-inequality.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/desigualdade-markov.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/markov-inequality.html">
+  <meta property="og:title" content="Markov&#x27;s Inequality — Interactive">
+  <meta property="og:description" content="Markov&#x27;s inequality explained term by term, with a calculator and a chart: a ceiling on the chance of high values, knowing only the mean.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Markov&#x27;s Inequality — Interactive">
+  <meta name="twitter:description" content="Markov&#x27;s inequality explained term by term, with a calculator and a chart: a ceiling on the chance of high values, knowing only the mean.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/desigualdade-markov.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Markov&#x27;s Inequality</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive Markov&#x27;s inequality formula">
+        <span class="part" data-part="p_mk" data-tone="1" data-tex="P(X \ge a)"></span>
+        <span class="op">≤</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="e_mk" data-tone="2" data-tex="E[X]"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="a_mk" data-tone="3" data-tex="a"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?mu=&a=. -->
+    <section class="calc" data-calc="markov" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the average income in a city is $3,000. Knowing nothing else about the distribution, at most what share of people can earn $15,000 or more? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Mean <i>E[X]</i></span>
+          <input name="mu" type="text" inputmode="decimal" value="3000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Threshold <i>a</i></span>
+          <input name="a" type="text" inputmode="decimal" value="15000" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="p_mk" data-tone="1">Chance of High Values (P(X ≥ a))</dt>
+          <dd>The probability that the variable reaches a or goes beyond it. Markov gives a ceiling for it, not the exact value.</dd>
+          <dt data-part="e_mk" data-tone="2">Mean (E[X])</dt>
+          <dd>The only information the inequality needs, besides the variable never being negative.</dd>
+          <dt data-part="a_mk" data-tone="3">Threshold (a)</dt>
+          <dd>The larger the threshold, the lower the ceiling. With a equal to 5 times the mean, at most 20% of the values get there.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="expected-value.html" rel="prev"><span>Previous</span>Expected Value</a>
+      <a class="pager-next" href="chebyshev-theorem.html" rel="next"><span>Next</span>Chebyshev&#x27;s Theorem</a>
+    </nav>
+  </main>
+</body>
+</html>

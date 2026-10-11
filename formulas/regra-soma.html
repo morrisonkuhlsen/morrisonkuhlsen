@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Regra da Soma (União de Eventos) — Interativa</title>
+  <meta name="description" content="A regra da soma P(A ∪ B) explicada termo a termo, com calculadora, diagrama de Venn e a relação com eventos exclusivos e independentes.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/regra-soma.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/regra-soma.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/addition-rule.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/regra-soma.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/regra-soma.html">
+  <meta property="og:title" content="Regra da Soma (União de Eventos) — Interativa">
+  <meta property="og:description" content="A regra da soma P(A ∪ B) explicada termo a termo, com calculadora, diagrama de Venn e a relação com eventos exclusivos e independentes.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Regra da Soma (União de Eventos) — Interativa">
+  <meta name="twitter:description" content="A regra da soma P(A ∪ B) explicada termo a termo, com calculadora, diagrama de Venn e a relação com eventos exclusivos e independentes.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/addition-rule.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Regra da Soma (União de Eventos)</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Regra da Soma interativa">
+        <span class="part" data-part="u_rs" data-tone="1" data-tex="P(A \cup B)"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="a_rs" data-tone="2" data-tex="P(A)"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="b_rs" data-tone="3" data-tex="P(B)"></span>
+        <span class="op">−</span>
+        <span class="part" data-part="ab_rs" data-tone="4" data-tex="P(A \cap B)"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com diagrama de Venn; estado em ?pa=&pb=&pab=. -->
+    <section class="calc" data-calc="uniao" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: numa turma, 60% dos alunos gostam de matemática, 45% de física e 30% das duas. Sorteando um aluno, qual a chance de ele gostar de pelo menos uma? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span><i>P(A)</i> (%)</span>
+          <input name="pa" type="text" inputmode="decimal" value="60" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span><i>P(B)</i> (%)</span>
+          <input name="pb" type="text" inputmode="decimal" value="45" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span><i>P(A ∩ B)</i> (%)</span>
+          <input name="pab" type="text" inputmode="decimal" value="30" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="u_rs" data-tone="1">União (P(A ∪ B))</dt>
+          <dd>A chance de acontecer A, ou B, ou os dois: pelo menos um deles.</dd>
+          <dt data-part="a_rs" data-tone="2">Probabilidade de A</dt>
+          <dd>Inclui os casos em que só A acontece e os casos em que A e B acontecem juntos.</dd>
+          <dt data-part="b_rs" data-tone="3">Probabilidade de B</dt>
+          <dd>Também inclui a interseção. Somando P(A) e P(B), os casos dos dois entram duas vezes.</dd>
+          <dt data-part="ab_rs" data-tone="4">Interseção (P(A ∩ B))</dt>
+          <dd>A chance de os dois acontecerem juntos. Subtraí-la uma vez desfaz a dupla contagem. Se A e B não podem ocorrer juntos, é zero e a união é a soma simples.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="teste-diagnostico.html" rel="prev"><span>Anterior</span>Teste Diagnóstico: Valores Preditivos</a>
+      <a class="pager-next" href="probabilidade-condicional.html" rel="next"><span>Próxima</span>Probabilidade Condicional</a>
+    </nav>
+  </main>
+</body>
+</html>

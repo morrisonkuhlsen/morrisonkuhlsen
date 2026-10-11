@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ruína do Jogador — Interativa</title>
+  <meta name="description" content="O problema da ruína do jogador explicado termo a termo: a chance de atingir uma meta antes de quebrar, com calculadora, gráfico e a duração média do jogo.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/ruina-jogador.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/ruina-jogador.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/gamblers-ruin.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/ruina-jogador.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/ruina-jogador.html">
+  <meta property="og:title" content="Ruína do Jogador — Interativa">
+  <meta property="og:description" content="O problema da ruína do jogador explicado termo a termo: a chance de atingir uma meta antes de quebrar, com calculadora, gráfico e a duração média do jogo.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Ruína do Jogador — Interativa">
+  <meta name="twitter:description" content="O problema da ruína do jogador explicado termo a termo: a chance de atingir uma meta antes de quebrar, com calculadora, gráfico e a duração média do jogo.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/gamblers-ruin.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Ruína do Jogador</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Ruína do Jogador interativa">
+        <span class="part" data-part="p_rj" data-tone="1" data-tex="P_i"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="n_rj" data-tone="2" data-tex="1 - (q/p)^i"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="d_rj" data-tone="3" data-tex="1 - (q/p)^N"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?i=&N=&p=. -->
+    <section class="calc" data-calc="ruina" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: na roleta europeia, apostar no vermelho ganha com chance 18/37 ≈ 48,65%. Com R$ 50, apostando R$ 1 por vez, qual a chance de dobrar o dinheiro antes de perder tudo? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>Capital inicial <i>i</i></span>
+          <input name="i" type="text" inputmode="numeric" value="50" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Meta <i>N</i></span>
+          <input name="N" type="text" inputmode="numeric" value="100" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Chance de ganhar a rodada <i>p</i> (%)</span>
+          <input name="p" type="text" inputmode="decimal" value="48,65" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="p_rj" data-tone="1">Chance de Chegar à Meta (Pᵢ)</dt>
+          <dd>Começando com i, a probabilidade de chegar a N antes de chegar a zero, ganhando ou perdendo 1 por rodada.</dd>
+          <dt data-part="n_rj" data-tone="2">Numerador</dt>
+          <dd>q/p é a razão entre perder e ganhar uma rodada. Com q/p > 1, o jogo é desfavorável, e (q/p)ⁱ cresce depressa com o capital.</dd>
+          <dt data-part="d_rj" data-tone="3">Denominador</dt>
+          <dd>A mesma conta para a meta N. Como N > i, num jogo desfavorável o denominador é muito maior que o numerador, e a chance encolhe. Com p = q, a fórmula vira i/N.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="monty-hall.html" rel="prev"><span>Anterior</span>Problema de Monty Hall</a>
+      <a class="pager-next" href="lei-benford.html" rel="next"><span>Próxima</span>Lei de Benford</a>
+    </nav>
+  </main>
+</body>
+</html>

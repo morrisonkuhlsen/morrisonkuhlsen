@@ -579,6 +579,9 @@ body {
 .chart-ref { stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .chart-tangent { fill: none; stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
 .chart-dot-b { fill: var(--surface); stroke: var(--chart-base); stroke-width: 2; }
+.chart-venn-frame { fill: none; stroke: var(--text-muted); stroke-width: 1; opacity: .5; }
+.chart-venn-name { font-size: 18px; font-weight: 700; fill: var(--text-strong); }
+.chart-venn-num { font-size: 15px; fill: var(--text-strong); }
 .chart-band { fill: none; stroke: var(--text-muted); stroke-width: 1; stroke-dasharray: 2 3; }
 .chart-box { fill: var(--chart-base); fill-opacity: .35; stroke: var(--chart-base); stroke-width: 1.5; }
 .chart-whisker { stroke: var(--chart-base); stroke-width: 1.5; }

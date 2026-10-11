@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lognormal Distribution — Interactive</title>
+  <meta name="description" content="The lognormal distribution explained term by term, with a calculator, a curve and step-by-step working: quantities whose logarithm is normal, such as income and prices.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/lognormal-distribution.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-lognormal.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/lognormal-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-lognormal.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/lognormal-distribution.html">
+  <meta property="og:title" content="Lognormal Distribution — Interactive">
+  <meta property="og:description" content="The lognormal distribution explained term by term, with a calculator, a curve and step-by-step working: quantities whose logarithm is normal, such as income and prices.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Lognormal Distribution — Interactive">
+  <meta name="twitter:description" content="The lognormal distribution explained term by term, with a calculator, a curve and step-by-step working: quantities whose logarithm is normal, such as income and prices.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/distribuicao-lognormal.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Lognormal Distribution</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive lognormal distribution formula">
+        <span class="part" data-part="f_ln" data-tone="1" data-tex="f(x)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="one_ln" data-tone="0" data-tex="1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="den_ln" data-tone="2" data-tex="x\sigma\sqrt{2\pi}"></span>
+          </span>
+        </span>
+        <span class="part" data-part="e_ln" data-tone="3" data-tex="e^{-\frac{(\ln x - \mu)^2}{2\sigma^2}}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com curva; estado em ?mu=&sigma=&x=. -->
+    <section class="calc" data-calc="lognorm" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the time, in minutes, that visitors spend on a website has a normal logarithm, with μ = 1.5 and σ = 0.8. What is the chance that a visit lasts up to 10 minutes? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="3">
+          <span><i>μ</i> (mean of ln <i>x</i>)</span>
+          <input name="mu" type="text" inputmode="decimal" value="1.5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span><i>σ</i> (standard deviation of ln <i>x</i>)</span>
+          <input name="sigma" type="text" inputmode="decimal" value="0.8" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Value <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="f_ln" data-tone="1">Density (f(x))</dt>
+          <dd>The height of the curve at x > 0. The curve starts at zero, rises fast and falls slowly, with a long right tail.</dd>
+          <dt data-part="one_ln" data-tone="0">One in the Numerator</dt>
+          <dd>Together with the denominator, it makes the total area under the curve equal 1.</dd>
+          <dt data-part="den_ln" data-tone="2">Normalization (xσ√(2π))</dt>
+          <dd>The σ√(2π) is the normal's; the extra x comes from the change of scale from ln x to x, which stretches small values and squeezes large ones.</dd>
+          <dt data-part="e_ln" data-tone="3">Bell on a Log Scale</dt>
+          <dd>The normal's bell, but in ln x: μ and σ are the mean and standard deviation of the logarithm, and e^μ is the median of x.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="normal-distribution.html" rel="prev"><span>Previous</span>Normal (Gaussian) Distribution</a>
+      <a class="pager-next" href="beta-distribution.html" rel="next"><span>Next</span>Beta Distribution</a>
+    </nav>
+  </main>
+</body>
+</html>

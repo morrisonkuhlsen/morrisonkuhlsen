@@ -33,6 +33,7 @@
     "regra-lhopital": "lhopital-rule", "soma-riemann": "riemann-sum", "t-duas-amostras": "two-sample-t-test",
     "margem-de-erro": "margin-of-error", "ic-proporcao": "proportion-confidence-interval",
     "quartis-iqr": "quartiles-iqr", "suavizacao-exponencial": "exponential-smoothing",
+    "derivada": "derivative-definition", "qui-quadrado": "chi-square-test", "probabilidade-condicional": "conditional-probability",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -3012,6 +3013,318 @@
       };
     },
 
+    lognorm({ mu, sigma, x }) {
+      if (sigma <= 0) return { error: T("σ precisa ser maior que zero.", "σ must be greater than zero.") };
+      if (x <= 0) return { error: T("x precisa ser maior que zero: a lognormal só assume valores positivos.", "x must be greater than zero: the lognormal only takes positive values.") };
+      if (Math.abs(mu) > 50 || sigma > 10) return { error: T("Use |μ| ≤ 50 e σ ≤ 10.", "Use |μ| ≤ 50 and σ ≤ 10.") };
+      const pdf = v => (v <= 0 ? 0 : Math.exp(-((Math.log(v) - mu) ** 2) / (2 * sigma * sigma)) / (v * sigma * Math.sqrt(2 * Math.PI)));
+      const z = (Math.log(x) - mu) / sigma, F = phi(z), f = pdf(x);
+      const med = Math.exp(mu), mean = Math.exp(mu + sigma * sigma / 2), moda = Math.exp(mu - sigma * sigma);
+      const hi = Math.max(x * 1.15, Math.exp(mu + 2.58 * sigma));
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = hi * (i + 0.5) / 240; return [v, pdf(v)]; });
+      const yMax = Math.max(...pts.map(p => p[1]));
+      const lx = Math.log(x), X = texNum(x);
+      return {
+        result: `f(${X}) ${approx(f, 6)} ${tone(texSci(f, 6), 1)}, \\qquad P(X \\le ${X}) ${approx(F, 6)} ${pctTex(F)}`,
+        chart: {
+          type: "curve", label: T(`Densidade lognormal com μ = ${fmt(mu)} e σ = ${fmt(sigma)}; área sombreada até x = ${fmt(x)}`, `Lognormal density with μ = ${fmt(mu)} and σ = ${fmt(sigma)}; area shaded up to x = ${fmt(x)}`),
+          xLabel: "x", xMin: 0, xMax: hi, yMax, pts, shadeTo: x, marker: f <= yMax ? [x, f] : null,
+          tipAt: v => [`f = ${fmtSci(pdf(v), 4)}`, `x = ${fmt(v, 2)}, P(X ≤ x) ≈ ${fmt(phi((Math.log(Math.max(v, 1e-300)) - mu) / sigma) * 100, 1)}%`],
+        },
+        steps: [
+          [T("Passe x para a escala do logaritmo, onde a distribuição é normal:", "Move x to the log scale, where the distribution is normal:"),
+            `\\ln ${X} ${approx(lx)} ${texNum(lx)}, \\qquad z = \\dfrac{${texNum(lx)} - ${paren(mu, texNum(mu))}}{${texNum(sigma)}} ${approx(z)} ${texNum(z)}`],
+          [T("A densidade é a da normal nesse ponto, dividida por x:", "The density is the normal's at that point, divided by x:"),
+            `f(${X}) = \\dfrac{1}{${tone(`${X} \\cdot ${texNum(sigma)} \\sqrt{2\\pi}`, 2)}} \\, ${tone(`e^{-${texNum(z * z / 2)}}`, 3)} ${approx(f, 6)} ${tone(texSci(f, 6), 1)}`],
+          [T("A probabilidade acumulada vem direto da normal padrão:", "The cumulative probability comes straight from the standard normal:"),
+            `P(X \\le ${X}) = \\Phi(${texNum(z)}) ${approx(F, 6)} ${texNum(F, 6)}`],
+        ],
+        note: T(`A mediana é e^μ ≈ ${fmt(med, 4)}, a média e^(μ + σ²/2) ≈ ${fmt(mean, 4)} e a moda e^(μ − σ²) ≈ ${fmt(moda, 4)}: a cauda longa à direita puxa a média para cima da mediana.`
+          + " É o modelo de quantidades que crescem por fatores multiplicados, e não somados — renda, preços, tamanhos de arquivos, tempo de permanência: o logaritmo transforma o produto numa soma, e o"
+          + ` <a href="${PAGE("teorema-central-limite")}">teorema central do limite</a> faz o resto. Veja a <a href="${PAGE("distribuicao-normal")}?mu=${mu}&amp;sd=${sigma}&amp;x=${Number(lx.toFixed(4))}">normal de ln x</a>.`,
+          `The median is e^μ ≈ ${fmt(med, 4)}, the mean e^(μ + σ²/2) ≈ ${fmt(mean, 4)} and the mode e^(μ − σ²) ≈ ${fmt(moda, 4)}: the long right tail pulls the mean above the median.`
+          + " It models quantities that grow by multiplied factors rather than added ones — income, prices, file sizes, time on a page: the logarithm turns the product into a sum, and the"
+          + ` <a href="${PAGE("teorema-central-limite")}">central limit theorem</a> does the rest. See the <a href="${PAGE("distribuicao-normal")}?mu=${mu}&amp;sd=${sigma}&amp;x=${Number(lx.toFixed(4))}">normal of ln x</a>.`),
+      };
+    },
+
+    negbin({ p, r, k }) {
+      if (p <= 0 || p > 100) return { error: T("A probabilidade de sucesso precisa ser maior que 0 e no máximo 100%.", "The probability of success must be above 0 and at most 100%.") };
+      if (!Number.isInteger(r) || r < 1 || r > 1000) return { error: T("O número de sucessos r precisa ser um inteiro entre 1 e 1.000.", "The number of successes r must be an integer between 1 and 1,000.") };
+      if (!Number.isInteger(k) || k < r || k > 100000) return { error: T(`k precisa ser um inteiro de pelo menos ${r}: não dá para ter ${r} sucessos em menos de ${r} tentativas.`, `k must be an integer of at least ${r}: you can't get ${r} successes in fewer than ${r} trials.`) };
+      const pp = p / 100, q = 1 - pp;
+      const lc = (a, b) => lgamma(a + 1) - lgamma(b + 1) - lgamma(a - b + 1);
+      const pmf = j => (j < r ? 0 : q === 0 ? (j === r ? 1 : 0) : Math.exp(lc(j - 1, r - 1) + r * Math.log(pp) + (j - r) * Math.log(q)));
+      const res = pmf(k);
+      const mean = r / pp, sd = Math.sqrt(r * q) / pp;
+      const top = Math.min(Math.max(k, Math.ceil(mean + 4 * sd), r + 5), r + 400);
+      const xs = Array.from({ length: Math.max(top, k) - r + 1 }, (_, i) => r + i), ys = xs.map(pmf);
+      let le = 0; for (let j = r; j <= k; j++) le += pmf(j);
+      const c = Math.exp(lc(k - 1, r - 1)), C = tone(c < 1e15 ? texNum(Math.round(c)) : texSci(c), 2);
+      const P = tone(texSci(pp ** r, 6), 3), Q = tone(texSci(q ** (k - r), 6), 4);
+      return {
+        result: `P(X = ${k}) ${approx(res, 6)} ${tone(pctTex(res), 1)}`,
+        chart: discreteChart(T(`Binomial negativa com r = ${r} e p = ${fmt(pp, 4)}`, `Negative binomial with r = ${r} and p = ${fmt(pp, 4)}`), T(`tentativa do ${r}º sucesso k`, `trial of success number ${r}, k`), xs, ys, k, "X"),
+        steps: [
+          [T(`A última tentativa, a ${k}ª, precisa ser o ${r}º sucesso. Conte de quantas formas os outros ${r - 1} sucessos se espalham pelas ${k - 1} tentativas anteriores:`, `The last trial, number ${k}, must be success number ${r}. Count how many ways the other ${r - 1} successes spread over the ${k - 1} earlier trials:`),
+            `\\dbinom{${k - 1}}{${r - 1}} = ${C}`],
+          [T(`Calcule a chance de uma sequência específica com ${r} sucessos e ${k - r} fracassos:`, `Compute the chance of one specific sequence with ${r} successes and ${k - r} failures:`),
+            `p^{${r}} = ${texNum(pp, 6)}^{${r}} ${approx(pp ** r, 6)} ${P}, \\qquad (1 - p)^{${k - r}} = ${texNum(q, 6)}^{${k - r}} ${approx(q ** (k - r), 6)} ${Q}`],
+          [T("Multiplique:", "Multiply:"), `P(X = ${k}) = ${C} \\cdot ${P} \\cdot ${Q} ${approx(res, 6)} ${tone(texSci(res, 6), 1)}`],
+        ],
+        note: T(`Acumulando, a chance de chegar ao ${r}º sucesso em até ${k} tentativas é ${fmt(le * 100, 2)}%. Em média, são r/p = ${fmt(mean, 2)} tentativas, com desvio padrão ${fmt(sd, 2)}.`
+          + ` Com r = 1, ela vira a <a href="${PAGE("distribuicao-geometrica")}?p=${p}&amp;k=${k}">distribuição geométrica</a>.`
+          + ` Na outra forma de escrever, que conta os fracassos, ela é o modelo para contagens com variância maior que a média — quando a <a href="${PAGE("distribuicao-poisson")}">Poisson</a> subestima a dispersão, como em número de acidentes ou de sinistros.`,
+          `Cumulatively, the chance of reaching success number ${r} within ${k} trials is ${fmt(le * 100, 2)}%. On average it takes r/p = ${fmt(mean, 2)} trials, with standard deviation ${fmt(sd, 2)}.`
+          + ` With r = 1 it becomes the <a href="${PAGE("distribuicao-geometrica")}?p=${p}&amp;k=${k}">geometric distribution</a>.`
+          + ` In the other way of writing it, which counts failures, it is the model for counts whose variance exceeds the mean — when the <a href="${PAGE("distribuicao-poisson")}">Poisson</a> understates the spread, as with numbers of accidents or insurance claims.`),
+      };
+    },
+
+    weibull({ k, lambda, x }) {
+      if (k <= 0 || k > 50) return { error: T("A forma k precisa estar entre 0 e 50, sem o zero.", "The shape k must be between 0 and 50, excluding zero.") };
+      if (lambda <= 0) return { error: T("A escala λ precisa ser maior que zero.", "The scale λ must be greater than zero.") };
+      if (x < 0) return { error: T("x precisa ser maior ou igual a zero.", "x must be zero or more.") };
+      const pdf = v => (v <= 0 ? (k === 1 ? 1 / lambda : k < 1 ? Infinity : 0) : (k / lambda) * (v / lambda) ** (k - 1) * Math.exp(-((v / lambda) ** k)));
+      const cdf = v => 1 - Math.exp(-((Math.max(v, 0) / lambda) ** k));
+      const haz = v => (k / lambda) * (v / lambda) ** (k - 1);
+      const f = pdf(x), F = cdf(x), h = x > 0 ? haz(x) : NaN;
+      const mean = lambda * Math.exp(lgamma(1 + 1 / k)), med = lambda * Math.log(2) ** (1 / k);
+      const hi = Math.max(x * 1.15, lambda * (-Math.log(0.005)) ** (1 / k));
+      const pts = Array.from({ length: 241 }, (_, i) => { const v = hi * (i + 0.5) / 240; return [v, pdf(v)]; });
+      const yMax = Math.max(...pts.map(p => p[1]).filter(Number.isFinite));
+      const ratio = x / lambda, pw = ratio ** k;
+      const forma = k < 1 ? T("decrescente: falhas são mais prováveis no começo, como defeitos de fabricação (mortalidade infantil)", "decreasing: failures are likelier early on, like manufacturing defects (infant mortality)")
+        : k === 1 ? T("constante: a falha não depende da idade, e a Weibull vira a exponencial", "constant: failure doesn't depend on age, and the Weibull becomes the exponential")
+          : T("crescente: quanto mais velho, maior o risco de falhar, como num desgaste", "increasing: the older it is, the greater the risk of failing, as with wear");
+      const X = texNum(x);
+      return {
+        result: `P(X \\le ${X}) ${approx(F, 6)} ${tone(pctTex(F), 1)}, \\qquad f(${X}) ${approx(f, 6)} ${texSci(f, 6)}`,
+        chart: {
+          type: "curve", label: T(`Densidade Weibull com forma ${fmt(k)} e escala ${fmt(lambda)}; área sombreada até x = ${fmt(x)}`, `Weibull density with shape ${fmt(k)} and scale ${fmt(lambda)}; area shaded up to x = ${fmt(x)}`),
+          xLabel: "x", xMin: 0, xMax: hi, yMax: k < 1 ? Math.min(yMax, pdf(hi / 40) * 1.2) : yMax, pts, shadeTo: x, marker: Number.isFinite(f) && f <= yMax ? [x, f] : null,
+          tipAt: v => [`f = ${fmtSci(pdf(v), 4)}`, `x = ${fmt(v, 2)}, P(X ≤ x) ≈ ${fmt(cdf(v) * 100, 1)}%`],
+        },
+        steps: [
+          [T("Divida x pela escala e eleve à forma:", "Divide x by the scale and raise it to the shape:"),
+            `\\left(\\dfrac{${X}}{${texNum(lambda)}}\\right)^{${texNum(k)}} = ${texNum(ratio, 6)}^{${texNum(k)}} ${approx(pw, 6)} ${tone(texNum(pw, 6), 4)}`],
+          [T("A chance de falhar até x é um menos a de sobreviver até lá:", "The chance of failing by x is one minus the chance of surviving until then:"),
+            `P(X \\le ${X}) = 1 - e^{-${tone(texNum(pw, 6), 4)}} ${approx(F, 6)} ${tone(texNum(F, 6), 1)}`],
+          [T("A densidade junta a taxa de falha e a sobrevivência:", "The density combines the failure rate and survival:"),
+            `f(${X}) = ${tone(`\\dfrac{${texNum(k)}}{${texNum(lambda)}}`, 2)} \\cdot ${tone(`${texNum(ratio, 6)}^{${texNum(k - 1)}}`, 3)} \\cdot e^{-${texNum(pw, 6)}} ${approx(f, 6)} ${texSci(f, 6)}`],
+        ],
+        note: T(`Com forma k = ${fmt(k)}, a taxa de falha é ${forma}.${Number.isFinite(h) ? ` Em x = ${fmt(x)}, ela vale ${fmtSci(h, 4)} por unidade de tempo.` : ""}`
+          + ` A vida média é λΓ(1 + 1/k) ≈ ${fmt(mean, 4)} e a mediana λ(ln 2)^(1/k) ≈ ${fmt(med, 4)}.`
+          + ` É o modelo padrão em confiabilidade e engenharia; com k = 1 é a <a href="${PAGE("distribuicao-exponencial")}?lambda=${Number((1 / lambda).toFixed(6))}&amp;x=${x}">exponencial</a> de taxa 1/λ.`,
+          `With shape k = ${fmt(k)}, the failure rate is ${forma}.${Number.isFinite(h) ? ` At x = ${fmt(x)}, it is ${fmtSci(h, 4)} per unit of time.` : ""}`
+          + ` The mean life is λΓ(1 + 1/k) ≈ ${fmt(mean, 4)} and the median λ(ln 2)^(1/k) ≈ ${fmt(med, 4)}.`
+          + ` It is the standard model in reliability and engineering; with k = 1 it is the <a href="${PAGE("distribuicao-exponencial")}?lambda=${Number((1 / lambda).toFixed(6))}&amp;x=${x}">exponential</a> with rate 1/λ.`),
+      };
+    },
+
+    cadeia({ f, g, x }) {
+      const SEN = T("\\operatorname{sen}", "\\sin");
+      const OUT = {
+        sin: { t: u => `${SEN}(${u})`, d: u => `\\cos(${u})`, f: Math.sin, df: Math.cos },
+        cos: { t: u => `\\cos(${u})`, d: u => `-${SEN}(${u})`, f: Math.cos, df: v => -Math.sin(v) },
+        exp: { t: u => `e^{${u}}`, d: u => `e^{${u}}`, f: Math.exp, df: Math.exp },
+        ln: { t: u => `\\ln(${u})`, d: u => `\\dfrac{1}{${u}}`, f: Math.log, df: v => 1 / v, pos: true },
+        sqrt: { t: u => `\\sqrt{${u}}`, d: u => `\\dfrac{1}{2\\sqrt{${u}}}`, f: Math.sqrt, df: v => 0.5 / Math.sqrt(v), pos: true },
+        cube: { t: u => `(${u})^3`, d: u => `3(${u})^2`, f: v => v ** 3, df: v => 3 * v * v },
+      };
+      const IN = {
+        x2: { t: "x^2", d: "2x", f: v => v * v, df: v => 2 * v },
+        lin: { t: "3x + 1", d: "3", f: v => 3 * v + 1, df: () => 3 },
+        sin: { t: `${SEN} x`, d: "\\cos x", f: Math.sin, df: Math.cos },
+        exp: { t: "e^{x}", d: "e^{x}", f: Math.exp, df: Math.exp },
+        poly: { t: "x^3 - x", d: "3x^2 - 1", f: v => v ** 3 - v, df: v => 3 * v * v - 1 },
+      };
+      const o = OUT[f], i = IN[g];
+      if (Math.abs(x) > 20) return { error: T("Use x entre −20 e 20.", "Use x between −20 and 20.") };
+      const u = i.f(x);
+      if (o.pos && !(u > 0)) return { error: T(`Aqui g(x) = ${fmt(u, 4)}, e ${f === "ln" ? "ln" : "√"} só aceita valores positivos. Tente outro x.`, `Here g(x) = ${fmt(u, 4)}, and ${f === "ln" ? "ln" : "√"} only takes positive values. Try another x.`) };
+      const du = i.df(x), dfu = o.df(u), d = dfu * du;
+      const h = 1e-5, num = (o.f(i.f(x + h)) - o.f(i.f(x - h))) / (2 * h);
+      const comp = v => o.f(i.f(v));
+      const lo = x - 2, hi = x + 2;
+      const pts = Array.from({ length: 241 }, (_, j) => { const v = lo + (hi - lo) * j / 240; return [v, comp(v)]; }).filter(p => Number.isFinite(p[1]));
+      const ys = pts.map(p => p[1]).sort((a, b) => a - b);
+      const yLo = ys[Math.floor(ys.length * 0.02)], yHi = ys[Math.ceil(ys.length * 0.98) - 1], pad = (yHi - yLo) * 0.15 || 1;
+      const y0 = comp(x);
+      const tan = Array.from({ length: 81 }, (_, j) => { const v = lo + (hi - lo) * j / 80; return [v, y0 + d * (v - x)]; });
+      const G = `(${i.t})`.replace(/^\((x\^2|e\^\{x\})\)$/, "$1");
+      const X = texNum(x);
+      return {
+        result: `\\dfrac{d}{dx}\\,${o.t(i.t)} = ${tone(o.d(i.t), 2)} \\cdot ${tone(i.d, 3)}, \\qquad \\text{${T("em", "at")}}\\ x = ${X}: ${approx(d, 6)} ${tone(texNum(d, 6), 1)}`,
+        chart: {
+          type: "curve", label: T(`Curva de f(g(x)) perto de x = ${fmt(x)}, com a reta tangente de inclinação ${fmt(d, 4)}`, `Curve of f(g(x)) near x = ${fmt(x)}, with the tangent line of slope ${fmt(d, 4)}`),
+          xLabel: T("x · tracejada: tangente no ponto", "x · dashed: tangent at the point"),
+          xMin: lo, xMax: hi, yMin: Math.min(yLo, y0) - pad, yMax: Math.max(yHi, y0) + pad, pts, lines: [{ pts: tan, cls: "chart-tangent" }],
+          tipAt: v => [fmt(comp(v), 4), `x = ${fmt(v, 2)}`],
+        },
+        steps: [
+          [T("Separe a função de dentro e a de fora:", "Separate the inside function from the outside one:"), `g(x) = ${i.t}, \\qquad f(u) = ${o.t("u")}`],
+          [T("Derive cada uma separadamente:", "Differentiate each one separately:"), `g'(x) = ${tone(i.d, 3)}, \\qquad f'(u) = ${o.d("u")}`],
+          [T("Troque u por g(x) na derivada de fora e multiplique pela de dentro:", "Replace u by g(x) in the outer derivative and multiply by the inner one:"),
+            `\\dfrac{d}{dx}\\,${o.t(i.t)} = ${tone(o.d(i.t), 2)} \\cdot ${tone(i.d, 3)}`],
+          [T(`Calcule em x = ${fmt(x)}:`, `Evaluate at x = ${fmt(x)}:`),
+            `g(${X}) ${approx(u, 6)} ${texNum(u, 6)}, \\quad f'(g(${X})) ${approx(dfu, 6)} ${tone(texNum(dfu, 6), 2)}, \\quad g'(${X}) ${approx(du, 6)} ${tone(texNum(du, 6), 3)} \\quad \\Rightarrow \\quad ${tone(texNum(d, 6), 1)}`],
+        ],
+        note: T(`Conferindo pela definição, com um passo pequeno: [f(g(x + h)) − f(g(x − h))] / (2h) ≈ ${fmt(num, 6)}.`
+          + ` A ideia: se g muda ${fmt(du, 3)} vezes mais depressa que x, e f muda ${fmt(dfu, 3)} vezes mais depressa que g, a composta muda o produto, ${fmt(d, 3)} vezes mais depressa que x.`
+          + ` Veja também a <a href="${PAGE("derivada")}">derivada pela definição</a>.`,
+          `Checking against the definition, with a small step: [f(g(x + h)) − f(g(x − h))] / (2h) ≈ ${fmt(num, 6)}.`
+          + ` The idea: if g changes ${fmt(du, 3)} times as fast as x, and f changes ${fmt(dfu, 3)} times as fast as g, the composite changes by the product, ${fmt(d, 3)} times as fast as x.`
+          + ` See also the <a href="${PAGE("derivada")}">derivative from the definition</a>.`),
+      };
+    },
+
+    benford({ fonte, n, x }) {
+      const benf = Array.from({ length: 9 }, (_, i) => Math.log10(1 + 1 / (i + 1)));
+      const counts = new Array(9).fill(0);
+      let total = 0;
+      const lead = l10 => Math.floor(10 ** (l10 - Math.floor(l10)) + 1e-9);
+      if (fonte === "dados") {
+        const xs = x.filter(v => v !== 0 && Number.isFinite(v));
+        if (xs.length < 10) return { error: T("Informe pelo menos dez valores diferentes de zero.", "Enter at least ten non-zero values.") };
+        xs.forEach(v => { const d = lead(Math.log10(Math.abs(v))); counts[Math.min(9, Math.max(1, d)) - 1]++; });
+        total = xs.length;
+      } else {
+        if (!Number.isInteger(n) || n < 10 || n > 100000) return { error: T("A quantidade de termos precisa ser um inteiro entre 10 e 100.000.", "The number of terms must be an integer between 10 and 100,000.") };
+        const phiL = Math.log10((1 + Math.sqrt(5)) / 2), s5 = Math.log10(Math.sqrt(5));
+        let fa = 1, fb = 1;
+        for (let k = 1; k <= n; k++) {
+          let l;
+          if (fonte === "pot2") l = k * Math.LOG10E * Math.LN2;
+          else if (fonte === "fat") l = lgamma(k + 1) / Math.LN10;
+          else if (k <= 70) { l = Math.log10(fa); [fa, fb] = [fb, fa + fb]; } else l = k * phiL - s5;
+          counts[Math.min(9, Math.max(1, lead(l))) - 1]++;
+        }
+        total = n;
+      }
+      const obs = counts.map(c => c / total);
+      const chi2 = counts.reduce((s, c, i) => s + (c - total * benf[i]) ** 2 / (total * benf[i]), 0), p = chiSurvival(chi2, 8);
+      const nomes = { pot2: T("potências de 2", "powers of 2"), fib: T("números de Fibonacci", "Fibonacci numbers"), fat: T("fatoriais", "factorials"), dados: T("seus dados", "your data") };
+      const rows = benf.map((b, i) => `${i + 1} & ${texNum(b * 100, 1)}\\% & ${counts[i]} & ${texNum(obs[i] * 100, 1)}\\%`).join(" \\\\ ");
+      const q = new URLSearchParams({ o: counts.join(" "), e: benf.map(b => b.toFixed(6)).join(" ") });
+      return {
+        result: `P(d = 1) = \\log_{10} 2 ${approx(benf[0], 4)} ${tone(pctTex(benf[0], 1), 1)}, \\qquad ${T("\\text{observado}", "\\text{observed}")}: ${pctTex(obs[0], 1)}`,
+        chart: {
+          type: "curve", label: T(`Frequência do primeiro dígito pela lei de Benford e nos ${fmt(total)} ${nomes[fonte]}`, `First-digit frequency under Benford's law and in the ${fmt(total)} ${nomes[fonte]}`),
+          xLabel: T("primeiro dígito · colorida: Benford · escura: observado", "first digit · colored: Benford · dark: observed"),
+          xMin: 1, xMax: 9, yMin: 0, yMax: Math.max(...benf, ...obs) * 100 * 1.1, pts: benf.map((b, i) => [i + 1, b * 100]),
+          lines: [{ pts: obs.map((v, i) => [i + 1, v * 100]), cls: "chart-fit" }],
+          tipAt: v => { const d = Math.min(9, Math.max(1, Math.round(v))); return [`${fmt(benf[d - 1] * 100, 1)}% × ${fmt(obs[d - 1] * 100, 1)}%`, T(`primeiro dígito ${d}: Benford × observado`, `first digit ${d}: Benford × observed`)]; },
+        },
+        steps: [
+          [T(`Conte o primeiro dígito de cada um dos ${fmt(total)} ${nomes[fonte]} e compare com log₁₀(1 + 1/d):`, `Count the first digit of each of the ${fmt(total)} ${nomes[fonte]} and compare with log₁₀(1 + 1/d):`),
+            `\\begin{array}{c|c|c|c} d & \\text{Benford} & ${T("\\text{contagem}", "\\text{count}")} & ${T("\\text{observado}", "\\text{observed}")} \\\\ \\hline ${rows} \\end{array}`],
+          [T("Um teste qui-quadrado de aderência mede a distância até Benford, com 8 graus de liberdade:", "A chi-square goodness-of-fit test measures the distance from Benford, with 8 degrees of freedom:"),
+            `\\chi^2 ${approx(chi2, 3)} ${texNum(chi2, 3)}`],
+        ],
+        note: T(`O valor-p é ${pValueText(p)}${p < 0.05 ? ": os dígitos se afastam de Benford mais do que o acaso explicaria" : ": os dígitos são compatíveis com Benford"}. Confira no <a href="${PAGE("qui-quadrado")}?${q}">teste qui-quadrado com estas contagens</a>.`
+          + " A lei aparece em números que se espalham por várias ordens de grandeza e crescem por multiplicação: populações, preços, contas de luz, potências. Num gráfico em escala logarítmica, o trecho de 1 a 2 ocupa 30% de cada década."
+          + " Por isso auditores usam Benford para farejar dados inventados: quem chuta números costuma espalhar os primeiros dígitos por igual.",
+          `The p-value is ${pValueText(p)}${p < 0.05 ? ": the digits stray from Benford more than chance would explain" : ": the digits are consistent with Benford"}. Check it in the <a href="${PAGE("qui-quadrado")}?${q}">chi-square test with these counts</a>.`
+          + " The law shows up in numbers that spread over several orders of magnitude and grow by multiplication: populations, prices, electricity bills, powers. On a log scale, the stretch from 1 to 2 takes up 30% of every decade."
+          + " That is why auditors use Benford to sniff out made-up data: people inventing numbers tend to spread first digits evenly."),
+      };
+    },
+
+    uniao({ pa, pb, pab }) {
+      if ([pa, pb, pab].some(v => v < 0 || v > 100)) return probRange;
+      if (pab > Math.min(pa, pb) + 1e-9) return { error: T("A interseção não pode ser maior que P(A) nem que P(B): ela está dentro dos dois.", "The intersection can't be larger than P(A) or P(B): it lies inside both.") };
+      if (pa + pb - pab > 100 + 1e-9) return { error: T(`Com esses valores, a união daria ${fmt(pa + pb - pab)}%, mais que 100%: a interseção precisa ser de pelo menos ${fmt(pa + pb - 100)}%.`, `With these values the union would be ${fmt(pa + pb - pab)}%, over 100%: the intersection must be at least ${fmt(pa + pb - 100)}%.`) };
+      const a = pa / 100, b = pb / 100, ab = pab / 100, u = a + b - ab;
+      const ind = Math.abs(ab - a * b) < 1e-9;
+      return {
+        result: `P(A \\cup B) ${approx(u, 6)} ${tone(pctTex(u), 1)}`,
+        chart: {
+          type: "venn", height: 240,
+          label: T(`Diagrama de Venn: só A ${fmt((a - ab) * 100)}%, A e B ${fmt(ab * 100)}%, só B ${fmt((b - ab) * 100)}%, nenhum ${fmt((1 - u) * 100)}%`, `Venn diagram: A only ${fmt((a - ab) * 100)}%, A and B ${fmt(ab * 100)}%, B only ${fmt((b - ab) * 100)}%, neither ${fmt((1 - u) * 100)}%`),
+          regions: [`${fmt((a - ab) * 100, 2)}%`, `${fmt(ab * 100, 2)}%`, `${fmt((b - ab) * 100, 2)}%`, T(`nenhum: ${fmt((1 - u) * 100, 2)}%`, `neither: ${fmt((1 - u) * 100, 2)}%`)],
+        },
+        steps: [
+          [T("Somar P(A) e P(B) conta duas vezes quem está nos dois:", "Adding P(A) and P(B) counts those in both twice:"),
+            `${tone(texNum(a, 4), 2)} + ${tone(texNum(b, 4), 3)} = ${texNum(a + b, 4)}`],
+          [T("Subtraia a interseção uma vez:", "Subtract the intersection once:"),
+            `P(A \\cup B) = ${texNum(a + b, 4)} - ${tone(texNum(ab, 4), 4)} ${approx(u, 6)} ${tone(texNum(u, 6), 1)}`],
+        ],
+        note: T(`Só A: ${fmt((a - ab) * 100, 2)}%; só B: ${fmt((b - ab) * 100, 2)}%; os dois: ${fmt(ab * 100, 2)}%; nenhum: ${fmt((1 - u) * 100, 2)}%.`
+          + (ab === 0 ? " Como a interseção é zero, A e B são mutuamente exclusivos, e a união é a soma simples." : "")
+          + (ind ? " Aqui P(A ∩ B) = P(A) · P(B): os eventos são independentes." : ` Se fossem independentes, a interseção seria P(A) · P(B) = ${fmt(a * b * 100, 2)}%; ${ab > a * b ? "é maior, então A e B tendem a andar juntos" : "é menor, então A e B tendem a se excluir"}.`)
+          + ` Para a chance de A sabendo que B aconteceu, use a <a href="${PAGE("probabilidade-condicional")}">probabilidade condicional</a>.`,
+          `A only: ${fmt((a - ab) * 100, 2)}%; B only: ${fmt((b - ab) * 100, 2)}%; both: ${fmt(ab * 100, 2)}%; neither: ${fmt((1 - u) * 100, 2)}%.`
+          + (ab === 0 ? " Since the intersection is zero, A and B are mutually exclusive, and the union is a plain sum." : "")
+          + (ind ? " Here P(A ∩ B) = P(A) · P(B): the events are independent." : ` If they were independent, the intersection would be P(A) · P(B) = ${fmt(a * b * 100, 2)}%; it is ${ab > a * b ? "larger, so A and B tend to go together" : "smaller, so A and B tend to exclude each other"}.`)
+          + ` For the chance of A given that B happened, use <a href="${PAGE("probabilidade-condicional")}">conditional probability</a>.`),
+      };
+    },
+
+    markov({ mu, a }) {
+      if (mu <= 0) return { error: T("A média precisa ser maior que zero (e a variável, nunca negativa).", "The mean must be greater than zero (and the variable never negative).") };
+      if (a <= 0) return { error: T("O limite a precisa ser maior que zero.", "The threshold a must be greater than zero.") };
+      const bound = Math.min(1, mu / a), expo = Math.exp(-a / mu);
+      const hi = Math.max(a * 1.5, mu * 6), lo = mu * 0.25;
+      const as = Array.from({ length: 241 }, (_, i) => lo + (hi - lo) * i / 240);
+      return {
+        result: `P(X \\ge ${texNum(a)}) \\le ${approx(bound, 6) === "=" ? "" : "\\approx\\,"}${tone(pctTex(bound), 1)}`,
+        chart: {
+          type: "curve", label: T(`Limite de Markov μ/a conforme a, com média ${fmt(mu)}, comparado com a cauda exata de uma exponencial de mesma média`, `Markov bound μ/a as a varies, with mean ${fmt(mu)}, compared with the exact tail of an exponential with the same mean`),
+          xLabel: T("a · colorida: limite de Markov · escura: cauda de uma exponencial com a mesma média", "a · colored: Markov bound · dark: tail of an exponential with the same mean"),
+          xMin: lo, xMax: hi, yMin: 0, yMax: 100, pts: as.map(v => [v, Math.min(1, mu / v) * 100]), lines: [{ pts: as.map(v => [v, Math.exp(-v / mu) * 100]), cls: "chart-fit" }],
+          marker: [a, bound * 100],
+          tipAt: v => [`≤ ${fmt(Math.min(1, mu / v) * 100, 1)}%`, T(`P(X ≥ ${fmt(v, 2)}); numa exponencial, ${fmt(Math.exp(-v / mu) * 100, 2)}%`, `P(X ≥ ${fmt(v, 2)}); for an exponential, ${fmt(Math.exp(-v / mu) * 100, 2)}%`)],
+        },
+        steps: [
+          [T("Divida a média pelo limite:", "Divide the mean by the threshold:"), `\\dfrac{${tone(texNum(mu), 2)}}{${tone(texNum(a), 3)}} ${approx(mu / a, 6)} ${texNum(mu / a, 6)}`],
+          [T(mu >= a ? "Como passa de 1, o limite não diz nada além do óbvio: uma probabilidade nunca passa de 100%." : "Essa é a fração máxima que pode estar em a ou acima, qualquer que seja a distribuição:", mu >= a ? "Since it exceeds 1, the bound says nothing beyond the obvious: a probability never exceeds 100%." : "That is the largest share that can lie at a or above, whatever the distribution:"),
+            `P(X \\ge ${texNum(a)}) \\le ${tone(pctTex(bound), 1)}`],
+        ],
+        note: T(`O raciocínio: se mais de ${fmt(bound * 100, 2)}% dos valores fossem ${fmt(a)} ou mais, só eles já fariam a média passar de ${fmt(mu)}. Vale para qualquer variável que nunca é negativa, conhecendo só a média.`
+          + ` O preço é ser folgado: numa exponencial com a mesma média, a chance real é ${fmtSci(expo, 3)}. Sabendo também o desvio padrão, o <a href="${PAGE("teorema-chebyshev")}">teorema de Chebyshev</a> dá um limite bem mais apertado — e ele sai justamente de aplicar Markov a (X − μ)².`,
+          `The reasoning: if more than ${fmt(bound * 100, 2)}% of the values were ${fmt(a)} or more, they alone would push the mean above ${fmt(mu)}. It holds for any variable that is never negative, knowing only the mean.`
+          + ` The price is looseness: for an exponential with the same mean, the real chance is ${fmtSci(expo, 3)}. Knowing the standard deviation too, <a href="${PAGE("teorema-chebyshev")}">Chebyshev's theorem</a> gives a much tighter bound — and it comes precisely from applying Markov to (X − μ)².`),
+      };
+    },
+
+    ruina({ i, N, p }) {
+      if (!Number.isInteger(N) || N < 2 || N > 100000) return { error: T("A meta N precisa ser um inteiro entre 2 e 100.000.", "The target N must be an integer between 2 and 100,000.") };
+      if (!Number.isInteger(i) || i < 1 || i >= N) return { error: T(`O capital inicial precisa ser um inteiro entre 1 e ${N - 1}.`, `The starting capital must be an integer between 1 and ${N - 1}.`) };
+      if (p <= 0 || p >= 100) return { error: T("A chance de ganhar cada rodada precisa estar entre 0 e 100%, sem os extremos.", "The chance of winning each round must be strictly between 0 and 100%.") };
+      const pp = p / 100, q = 1 - pp, r = q / pp, justo = Math.abs(pp - 0.5) < 1e-12;
+      // (r^j − 1)/(r^N − 1) em logaritmos, para N grande não estourar.
+      const ganha = j => {
+        if (justo) return j / N;
+        if (r > 1) { const a = j * Math.log(r), b = N * Math.log(r); return Math.exp(a - b) * (1 - Math.exp(-a)) / (1 - Math.exp(-b)); }
+        return (1 - r ** j) / (1 - r ** N);
+      };
+      const P = ganha(i);
+      const dur = justo ? i * (N - i) : i / (q - pp) - N / (q - pp) * P;
+      const js = Array.from({ length: Math.min(N, 400) + 1 }, (_, k) => Math.round(k * N / Math.min(N, 400)));
+      const R = tone(texNum(r, 6), 2);
+      return {
+        result: `P(\\text{${T("chegar a", "reach")}}\\ ${N}) ${approx(P, 6)} ${tone(pctTex(P), 1)}`,
+        chart: {
+          type: "curve", label: T(`Chance de chegar a ${N} antes de quebrar, para cada capital inicial`, `Chance of reaching ${N} before going broke, for each starting capital`),
+          xLabel: T("capital inicial · colorida: este jogo · escura: jogo justo (p = 50%)", "starting capital · colored: this game · dark: a fair game (p = 50%)"),
+          xMin: 0, xMax: N, yMin: 0, yMax: 100, pts: js.map(j => [j, ganha(j) * 100]), lines: [{ pts: js.map(j => [j, j / N * 100]), cls: "chart-fit" }],
+          marker: [i, P * 100],
+          tipAt: v => { const j = Math.min(N, Math.max(0, Math.round(v))); return [`${fmt(ganha(j) * 100, 2)}%`, T(`começando com ${j}`, `starting with ${j}`)]; },
+        },
+        steps: justo
+          ? [[T("Num jogo justo, a chance é só a fração do caminho já percorrida:", "In a fair game, the chance is just the share of the way already covered:"), `P_{${i}} = \\dfrac{${i}}{${N}} ${approx(P, 6)} ${tone(texNum(P, 6), 1)}`]]
+          : [[T("Calcule a razão entre perder e ganhar uma rodada:", "Compute the ratio of losing to winning a round:"), `\\dfrac{q}{p} = \\dfrac{${texNum(q, 4)}}{${texNum(pp, 4)}} ${approx(r, 6)} ${R}`],
+            [T("Aplique a fórmula:", "Apply the formula:"), `P_{${i}} = \\dfrac{1 - ${R}^{${i}}}{1 - ${R}^{${N}}} ${approx(P, 6)} ${tone(texSci(P, 6), 1)}`]],
+        note: T(`Começando com ${i} e apostando 1 por rodada, a chance de chegar a ${N} antes de zerar é ${fmt(P * 100, 2)}%${justo ? "" : `; num jogo justo seria ${fmt(i / N * 100, 1)}%`}. Em média, o jogo dura cerca de ${fmt(Math.round(dur))} rodadas.`
+          + (pp < 0.5 ? " Uma desvantagem pequena por rodada vira uma desvantagem enorme no longo prazo: quanto mais rodadas, mais a casa ganha. Num jogo desfavorável, apostar alto e jogar poucas vezes dá mais chance de chegar à meta do que apostar pouco muitas vezes." : "")
+          + " É também um passeio aleatório entre duas barreiras, o mesmo modelo de uma partícula que se difunde ou do preço de um ativo.",
+          `Starting with ${i} and betting 1 per round, the chance of reaching ${N} before hitting zero is ${fmt(P * 100, 2)}%${justo ? "" : `; in a fair game it would be ${fmt(i / N * 100, 1)}%`}. On average, the game lasts about ${fmt(Math.round(dur))} rounds.`
+          + (pp < 0.5 ? " A small edge per round becomes a huge one in the long run: the more rounds, the more the house wins. In an unfavourable game, betting big and playing few times gives a better chance of reaching the target than betting small many times." : "")
+          + " It is also a random walk between two barriers, the same model as a diffusing particle or an asset's price."),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -4234,6 +4547,22 @@
     tip.className = "chart-tip";
     tip.hidden = true;
     box.appendChild(tip);
+
+    // Diagrama de Venn de dois eventos, com o rótulo de cada região.
+    if (spec.type === "venn") {
+      const cy = H / 2, r = Math.min(95, H / 2 - 22), dx = r * 0.72;
+      svg("rect", { x: 1, y: 1, width: W - 2, height: H - 2, rx: 6, class: "chart-venn-frame" }, root);
+      [W / 2 - dx, W / 2 + dx].forEach(cx => svg("circle", { cx, cy, r, class: "chart-box" }, root));
+      const txt = (x, y, t, cls, anchor = "middle") => { svg("text", { x, y, class: cls, "text-anchor": anchor }, root).textContent = t; };
+      txt(W / 2 - dx - r * 0.55, cy - r * 0.78, "A", "chart-venn-name");
+      txt(W / 2 + dx + r * 0.55, cy - r * 0.78, "B", "chart-venn-name");
+      const [sa, both, sb, none] = spec.regions;
+      txt(W / 2 - dx - r * 0.35, cy + 6, sa, "chart-venn-num");
+      txt(W / 2, cy + 6, both, "chart-venn-num");
+      txt(W / 2 + dx + r * 0.35, cy + 6, sb, "chart-venn-num");
+      txt(W - 14, H - 12, none, "chart-label", "end");
+      return;
+    }
 
     const xMin = spec.xMin, xMax = spec.xMax;
     // Sem yMin, o eixo y começa em 0 e ganha 8% de folga no topo; com yMin,

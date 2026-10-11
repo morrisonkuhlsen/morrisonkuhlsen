@@ -37,6 +37,11 @@
   description: "A derivada como limite do quociente de diferenças, explicada termo a termo, com calculadora, gráfico da secante virando tangente e comparação com o valor exato."
   tags: "fórmula interativa calculadora passo a passo derivada limite secante tangente inclinação"
   lang: pt
+- title: "Desigualdade de Markov"
+  url: "/formulas/desigualdade-markov.html"
+  description: "A desigualdade de Markov explicada termo a termo, com calculadora e gráfico: um teto para a chance de valores altos, conhecendo só a média."
+  tags: "fórmula interativa calculadora passo a passo Markov limite cauda média"
+  lang: pt
 - title: "Aproximação de Stirling"
   url: "/formulas/aproximacao-stirling.html"
   description: "Aproximação de Stirling para n! explicada termo a termo, com calculadora, comparação com o valor exato e gráfico do erro relativo."
@@ -97,6 +102,11 @@
   description: "Distribuição binomial explicada termo a termo, com calculadora de P(X = k), probabilidades acumuladas, gráfico e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Distribuição Binomial Negativa"
+  url: "/formulas/distribuicao-binomial-negativa.html"
+  description: "Distribuição binomial negativa explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de o r-ésimo sucesso vir na k-ésima tentativa."
+  tags: "fórmula interativa calculadora passo a passo binomial negativa Pascal r-ésimo sucesso"
+  lang: pt
 - title: "Distribuição Exponencial"
   url: "/formulas/distribuicao-exponencial.html"
   description: "Distribuição exponencial explicada termo a termo, com calculadora, curva e passo a passo: a densidade e a chance de esperar até x pelo próximo evento."
@@ -117,6 +127,11 @@
   description: "Distribuição hipergeométrica explicada termo a termo, com calculadora, gráfico, passo a passo e comparação com a binomial: sorteios sem reposição."
   tags: "fórmula interativa calculadora passo a passo sem reposição amostra lote controle de qualidade"
   lang: pt
+- title: "Distribuição Lognormal"
+  url: "/formulas/distribuicao-lognormal.html"
+  description: "Distribuição lognormal explicada termo a termo, com calculadora, curva e passo a passo: quantidades cujo logaritmo é normal, como renda e preços."
+  tags: "fórmula interativa calculadora passo a passo lognormal log-normal renda preços assimetria"
+  lang: pt
 - title: "Distribuição Normal"
   url: "/formulas/distribuicao-normal.html"
   description: "Distribuição normal explicada termo a termo, com calculadora da densidade f(x), gráfico da área P(X ≤ x) e passo a passo."
@@ -126,6 +141,11 @@
   url: "/formulas/distribuicao-poisson.html"
   description: "Distribuição de Poisson explicada termo a termo, com calculadora de P(X = k), probabilidades acumuladas, gráfico e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Distribuição de Weibull"
+  url: "/formulas/distribuicao-weibull.html"
+  description: "Distribuição de Weibull explicada termo a termo, com calculadora, curva e a taxa de falha: o modelo da vida útil em confiabilidade."
+  tags: "fórmula interativa calculadora passo a passo Weibull confiabilidade vida útil taxa de falha"
   lang: pt
 - title: "Fórmula Quadrática"
   url: "/formulas/formula-quadratica.html"
@@ -156,6 +176,11 @@
   url: "/formulas/kappa-cohen.html"
   description: "Kappa de Cohen explicado termo a termo, com calculadora para a concordância entre dois avaliadores, concordância esperada por acaso e interpretação."
   tags: "fórmula interativa calculadora passo a passo concordância entre avaliadores confiabilidade"
+  lang: pt
+- title: "Lei de Benford"
+  url: "/formulas/lei-benford.html"
+  description: "A lei de Benford explicada termo a termo: por que o primeiro dígito costuma ser 1, com contagem em sequências ou nos seus dados e teste qui-quadrado."
+  tags: "fórmula interativa calculadora passo a passo Benford primeiro dígito fraude auditoria"
   lang: pt
 - title: "Lei dos Grandes Números"
   url: "/formulas/lei-grandes-numeros.html"
@@ -302,10 +327,25 @@
   description: "Regra de L'Hôpital explicada termo a termo, com exemplos resolvidos de 0/0 e ∞/∞ e o erro comum de aplicá-la sem indeterminação."
   tags: "fórmula interativa calculadora passo a passo"
   lang: pt
+- title: "Regra da Cadeia"
+  url: "/formulas/regra-cadeia.html"
+  description: "A regra da cadeia explicada termo a termo, com calculadora de derivadas de funções compostas, gráfico da tangente e exemplos resolvidos."
+  tags: "fórmula interativa calculadora passo a passo derivada função composta cálculo exemplos"
+  lang: pt
+- title: "Regra da Soma (União de Eventos)"
+  url: "/formulas/regra-soma.html"
+  description: "A regra da soma P(A ∪ B) explicada termo a termo, com calculadora, diagrama de Venn e a relação com eventos exclusivos e independentes."
+  tags: "fórmula interativa calculadora passo a passo união interseção Venn eventos"
+  lang: pt
 - title: "Regressão Linear"
   url: "/formulas/regressao-linear.html"
   description: "Regressão linear simples explicada termo a termo, com calculadora da reta de mínimos quadrados, previsão e passo a passo."
   tags: "fórmula interativa calculadora passo a passo"
+  lang: pt
+- title: "Ruína do Jogador"
+  url: "/formulas/ruina-jogador.html"
+  description: "O problema da ruína do jogador explicado termo a termo: a chance de atingir uma meta antes de quebrar, com calculadora, gráfico e a duração média do jogo."
+  tags: "fórmula interativa calculadora passo a passo ruína do jogador passeio aleatório roleta aposta"
   lang: pt
 - title: "Série de Taylor"
   url: "/formulas/serie-taylor.html"
@@ -443,6 +483,11 @@
   description: "Sensitivity, specificity and the predictive values of a diagnostic test explained term by term, with a frequency table and a chart by prevalence."
   tags: "formula interactive calculator step by step sensitivity specificity PPV NPV prevalence false positive"
   lang: en
+- title: "Addition Rule (Union of Events)"
+  url: "/en/formulas/addition-rule.html"
+  description: "The addition rule P(A ∪ B) explained term by term, with a calculator, a Venn diagram and how it relates to exclusive and independent events."
+  tags: "formula interactive calculator step by step union intersection Venn events"
+  lang: en
 - title: "Conditional Probability"
   url: "/en/formulas/conditional-probability.html"
   description: "Conditional probability P(A|B) explained term by term, with a calculator that works from counts, step by step."
@@ -478,10 +523,25 @@
   description: "The Monty Hall problem explained term by term: why switching doors doubles the chance, with the exact calculation and a simulation comparing staying and switching."
   tags: "formula interactive calculator step by step Monty Hall doors switch paradox simulation"
   lang: en
+- title: "Gambler's Ruin"
+  url: "/en/formulas/gamblers-ruin.html"
+  description: "The gambler's ruin problem explained term by term: the chance of reaching a target before going broke, with a calculator, a chart and the average length of the game."
+  tags: "formula interactive calculator step by step gambler's ruin random walk roulette betting"
+  lang: en
+- title: "Benford's Law"
+  url: "/en/formulas/benfords-law.html"
+  description: "Benford's law explained term by term: why the first digit is so often 1, with counts over sequences or your own data and a chi-square test."
+  tags: "formula interactive calculator step by step Benford first digit fraud auditing"
+  lang: en
 - title: "Expected Value"
   url: "/en/formulas/expected-value.html"
   description: "The expected value E[X] explained term by term, with a calculator, a table of products, a chart of the distribution and the variance as a bonus."
   tags: "formula interactive calculator step by step expectation mean random variable"
+  lang: en
+- title: "Markov's Inequality"
+  url: "/en/formulas/markov-inequality.html"
+  description: "Markov's inequality explained term by term, with a calculator and a chart: a ceiling on the chance of high values, knowing only the mean."
+  tags: "formula interactive calculator step by step Markov bound tail mean"
   lang: en
 - title: "Chebyshev's Theorem"
   url: "/en/formulas/chebyshev-theorem.html"
@@ -503,6 +563,11 @@
   description: "The geometric distribution explained term by term, with a calculator, a chart and step-by-step working: the chance that the first success comes on trial k."
   tags: "formula interactive calculator step by step first success trials"
   lang: en
+- title: "Negative Binomial Distribution"
+  url: "/en/formulas/negative-binomial-distribution.html"
+  description: "The negative binomial distribution explained term by term, with a calculator, a chart and step-by-step working: the chance that success number r comes on trial k."
+  tags: "formula interactive calculator step by step negative binomial Pascal r-th success"
+  lang: en
 - title: "Hypergeometric Distribution"
   url: "/en/formulas/hypergeometric-distribution.html"
   description: "The hypergeometric distribution explained term by term, with a calculator, a chart, step-by-step working and a comparison with the binomial: draws without replacement."
@@ -523,10 +588,20 @@
   description: "The Gamma distribution explained term by term, with a calculator, a curve and step-by-step working: the time until the k-th event and the link to the exponential and Poisson."
   tags: "formula interactive calculator step by step gamma Erlang time until the k-th event"
   lang: en
+- title: "Weibull Distribution"
+  url: "/en/formulas/weibull-distribution.html"
+  description: "The Weibull distribution explained term by term, with a calculator, a curve and the failure rate: the model of service life in reliability."
+  tags: "formula interactive calculator step by step Weibull reliability service life failure rate"
+  lang: en
 - title: "Normal (Gaussian) Distribution"
   url: "/en/formulas/normal-distribution.html"
   description: "The normal distribution explained term by term, with a calculator for the density f(x), a chart of the area P(X ≤ x) and step-by-step working."
   tags: "formula interactive calculator step by step"
+  lang: en
+- title: "Lognormal Distribution"
+  url: "/en/formulas/lognormal-distribution.html"
+  description: "The lognormal distribution explained term by term, with a calculator, a curve and step-by-step working: quantities whose logarithm is normal, such as income and prices."
+  tags: "formula interactive calculator step by step lognormal income prices skewness"
   lang: en
 - title: "Beta Distribution"
   url: "/en/formulas/beta-distribution.html"
@@ -762,6 +837,11 @@
   url: "/en/formulas/derivative-definition.html"
   description: "The derivative as the limit of a difference quotient, explained term by term, with a calculator, a chart of the secant turning into the tangent and a comparison with the exact value."
   tags: "formula interactive calculator step by step derivative limit secant tangent slope"
+  lang: en
+- title: "Chain Rule"
+  url: "/en/formulas/chain-rule.html"
+  description: "The chain rule explained term by term, with a calculator for derivatives of composite functions, a chart of the tangent and worked examples."
+  tags: "formula interactive calculator step by step derivative composite function calculus examples"
   lang: en
 - title: "Newton's Method"
   url: "/en/formulas/newton-method.html"

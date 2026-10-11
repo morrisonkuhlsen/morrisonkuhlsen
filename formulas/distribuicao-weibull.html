@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Distribuição de Weibull — Interativa</title>
+  <meta name="description" content="Distribuição de Weibull explicada termo a termo, com calculadora, curva e a taxa de falha: o modelo da vida útil em confiabilidade.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-weibull.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-weibull.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/weibull-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-weibull.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/distribuicao-weibull.html">
+  <meta property="og:title" content="Distribuição de Weibull — Interativa">
+  <meta property="og:description" content="Distribuição de Weibull explicada termo a termo, com calculadora, curva e a taxa de falha: o modelo da vida útil em confiabilidade.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Distribuição de Weibull — Interativa">
+  <meta name="twitter:description" content="Distribuição de Weibull explicada termo a termo, com calculadora, curva e a taxa de falha: o modelo da vida útil em confiabilidade.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/weibull-distribution.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Distribuição de Weibull</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Distribuição de Weibull interativa">
+        <span class="part" data-part="f_wb" data-tone="1" data-tex="f(x)"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="kl_wb" data-tone="2" data-tex="\dfrac{k}{\lambda}"></span>
+        <span class="part" data-part="xl_wb" data-tone="3" data-tex="\left(\dfrac{x}{\lambda}\right)^{k-1}"></span>
+        <span class="part" data-part="e_wb" data-tone="4" data-tex="e^{-(x/\lambda)^k}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com curva; estado em ?k=&lambda=&x=. -->
+    <section class="calc" data-calc="weibull" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: a vida útil de uma lâmpada, em milhares de horas, segue uma Weibull com forma 1,5 e escala 10. Qual a chance de ela queimar antes de 5 mil horas? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Forma <i>k</i></span>
+          <input name="k" type="text" inputmode="decimal" value="1,5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Escala <i>λ</i></span>
+          <input name="lambda" type="text" inputmode="decimal" value="10" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Valor <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="f_wb" data-tone="1">Densidade (f(x))</dt>
+          <dd>A altura da curva no instante x. A área sob ela até x é a chance de a falha já ter acontecido.</dd>
+          <dt data-part="kl_wb" data-tone="2">Forma Sobre Escala (k/λ)</dt>
+          <dd>Fixa a escala da taxa de falha. A forma k decide se o risco cai (k < 1), fica constante (k = 1) ou cresce com a idade (k > 1).</dd>
+          <dt data-part="xl_wb" data-tone="3">Idade Relativa ((x/λ)ᵏ⁻¹)</dt>
+          <dd>O tempo medido em unidades de λ. Junto com k/λ, forma a taxa de falha: o risco de quebrar agora, para quem chegou até aqui.</dd>
+          <dt data-part="e_wb" data-tone="4">Sobrevivência (e^(−(x/λ)ᵏ))</dt>
+          <dd>A chance de durar além de x. Em x = λ, ela vale e⁻¹ ≈ 37%, qualquer que seja a forma: λ é a vida característica.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="distribuicao-gama.html" rel="prev"><span>Anterior</span>Distribuição Gama</a>
+      <a class="pager-next" href="distribuicao-normal.html" rel="next"><span>Próxima</span>Distribuição Normal (Gaussiana)</a>
+    </nav>
+  </main>
+</body>
+</html>

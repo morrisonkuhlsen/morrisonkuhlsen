@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">72 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">80 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -66,6 +66,11 @@
             <span class="card-tex" data-tex="VPP = \dfrac{S \cdot p}{S \cdot p + (1 - E)(1 - p)}"></span>
             <span class="card-name">Teste Diagnóstico: Valores Preditivos</span>
             <span class="card-blurb">Quanto vale um positivo, conforme a doença é rara ou comum.</span>
+          </a></li>
+          <li><a class="formula-card" href="regra-soma.html">
+            <span class="card-tex" data-tex="P(A \cup B) = P(A) + P(B) - P(A \cap B)"></span>
+            <span class="card-name">Regra da Soma (União de Eventos)</span>
+            <span class="card-blurb">A chance de pelo menos um de dois eventos.</span>
           </a></li>
           <li><a class="formula-card" href="probabilidade-condicional.html">
             <span class="card-tex" data-tex="P(A\mid B) = \dfrac{P(A \cap B)}{P(B)}"></span>
@@ -102,10 +107,25 @@
             <span class="card-name">Problema de Monty Hall</span>
             <span class="card-blurb">Por que trocar de porta dobra a chance de ganhar o carro.</span>
           </a></li>
+          <li><a class="formula-card" href="ruina-jogador.html">
+            <span class="card-tex" data-tex="P_i = \dfrac{1 - (q/p)^i}{1 - (q/p)^N}"></span>
+            <span class="card-name">Ruína do Jogador</span>
+            <span class="card-blurb">A chance de atingir uma meta antes de quebrar.</span>
+          </a></li>
+          <li><a class="formula-card" href="lei-benford.html">
+            <span class="card-tex" data-tex="P(d) = \log_{10}\left(1 + \dfrac{1}{d}\right)"></span>
+            <span class="card-name">Lei de Benford</span>
+            <span class="card-blurb">Por que o primeiro dígito costuma ser 1.</span>
+          </a></li>
           <li><a class="formula-card" href="valor-esperado.html">
             <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
             <span class="card-name">Valor Esperado</span>
             <span class="card-blurb">A média de longo prazo de uma variável aleatória.</span>
+          </a></li>
+          <li><a class="formula-card" href="desigualdade-markov.html">
+            <span class="card-tex" data-tex="P(X \ge a) \le \dfrac{E[X]}{a}"></span>
+            <span class="card-name">Desigualdade de Markov</span>
+            <span class="card-blurb">Um teto para valores altos, conhecendo só a média.</span>
           </a></li>
           <li><a class="formula-card" href="teorema-chebyshev.html">
             <span class="card-tex" data-tex="P \left( |X - \mu| \ge k \sigma \right) \le \dfrac{1}{k^2}"></span>
@@ -132,6 +152,11 @@
             <span class="card-name">Distribuição Geométrica</span>
             <span class="card-blurb">Quantas tentativas até o primeiro sucesso.</span>
           </a></li>
+          <li><a class="formula-card" href="distribuicao-binomial-negativa.html">
+            <span class="card-tex" data-tex="P(X=k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}"></span>
+            <span class="card-name">Distribuição Binomial Negativa</span>
+            <span class="card-blurb">Quantas tentativas até o r-ésimo sucesso.</span>
+          </a></li>
           <li><a class="formula-card" href="distribuicao-hipergeometrica.html">
             <span class="card-tex" data-tex="P(X=k) = \dfrac{\binom{K}{k} \binom{N-K}{n-k}}{\binom{N}{n}}"></span>
             <span class="card-name">Distribuição Hipergeométrica</span>
@@ -152,10 +177,20 @@
             <span class="card-name">Distribuição Gama</span>
             <span class="card-blurb">O tempo até o k-ésimo evento.</span>
           </a></li>
+          <li><a class="formula-card" href="distribuicao-weibull.html">
+            <span class="card-tex" data-tex="f(x) = \dfrac{k}{\lambda}\left(\dfrac{x}{\lambda}\right)^{k-1} e^{-(x/\lambda)^k}"></span>
+            <span class="card-name">Distribuição de Weibull</span>
+            <span class="card-blurb">A vida útil de peças e equipamentos, e a taxa de falha.</span>
+          </a></li>
           <li><a class="formula-card" href="distribuicao-normal.html">
             <span class="card-tex" data-tex="f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}"></span>
             <span class="card-name">Distribuição Normal (Gaussiana)</span>
             <span class="card-blurb">A curva em sino definida pela média e pelo desvio padrão.</span>
+          </a></li>
+          <li><a class="formula-card" href="distribuicao-lognormal.html">
+            <span class="card-tex" data-tex="f(x) = \dfrac{1}{x\sigma\sqrt{2\pi}}\, e^{-\frac{(\ln x - \mu)^2}{2\sigma^2}}"></span>
+            <span class="card-name">Distribuição Lognormal</span>
+            <span class="card-blurb">Quantidades que crescem por multiplicação, como renda e preços.</span>
           </a></li>
           <li><a class="formula-card" href="distribuicao-beta.html">
             <span class="card-tex" data-tex="f(p) = \dfrac{p^{\alpha-1}(1-p)^{\beta-1}}{B(\alpha, \beta)}"></span>
@@ -421,6 +456,11 @@
             <span class="card-tex" data-tex="f'(x) = \lim_{h \to 0} \dfrac{f(x+h) - f(x)}{h}"></span>
             <span class="card-name">Derivada pela Definição</span>
             <span class="card-blurb">A inclinação de uma curva como limite de secantes.</span>
+          </a></li>
+          <li><a class="formula-card" href="regra-cadeia.html">
+            <span class="card-tex" data-tex="\dfrac{d}{dx} f(g(x)) = f'(g(x)) \cdot g'(x)"></span>
+            <span class="card-name">Regra da Cadeia</span>
+            <span class="card-blurb">A derivada de uma função dentro de outra.</span>
           </a></li>
           <li><a class="formula-card" href="metodo-newton.html">
             <span class="card-tex" data-tex="x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}"></span>
