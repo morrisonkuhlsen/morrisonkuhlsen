@@ -1224,10 +1224,10 @@
   tags: "formula interactive calculator step by step Gaussian integral square root of pi area under the bell"
   lang: en
 
-- title: "Matemática Básica"
+- title: "Matemática Elementar"
   url: "/matematica-basica/"
   description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
-  tags: "matemática básica aritmética exercícios"
+  tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
 - title: "Adição — Vai Um e a Conta Armada"

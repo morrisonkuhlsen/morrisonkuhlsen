@@ -1,4 +1,4 @@
-/* Matemática básica: o índice e as páginas de cada assunto.
+/* Matemática elementar: o índice e as páginas de cada assunto.
  *
  * Cada calculadora é um <section class="calc" data-calc="nome"> com um campo
  * name="n" para a lista de inteiros. CALCS[nome] recebe a lista já conferida
@@ -307,6 +307,53 @@
 
     update();
   }
+
+  /* ---------------------------------------------------------------- índice */
+
+  // Filtro do índice, como o das fórmulas: cada palavra digitada tem de
+  // aparecer no nome ou na descrição do card, sem ligar para acento.
+  // Enter abre a primeira lição que sobrou.
+  function initFilter(input) {
+    const cards = Array.from(document.querySelectorAll(".formula-card"));
+    const groups = Array.from(document.querySelectorAll(".formula-group"));
+    const empty = document.querySelector(".filter-empty");
+    const count = document.querySelector(".filter-count");
+    // Sem acento e no singular, para "fracao" achar "frações": ões/ães viram
+    // ão (já sem til, "ao") e cai o s final. π vale como "pi".
+    const fold = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      .replace(/π/g, " pi ").split(/[^a-z0-9]+/).filter(Boolean)
+      .map(w => w.replace(/(oes|aes)$/, "ao").replace(/(.{3,})s$/, "$1")).join(" ");
+    const haystack = new Map(cards.map(c => [
+      c, fold(c.querySelector(".card-name").textContent + " " + c.querySelector(".card-blurb").textContent)
+    ]));
+
+    input.addEventListener("input", () => {
+      const terms = fold(input.value).split(" ").filter(Boolean);
+      cards.forEach(c => {
+        c.parentElement.hidden = !terms.every(t => haystack.get(c).includes(t));
+      });
+      let any = false;
+      groups.forEach(g => {
+        const visible = g.querySelector("li:not([hidden])");
+        g.hidden = !visible;
+        any = any || !!visible;
+      });
+      empty.hidden = any;
+      // A faixa ocupa quase a tela: sem a contagem, o filtro parece não fazer nada.
+      const n = cards.filter(c => !c.parentElement.hidden).length;
+      count.textContent = !terms.length ? "" : !n ? "Nenhuma lição encontrada."
+        : `${n} ${n === 1 ? "lição encontrada" : "lições encontradas"} — Enter abre ${n === 1 ? "ela" : "a primeira"}.`;
+    });
+
+    input.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const first = cards.find(c => !c.parentElement.hidden);
+      if (first && input.value.trim()) location.href = first.href;
+    });
+  }
+
+  const filtro = document.querySelector("#filtro");
+  if (filtro) initFilter(filtro);
 
   document.querySelectorAll(".calc[data-calc]").forEach(initCalc);
   document.querySelectorAll("[data-tex]").forEach(e => math(e, "\\displaystyle " + e.dataset.tex));

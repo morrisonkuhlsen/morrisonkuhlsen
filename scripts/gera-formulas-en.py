@@ -63,8 +63,8 @@ def link_pt(s, pt_url, en_url, en_path):
 COMMON = [
     ('<html lang="pt-BR">', '<html lang="en">'),
     ('<meta property="og:locale" content="pt_BR">', '<meta property="og:locale" content="en_US">'),
-    ('href="style.css"', 'href="/formulas/style.css"'),
-    ('src="script.js"', 'src="/formulas/script.js"'),
+    ('href="style.css', 'href="/formulas/style.css'),   # sem a aspa final: vale também com ?v=
+    ('src="script.js', 'src="/formulas/script.js'),
 ]
 FORMULA_COMMON = [
     ('aria-label="Todas as fórmulas" title="Todas as fórmulas"', 'aria-label="All formulas" title="All formulas"'),

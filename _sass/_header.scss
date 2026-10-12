@@ -260,6 +260,21 @@
 
 .megamenu__col:last-child { border-right: 0; }
 
+/* Letreiro do painel de Ferramentas: ocupa as duas últimas colunas. */
+.megamenu__board {
+  grid-column: span 2;
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.megamenu__board canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .megamenu__intro {
   color: var(--ink-soft);
   font-size: var(--step--1);

@@ -39,21 +39,25 @@
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <link rel="stylesheet" href="/formulas/style.css">
-  <script defer src="/formulas/script.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css?v=3">
+  <script defer src="/formulas/script.js?v=3"></script>
+  <script defer src="/assets/js/flap-board.js?v=3"></script>
+  <script defer src="/formulas/letreiro.js?v=3"></script>
 </head>
-<body>
+<body class="has-hero">
   <a href="/en/" class="back-link" aria-label="Back to the site" title="Back to the site"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
   <a class="lang-link" href="/formulas/" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <header class="home-header has-board">
+    <canvas class="home-board" aria-hidden="true"></canvas>
+    <h1 class="home-title">Formulas</h1>
+    <p class="home-lede">115 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+    <label class="filter">
+      <span class="visually-hidden">Filter formulas</span>
+      <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off" enterkeyhint="go">
+    </label>
+    <p class="filter-count" aria-live="polite"></p>
+  </header>
   <main class="card home">
-    <header class="home-header">
-      <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">115 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
-      <label class="filter">
-        <span class="visually-hidden">Filter formulas</span>
-        <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
-      </label>
-    </header>
       <section class="formula-group">
         <h2>Probability</h2>
         <ul class="formula-list">

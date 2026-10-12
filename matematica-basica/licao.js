@@ -1,4 +1,4 @@
-/* O que as lições de matemática básica dividem: números em pt-BR, KaTeX,
+/* O que as lições de matemática elementar dividem: números em pt-BR, KaTeX,
  * SVG e os cards de regra.
  *
  * Um card de regra é um <div class="rule-try" data-rule="nome" data-vars="a b">.

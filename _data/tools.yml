@@ -1,24 +1,26 @@
 # Itens do dropdown "Ferramentas" do menu principal.
 # São páginas HTML avulsas na raiz, sem front matter de navegação —
 # por isso vivem aqui e não são descobertas por site.pages.
+# board: o exemplo que o letreiro do menu mostra ao passar o cursor
+# (assets/js/tools-board.js).
 
 pt:
-  - { name: "Standard Normal Table", url: "/ztable.html" }
-  - { name: "Student's T Table",     url: "/ttable.html" }
-  - { name: "Snedecor F Table",      url: "/ftable.html" }
-  - { name: "Chi-Square Table",      url: "/chitable.html" }
-  - { name: "Fórmulas",              url: "/formulas/" }
-  - { name: "Testes estatísticos",   url: "/testes-estatisticos/" }
-  - { name: "Glossário",             url: "/pt/glossario" }
-  - { name: "Matemática básica",     url: "/matematica-basica/" }
-  - { name: "Cálculo intuitivo",     url: "/calculo/" }
-  - { name: "Problema Semanal",      url: "/problema-semanal/", external: true, featured: true }
+  - { name: "Standard Normal Table", url: "/ztable.html", board: z }
+  - { name: "Student's T Table",     url: "/ttable.html", board: t }
+  - { name: "Snedecor F Table",      url: "/ftable.html", board: f }
+  - { name: "Chi-Square Table",      url: "/chitable.html", board: chi }
+  - { name: "Fórmulas",              url: "/formulas/", board: formulas }
+  - { name: "Testes estatísticos",   url: "/testes-estatisticos/", board: testes }
+  - { name: "Glossário",             url: "/pt/glossario", board: glossario }
+  - { name: "Matemática elementar",  url: "/matematica-basica/", board: elementar }
+  - { name: "Cálculo intuitivo",     url: "/calculo/", board: calculo }
+  - { name: "Problema Semanal",      url: "/problema-semanal/", external: true, featured: true, board: problema }
 
 en:
-  - { name: "Standard Normal Table", url: "/ztable.html" }
-  - { name: "Student's T Table",     url: "/ttable.html" }
-  - { name: "Snedecor F Table",      url: "/ftable.html" }
-  - { name: "Chi-Square Table",      url: "/chitable.html" }
-  - { name: "Formulas",              url: "/en/formulas/" }
-  - { name: "Statistical tests",     url: "/en/statistical-tests/" }
-  - { name: "Weekly Problem",        url: "/problema-semanal/", external: true, featured: true }
+  - { name: "Standard Normal Table", url: "/ztable.html", board: z }
+  - { name: "Student's T Table",     url: "/ttable.html", board: t }
+  - { name: "Snedecor F Table",      url: "/ftable.html", board: f }
+  - { name: "Chi-Square Table",      url: "/chitable.html", board: chi }
+  - { name: "Formulas",              url: "/en/formulas/", board: formulas }
+  - { name: "Statistical tests",     url: "/en/statistical-tests/", board: testes }
+  - { name: "Weekly Problem",        url: "/problema-semanal/", external: true, featured: true, board: problema }

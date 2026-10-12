@@ -59,6 +59,7 @@
     const cards = Array.from(document.querySelectorAll(".formula-card"));
     const groups = Array.from(document.querySelectorAll(".formula-group"));
     const empty = document.querySelector(".filter-empty");
+    const count = document.querySelector(".filter-count");
     const fold = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
     const haystack = new Map(cards.map(c => [
       c, fold(c.querySelector(".card-name").textContent + " " + c.querySelector(".card-blurb").textContent
@@ -77,6 +78,21 @@
         any = any || !!visible;
       });
       empty.hidden = any;
+      // A faixa ocupa quase a tela: sem a contagem, o filtro parece não fazer nada.
+      if (!count) return;
+      const n = cards.filter(c => !c.parentElement.hidden).length;
+      const en = document.documentElement.lang === "en";
+      count.textContent = !terms.length ? ""
+        : !n ? (en ? "No formula found." : "Nenhuma fórmula encontrada.")
+        : en ? `${n} ${n === 1 ? "formula" : "formulas"} found — Enter opens ${n === 1 ? "it" : "the first"}.`
+        : `${n} ${n === 1 ? "fórmula encontrada" : "fórmulas encontradas"} — Enter abre ${n === 1 ? "ela" : "a primeira"}.`;
+    });
+
+    // Enter abre a primeira fórmula que sobrou.
+    input.addEventListener("keydown", e => {
+      if (e.key !== "Enter" || !input.value.trim()) return;
+      const first = cards.find(c => !c.parentElement.hidden);
+      if (first) location.href = first.href;
     });
   }
 

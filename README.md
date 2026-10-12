@@ -163,7 +163,7 @@ A coluna Z escreve o negativo com o sinal tipográfico − (U+2212), em que
 `ftable.html` usam CRLF, ao contrário do resto do repositório.
 
 **Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 80 fórmulas
-interativas, Matemática Básica, Cálculo Intuitivo, o quiz e o problema semanal
+interativas, Matemática Elementar, Cálculo Intuitivo, o quiz e o problema semanal
 são HTML solto, fora do ciclo do Jekyll — são aplicações com CSS e JS
 próprios, não conteúdo. Ficam assim de propósito. Para entrarem na busca há
 `_data/standalone.yml`, com o `<title>` e o `<meta description>` de cada
@@ -197,7 +197,7 @@ gerador e as duas entradas em `_data/standalone.yml`. Se a fórmula é de um
 teste, `page`/`veja` em `_data/testes_estatisticos.yml` liga o catálogo a ela.
 
 **Cálculo Intuitivo.** `/calculo/`, só em português: dez lições no formato de
-Matemática Básica, cujo `style.css` e `licao.js` reaproveita. Cada lição é um
+Matemática Elementar, cujo `style.css` e `licao.js` reaproveita. Cada lição é um
 HTML e um JS; `calculo/grafico.js` desenha os gráficos (curvas, secantes,
 tangentes, áreas e faixas, com escalas iguais quando a inclinação importa) e
 os sliders, cujo estado vai para a URL. As tabelas de derivadas e de integrais

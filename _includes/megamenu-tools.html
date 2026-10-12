@@ -27,7 +27,7 @@
         {%- for tool in tools -%}
           <li>
             <a class="megamenu__link{% if tool.featured %} megamenu__link--featured{% endif %}"
-               href="{{ tool.url | relative_url }}"
+               href="{{ tool.url | relative_url }}"{% if tool.board %} data-board="{{ tool.board }}"{% endif %}
                {% if tool.external %}target="_blank" rel="noopener"{% endif %}>
               <span>{{ tool.name }}</span>
             </a>
@@ -36,7 +36,11 @@
       </ul>
     </div>
 
-    <div class="megamenu__col"></div>
-    <div class="megamenu__col"></div>
+    {%- comment -%} Letreiro que mostra um exemplo do item sob o cursor. {%- endcomment -%}
+    <div class="megamenu__col megamenu__board" aria-hidden="true">
+      <canvas class="tools-board"></canvas>
+    </div>
   </div>
 </div>
+<script src="{{ '/assets/js/flap-board.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/tools-board.js' | relative_url }}" defer></script>

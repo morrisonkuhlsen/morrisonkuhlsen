@@ -870,6 +870,95 @@ body {
   color: var(--text-muted);
 }
 
+/* ─── Índice com faixa ──────────────────────────────────────────────────────
+   Faixa de ponta a ponta, encostada no topo, com um letreiro de palhetas
+   (/assets/js/flap-board.js) atrás do título e da busca. Usada no índice das
+   fórmulas e no da Matemática Elementar. O body empilha em coluna: a faixa
+   vem antes do <main>. */
+
+.has-hero {
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 3rem;
+}
+
+.has-hero > .card { width: calc(100% - 32px); margin-top: 1.5rem; }
+
+/* O voltar e o idioma ficam no canto de cima, por cima da faixa. */
+.has-hero > .back-link,
+.has-hero > .lang-link { z-index: 3; }
+
+.home-header.has-board {
+  --board-font: ui-monospace, "SFMono-Regular", "Roboto Mono", monospace;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: clamp(380px, 32vw, 520px);
+  padding: 4rem 16px 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.home-board {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Véu para o título e o texto continuarem legíveis sobre as palhetas */
+.home-header.has-board::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(ellipse 46% 60% at 50% 50%,
+    color-mix(in srgb, var(--bg) 88%, transparent) 40%,
+    color-mix(in srgb, var(--bg) 30%, transparent));
+  pointer-events: none;
+}
+
+.home-header.has-board > :not(canvas) { position: relative; z-index: 2; }
+.home-header.has-board .home-lede { color: var(--text-strong); }
+
+.home-header.has-board .filter { display: block; width: 100%; max-width: 520px; }
+
+.home-header.has-board .filter input {
+  max-width: none;
+  padding: .85rem 1.2rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 18%);
+}
+
+.home-header.has-board .filter input:focus-visible {
+  outline: 2px solid var(--chart-hi);
+  outline-offset: 2px;
+}
+
+.formula-group[hidden] { display: none; }
+
+.home-header.has-board .filter-count {
+  min-height: 1.4em;
+  margin: .6rem 0 0;
+  font-size: .9rem;
+  color: var(--text-strong);
+}
+
+/* No celular as palhetas ficariam miúdas, cobertas pelo texto: sai o
+   letreiro (escondido, ele também para de trocar). */
+@media (max-width: 520px) {
+  .home-header.has-board { min-height: 0; padding: 4rem 16px 2rem; }
+  .home-board, .home-header.has-board::before { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
