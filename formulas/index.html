@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">111 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">115 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -262,10 +262,25 @@
             <span class="card-name">ANOVA de Um Fator</span>
             <span class="card-blurb">Compara as médias de três ou mais grupos.</span>
           </a></li>
+          <li><a class="formula-card" href="anova-dois-fatores.html">
+            <span class="card-tex" data-tex="SQ_T = SQ_A + SQ_B + SQ_{AB} + SQ_E"></span>
+            <span class="card-name">ANOVA de Dois Fatores</span>
+            <span class="card-blurb">Dois fatores ao mesmo tempo, e a interação entre eles.</span>
+          </a></li>
           <li><a class="formula-card" href="kruskal-wallis.html">
             <span class="card-tex" data-tex="H = \dfrac{12}{N(N+1)} \sum \dfrac{R_j^2}{n_j} - 3(N+1)"></span>
             <span class="card-name">Teste de Kruskal-Wallis</span>
             <span class="card-blurb">A ANOVA feita sobre postos, sem supor normalidade.</span>
+          </a></li>
+          <li><a class="formula-card" href="teste-dunn.html">
+            <span class="card-tex" data-tex="z_{ij} = \dfrac{\bar{R}_i - \bar{R}_j}{\sqrt{\frac{N(N+1)}{12}\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}}"></span>
+            <span class="card-name">Teste de Dunn</span>
+            <span class="card-blurb">Quais pares diferem, depois do Kruskal-Wallis.</span>
+          </a></li>
+          <li><a class="formula-card" href="friedman.html">
+            <span class="card-tex" data-tex="\chi^2_F = \dfrac{12}{nk(k+1)} \sum R_j^2 - 3n(k+1)"></span>
+            <span class="card-name">Teste de Friedman</span>
+            <span class="card-blurb">Medidas repetidas por postos, dentro de cada bloco.</span>
           </a></li>
           <li><a class="formula-card" href="comparacoes-multiplas.html">
             <span class="card-tex" data-tex="P(\text{falso positivo}) = 1 - (1 - \alpha)^k"></span>
@@ -401,6 +416,11 @@
             <span class="card-tex" data-tex="g_1 = \dfrac{\frac{1}{n}\sum (x_i - \bar{x})^3}{\left[\frac{1}{n}\sum (x_i - \bar{x})^2\right]^{3/2}}"></span>
             <span class="card-name">Assimetria e Curtose</span>
             <span class="card-blurb">O formato dos dados: para que lado pende e quão pesadas são as caudas.</span>
+          </a></li>
+          <li><a class="formula-card" href="shapiro-wilk.html">
+            <span class="card-tex" data-tex="W = \dfrac{\left(\sum a_i x_{(i)}\right)^2}{\sum (x_i - \bar{x})^2}"></span>
+            <span class="card-name">Teste de Shapiro-Wilk</span>
+            <span class="card-blurb">Os dados vêm de uma normal? W e o gráfico quantil-quantil.</span>
           </a></li>
           <li><a class="formula-card" href="covariancia.html">
             <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>

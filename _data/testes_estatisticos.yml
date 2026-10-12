@@ -392,6 +392,7 @@ testes:
     vars:
       - ['Pós-teste de Nemenyi ou Conover', null]
       - ['Versão paramétrica', anova-mr]
+    page: friedman
     reporte: 'χ²F(2) = 9,10; p = 0,011; W de Kendall = 0,23'
     codigo:
       r: |
@@ -417,6 +418,7 @@ testes:
     vars:
       - ['Ajuste os valores-p das comparações (Bonferroni, Holm)', null]
       - ['Conover-Iman, um pouco mais poderoso', null]
+    page: teste-dunn
     reporte: 'B − A: z = 2,74; p ajustado (Holm) = 0,018'
     codigo:
       r: |
@@ -719,6 +721,7 @@ testes:
     tex: 'W = \dfrac{\left(\sum a_i\, x_{(i)}\right)^2}{\sum (x_i - \bar{x})^2}'
     vars: []
     veja: [distribuicao-normal]
+    page: shapiro-wilk
     reporte: 'W = 0,96; p = 0,31'
     codigo:
       r: |
@@ -1124,6 +1127,7 @@ testes:
     vars:
       - ['ANOVA de um fator, com um fator só', anova]
       - ['ANCOVA, quando há também uma covariável numérica', null]
+    page: anova-dois-fatores
     reporte: 'Dose: F(2, 54) = 7,9; p = 0,001; η²p = 0,23. Interação: F(2, 54) = 1,1; p = 0,34'
     codigo:
       r: |

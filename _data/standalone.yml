@@ -312,6 +312,26 @@
   description: "A regressão logística simples explicada termo a termo, com ajuste por máxima verossimilhança, razão de chances, testes de Wald e da razão de verossimilhança e gráfico da curva."
   tags: "fórmula interativa calculadora passo a passo regressão logística razão de chances máxima verossimilhança Wald"
   lang: pt
+- title: "ANOVA de Dois Fatores"
+  url: "/formulas/anova-dois-fatores.html"
+  description: "A ANOVA de dois fatores explicada termo a termo, com calculadora, tabela da ANOVA, gráfico de interação e os efeitos de A, de B e da interação."
+  tags: "fórmula interativa calculadora passo a passo ANOVA dois fatores interação fatorial"
+  lang: pt
+- title: "Teste de Dunn"
+  url: "/formulas/teste-dunn.html"
+  description: "O teste de Dunn explicado termo a termo, com calculadora das comparações par a par depois do Kruskal-Wallis e ajuste de Holm."
+  tags: "fórmula interativa calculadora passo a passo Dunn comparações par a par Holm Kruskal-Wallis"
+  lang: pt
+- title: "Teste de Friedman"
+  url: "/formulas/friedman.html"
+  description: "O teste de Friedman explicado termo a termo, com calculadora, postos dentro de cada bloco, W de Kendall e gráfico dos postos médios."
+  tags: "fórmula interativa calculadora passo a passo Friedman medidas repetidas postos blocos Kendall"
+  lang: pt
+- title: "Teste de Shapiro-Wilk"
+  url: "/formulas/shapiro-wilk.html"
+  description: "O teste de normalidade de Shapiro-Wilk explicado termo a termo, com calculadora, gráfico quantil-quantil e a leitura do W e do valor-p."
+  tags: "fórmula interativa calculadora passo a passo Shapiro-Wilk normalidade quantil-quantil QQ"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -977,6 +997,26 @@
   url: "/en/formulas/logistic-regression.html"
   description: "Simple logistic regression explained term by term, with a maximum likelihood fit, the odds ratio, Wald and likelihood ratio tests and a chart of the curve."
   tags: "interactive formula calculator step by step logistic regression odds ratio maximum likelihood Wald"
+  lang: en
+- title: "Two-Way ANOVA"
+  url: "/en/formulas/two-way-anova.html"
+  description: "Two-way ANOVA explained term by term, with a calculator, the ANOVA table, an interaction plot and the effects of A, B and their interaction."
+  tags: "interactive formula calculator step by step two-way ANOVA interaction factorial"
+  lang: en
+- title: "Dunn's Test"
+  url: "/en/formulas/dunn-test.html"
+  description: "Dunn's test explained term by term, with a calculator for the pairwise comparisons after Kruskal-Wallis and Holm's adjustment."
+  tags: "interactive formula calculator step by step Dunn pairwise comparisons Holm Kruskal-Wallis"
+  lang: en
+- title: "Friedman Test"
+  url: "/en/formulas/friedman-test.html"
+  description: "The Friedman test explained term by term, with a calculator, ranks within each block, Kendall's W and a chart of the mean ranks."
+  tags: "interactive formula calculator step by step Friedman repeated measures ranks blocks Kendall"
+  lang: en
+- title: "Shapiro-Wilk Test"
+  url: "/en/formulas/shapiro-wilk-test.html"
+  description: "The Shapiro-Wilk normality test explained term by term, with a calculator, a quantile-quantile plot and how to read W and the p-value."
+  tags: "interactive formula calculator step by step Shapiro-Wilk normality quantile-quantile QQ"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

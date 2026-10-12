@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Two-Way ANOVA — Interactive</title>
+  <meta name="description" content="Two-way ANOVA explained term by term, with a calculator, the ANOVA table, an interaction plot and the effects of A, B and their interaction.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/two-way-anova.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/anova-dois-fatores.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/two-way-anova.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/anova-dois-fatores.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/two-way-anova.html">
+  <meta property="og:title" content="Two-Way ANOVA — Interactive">
+  <meta property="og:description" content="Two-way ANOVA explained term by term, with a calculator, the ANOVA table, an interaction plot and the effects of A, B and their interaction.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Two-Way ANOVA — Interactive">
+  <meta name="twitter:description" content="Two-way ANOVA explained term by term, with a calculator, the ANOVA table, an interaction plot and the effects of A, B and their interaction.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/anova-dois-fatores.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Two-Way ANOVA</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive two-way ANOVA formula">
+        <span class="part" data-part="t_a2" data-tone="0" data-tex="SS_T"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="a_a2" data-tone="2" data-tex="SS_A"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="b_a2" data-tone="3" data-tex="SS_B"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="ab_a2" data-tone="4" data-tex="SS_{AB}"></span>
+        <span class="op">+</span>
+        <span class="part" data-part="e_a2" data-tone="1" data-tex="SS_E"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; as células vão em ?o=, uma por linha, e os níveis de B em ?b=. -->
+    <section class="calc" data-calc="anova2" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: the yield of plots with two fertilizers (factor A) and three irrigation levels (factor B), three plots in each combination. Does the fertilizer matter? The irrigation? And does the effect of irrigation depend on the fertilizer? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Cells (one per row)</span>
+          <input name="o" type="text" inputmode="decimal" value="20 22 21; 25 24 26; 28 27 29; 23 24 22; 27 29 28; 35 33 34" data-matrix autocomplete="off" spellcheck="false">
+          <small>In the order A1B1, A1B2, …, A2B1, …; all with the same number of replicates.</small>
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Levels of factor <i>B</i></span>
+          <input name="b" type="text" inputmode="numeric" value="3" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="t_a2" data-tone="0">Total Variation (SS_T)</dt>
+          <dd>The sum of squares of all values around the overall mean.</dd>
+          <dt data-part="a_a2" data-tone="2">Effect of A (SS_A)</dt>
+          <dd>How far the means of each level of A are from the overall mean.</dd>
+          <dt data-part="b_a2" data-tone="3">Effect of B (SS_B)</dt>
+          <dd>The same for the levels of B.</dd>
+          <dt data-part="ab_a2" data-tone="4">Interaction (SS_AB)</dt>
+          <dd>What the cell means have beyond the sum of the two effects: the effect of B changing with the level of A. On the chart, it shows as non-parallel lines.</dd>
+          <dt data-part="e_a2" data-tone="1">Error (SS_E)</dt>
+          <dd>The variation between replicates of the same cell — the noise each effect is measured against, in the F.</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">When to use it, assumptions and alternatives: <a href="/en/statistical-tests/two-way-anova/">two-way ANOVA in the statistical tests catalog</a>.</p>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="one-way-anova.html" rel="prev"><span>Previous</span>One-Way ANOVA</a>
+      <a class="pager-next" href="kruskal-wallis-test.html" rel="next"><span>Next</span>Kruskal-Wallis Test</a>
+    </nav>
+  </main>
+</body>
+</html>

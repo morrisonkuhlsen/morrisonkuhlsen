@@ -183,6 +183,10 @@ CATALOG = {
     "ic-variancia": ("chi-square-test-for-variance", "the chi-square test for variance"),
     "mcnemar": ("mcnemar-test", "the McNemar test"),
     "kruskal-wallis": ("kruskal-wallis-test", "the Kruskal-Wallis test"),
+    "anova-dois-fatores": ("two-way-anova", "two-way ANOVA"),
+    "teste-dunn": ("dunn-test", "Dunn's test"),
+    "friedman": ("friedman-test", "the Friedman test"),
+    "shapiro-wilk": ("shapiro-wilk-test", "the Shapiro-Wilk test"),
     "autocorrelacao": ("ljung-box-test", "the Ljung–Box test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
@@ -227,6 +231,8 @@ def build_index():
             tex = tex.replace("VPP =", "PPV =")
         if slug == "media-movel":
             tex = tex.replace("MM_t =", "MA_t =")
+        if slug == "anova-dois-fatores":
+            tex = tex.replace("SQ_", "SS_")
         if slug == "bootstrap":
             tex = tex.replace("IC =", "CI =")
         if slug == "anova-um-fator":

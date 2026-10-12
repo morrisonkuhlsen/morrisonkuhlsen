@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "kruskal-wallis": "kruskal-wallis-test", "assimetria-curtose": "skewness-kurtosis",
     "anova-um-fator": "one-way-anova", "mann-whitney": "mann-whitney-test", "funcao-logistica": "logistic-function", "paradoxo-simpson": "simpsons-paradox",
     "numero-e": "number-e-limit", "soma-pa": "arithmetic-series", "tempo-duplicacao": "doubling-time",
     "equacao-reta": "line-through-two-points",
@@ -4595,6 +4596,225 @@
           + " The difference is the 1 inside the root: the mean gets ever more precise with more data, but an individual value always varies around the line, and that variation doesn't vanish with large n. Both bands widen away from the centre of the data, at x̄."
           + (fora ? ` ${warn} x₀ is outside the range of the data: extrapolating assumes the line still holds there, which the data don't guarantee.` : "")
           + ` See the <a href="${PAGE("regressao-linear")}?x=${encodeURIComponent(x.join(" "))}&amp;y=${encodeURIComponent(y.join(" "))}&amp;x0=${x0}">linear regression of these data</a>.`),
+      };
+    },
+
+    friedman({ o }) {
+      const n = o.length, k = o[0] ? o[0].length : 0;
+      if (n < 2) return { error: T("Informe pelo menos dois blocos (linhas), separados por ponto e vírgula.", "Enter at least two blocks (rows), separated by semicolons.") };
+      if (k < 2 || o.some(r => r.length !== k)) return { error: T("Todas as linhas precisam ter o mesmo número de tratamentos, pelo menos dois.", "Every row must have the same number of treatments, at least two.") };
+      if (n * k > 3000) return { error: T("Use no máximo 3.000 valores ao todo.", "Use at most 3,000 values in all.") };
+      let ties = 0;
+      const rk = o.map(row => {
+        const idx = row.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]), r = new Array(k);
+        for (let i = 0; i < k;) { let j = i; while (j + 1 < k && idx[j + 1][0] === idx[i][0]) j++; const t = j - i + 1; ties += t ** 3 - t; for (let m = i; m <= j; m++) r[idx[m][1]] = (i + j) / 2 + 1; i = j + 1; }
+        return r;
+      });
+      const R = Array.from({ length: k }, (_, j) => rk.reduce((s, r) => s + r[j], 0));
+      const C = 1 - ties / (n * (k ** 3 - k));
+      if (C <= 0) return { error: T("Em todos os blocos os valores são iguais: não há ordem para comparar.", "In every block the values are equal: there is no order to compare.") };
+      const Q0 = 12 / (n * k * (k + 1)) * R.reduce((s, r) => s + r * r, 0) - 3 * n * (k + 1), Q = Q0 / C, df = k - 1;
+      const p = chiSurvival(Q, df), W = Q / (n * (k - 1));
+      const mr = R.map(r => r / n);
+      const show = Math.min(n, 8);
+      const tab = `\\begin{array}{c|${"c".repeat(k)}} ${T("\\text{bloco}", "\\text{block}")} & ${R.map((_, j) => `T_{${j + 1}}`).join(" & ")} \\\\ \\hline `
+        + rk.slice(0, show).map((r, i) => `${i + 1} & ${r.map(v => texNum(v)).join(" & ")}`).join(" \\\\ ") + (n > show ? ` \\\\ \\vdots & ${R.map(() => "\\vdots").join(" & ")}` : "")
+        + ` \\\\ \\hline R_j & ${R.map(r => tone(texNum(r), 2)).join(" & ")} \\end{array}`;
+      const Qt = tone(texNum(Q, 4), 1);
+      return {
+        result: `\\chi^2_F ${approx(Q, 4)} ${Qt}, \\qquad p ${p < 1e-4 ? "<" : "\\approx"} ${p < 1e-4 ? T("0{,}0001", "0.0001") : texNum(p, 4)}`,
+        chart: {
+          type: "bars", label: T(`Posto médio de cada um dos ${k} tratamentos`, `Mean rank of each of the ${k} treatments`),
+          xLabel: T(`tratamento · altura: posto médio, de 1 a ${k} · tracejada: o esperado sem diferença, ${fmt((k + 1) / 2, 2)}`, `treatment · height: mean rank, 1 to ${k} · dashed: expected with no difference, ${fmt((k + 1) / 2, 2)}`),
+          xs: mr.map((_, j) => j + 1), ys: mr, xMin: 0.5, xMax: k + 0.5, yMax: k, hlines: [{ y: (k + 1) / 2, cls: "chart-ref" }],
+          hi: j => Math.abs(mr[j - 1] - (k + 1) / 2) === Math.max(...mr.map(v => Math.abs(v - (k + 1) / 2))),
+          tip: (j, v) => [fmt(v, 3), T(`tratamento ${j}: soma de postos ${fmt(R[j - 1])}`, `treatment ${j}: rank sum ${fmt(R[j - 1])}`)],
+        },
+        steps: [
+          [T(`Em cada bloco, ordene os ${k} tratamentos e dê postos de 1 a ${k}; empates recebem a média. Some os postos de cada tratamento:`, `Within each block, sort the ${k} treatments and rank them 1 to ${k}; ties get the average. Add up each treatment's ranks:`), tab],
+          [T("Compare as somas com o que se esperaria se a ordem fosse ao acaso:", "Compare the sums with what would be expected if the order were random:"),
+            `\\chi^2_F = \\dfrac{12}{${n} \\cdot ${k} \\cdot ${k + 1}} \\left(${R.slice(0, 6).map(r => `${tone(texNum(r), 2)}^2`).join(" + ")}${k > 6 ? " + \\cdots" : ""}\\right) - 3 \\cdot ${n} \\cdot ${k + 1} ${approx(Q0, 4)} ${texNum(Q0, 4)}`],
+          ...(ties ? [[T("Com empates, divida pela correção:", "With ties, divide by the correction:"), `C ${approx(C, 6)} ${texNum(C, 6)}, \\qquad \\chi^2_F = \\dfrac{${texNum(Q0, 4)}}{${texNum(C, 6)}} ${approx(Q, 4)} ${Qt}`]] : []),
+          [T(`Compare com a qui-quadrado com ${dof(df)}, e calcule o W de Kendall:`, `Compare with the chi-square with ${dof(df)}, and compute Kendall's W:`),
+            `p ${approx(p, 4)} ${tone(texNum(p, 4), 3)}, \\qquad W = \\dfrac{${texNum(Q, 4)}}{${n} \\cdot ${k - 1}} ${approx(W, 3)} ${texNum(W, 3)}`],
+        ],
+        note: (p < 0.05 ? T("Ao nível de 5%, rejeita-se H₀: os tratamentos não ficam na mesma posição — algum tende a ficar acima ou abaixo dos outros dentro dos blocos.", "At the 5% level, H₀ is rejected: the treatments don't sit in the same position — some tends to rank above or below the others within the blocks.")
+          : T("Ao nível de 5%, não se rejeita H₀: a ordem dos tratamentos dentro dos blocos é compatível com o acaso.", "At the 5% level, H₀ is not rejected: the order of the treatments within the blocks is consistent with chance."))
+          + T(` O W de Kendall, ${fmt(W, 3)}, mede a concordância entre os blocos, de 0 (nenhuma) a 1 (todos ordenam igual). Como os postos são dados dentro de cada bloco, as diferenças entre blocos — um provador mais exigente, um paciente mais forte — saem da conta: é a versão por postos da ANOVA de medidas repetidas. Para grupos independentes, o análogo é o <a href="${PAGE("kruskal-wallis")}">Kruskal-Wallis</a>; com dois tratamentos, o teste do sinal.`,
+            ` Kendall's W, ${fmt(W, 3)}, measures agreement between the blocks, from 0 (none) to 1 (all rank the same). Because ranks are given within each block, differences between blocks — a stricter taster, a stronger patient — drop out: it is the rank version of repeated-measures ANOVA. For independent groups, the analogue is <a href="${PAGE("kruskal-wallis")}">Kruskal-Wallis</a>; with two treatments, the sign test.`),
+      };
+    },
+
+    dunn({ o }) {
+      const k = o.length;
+      if (k < 3) return { error: T("Informe pelo menos três grupos; com dois, use o Mann-Whitney.", "Enter at least three groups; with two, use Mann-Whitney.") };
+      if (k > 10) return { error: T("Use no máximo 10 grupos.", "Use at most 10 groups.") };
+      if (o.some(g => g.length < 1)) return { error: T("Cada grupo precisa de pelo menos um valor.", "Each group needs at least one value.") };
+      const all = o.flatMap((g, j) => g.map(v => [v, j])).sort((p, q) => p[0] - q[0]);
+      const N = all.length;
+      if (N > 2000) return { error: T("Use no máximo 2.000 valores ao todo.", "Use at most 2,000 values in all.") };
+      const R = new Array(k).fill(0), ns = o.map(g => g.length);
+      let ties = 0;
+      for (let i = 0; i < N;) { let j = i; while (j + 1 < N && all[j + 1][0] === all[i][0]) j++; const t = j - i + 1; ties += t ** 3 - t; for (let m = i; m <= j; m++) R[all[m][1]] += (i + j) / 2 + 1; i = j + 1; }
+      const mr = R.map((r, j) => r / ns[j]);
+      const v0 = N * (N + 1) / 12 - ties / (12 * (N - 1));
+      if (v0 <= 0) return { error: T("Todos os valores são iguais: não há postos para comparar.", "All values are equal: there are no ranks to compare.") };
+      const pairs = [];
+      for (let a = 0; a < k; a++) for (let b = a + 1; b < k; b++) {
+        const se = Math.sqrt(v0 * (1 / ns[a] + 1 / ns[b])), z = (mr[a] - mr[b]) / se, p = 2 * (1 - phi(Math.abs(z)));
+        pairs.push({ a, b, z, p, se });
+      }
+      const m = pairs.length;
+      // Holm: ordena os p, multiplica o i-ésimo por (m − i) e mantém a sequência crescente.
+      const ord = pairs.map((q, i) => i).sort((i, j) => pairs[i].p - pairs[j].p);
+      let run = 0; ord.forEach((i, r) => { run = Math.max(run, Math.min(1, pairs[i].p * (m - r))); pairs[i].holm = run; });
+      pairs.forEach(q => { q.bonf = Math.min(1, q.p * m); });
+      const sig = pairs.filter(q => q.holm < 0.05);
+      const pt = v => (v < 1e-4 ? T("<0{,}0001", "<0.0001") : texNum(v, 4));
+      const rows = pairs.slice(0, 15).map(q => `${q.a + 1} \\text{ – } ${q.b + 1} & ${texNum(mr[q.a] - mr[q.b], 3)} & ${texNum(q.z, 3)} & ${pt(q.p)} & ${q.holm < 0.05 ? tone(pt(q.holm), 1) : pt(q.holm)}`).join(" \\\\ ");
+      const enc = encodeURIComponent(o.map(g => g.join(" ")).join("; "));
+      const inv = new Set(sig.flatMap(q => [q.a + 1, q.b + 1]));
+      return {
+        result: sig.length ? `${T("\\text{diferem:}", "\\text{differ:}")}\\ ${sig.map(q => tone(`${q.a + 1}\\text{ – }${q.b + 1}`, 1)).join(",\\ ")}` : T("\\text{nenhum par difere a } 5\\%", "\\text{no pair differs at } 5\\%"),
+        chart: {
+          type: "bars", label: T(`Posto médio de cada um dos ${k} grupos`, `Mean rank of each of the ${k} groups`),
+          xLabel: T("grupo · altura: posto médio · destaque: grupos em algum par significativo (Holm, 5%)", "group · height: mean rank · highlighted: groups in some significant pair (Holm, 5%)"),
+          xs: mr.map((_, j) => j + 1), ys: mr, xMin: 0.5, xMax: k + 0.5, yMax: Math.max(...mr), hlines: [{ y: (N + 1) / 2, cls: "chart-ref" }],
+          hi: j => inv.has(j), tip: (j, v) => [fmt(v, 2), T(`grupo ${j}, com ${ns[j - 1]} valores`, `group ${j}, with ${ns[j - 1]} values`)],
+        },
+        steps: [
+          [T(`Dê postos a todos os ${N} valores juntos, como no Kruskal-Wallis, e calcule o posto médio de cada grupo:`, `Rank all ${N} values together, as in Kruskal-Wallis, and compute each group's mean rank:`),
+            mr.map((v, j) => `\\bar{R}_{${j + 1}} ${approx(v, 3)} ${tone(texNum(v, 3), 2)}`).join(", \\quad ")],
+          [T("Para cada par, divida a diferença dos postos médios pelo seu erro padrão:", "For each pair, divide the difference in mean ranks by its standard error:"),
+            `z_{ij} = \\dfrac{\\bar{R}_i - \\bar{R}_j}{\\sqrt{\\left(\\dfrac{N(N+1)}{12} - \\dfrac{\\sum (t^3 - t)}{12(N - 1)}\\right)\\left(\\dfrac{1}{n_i} + \\dfrac{1}{n_j}\\right)}}`],
+          [T(`Com ${m} comparações, ajuste os valores-p pelo método de Holm:`, `With ${m} comparisons, adjust the p-values by Holm's method:`),
+            `\\begin{array}{c|c|c|c|c} ${T("\\text{par}", "\\text{pair}")} & \\bar{R}_i - \\bar{R}_j & z & p & p_{\\text{Holm}} \\\\ \\hline ${rows}${m > 15 ? " \\\\ \\vdots & & & &" : ""} \\end{array}`],
+        ],
+        note: T(`${sig.length ? `Ao nível de 5%, depois do ajuste, ${sig.length === 1 ? "difere o par" : "diferem os pares"} ${list(sig.map(q => `${q.a + 1}–${q.b + 1}`))}.` : "Ao nível de 5%, depois do ajuste, nenhum par difere."} O teste de Dunn é o seguimento natural do <a href="${PAGE("kruskal-wallis")}?o=${enc}">Kruskal-Wallis</a>: este diz se algum grupo difere; o de Dunn diz quais. Usa os mesmos postos, o que mantém as comparações coerentes com o teste global.`
+          + ` Como são ${m} comparações, o risco de algum falso positivo cresce; o ajuste de Holm controla isso e é sempre pelo menos tão poderoso quanto o de Bonferroni — veja as <a href="${PAGE("comparacoes-multiplas")}">comparações múltiplas</a>.`,
+          `${sig.length ? `At the 5% level, after adjustment, the ${sig.length === 1 ? "pair that differs is" : "pairs that differ are"} ${list(sig.map(q => `${q.a + 1}–${q.b + 1}`))}.` : "At the 5% level, after adjustment, no pair differs."} Dunn's test is the natural follow-up to <a href="${PAGE("kruskal-wallis")}?o=${enc}">Kruskal-Wallis</a>: that one says whether any group differs; Dunn's says which. It uses the same ranks, which keeps the comparisons consistent with the global test.`
+          + ` With ${m} comparisons, the risk of some false positive grows; Holm's adjustment controls that and is always at least as powerful as Bonferroni's — see <a href="${PAGE("comparacoes-multiplas")}">multiple comparisons</a>.`),
+      };
+    },
+
+    anova2({ o, b }) {
+      if (!Number.isInteger(b) || b < 2) return { error: T("O fator B precisa ter um número inteiro de níveis, pelo menos 2.", "Factor B must have a whole number of levels, at least 2.") };
+      if (o.length % b) return { error: T(`Há ${o.length} linhas, que não se dividem em ${b} níveis de B: o número de linhas precisa ser (níveis de A) × (níveis de B).`, `There are ${o.length} rows, which don't split into ${b} levels of B: the number of rows must be (levels of A) × (levels of B).`) };
+      const a = o.length / b, r = o[0].length;
+      if (a < 2) return { error: T("O fator A precisa de pelo menos 2 níveis.", "Factor A needs at least 2 levels.") };
+      if (r < 2 || o.some(c => c.length !== r)) return { error: T("Todas as células precisam ter o mesmo número de repetições, pelo menos 2.", "Every cell must have the same number of replicates, at least 2.") };
+      if (a * b * r > 3000) return { error: T("Use no máximo 3.000 valores ao todo.", "Use at most 3,000 values in all.") };
+      const sum = v => v.reduce((s, x) => s + x, 0);
+      const cell = (i, j) => o[i * b + j];
+      const cm = Array.from({ length: a }, (_, i) => Array.from({ length: b }, (_, j) => sum(cell(i, j)) / r));
+      const N = a * b * r, G = sum(o.flat()) / N;
+      const mA = cm.map(row => sum(row) / b), mB = Array.from({ length: b }, (_, j) => sum(cm.map(row => row[j])) / a);
+      const ssA = b * r * sum(mA.map(m => (m - G) ** 2)), ssB = a * r * sum(mB.map(m => (m - G) ** 2));
+      const ssAB = r * sum(cm.flatMap((row, i) => row.map((m, j) => (m - mA[i] - mB[j] + G) ** 2)));
+      const ssE = sum(o.flatMap((c, idx) => c.map(v => (v - cm[Math.floor(idx / b)][idx % b]) ** 2)));
+      const dA = a - 1, dB = b - 1, dAB = dA * dB, dE = a * b * (r - 1);
+      if (ssE === 0) return { error: T("Não há variação dentro das células: as repetições de cada célula são todas iguais.", "There is no variation within the cells: each cell's replicates are all equal.") };
+      const msE = ssE / dE;
+      const test = (ss, d) => { const F = ss / d / msE; return { ss, d, ms: ss / d, F, p: betainc(dE / (dE + d * F), dE / 2, d / 2), eta: ss / (ss + ssE) }; };
+      const A = test(ssA, dA), B = test(ssB, dB), AB = test(ssAB, dAB);
+      const pt = v => (v < 1e-4 ? T("<0{,}0001", "<0.0001") : texNum(v, 4));
+      const row = (lab, t, tn) => `${lab} & ${texNum(t.ss, 2)} & ${t.d} & ${texNum(t.ms, 2)} & ${tone(texNum(t.F, 3), tn)} & ${pt(t.p)}`;
+      const flat = o.flat(), yl = Math.min(...cm.flat()), yh = Math.max(...cm.flat()), py = (yh - yl) * 0.15 || 1;
+      const lines = cm.slice(1).map(rowm => ({ pts: rowm.map((m, j) => [j + 1, m]), cls: "chart-fit" }));
+      const inter = AB.p < 0.05;
+      return {
+        result: `F_A ${approx(A.F, 3)} ${tone(texNum(A.F, 3), 2)}, \\quad F_B ${approx(B.F, 3)} ${tone(texNum(B.F, 3), 3)}, \\quad F_{AB} ${approx(AB.F, 3)} ${tone(texNum(AB.F, 3), 4)}`,
+        chart: {
+          type: "curve", label: T(`Gráfico de interação: média de cada combinação, uma linha por nível de A`, `Interaction plot: mean of each combination, one line per level of A`),
+          xLabel: T(`nível de B · colorida: A = 1 · escuras: os outros níveis de A · linhas paralelas: sem interação`, `level of B · colored: A = 1 · dark: the other levels of A · parallel lines: no interaction`),
+          xMin: 0.8, xMax: b + 0.2, yMin: yl - py, yMax: yh + py, pts: cm[0].map((m, j) => [j + 1, m]), lines,
+          dots: cm.flatMap(rowm => rowm.map((m, j) => [j + 1, m])),
+          tipAt: v => { const j = Math.min(b, Math.max(1, Math.round(v))); return [cm.map((rowm, i) => `A${i + 1}: ${fmt(rowm[j - 1], 2)}`).join(" · "), T(`médias em B = ${j}`, `means at B = ${j}`)]; },
+        },
+        steps: [
+          [T(`Calcule as médias de cada combinação (célula), de cada nível de A, de cada nível de B e a geral:`, `Compute the means of each combination (cell), of each level of A, of each level of B and overall:`),
+            `\\begin{array}{c|${"c".repeat(b)}|c} & ${mB.map((_, j) => `B_{${j + 1}}`).join(" & ")} & \\bar{y}_{A} \\\\ \\hline ${cm.map((rowm, i) => `A_{${i + 1}} & ${rowm.map(m => texNum(m, 3)).join(" & ")} & ${texNum(mA[i], 3)}`).join(" \\\\ ")} \\\\ \\hline \\bar{y}_{B} & ${mB.map(m => texNum(m, 3)).join(" & ")} & ${texNum(G, 3)} \\end{array}`],
+          [T("Reparta a variação total em quatro partes — A, B, a interação e o erro dentro das células — e divida cada uma pela sua média quadrática do erro:", "Split the total variation into four parts — A, B, the interaction and the error within cells — and divide each by the error mean square:"),
+            `\\begin{array}{l|r|r|r|r|r} & ${T("SQ & gl & QM", "SS & df & MS")} & F & p \\\\ \\hline ${row("A", A, 2)} \\\\ ${row("B", B, 3)} \\\\ ${row("A \\times B", AB, 4)} \\\\ ${T("\\text{erro}", "\\text{error}")} & ${texNum(ssE, 2)} & ${dE} & ${texNum(msE, 2)} & & \\end{array}`],
+        ],
+        note: T(`${inter ? `<strong>A interação é significativa</strong> (p ${pValueText(AB.p)}): o efeito de B depende do nível de A — as linhas do gráfico não são paralelas. Nesse caso, os efeitos principais sozinhos enganam; vale comparar B dentro de cada nível de A.` : `A interação não é significativa (p ${pValueText(AB.p)}): as linhas do gráfico são aproximadamente paralelas, e os efeitos de A e de B podem ser lidos separadamente.`}`
+          + ` Efeito de A: p ${pValueText(A.p)}, η² parcial ${fmt(A.eta, 3)}. Efeito de B: p ${pValueText(B.p)}, η² parcial ${fmt(B.eta, 3)}.`
+          + ` A ANOVA de dois fatores estende a <a href="${PAGE("anova-um-fator")}">de um fator</a> e supõe resíduos normais com variâncias iguais entre as células; aqui o desenho é balanceado, com ${r} repetições em cada uma das ${a * b} combinações.`,
+          `${inter ? `<strong>The interaction is significant</strong> (p ${pValueText(AB.p)}): the effect of B depends on the level of A — the chart's lines aren't parallel. In that case, the main effects alone mislead; it is worth comparing B within each level of A.` : `The interaction isn't significant (p ${pValueText(AB.p)}): the chart's lines are roughly parallel, and the effects of A and B can be read separately.`}`
+          + ` Effect of A: p ${pValueText(A.p)}, partial η² ${fmt(A.eta, 3)}. Effect of B: p ${pValueText(B.p)}, partial η² ${fmt(B.eta, 3)}.`
+          + ` Two-way ANOVA extends the <a href="${PAGE("anova-um-fator")}">one-way</a> version and assumes normal residuals with equal variances across cells; here the design is balanced, with ${r} replicates in each of the ${a * b} combinations.`),
+      };
+    },
+
+    shapiro({ x }) {
+      const n = x.length;
+      if (n < 3) return { error: T("Informe pelo menos três valores.", "Enter at least three values.") };
+      if (n > 5000) return { error: T("Use no máximo 5.000 valores.", "Use at most 5,000 values.") };
+      const s = x.slice().sort((p, q) => p - q), mean = s.reduce((t, v) => t + v, 0) / n;
+      const ss = s.reduce((t, v) => t + (v - mean) ** 2, 0);
+      if (ss === 0) return { error: T("Todos os valores são iguais: não há variação para testar.", "All values are equal: there is no variation to test.") };
+      // Coeficientes e valor-p pela aproximação de Royston (1992, 1995).
+      const m = Array.from({ length: n }, (_, i) => probit((i + 1 - 0.375) / (n + 0.25)));
+      const mm = m.reduce((t, v) => t + v * v, 0), u = 1 / Math.sqrt(n);
+      const poly = (c, z) => c.reduce((t, ci, i) => t + ci * z ** i, 0);
+      const a = new Array(n);
+      if (n === 3) { a[0] = -Math.SQRT1_2; a[1] = 0; a[2] = Math.SQRT1_2; }
+      else {
+        const an = poly([m[n - 1] / Math.sqrt(mm), 0.221157, -0.147981, -2.07119, 4.434685, -2.706056], u);
+        if (n > 5) {
+          const an1 = poly([m[n - 2] / Math.sqrt(mm), 0.042981, -0.293762, -1.752461, 5.682633, -3.582633], u);
+          const ph = (mm - 2 * m[n - 1] ** 2 - 2 * m[n - 2] ** 2) / (1 - 2 * an ** 2 - 2 * an1 ** 2);
+          for (let i = 2; i < n - 2; i++) a[i] = m[i] / Math.sqrt(ph);
+          a[0] = -an; a[1] = -an1; a[n - 2] = an1; a[n - 1] = an;
+        } else {
+          const ph = (mm - 2 * m[n - 1] ** 2) / (1 - 2 * an ** 2);
+          for (let i = 1; i < n - 1; i++) a[i] = m[i] / Math.sqrt(ph);
+          a[0] = -an; a[n - 1] = an;
+        }
+      }
+      const num = a.reduce((t, ai, i) => t + ai * s[i], 0);
+      const Wv = Math.min(1, num * num / ss);
+      let p;
+      if (n === 3) p = Math.max(0, Math.min(1, 6 / Math.PI * (Math.asin(Math.sqrt(Wv)) - Math.asin(Math.sqrt(0.75)))));
+      else if (n <= 11) {
+        const g = 0.459 * n - 2.273, w = -Math.log(g - Math.log(1 - Wv));
+        const mu = poly([0.544, -0.39978, 0.025054, -6.714e-4], n), sg = Math.exp(poly([1.3822, -0.77857, 0.062767, -0.0020322], n));
+        p = 1 - phi((w - mu) / sg);
+      } else {
+        const L = Math.log(n), w = Math.log(1 - Wv);
+        const mu = poly([-1.5861, -0.31082, -0.083751, 0.0038915], L), sg = Math.exp(poly([-0.4803, -0.082676, 0.0030302], L));
+        p = 1 - phi((w - mu) / sg);
+      }
+      const sd = Math.sqrt(ss / (n - 1));
+      const q0 = m[0], q1 = m[n - 1], pad = (q1 - q0) * 0.08;
+      const yl = Math.min(s[0], mean + sd * (q0 - pad)), yh = Math.max(s[n - 1], mean + sd * (q1 + pad)), py = (yh - yl) * 0.06;
+      const show = Math.min(5, Math.floor(n / 2));
+      const pairs = Array.from({ length: show }, (_, i) => `${texNum(a[n - 1 - i], 4)}(${texNum(s[n - 1 - i])} - ${paren(s[i], texNum(s[i]))})`).join(" + ") + (Math.floor(n / 2) > show ? " + \\cdots" : "");
+      return {
+        result: `W ${approx(Wv, 4)} ${tone(texNum(Wv, 4), 1)}, \\qquad p ${p < 1e-4 ? "<" : "\\approx"} ${p < 1e-4 ? T("0{,}0001", "0.0001") : tone(texNum(p, 4), 3)}`,
+        chart: {
+          type: "curve", label: T(`Gráfico quantil-quantil: os ${n} valores ordenados contra os quantis esperados da normal`, `Quantile-quantile plot: the ${n} sorted values against the expected normal quantiles`),
+          xLabel: T("quantil esperado da normal padrão · pontos: os dados ordenados · reta: onde cairiam se fossem normais", "expected standard normal quantile · dots: the sorted data · line: where they would fall if normal"),
+          xMin: q0 - pad, xMax: q1 + pad, yMin: yl - py, yMax: yh + py, pts: [[q0 - pad, mean + sd * (q0 - pad)], [q1 + pad, mean + sd * (q1 + pad)]],
+          dots: s.map((v, i) => [m[i], v]),
+          tipAt: v => { const i = m.reduce((b, q, j) => (Math.abs(q - v) < Math.abs(m[b] - v) ? j : b), 0); return [fmt(s[i]), T(`${i + 1}º menor valor; quantil esperado ${fmt(m[i], 3)}`, `${i + 1}th smallest value; expected quantile ${fmt(m[i], 3)}`)]; },
+        },
+        steps: [
+          [T("Ordene os valores e calcule a soma dos quadrados dos desvios:", "Sort the values and compute the sum of squared deviations:"),
+            `\\textstyle\\sum (x_i - \\bar{x})^2 ${approx(ss, 4)} ${tone(texNum(ss, 4), 2)}`],
+          [T("Combine os valores ordenados com os pesos aᵢ, tirados dos quantis esperados de uma amostra normal — os pares das pontas pesam mais:", "Combine the sorted values with the weights aᵢ, taken from the expected quantiles of a normal sample — the pairs at the ends weigh most:"),
+            `\\textstyle\\sum a_i\\, x_{(i)} = ${pairs} ${approx(num, 4)} ${texNum(num, 4)}`],
+          [T("W é o quadrado disso dividido pela soma dos quadrados:", "W is the square of that divided by the sum of squares:"),
+            `W = \\dfrac{${texNum(num, 4)}^2}{${tone(texNum(ss, 4), 2)}} ${approx(Wv, 4)} ${tone(texNum(Wv, 4), 1)}`],
+          [T(n === 3 ? "Com n = 3, o valor-p é exato:" : "O valor-p vem da aproximação de Royston, que leva W a uma normal:", n === 3 ? "With n = 3, the p-value is exact:" : "The p-value comes from Royston's approximation, which maps W to a normal:"),
+            `p ${p < 1e-4 ? "<" : "\\approx"} ${p < 1e-4 ? T("0{,}0001", "0.0001") : tone(texNum(p, 4), 3)}`],
+        ],
+        note: T(`${p < 0.05 ? `Ao nível de 5%, rejeita-se a normalidade (p ${pValueText(p)}): os pontos se afastam da reta do gráfico de forma sistemática.` : `Ao nível de 5%, não se rejeita a normalidade (p ${pValueText(p)}): os dados são compatíveis com uma normal.`}`
+          + ` W vai de 0 a 1 e é, em essência, o quadrado da correlação entre os dados ordenados e os quantis da normal: perto de 1, os pontos caem sobre a reta. O gráfico costuma dizer mais que o p — caudas que se abrem nas pontas indicam caudas pesadas; uma curva em arco, assimetria.`
+          + ` Cuidado com o tamanho da amostra: com poucos dados, o teste quase nunca rejeita; com milhares, rejeita desvios minúsculos que não atrapalham um <a href="${PAGE("t-student")}">teste t</a>. Para ver a forma, veja também a <a href="${PAGE("assimetria-curtose")}?x=${encodeURIComponent(x.join(" "))}">assimetria e curtose</a> destes dados.`,
+          `${p < 0.05 ? `At the 5% level, normality is rejected (p ${pValueText(p)}): the dots move away from the chart's line systematically.` : `At the 5% level, normality is not rejected (p ${pValueText(p)}): the data are consistent with a normal.`}`
+          + ` W runs from 0 to 1 and is, in essence, the squared correlation between the sorted data and the normal quantiles: near 1, the dots fall on the line. The chart often says more than the p — ends that peel away suggest heavy tails; an arc, skewness.`
+          + ` Mind the sample size: with little data, the test almost never rejects; with thousands, it rejects tiny departures that don't hurt a <a href="${PAGE("t-student")}">t test</a>. For the shape, see also the <a href="${PAGE("assimetria-curtose")}?x=${encodeURIComponent(x.join(" "))}">skewness and kurtosis</a> of these data.`),
       };
     },
 

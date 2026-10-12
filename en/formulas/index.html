@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">111 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">115 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -262,10 +262,25 @@
             <span class="card-name">One-Way ANOVA</span>
             <span class="card-blurb">Compares the means of three or more groups.</span>
           </a></li>
+          <li><a class="formula-card" href="two-way-anova.html">
+            <span class="card-tex" data-tex="SS_T = SS_A + SS_B + SS_{AB} + SS_E"></span>
+            <span class="card-name">Two-Way ANOVA</span>
+            <span class="card-blurb">Two factors at once, and the interaction between them.</span>
+          </a></li>
           <li><a class="formula-card" href="kruskal-wallis-test.html">
             <span class="card-tex" data-tex="H = \dfrac{12}{N(N+1)} \sum \dfrac{R_j^2}{n_j} - 3(N+1)"></span>
             <span class="card-name">Kruskal-Wallis Test</span>
             <span class="card-blurb">ANOVA done on ranks, without assuming normality.</span>
+          </a></li>
+          <li><a class="formula-card" href="dunn-test.html">
+            <span class="card-tex" data-tex="z_{ij} = \dfrac{\bar{R}_i - \bar{R}_j}{\sqrt{\frac{N(N+1)}{12}\left(\frac{1}{n_i} + \frac{1}{n_j}\right)}}"></span>
+            <span class="card-name">Dunn&#x27;s Test</span>
+            <span class="card-blurb">Which pairs differ, after Kruskal-Wallis.</span>
+          </a></li>
+          <li><a class="formula-card" href="friedman-test.html">
+            <span class="card-tex" data-tex="\chi^2_F = \dfrac{12}{nk(k+1)} \sum R_j^2 - 3n(k+1)"></span>
+            <span class="card-name">Friedman Test</span>
+            <span class="card-blurb">Repeated measures by ranks, within each block.</span>
           </a></li>
           <li><a class="formula-card" href="multiple-comparisons.html">
             <span class="card-tex" data-tex="P(\text{false positive}) = 1 - (1 - \alpha)^k"></span>
@@ -401,6 +416,11 @@
             <span class="card-tex" data-tex="g_1 = \dfrac{\frac{1}{n}\sum (x_i - \bar{x})^3}{\left[\frac{1}{n}\sum (x_i - \bar{x})^2\right]^{3/2}}"></span>
             <span class="card-name">Skewness and Kurtosis</span>
             <span class="card-blurb">The shape of the data: which way it leans and how heavy its tails are.</span>
+          </a></li>
+          <li><a class="formula-card" href="shapiro-wilk-test.html">
+            <span class="card-tex" data-tex="W = \dfrac{\left(\sum a_i x_{(i)}\right)^2}{\sum (x_i - \bar{x})^2}"></span>
+            <span class="card-name">Shapiro-Wilk Test</span>
+            <span class="card-blurb">Do the data come from a normal? W and the quantile-quantile plot.</span>
           </a></li>
           <li><a class="formula-card" href="covariance.html">
             <span class="card-tex" data-tex="Cov(X,Y) = \dfrac{\sum_{i=1}^{n} (x_i - \mu_x) (y_i - \mu_y)}{n}"></span>
