@@ -1226,8 +1226,14 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por subtração, multiplicação, divisão, MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
   tags: "matemática básica aritmética exercícios"
+  lang: pt
+
+- title: "Adição — Vai Um e a Conta Armada"
+  url: "/matematica-basica/adicao.html"
+  description: "Adição explicada do zero: juntar com blocos de dezena e unidade, o que são parcelas e soma, por que vai um e uma calculadora que faz a conta à mão, passo a passo, com até cinco parcelas e o nome de cada parte a um clique."
+  tags: "adição soma conta armada vai um reserva parcelas total somar prova real"
   lang: pt
 
 - title: "Subtração — Empréstimo e a Conta Armada"

@@ -1874,3 +1874,28 @@
 .cube.is-out {
   opacity: .18;
 }
+
+/* ---------------------------------------------------------------- adição: blocos */
+
+/* O segundo número em outra cor, para ver o que veio de cada um. */
+.bar.is-b,
+.cube.is-b {
+  background-color: var(--tone-5);
+}
+
+.var-b i {
+  color: var(--tone-5);
+}
+
+.var-b input {
+  accent-color: var(--tone-5);
+}
+
+/* A barra feita com dez cubinhos: o vai um. */
+.bar.is-made {
+  outline: 2px dashed var(--tone-1);
+  outline-offset: 1px;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 calc(10% - 1px), var(--surface) calc(10% - 1px) 10%),
+    var(--tone-1);
+}

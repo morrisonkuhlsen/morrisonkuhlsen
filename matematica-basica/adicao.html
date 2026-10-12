@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Adição — Vai Um e a Conta Armada</title>
+  <meta name="description" content="Adição explicada do zero: juntar com blocos de dezena e unidade, o que são parcelas e soma, por que vai um e uma calculadora que faz a conta à mão, passo a passo, com até cinco parcelas e o nome de cada parte a um clique.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/adicao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/adicao.html">
+  <meta property="og:title" content="Adição — Vai Um e a Conta Armada">
+  <meta property="og:description" content="Adição explicada do zero: juntar com blocos de dezena e unidade, o que são parcelas e soma, por que vai um e uma calculadora que faz a conta à mão, passo a passo, com até cinco parcelas e o nome de cada parte a um clique.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Adição — Vai Um e a Conta Armada">
+  <meta name="twitter:description" content="Adição explicada do zero: juntar com blocos de dezena e unidade, o que são parcelas e soma, por que vai um e uma calculadora que faz a conta à mão, passo a passo, com até cinco parcelas e o nome de cada parte a um clique.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="conta.js"></script>
+  <script defer src="adicao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Adição — Vai Um e a Conta Armada</h1>
+    <p class="page-lede">Somar é <strong>juntar</strong>. A conta armada junta casa por casa — unidades com unidades, dezenas com dezenas — e, como cada casa só guarda até 9, quando passa disso dez viram 1 da casa seguinte: é o <strong>vai um</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#blocos">Juntar</a>
+      <a href="#partes">As partes</a>
+      <a href="#conta">Conta armada</a>
+      <a href="#porque">Por que funciona</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\text{parcela} + \text{parcela} = \text{soma}"></span>
+
+    <!-- 1. Blocos de dezena e unidade; estado em ?um=&outro=. -->
+    <section class="calc intro blocos" id="blocos" aria-labelledby="blk-title">
+      <h2 id="blk-title">Somar é juntar</h2>
+      <div class="vars share-vars">
+        <label class="var">
+          <i>um</i>
+          <input name="um" type="range" min="0" max="99" step="1" value="27" aria-label="Primeiro número">
+          <output class="out-um">27</output>
+        </label>
+        <label class="var var-b">
+          <i>outro</i>
+          <input name="outro" type="range" min="0" max="99" step="1" value="48" aria-label="Segundo número">
+          <output class="out-outro">48</output>
+        </label>
+      </div>
+      <div class="blk" aria-hidden="true">
+        <div class="blk-col"><div class="blk-tens"></div><span class="share-label">dezenas</span></div>
+        <div class="blk-col"><div class="blk-units"></div><span class="share-label">unidades</span></div>
+      </div>
+      <div class="blk-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. A conta pronta, com as partes clicáveis; estado em ?a=&b=. -->
+    <section class="calc" id="partes" aria-labelledby="partes-title">
+      <h2 id="partes-title">O nome de cada parte</h2>
+      <p class="calc-lede">Escreva as parcelas separadas por + (de duas a cinco) e clique em qualquer parte da conta para saber o que ela é — parcela, vai um, soma — e de onde veio.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Parcelas</span>
+          <input name="n" type="text" value="27 + 48" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="27 + 48">27 + 48</button>
+        <button type="button" data-exemplo="356 + 278">356 + 278</button>
+        <button type="button" data-exemplo="999 + 1">999 + 1</button>
+        <button type="button" data-exemplo="1205 + 398 + 76">1205 + 398 + 76</button>
+        <button type="button" data-exemplo="99 + 99 + 99 + 99">99 + 99 + 99 + 99</button>
+      </div>
+
+      <div class="ld-box ld-anat"></div>
+      <div class="ld-info" aria-live="polite"></div>
+      <div class="terms"></div>
+      <p class="prova-label">Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
+      <div class="prova calc-result"></div>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 3. A conta armada; estado em ?parcelas=. -->
+    <section class="calc" id="conta" aria-labelledby="conta-title">
+      <h2 id="conta-title">A conta armada, passo a passo</h2>
+      <p class="calc-lede">Escreva as parcelas e avance um passo de cada vez (os números também podem ser clicados). Em cada coluna, da direita para a esquerda: <strong>soma</strong>; se passar de 9, <strong>vai um</strong>.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Parcelas</span>
+          <input name="parcelas" type="text" value="356 + 278" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="27 + 48">27 + 48</button>
+        <button type="button" data-exemplo="356 + 278">356 + 278</button>
+        <button type="button" data-exemplo="999 + 1">999 + 1</button>
+        <button type="button" data-exemplo="4567 + 5433">4567 + 5433</button>
+        <button type="button" data-exemplo="1205 + 398 + 76">1205 + 398 + 76</button>
+        <button type="button" data-exemplo="99 + 99 + 99 + 99">99 + 99 + 99 + 99</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="ld-stage">
+        <div class="ld-main">
+          <div class="ld-box"></div>
+          <div class="ld-info" aria-live="polite" hidden></div>
+        </div>
+      </div>
+
+      <div class="ld-tags" aria-hidden="true">
+        <span data-tag="Soma">soma</span>
+        <span data-tag="Vai um">vai um</span>
+      </div>
+      <p class="ld-say" aria-live="polite"></p>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar a conta pronta">⏭</button>
+      </div>
+
+      <details class="ld-details">
+        <summary>Ver todos os passos em texto</summary>
+        <ol class="ld-all"></ol>
+      </details>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que a conta funciona</h2>
+      <p>No nosso sistema, cada casa vale dez vezes a da direita, e cada uma só tem algarismos de 0 a 9. Quando uma coluna soma 10 ou mais, o excesso não cabe ali: <strong>dez unidades são uma dezena</strong>, e essa dezena sobe para a coluna das dezenas. O vai um não acrescenta nada — só guarda o número na casa certa.</p>
+      <span class="tex-block" data-tex="\begin{aligned} 27 + 48 &= (2 + 4) \text{ dezenas} + (7 + 8) \text{ unidades} \\ &= 6 \text{ dezenas} + 15 \text{ unidades} \\ &= 6 \text{ dezenas} + 1 \text{ dezena} + 5 \text{ unidades} \\ &= 7 \text{ dezenas} + 5 \text{ unidades} = 75 \end{aligned}"></span>
+      <p>Com muitas parcelas, a coluna pode passar de 19, e aí sobem duas ou mais dezenas de uma vez: 9 + 9 + 9 + 9 = 36 manda 3 para a coluna seguinte — um “vai três”.</p>
+
+      <div class="tip">
+        <strong>De cabeça.</strong> Some as dezenas primeiro e as unidades depois: 27 + 48 = 60 + 15 = 75. Ou arredonde e corrija: 27 + 48 = 27 + 50 − 2 = 75. Em listas longas, junte o que fecha dezenas: 17 + 25 + 3 = (17 + 3) + 25 = 45.
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas e casos especiais</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="27 + 48 = 75"></span>
+          <p><strong>Esquecer o vai um.</strong> 7 + 8 = 15: fica 5 e sobe 1. Sem ele, as dezenas dariam 6, e a conta, 65.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="352 + 17 = 369"></span>
+          <p><strong>Alinhar pela direita.</strong> Unidades embaixo de unidades: o 7 vai embaixo do 2. Desalinhado, a conta vira 352 + 170.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="99 + 99 + 99 + 99 = 396"></span>
+          <p><strong>Vai mais que um.</strong> Uma coluna pode somar 36: escreve 6 e sobem 3.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="999 + 1 = 1000"></span>
+          <p><strong>Vai um em cadeia.</strong> Cada coluna dá 10 e passa 1 adiante, até abrir uma casa nova à esquerda.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a + b = b + a"></span>
+          <p><strong>A ordem não importa.</strong> E dá para agrupar como for mais fácil: (17 + 3) + 25 é o mesmo que 17 + (3 + 25).</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a + 0 = a"></span>
+          <p><strong>Zero não muda nada.</strong> Somar 0 é não juntar coisa nenhuma.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde a adição leva</h2>
+      <p><strong>Subtração.</strong> A <a href="subtracao.html">subtração</a> desfaz a adição: o vai um vira empréstimo, que é a mesma troca ao contrário — uma dezena desmanchada em dez unidades. É por isso que a soma é a prova real da subtração.</p>
+      <p><strong>Multiplicação.</strong> A <a href="multiplicacao.html">multiplicação</a> é a soma de parcelas iguais, e a conta armada dela termina somando as linhas com o mesmo vai um daqui.</p>
+      <p><strong>Estatística.</strong> O somatório Σ é uma adição de muitas parcelas, e a média é a soma dividida pela quantidade de valores. Quase toda fórmula da estatística começa somando alguma coisa.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 27 + 48 armando a conta.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>7 + 8 = 15: escreve 5, vai 1. 2 + 4 + 1 = 7. Soma <strong>75</strong>.</p>
+            <p><a href="?parcelas=27+%2B+48#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 356 + 278.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>6 + 8 = 14: escreve 4, vai 1. 5 + 7 + 1 = 13: escreve 3, vai 1. 3 + 2 + 1 = 6. Soma <strong>634</strong>.</p>
+            <p><a href="?parcelas=356+%2B+278#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quanto é 999 + 1?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>9 + 1 = 10 em cada coluna: escreve 0 e vai 1, três vezes seguidas. O último 1 abre a casa do milhar: <strong>1000</strong>.</p>
+            <p><a href="?parcelas=999+%2B+1#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule 1205 + 398 + 76.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Unidades: 5 + 8 + 6 = 19, escreve 9, vai 1. Dezenas: 0 + 9 + 7 + 1 = 17, escreve 7, vai 1. Centenas: 2 + 3 + 1 = 6. Milhar: 1. Soma <strong>1679</strong>.</p>
+            <p><a href="?parcelas=1205+%2B+398+%2B+76#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule 99 + 99 + 99 + 99.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Unidades: 36, escreve 6, vão 3. Dezenas: 36 + 3 = 39, escreve 9, vão 3. Centenas: só o 3. Soma <strong>396</strong>.</p>
+            <p>De cabeça: 4 × 100 − 4 = 396.</p>
+            <p><a href="?parcelas=99+%2B+99+%2B+99+%2B+99#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Numa feira, alguém gastou 37 reais na barraca de frutas, 25 na de verduras e 18 na de queijos. Quanto gastou ao todo?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>37 + 25 + 18 = <strong>80 reais</strong>. De cabeça, junte o que fecha dezena: 37 + 3 = 40 (dos 18 sobram 15), e 40 + 25 + 15 = 80.</p>
+            <p><a href="?parcelas=37+%2B+25+%2B+18#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="./" rel="prev"><span>Voltar</span>Matemática básica</a>
+      <a class="pager-next" href="subtracao.html" rel="next"><span>Próximo</span>Subtração — Empréstimo e a Conta Armada</a>
+    </nav>
+  </main>
+</body>
+</html>
