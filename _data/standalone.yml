@@ -936,7 +936,7 @@
 
 - title: "Cálculo Intuitivo"
   url: "/calculo/"
-  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas e máximos e mínimos, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
+  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas, máximos e mínimos e integral, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
   tags: "cálculo intuitivo derivada limite aulas lições"
   lang: pt
 
@@ -968,4 +968,10 @@
   url: "/calculo/maximos-minimos.html"
   description: "Máximos e mínimos explicados de forma intuitiva: a caixa de maior volume, pontos críticos, segunda derivada, a receita da otimização e por que a média e a mediana são mínimos, com gráficos interativos e exercícios."
   tags: "máximos e mínimos otimização pontos críticos segunda derivada média mediana mínimos quadrados cálculo"
+  lang: pt
+
+- title: "Integral — Área Como Acúmulo"
+  url: "/calculo/integral.html"
+  description: "Integral explicada do zero e de forma intuitiva: a água que se acumula num tanque, a área medida com retângulos, a notação, a área com sinal e por que probabilidade é área, com gráficos interativos e exercícios."
+  tags: "integral área acúmulo soma de Riemann retângulos probabilidade é área cálculo"
   lang: pt

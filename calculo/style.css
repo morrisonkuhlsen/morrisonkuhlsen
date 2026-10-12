@@ -149,3 +149,21 @@
   stroke-width: 1;
   stroke-dasharray: 4 4;
 }
+
+/* Integral: a área acumulada e os retângulos da soma. */
+.plot-area {
+  fill: var(--tone-1);
+  fill-opacity: .22;
+}
+
+.plot-rect {
+  fill: var(--tone-3);
+  fill-opacity: .25;
+  stroke: var(--tone-3);
+  stroke-width: 1;
+}
+
+.plot-rect.is-neg {
+  fill: var(--tone-4);
+  stroke: var(--tone-4);
+}

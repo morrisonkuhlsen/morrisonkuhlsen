@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Integral — Área Como Acúmulo</title>
+  <meta name="description" content="Integral explicada do zero e de forma intuitiva: a água que se acumula num tanque, a área medida com retângulos, a notação, a área com sinal e por que probabilidade é área, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/integral.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/integral.html">
+  <meta property="og:title" content="Integral — Área Como Acúmulo">
+  <meta property="og:description" content="Integral explicada do zero e de forma intuitiva: a água que se acumula num tanque, a área medida com retângulos, a notação, a área com sinal e por que probabilidade é área, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Integral — Área Como Acúmulo">
+  <meta name="twitter:description" content="Integral explicada do zero e de forma intuitiva: a água que se acumula num tanque, a área medida com retângulos, a notação, a área com sinal e por que probabilidade é área, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="integral.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Integral — Área Como Acúmulo</h1>
+    <p class="page-lede">A derivada pergunta <strong>quão rápido</strong> algo muda. A integral faz a pergunta ao contrário: sabendo quão rápido muda a cada instante, <strong>quanto se acumulou</strong> no total? Com velocidade constante, é só multiplicar. Quando a taxa varia, a resposta é a área sob o gráfico — e para medir essa área, retângulos cada vez mais finos.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#tanque">Enchendo um tanque</a>
+      <a href="#retangulos">Retângulos</a>
+      <a href="#notacao">A notação</a>
+      <a href="#sinal">Área com sinal</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\int_a^b f(x)\,dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i)\,\Delta x"></span>
+
+    <!-- 1. A torneira e o tanque; estado em ?t=. -->
+    <section class="calc intro" id="tanque" aria-labelledby="tanque-title">
+      <h2 id="tanque-title">Enchendo um tanque</h2>
+      <p class="calc-lede">Uma torneira abre aos poucos, fica bem aberta e fecha de novo em 10 minutos. O gráfico de cima mostra a <strong>vazão</strong>, em litros por minuto, a cada instante. Quanta água entrou até o instante <i>t</i>? Litros por minuto vezes minutos dá litros: é a <strong>área</strong> sob a vazão até <i>t</i>.</p>
+      <div class="vars tanque-vars"></div>
+      <div class="plot-box tanque-rate"></div>
+      <p class="plot-caption">vazão (L/min) — a área sombreada é a água que já entrou</p>
+      <div class="plot-box tanque-vol"></div>
+      <p class="plot-caption">volume no tanque (L) — a curva da área acumulada</p>
+      <p class="readout tanque-out" aria-live="polite"></p>
+      <div class="intro-text tanque-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Somas de retângulos; estado em ?g=&n=&m=. -->
+    <section class="calc intro" id="retangulos" aria-labelledby="ret-title">
+      <h2 id="ret-title">Medindo a área com retângulos</h2>
+      <p class="calc-lede">Área de retângulo é fácil: base vezes altura. Então divida o intervalo em <i>n</i> faixas, troque a curva de cada faixa por um retângulo e some. Aumente <i>n</i> e veja a soma chegar no valor exato.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-g="x2" aria-pressed="true">x² de 0 a 2</button>
+        <button type="button" data-g="sen" aria-pressed="false">sen x de 0 a π</button>
+        <button type="button" data-g="normal" aria-pressed="false">normal de −1,96 a 1,96</button>
+        <button type="button" data-g="onda" aria-pressed="false">sen x de 0 a 2π</button>
+      </div>
+      <div class="seg" role="group" aria-label="Altura do retângulo">
+        <button type="button" data-m="esq" aria-pressed="false">borda esquerda</button>
+        <button type="button" data-m="meio" aria-pressed="true">ponto médio</button>
+        <button type="button" data-m="dir" aria-pressed="false">borda direita</button>
+      </div>
+      <div class="vars ret-vars"></div>
+      <div class="plot-box ret-plot"></div>
+      <p class="readout ret-out" aria-live="polite"></p>
+      <div class="approx-table ret-table"></div>
+      <div class="intro-text ret-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="notacao" aria-labelledby="not-title">
+      <h2 id="not-title">A notação, peça por peça</h2>
+      <p>O símbolo da integral é um <strong>S alongado</strong>, de “soma” — foi Leibniz quem o escolheu. Ele lembra que a integral é a soma de infinitos retângulos infinitamente finos.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\int_a^b"></span>
+          <p>“Some de a até b”: os limites do intervalo.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="f(x)"></span>
+          <p>A altura de cada retângulo: o valor da função naquele ponto, como a vazão num instante.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="dx"></span>
+          <p>A largura de cada retângulo, que no limite fica infinitamente pequena. Altura × largura: f(x) dx é a área de uma faixa.</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>Para calcular com os seus números,</strong> a fórmula da <a href="/formulas/soma-riemann.html">soma de Riemann</a> faz o mesmo com x², eˣ, 1/x, √x e a densidade normal, comparando com o valor exato.
+      </div>
+    </section>
+
+    <section class="lesson" id="sinal" aria-labelledby="sinal-title">
+      <h2 id="sinal-title">Área com sinal</h2>
+      <p>Abaixo do eixo, a altura f(x) é negativa, e o retângulo entra na soma com <strong>sinal negativo</strong>. A integral é uma área com sinal: o que fica acima soma, o que fica abaixo subtrai. Na opção “sen x de 0 a 2π”, as duas metades se cancelam e a integral dá zero.</p>
+      <p>Faz sentido no tanque: vazão negativa é água saindo. O volume final é o que entrou menos o que saiu.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\int_a^b (f + g) = \int_a^b f + \int_a^b g"></span>
+          <p>A área de uma soma é a soma das áreas.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\int_a^b c\,f = c \int_a^b f"></span>
+          <p>Esticar a altura por c estica a área por c.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\int_a^b f + \int_b^c f = \int_a^c f"></span>
+          <p>Áreas de trechos vizinhos se juntam.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Integrais na estatística</h2>
+      <p><strong>Probabilidade é área.</strong> Numa variável contínua, a chance de cair entre a e b é a área sob a densidade nesse trecho. Na opção da normal, os retângulos chegam a 0,95: são os 95% entre −1,96 e 1,96 que aparecem em todo <a href="/formulas/intervalo-confianca.html">intervalo de confiança</a>.</p>
+      <p><strong>A área total é 1.</strong> Toda densidade tem área total 1 — tudo o que pode acontecer. Para a normal, isso só funciona por causa da <a href="/formulas/integral-gaussiana.html">integral gaussiana</a>, que dá o √(2π) da fórmula.</p>
+      <p><strong>A média é uma integral.</strong> O valor esperado de uma variável contínua é ∫ x f(x) dx: cada valor pesado pela sua densidade, a versão contínua do <a href="/formulas/valor-esperado.html">valor esperado</a> como soma.</p>
+      <p>Somar retângulos funciona, mas dá trabalho. A próxima lição mostra o atalho: para achar a área, basta conhecer uma função cuja derivada é f — o <strong>teorema fundamental do cálculo</strong>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Um carro anda a 20 m/s constantes durante 30 s. Quanto ele percorre, e que área é essa no gráfico de velocidade?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Velocidade × tempo = 20 × 30 = <strong>600 m</strong>. No gráfico de velocidade, é a área do retângulo de altura 20 e largura 30.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Qual a área sob y = 2x de x = 0 a x = 3?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>É um triângulo de base 3 e altura 6: (3 × 6) ÷ 2 = <strong>9</strong>. A integral de 0 a 3 de 2x dx vale 9.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Estime a área sob y = x² de 0 a 2 com 4 retângulos pela borda direita.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Larguras de 0,5; alturas f(0,5), f(1), f(1,5), f(2) = 0,25; 1; 2,25; 4. Soma × 0,5 = 7,5 × 0,5 = <strong>3,75</strong>. O valor exato é 8/3 ≈ 2,667: pela direita, numa curva que sobe, a soma passa do valor.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quanto vale a integral de sen x de 0 a 2π, e por quê?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>Zero.</strong> A área acima do eixo, de 0 a π, vale 2; a de baixo, de π a 2π, vale −2. A integral soma áreas com sinal, e as duas se cancelam.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Se a densidade de uma variável é f(x) = 1/10 entre 0 e 10, qual a chance de X ficar entre 2 e 5?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Área sob a densidade de 2 a 5: largura 3 × altura 1/10 = <strong>0,3</strong>, ou 30%. Em variáveis contínuas, probabilidade é área.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="maximos-minimos.html" rel="prev"><span>Anterior</span>Máximos e Mínimos</a>
+    </nav>
+  </main>
+</body>
+</html>

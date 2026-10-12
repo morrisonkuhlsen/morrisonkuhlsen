@@ -69,6 +69,15 @@ window.Grafico = (() => {
     // Reta de inclinação m pelo ponto (x, y), de ponta a ponta da janela.
     const line = (x, y, m, cls) => seg(x0, y + m * (x0 - x), x1, y + m * (x1 - x), cls);
     const band = (xa, xb, ya, yb, cls) => svg("rect", { x: X(Math.min(xa, xb)), y: Y(Math.max(ya, yb)), width: Math.abs(X(xb) - X(xa)), height: Math.abs(Y(yb) - Y(ya)), class: cls }, layer);
+    // Área entre a curva e o eixo x, de `from` a `to` (com sinal: abaixo do
+    // eixo, a região fica abaixo dele).
+    function area(f, from, to, cls = "plot-area", n = 200) {
+      if (to <= from) return null;
+      let d = `M${X(from).toFixed(2)},${Y(0).toFixed(2)}`;
+      for (let i = 0; i <= n; i++) { const x = from + (to - from) * i / n; d += `L${X(x).toFixed(2)},${Y(f(x)).toFixed(2)}`; }
+      d += `L${X(to).toFixed(2)},${Y(0).toFixed(2)}Z`;
+      return svg("path", { d, class: cls }, layer);
+    }
     const dot = (x, y, cls = "plot-dot is-hover", r = 5.5) => svg("circle", { cx: X(x), cy: Y(y), r, class: cls }, g);
     const label = (x, y, txt, anchor = "middle", dy = -10) => {
       const t = svg("text", { x: X(x), y: Y(y) + dy, class: "plot-label", "text-anchor": anchor }, g);
@@ -77,7 +86,7 @@ window.Grafico = (() => {
     };
 
     box.replaceChildren(g);
-    return { g, layer, X, Y, W, H, x0, x1, y0, y1, curve, seg, line, band, dot, label };
+    return { g, layer, X, Y, W, H, x0, x1, y0, y1, curve, seg, line, band, area, dot, label };
   }
 
   // Redesenha os gráficos quando a largura muda (celular girando, janela).
