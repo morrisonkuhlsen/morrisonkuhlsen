@@ -9,6 +9,8 @@
 
 {%- if all_tags.size > 0 -%}
 <section class="section section--alt tags-section">
+  {%- comment -%} Painel de letreiro ao fundo, montado por tags-board.js. {%- endcomment -%}
+  <canvas class="tags-board" aria-hidden="true" data-lang="{{ lang }}"></canvas>
   <div class="container">
     <h2 class="tags-section__title">
       {%- if lang == 'en' -%}Browse by category{%- else -%}Navegar por categoria{%- endif -%}
@@ -20,4 +22,5 @@
     </div>
   </div>
 </section>
+<script src="{{ '/assets/js/tags-board.js' | relative_url }}" defer></script>
 {%- endif -%}
