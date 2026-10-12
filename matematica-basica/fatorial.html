@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fatorial — Contar Filas</title>
+  <meta name="description" content="Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/fatorial.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/fatorial.html">
+  <meta property="og:title" content="Fatorial — Contar Filas">
+  <meta property="og:description" content="Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Fatorial — Contar Filas">
+  <meta name="twitter:description" content="Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="fatorial.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Fatorial — Contar Filas</h1>
+    <p class="page-lede">O fatorial de n, escrito <strong>n!</strong>, é o produto de todos os inteiros de n até 1: 4! = 4 × 3 × 2 × 1 = 24. Ele conta de quantos jeitos dá para pôr n coisas em fila — e cresce mais rápido que quase tudo.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#escada">O que é</a>
+      <a href="#filas">O que conta</a>
+      <a href="#calc">Calculadora</a>
+      <a href="#regras">Regras</a>
+      <a href="#crescimento">Crescimento</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="n! = n \times (n - 1) \times \cdots \times 2 \times 1 \qquad 0! = 1"></span>
+
+    <!-- 1. A escada; estado em ?n=. -->
+    <section class="calc intro" id="escada" aria-labelledby="escada-title">
+      <h2 id="escada-title">Uma escada de multiplicações</h2>
+      <div class="vars var-wide">
+        <label class="var">
+          <i>n</i>
+          <input name="n" type="range" min="0" max="10" step="1" value="5" aria-label="n">
+          <output class="out-n">5</output>
+        </label>
+      </div>
+      <div class="fat-expand calc-result" data-tone="1" aria-live="polite"></div>
+      <ol class="ladder-steps" aria-label="Fatoriais de 0 a 10"></ol>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. As filas; estado em ?letras=. -->
+    <section class="calc intro" id="filas" aria-labelledby="filas-title">
+      <h2 id="filas-title">O que o fatorial conta: filas</h2>
+      <div class="vars var-wide">
+        <label class="var">
+          <i>n</i>
+          <input name="letras" type="range" min="1" max="5" step="1" value="3" aria-label="Quantas letras">
+          <output class="out-letras">3</output>
+        </label>
+      </div>
+      <ul class="fila-list" aria-label="Todas as filas possíveis"></ul>
+      <div class="intro-text fila-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 3. Calculadora; estado em ?fn=&fk=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculadora de fatorial</h2>
+      <p class="calc-lede">O valor exato de n! até n = 1000. Com k preenchido, calcula n!/k! cancelando — sem calcular os dois fatoriais enormes.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>n</span>
+          <input name="fn" type="text" inputmode="numeric" value="52" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>k (opcional, para n!/k!)</span>
+          <input name="fk" type="text" inputmode="numeric" value="" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="6">6!</button>
+        <button type="button" data-exemplo="20">20!</button>
+        <button type="button" data-exemplo="52">baralho</button>
+        <button type="button" data-exemplo="100">100!</button>
+        <button type="button" data-exemplo="10;7">10!/7!</button>
+        <button type="button" data-exemplo="100;98">100!/98!</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras</h2>
+      <p>Arraste n e m: os valores são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Cada fatorial sai do anterior</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="n! = n \times (n - 1)!"></span>
+        <div class="rule-try" data-rule="recursiva" data-vars="n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Fatorial de uma divisão: cancele</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{n!}{k!} = n \times (n - 1) \times \cdots \times (k + 1)"></span>
+        <p>Aqui com k = m. É o atalho de toda fórmula de contagem: 100!/98! = 100 × 99 = 9900, sem calcular número de 158 algarismos.</p>
+        <div class="rule-try" data-rule="divisao" data-vars="n m"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Fatorial de uma soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="(n + m)! \ne n! + m!"></span>
+        <div class="rule-try" data-rule="soma" data-vars="n m"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Fatorial do dobro</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="(2n)! \ne 2 \times n!"></span>
+        <div class="rule-try" data-rule="dobro" data-vars="n"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="crescimento" aria-labelledby="cresc-title">
+      <h2 id="cresc-title">Cresce mais rápido que potência</h2>
+      <p>A cada passo o fatorial multiplica por um número maior, enquanto uma potência como 2ⁿ multiplica sempre pelo mesmo. Por isso o fatorial ultrapassa qualquer potência:</p>
+      <div class="table-scroll">
+        <table class="plain-table fat-table">
+          <thead><tr><th>n</th><th>n²</th><th>2ⁿ</th><th>n!</th></tr></thead>
+          <tbody>
+            <tr><td>3</td><td>9</td><td>8</td><td>6</td></tr>
+            <tr><td>5</td><td>25</td><td>32</td><td>120</td></tr>
+            <tr><td>10</td><td>100</td><td>1.024</td><td>3.628.800</td></tr>
+            <tr><td>20</td><td>400</td><td>1.048.576</td><td>2,4 × 10¹⁸</td></tr>
+            <tr><td>52</td><td>2.704</td><td>4,5 × 10¹⁵</td><td>8,1 × 10⁶⁷</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>52! é o número de ordens de um baralho embaralhado: cerca de 8 × 10⁶⁷. É tão grande que, embaralhando bem, quase certamente ninguém na história segurou o mesmo baralho na mesma ordem. É por isso que contar “testando todas as ordens” é inviável — e por que as fórmulas de contagem existem.</p>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde o fatorial leva</h2>
+      <p><strong>Contagem.</strong> Arranjos, permutações e combinações são frações de fatoriais. Veja <a href="/formulas/permutacoes-arranjos.html">permutações e arranjos</a> e o <a href="/formulas/coeficiente-binomial.html">coeficiente binomial</a>, que é n! ÷ (k! (n − k)!).</p>
+      <p><strong>Probabilidade.</strong> A distribuição binomial, a de Poisson e o <a href="/formulas/problema-aniversario.html">problema do aniversário</a> têm fatoriais nas fórmulas. O <a href="/formulas/binomio-newton.html">binômio de Newton</a> também.</p>
+      <p><strong>Estimar sem calcular.</strong> Para n grande, a <a href="/formulas/aproximacao-stirling.html">aproximação de Stirling</a> dá n! com erro pequeno, usando só potência e raiz — o π e o e aparecem juntos nela, veja as <a href="constantes.html">constantes</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 6!.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>6 × 5 × 4 × 3 × 2 × 1 = <strong>720</strong>. Ou, da escada: 6 × 5! = 6 × 120.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 9!/7! sem calcular os dois fatoriais.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>9!/7! = 9 × 8 × 7!/7! = 9 × 8 = <strong>72</strong>.</p>
+            <p><a href="?fn=9&amp;fk=7#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> De quantos jeitos 5 pessoas podem se sentar num banco de 5 lugares?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>5 escolhas para o 1º lugar, 4 para o 2º… 5! = <strong>120</strong> jeitos.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Numa corrida com 10 atletas, de quantos jeitos podem sair o 1º, o 2º e o 3º lugares?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>10 × 9 × 8 = <strong>720</strong>, que é 10!/7!. Só os três primeiros importam, então o 7! dos outros se cancela.</p>
+            <p><a href="?fn=10&amp;fk=7#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Simplifique (n + 1)!/n!.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(n + 1)! = (n + 1) × n!, então a fração é <strong>n + 1</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Em quantos zeros termina 25!?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Cada zero do fim vem de um 2 × 5. Há bem mais fatores 2 que 5, então conte os 5: 5, 10, 15, 20 dão um cada, e 25 = 5 × 5 dá dois. Total: <strong>6 zeros</strong>.</p>
+            <p><a href="?fn=25#calc">Confira →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="somatorio.html" rel="prev"><span>Anterior</span>Somatório — A Notação Σ</a>
+      <a class="pager-next" href="funcao-1grau.html" rel="next"><span>Próximo</span>Função do 1º Grau — A Reta y = ax + b</a>
+    </nav>
+  </main>
+</body>
+</html>

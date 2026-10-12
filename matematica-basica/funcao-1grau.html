@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Função do 1º Grau — A Reta y = ax + b</title>
+  <meta name="description" content="Função do 1º grau explicada do zero: o gráfico de y = ax + b com a inclinação e o corte no eixo y nos seus controles, a reta que passa por dois pontos passo a passo, a taxa constante e a ligação com a regressão linear.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/funcao-1grau.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/funcao-1grau.html">
+  <meta property="og:title" content="Função do 1º Grau — A Reta y = ax + b">
+  <meta property="og:description" content="Função do 1º grau explicada do zero: o gráfico de y = ax + b com a inclinação e o corte no eixo y nos seus controles, a reta que passa por dois pontos passo a passo, a taxa constante e a ligação com a regressão linear.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Função do 1º Grau — A Reta y = ax + b">
+  <meta name="twitter:description" content="Função do 1º grau explicada do zero: o gráfico de y = ax + b com a inclinação e o corte no eixo y nos seus controles, a reta que passa por dois pontos passo a passo, a taxa constante e a ligação com a regressão linear.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="funcao-1grau.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Função do 1º Grau — A Reta y = ax + b</h1>
+    <p class="page-lede">Uma função do 1º grau, <strong>y = ax + b</strong>, transforma cada x num y somando sempre o mesmo tanto a cada passo. O gráfico é uma reta: <strong>a</strong> diz o quanto ela é inclinada, e <strong>b</strong>, onde ela corta o eixo y.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#reta">a e b</a>
+      <a href="#pontos">Reta por dois pontos</a>
+      <a href="#taxa">Taxa constante</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="y = ax + b \qquad a = \frac{\Delta y}{\Delta x}"></span>
+
+    <!-- 1. A reta; estado em ?ra=&rb=. -->
+    <section class="calc intro" id="reta" aria-labelledby="reta-title">
+      <h2 id="reta-title">O que a e b fazem com a reta</h2>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="ra" type="range" min="-3" max="3" step="0.5" value="1.5" aria-label="Inclinação a">
+          <output class="out-ra">1,5</output>
+        </label>
+        <label class="var var-b">
+          <i>b</i>
+          <input name="rb" type="range" min="-5" max="5" step="1" value="-2" aria-label="Corte no eixo y, b">
+          <output class="out-rb">−2</output>
+        </label>
+      </div>
+      <div class="reta-f calc-result"></div>
+      <div class="intro-figure reta-fig" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Reta por dois pontos; estado em ?x1=&y1=&x2=&y2=. -->
+    <section class="calc" id="pontos" aria-labelledby="pontos-title">
+      <h2 id="pontos-title">A reta que passa por dois pontos</h2>
+      <p class="calc-lede">Dois pontos bastam para definir uma reta. Digite as coordenadas e veja a e b saírem.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>x₁</span>
+          <input name="x1" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>y₁</span>
+          <input name="y1" type="text" inputmode="decimal" value="3" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>x₂</span>
+          <input name="x2" type="text" inputmode="decimal" value="4" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>y₂</span>
+          <input name="y2" type="text" inputmode="decimal" value="-3" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="1;3;4;-3">(1, 3) e (4, −3)</button>
+        <button type="button" data-exemplo="0;32;100;212">°C → °F</button>
+        <button type="button" data-exemplo="-2;1;4;4">(−2, 1) e (4, 4)</button>
+        <button type="button" data-exemplo="2;5;6;5">reta horizontal</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="intro-figure pontos-fig" aria-hidden="true"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="taxa" aria-labelledby="taxa-title">
+      <h2 id="taxa-title">Taxa constante: o que faz a função ser do 1º grau</h2>
+      <p>Uma corrida de táxi custa R$ 5 de bandeirada mais R$ 3 por quilômetro. O preço é y = 3x + 5: cada quilômetro a mais soma <strong>sempre</strong> R$ 3. Essa é a marca da função do 1º grau — a variação de y é proporcional à de x, a uma taxa que não muda.</p>
+      <div class="table-scroll">
+        <table class="plain-table fat-table">
+          <thead><tr><th>x (km)</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+          <tbody>
+            <tr><td>y (R$)</td><td>5</td><td>8</td><td>11</td><td>14</td><td>17</td></tr>
+            <tr><td>diferença</td><td></td><td>+3</td><td>+3</td><td>+3</td><td>+3</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Por isso a inclinação se calcula com <strong>quaisquer</strong> dois pontos: Δy/Δx dá sempre o mesmo número. Se as diferenças mudassem, a curva não seria reta — e a taxa de cada trecho viraria a <a href="/calculo/taxa-variacao.html">taxa de variação</a> do cálculo.</p>
+      <div class="facts is-pairs">
+        <div class="fact">
+          <span class="rule-tex" data-tex="a > 0"></span>
+          <p><strong>Crescente:</strong> quanto maior x, maior y.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a < 0"></span>
+          <p><strong>Decrescente:</strong> quanto maior x, menor y.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="b = 0 \Rightarrow y = ax"></span>
+          <p><strong>Passa pela origem:</strong> y é proporcional a x — é a <a href="/formulas/regra-de-tres.html">regra de três</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="y > 0 \iff ax + b > 0"></span>
+          <p><strong>Onde y é positivo:</strong> uma <a href="inequacoes.html">inequação do 1º grau</a>; a raiz separa os dois lados.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">A reta na estatística</h2>
+      <p><strong>Regressão linear.</strong> Quando os pontos de um gráfico de dispersão “quase” formam uma reta, a <a href="/formulas/regressao-linear.html">regressão linear</a> acha a reta que passa mais perto de todos eles. Na estatística ela costuma ser escrita ŷ = b₀ + b₁x — os mesmos b e a desta página, com outros nomes e em outra ordem. A inclinação b₁ diz quanto y muda, em média, quando x aumenta 1.</p>
+      <p><strong>Correlação.</strong> O sinal da inclinação é o sinal da <a href="/formulas/coeficiente-pearson.html">correlação de Pearson</a>: reta crescente, correlação positiva; decrescente, negativa.</p>
+      <p><strong>Mudar de unidade.</strong> Converter Celsius em Fahrenheit é F = 1,8C + 32. Quando todos os dados passam por uma função assim, a média passa pela mesma função, e o desvio padrão só é multiplicado por |a| — o b não mexe na dispersão.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Em y = −2x + 4, diga se a função é crescente ou decrescente, onde corta o eixo y e qual é a raiz.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>a = −2: <strong>decrescente</strong>. Corta o eixo y em <strong>(0, 4)</strong>. Raiz: −2x + 4 = 0, <strong>x = 2</strong>.</p>
+            <p><a href="?ra=-2&amp;rb=4#reta">Veja no gráfico →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Ache a reta que passa por (1, 2) e (3, 8).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>a = (8 − 2)/(3 − 1) = 3. Com (1, 2): 2 = 3 + b, b = −1. <strong>y = 3x − 1</strong>.</p>
+            <p><a href="?x1=1&amp;y1=2&amp;x2=3&amp;y2=8#pontos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> A água ferve a 100 °C = 212 °F e congela a 0 °C = 32 °F. Ache a fórmula de F em função de C e converta 25 °C.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>a = (212 − 32)/(100 − 0) = 1,8 e b = 32: <strong>F = 1,8C + 32</strong>. Para 25 °C: 1,8 × 25 + 32 = <strong>77 °F</strong>.</p>
+            <p><a href="?x1=0&amp;y1=32&amp;x2=100&amp;y2=212#pontos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Um plano de celular custa R$ 40 fixos mais R$ 0,50 por gigabyte. Escreva a função e diga quanto custa um mês com 12 GB.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>y = 0,5x + 40. Com x = 12: 6 + 40 = <strong>R$ 46</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Uma regressão deu ŷ = 50 + 4x, em que x é horas de estudo e ŷ a nota prevista (de 0 a 100). O que significa o 4? E o 50?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>O <strong>4</strong> é a inclinação: cada hora a mais de estudo está associada, em média, a 4 pontos a mais na nota. O <strong>50</strong> é a nota prevista para quem não estudou nada (x = 0).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="fatorial.html" rel="prev"><span>Anterior</span>Fatorial — Contar Filas</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>

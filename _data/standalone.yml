@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes e somatório."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -1348,6 +1348,18 @@
   url: "/matematica-basica/somatorio.html"
   description: "O somatório Σ explicado do zero: como ler o índice e os limites, uma tabela que soma os seus dados coluna por coluna (Σx, Σx², (Σx)², desvios), as propriedades testadas com os seus números e o Σ nas fórmulas da média, da variância e da covariância."
   tags: "somatório sigma Σ notação soma índice soma dos quadrados quadrado da soma desvios média variância"
+  lang: pt
+
+- title: "Fatorial — Contar Filas"
+  url: "/matematica-basica/fatorial.html"
+  description: "Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência."
+  tags: "fatorial n! zero fatorial permutação contagem filas arranjo calculadora stirling"
+  lang: pt
+
+- title: "Função do 1º Grau — A Reta y = ax + b"
+  url: "/matematica-basica/funcao-1grau.html"
+  description: "Função do 1º grau explicada do zero: o gráfico de y = ax + b com a inclinação e o corte no eixo y nos seus controles, a reta que passa por dois pontos passo a passo, a taxa constante e a ligação com a regressão linear."
+  tags: "função do primeiro grau função afim função linear reta inclinação coeficiente angular coeficiente linear dois pontos regressão gráfico"
   lang: pt
 
 - title: "Cálculo Intuitivo"

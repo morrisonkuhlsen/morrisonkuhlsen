@@ -2205,3 +2205,81 @@
 .ineq-dot.is-open {
   fill: var(--surface);
 }
+
+/* ================================================================ fatorial */
+
+/* As filas de letras, coloridas pela primeira letra: cada cor é um grupo de
+   (n − 1)! filas. */
+.fila-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem;
+  max-width: 640px;
+  margin: .6rem auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fila {
+  padding: .2rem .5rem;
+  border: 1px solid var(--tone);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
+  color: var(--text-strong);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: .9rem;
+  letter-spacing: .12em;
+}
+
+.fila[data-first="A"] { --tone: var(--tone-1); }
+.fila[data-first="B"] { --tone: var(--tone-2); }
+.fila[data-first="C"] { --tone: var(--tone-3); }
+.fila[data-first="D"] { --tone: var(--tone-4); }
+.fila[data-first="E"] { --tone: var(--tone-5); }
+
+.fat-expand {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.fat-table td,
+.fat-table th {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fat-table td:first-child,
+.fat-table th:first-child {
+  text-align: left;
+}
+
+/* ================================================================ função do 1º grau */
+
+.reta-plot {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* O degrau: 1 para a direita (cinza), a para cima ou para baixo (laranja). */
+.deg-run {
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.deg-rise {
+  stroke: var(--tone-2);
+  stroke-width: 3;
+}
+
+.plot-label.deg-label {
+  fill: var(--tone-2);
+}
+
+.plot-dot.is-b { fill: var(--tone-5); }
+.plot-dot.is-pt { fill: var(--tone-2); }
+
+.reta-f {
+  margin-top: .2rem;
+}
