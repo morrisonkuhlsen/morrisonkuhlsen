@@ -247,6 +247,36 @@
   description: "Autovalores e autovetores de uma matriz 2×2 explicados termo a termo, com calculadora, gráfico do círculo transformado e a ligação com a PCA."
   tags: "fórmula interativa calculadora passo a passo autovalores autovetores matriz PCA componentes principais"
   lang: pt
+- title: "Regra de Três"
+  url: "/formulas/regra-de-tres.html"
+  description: "A regra de três simples, direta e inversa, explicada termo a termo, com calculadora, gráfico da reta ou da hipérbole e o cuidado de checar se a proporção existe."
+  tags: "fórmula interativa calculadora passo a passo regra de três proporção direta inversa grandezas proporcionais"
+  lang: pt
+- title: "Distância entre Dois Pontos"
+  url: "/formulas/distancia-pontos.html"
+  description: "A distância entre dois pontos e a equação da circunferência explicadas termo a termo, com calculadora, gráfico do triângulo de Pitágoras e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo distância entre pontos Pitágoras circunferência geometria analítica"
+  lang: pt
+- title: "Vértice da Parábola"
+  url: "/formulas/vertice-parabola.html"
+  description: "O vértice da parábola explicado termo a termo, com calculadora, gráfico, eixo de simetria, forma canônica e o ponto de máximo ou de mínimo."
+  tags: "fórmula interativa calculadora passo a passo vértice parábola função quadrática máximo mínimo forma canônica"
+  lang: pt
+- title: "Binômio de Newton"
+  url: "/formulas/binomio-newton.html"
+  description: "O binômio de Newton explicado termo a termo, com calculadora da expansão de (a + b)ⁿ, o triângulo de Pascal e a ligação com a distribuição binomial."
+  tags: "fórmula interativa calculadora passo a passo binômio de Newton triângulo de Pascal expansão"
+  lang: pt
+- title: "Dízima Periódica e PG Infinita"
+  url: "/formulas/dizima-periodica.html"
+  description: "Dízima periódica e fração geratriz explicadas pela soma da PG infinita, termo a termo, com calculadora, gráfico das somas parciais e por que 0,999… = 1."
+  tags: "fórmula interativa calculadora passo a passo dízima periódica fração geratriz PG infinita 0,999"
+  lang: pt
+- title: "Multiplicação de Matrizes 2×2"
+  url: "/formulas/multiplicacao-matrizes.html"
+  description: "A multiplicação de matrizes 2×2 explicada termo a termo, com calculadora, gráfico das transformações compostas e por que AB é diferente de BA."
+  tags: "fórmula interativa calculadora passo a passo multiplicação de matrizes produto transformação composição"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -847,6 +877,36 @@
   url: "/en/formulas/eigenvalues-2x2.html"
   description: "Eigenvalues and eigenvectors of a 2×2 matrix explained term by term, with a calculator, a chart of the transformed circle and the link to PCA."
   tags: "interactive formula calculator step by step eigenvalues eigenvectors matrix PCA principal components"
+  lang: en
+- title: "Rule of Three"
+  url: "/en/formulas/rule-of-three.html"
+  description: "The rule of three, direct and inverse, explained term by term, with a calculator, a chart of the line or hyperbola and the caveat of checking that the proportion holds."
+  tags: "interactive formula calculator step by step rule of three direct inverse proportion"
+  lang: en
+- title: "Distance Between Two Points"
+  url: "/en/formulas/distance-between-points.html"
+  description: "The distance between two points and the equation of a circle explained term by term, with a calculator, a chart of Pythagoras' triangle and step-by-step working."
+  tags: "interactive formula calculator step by step distance between points Pythagoras circle analytic geometry"
+  lang: en
+- title: "Vertex of a Parabola"
+  url: "/en/formulas/parabola-vertex.html"
+  description: "The vertex of a parabola explained term by term, with a calculator, a chart, the axis of symmetry, the vertex form and the maximum or minimum point."
+  tags: "interactive formula calculator step by step vertex parabola quadratic function maximum minimum vertex form"
+  lang: en
+- title: "Binomial Theorem"
+  url: "/en/formulas/binomial-theorem.html"
+  description: "The binomial theorem explained term by term, with a calculator for the expansion of (a + b)ⁿ, Pascal's triangle and the link to the binomial distribution."
+  tags: "interactive formula calculator step by step binomial theorem Pascal's triangle expansion"
+  lang: en
+- title: "Repeating Decimals and Infinite Geometric Series"
+  url: "/en/formulas/repeating-decimal.html"
+  description: "Repeating decimals and their fractions explained through the infinite geometric series, term by term, with a calculator, a chart of the partial sums and why 0.999… = 1."
+  tags: "interactive formula calculator step by step repeating decimal fraction infinite geometric series 0.999"
+  lang: en
+- title: "2×2 Matrix Multiplication"
+  url: "/en/formulas/matrix-multiplication-2x2.html"
+  description: "2×2 matrix multiplication explained term by term, with a calculator, a chart of the composed transformations and why AB differs from BA."
+  tags: "interactive formula calculator step by step matrix multiplication product transformation composition"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

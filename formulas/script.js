@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "equacao-reta": "line-through-two-points",
     "matriz-inversa-2x2": "inverse-2x2-matrix", "covariancia": "covariance", "entropia-shannon": "shannon-entropy", "logaritmo-mudanca-base": "logarithm-change-of-base",
     "neyman-allocation": "neyman-allocation", "juros-aportes": "compound-interest-contributions", "media-geometrica": "geometric-mean",
     "teorema-bayes": "bayes-theorem", "distribuicao-binomial": "binomial-distribution",
@@ -4053,6 +4054,227 @@
       };
     },
 
+    regra3({ x1, y1, x2, tipo }) {
+      if (x1 === 0 || x2 === 0) return { error: T("As grandezas x₁ e x₂ precisam ser diferentes de zero.", "The quantities x₁ and x₂ must be nonzero.") };
+      const inv = tipo === "inversa";
+      if (inv && (x1 < 0 || x2 < 0)) return { error: T("Na proporção inversa, use valores positivos de x.", "For inverse proportion, use positive values of x.") };
+      const y2 = inv ? y1 * x1 / x2 : y1 * x2 / x1, k = inv ? x1 * y1 : y1 / x1;
+      const hi = Math.max(Math.abs(x1), Math.abs(x2)) * 1.4, lo = inv ? hi / 40 : Math.min(0, x1, x2) * 1.4;
+      const f = t => (inv ? k / t : k * t);
+      const pts = Array.from({ length: 241 }, (_, i) => { const t = lo + (hi - lo) * i / 240; return [t, f(t)]; });
+      const ys = inv ? [0, y1, y2].concat([y1, y2].map(v => v * 2.2)) : pts.map(p => p[1]).concat(0);
+      const yl = Math.min(...ys), yh = Math.max(...ys), yp = (yh - yl) * 0.08 || 1;
+      const X1 = tone(texNum(x1), 3), Y1 = tone(texNum(y1), 2), X2 = tone(texNum(x2), 4), Y2 = tone(texNum(y2, 6), 1);
+      return {
+        result: `y_2 ${approx(y2, 6)} ${Y2}`,
+        chart: {
+          type: "curve", label: T(inv ? `Hipérbole x · y = ${fmt(k)}, com os pontos (${fmt(x1)}, ${fmt(y1)}) e (${fmt(x2)}, ${fmt(y2, 4)})` : `Reta y = ${fmt(k, 4)} x, com os pontos (${fmt(x1)}, ${fmt(y1)}) e (${fmt(x2)}, ${fmt(y2, 4)})`,
+            inv ? `Hyperbola x · y = ${fmt(k)}, with the points (${fmt(x1)}, ${fmt(y1)}) and (${fmt(x2)}, ${fmt(y2, 4)})` : `Line y = ${fmt(k, 4)} x, with the points (${fmt(x1)}, ${fmt(y1)}) and (${fmt(x2)}, ${fmt(y2, 4)})`),
+          xLabel: T(inv ? "x · o produto x · y é constante: uma hipérbole" : "x · a razão y / x é constante: uma reta pela origem", inv ? "x · the product x · y is constant: a hyperbola" : "x · the ratio y / x is constant: a line through the origin"),
+          xMin: lo, xMax: hi, yMin: Math.min(0, yl) - (yl < 0 ? yp : 0), yMax: yh + yp, pts: pts.filter(p => p[1] >= Math.min(0, yl) - yp && p[1] <= yh + yp),
+          lines: [{ pts: [[x1, 0], [x1, y1]], cls: "chart-ref" }], marker: [x2, y2],
+          tipAt: t => [fmt(f(t), 4), `x = ${fmt(t, 3)}`],
+        },
+        steps: inv ? [
+          [T("Grandezas inversamente proporcionais têm produto constante:", "Inversely proportional quantities have a constant product:"),
+            `x_1 \\cdot y_1 = x_2 \\cdot y_2 \\;\\Rightarrow\\; ${X1} \\cdot ${paren(y1, Y1)} = ${X2} \\cdot y_2`],
+          [T("Isole y₂:", "Solve for y₂:"), `y_2 = \\dfrac{${X1} \\cdot ${paren(y1, Y1)}}{${X2}} ${approx(y2, 6)} ${Y2}`],
+        ] : [
+          [T("Grandezas diretamente proporcionais têm razão constante:", "Directly proportional quantities have a constant ratio:"),
+            `\\dfrac{y_1}{x_1} = \\dfrac{y_2}{x_2} \\;\\Rightarrow\\; \\dfrac{${Y1}}{${X1}} = \\dfrac{y_2}{${X2}}`],
+          [T("Multiplique cruzado e isole y₂:", "Cross-multiply and solve for y₂:"), `y_2 = ${Y1} \\cdot \\dfrac{${X2}}{${X1}} ${approx(y2, 6)} ${Y2}`],
+        ],
+        note: (inv ? T(`Aqui, x · y vale sempre ${fmt(k)}: quando x é multiplicado por ${fmt(x2 / x1, 4)}, y é dividido pelo mesmo fator. É o caso de trabalhadores e prazo, velocidade e tempo de viagem, preço unitário e quantidade com a mesma verba. O gráfico é uma hipérbole: nunca toca os eixos.`,
+            `Here, x · y is always ${fmt(k)}: when x is multiplied by ${fmt(x2 / x1, 4)}, y is divided by the same factor. It is the case of workers and deadline, speed and travel time, unit price and quantity on a fixed budget. The graph is a hyperbola: it never touches the axes.`)
+          : T(`Aqui, y / x vale sempre ${fmt(k, 4)}: quando x é multiplicado por ${fmt(x2 / x1, 4)}, y também é. É o caso de quantidade e preço, distância e combustível, receita e porções. O gráfico é uma reta que passa pela origem — uma <a href="${PAGE("equacao-reta")}">reta</a> com intercepto zero.`,
+            `Here, y / x is always ${fmt(k, 4)}: when x is multiplied by ${fmt(x2 / x1, 4)}, so is y. It is the case of quantity and price, distance and fuel, a recipe and servings. The graph is a line through the origin — a <a href="${PAGE("equacao-reta")}">line</a> with zero intercept.`))
+          + T(" Antes de usar a regra de três, vale perguntar se a proporção existe de fato: dobrar os pedreiros não corta o prazo pela metade se eles se atrapalham, e o preço por quilo costuma cair no atacado.",
+            " Before using the rule of three, it is worth asking whether the proportion really holds: doubling the builders doesn't halve the deadline if they get in each other's way, and the price per kilo often falls in bulk."),
+      };
+    },
+
+    dist({ x1, y1, x2, y2 }) {
+      const dx = x2 - x1, dy = y2 - y1, d = Math.hypot(dx, dy);
+      if (d === 0) return { error: T("Os dois pontos são o mesmo: a distância é zero.", "The two points are the same: the distance is zero.") };
+      const circ = Array.from({ length: 181 }, (_, k) => { const t = 2 * Math.PI * k / 180; return [x1 + d * Math.cos(t), y1 + d * Math.sin(t)]; });
+      const R = d * 1.15, ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      const DX = tone(texNum(dx, 6), 2), DY = tone(texNum(dy, 6), 3), D = tone(texNum(d, 6), 1);
+      const sgn = v => (v < 0 ? "-" : "+");
+      const circTex = `(x ${sgn(-x1)} ${texNum(Math.abs(x1))})^2 + (y ${sgn(-y1)} ${texNum(Math.abs(y1))})^2 = ${texNum(d * d, 6)}`;
+      return {
+        result: `d ${approx(d, 6)} ${D}`,
+        chart: {
+          type: "curve", height: 280, label: T(`Os pontos (${fmt(x1)}, ${fmt(y1)}) e (${fmt(x2)}, ${fmt(y2)}), a distância ${fmt(d, 4)} entre eles e a circunferência de centro no primeiro`, `The points (${fmt(x1)}, ${fmt(y1)}) and (${fmt(x2)}, ${fmt(y2)}), the distance ${fmt(d, 4)} between them and the circle centred on the first`),
+          xLabel: T("tracejados: os catetos Δx e Δy · escuro: a distância, a hipotenusa · colorida: a circunferência", "dashed: the legs Δx and Δy · dark: the distance, the hypotenuse · colored: the circle"),
+          xMin: x1 - R * ratio, xMax: x1 + R * ratio, yMin: y1 - R, yMax: y1 + R, pts: circ,
+          lines: [{ pts: [[x1, y1], [x2, y2]], cls: "chart-fit" }, { pts: [[x1, y1], [x2, y1], [x2, y2]], cls: "chart-ref" }],
+          marker: [x2, y2],
+        },
+        steps: [
+          [T("Calcule quanto x e y mudam entre os pontos — os catetos de um triângulo retângulo:", "Compute how much x and y change between the points — the legs of a right triangle:"),
+            `\\Delta x = ${texNum(x2)} - ${paren(x1, texNum(x1))} = ${DX}, \\qquad \\Delta y = ${texNum(y2)} - ${paren(y1, texNum(y1))} = ${DY}`],
+          [T("Pelo teorema de Pitágoras, a distância é a hipotenusa:", "By Pythagoras' theorem, the distance is the hypotenuse:"),
+            `d = \\sqrt{${paren(dx, DX)}^2 + ${paren(dy, DY)}^2} = \\sqrt{${texNum(dx * dx, 6)} + ${texNum(dy * dy, 6)}} ${approx(d, 6)} ${D}`],
+          [T("Os pontos a essa distância do primeiro formam a circunferência:", "The points at that distance from the first one form the circle:"), circTex],
+        ],
+        note: T(`A distância entre (${fmt(x1)}, ${fmt(y1)}) e (${fmt(x2)}, ${fmt(y2)}) é ${fmt(d, 4)}${Number.isInteger(d) && Number.isInteger(dx) && Number.isInteger(dy) ? ` — um terno pitagórico: ${fmt(Math.abs(dx))}² + ${fmt(Math.abs(dy))}² = ${fmt(d)}²` : ""}. A circunferência é o conjunto de todos os pontos a essa mesma distância do centro, e a equação dela é a fórmula da distância elevada ao quadrado.`
+          + ` Em mais dimensões, a conta é a mesma: some os quadrados das diferenças em cada eixo e tire a raiz. É a distância que algoritmos de agrupamento e de vizinhos mais próximos usam, e é parente do <a href="${PAGE("desvio-padrao")}">desvio padrão</a>, que também é a raiz de uma soma de quadrados.`,
+          `The distance between (${fmt(x1)}, ${fmt(y1)}) and (${fmt(x2)}, ${fmt(y2)}) is ${fmt(d, 4)}${Number.isInteger(d) && Number.isInteger(dx) && Number.isInteger(dy) ? ` — a Pythagorean triple: ${fmt(Math.abs(dx))}² + ${fmt(Math.abs(dy))}² = ${fmt(d)}²` : ""}. The circle is the set of all points at that same distance from the centre, and its equation is the distance formula squared.`
+          + ` In more dimensions, the calculation is the same: add the squares of the differences along each axis and take the root. It is the distance clustering and nearest-neighbour algorithms use, and a relative of the <a href="${PAGE("desvio-padrao")}">standard deviation</a>, also the root of a sum of squares.`),
+      };
+    },
+
+    vertice({ a, b, c }) {
+      if (a === 0) return { error: T("Com a = 0, não há parábola: a função é uma reta.", "With a = 0, there is no parabola: the function is a line.") };
+      const h = -b / (2 * a), D = b * b - 4 * a * c, k = -D / (4 * a);
+      const f = x => a * x * x + b * x + c;
+      const w = D > 0 ? Math.max(1, Math.sqrt(D) / Math.abs(2 * a) * 1.8) : Math.max(1, 2 / Math.sqrt(Math.abs(a)));
+      const pts = Array.from({ length: 241 }, (_, i) => { const x = h - w + 2 * w * i / 240; return [x, f(x)]; });
+      const ys = pts.map(p => p[1]).concat(0), yl = Math.min(...ys), yh = Math.max(...ys), yp = (yh - yl) * 0.08 || 1;
+      const H = tone(texNum(h, 6), 2), K = tone(texNum(k, 6), 3);
+      const can = `${texNum(a)}\\,(x ${h < 0 ? "+" : "-"} ${tone(texNum(Math.abs(h), 6), 2)})^2 ${k < 0 ? "-" : "+"} ${tone(texNum(Math.abs(k), 6), 3)}`;
+      const rts = D > 0 ? [h - Math.sqrt(D) / Math.abs(2 * a), h + Math.sqrt(D) / Math.abs(2 * a)] : D === 0 ? [h] : [];
+      return {
+        result: `V = (${H},\\ ${K})`,
+        chart: {
+          type: "curve", label: T(`Parábola com vértice em (${fmt(h, 4)}, ${fmt(k, 4)}) e o eixo de simetria x = ${fmt(h, 4)}`, `Parabola with vertex at (${fmt(h, 4)}, ${fmt(k, 4)}) and the axis of symmetry x = ${fmt(h, 4)}`),
+          xLabel: T("x · tracejada: o eixo de simetria · o ponto: o vértice", "x · dashed: the axis of symmetry · the dot: the vertex"),
+          xMin: h - w, xMax: h + w, yMin: yl - yp, yMax: yh + yp, pts,
+          lines: [{ pts: [[h, yl - yp * 0.9], [h, yh + yp * 0.9]], cls: "chart-ref" }], hlines: [{ y: 0, cls: "chart-ref" }], marker: [h, k],
+          tipAt: x => [fmt(f(x), 4), `x = ${fmt(x, 3)}`],
+        },
+        steps: [
+          [T("O vértice fica no meio das raízes, em x = −b / 2a:", "The vertex sits midway between the roots, at x = −b / 2a:"),
+            `x_V = -\\dfrac{${paren(b, texNum(b))}}{2 \\cdot ${paren(a, texNum(a))}} ${approx(h, 6)} ${H}`],
+          [T("A altura do vértice é o valor da função nesse ponto:", "The vertex's height is the function's value at that point:"),
+            `y_V = f(${texNum(h, 6)}) = -\\dfrac{\\Delta}{4a} = -\\dfrac{${texNum(D, 6)}}{${texNum(4 * a, 6)}} ${approx(k, 6)} ${K}`],
+          [T("Na forma canônica, o vértice aparece direto:", "In vertex form, the vertex shows up directly:"), `f(x) = ${can}`],
+        ],
+        note: T(`Como a ${a > 0 ? "é positivo, a parábola abre para cima e o vértice é o ponto de <strong>mínimo</strong>" : "é negativo, a parábola abre para baixo e o vértice é o ponto de <strong>máximo</strong>"}: f(x) = ${fmt(k, 4)} em x = ${fmt(h, 4)}. ${rts.length === 2 ? `As raízes, ${fmt(rts[0], 4)} e ${fmt(rts[1], 4)}, ficam simétricas em torno de x = ${fmt(h, 4)}.` : rts.length === 1 ? "O vértice toca o eixo x: a raiz é dupla." : "A parábola não cruza o eixo x: não há raízes reais."} Veja as <a href="${PAGE("formula-quadratica")}?a=${a}&amp;b=${b}&amp;c=${c}">raízes pela fórmula quadrática</a>.`
+          + ` O vértice é onde a inclinação é zero: a <a href="${PAGE("derivada")}">derivada</a> 2ax + b se anula em x = −b/2a. É a conta do lucro máximo, da altura máxima de um arremesso e da variância mínima.`,
+          `Since a is ${a > 0 ? "positive, the parabola opens upward and the vertex is the <strong>minimum</strong>" : "negative, the parabola opens downward and the vertex is the <strong>maximum</strong>"}: f(x) = ${fmt(k, 4)} at x = ${fmt(h, 4)}. ${rts.length === 2 ? `The roots, ${fmt(rts[0], 4)} and ${fmt(rts[1], 4)}, are symmetric about x = ${fmt(h, 4)}.` : rts.length === 1 ? "The vertex touches the x axis: the root is double." : "The parabola doesn't cross the x axis: there are no real roots."} See the <a href="${PAGE("formula-quadratica")}?a=${a}&amp;b=${b}&amp;c=${c}">roots by the quadratic formula</a>.`
+          + ` The vertex is where the slope is zero: the <a href="${PAGE("derivada")}">derivative</a> 2ax + b vanishes at x = −b/2a. It is the calculation for maximum profit, the peak height of a throw and minimum variance.`),
+      };
+    },
+
+    binomio({ a, b, n }) {
+      if (!Number.isInteger(n) || n < 0 || n > 30) return { error: T("O expoente n precisa ser um inteiro entre 0 e 30.", "The exponent n must be an integer between 0 and 30.") };
+      const C = [1]; for (let k = 1; k <= n; k++) C.push(C[k - 1] * (n - k + 1) / k);
+      const t = C.map((c, k) => c * a ** (n - k) * b ** k), sum = t.reduce((s, v) => s + v, 0), exact = (a + b) ** n;
+      const pw = (base, e) => (e === 0 ? "" : e === 1 ? base : `${base}^{${e}}`);
+      const sym = C.map((c, k) => `${c === 1 ? "" : texNum(c)}${pw("a", n - k)}${pw("b", k)}` || "1").join(" + ");
+      const symShow = n <= 7 ? sym : C.slice(0, 3).map((c, k) => `${c === 1 ? "" : texNum(c)}${pw("a", n - k)}${pw("b", k)}`).join(" + ") + ` + \\cdots + ${pw("b", n)}`;
+      const prob = a >= 0 && b >= 0 && Math.abs(a + b - 1) < 1e-9 && n >= 1;
+      const neg = t.some(v => v < 0), lo = Math.min(0, ...t), hi = Math.max(0, ...t);
+      return {
+        result: `(${texNum(a)} + ${paren(b, texNum(b))})^{${n}} ${approx(exact, 6)} ${tone(texNum(exact, 6), 1)}`,
+        chart: {
+          type: "bars", label: T(`Os ${n + 1} termos da expansão de (${fmt(a)} + ${fmt(b)})^${n}`, `The ${n + 1} terms of the expansion of (${fmt(a)} + ${fmt(b)})^${n}`),
+          xLabel: T("k · altura: o termo C(n, k) · aⁿ⁻ᵏ · bᵏ", "k · height: the term C(n, k) · aⁿ⁻ᵏ · bᵏ"),
+          xs: t.map((_, k) => k), ys: t, xMin: -0.5, xMax: n + 0.5, ...(neg ? { yMin: lo * 1.08, yMax: hi * 1.08 || 1 } : { yMax: hi || 1 }),
+          hi: () => false,
+          tip: (k, v) => [fmt(v, 6), T(`k = ${k}: C(${n}, ${k}) = ${fmt(C[k])}`, `k = ${k}: C(${n}, ${k}) = ${fmt(C[k])}`)],
+        },
+        steps: [
+          [T(`Os coeficientes são a linha ${n} do triângulo de Pascal, C(n, k):`, `The coefficients are row ${n} of Pascal's triangle, C(n, k):`),
+            n <= 14 ? tone(C.map(c => texNum(c)).join(",\\ "), 2) : tone(`${C.slice(0, 4).map(c => texNum(c)).join(",\\ ")},\\ \\ldots`, 2)],
+          [T("Expanda: em cada termo, os expoentes de a e b somam n.", "Expand: in each term, the exponents of a and b add up to n."), `(a + b)^{${n}} = ${symShow}`],
+          [T("Com os valores de a e b, cada termo vale:", "With the values of a and b, each term is:"),
+            t.slice(0, 7).map((v, k) => `${texNum(v, 6)}`).join(" + ") + (n > 6 ? " + \\cdots" : "") + ` ${approx(sum, 6)} ${tone(texNum(sum, 6), 1)}`],
+        ],
+        note: T(`O coeficiente C(n, k) conta de quantas maneiras se escolhem os k fatores que contribuem com b, entre os n parênteses de (a + b)(a + b)⋯ — por isso é o <a href="${PAGE("coeficiente-binomial")}?n=${n}&amp;k=${Math.floor(n / 2)}">coeficiente binomial</a>. Os coeficientes somam 2ⁿ = ${fmt(2 ** n)}, o caso a = b = 1.`
+          + (prob ? ` Como a + b = 1, cada termo é uma probabilidade: a chance de k sucessos em ${n} tentativas com probabilidade ${fmt(b)} — a <a href="${PAGE("distribuicao-binomial")}?n=${n}&amp;p=${b}&amp;k=${Math.round(n * b)}">distribuição binomial</a>. E a soma dá 1, como tem de dar.` : " Se a e b forem probabilidades que somam 1, os termos viram a distribuição binomial e somam 1."),
+          `The coefficient C(n, k) counts the ways to choose the k factors that contribute b among the n brackets of (a + b)(a + b)⋯ — which is why it is the <a href="${PAGE("coeficiente-binomial")}?n=${n}&amp;k=${Math.floor(n / 2)}">binomial coefficient</a>. The coefficients add up to 2ⁿ = ${fmt(2 ** n)}, the case a = b = 1.`
+          + (prob ? ` Since a + b = 1, each term is a probability: the chance of k successes in ${n} trials with probability ${fmt(b)} — the <a href="${PAGE("distribuicao-binomial")}?n=${n}&amp;p=${b}&amp;k=${Math.round(n * b)}">binomial distribution</a>. And the sum is 1, as it must be.` : " If a and b are probabilities that add up to 1, the terms become the binomial distribution and add up to 1.")),
+      };
+    },
+
+    dizima({ I, ante, per }) {
+      if (!Number.isInteger(I) || I < 0 || I > 1e9) return { error: T("A parte inteira precisa ser um inteiro entre 0 e 1 bilhão.", "The whole part must be an integer between 0 and 1 billion.") };
+      if (!/^\d{0,8}$/.test(ante)) return { error: T("O anteperíodo precisa ter só dígitos, no máximo 8, ou ficar em branco.", "The non-repeating part must be digits only, at most 8, or blank.") };
+      if (!/^\d{1,8}$/.test(per)) return { error: T("O período precisa ter de 1 a 8 dígitos.", "The repeating block must have 1 to 8 digits.") };
+      const m = ante.length, k = per.length;
+      const big = s => BigInt(s || "0");
+      let N = big(`${I}${ante}${per}`) - big(`${I}${ante}`), D = (10n ** BigInt(k) - 1n) * 10n ** BigInt(m);
+      const g0 = (x, y) => { while (y) [x, y] = [y, x % y]; return x; };
+      const g = g0(N, D), Nr = N / g, Dr = D / g;
+      const dec = T("{,}", ".");
+      const xTex = `${I}${dec}${ante}\\overline{${per}}`;
+      const xTxt = `${I}${T(",", ".")}${ante}${per}${per}${per}…`;
+      const nines = "9".repeat(k) + "0".repeat(m);
+      const value = Number(Nr) / Number(Dr);
+      const P = Number(per), a1 = P / 10 ** (m + k), r = 10 ** -k, base = I + (m ? Number(ante) / 10 ** m : 0);
+      const S = j => base + a1 * (1 - r ** j) / (1 - r);
+      const js = Array.from({ length: 6 }, (_, i) => i + 1);
+      const s1 = S(1), lim = value, gap = Math.max(lim - s1, 1e-12);
+      const fracTex = Dr === 1n ? `${Nr}` : `\\dfrac{${Nr}}{${Dr}}`;
+      const allNine = /^9+$/.test(per);
+      return {
+        result: `${xTex} = ${tone(fracTex, 1)}`,
+        chart: {
+          type: "curve", label: T(`Somas parciais da PG que forma ${xTxt}, chegando a ${Dr === 1n ? String(Nr) : `${Nr}/${Dr}`}`, `Partial sums of the geometric series that forms ${xTxt}, approaching ${Dr === 1n ? String(Nr) : `${Nr}/${Dr}`}`),
+          xLabel: T("quantas repetições do período · tracejada: o valor exato", "how many repetitions of the block · dashed: the exact value"),
+          xMin: 1, xMax: 6, yMin: s1 - gap * 0.15, yMax: lim + gap * 0.15, pts: js.map(j => [j, S(j)]),
+          hlines: [{ y: lim, cls: "chart-ref" }],
+          tipAt: v => { const j = Math.max(1, Math.round(v)); return [fmt(S(j), 12), T(`com ${j} ${j === 1 ? "repetição" : "repetições"}; falta ${lim - S(j) > 1e-15 ? fmtSci(lim - S(j)) : "0"}`, `with ${j} ${j === 1 ? "repetition" : "repetitions"}; missing ${lim - S(j) > 1e-15 ? fmtSci(lim - S(j)) : "0"}`)]; },
+        },
+        steps: [
+          [T("O período se repete como os termos de uma PG, cada um 10ᵏ vezes menor que o anterior:", "The block repeats like the terms of a geometric series, each 10ᵏ times smaller than the last:"),
+            `${xTex} = ${ante ? `${I}${dec}${ante}` : I} + \\dfrac{${per}}{10^{${m + k}}} + \\dfrac{${per}}{10^{${m + 2 * k}}} + \\cdots, \\qquad ${tone(`a = \\dfrac{${per}}{10^{${m + k}}}`, 2)},\\ ${tone(`r = 10^{-${k}}`, 3)}`],
+          [T("A soma da PG infinita é a / (1 − r):", "The infinite series sums to a / (1 − r):"),
+            `\\dfrac{${tone(`${per} / 10^{${m + k}}`, 2)}}{${tone(`1 - 10^{-${k}}`, 3)}} = \\dfrac{${per}}{${nines}}`],
+          [T("Junte tudo numa fração — o atalho é: número sem a vírgula, menos o que vem antes do período, sobre tantos noves quantos dígitos tem o período, seguidos de tantos zeros quantos tem o anteperíodo:", "Put it all in one fraction — the shortcut is: the number without the decimal point, minus what comes before the block, over as many nines as the block has digits, followed by as many zeros as the non-repeating part has:"),
+            `\\dfrac{${I}${ante}${per} - ${I}${ante || ""}}{${nines}} = \\dfrac{${N}}{${D}}${g > 1n ? ` = ${tone(fracTex, 1)}` : ""}`],
+        ],
+        note: (allNine ? T(`Aqui o período é só de noves, e a fração dá ${Dr === 1n ? `exatamente ${Nr}` : `${Nr}/${Dr}, um decimal finito`}: ${xTxt} e ${fmt(value, 8)} são o mesmo número, escrito de dois jeitos. Não é que "chega perto": a soma infinita é, por definição, o limite das somas parciais, e esse limite é exatamente esse valor. Se fossem diferentes, haveria um número entre eles — e não há.`,
+            `Here the block is all nines, and the fraction comes out ${Dr === 1n ? `as exactly ${Nr}` : `as ${Nr}/${Dr}, a terminating decimal`}: ${xTxt} and ${fmt(value, 8)} are the same number, written two ways. It doesn't "get close": the infinite sum is, by definition, the limit of the partial sums, and that limit is exactly this value. If they were different, there would be a number between them — and there isn't.`)
+          : T(`A dízima ${xTxt} é a fração ${Dr === 1n ? Nr : `${Nr}/${Dr}`}. Toda dízima periódica é uma fração, e toda fração é um decimal finito ou uma dízima periódica: é isso que distingue os racionais dos irracionais, como √2 e π, cujos dígitos nunca se repetem em bloco.`,
+            `The repeating decimal ${xTxt} is the fraction ${Dr === 1n ? Nr : `${Nr}/${Dr}`}. Every repeating decimal is a fraction, and every fraction is a terminating or a repeating decimal: that is what separates rationals from irrationals, such as √2 and π, whose digits never repeat in a block.`))
+          + T(` A conta é a da <a href="${PAGE("soma-pg")}?a=${a1}&amp;r=${r}&amp;n=10">soma da progressão geométrica</a> com razão ${fmt(r, 10)}: como |r| < 1, a soma infinita converge.`,
+            ` The calculation is the <a href="${PAGE("soma-pg")}?a=${a1}&amp;r=${r}&amp;n=10">geometric series sum</a> with ratio ${fmt(r, 10)}: since |r| < 1, the infinite sum converges.`),
+      };
+    },
+
+    matmul({ A, B }) {
+      const ok = M => M.length === 2 && M.every(r => r.length === 2);
+      if (!ok(A) || !ok(B)) return { error: T("Cada matriz precisa ter 2 linhas de 2 números, como 2 0; 0 1.", "Each matrix must have 2 rows of 2 numbers, such as 2 0; 0 1.") };
+      const mul = (P, Q) => [[P[0][0] * Q[0][0] + P[0][1] * Q[1][0], P[0][0] * Q[0][1] + P[0][1] * Q[1][1]], [P[1][0] * Q[0][0] + P[1][1] * Q[1][0], P[1][0] * Q[0][1] + P[1][1] * Q[1][1]]];
+      const AB = mul(A, B), BA = mul(B, A);
+      const det = M => M[0][0] * M[1][1] - M[0][1] * M[1][0];
+      const mat = (M, t) => `\\begin{pmatrix} ${M.map(r => r.map(v => (t ? t(v) : texNum(v, 6))).join(" & ")).join(" \\\\ ")} \\end{pmatrix}`;
+      const sq = [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]];
+      const ap = (M, p) => p.map(([x, y]) => [M[0][0] * x + M[0][1] * y, M[1][0] * x + M[1][1] * y]);
+      const pB = ap(B, sq), pAB = ap(AB, sq);
+      const all = sq.concat(pB, pAB);
+      const span = v => { const lo = Math.min(...v), hi = Math.max(...v), pad = (hi - lo) * 0.12 || 1; return [lo - pad, hi + pad]; };
+      let [x0, x1] = span(all.map(p => p[0])), [yMin, yMax] = span(all.map(p => p[1]));
+      const ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      if ((x1 - x0) / (yMax - yMin) < ratio) { const h = (yMax - yMin) * ratio / 2, mm = (x0 + x1) / 2; x0 = mm - h; x1 = mm + h; }
+      else { const h = (x1 - x0) / ratio / 2, mm = (yMin + yMax) / 2; yMin = mm - h; yMax = mm + h; }
+      const cell = (i, j) => `${paren(A[i][0], texNum(A[i][0]))} \\cdot ${paren(B[0][j], texNum(B[0][j]))} + ${paren(A[i][1], texNum(A[i][1]))} \\cdot ${paren(B[1][j], texNum(B[1][j]))}`;
+      const same = AB.flat().every((v, i) => Math.abs(v - BA.flat()[i]) < 1e-12);
+      return {
+        result: `AB = ${tone(mat(AB), 1)}`,
+        chart: {
+          type: "curve", height: 280, label: T("O quadrado unitário, a sua imagem por B e a imagem por AB — primeiro B, depois A", "The unit square, its image under B and its image under AB — first B, then A"),
+          xLabel: T("escura: quadrado unitário · tracejada: depois de B · colorida: depois de B e A, ou seja, AB", "dark: unit square · dashed: after B · colored: after B and then A, that is, AB"),
+          xMin: x0, xMax: x1, yMin, yMax, pts: pAB, lines: [{ pts: sq, cls: "chart-fit" }, { pts: pB, cls: "chart-ref" }],
+        },
+        steps: [
+          [T("Cada elemento de AB é uma linha de A vezes uma coluna de B: multiplique termo a termo e some.", "Each entry of AB is a row of A times a column of B: multiply term by term and add."),
+            `\\begin{aligned} (AB)_{11} &= ${cell(0, 0)} = ${texNum(AB[0][0], 6)} \\\\ (AB)_{12} &= ${cell(0, 1)} = ${texNum(AB[0][1], 6)} \\\\ (AB)_{21} &= ${cell(1, 0)} = ${texNum(AB[1][0], 6)} \\\\ (AB)_{22} &= ${cell(1, 1)} = ${texNum(AB[1][1], 6)} \\end{aligned}`],
+          [T("O resultado:", "The result:"), `${tone(mat(A), 2)} ${tone(mat(B), 3)} = ${tone(mat(AB), 1)}`],
+          [T("Na ordem inversa:", "In the reverse order:"), `BA = ${mat(BA)}`],
+          [T("O determinante do produto é o produto dos determinantes:", "The determinant of the product is the product of the determinants:"),
+            `\\det(AB) = ${texNum(det(A), 6)} \\cdot ${paren(det(B), texNum(det(B), 6))} = ${texNum(det(AB), 6)}`],
+        ],
+        note: T(`Multiplicar matrizes é compor transformações: AB aplica primeiro B e depois A, por isso o gráfico mostra o quadrado passando por B (tracejado) antes de chegar a AB. ${same ? "Aqui, AB e BA dão o mesmo — as duas transformações comutam, o que é a exceção." : "Aqui, AB ≠ BA: girar e depois esticar não é o mesmo que esticar e depois girar. A ordem importa, e essa é a grande diferença em relação aos números."}`
+          + ` As áreas se multiplicam: det(AB) = det A · det B. Por isso o produto só tem <a href="${PAGE("matriz-inversa-2x2")}">inversa</a> se as duas têm, e (AB)⁻¹ = B⁻¹A⁻¹ — desfaz-se na ordem contrária.`,
+          `Multiplying matrices composes transformations: AB applies B first and then A, which is why the chart shows the square going through B (dashed) before reaching AB. ${same ? "Here, AB and BA are the same — the two transformations commute, which is the exception." : "Here, AB ≠ BA: rotating then stretching is not the same as stretching then rotating. Order matters, and that is the big difference from numbers."}`
+          + ` Areas multiply: det(AB) = det A · det B. That is why the product only has an <a href="${PAGE("matriz-inversa-2x2")}">inverse</a> if both do, and (AB)⁻¹ = B⁻¹A⁻¹ — undone in the opposite order.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -5518,6 +5740,8 @@
     // a lista vira [], o número vira null.
     const read = i => {
       if (i.tagName === "SELECT") return i.value;
+      // Com data-raw, o texto vai como está: dígitos em que o zero à esquerda conta.
+      if ("raw" in i.dataset) return i.value.trim();
       if ("matrix" in i.dataset) {
         const rows = i.value.split(/[;\n]+/).map(r => r.trim()).filter(Boolean)
           .map(r => r.split(EN ? /[\s,]+/ : /\s+/).filter(Boolean).map(parse));

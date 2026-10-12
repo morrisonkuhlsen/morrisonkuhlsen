@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">98 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">104 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -467,20 +467,40 @@
       <section class="formula-group">
         <h2>Álgebra</h2>
         <ul class="formula-list">
+          <li><a class="formula-card" href="regra-de-tres.html">
+            <span class="card-tex" data-tex="y_2 = y_1 \cdot \dfrac{x_2}{x_1}"></span>
+            <span class="card-name">Regra de Três</span>
+            <span class="card-blurb">Proporção direta e inversa, e quando ela não vale.</span>
+          </a></li>
           <li><a class="formula-card" href="equacao-reta.html">
             <span class="card-tex" data-tex="m = \dfrac{y_2 - y_1}{x_2 - x_1}"></span>
             <span class="card-name">Equação da Reta por Dois Pontos</span>
             <span class="card-blurb">Inclinação e intercepto: uma parte fixa e uma proporcional.</span>
+          </a></li>
+          <li><a class="formula-card" href="distancia-pontos.html">
+            <span class="card-tex" data-tex="d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}"></span>
+            <span class="card-name">Distância entre Dois Pontos</span>
+            <span class="card-blurb">Pitágoras no plano, e a equação da circunferência.</span>
           </a></li>
           <li><a class="formula-card" href="sistema-linear-2x2.html">
             <span class="card-tex" data-tex="x = \dfrac{D_x}{D},\ \ y = \dfrac{D_y}{D}"></span>
             <span class="card-name">Sistema Linear 2×2</span>
             <span class="card-blurb">A regra de Cramer e as duas retas que se cruzam.</span>
           </a></li>
+          <li><a class="formula-card" href="vertice-parabola.html">
+            <span class="card-tex" data-tex="V = \Big(-\dfrac{b}{2a},\ -\dfrac{\Delta}{4a}\Big)"></span>
+            <span class="card-name">Vértice da Parábola</span>
+            <span class="card-blurb">O ponto de máximo ou de mínimo, e o eixo de simetria.</span>
+          </a></li>
           <li><a class="formula-card" href="formula-quadratica.html">
             <span class="card-tex" data-tex="x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"></span>
             <span class="card-name">Fórmula Quadrática</span>
             <span class="card-blurb">As raízes de ax² + bx + c = 0.</span>
+          </a></li>
+          <li><a class="formula-card" href="binomio-newton.html">
+            <span class="card-tex" data-tex="(a + b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^k"></span>
+            <span class="card-name">Binômio de Newton</span>
+            <span class="card-blurb">A expansão de (a + b)ⁿ e o triângulo de Pascal.</span>
           </a></li>
           <li><a class="formula-card" href="logaritmo-mudanca-base.html">
             <span class="card-tex" data-tex="\log_b x = \dfrac{\ln x}{\ln b}"></span>
@@ -496,6 +516,11 @@
             <span class="card-tex" data-tex="S_n = a \cdot \dfrac{1 - r^n}{1 - r}"></span>
             <span class="card-name">Soma da Progressão Geométrica</span>
             <span class="card-blurb">Soma de termos que se multiplicam por uma razão fixa, finita ou infinita.</span>
+          </a></li>
+          <li><a class="formula-card" href="dizima-periodica.html">
+            <span class="card-tex" data-tex="S = \dfrac{a}{1 - r}"></span>
+            <span class="card-name">Dízima Periódica e PG Infinita</span>
+            <span class="card-blurb">A fração geratriz, e por que 0,999… = 1.</span>
           </a></li>
           <li><a class="formula-card" href="juros-aportes.html">
             <span class="card-tex" data-tex="M = P(1+i)^n + A \cdot \dfrac{(1+i)^n - 1}{i}"></span>
@@ -516,6 +541,11 @@
             <span class="card-tex" data-tex="I = \textstyle\prod (1 + i_t) - 1"></span>
             <span class="card-name">Inflação Acumulada</span>
             <span class="card-blurb">Por que as taxas se multiplicam, e não se somam.</span>
+          </a></li>
+          <li><a class="formula-card" href="multiplicacao-matrizes.html">
+            <span class="card-tex" data-tex="(AB)_{ij} = a_{i1} b_{1j} + a_{i2} b_{2j}"></span>
+            <span class="card-name">Multiplicação de Matrizes 2×2</span>
+            <span class="card-blurb">Compor transformações, e por que AB ≠ BA.</span>
           </a></li>
           <li><a class="formula-card" href="matriz-inversa-2x2.html">
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>

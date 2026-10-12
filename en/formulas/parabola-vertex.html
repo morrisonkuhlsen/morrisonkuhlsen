@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vertex of a Parabola — Interactive</title>
+  <meta name="description" content="The vertex of a parabola explained term by term, with a calculator, a chart, the axis of symmetry, the vertex form and the maximum or minimum point.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/parabola-vertex.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/vertice-parabola.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/parabola-vertex.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/vertice-parabola.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/parabola-vertex.html">
+  <meta property="og:title" content="Vertex of a Parabola — Interactive">
+  <meta property="og:description" content="The vertex of a parabola explained term by term, with a calculator, a chart, the axis of symmetry, the vertex form and the maximum or minimum point.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Vertex of a Parabola — Interactive">
+  <meta name="twitter:description" content="The vertex of a parabola explained term by term, with a calculator, a chart, the axis of symmetry, the vertex form and the maximum or minimum point.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/vertice-parabola.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Vertex of a Parabola</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive vertex of a parabola formula">
+        <span class="part" data-part="V_vp" data-tone="1" data-tex="V"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="h_vp" data-tone="2" data-tex="\Big(-\dfrac{b}{2a},"></span>
+        <span class="part" data-part="k_vp" data-tone="3" data-tex="-\dfrac{\Delta}{4a}\Big)"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?a=&b=&c=. -->
+    <section class="calc" data-calc="vertice" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a ball is thrown upward, and its height in metres after t seconds is h(t) = −5t² + 20t + 1. When does it reach its highest point, and how high? Change the coefficients of ax² + bx + c to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span><i>a</i></span>
+          <input name="a" type="text" inputmode="decimal" value="-5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>b</i></span>
+          <input name="b" type="text" inputmode="decimal" value="20" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span><i>c</i></span>
+          <input name="c" type="text" inputmode="decimal" value="1" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="V_vp" data-tone="1">Vertex (V)</dt>
+          <dd>The parabola's turning point: the lowest, if a > 0, or the highest, if a < 0.</dd>
+          <dt data-part="h_vp" data-tone="2">Vertex x (−b/2a)</dt>
+          <dd>Where the vertex sits on the x axis. The parabola is symmetric about the vertical line through it, and the roots, when they exist, are the same distance away on either side.</dd>
+          <dt data-part="k_vp" data-tone="3">Vertex y (−Δ/4a)</dt>
+          <dd>The function's maximum or minimum value, with Δ = b² − 4ac. In vertex form, f(x) = a(x − h)² + k, the vertex (h, k) shows up directly.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="2x2-linear-system.html" rel="prev"><span>Previous</span>2×2 Linear System</a>
+      <a class="pager-next" href="quadratic-formula.html" rel="next"><span>Next</span>Quadratic Formula</a>
+    </nav>
+  </main>
+</body>
+</html>
