@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Teorema Fundamental — Derivar e Integrar se Desfazem</title>
+  <meta name="description" content="O teorema fundamental do cálculo explicado de forma intuitiva: a função área, por que a derivada da área é a curva, o atalho F(b) − F(a), as primitivas e a ligação com densidade e probabilidade acumulada, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/teorema-fundamental.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/teorema-fundamental.html">
+  <meta property="og:title" content="Teorema Fundamental — Derivar e Integrar se Desfazem">
+  <meta property="og:description" content="O teorema fundamental do cálculo explicado de forma intuitiva: a função área, por que a derivada da área é a curva, o atalho F(b) − F(a), as primitivas e a ligação com densidade e probabilidade acumulada, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Teorema Fundamental — Derivar e Integrar se Desfazem">
+  <meta name="twitter:description" content="O teorema fundamental do cálculo explicado de forma intuitiva: a função área, por que a derivada da área é a curva, o atalho F(b) − F(a), as primitivas e a ligação com densidade e probabilidade acumulada, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="teorema-fundamental.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Teorema Fundamental — Derivar e Integrar se Desfazem</h1>
+    <p class="page-lede">Até aqui, derivada e integral pareciam assuntos separados: uma mede inclinações, a outra mede áreas. O <strong>teorema fundamental do cálculo</strong> diz que uma desfaz a outra. Na prática, isso troca a soma de infinitos retângulos por uma conta de duas linhas — e é a razão de o cálculo funcionar.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#area">A função área</a>
+      <a href="#porque">Por que funciona</a>
+      <a href="#atalho">O atalho</a>
+      <a href="#primitivas">Primitivas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\dfrac{d}{dx} \int_a^x f(t)\,dt = f(x) \qquad \int_a^b f(x)\,dx = F(b) - F(a)"></span>
+
+    <!-- 1. A função área; estado em ?q=&x=. -->
+    <section class="calc intro" id="area" aria-labelledby="area-title">
+      <h2 id="area-title">A função área</h2>
+      <p class="calc-lede">Fixe o começo em 0 e deixe o fim, <i>x</i>, andar. A área sob <i>f</i> de 0 até <i>x</i> vira uma função de <i>x</i>: <i>A</i>(<i>x</i>). O gráfico de baixo desenha essa função. Olhe a inclinação dela e compare com a altura de <i>f</i> no mesmo ponto.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-q="reta" aria-pressed="true">f(t) = t</button>
+        <button type="button" data-q="cos" aria-pressed="false">f(t) = cos t</button>
+        <button type="button" data-q="par" aria-pressed="false">f(t) = t² − 2t</button>
+      </div>
+      <div class="vars area-vars"></div>
+      <div class="plot-box area-f"></div>
+      <p class="plot-caption">f(t) — sombreada, a área de 0 até x; a faixa clara é o pedaço que entra no próximo passo</p>
+      <div class="plot-box area-a"></div>
+      <p class="plot-caption">A(x), a área acumulada — tracejada, a tangente no ponto</p>
+      <p class="readout area-out" aria-live="polite"></p>
+      <div class="intro-text area-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que funciona: a faixa fininha</h2>
+      <p>Quando <i>x</i> anda um pouquinho, <i>h</i>, a área ganha uma faixa estreita: a faixa clara do primeiro gráfico. Ela é quase um retângulo de largura <i>h</i> e altura <i>f</i>(<i>x</i>):</p>
+      <span class="rule-tex" data-tex="A(x + h) - A(x) \approx f(x) \cdot h \quad\Longrightarrow\quad \dfrac{A(x + h) - A(x)}{h} \approx f(x)"></span>
+      <p>À esquerda está a <a href="taxa-variacao.html">taxa média</a> de <i>A</i>; quando <i>h</i> → 0, ela vira a <a href="derivada.html">derivada</a>, e o “quase” vira igual: <strong>A′(x) = f(x)</strong>. A área cresce exatamente na velocidade da altura da curva — como o volume do <a href="integral.html#tanque">tanque</a> crescia na velocidade da vazão.</p>
+    </section>
+
+    <!-- 2. O atalho; estado em ?h=&a=&b=. -->
+    <section class="calc intro" id="atalho" aria-labelledby="atalho-title">
+      <h2 id="atalho-title">O atalho: integrar sem retângulos</h2>
+      <p class="calc-lede">Se <i>F</i> é qualquer função cuja derivada é <i>f</i> — uma <strong>primitiva</strong> —, a área de <i>a</i> a <i>b</i> é só <i>F</i>(<i>b</i>) − <i>F</i>(<i>a</i>). Escolha a função e o intervalo, e compare com a soma de mil retângulos.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-h="x2" aria-pressed="true">x²</button>
+        <button type="button" data-h="x3" aria-pressed="false">x³</button>
+        <button type="button" data-h="exp" aria-pressed="false">eˣ</button>
+        <button type="button" data-h="inv" aria-pressed="false">1/x</button>
+        <button type="button" data-h="cos" aria-pressed="false">cos x</button>
+        <button type="button" data-h="sen" aria-pressed="false">sen x</button>
+      </div>
+      <div class="vars atalho-vars"></div>
+      <div class="plot-box atalho-plot"></div>
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps atalho-steps"></ol>
+      <p class="readout atalho-out" aria-live="polite"></p>
+    </section>
+
+    <section class="lesson" id="primitivas" aria-labelledby="prim-title">
+      <h2 id="prim-title">Primitivas: a tabela de derivadas ao contrário</h2>
+      <p>Achar uma primitiva — veja a <a href="tabela-integrais.html">tabela de integrais</a> completa — é perguntar <strong>“de quem esta função é a derivada?”</strong> — por isso basta ler a <a href="tabela-derivadas.html">tabela de derivadas</a> de trás para a frente:</p>
+      <span class="rule-tex" data-tex="\begin{array}{l|l} f(x) & F(x) \\ \hline x^n\ (n \ne -1) & \dfrac{x^{n+1}}{n+1} \\ 1/x & \ln x \\ e^x & e^x \\ \cos x & \operatorname{sen} x \\ \operatorname{sen} x & -\cos x \end{array}"></span>
+      <div class="tip">
+        <strong>O “+ C”.</strong> Se F é uma primitiva, F + 5 também é: constantes somem ao derivar. Por isso se escreve ∫ f(x) dx = F(x) + C. Na diferença F(b) − F(a), a constante se cancela, e qualquer primitiva serve.
+      </div>
+      <p>Nem toda função tem primitiva escrita com funções conhecidas: e^(−x²), o sino da normal, é o exemplo famoso. Aí volta a soma de retângulos — feita uma vez, com muito cuidado, e guardada numa tabela.</p>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">O teorema fundamental na estatística</h2>
+      <p><strong>Densidade e acumulada.</strong> A função de distribuição acumulada, F(x) = P(X ≤ x), é a função área da densidade. Pelo teorema, a densidade é a derivada da acumulada — a curva em sino é a inclinação da curva em S.</p>
+      <p><strong>Probabilidade de um intervalo.</strong> P(a &lt; X ≤ b) = F(b) − F(a): exatamente o atalho desta página. Na <a href="/formulas/distribuicao-exponencial.html">exponencial</a>, a primitiva é conhecida e dá a fórmula 1 − e^(−λx).</p>
+      <p><strong>A tabela Z.</strong> A densidade normal não tem primitiva em funções elementares. A <a href="/ztable.html">tabela Z</a> é a primitiva calculada numericamente e guardada: cada número dela é uma área de −∞ até z.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule a integral de 3x² de 0 a 2.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Uma primitiva de 3x² é x³ (a derivada de x³ é 3x²). Então ∫₀² 3x² dx = 2³ − 0³ = <strong>8</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule a integral de cos x de 0 a π/2.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Uma primitiva de cos x é sen x. Resultado: sen(π/2) − sen 0 = 1 − 0 = <strong>1</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule a integral de 1/x de 1 a e.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Uma primitiva de 1/x é ln x. Resultado: ln e − ln 1 = 1 − 0 = <strong>1</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Se A(x) é a área sob f(t) = t² de 0 até x, quanto vale A′(3)?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Pelo teorema fundamental, A′(x) = f(x). Então A′(3) = 3² = <strong>9</strong> — sem precisar calcular área nenhuma.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> O tempo até uma lâmpada queimar tem densidade 0,5e^(−0,5x), em anos. Qual a chance de ela durar até 2 anos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Uma primitiva de 0,5e^(−0,5x) é −e^(−0,5x). P(X ≤ 2) = [−e^(−1)] − [−e^0] = 1 − e^(−1) ≈ <strong>63,2%</strong>. É a fórmula da <a href="/formulas/distribuicao-exponencial.html">distribuição exponencial</a>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="integral.html" rel="prev"><span>Anterior</span>Integral — Área Como Acúmulo</a>
+      <a class="pager-next" href="tabela-integrais.html" rel="next"><span>Próxima</span>Tabela de Integrais</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tabela de Integrais — As Primitivas e de Onde Vêm</title>
+  <meta name="description" content="Tabela de integrais explicada: constante, potência, 1/x, raiz, eˣ, e^(kx), aˣ, ln x, seno e cosseno, e as técnicas de substituição e por partes, cada uma com a ideia e um teste que compara a área medida com F(b) − F(a).">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/tabela-integrais.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/tabela-integrais.html">
+  <meta property="og:title" content="Tabela de Integrais — As Primitivas e de Onde Vêm">
+  <meta property="og:description" content="Tabela de integrais explicada: constante, potência, 1/x, raiz, eˣ, e^(kx), aˣ, ln x, seno e cosseno, e as técnicas de substituição e por partes, cada uma com a ideia e um teste que compara a área medida com F(b) − F(a).">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Tabela de Integrais — As Primitivas e de Onde Vêm">
+  <meta name="twitter:description" content="Tabela de integrais explicada: constante, potência, 1/x, raiz, eˣ, e^(kx), aˣ, ln x, seno e cosseno, e as técnicas de substituição e por partes, cada uma com a ideia e um teste que compara a área medida com F(b) − F(a).">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="tabela-integrais.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Tabela de Integrais — As Primitivas e de Onde Vêm</h1>
+    <p class="page-lede">Pelo <a href="teorema-fundamental.html">teorema fundamental</a>, integrar é achar uma <strong>primitiva</strong>: uma função cuja derivada é a que você tem. Esta tabela é a <a href="tabela-derivadas.html">tabela de derivadas</a> lida de trás para a frente, com a ideia de cada regra e um teste: a página mede a área com milhares de faixas e compara com F(b) − F(a).</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#resumo">Resumo</a>
+      <a href="#basicas">Básicas</a>
+      <a href="#exponenciais">Exponenciais e logaritmos</a>
+      <a href="#trigonometricas">Trigonométricas</a>
+      <a href="#tecnicas">Técnicas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <section class="lesson" id="resumo" aria-labelledby="resumo-title">
+      <h2 id="resumo-title">Resumo</h2>
+      <span class="rule-tex" data-tex="\begin{array}{ll|ll} f(x) & \int f\,dx & f(x) & \int f\,dx \\ \hline c & c\,x & e^x & e^x \\ x^n & \dfrac{x^{n+1}}{n+1} & e^{kx} & e^{kx}/k \\ 1/x & \ln|x| & a^x & a^x/\ln a \\ \sqrt{x} & \tfrac{2}{3}x^{3/2} & \ln x & x \ln x - x \\ \operatorname{sen} x & -\cos x & \cos x & \operatorname{sen} x \end{array}"></span>
+      <p>A todas se soma uma constante, o <strong>+ C</strong>: constantes somem ao derivar, então F + C é primitiva para qualquer C. Nos cards, os controles <i>a</i> e <i>b</i> são o começo e o fim do intervalo e valem para todos; <i>n</i> é um expoente, <i>c</i> uma constante e <i>k</i> um coeficiente. O primeiro lado é a área <strong>medida</strong>, com milhares de faixas; o segundo, a conta <strong>pela primitiva</strong>.</p>
+      <p class="calc-note">Para ver as duas tabelas lado a lado, com a escada que vai da primitiva à derivada, abra <a href="derivadas-integrais.html">Derivar e Integrar</a>.</p>
+    </section>
+
+    <section class="lesson" id="basicas" aria-labelledby="bas-title">
+      <h2 id="bas-title">Básicas</h2>
+      <article class="rule" id="constante">
+        <header><h3>Constante</h3></header>
+        <span class="rule-tex" data-tex="\int c\,dx = c\,x + C"></span>
+        <p>A área sob uma altura constante c é um retângulo: altura vezes largura. E a derivada de c·x é c.</p>
+        <div class="rule-try" data-rule="constante" data-vars="c a b"></div>
+      </article>
+      <article class="rule" id="potencia">
+        <header><h3>Potência</h3></header>
+        <span class="rule-tex" data-tex="\int x^n\,dx = \dfrac{x^{n+1}}{n+1} + C \quad (n \ne -1)"></span>
+        <p>A regra da potência das derivadas, ao contrário: o expoente sobe uma unidade e passa a dividir. Derive o resultado e o (n + 1) de cima cancela o de baixo. Não serve para n = −1, que dividiria por zero.</p>
+        <div class="rule-try" data-rule="potencia" data-vars="n a b"></div>
+      </article>
+      <article class="rule" id="inverso">
+        <header><h3>1/x: o caso que faltava</h3></header>
+        <span class="rule-tex" data-tex="\int \dfrac{1}{x}\,dx = \ln|x| + C"></span>
+        <p>O buraco da regra da potência é preenchido pelo logaritmo: como a derivada de ln x é 1/x, a primitiva de 1/x é ln x. A área sob 1/x de 1 até x é a própria definição de ln x.</p>
+        <div class="rule-try" data-rule="inverso" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="raiz">
+        <header><h3>Raiz quadrada</h3></header>
+        <span class="rule-tex" data-tex="\int \sqrt{x}\,dx = \dfrac{2}{3}\,x^{3/2} + C"></span>
+        <p>É a regra da potência com n = 1/2: o expoente vira 3/2 e o 3/2 passa a dividir, o que dá o fator 2/3.</p>
+        <div class="rule-try" data-rule="raiz" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="exponenciais" aria-labelledby="exp-title">
+      <h2 id="exp-title">Exponenciais e logaritmos</h2>
+      <article class="rule" id="exp">
+        <header><h3>Exponencial de Euler</h3></header>
+        <span class="rule-tex" data-tex="\int e^x\,dx = e^x + C"></span>
+        <p>Como eˣ é a própria derivada, é também a própria primitiva: a área acumulada sob eˣ cresce exatamente como eˣ.</p>
+        <div class="rule-try" data-rule="exp" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="expk">
+        <header><h3>Exponencial com coeficiente</h3></header>
+        <span class="rule-tex" data-tex="\int e^{kx}\,dx = \dfrac{e^{kx}}{k} + C"></span>
+        <p>Derivando e^(kx), a regra da cadeia traz um fator k; para desfazer, divide-se por k.</p>
+        <div class="rule-try" data-rule="expk" data-vars="k a b"></div>
+      </article>
+      <article class="rule" id="exp2">
+        <header><h3>Exponencial de outra base</h3></header>
+        <span class="rule-tex" data-tex="\int 2^x\,dx = \dfrac{2^x}{\ln 2} + C"></span>
+        <p>A derivada de 2ˣ tem o fator ln 2; a primitiva divide por ele. Vale para qualquer base positiva diferente de 1.</p>
+        <div class="rule-try" data-rule="exp2" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="ln">
+        <header><h3>Logaritmo</h3></header>
+        <span class="rule-tex" data-tex="\int \ln x\,dx = x \ln x - x + C"></span>
+        <p>Menos óbvia: sai da integração por partes (mais abaixo). Confira derivando: (x ln x − x)′ = ln x + 1 − 1 = ln x.</p>
+        <div class="rule-try" data-rule="ln" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="trigonometricas" aria-labelledby="trig-title">
+      <h2 id="trig-title">Trigonométricas</h2>
+      <article class="rule" id="sen">
+        <header><h3>Seno</h3></header>
+        <span class="rule-tex" data-tex="\int \operatorname{sen} x\,dx = -\cos x + C"></span>
+        <p>A derivada do cosseno é −seno, então a primitiva do seno é −cosseno. O sinal costuma enganar: derive o resultado para conferir.</p>
+        <div class="rule-try" data-rule="sen" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="cos">
+        <header><h3>Cosseno</h3></header>
+        <span class="rule-tex" data-tex="\int \cos x\,dx = \operatorname{sen} x + C"></span>
+        <p>A derivada do seno é o cosseno, então a primitiva do cosseno é o seno.</p>
+        <div class="rule-try" data-rule="cos" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="senk">
+        <header><h3>Seno com coeficiente</h3></header>
+        <span class="rule-tex" data-tex="\int \operatorname{sen}(kx)\,dx = -\dfrac{\cos(kx)}{k} + C"></span>
+        <p>Como na exponencial, o fator k da regra da cadeia passa a dividir.</p>
+        <div class="rule-try" data-rule="senk" data-vars="k a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="tecnicas" aria-labelledby="tec-title">
+      <h2 id="tec-title">Técnicas: quando a função não está na tabela</h2>
+      <p>Derivar é mecânico: há regra para tudo. Integrar não — muitas vezes é preciso reescrever a função até ela cair na tabela. As técnicas são as regras de derivação usadas ao contrário.</p>
+      <article class="rule" id="soma">
+        <header><h3>Soma</h3></header>
+        <span class="rule-tex" data-tex="\int (f + g)\,dx = \int f\,dx + \int g\,dx"></span>
+        <p>A área sob uma soma é a soma das áreas: dá para integrar termo a termo, como um polinômio.</p>
+        <div class="rule-try" data-rule="soma" data-vars="n a b"></div>
+      </article>
+      <article class="rule" id="multc">
+        <header><h3>Constante multiplicando</h3></header>
+        <span class="rule-tex" data-tex="\int c\,f\,dx = c \int f\,dx"></span>
+        <p>Esticar a altura por c estica a área por c: a constante sai da integral.</p>
+        <div class="rule-try" data-rule="multc" data-vars="c n a b"></div>
+      </article>
+      <article class="rule" id="substituicao">
+        <header><h3>Substituição: a cadeia ao contrário</h3></header>
+        <span class="rule-tex" data-tex="\int f(g(x))\,g'(x)\,dx = F(g(x)) + C"></span>
+        <p>Quando aparece uma função de dentro, g, multiplicada pela própria derivada, g′, a integral desfaz a regra da cadeia. Exemplo: 2x · cos(x²) é a derivada de sen(x²).</p>
+        <div class="rule-try" data-rule="substituicao" data-vars="a b"></div>
+      </article>
+      <article class="rule" id="partes">
+        <header><h3>Por partes: o produto ao contrário</h3></header>
+        <span class="rule-tex" data-tex="\int u\,dv = u\,v - \int v\,du"></span>
+        <p>Sai da regra do produto, (uv)′ = u′v + uv′, integrada. Exemplo: em ∫ x eˣ dx, com u = x e dv = eˣ dx, sobra ∫ eˣ dx, fácil: o resultado é (x − 1)eˣ.</p>
+        <div class="rule-try" data-rule="partes" data-vars="a b"></div>
+      </article>
+      <div class="tip">
+        <strong>Nem toda integral tem fórmula.</strong> e^(−x²), o sino da normal, não tem primitiva escrita com funções conhecidas. A área sob ela se calcula numericamente — é o que fazem a <a href="/ztable.html">tabela Z</a> e a <a href="/formulas/integral-gaussiana.html">integral gaussiana</a>.
+      </div>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule ∫ (3x² + 4x − 5) dx.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Termo a termo: <strong>x³ + 2x² − 5x + C</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule a integral de 1/x de 1 a 10.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>ln 10 − ln 1 = <strong>ln 10 ≈ 2,303</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule ∫ e^(3x) dx.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>e^(3x)/3 + C</strong>: o 3 que a regra da cadeia traria passa a dividir.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule a integral de sen x de 0 a π.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>[−cos x] de 0 a π = −cos π − (−cos 0) = 1 + 1 = <strong>2</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule ∫ 2x · e^(x²) dx.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Substituição: 2x é a derivada de x², a função de dentro. O resultado é <strong>e^(x²) + C</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Por que ∫ x⁻¹ dx não é x⁰/0?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Porque a regra da potência dividiria por zero. O caso n = −1 é especial e tem resposta própria: <strong>ln|x| + C</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="teorema-fundamental.html" rel="prev"><span>Anterior</span>Teorema Fundamental</a>
+      <a class="pager-next" href="derivadas-integrais.html" rel="next"><span>Próxima</span>Derivar e Integrar Lado a Lado</a>
+    </nav>
+  </main>
+</body>
+</html>

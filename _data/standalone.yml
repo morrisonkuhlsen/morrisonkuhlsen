@@ -936,7 +936,7 @@
 
 - title: "Cálculo Intuitivo"
   url: "/calculo/"
-  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas, máximos e mínimos e integral, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
+  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas, máximos e mínimos, integral, teorema fundamental, tabela de integrais e as duas tabelas lado a lado, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
   tags: "cálculo intuitivo derivada limite aulas lições"
   lang: pt
 
@@ -974,4 +974,22 @@
   url: "/calculo/integral.html"
   description: "Integral explicada do zero e de forma intuitiva: a água que se acumula num tanque, a área medida com retângulos, a notação, a área com sinal e por que probabilidade é área, com gráficos interativos e exercícios."
   tags: "integral área acúmulo soma de Riemann retângulos probabilidade é área cálculo"
+  lang: pt
+
+- title: "Teorema Fundamental — Derivar e Integrar se Desfazem"
+  url: "/calculo/teorema-fundamental.html"
+  description: "O teorema fundamental do cálculo explicado de forma intuitiva: a função área, por que a derivada da área é a curva, o atalho F(b) − F(a), as primitivas e a ligação com densidade e probabilidade acumulada, com gráficos interativos e exercícios."
+  tags: "teorema fundamental do cálculo primitiva antiderivada integral derivada função acumulada cálculo"
+  lang: pt
+
+- title: "Tabela de Integrais — As Primitivas e de Onde Vêm"
+  url: "/calculo/tabela-integrais.html"
+  description: "Tabela de integrais explicada: constante, potência, 1/x, raiz, eˣ, e^(kx), aˣ, ln x, seno e cosseno, e as técnicas de substituição e por partes, cada uma com a ideia e um teste que compara a área medida com F(b) − F(a)."
+  tags: "tabela de integrais primitivas antiderivadas substituição integração por partes potência exponencial logaritmo seno cosseno cálculo"
+  lang: pt
+
+- title: "Derivar e Integrar — As Duas Tabelas Lado a Lado"
+  url: "/calculo/derivadas-integrais.html"
+  description: "Derivadas e integrais lado a lado, de forma interativa: a escada que anda da primitiva para a derivada, a família F + C e as duas tabelas numa só, com a ligação com densidade e probabilidade acumulada."
+  tags: "derivadas e integrais tabela primitiva antiderivada relação inversa constante de integração cálculo"
   lang: pt

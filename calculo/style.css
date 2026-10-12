@@ -167,3 +167,122 @@
   fill: var(--tone-4);
   stroke: var(--tone-4);
 }
+
+/* Derivar e integrar: a escada de degraus e a tabela unificada. */
+.ladder-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  margin: .9rem 0 .3rem;
+}
+
+.ladder-move {
+  flex: none;
+  padding: .35rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: .85rem;
+  cursor: pointer;
+}
+
+.ladder-move:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.rel-ladder {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  margin: 0;
+  padding: .2rem;
+  list-style: none;
+  overflow-x: auto;
+}
+
+.rel-step {
+  flex: none;
+  padding: .3rem .55rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  opacity: .7;
+}
+
+.rel-step.is-near {
+  opacity: 1;
+  color: var(--text-strong);
+}
+
+.rel-step.is-on {
+  opacity: 1;
+  color: var(--text-strong);
+  border-color: var(--tone-1);
+  box-shadow: 0 0 0 1px var(--tone-1);
+}
+
+.rel-step-op {
+  flex: none;
+  color: var(--text-muted);
+  font-size: .8rem;
+}
+
+.rel-table-wrap {
+  overflow-x: auto;
+  margin: .6rem 0 1rem;
+}
+
+.rel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .95rem;
+}
+
+.rel-table th {
+  padding: .4rem .5rem;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.rel-table td {
+  padding: .45rem .5rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.rel-table .rel-f { font-weight: 600; }
+.rel-table .rel-F .katex { color: var(--tone-2); }
+.rel-table .rel-d .katex { color: var(--tone-3); }
+
+.rel-table .rel-arrow {
+  color: var(--text-muted);
+  font-size: .75rem;
+}
+
+.rel-links {
+  font-size: .8rem;
+}
+
+.rel-links a + a,
+.rel-links a + button,
+.rel-links button {
+  margin-left: .4rem;
+}
+
+.rel-load {
+  padding: .1rem .45rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: none;
+  color: var(--text-strong);
+  font: inherit;
+  cursor: pointer;
+}

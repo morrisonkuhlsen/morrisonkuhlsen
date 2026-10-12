@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Derivar e Integrar — As Duas Tabelas Lado a Lado</title>
+  <meta name="description" content="Derivadas e integrais lado a lado, de forma interativa: a escada que anda da primitiva para a derivada, a família F + C e as duas tabelas numa só, com a ligação com densidade e probabilidade acumulada.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/derivadas-integrais.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/derivadas-integrais.html">
+  <meta property="og:title" content="Derivar e Integrar — As Duas Tabelas Lado a Lado">
+  <meta property="og:description" content="Derivadas e integrais lado a lado, de forma interativa: a escada que anda da primitiva para a derivada, a família F + C e as duas tabelas numa só, com a ligação com densidade e probabilidade acumulada.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Derivar e Integrar — As Duas Tabelas Lado a Lado">
+  <meta name="twitter:description" content="Derivadas e integrais lado a lado, de forma interativa: a escada que anda da primitiva para a derivada, a família F + C e as duas tabelas numa só, com a ligação com densidade e probabilidade acumulada.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="derivadas-integrais.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Derivar e Integrar — As Duas Tabelas Lado a Lado</h1>
+    <p class="page-lede">A <a href="tabela-derivadas.html">tabela de derivadas</a> e a <a href="tabela-integrais.html">tabela de integrais</a> são a mesma tabela lida em sentidos opostos. Derivar anda um degrau para a direita; integrar, um degrau para a esquerda. O <a href="teorema-fundamental.html">teorema fundamental</a> garante que um passo desfaz o outro — quase: falta uma constante.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#escada">A escada</a>
+      <a href="#constante">O que se perde: o + C</a>
+      <a href="#tabelas">As duas tabelas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="F \;\xrightarrow{\;d/dx\;}\; f \;\xrightarrow{\;d/dx\;}\; f' \qquad\qquad F = \int f\,dx, \quad f = \int f'\,dx"></span>
+
+    <!-- 1. A escada; estado em ?fam=&i=&x=. -->
+    <section class="calc intro" id="escada" aria-labelledby="escada-title">
+      <h2 id="escada-title">A escada</h2>
+      <p class="calc-lede">Escolha uma função e ande pela escada. O degrau do meio é <i>f</i>; à esquerda, a primitiva <i>F</i>; à direita, a derivada <i>f</i>′. Nos gráficos, arraste <i>x</i>: a inclinação de cada curva, no ponto, é a altura da curva de baixo.</p>
+      <div class="seg" role="group" aria-label="Função de partida">
+        <button type="button" data-fam="pot" aria-pressed="true">x³</button>
+        <button type="button" data-fam="sen" aria-pressed="false">sen x</button>
+        <button type="button" data-fam="exp" aria-pressed="false">eˣ</button>
+        <button type="button" data-fam="e2" aria-pressed="false">e^(2x)</button>
+        <button type="button" data-fam="ln" aria-pressed="false">ln x</button>
+      </div>
+      <div class="ladder-row">
+        <button type="button" class="ladder-move" data-move="-1">⟵ integrar</button>
+        <ol class="rel-ladder" aria-label="Degraus da escada"></ol>
+        <button type="button" class="ladder-move" data-move="1">derivar ⟶</button>
+      </div>
+      <div class="vars rel-vars"></div>
+      <div class="plot-box rel-F-plot"></div>
+      <p class="plot-caption rel-cap-F"></p>
+      <div class="plot-box rel-f-plot"></div>
+      <p class="plot-caption rel-cap-f"></p>
+      <div class="plot-box rel-d-plot"></div>
+      <p class="plot-caption rel-cap-d"></p>
+      <p class="readout rel-out" aria-live="polite"></p>
+      <div class="intro-text rel-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. A família F + C; estado em ?C=. -->
+    <section class="calc intro" id="constante" aria-labelledby="const-title">
+      <h2 id="const-title">O que se perde: o + C</h2>
+      <p class="calc-lede">Derivar apaga as constantes: x²/2, x²/2 + 1 e x²/2 − 3 têm todas a derivada x. Por isso, integrando x, não dá para saber qual delas era — a resposta é a família inteira, x²/2 + C. Mova <i>C</i>: as curvas sobem e descem, mas a inclinação em cada ponto não muda.</p>
+      <div class="vars const-vars"></div>
+      <div class="plot-box const-plot"></div>
+      <p class="readout const-out" aria-live="polite"></p>
+      <div class="intro-text const-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="tabelas" aria-labelledby="tab-title">
+      <h2 id="tab-title">As duas tabelas numa só</h2>
+      <p>Cada linha é um trecho de escada: a função no meio, a primitiva à esquerda, a derivada à direita. Os links levam ao card de cada regra, com a ideia e o teste; “na escada” carrega a família no painel de cima.</p>
+      <div class="rel-table-wrap">
+        <table class="rel-table">
+          <thead>
+            <tr><th>Primitiva ∫f dx</th><th></th><th>Função f(x)</th><th></th><th>Derivada f′(x)</th><th>Ver</th></tr>
+          </thead>
+          <tbody>
+        <tr>
+          <td class="rel-F"><span data-tex="c\,x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="c"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="0"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#constante">integral</a> <a href="tabela-derivadas.html#constante">derivada</a></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\dfrac{x^{n+1}}{n+1}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="x^n"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="n\,x^{n-1}"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#potencia">integral</a> <a href="tabela-derivadas.html#potencia">derivada</a> <button type="button" class="rel-load" data-load="pot">na escada</button></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\ln|x|"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="\dfrac{1}{x}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="-\dfrac{1}{x^2}"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#inverso">integral</a> <a href="tabela-derivadas.html#inverso">derivada</a></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\tfrac{2}{3}x^{3/2}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="\sqrt{x}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="\dfrac{1}{2\sqrt{x}}"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#raiz">integral</a> <a href="tabela-derivadas.html#raiz">derivada</a></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="e^x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="e^x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="e^x"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#exp">integral</a> <a href="tabela-derivadas.html#exp">derivada</a> <button type="button" class="rel-load" data-load="exp">na escada</button></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\dfrac{e^{kx}}{k}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="e^{kx}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="k\,e^{kx}"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#expk">integral</a> <button type="button" class="rel-load" data-load="e2">na escada</button></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\dfrac{a^x}{\ln a}"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="a^x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="a^x \ln a"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#exp2">integral</a> <a href="tabela-derivadas.html#expa">derivada</a></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="x \ln x - x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="\ln x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="\dfrac{1}{x}"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#ln">integral</a> <a href="tabela-derivadas.html#ln">derivada</a> <button type="button" class="rel-load" data-load="ln">na escada</button></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="-\cos x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="\operatorname{sen} x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="\cos x"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#sen">integral</a> <a href="tabela-derivadas.html#sen">derivada</a> <button type="button" class="rel-load" data-load="sen">na escada</button></td>
+        </tr>
+        <tr>
+          <td class="rel-F"><span data-tex="\operatorname{sen} x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">⟵ ∫</td>
+          <td class="rel-f"><span data-tex="\cos x"></span></td>
+          <td class="rel-arrow" aria-hidden="true">d/dx ⟶</td>
+          <td class="rel-d"><span data-tex="-\operatorname{sen} x"></span></td>
+          <td class="rel-links"><a href="tabela-integrais.html#cos">integral</a> <a href="tabela-derivadas.html#cos">derivada</a> <button type="button" class="rel-load" data-load="sen">na escada</button></td>
+        </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tip">
+        <strong>Uma assimetria.</strong> Derivar sempre funciona: há regra para produto, quociente e composição. Integrar, não — não há regra geral para produtos, e funções inocentes como e^(−x²) não têm primitiva com fórmula. Por isso a tabela de integrais vem acompanhada de técnicas.
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">A mesma escada na estatística</h2>
+      <p>Toda variável contínua tem três degraus: a <strong>acumulada</strong> F(x) = P(X ≤ x), a <strong>densidade</strong> f(x) e a inclinação da densidade. Derivar a acumulada dá a densidade; integrar a densidade dá a acumulada.</p>
+      <span class="rule-tex" data-tex="P(X \le x) \;\xrightarrow{\;d/dx\;}\; \text{densidade} \qquad\qquad \int_{-\infty}^{x} \text{densidade} = P(X \le x)"></span>
+      <p>Na <a href="/formulas/distribuicao-exponencial.html">exponencial</a>, a escada é a de e^(−λx): densidade λe^(−λx), acumulada 1 − e^(−λx). Na <a href="/formulas/distribuicao-normal.html">normal</a>, o degrau da acumulada não tem fórmula — é a <a href="/ztable.html">tabela Z</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Na escada de x³, quais são os dois degraus seguintes para a direita? E para a esquerda?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Para a direita (derivando): 3x², depois <strong>6x</strong>, depois 6. Para a esquerda (integrando): x⁴/4, depois <strong>x⁵/20</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Derivar e depois integrar sen x devolve sen x?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Quase: derivando, cos x; integrando, sen x <strong>+ C</strong>. A volta recupera a função a menos de uma constante — a única informação que a derivada apaga.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Qual função fica igual em todos os degraus da escada?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>eˣ</strong> (e qualquer múltiplo dela): é a própria derivada e a própria primitiva.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quantos degraus para a direita até sen x voltar a ser sen x?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>Quatro</strong>: sen → cos → −sen → −cos → sen. Derivar o seno é girar um quarto de volta.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="tabela-integrais.html" rel="prev"><span>Anterior</span>Tabela de Integrais</a>
+    </nav>
+  </main>
+</body>
+</html>
