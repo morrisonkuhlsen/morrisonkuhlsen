@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">86 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">92 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -102,6 +102,11 @@
             <span class="card-name">Problema do Aniversário</span>
             <span class="card-blurb">A chance de duas pessoas de um grupo fazerem aniversário no mesmo dia.</span>
           </a></li>
+          <li><a class="formula-card" href="problema-figurinhas.html">
+            <span class="card-tex" data-tex="E[T] = N \cdot H_N"></span>
+            <span class="card-name">Problema das Figurinhas</span>
+            <span class="card-blurb">Quantas figurinhas completam o álbum, em média.</span>
+          </a></li>
           <li><a class="formula-card" href="monty-hall.html">
             <span class="card-tex" data-tex="P(\text{ganhar trocando}) = 1 - \dfrac{1}{d}"></span>
             <span class="card-name">Problema de Monty Hall</span>
@@ -121,6 +126,11 @@
             <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
             <span class="card-name">Valor Esperado</span>
             <span class="card-blurb">A média de longo prazo de uma variável aleatória.</span>
+          </a></li>
+          <li><a class="formula-card" href="entropia-shannon.html">
+            <span class="card-tex" data-tex="H = -\textstyle\sum p_i \log_2 p_i"></span>
+            <span class="card-name">Entropia de Shannon</span>
+            <span class="card-blurb">A surpresa média de um resultado, em bits.</span>
           </a></li>
           <li><a class="formula-card" href="desigualdade-markov.html">
             <span class="card-tex" data-tex="P(X \ge a) \le \dfrac{E[X]}{a}"></span>
@@ -342,6 +352,16 @@
             <span class="card-name">Correção para População Finita</span>
             <span class="card-blurb">Reduz o tamanho da amostra quando a população é pequena.</span>
           </a></li>
+          <li><a class="formula-card" href="amostragem-sistematica.html">
+            <span class="card-tex" data-tex="k = \dfrac{N}{n}"></span>
+            <span class="card-name">Amostragem Sistemática</span>
+            <span class="card-blurb">Sorteie o começo e pegue uma a cada k.</span>
+          </a></li>
+          <li><a class="formula-card" href="alocacao-proporcional.html">
+            <span class="card-tex" data-tex="n_h = n \cdot \dfrac{N_h}{N}"></span>
+            <span class="card-name">Alocação Proporcional</span>
+            <span class="card-blurb">Cada estrato recebe a sua fatia da amostra.</span>
+          </a></li>
           <li><a class="formula-card" href="neyman-allocation.html">
             <span class="card-tex" data-tex="n_h = n \cdot \dfrac{N_h \cdot \sigma_h}{\sum(N_h \cdot \sigma_h)}"></span>
             <span class="card-name">Alocação de Neyman</span>
@@ -432,6 +452,11 @@
             <span class="card-name">Suavização Exponencial</span>
             <span class="card-blurb">Suaviza e prevê, dando mais peso ao recente.</span>
           </a></li>
+          <li><a class="formula-card" href="suavizacao-holt.html">
+            <span class="card-tex" data-tex="\hat{x}_{n+h} = L_n + h\,T_n"></span>
+            <span class="card-name">Suavização de Holt</span>
+            <span class="card-blurb">Previsão que acompanha o nível e a tendência.</span>
+          </a></li>
           <li><a class="formula-card" href="autocorrelacao.html">
             <span class="card-tex" data-tex="r_k = \dfrac{\sum (x_t - \bar{x})(x_{t+k} - \bar{x})}{\sum (x_t - \bar{x})^2}"></span>
             <span class="card-name">Autocorrelação</span>
@@ -461,6 +486,11 @@
             <span class="card-tex" data-tex="M = P(1+i)^n + A \cdot \dfrac{(1+i)^n - 1}{i}"></span>
             <span class="card-name">Juros Compostos com Aportes</span>
             <span class="card-blurb">Quanto rende um valor inicial mais depósitos periódicos.</span>
+          </a></li>
+          <li><a class="formula-card" href="inflacao-acumulada.html">
+            <span class="card-tex" data-tex="I = \textstyle\prod (1 + i_t) - 1"></span>
+            <span class="card-name">Inflação Acumulada</span>
+            <span class="card-blurb">Por que as taxas se multiplicam, e não se somam.</span>
           </a></li>
           <li><a class="formula-card" href="matriz-inversa-2x2.html">
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>

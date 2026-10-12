@@ -187,6 +187,36 @@
   description: "Soma da progressão aritmética explicada termo a termo, com calculadora, gráfico dos termos e o truque de Gauss para somar 1 + 2 + … + 100."
   tags: "fórmula interativa calculadora passo a passo progressão aritmética PA Gauss soma"
   lang: pt
+- title: "Amostragem Sistemática"
+  url: "/formulas/amostragem-sistematica.html"
+  description: "Amostragem sistemática explicada termo a termo, com calculadora do intervalo de seleção, das unidades sorteadas e o cuidado com listas que têm ciclos."
+  tags: "fórmula interativa calculadora passo a passo amostragem sistemática intervalo de seleção k"
+  lang: pt
+- title: "Alocação Proporcional"
+  url: "/formulas/alocacao-proporcional.html"
+  description: "Alocação proporcional na amostragem estratificada explicada termo a termo, com calculadora, gráfico e passo a passo: cada estrato recebe a sua fatia da amostra."
+  tags: "fórmula interativa calculadora passo a passo alocação proporcional estratos amostragem estratificada"
+  lang: pt
+- title: "Suavização de Holt"
+  url: "/formulas/suavizacao-holt.html"
+  description: "Suavização exponencial de Holt, com nível e tendência, explicada termo a termo, com calculadora, gráfico da previsão e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo Holt nível tendência previsão séries temporais"
+  lang: pt
+- title: "Problema das Figurinhas"
+  url: "/formulas/problema-figurinhas.html"
+  description: "O problema das figurinhas (do colecionador de cupons) explicado termo a termo, com calculadora de quantas figurinhas e pacotes completam o álbum, em média."
+  tags: "fórmula interativa calculadora passo a passo figurinhas álbum colecionador de cupons número harmônico"
+  lang: pt
+- title: "Inflação Acumulada"
+  url: "/formulas/inflacao-acumulada.html"
+  description: "Inflação acumulada explicada termo a termo, com calculadora, gráfico mês a mês, a taxa média e a perda do poder de compra — e por que não se somam as taxas."
+  tags: "fórmula interativa calculadora passo a passo inflação acumulada IPCA poder de compra taxa média"
+  lang: pt
+- title: "Entropia de Shannon"
+  url: "/formulas/entropia-shannon.html"
+  description: "A entropia de Shannon explicada termo a termo, com calculadora em bits, gráfico das probabilidades e a leitura como surpresa média e número de perguntas."
+  tags: "fórmula interativa calculadora passo a passo entropia Shannon informação bits teoria da informação"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -727,6 +757,36 @@
   url: "/en/formulas/arithmetic-series.html"
   description: "The sum of an arithmetic series explained term by term, with a calculator, a chart of the terms and Gauss's trick for adding 1 + 2 + … + 100."
   tags: "interactive formula calculator step by step arithmetic progression Gauss sum"
+  lang: en
+- title: "Systematic Sampling"
+  url: "/en/formulas/systematic-sampling.html"
+  description: "Systematic sampling explained term by term, with a calculator for the sampling interval, the selected units and the caveat about lists with cycles."
+  tags: "interactive formula calculator step by step systematic sampling interval k"
+  lang: en
+- title: "Proportional Allocation"
+  url: "/en/formulas/proportional-allocation.html"
+  description: "Proportional allocation in stratified sampling explained term by term, with a calculator, a chart and step-by-step working: each stratum gets its share of the sample."
+  tags: "interactive formula calculator step by step proportional allocation strata stratified sampling"
+  lang: en
+- title: "Holt's Linear Smoothing"
+  url: "/en/formulas/holt-linear-smoothing.html"
+  description: "Holt's exponential smoothing, with level and trend, explained term by term, with a calculator, a forecast chart and step-by-step working."
+  tags: "interactive formula calculator step by step Holt level trend forecast time series"
+  lang: en
+- title: "Coupon Collector's Problem"
+  url: "/en/formulas/coupon-collector-problem.html"
+  description: "The coupon collector's problem (filling a sticker album) explained term by term, with a calculator for how many stickers and packs complete the album, on average."
+  tags: "interactive formula calculator step by step coupon collector sticker album harmonic number"
+  lang: en
+- title: "Cumulative Inflation"
+  url: "/en/formulas/cumulative-inflation.html"
+  description: "Cumulative inflation explained term by term, with a calculator, a period-by-period chart, the average rate and the loss of purchasing power — and why rates aren't added."
+  tags: "interactive formula calculator step by step cumulative inflation purchasing power average rate"
+  lang: en
+- title: "Shannon Entropy"
+  url: "/en/formulas/shannon-entropy.html"
+  description: "Shannon entropy explained term by term, with a calculator in bits, a chart of the probabilities and its reading as average surprise and number of questions."
+  tags: "interactive formula calculator step by step entropy Shannon information bits information theory"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

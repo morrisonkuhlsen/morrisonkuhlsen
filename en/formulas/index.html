@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">86 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">92 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -102,6 +102,11 @@
             <span class="card-name">Birthday Problem</span>
             <span class="card-blurb">The chance that two people in a group share a birthday.</span>
           </a></li>
+          <li><a class="formula-card" href="coupon-collector-problem.html">
+            <span class="card-tex" data-tex="E[T] = N \cdot H_N"></span>
+            <span class="card-name">Coupon Collector&#x27;s Problem</span>
+            <span class="card-blurb">How many stickers complete the album, on average.</span>
+          </a></li>
           <li><a class="formula-card" href="monty-hall.html">
             <span class="card-tex" data-tex="P(\text{win by switching}) = 1 - \dfrac{1}{d}"></span>
             <span class="card-name">Monty Hall Problem</span>
@@ -121,6 +126,11 @@
             <span class="card-tex" data-tex="E[X] = \sum_{i} x_i \cdot P(x_i)"></span>
             <span class="card-name">Expected Value</span>
             <span class="card-blurb">The long-run average of a random variable.</span>
+          </a></li>
+          <li><a class="formula-card" href="shannon-entropy.html">
+            <span class="card-tex" data-tex="H = -\textstyle\sum p_i \log_2 p_i"></span>
+            <span class="card-name">Shannon Entropy</span>
+            <span class="card-blurb">The average surprise of an outcome, in bits.</span>
           </a></li>
           <li><a class="formula-card" href="markov-inequality.html">
             <span class="card-tex" data-tex="P(X \ge a) \le \dfrac{E[X]}{a}"></span>
@@ -342,6 +352,16 @@
             <span class="card-name">Finite Population Correction</span>
             <span class="card-blurb">Shrinks the sample size when the population is small.</span>
           </a></li>
+          <li><a class="formula-card" href="systematic-sampling.html">
+            <span class="card-tex" data-tex="k = \dfrac{N}{n}"></span>
+            <span class="card-name">Systematic Sampling</span>
+            <span class="card-blurb">Draw the start and take one every k.</span>
+          </a></li>
+          <li><a class="formula-card" href="proportional-allocation.html">
+            <span class="card-tex" data-tex="n_h = n \cdot \dfrac{N_h}{N}"></span>
+            <span class="card-name">Proportional Allocation</span>
+            <span class="card-blurb">Each stratum gets its share of the sample.</span>
+          </a></li>
           <li><a class="formula-card" href="neyman-allocation.html">
             <span class="card-tex" data-tex="n_h = n \cdot \dfrac{N_h \cdot \sigma_h}{\sum(N_h \cdot \sigma_h)}"></span>
             <span class="card-name">Neyman Allocation</span>
@@ -432,6 +452,11 @@
             <span class="card-name">Exponential Smoothing</span>
             <span class="card-blurb">Smooths and forecasts, giving more weight to recent values.</span>
           </a></li>
+          <li><a class="formula-card" href="holt-linear-smoothing.html">
+            <span class="card-tex" data-tex="\hat{x}_{n+h} = L_n + h\,T_n"></span>
+            <span class="card-name">Holt&#x27;s Linear Smoothing</span>
+            <span class="card-blurb">A forecast that tracks both level and trend.</span>
+          </a></li>
           <li><a class="formula-card" href="autocorrelation.html">
             <span class="card-tex" data-tex="r_k = \dfrac{\sum (x_t - \bar{x})(x_{t+k} - \bar{x})}{\sum (x_t - \bar{x})^2}"></span>
             <span class="card-name">Autocorrelation</span>
@@ -461,6 +486,11 @@
             <span class="card-tex" data-tex="M = P(1+i)^n + A \cdot \dfrac{(1+i)^n - 1}{i}"></span>
             <span class="card-name">Compound Interest with Contributions</span>
             <span class="card-blurb">What an initial amount plus regular deposits grows to.</span>
+          </a></li>
+          <li><a class="formula-card" href="cumulative-inflation.html">
+            <span class="card-tex" data-tex="I = \textstyle\prod (1 + i_t) - 1"></span>
+            <span class="card-name">Cumulative Inflation</span>
+            <span class="card-blurb">Why rates multiply instead of adding up.</span>
           </a></li>
           <li><a class="formula-card" href="inverse-2x2-matrix.html">
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>

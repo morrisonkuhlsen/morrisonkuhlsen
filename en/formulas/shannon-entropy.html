@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Shannon Entropy — Interactive</title>
+  <meta name="description" content="Shannon entropy explained term by term, with a calculator in bits, a chart of the probabilities and its reading as average surprise and number of questions.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/shannon-entropy.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/entropia-shannon.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/shannon-entropy.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/entropia-shannon.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/shannon-entropy.html">
+  <meta property="og:title" content="Shannon Entropy — Interactive">
+  <meta property="og:description" content="Shannon entropy explained term by term, with a calculator in bits, a chart of the probabilities and its reading as average surprise and number of questions.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Shannon Entropy — Interactive">
+  <meta name="twitter:description" content="Shannon entropy explained term by term, with a calculator in bits, a chart of the probabilities and its reading as average surprise and number of questions.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/entropia-shannon.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Shannon Entropy</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive Shannon entropy formula">
+        <span class="part" data-part="H_en" data-tone="1" data-tex="H"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="s_en" data-tone="0" data-tex="-\sum_i"></span>
+        <span class="part" data-part="p_en" data-tone="2" data-tex="p_i"></span>
+        <span class="part" data-part="l_en" data-tone="3" data-tex="\log_2 p_i"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?p=. -->
+    <section class="calc" data-calc="entropia" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a source that emits four symbols, with chances of 1/2, 1/4, 1/8 and 1/8. How much information, in bits, does each symbol carry on average? Change the probabilities — or enter counts, which get converted — to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Probabilities or counts</span>
+          <input name="p" type="text" inputmode="decimal" value="0.5 0.25 0.125 0.125" data-list autocomplete="off" spellcheck="false">
+          <small>Separated by spaces. If they don't add up to 1, they are treated as counts.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="H_en" data-tone="1">Entropy (H)</dt>
+          <dd>The average uncertainty about the outcome, in bits. Zero when the outcome is certain; highest, log₂ k, when the k outcomes are equally likely.</dd>
+          <dt data-part="s_en" data-tone="0">Sum with the Sign Flipped (−Σ)</dt>
+          <dd>A sum over all outcomes. The minus sign is there because the log of a probability is negative, and the entropy should come out positive.</dd>
+          <dt data-part="p_en" data-tone="2">Probability (pᵢ)</dt>
+          <dd>The weight of each outcome: the average is weighted by the chance of each one happening.</dd>
+          <dt data-part="l_en" data-tone="3">Surprise (log₂ pᵢ)</dt>
+          <dd>−log₂ p is an outcome's surprise: 1 bit for a chance of 1/2, 3 bits for 1/8. Rare outcomes surprise more.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="expected-value.html" rel="prev"><span>Previous</span>Expected Value</a>
+      <a class="pager-next" href="markov-inequality.html" rel="next"><span>Next</span>Markov&#x27;s Inequality</a>
+    </nav>
+  </main>
+</body>
+</html>

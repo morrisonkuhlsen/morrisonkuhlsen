@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "neyman-allocation": "neyman-allocation", "juros-aportes": "compound-interest-contributions", "media-geometrica": "geometric-mean",
     "teorema-bayes": "bayes-theorem", "distribuicao-binomial": "binomial-distribution",
     "correcao-populacao-finita": "finite-population-correction", "coeficiente-pearson": "pearson-correlation",
     "regressao-linear": "linear-regression", "z-score": "z-score", "t-student": "students-t-test",
@@ -3520,6 +3521,248 @@
           + ` A média dos termos é a média do primeiro com o último, ${fmt((a1 + an) / 2)}: a soma é essa média vezes o número de termos. Compare com a <a href="${PAGE("soma-pg")}">soma da progressão geométrica</a>, em que os termos se multiplicam em vez de se somar.`,
           `The idea, told of the young Gauss adding 1 + 2 + … + 100: write the sum backwards under itself. Each column adds up to a₁ + aₙ = ${fmt(a1 + an)}, and there are ${n} columns — but that way every term went in twice, hence the division by 2.`
           + ` The mean of the terms is the mean of the first and last, ${fmt((a1 + an) / 2)}: the sum is that mean times the number of terms. Compare with the <a href="${PAGE("soma-pg")}">geometric series</a>, where the terms multiply instead of add.`),
+      };
+    },
+
+    sist({ N, n, r }) {
+      if (!Number.isInteger(N) || N < 2 || N > 1e7) return { error: T("O tamanho da população precisa ser um inteiro entre 2 e 10 milhões.", "The population size must be an integer between 2 and 10 million.") };
+      if (!Number.isInteger(n) || n < 1 || n > N) return { error: T(`O tamanho da amostra precisa ser um inteiro entre 1 e ${fmt(N)}.`, `The sample size must be an integer between 1 and ${fmt(N)}.`) };
+      const k = N / n, kInt = Number.isInteger(k);
+      const kMax = Math.ceil(k);
+      if (r == null) r = 1;
+      if (!Number.isInteger(r) || r < 1 || r > (kInt ? k : Math.floor(k))) return { error: T(`O começo precisa ser um inteiro entre 1 e ${fmt(kInt ? k : Math.floor(k))}, sorteado nesse intervalo.`, `The start must be an integer between 1 and ${fmt(kInt ? k : Math.floor(k))}, drawn from that range.`) };
+      // Com k fracionário, arredonda-se cada posição para baixo: r + ⌊i·k⌋.
+      const unit = i => r + Math.floor(i * k + 1e-9);
+      const units = Array.from({ length: Math.min(n, 12) }, (_, i) => unit(i));
+      const last = unit(n - 1);
+      const kTex = kInt ? texNum(k) : texNum(k, 4);
+      const show = units.map(u => texNum(u)).join(",\\ ") + (n > 12 ? `,\\ \\ldots,\\ ${texNum(last)}` : "");
+      const showTxt = units.map(u => fmt(u)).join(", ") + (n > 12 ? `, …, ${fmt(last)}` : "");
+      return {
+        result: `k ${approx(k, 4)} ${tone(kTex, 1)}, \\qquad ${T("\\text{amostra}", "\\text{sample}")}: ${show}`,
+        steps: [
+          [T("Divida a população pela amostra para ter o intervalo de seleção:", "Divide the population by the sample to get the sampling interval:"),
+            `k = \\dfrac{${tone(texNum(N), 2)}}{${tone(texNum(n), 3)}} ${approx(k, 4)} ${tone(kTex, 1)}`],
+          [T(`Sorteie o começo entre 1 e ${kInt ? fmt(k) : fmt(Math.floor(k))}. Aqui:`, `Draw the start between 1 and ${kInt ? fmt(k) : fmt(Math.floor(k))}. Here:`), `r = ${tone(texNum(r), 4)}`],
+          [kInt ? T("Daí em diante, pule de k em k:", "From there on, step k at a time:")
+            : T("Daí em diante, pule de k em k, arredondando cada posição para baixo:", "From there on, step k at a time, rounding each position down:"),
+            `${tone(texNum(r), 4)},\\ ${tone(texNum(r), 4)} + ${kTex}${kInt ? "" : "\\ (\\lfloor\\cdot\\rfloor)"},\\ \\ldots \\;\\to\\; ${show}`],
+        ],
+        note: T(`Com ${fmt(N)} unidades numa lista, sai uma amostra de ${fmt(n)} unidades — ${showTxt}. Só o começo é sorteado: o resto é consequência dele, então cada unidade tem a mesma chance, 1 em ${fmt(k, 4)}, de entrar.`
+          + " É mais simples de executar que o sorteio unidade por unidade — basta contar na fila, no arquivo ou na linha de produção — e, se a lista estiver ordenada por algo ligado à variável, espalha a amostra por toda a lista, como uma estratificação implícita."
+          + ` ${warn} se a lista tiver um ciclo que coincide com k — um turno a cada ${fmt(kMax)} peças, um mesmo dia da semana a cada 7 registros —, a amostra cai sempre no mesmo ponto do ciclo e fica viciada. Para ver o efeito da aleatoriedade numa pesquisa, use o <a href="${PAGE("simulador-pesquisa")}">simulador de pesquisa</a>.`,
+          `With ${fmt(N)} units on a list, this gives a sample of ${fmt(n)} units — ${showTxt}. Only the start is drawn: the rest follows from it, so each unit has the same chance, 1 in ${fmt(k, 4)}, of being picked.`
+          + " It is simpler to carry out than drawing unit by unit — you just count along the queue, the file or the production line — and, if the list is sorted by something related to the variable, it spreads the sample over the whole list, like an implicit stratification."
+          + ` ${warn} if the list has a cycle matching k — a shift every ${fmt(kMax)} parts, the same weekday every 7 records —, the sample always lands at the same point of the cycle and is biased. To see the effect of randomness in a survey, try the <a href="${PAGE("simulador-pesquisa")}">survey simulator</a>.`),
+      };
+    },
+
+    propal({ n, Nh }) {
+      const k = Nh.length;
+      if (!Number.isInteger(n) || n < 1) return { error: T("A amostra total precisa ser um inteiro positivo.", "The total sample must be a positive integer.") };
+      if (k < 2) return { error: T("Informe o tamanho de pelo menos dois estratos.", "Enter the size of at least two strata.") };
+      if (k > 30) return { error: T("Use no máximo 30 estratos.", "Use at most 30 strata.") };
+      if (Nh.some(x => x <= 0)) return { error: T("O tamanho de cada estrato precisa ser maior que zero.", "Each stratum size must be greater than zero.") };
+      const N = Nh.reduce((s, x) => s + x, 0);
+      if (n > N) return { error: T(`A amostra total (${fmt(n)}) é maior que a população (${fmt(N)}).`, `The total sample (${fmt(n)}) is larger than the population (${fmt(N)}).`) };
+      const al = apportion(n, Nh);
+      const NT = texNum(N);
+      const t = `\\def\\arraystretch{2.4}\\begin{array}{c|c|l|c} h & N_h & n_h = n \\cdot N_h / N & \\text{${T("arredondado", "rounded")}} \\\\ \\hline `
+        + Nh.map((x, i) => `${i + 1} & ${tone(texNum(x), 3)} & ${tone(texNum(n), 2)} \\cdot \\dfrac{${texNum(x)}}{${tone(NT, 4)}} ${approx(al.exact[i], 2)} ${texNum(al.exact[i], 2)} & ${tone(texNum(al.out[i]), 1)}`).join(" \\\\ ")
+        + ` \\end{array}`;
+      const f = n / N;
+      return {
+        result: `n_h = ${tone(al.out.map(x => texNum(x)).join(",\\ "), 1)}`,
+        chart: {
+          type: "bars", label: T(`Amostra de cada um dos ${k} estratos`, `Sample from each of the ${k} strata`),
+          xLabel: T("estrato h · altura: a amostra n_h", "stratum h · height: the sample n_h"),
+          xs: al.out.map((_, i) => i + 1), ys: al.out, xMin: 0.5, xMax: k + 0.5, yMax: Math.max(...al.out),
+          hi: () => false,
+          tip: (h, v) => [fmt(v), T(`estrato ${h}: ${fmt(Nh[h - 1])} na população (${fmt(Nh[h - 1] / N * 100, 1)}%)`, `stratum ${h}: ${fmt(Nh[h - 1])} in the population (${fmt(Nh[h - 1] / N * 100, 1)}%)`)],
+        },
+        steps: [
+          [T("Some os estratos para ter a população:", "Add up the strata to get the population:"),
+            k <= 6 ? `N = ${Nh.map(x => texNum(x)).join(" + ")} = ${tone(NT, 4)}` : `N = ${tone(NT, 4)}`],
+          [T("Dê a cada estrato a mesma fração da amostra que ele tem da população, e arredonde:", "Give each stratum the same share of the sample that it has of the population, and round:"), t],
+        ],
+        note: T(`Todos os estratos são amostrados na mesma fração, n/N ≈ ${fmt(f * 100, 2)}%, então cada unidade da população tem a mesma chance de entrar: a amostra é autoponderada, e a média simples dela já estima a média da população, sem pesos.`
+          + " Comparada à amostra aleatória simples, garante que nenhum estrato fique de fora ou sobre por azar, e nunca piora a precisão."
+          + ` Quando a variável varia muito mais num estrato que nos outros, a <a href="${PAGE("neyman-allocation")}">alocação de Neyman</a> faz melhor, levando mais amostra para onde há mais variação. Os arredondamentos usam o método dos maiores restos, para que a soma dê exatamente n.`,
+          `Every stratum is sampled at the same fraction, n/N ≈ ${fmt(f * 100, 2)}%, so each unit in the population has the same chance of being picked: the sample is self-weighting, and its plain mean already estimates the population mean, without weights.`
+          + " Compared with a simple random sample, it ensures no stratum is left out or overrepresented by bad luck, and never loses precision."
+          + ` When the variable varies much more in one stratum than in the others, <a href="${PAGE("neyman-allocation")}">Neyman allocation</a> does better, moving more of the sample to where the variation is. Rounding uses the largest remainder method, so the parts add up to exactly n.`),
+      };
+    },
+
+    holt({ x, alpha, beta, h }) {
+      const n = x.length;
+      if (n < 3) return { error: T("Informe pelo menos três valores da série.", "Enter at least three values of the series.") };
+      if (n > 2000) return { error: T("Use no máximo 2.000 valores.", "Use at most 2,000 values.") };
+      if (!(alpha > 0 && alpha <= 1)) return { error: T("α precisa estar entre 0 e 1, sem o zero.", "α must be between 0 and 1, excluding zero.") };
+      if (!(beta > 0 && beta <= 1)) return { error: T("β precisa estar entre 0 e 1, sem o zero.", "β must be between 0 and 1, excluding zero.") };
+      if (!Number.isInteger(h) || h < 1 || h > 100) return { error: T("O horizonte precisa ser um inteiro entre 1 e 100.", "The horizon must be an integer between 1 and 100.") };
+      const run = (a, b) => {
+        const L = [x[0]], B = [x[1] - x[0]]; let sse = 0;
+        for (let t = 1; t < n; t++) {
+          const f = L[t - 1] + B[t - 1]; sse += (x[t] - f) ** 2;
+          L.push(a * x[t] + (1 - a) * f);
+          B.push(b * (L[t] - L[t - 1]) + (1 - b) * B[t - 1]);
+        }
+        return { L, B, sse };
+      };
+      const { L, B, sse } = run(alpha, beta);
+      const Ln = L[n - 1], Bn = B[n - 1], F = Ln + h * Bn;
+      const fc = Array.from({ length: h + 1 }, (_, j) => [n + j, Ln + j * Bn]);
+      const ys = [...x, ...L, ...fc.map(p => p[1])];
+      const lo = Math.min(...ys), hi = Math.max(...ys), pad = (hi - lo) * 0.1 || 1;
+      // Erro do mesmo período pela suavização simples, para comparar.
+      let S = x[0], sseS = 0; for (let t = 1; t < n; t++) { sseS += (x[t] - S) ** 2; S = alpha * x[t] + (1 - alpha) * S; }
+      const rmse = Math.sqrt(sse / (n - 1)), rmseS = Math.sqrt(sseS / (n - 1));
+      const A = tone(texNum(alpha), 0), Bt = tone(texNum(beta), 0);
+      const ex = n > 2 ? [
+        `L_2 = ${A} \\cdot ${texNum(x[1])} + ${texNum(1 - alpha, 4)} \\cdot (${texNum(L[0])} + ${paren(B[0], texNum(B[0]))}) ${approx(L[1])} ${texNum(L[1])}`,
+        `T_2 = ${Bt} \\cdot (${texNum(L[1])} - ${paren(L[0], texNum(L[0]))}) + ${texNum(1 - beta, 4)} \\cdot ${paren(B[0], texNum(B[0]))} ${approx(B[1])} ${texNum(B[1])}`,
+      ] : [];
+      return {
+        result: `\\hat{x}_{${n + h}} = ${tone(texNum(Ln), 2)} + ${tone(texNum(h), 0)} \\cdot ${paren(Bn, tone(texNum(Bn), 3))} ${approx(F)} ${tone(texNum(F), 1)}`,
+        chart: {
+          type: "curve", label: T(`Série de ${n} valores, o nível suavizado por Holt e a previsão para ${h} ${h === 1 ? "período" : "períodos"}`, `Series of ${n} values, Holt's smoothed level and the forecast for ${h} ${h === 1 ? "period" : "periods"}`),
+          xLabel: T("período · escura: a série · colorida: o nível · tracejada: a previsão", "period · dark: the series · colored: the level · dashed: the forecast"),
+          xMin: 1, xMax: n + h, yMin: lo - pad, yMax: hi + pad, pts: L.map((v, i) => [i + 1, v]),
+          lines: [{ pts: x.map((v, i) => [i + 1, v]), cls: "chart-fit" }, { pts: fc, cls: "chart-tangent" }],
+          tipAt: v => {
+            const t = Math.max(1, Math.round(v));
+            if (t > n) return [fmt(Ln + (t - n) * Bn), T(`previsão para o período ${t}`, `forecast for period ${t}`)];
+            return [fmt(L[t - 1]), T(`período ${t}: valor ${fmt(x[t - 1])}, tendência ${fmt(B[t - 1])}`, `period ${t}: value ${fmt(x[t - 1])}, trend ${fmt(B[t - 1])}`)];
+          },
+        },
+        steps: [
+          [T("Comece o nível no primeiro valor e a tendência na primeira diferença:", "Start the level at the first value and the trend at the first difference:"),
+            `L_1 = ${texNum(x[0])}, \\qquad T_1 = ${texNum(x[1])} - ${paren(x[0], texNum(x[0]))} = ${texNum(B[0])}`],
+          [T("A cada período, o nível mistura o valor novo com a previsão anterior (L + T), e a tendência mistura a última subida do nível com a tendência anterior:", "Each period, the level blends the new value with the previous forecast (L + T), and the trend blends the level's latest rise with the previous trend:"),
+            `\\begin{gathered}L_t = \\alpha\\,x_t + (1 - \\alpha)(L_{t-1} + T_{t-1}) \\\\ T_t = \\beta\\,(L_t - L_{t-1}) + (1 - \\beta)\\,T_{t-1} \\\\ ${ex.join(" \\\\ ")}${n > 3 ? " \\\\ \\vdots" : ""}\\end{gathered}`],
+          [T(`No último período, o nível e a tendência são:`, `In the last period, the level and the trend are:`),
+            `L_{${n}} ${approx(Ln)} ${tone(texNum(Ln), 2)}, \\qquad T_{${n}} ${approx(Bn)} ${tone(texNum(Bn), 3)}`],
+          [T(`Projete a reta ${h} ${h === 1 ? "período" : "períodos"} à frente:`, `Project the line ${h} ${h === 1 ? "period" : "periods"} ahead:`),
+            `\\hat{x}_{${n} + ${h}} = ${tone(texNum(Ln), 2)} + ${tone(texNum(h), 0)} \\cdot ${paren(Bn, tone(texNum(Bn), 3))} ${approx(F)} ${tone(texNum(F), 1)}`],
+        ],
+        note: T(`A previsão é uma reta que parte do nível atual e sobe ${fmt(Bn)} por período. O erro típico das previsões um passo à frente é ${fmt(rmse)}; pela <a href="${PAGE("suavizacao-exponencial")}?x=${encodeURIComponent(x.join(" "))}&amp;alpha=${alpha}">suavização exponencial simples</a>, com o mesmo α, seria ${fmt(rmseS)} — numa série com tendência, a simples fica sempre um passo atrás.`
+          + " β controla a rapidez com que a tendência se ajusta: perto de 0, ela quase não muda; perto de 1, segue cada oscilação. Projetada muito à frente, a reta cresce sem limite — por isso se usa às vezes uma tendência amortecida. Com sazonalidade, a extensão é a de Holt–Winters.",
+          `The forecast is a line starting at the current level and rising ${fmt(Bn)} per period. The typical one-step-ahead forecast error is ${fmt(rmse)}; with <a href="${PAGE("suavizacao-exponencial")}?x=${encodeURIComponent(x.join(" "))}&amp;alpha=${alpha}">simple exponential smoothing</a>, with the same α, it would be ${fmt(rmseS)} — on a series with a trend, the simple one is always a step behind.`
+          + " β controls how fast the trend adjusts: near 0, it hardly changes; near 1, it follows every wiggle. Projected far ahead, the line grows without limit — which is why a damped trend is sometimes used. With seasonality, the extension is Holt–Winters'."),
+      };
+    },
+
+    figurinhas({ N, k }) {
+      if (!Number.isInteger(N) || N < 2 || N > 100000) return { error: T("O álbum precisa ter um número inteiro de figurinhas entre 2 e 100.000.", "The album must have a whole number of stickers between 2 and 100,000.") };
+      if (!Number.isInteger(k) || k < 1 || k > N) return { error: T(`O pacote precisa ter um inteiro entre 1 e ${fmt(N)} figurinhas.`, `A pack must hold a whole number of stickers between 1 and ${fmt(N)}.`) };
+      // H[j] = 1 + 1/2 + … + 1/j.
+      const H = [0]; for (let j = 1; j <= N; j++) H.push(H[j - 1] + 1 / j);
+      let S2 = 0; for (let j = 1; j <= N; j++) S2 += 1 / (j * j);
+      const E = N * H[N], sd = Math.sqrt(N * N * S2 - E), packs = E / k;
+      const Ej = j => N * (H[N] - H[N - j]);
+      const half = Ej(Math.ceil(N / 2)), lastTen = E - Ej(Math.max(0, N - 10));
+      const step = Math.max(1, Math.round(N / 300));
+      const pts = []; for (let j = 0; j <= N; j += step) pts.push([j, Ej(j)]);
+      if (pts[pts.length - 1][0] !== N) pts.push([N, E]);
+      const sum = N <= 5 ? Array.from({ length: N }, (_, i) => (i ? `\\tfrac{1}{${i + 1}}` : "1")).join(" + ") : `1 + \\tfrac{1}{2} + \\tfrac{1}{3} + \\cdots + \\tfrac{1}{${texNum(N)}}`;
+      return {
+        result: `E[T] ${approx(E, 2)} ${tone(texNum(E, 0), 1)}\\ ${T("\\text{figurinhas}", "\\text{stickers}")}${k > 1 ? ` \\approx ${texNum(packs, 0)}\\ ${T("\\text{pacotes}", "\\text{packs}")}` : ""}`,
+        chart: {
+          type: "curve", label: T(`Figurinhas compradas, em média, até ter j diferentes, de 0 a ${fmt(N)}`, `Stickers bought, on average, until having j different ones, from 0 to ${fmt(N)}`),
+          xLabel: T("figurinhas diferentes já coladas · altura: compradas até lá, em média", "different stickers already in the album · height: bought by then, on average"),
+          xMin: 0, xMax: N, yMax: E, pts, marker: [Math.ceil(N / 2), half],
+          tipAt: v => { const j = Math.min(N, Math.max(0, Math.round(v))); return [fmt(Ej(j), 0), T(`compradas, em média, até ter ${fmt(j)} diferentes`, `bought, on average, until having ${fmt(j)} different ones`)]; },
+        },
+        steps: [
+          [T(`Com j figurinhas já coladas, a chance de a próxima ser nova é (N − j)/N, e a espera por ela é, em média, N/(N − j). Somando de j = 0 até ${fmt(N - 1)}:`, `With j stickers already in the album, the chance that the next one is new is (N − j)/N, and the wait for it is, on average, N/(N − j). Adding from j = 0 to ${fmt(N - 1)}:`),
+            `E[T] = \\dfrac{N}{N} + \\dfrac{N}{N - 1} + \\cdots + \\dfrac{N}{1} = ${tone(texNum(N), 2)} \\left(${tone(sum, 3)}\\right)`],
+          [T("A soma entre parênteses é o número harmônico, que cresce como ln N + 0,5772:", "The sum in brackets is the harmonic number, which grows like ln N + 0.5772:"),
+            `H_{${texNum(N)}} ${approx(H[N], 4)} ${tone(texNum(H[N], 4), 3)}, \\qquad \\ln ${texNum(N)} + 0{,}5772 \\approx ${texNum(Math.log(N) + 0.5772, 4)}`.replace("0{,}5772", T("0{,}5772", "0.5772"))],
+          [T("Multiplique:", "Multiply:"), `E[T] = ${tone(texNum(N), 2)} \\cdot ${tone(texNum(H[N], 4), 3)} ${approx(E, 2)} ${tone(texNum(E, 2), 1)}`],
+          ...(k > 1 ? [[T(`Em pacotes de ${fmt(k)}:`, `In packs of ${fmt(k)}:`), `\\dfrac{${texNum(E, 2)}}{${texNum(k)}} \\approx ${texNum(packs, 1)}`]] : []),
+        ],
+        note: T(`Para um álbum de ${fmt(N)}, a conta dá ${fmt(E, 0)} figurinhas, ${fmt(E / N, 2)} vezes o tamanho do álbum, com desvio padrão de cerca de ${fmt(sd, 0)}. A primeira metade sai rápido: ${fmt(half, 0)} figurinhas, em média. As últimas ${fmt(Math.min(10, N))} custam ${fmt(lastTen, 0)} — a última sozinha pede ${fmt(N)}, porque só 1 em ${fmt(N)} serve.`
+          + ` A curva mostra isso: plana no começo, quase vertical no fim. A conta supõe figurinhas igualmente comuns e ignora repetidas dentro do mesmo pacote. Na prática, trocar as repetidas muda tudo: com amigos completando juntos, cada repetida de um serve ao outro. É o mesmo raciocínio das <a href="${PAGE("distribuicao-geometrica")}">esperas da distribuição geométrica</a>, uma para cada figurinha nova.`,
+          `For an album of ${fmt(N)}, the sum gives ${fmt(E, 0)} stickers, ${fmt(E / N, 2)} times the album size, with a standard deviation of about ${fmt(sd, 0)}. The first half comes quickly: ${fmt(half, 0)} stickers, on average. The last ${fmt(Math.min(10, N))} cost ${fmt(lastTen, 0)} — the last one alone takes ${fmt(N)}, because only 1 in ${fmt(N)} will do.`
+          + ` The curve shows it: flat at the start, almost vertical at the end. The calculation assumes equally common stickers and ignores duplicates within a pack. In practice, swapping duplicates changes everything: with friends filling albums together, each one's duplicate serves another. It is the same reasoning as the <a href="${PAGE("distribuicao-geometrica")}">waits of the geometric distribution</a>, one for each new sticker.`),
+      };
+    },
+
+    inflacao({ i, v }) {
+      const n = i.length;
+      if (!n) return { error: T("Informe pelo menos uma taxa.", "Enter at least one rate.") };
+      if (n > 600) return { error: T("Use no máximo 600 taxas.", "Use at most 600 rates.") };
+      if (i.some(x => x <= -100)) return { error: T("Cada taxa precisa ser maior que −100%.", "Each rate must be greater than −100%.") };
+      if (v != null && !(v > 0)) return { error: T("O valor inicial precisa ser maior que zero.", "The starting value must be greater than zero.") };
+      const acc = []; let f = 1;
+      i.forEach(x => { f *= 1 + x / 100; acc.push((f - 1) * 100); });
+      const I = f - 1, soma = i.reduce((s, x) => s + x, 0) / 100;
+      const media = f ** (1 / n) - 1, perda = 1 - 1 / f;
+      const fat = n <= 6 ? i.map(x => `${texNum(1 + x / 100, 6)}`).join(" \\cdot ") : `${texNum(1 + i[0] / 100, 6)} \\cdot ${texNum(1 + i[1] / 100, 6)} \\cdots ${texNum(1 + i[n - 1] / 100, 6)}`;
+      const lo = Math.min(0, ...acc), hi = Math.max(0, ...acc);
+      return {
+        result: `I ${approx(I, 6)} ${tone(pctTex(I), 1)}`,
+        chart: {
+          type: "bars", label: T(`Inflação acumulada mês a mês, ao longo de ${n} ${n === 1 ? "período" : "períodos"}`, `Cumulative inflation period by period, over ${n} ${n === 1 ? "period" : "periods"}`),
+          xLabel: T("período · altura: a inflação acumulada até ele (%)", "period · height: the inflation accumulated up to it (%)"),
+          xs: acc.map((_, t) => t + 1), ys: acc, xMin: 0.5, xMax: n + 0.5, yMin: lo - (hi - lo) * 0.08, yMax: hi + (hi - lo) * 0.08 || 1,
+          hi: t => t === n,
+          tip: (t, y) => [`${fmt(y, 2)}%`, T(`acumulada até o período ${t}; no período: ${fmt(i[t - 1], 2)}%`, `accumulated up to period ${t}; in the period: ${fmt(i[t - 1], 2)}%`)],
+        },
+        steps: [
+          [T("Transforme cada taxa num fator: 1 mais a taxa em decimal.", "Turn each rate into a factor: 1 plus the rate as a decimal."),
+            n <= 6 ? i.map(x => `${texNum(x)}\\% \\to ${tone(texNum(1 + x / 100, 6), 2)}`).join(", \\quad ") : `${texNum(i[0])}\\% \\to ${tone(texNum(1 + i[0] / 100, 6), 2)}, \\quad \\ldots`],
+          [T("Multiplique os fatores e tire 1:", "Multiply the factors and subtract 1:"),
+            `I = ${fat} - 1 ${approx(I, 6)} ${tone(pctTex(I), 1)}`],
+          [T("A taxa média por período é a média geométrica dos fatores, menos 1:", "The average rate per period is the geometric mean of the factors, minus 1:"),
+            `\\sqrt[${n}]{${texNum(f, 6)}} - 1 ${approx(media, 6)} ${pctTex(media)}`],
+          ...(v != null ? [[T("Corrija o valor inicial:", "Adjust the starting value:"),
+            `${texNum(v)} \\cdot ${texNum(f, 6)} ${approx(v * f, 2)} ${tone(texNum(v * f, 2), 1)}`]] : []),
+        ],
+        note: T(`Em ${n} ${n === 1 ? "período" : "períodos"}, os preços subiram ${fmt(I * 100, 2)}%. Somar as taxas daria ${fmt(soma * 100, 2)}% — ${Math.abs(I - soma) < 5e-5 ? "praticamente o mesmo aqui" : I > soma ? "menos, porque a soma esquece que cada aumento incide sobre preços que já tinham subido" : "diferente, porque cada taxa incide sobre a base já alterada pelas anteriores"}: é o mesmo juro sobre juro dos <a href="${PAGE("juros-aportes")}">juros compostos</a>.`
+          + ` O poder de compra caiu ${fmt(perda * 100, 2)}%: o que custava 100 passou a custar ${fmt(100 * f, 2)}, e 100 compram hoje o que ${fmt(100 / f, 2)} compravam antes.${v != null ? ` Os ${fmt(v)} do começo equivalem a ${fmt(v * f, 2)} no fim.` : ""} A taxa média por período, ${fmt(media * 100, 4)}%, é uma <a href="${PAGE("media-geometrica")}">média geométrica</a>, não a aritmética.`,
+          `Over ${n} ${n === 1 ? "period" : "periods"}, prices rose ${fmt(I * 100, 2)}%. Adding the rates would give ${fmt(soma * 100, 2)}% — ${Math.abs(I - soma) < 5e-5 ? "practically the same here" : I > soma ? "less, because the sum forgets that each rise applies to prices that had already gone up" : "different, because each rate applies to a base already changed by the previous ones"}: it is the same interest on interest as in <a href="${PAGE("juros-aportes")}">compound interest</a>.`
+          + ` Purchasing power fell ${fmt(perda * 100, 2)}%: what cost 100 now costs ${fmt(100 * f, 2)}, and 100 now buys what ${fmt(100 / f, 2)} bought before.${v != null ? ` The starting ${fmt(v)} is worth ${fmt(v * f, 2)} at the end.` : ""} The average rate per period, ${fmt(media * 100, 4)}%, is a <a href="${PAGE("media-geometrica")}">geometric mean</a>, not the arithmetic one.`),
+      };
+    },
+
+    entropia({ p }) {
+      const k = p.length;
+      if (k < 2) return { error: T("Informe pelo menos duas probabilidades ou contagens.", "Enter at least two probabilities or counts.") };
+      if (k > 200) return { error: T("Use no máximo 200 valores.", "Use at most 200 values.") };
+      if (p.some(x => x < 0)) return { error: T("Probabilidades e contagens não podem ser negativas.", "Probabilities and counts cannot be negative.") };
+      const tot = p.reduce((s, x) => s + x, 0);
+      if (tot <= 0) return { error: T("Pelo menos um valor precisa ser maior que zero.", "At least one value must be greater than zero.") };
+      const norm = Math.abs(tot - 1) > 1e-9;
+      const q = p.map(x => x / tot);
+      const c = q.map(x => (x > 0 ? -x * Math.log2(x) : 0));
+      const Hb = c.reduce((s, x) => s + x, 0), Hmax = Math.log2(k), ef = Hb / Hmax;
+      const terms = q.slice(0, 6).map(x => (x > 0 ? `${tone(texNum(x, 4), 2)} \\log_2 ${texNum(x, 4)}` : "0")).join(" + ") + (k > 6 ? " + \\cdots" : "");
+      const igual = q.every(x => Math.abs(x - 1 / k) < 1e-9);
+      return {
+        result: `H ${approx(Hb, 6)} ${tone(texNum(Hb, 4), 1)}\\ \\text{bits}`,
+        chart: {
+          type: "bars", label: T(`As ${k} probabilidades e quanto cada uma contribui para a entropia`, `The ${k} probabilities and how much each one adds to the entropy`),
+          xLabel: T("resultado i · altura: a probabilidade", "outcome i · height: the probability"),
+          xs: q.map((_, i) => i + 1), ys: q, xMin: 0.5, xMax: k + 0.5, yMax: Math.max(...q),
+          hi: () => false,
+          tip: (i, y) => [fmt(y, 4), T(`resultado ${i}: surpresa −log₂ p = ${y > 0 ? fmt(-Math.log2(y), 3) : "∞"} bits; contribui ${fmt(c[i - 1], 4)}`, `outcome ${i}: surprise −log₂ p = ${y > 0 ? fmt(-Math.log2(y), 3) : "∞"} bits; adds ${fmt(c[i - 1], 4)}`)],
+        },
+        steps: [
+          ...(norm ? [[T("Os valores não somam 1: trate-os como contagens e divida cada um pelo total.", "The values don't add up to 1: treat them as counts and divide each by the total."),
+            `p_i = \\dfrac{n_i}{${texNum(tot)}} \\;\\to\\; ${q.slice(0, 6).map(x => texNum(x, 4)).join(",\\ ")}${k > 6 ? ",\\ \\ldots" : ""}`]] : []),
+          [T("Para cada resultado, multiplique a probabilidade pelo log na base 2 dela, some e troque o sinal:", "For each outcome, multiply the probability by its base-2 log, add up and flip the sign:"),
+            `H = -\\left(${terms}\\right) ${approx(Hb, 6)} ${tone(texNum(Hb, 4), 1)}`],
+          [T(`Compare com o máximo para ${k} resultados, quando são todos igualmente prováveis:`, `Compare with the maximum for ${k} outcomes, when they are all equally likely:`),
+            `H_{\\max} = \\log_2 ${k} ${approx(Hmax, 4)} ${texNum(Hmax, 4)}, \\qquad \\dfrac{H}{H_{\\max}} ${approx(ef, 4)} ${pctTex(ef)}`],
+        ],
+        note: T(`A entropia é a surpresa média: um resultado de probabilidade p surpreende −log₂ p bits, e H é o <a href="${PAGE("valor-esperado")}">valor esperado</a> dessa surpresa. Aqui, ${fmt(Hb, 4)} bits — em média, ${fmt(Hb, 2)} perguntas de sim ou não bem escolhidas bastam para descobrir o resultado, e é o mínimo de bits por símbolo que uma compressão sem perdas consegue.`
+          + ` ${igual ? `Com ${k} resultados igualmente prováveis, a entropia é a máxima possível: nenhuma pergunta é mais esperta que as outras.` : `É ${fmt(ef * 100, 1)}% do máximo, log₂ ${k} ≈ ${fmt(Hmax, 3)} bits: quanto mais desigual a distribuição, mais previsível o resultado, e menor a entropia.`}`
+          + ` Uma moeda honesta tem 1 bit; uma viciada, menos; um resultado certo, 0. Em logaritmo natural, a mesma conta dá ${fmt(Hb * Math.LN2, 4)} nats.`,
+          `Entropy is the average surprise: an outcome of probability p surprises −log₂ p bits, and H is the <a href="${PAGE("valor-esperado")}">expected value</a> of that surprise. Here, ${fmt(Hb, 4)} bits — on average, ${fmt(Hb, 2)} well-chosen yes-or-no questions are enough to find out the outcome, and it is the fewest bits per symbol any lossless compression can achieve.`
+          + ` ${igual ? `With ${k} equally likely outcomes, the entropy is the highest possible: no question is cleverer than the others.` : `It is ${fmt(ef * 100, 1)}% of the maximum, log₂ ${k} ≈ ${fmt(Hmax, 3)} bits: the more uneven the distribution, the more predictable the outcome, and the lower the entropy.`}`
+          + ` A fair coin has 1 bit; a biased one, less; a certain outcome, 0. With the natural log, the same calculation gives ${fmt(Hb * Math.LN2, 4)} nats.`),
       };
     },
 

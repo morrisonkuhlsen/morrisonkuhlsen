@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Alocação Proporcional — Interativa</title>
+  <meta name="description" content="Alocação proporcional na amostragem estratificada explicada termo a termo, com calculadora, gráfico e passo a passo: cada estrato recebe a sua fatia da amostra.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/alocacao-proporcional.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/alocacao-proporcional.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/proportional-allocation.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/alocacao-proporcional.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/alocacao-proporcional.html">
+  <meta property="og:title" content="Alocação Proporcional — Interativa">
+  <meta property="og:description" content="Alocação proporcional na amostragem estratificada explicada termo a termo, com calculadora, gráfico e passo a passo: cada estrato recebe a sua fatia da amostra.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Alocação Proporcional — Interativa">
+  <meta name="twitter:description" content="Alocação proporcional na amostragem estratificada explicada termo a termo, com calculadora, gráfico e passo a passo: cada estrato recebe a sua fatia da amostra.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/proportional-allocation.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Alocação Proporcional</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Alocação Proporcional interativa">
+        <span class="part" data-part="nh_pr" data-tone="1" data-tex="n_h"></span>
+        <span class="op">=</span>
+        <span class="part" data-part="n_pr" data-tone="2" data-tex="n"></span>
+        <span class="op">·</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="Nh_pr" data-tone="3" data-tex="N_h"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="N_pr" data-tone="4" data-tex="N"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?n=&Nh=. -->
+    <section class="calc" data-calc="propal" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma pesquisa com 200 alunos numa universidade com 5.000 alunos de humanas, 3.000 de exatas e 2.000 de biológicas. Quantos entrevistar em cada área? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Amostra total <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="200" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="3">
+          <span>Tamanho de cada estrato <i>N<sub>h</sub></i></span>
+          <input name="Nh" type="text" inputmode="decimal" value="5000 3000 2000" data-list autocomplete="off" spellcheck="false">
+          <small>Separados por espaço ou ponto e vírgula.</small>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="nh_pr" data-tone="1">Amostra do Estrato (nₕ)</dt>
+          <dd>Quantas unidades sortear dentro do estrato h.</dd>
+          <dt data-part="n_pr" data-tone="2">Amostra Total (n)</dt>
+          <dd>O total da pesquisa, a ser repartido entre os estratos.</dd>
+          <dt data-part="Nh_pr" data-tone="3">Tamanho do Estrato (Nₕ)</dt>
+          <dd>Quantas unidades da população estão no estrato h.</dd>
+          <dt data-part="N_pr" data-tone="4">População (N)</dt>
+          <dd>A soma de todos os estratos. Nₕ/N é a fatia do estrato na população — e passa a ser a fatia dele na amostra.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="amostragem-sistematica.html" rel="prev"><span>Anterior</span>Amostragem Sistemática</a>
+      <a class="pager-next" href="neyman-allocation.html" rel="next"><span>Próxima</span>Alocação de Neyman</a>
+    </nav>
+  </main>
+</body>
+</html>
