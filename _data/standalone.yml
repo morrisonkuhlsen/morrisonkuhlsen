@@ -936,7 +936,7 @@
 
 - title: "Cálculo Intuitivo"
   url: "/calculo/"
-  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada e a tabela de derivadas, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
+  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas e máximos e mínimos, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
   tags: "cálculo intuitivo derivada limite aulas lições"
   lang: pt
 
@@ -962,4 +962,10 @@
   url: "/calculo/tabela-derivadas.html"
   description: "Tabela de derivadas explicada: constante, variável, potência, raiz, eˣ, aˣ, ln, seno, cosseno, tangente e as regras da soma, do produto, do quociente e da cadeia, cada uma com a intuição e um teste com os seus números."
   tags: "tabela de derivadas regras de derivação constante potência exponencial logaritmo seno cosseno produto quociente cadeia"
+  lang: pt
+
+- title: "Máximos e Mínimos — Onde a Inclinação Zera"
+  url: "/calculo/maximos-minimos.html"
+  description: "Máximos e mínimos explicados de forma intuitiva: a caixa de maior volume, pontos críticos, segunda derivada, a receita da otimização e por que a média e a mediana são mínimos, com gráficos interativos e exercícios."
+  tags: "máximos e mínimos otimização pontos críticos segunda derivada média mediana mínimos quadrados cálculo"
   lang: pt

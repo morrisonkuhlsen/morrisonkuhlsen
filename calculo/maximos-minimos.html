@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Máximos e Mínimos — Onde a Inclinação Zera</title>
+  <meta name="description" content="Máximos e mínimos explicados de forma intuitiva: a caixa de maior volume, pontos críticos, segunda derivada, a receita da otimização e por que a média e a mediana são mínimos, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/maximos-minimos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/maximos-minimos.html">
+  <meta property="og:title" content="Máximos e Mínimos — Onde a Inclinação Zera">
+  <meta property="og:description" content="Máximos e mínimos explicados de forma intuitiva: a caixa de maior volume, pontos críticos, segunda derivada, a receita da otimização e por que a média e a mediana são mínimos, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Máximos e Mínimos — Onde a Inclinação Zera">
+  <meta name="twitter:description" content="Máximos e mínimos explicados de forma intuitiva: a caixa de maior volume, pontos críticos, segunda derivada, a receita da otimização e por que a média e a mediana são mínimos, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="maximos-minimos.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Máximos e Mínimos — Onde a Inclinação Zera</h1>
+    <p class="page-lede">No ponto mais alto de um morro, você não está subindo nem descendo: o chão está <strong>plano</strong>. Com curvas é igual — no topo e no fundo, a tangente fica horizontal e a <a href="derivada.html">derivada</a> vale zero. É assim que o cálculo acha o melhor de alguma coisa: a maior caixa, o menor custo, a estimativa que menos erra.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#caixa">A maior caixa</a>
+      <a href="#topo">Topo ou fundo?</a>
+      <a href="#receita">A receita</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="f'(c) = 0 \quad \text{nos topos e fundos de uma curva lisa}"></span>
+
+    <!-- 1. A caixa de papelão; estado em ?L=&x=. -->
+    <section class="calc intro" id="caixa" aria-labelledby="caixa-title">
+      <h2 id="caixa-title">A maior caixa</h2>
+      <p class="calc-lede">De uma folha quadrada de papelão de lado <i>L</i>, corte um quadrado de lado <i>x</i> em cada canto e dobre as abas: vira uma caixa aberta. Corte pouco e a caixa fica rasa; corte muito e ela fica estreita. Que corte dá o maior volume?</p>
+      <div class="vars box-vars"></div>
+      <div class="box-figs">
+        <div class="box-fig box-sheet" aria-hidden="true"></div>
+        <div class="box-fig box-3d" aria-hidden="true"></div>
+      </div>
+      <div class="plot-box box-plot"></div>
+      <p class="readout box-out" aria-live="polite"></p>
+      <div class="calc-examples"><button type="button" class="box-best">Ir para o máximo</button></div>
+      <div class="intro-text box-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Classificar pontos críticos; estado em ?q=&p=. -->
+    <section class="calc intro" id="topo" aria-labelledby="topo-title">
+      <h2 id="topo-title">Topo, fundo ou nenhum dos dois?</h2>
+      <p class="calc-lede">Derivada zero marca os candidatos — os <strong>pontos críticos</strong>. Para saber o que cada um é, olhe a <strong>segunda derivada</strong>, <i>f</i>″: ela diz se a curva está virada para cima, como um sorriso, ou para baixo. Arraste o ponto pela curva.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-q="cubo" aria-pressed="true">x³ − 3x</button>
+        <button type="button" data-q="w" aria-pressed="false">x⁴ − 2x²</button>
+        <button type="button" data-q="sela" aria-pressed="false">x³</button>
+        <button type="button" data-q="gauss" aria-pressed="false">e^(−x²)</button>
+      </div>
+      <div class="vars topo-vars"></div>
+      <div class="plot-box topo-plot"></div>
+      <p class="readout topo-out" aria-live="polite"></p>
+      <div class="intro-text topo-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="receita" aria-labelledby="receita-title">
+      <h2 id="receita-title">A receita</h2>
+      <ol>
+        <li><strong>Escreva o que quer otimizar</strong> como função de uma variável. Na caixa: V(x) = x(L − 2x)².</li>
+        <li><strong>Derive e iguale a zero.</strong> V′(x) = (L − 2x)(L − 6x) = 0 dá x = L/2 ou x = L/6.</li>
+        <li><strong>Classifique.</strong> Pela segunda derivada (negativa: máximo; positiva: mínimo) ou pelo sinal de f′ antes e depois do ponto.</li>
+        <li><strong>Confira as pontas.</strong> Num intervalo fechado, o melhor pode estar na borda. Na caixa, x = 0 e x = L/2 dão volume zero; o máximo é em <strong>x = L/6</strong>.</li>
+      </ol>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="f'(c) = 0,\ f''(c) &lt; 0"></span>
+          <p><strong>Máximo local:</strong> a curva está virada para baixo, como um morro.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="f'(c) = 0,\ f''(c) &gt; 0"></span>
+          <p><strong>Mínimo local:</strong> virada para cima, como um vale.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="f'(c) = 0,\ f''(c) = 0"></span>
+          <p><strong>Inconclusivo:</strong> pode ser topo, fundo ou um patamar, como x³ em 0. Olhe o sinal de f′ dos dois lados.</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>Local ou global?</strong> Um máximo local é o mais alto da vizinhança, não necessariamente da curva toda: x³ − 3x tem um topo em x = −1, mas a curva passa dele mais adiante. Para o melhor de todos, compare todos os candidatos — pontos críticos e bordas.
+      </div>
+    </section>
+
+    <!-- 3. Média e mediana como mínimos; estado em ?c=. -->
+    <section class="calc intro" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística: a média e a mediana são mínimos</h2>
+      <p class="calc-lede">Com os dados 1, 2, 3, 4 e 20, procure um número <i>c</i> que fique “perto” de todos. Medindo a distância pelos <strong>quadrados</strong>, Σ(xᵢ − c)², o melhor <i>c</i> é a <strong>média</strong>; medindo pelos <strong>valores absolutos</strong>, Σ|xᵢ − c|, é a <strong>mediana</strong>. Arraste <i>c</i> e veja as duas somas.</p>
+      <div class="vars est-vars"></div>
+      <div class="plot-box est-sq"></div>
+      <p class="plot-caption">soma dos quadrados dos desvios, Σ(xᵢ − c)²</p>
+      <div class="plot-box est-abs"></div>
+      <p class="plot-caption">soma dos desvios absolutos, Σ|xᵢ − c|</p>
+      <p class="readout est-out" aria-live="polite"></p>
+      <div class="intro-text est-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="mais-title">
+      <h2 id="mais-title">Mais otimização na estatística</h2>
+      <p><strong>Regressão.</strong> A reta da <a href="/formulas/regressao-linear.html">regressão linear</a> é a que minimiza a soma dos quadrados dos resíduos. Derivando em relação à inclinação e ao intercepto e igualando a zero, saem as fórmulas de b₀ e b₁.</p>
+      <p><strong>Máxima verossimilhança.</strong> O valor de um parâmetro que torna os dados mais prováveis é um máximo. Com k sucessos em n tentativas, maximizar pᵏ(1 − p)ⁿ⁻ᵏ dá p = k/n — a proporção observada, como se espera.</p>
+      <p><strong>Quando não há fórmula,</strong> o computador procura o mínimo andando ladeira abaixo, guiado pela derivada, ou acha onde ela zera pelo <a href="/formulas/metodo-newton.html">método de Newton</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Ache o ponto mais baixo da parábola y = x² − 8x + 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>y′ = 2x − 8 = 0 dá <strong>x = 4</strong>. Como y″ = 2 > 0, é um mínimo, em y = 16 − 32 + 3 = −13.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Com 40 m de cerca, qual o retângulo de maior área?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Lados x e 20 − x: área A = x(20 − x) = 20x − x². A′ = 20 − 2x = 0 dá x = 10: o melhor retângulo é o <strong>quadrado de 10 m</strong>, com 100 m².</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Classifique os pontos críticos de f(x) = x³ − 12x.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>f′ = 3x² − 12 = 0 em x = ±2. f″ = 6x: em x = 2, f″ = 12 > 0, <strong>mínimo</strong>; em x = −2, f″ = −12 < 0, <strong>máximo</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> f(x) = x³ tem derivada zero em x = 0. É máximo ou mínimo?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Nenhum dos dois. f′ = 3x² é positiva dos dois lados de 0: a função sobe, dá uma pausa e continua subindo. Derivada zero é necessária para um topo ou fundo, mas <strong>não basta</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Para os dados 2, 4, 9, que número c deixa a soma (2 − c)² + (4 − c)² + (9 − c)² a menor possível?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Derivando: −2(2 − c) − 2(4 − c) − 2(9 − c) = 0, ou seja, 15 − 3c = 0 e <strong>c = 5</strong> — a média dos três. É por isso que a média é a estimativa de “mínimos quadrados”.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="tabela-derivadas.html" rel="prev"><span>Anterior</span>Tabela de Derivadas</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -103,3 +103,49 @@
 .next-list li + li {
   margin-top: .3rem;
 }
+
+/* A caixa de papelão: a folha com os cortes e a caixa montada, lado a lado. */
+.box-figs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem 2rem;
+  margin-top: .6rem;
+}
+
+.box-fig {
+  width: min(200px, 42vw);
+}
+
+.box-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.box-face {
+  fill: var(--tone-1);
+  fill-opacity: .14;
+  stroke: var(--tone-1);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.box-face.is-back {
+  fill-opacity: .06;
+  stroke-opacity: .5;
+}
+
+.box-cut {
+  fill: var(--surface);
+  stroke: var(--tone-4);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.box-fold {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+}
