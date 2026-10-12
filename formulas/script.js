@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "matriz-inversa-2x2": "inverse-2x2-matrix", "covariancia": "covariance", "entropia-shannon": "shannon-entropy", "logaritmo-mudanca-base": "logarithm-change-of-base",
     "neyman-allocation": "neyman-allocation", "juros-aportes": "compound-interest-contributions", "media-geometrica": "geometric-mean",
     "teorema-bayes": "bayes-theorem", "distribuicao-binomial": "binomial-distribution",
     "correcao-populacao-finita": "finite-population-correction", "coeficiente-pearson": "pearson-correlation",
@@ -3763,6 +3764,292 @@
           `Entropy is the average surprise: an outcome of probability p surprises −log₂ p bits, and H is the <a href="${PAGE("valor-esperado")}">expected value</a> of that surprise. Here, ${fmt(Hb, 4)} bits — on average, ${fmt(Hb, 2)} well-chosen yes-or-no questions are enough to find out the outcome, and it is the fewest bits per symbol any lossless compression can achieve.`
           + ` ${igual ? `With ${k} equally likely outcomes, the entropy is the highest possible: no question is cleverer than the others.` : `It is ${fmt(ef * 100, 1)}% of the maximum, log₂ ${k} ≈ ${fmt(Hmax, 3)} bits: the more uneven the distribution, the more predictable the outcome, and the lower the entropy.`}`
           + ` A fair coin has 1 bit; a biased one, less; a certain outcome, 0. With the natural log, the same calculation gives ${fmt(Hb * Math.LN2, 4)} nats.`),
+      };
+    },
+
+    reta({ x1, y1, x2, y2, x }) {
+      if (x1 === x2) return { error: T(y1 === y2 ? "Os dois pontos são o mesmo: por um ponto só passam infinitas retas." : "Os dois pontos têm o mesmo x: a reta é vertical, x = " + fmt(x1) + ", e não tem inclinação definida.",
+        y1 === y2 ? "The two points are the same: infinitely many lines pass through a single point." : "The two points have the same x: the line is vertical, x = " + fmt(x1) + ", and has no defined slope.") };
+      const dy = y2 - y1, dx = x2 - x1, m = dy / dx, b = y1 - m * x1;
+      const f = t => m * t + b;
+      const xs = [x1, x2, ...(x != null ? [x] : []), 0];
+      let lo = Math.min(...xs), hi = Math.max(...xs); const pad = (hi - lo) * 0.15 || 1; lo -= pad; hi += pad;
+      const ys = [f(lo), f(hi), y1, y2, 0];
+      const yl = Math.min(...ys), yh = Math.max(...ys), yp = (yh - yl) * 0.1 || 1;
+      const M = tone(texNum(m, 6), 1), B = tone(texNum(b, 6), 4);
+      const eqTex = `y = ${m === 0 ? "" : `${M}\\,x`} ${m === 0 ? B : b < 0 ? `- ${tone(texNum(-b, 6), 4)}` : `+ ${B}`}`;
+      const eqTxt = `y = ${m === 0 ? fmt(b, 6) : `${fmt(m, 6)}x ${b < 0 ? "−" : "+"} ${fmt(Math.abs(b), 6)}`}`;
+      const steps = [
+        [T("A inclinação é quanto y sobe dividido por quanto x anda entre os dois pontos:", "The slope is how much y rises divided by how far x moves between the two points:"),
+          `m = \\dfrac{${texNum(y2)} - ${paren(y1, texNum(y1))}}{${texNum(x2)} - ${paren(x1, texNum(x1))}} = \\dfrac{${tone(texNum(dy, 6), 2)}}{${tone(texNum(dx, 6), 3)}} ${approx(m, 6)} ${M}`],
+        [T("O intercepto sai de pôr um dos pontos na equação y = mx + b:", "The intercept comes from putting one of the points into y = mx + b:"),
+          `b = y_1 - m\\,x_1 = ${texNum(y1)} - ${paren(m, texNum(m, 6))} \\cdot ${paren(x1, texNum(x1))} ${approx(b, 6)} ${B}`],
+        [T("A equação da reta:", "The line's equation:"), eqTex],
+      ];
+      if (x != null) steps.push([T(`Em x = ${fmt(x)}:`, `At x = ${fmt(x)}:`), `y = ${texNum(m, 6)} \\cdot ${paren(x, texNum(x))} ${b < 0 ? "-" : "+"} ${texNum(Math.abs(b), 6)} ${approx(f(x), 6)} ${tone(texNum(f(x), 6), 0)}`]);
+      return {
+        result: eqTex + (x != null ? `, \\qquad y(${texNum(x)}) ${approx(f(x), 6)} ${texNum(f(x), 6)}` : ""),
+        chart: {
+          type: "curve", label: T(`A reta ${eqTxt} pelos pontos (${fmt(x1)}, ${fmt(y1)}) e (${fmt(x2)}, ${fmt(y2)})`, `The line ${eqTxt} through the points (${fmt(x1)}, ${fmt(y1)}) and (${fmt(x2)}, ${fmt(y2)})`),
+          xLabel: T("x · tracejado: o quanto x anda e o quanto y sobe entre os pontos", "x · dashed: how far x moves and how much y rises between the points"),
+          xMin: lo, xMax: hi, yMin: yl - yp, yMax: yh + yp, pts: [[lo, f(lo)], [hi, f(hi)]],
+          lines: [{ pts: [[x1, y1], [x2, y1], [x2, y2]], cls: "chart-ref" }],
+          marker: x != null ? [x, f(x)] : [x2, y2],
+          tipAt: t => [fmt(f(t), 4), `x = ${fmt(t, 3)}`],
+        },
+        steps,
+        note: T(`A reta sobe ${fmt(m, 4)} a cada unidade de x${m < 0 ? " — como m é negativo, na verdade desce" : ""}, e corta o eixo y em ${fmt(b, 4)}, o valor quando x = 0.`
+          + " É o modelo de tudo que tem uma parte fixa e uma parte proporcional: a bandeirada e o preço por quilômetro, a assinatura e o preço por minuto."
+          + ` A inclinação entre dois pontos de uma curva qualquer é a da reta secante; aproximando os pontos até coincidirem, ela vira a <a href="${PAGE("derivada")}">derivada</a>. Com muitos pontos que não caem todos numa reta, a melhor reta é a da <a href="${PAGE("regressao-linear")}">regressão linear</a>.`,
+          `The line rises ${fmt(m, 4)} for each unit of x${m < 0 ? " — since m is negative, it actually falls" : ""}, and crosses the y axis at ${fmt(b, 4)}, the value when x = 0.`
+          + " It is the model of anything with a fixed part and a proportional part: a taxi's flag fare and price per kilometre, a subscription and a price per minute."
+          + ` The slope between two points of any curve is that of the secant line; bringing the points together until they meet turns it into the <a href="${PAGE("derivada")}">derivative</a>. With many points that don't all lie on a line, the best line is the <a href="${PAGE("regressao-linear")}">linear regression</a> one.`),
+      };
+    },
+
+    cramer({ a1, b1, c1, a2, b2, c2 }) {
+      if ((a1 === 0 && b1 === 0) || (a2 === 0 && b2 === 0)) return { error: T("Em cada equação, a ou b precisa ser diferente de zero.", "In each equation, a or b must be nonzero.") };
+      const D = a1 * b2 - a2 * b1, Dx = c1 * b2 - c2 * b1, Dy = a1 * c2 - a2 * c1;
+      const det = (p, q, r, s) => `\\begin{vmatrix} ${texNum(p)} & ${texNum(q)} \\\\ ${texNum(r)} & ${texNum(s)} \\end{vmatrix}`;
+      const sing = Math.abs(D) < 1e-12;
+      const sx = sing ? 0 : Dx / D, sy = sing ? 0 : Dy / D;
+      // Cada equação vira uma reta; com b = 0, é vertical.
+      // O trecho de cada reta dentro do quadro (o gráfico descarta pontos fora dele).
+      const seg = (a, b, c, lo, hi, ylo, yhi) => {
+        if (b === 0) return [[c / a, ylo], [c / a, yhi]];
+        let x0 = lo, x1 = hi;
+        if (a !== 0) { const p = (c - b * ylo) / a, q = (c - b * yhi) / a; x0 = Math.max(lo, Math.min(p, q)); x1 = Math.min(hi, Math.max(p, q)); }
+        return Array.from({ length: 41 }, (_, k) => { const x = x0 + (x1 - x0) * k / 40; return [x, (c - a * x) / b]; });
+      };
+      const R = sing ? 6 : Math.max(5, Math.abs(sx) * 1.6, Math.abs(sy) * 1.6);
+      const cx = sing ? 0 : sx, cy = sing ? 0 : sy;
+      const ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      const xMin = cx - R * ratio / 1.6, xMax = cx + R * ratio / 1.6, yMin = cy - R / 1.6, yMax = cy + R / 1.6;
+      const eqn = (a, b, c) => {
+        const co = v => (v === 1 ? "" : v === -1 ? "-" : texNum(v));
+        const t1 = a ? `${co(a)}x` : "", t2 = b ? `${co(Math.abs(b))}y` : "";
+        return `${t1}${t1 && t2 ? ` ${b < 0 ? "-" : "+"} ${t2}` : t2 ? `${b < 0 ? "-" : ""}${t2}` : ""} = ${texNum(c)}`;
+      };
+      const sys = `\\begin{cases} ${eqn(a1, b1, c1)} \\\\ ${eqn(a2, b2, c2)} \\end{cases}`;
+      const chart = {
+        type: "curve", height: 280,
+        label: T("As duas retas do sistema" + (sing ? "" : `, que se cruzam em (${fmt(sx, 4)}, ${fmt(sy, 4)})`), "The system's two lines" + (sing ? "" : `, crossing at (${fmt(sx, 4)}, ${fmt(sy, 4)})`)),
+        xLabel: T("colorida: a primeira equação · escura: a segunda · o ponto: a solução", "colored: the first equation · dark: the second · the dot: the solution"),
+        xMin, xMax, yMin, yMax, pts: seg(a1, b1, c1, xMin, xMax, yMin, yMax),
+        lines: [{ pts: seg(a2, b2, c2, xMin, xMax, yMin, yMax), cls: "chart-fit" }],
+        hlines: [{ y: 0, cls: "chart-ref" }],
+        marker: sing ? null : [sx, sy],
+      };
+      const steps = [
+        [T("Calcule o determinante dos coeficientes:", "Compute the determinant of the coefficients:"),
+          `D = ${det(a1, b1, a2, b2)} = ${paren(a1, texNum(a1))} \\cdot ${paren(b2, texNum(b2))} - ${paren(b1, texNum(b1))} \\cdot ${paren(a2, texNum(a2))} = ${tone(texNum(D, 6), 3)}`],
+      ];
+      if (sing) {
+        const same = Math.abs(Dx) < 1e-12 && Math.abs(Dy) < 1e-12;
+        steps.push([T("Com D = 0, as retas são paralelas. Veja se são a mesma reta:", "With D = 0, the lines are parallel. Check whether they are the same line:"),
+          `D_x = ${texNum(Dx, 6)}, \\qquad D_y = ${texNum(Dy, 6)}`]);
+        return {
+          result: same ? T("\\text{infinitas soluções}", "\\text{infinitely many solutions}") : T("\\text{nenhuma solução}", "\\text{no solution}"),
+          chart, steps,
+          note: same ? T("As duas equações descrevem a mesma reta — uma é múltipla da outra. Todos os pontos dela resolvem o sistema: há infinitas soluções, e falta uma informação nova para fixar uma só.", "The two equations describe the same line — one is a multiple of the other. Every point on it solves the system: there are infinitely many solutions, and a new piece of information is missing to pin down one.")
+            : T("As retas são paralelas e distintas: nunca se cruzam, e o sistema não tem solução. As equações se contradizem.", "The lines are parallel and distinct: they never cross, and the system has no solution. The equations contradict each other."),
+        };
+      }
+      steps.push(
+        [T("Troque a coluna de x pelos termos independentes:", "Replace the x column with the constants:"),
+          `D_x = ${det(c1, b1, c2, b2)} = ${tone(texNum(Dx, 6), 2)}`],
+        [T("Troque a coluna de y pelos termos independentes:", "Replace the y column with the constants:"),
+          `D_y = ${det(a1, c1, a2, c2)} = ${tone(texNum(Dy, 6), 5)}`],
+        [T("Divida cada um por D:", "Divide each by D:"),
+          `x = \\dfrac{${tone(texNum(Dx, 6), 2)}}{${tone(texNum(D, 6), 3)}} ${approx(sx, 6)} ${tone(texNum(sx, 6), 1)}, \\qquad y = \\dfrac{${tone(texNum(Dy, 6), 5)}}{${tone(texNum(D, 6), 3)}} ${approx(sy, 6)} ${tone(texNum(sy, 6), 4)}`],
+      );
+      return {
+        result: `${sys} \\;\\Rightarrow\\; x ${approx(sx, 6)} ${tone(texNum(sx, 6), 1)}, \\quad y ${approx(sy, 6)} ${tone(texNum(sy, 6), 4)}`,
+        chart, steps,
+        note: T(`Cada equação é uma reta, e a solução é o ponto onde elas se cruzam: (${fmt(sx, 4)}, ${fmt(sy, 4)}). Confira: ${fmt(a1)}·${fmt(sx, 4)} + ${fmt(b1)}·${fmt(sy, 4)} = ${fmt(a1 * sx + b1 * sy, 4)}.`
+          + " Quando D = 0, as retas são paralelas: não se cruzam (nenhuma solução) ou são a mesma (infinitas). Quanto mais perto de zero está D, mais as retas se parecem com paralelas, e um erro pequeno nos coeficientes desloca muito a solução."
+          + ` A regra de Cramer é prática em 2 × 2 e 3 × 3; em sistemas grandes, usa-se eliminação. É o mesmo sistema que a <a href="${PAGE("matriz-inversa-2x2")}">matriz inversa</a> resolve.`,
+          `Each equation is a line, and the solution is the point where they cross: (${fmt(sx, 4)}, ${fmt(sy, 4)}). Check: ${fmt(a1)}·${fmt(sx, 4)} + ${fmt(b1)}·${fmt(sy, 4)} = ${fmt(a1 * sx + b1 * sy, 4)}.`
+          + " When D = 0, the lines are parallel: they don't cross (no solution) or they are the same (infinitely many). The closer D is to zero, the more the lines look parallel, and a small error in the coefficients moves the solution a lot."
+          + ` Cramer's rule is handy for 2 × 2 and 3 × 3; for large systems, elimination is used. It is the same system the <a href="${PAGE("matriz-inversa-2x2")}">inverse matrix</a> solves.`),
+      };
+    },
+
+    logb({ x, b }) {
+      if (!(x > 0)) return { error: T("O logaritmo só existe para x maior que zero.", "The logarithm only exists for x greater than zero.") };
+      if (!(b > 0) || b === 1) return { error: T("A base precisa ser positiva e diferente de 1.", "The base must be positive and different from 1.") };
+      const L = Math.log(x) / Math.log(b);
+      const top = Math.max(x, b, 1) * 1.25;
+      const Rg = Math.max(3, Math.abs(L) * 1.25, Math.abs(Math.log(top) / Math.log(b)) * 1.1);
+      const pts = []; for (let i = 1; i <= 600; i++) { const t = top * i / 600, y = Math.log(t) / Math.log(b); if (Math.abs(y) <= Rg) pts.push([t, y]); }
+      const ln = v => texNum(Math.log(v), 6);
+      const back = b ** L;
+      const bTex = texNum(b), xTex = texNum(x);
+      return {
+        result: `\\log_{${bTex}} ${xTex} ${approx(L, 6)} ${tone(texNum(L, 6), 1)}`,
+        chart: {
+          type: "curve", label: T(`A curva y = log na base ${fmt(b)} de x, com o ponto x = ${fmt(x)}`, `The curve y = log base ${fmt(b)} of x, with the point x = ${fmt(x)}`),
+          xLabel: T(`x · a curva corta o eixo em x = 1 e passa por (${fmt(b)}, 1)`, `x · the curve crosses the axis at x = 1 and passes through (${fmt(b)}, 1)`),
+          xMin: 0, xMax: top, yMin: -Rg, yMax: Rg, pts, hlines: [{ y: 0, cls: "chart-ref" }], marker: [x, L],
+          tipAt: t => (t > 0 ? [fmt(Math.log(t) / Math.log(b), 4), `x = ${fmt(t, 3)}`] : ["—", "x = 0"]),
+        },
+        steps: [
+          [T("Tire o logaritmo natural de x e da base:", "Take the natural log of x and of the base:"),
+            `\\ln ${xTex} ${approx(Math.log(x), 6)} ${tone(ln(x), 2)}, \\qquad \\ln ${bTex} ${approx(Math.log(b), 6)} ${tone(ln(b), 3)}`],
+          [T("Divida um pelo outro:", "Divide one by the other:"),
+            `\\log_{${bTex}} ${xTex} = \\dfrac{${tone(ln(x), 2)}}{${tone(ln(b), 3)}} ${approx(L, 6)} ${tone(texNum(L, 6), 1)}`],
+          [T("Confira: a base elevada ao resultado devolve x.", "Check: the base raised to the result gives back x."),
+            `${paren(b, bTex)}^{${texNum(L, 6)}} ${approx(back, 6)} ${texNum(back, 6)}`],
+        ],
+        note: T(`O logaritmo responde a quantas vezes é preciso multiplicar ${fmt(b)} por si mesmo para chegar a ${fmt(x)}: ${fmt(L, 4)} vezes. Na base 10, log ${fmt(x)} ≈ ${fmt(Math.log10(x), 4)} (quantos dígitos, mais ou menos); na base e, ln ${fmt(x)} ≈ ${fmt(Math.log(x), 4)}; na base 2, ≈ ${fmt(Math.log2(x), 4)} (quantas vezes dobrar).`
+          + ` A troca de base mostra que todos os logaritmos são o mesmo, a menos de uma escala: log na base ${fmt(b)} é ln dividido por ${fmt(Math.log(b), 4)}. Por isso as curvas de todas as bases têm a mesma forma, e por isso a <a href="${PAGE("entropia-shannon")}">entropia</a> em bits e em nats difere só por um fator ln 2.`
+          + " Os logaritmos transformam produtos em somas — log(ab) = log a + log b —, o que faz deles a escala natural para crescimentos multiplicativos, como juros, populações e a escala Richter.",
+          `The logarithm answers how many times ${fmt(b)} must be multiplied by itself to reach ${fmt(x)}: ${fmt(L, 4)} times. In base 10, log ${fmt(x)} ≈ ${fmt(Math.log10(x), 4)} (roughly how many digits); in base e, ln ${fmt(x)} ≈ ${fmt(Math.log(x), 4)}; in base 2, ≈ ${fmt(Math.log2(x), 4)} (how many doublings).`
+          + ` The change of base shows that all logarithms are the same, up to a scale: log base ${fmt(b)} is ln divided by ${fmt(Math.log(b), 4)}. That is why the curves for all bases have the same shape, and why <a href="${PAGE("entropia-shannon")}">entropy</a> in bits and in nats differs only by a factor of ln 2.`
+          + " Logarithms turn products into sums — log(ab) = log a + log b —, which makes them the natural scale for multiplicative growth, such as interest, populations and the Richter scale."),
+      };
+    },
+
+    dobra({ r }) {
+      if (!(r > -100) || r === 0) return { error: T("A taxa precisa ser maior que −100% e diferente de zero.", "The rate must be greater than −100% and nonzero.") };
+      const g = r / 100, cai = g < 0, alvo = cai ? 0.5 : 2;
+      const Tt = Math.log(alvo) / Math.log(1 + g);
+      const r70 = 70 / Math.abs(r), r72 = 72 / Math.abs(r), r69 = 69.3 / Math.abs(r);
+      const top = Math.min(Tt * 3.2, 1e6);
+      const pts = Array.from({ length: 301 }, (_, i) => { const t = top * i / 300; return [t, (1 + g) ** t]; });
+      const lv = cai ? [1, 0.5, 0.25, 0.125] : [1, 2, 4, 8];
+      const verbo = cai ? T("cair à metade", "halve") : T("dobrar", "double");
+      return {
+        result: `T ${approx(Tt, 4)} ${tone(texNum(Tt, 4), 1)}\\ ${T("\\text{períodos}", "\\text{periods}")}`,
+        chart: {
+          type: "curve", label: T(`Crescimento de ${fmt(r)}% por período: o valor ${cai ? "cai à metade" : "dobra"} a cada ${fmt(Tt, 2)} períodos`, `Growth of ${fmt(r)}% per period: the value ${cai ? "halves" : "doubles"} every ${fmt(Tt, 2)} periods`),
+          xLabel: T(`períodos · tracejadas: ${cai ? "1/2, 1/4 e 1/8" : "2, 4 e 8"} vezes o valor inicial`, `periods · dashed: ${cai ? "1/2, 1/4 and 1/8" : "2, 4 and 8"} times the starting value`),
+          xMin: 0, xMax: top, yMin: 0, yMax: cai ? 1.05 : Math.max(...pts.map(p => p[1])) * 1.05, pts,
+          hlines: lv.slice(1).map(y => ({ y, cls: "chart-ref" })), marker: [Tt, alvo],
+          tipAt: t => [fmt((1 + g) ** t, 4) + "×", T(`depois de ${fmt(t, 2)} períodos`, `after ${fmt(t, 2)} periods`)],
+        },
+        steps: [
+          [T(`Depois de T períodos, o valor fica multiplicado por (1 + r)ᵀ. Para ${verbo}, isso precisa dar ${cai ? "1/2" : "2"}:`, `After T periods, the value is multiplied by (1 + r)ᵀ. To ${verbo}, that must equal ${cai ? "1/2" : "2"}:`),
+            `(1 + ${paren(g, texNum(g, 6))})^{T} = ${cai ? "\\tfrac{1}{2}" : "2"}`],
+          [T("Tire o logaritmo dos dois lados e isole T:", "Take the log of both sides and solve for T:"),
+            `T = \\dfrac{${tone(cai ? "\\ln \\tfrac{1}{2}" : "\\ln 2", 2)}}{${tone(`\\ln(${texNum(1 + g, 6)})`, 3)}} = \\dfrac{${texNum(Math.log(alvo), 6)}}{${texNum(Math.log(1 + g), 6)}} ${approx(Tt, 4)} ${tone(texNum(Tt, 4), 1)}`],
+          [T("Compare com as regras de bolso:", "Compare with the rules of thumb:"),
+            `\\dfrac{70}{${texNum(Math.abs(r))}} ${approx(r70, 4)} ${texNum(r70, 4)}, \\qquad \\dfrac{72}{${texNum(Math.abs(r))}} ${approx(r72, 4)} ${texNum(r72, 4)}`],
+        ],
+        note: T(`${cai ? "Caindo" : "A"} ${fmt(Math.abs(r))}% por período, o valor ${cai ? "cai à metade" : "dobra"} a cada ${fmt(Tt, 2)} períodos — e de novo nos ${fmt(Tt, 2)} seguintes: ${cai ? "a meia-vida" : "o tempo de duplicação"} não depende de quanto já se tem. A regra dos 70 dá ${fmt(r70, 2)} e a dos 72, ${fmt(r72, 2)}.`
+          + ` Elas vêm de ln 2 ≈ 0,693: para taxas pequenas, ln(1 + r) ≈ r, e T ≈ 69,3/r%. Usa-se 70 ou 72 porque são mais fáceis de dividir de cabeça, e o 72 compensa melhor taxas entre 5% e 10%. Com taxas altas, as regras pioram: a conta exata usa o <a href="${PAGE("logaritmo-mudanca-base")}">logaritmo</a>.`
+          + ` ${cai ? "É a conta da meia-vida de um remédio no sangue ou de um isótopo radioativo." : `É a conta dos <a href="${PAGE("juros-aportes")}">juros compostos</a>, da inflação e do crescimento de populações.`}`,
+          `${cai ? "Falling" : "At"} ${fmt(Math.abs(r))}% per period, the value ${cai ? "halves" : "doubles"} every ${fmt(Tt, 2)} periods — and again over the next ${fmt(Tt, 2)}: the ${cai ? "half-life" : "doubling time"} doesn't depend on how much there already is. The rule of 70 gives ${fmt(r70, 2)} and the rule of 72, ${fmt(r72, 2)}.`
+          + ` They come from ln 2 ≈ 0.693: for small rates, ln(1 + r) ≈ r, and T ≈ 69.3/r%. People use 70 or 72 because they are easier to divide in your head, and 72 compensates better for rates between 5% and 10%. With high rates, the rules get worse: the exact calculation uses the <a href="${PAGE("logaritmo-mudanca-base")}">logarithm</a>.`
+          + ` ${cai ? "It is the calculation for the half-life of a drug in the blood or of a radioactive isotope." : `It is the calculation behind <a href="${PAGE("juros-aportes")}">compound interest</a>, inflation and population growth.`}`)
+          + (Math.abs(r69 - Tt) / Tt > 0.15 ? T(` ${warn} com ${fmt(r)}% por período, as regras de bolso erram por mais de 15%.`, ` ${warn} at ${fmt(r)}% per period, the rules of thumb are off by more than 15%.`) : ""),
+      };
+    },
+
+    price({ P, i, n }) {
+      if (!(P > 0)) return { error: T("O valor financiado precisa ser maior que zero.", "The amount financed must be greater than zero.") };
+      if (!(i >= 0) || i > 100) return { error: T("A taxa precisa estar entre 0% e 100% por período.", "The rate must be between 0% and 100% per period.") };
+      if (!Number.isInteger(n) || n < 1 || n > 1200) return { error: T("O número de parcelas precisa ser um inteiro entre 1 e 1.200.", "The number of instalments must be an integer between 1 and 1,200.") };
+      const r = i / 100, v = (1 + r) ** -n;
+      const pmt = r === 0 ? P / n : P * r / (1 - v);
+      const rows = []; let saldo = P;
+      for (let k = 1; k <= n; k++) { const j = saldo * r, am = pmt - j; saldo -= am; rows.push({ k, j, am, saldo: Math.abs(saldo) < 1e-6 * P ? 0 : saldo }); }
+      const total = pmt * n, juros = total - P, sac = P * r * (n + 1) / 2;
+      const money = v => fmt(v, 2);
+      return {
+        result: `PMT ${approx(pmt, 2)} ${tone(texNum(pmt, 2), 1)}`,
+        chart: {
+          type: "curve", label: T(`Juros e amortização em cada uma das ${n} parcelas, de ${money(pmt)}`, `Interest and principal in each of the ${n} instalments of ${money(pmt)}`),
+          xLabel: T("parcela · colorida: juros · escura: amortização · tracejada: a prestação", "instalment · colored: interest · dark: principal · dashed: the payment"),
+          xMin: 1, xMax: Math.max(2, n), yMax: pmt, pts: rows.map(o => [o.k, o.j]), lines: [{ pts: rows.map(o => [o.k, o.am]), cls: "chart-fit" }],
+          hlines: [{ y: pmt, cls: "chart-ref" }],
+          tipAt: t => { const o = rows[Math.min(n, Math.max(1, Math.round(t))) - 1]; return [T(`juros ${money(o.j)} · amortização ${money(o.am)}`, `interest ${money(o.j)} · principal ${money(o.am)}`), T(`parcela ${o.k}; saldo depois dela: ${money(o.saldo)}`, `instalment ${o.k}; balance after it: ${money(o.saldo)}`)]; },
+          table: {
+            title: T("Tabela de amortização", "Amortization table"),
+            head: T(["Parcela", "Prestação", "Juros", "Amortização", "Saldo"], ["Instalment", "Payment", "Interest", "Principal", "Balance"]),
+            rows: rows.map(o => ({ cells: [String(o.k), money(pmt), money(o.j), money(o.am), money(o.saldo)] })),
+          },
+        },
+        steps: r === 0 ? [[T("Sem juros, a prestação é só o valor dividido pelo número de parcelas:", "With no interest, the payment is just the amount divided by the number of instalments:"),
+          `PMT = \\dfrac{${texNum(P)}}{${texNum(n)}} ${approx(pmt, 2)} ${tone(texNum(pmt, 2), 1)}`]] : [
+          [T("Calcule o fator de desconto de todo o prazo:", "Compute the discount factor for the whole term:"),
+            `(1 + ${texNum(r, 6)})^{-${n}} ${approx(v, 6)} ${texNum(v, 6)}`],
+          [T("Aplique a fórmula:", "Apply the formula:"),
+            `PMT = \\dfrac{${tone(texNum(P), 2)} \\cdot ${tone(texNum(r, 6), 3)}}{${tone(`1 - ${texNum(v, 6)}`, 4)}} ${approx(pmt, 2)} ${tone(texNum(pmt, 2), 1)}`],
+          [T("Na primeira parcela, os juros incidem sobre o valor todo; o resto da prestação amortiza a dívida:", "In the first instalment, interest applies to the full amount; the rest of the payment reduces the debt:"),
+            `${T("\\text{juros}", "\\text{interest}")} = ${texNum(P)} \\cdot ${texNum(r, 6)} ${approx(rows[0].j, 2)} ${texNum(rows[0].j, 2)}, \\qquad ${T("\\text{amortização}", "\\text{principal}")} ${approx(rows[0].am, 2)} ${texNum(rows[0].am, 2)}`],
+          [T("No total:", "In total:"), `${texNum(n)} \\cdot ${texNum(pmt, 2)} ${approx(total, 2)} ${texNum(total, 2)}, \\qquad ${T("\\text{juros}", "\\text{interest}")} ${approx(juros, 2)} ${texNum(juros, 2)}`],
+        ],
+        note: T(`Pela Tabela Price, as ${n} prestações são iguais, de ${money(pmt)}, e somam ${money(total)}: ${money(juros)} de juros, ${fmt(juros / P * 100, 1)}% do valor financiado. No começo, a maior parte da prestação é juro; no fim, quase tudo é amortização — o gráfico mostra as duas linhas se cruzando.`
+          + (r > 0 ? ` No sistema SAC, com amortizações iguais, as prestações começam mais altas e caem, e os juros totais seriam ${money(sac)}, ${money(juros - sac)} a menos, porque a dívida cai mais depressa.` : "")
+          + ` A fórmula é a soma de uma <a href="${PAGE("soma-pg")}">progressão geométrica</a>: o valor financiado é igual à soma das prestações trazidas a valor presente. É a conta inversa dos <a href="${PAGE("juros-aportes")}">juros com aportes</a>.`,
+          `With the French (Price) system, the ${n} payments are equal, ${money(pmt)}, and add up to ${money(total)}: ${money(juros)} of interest, ${fmt(juros / P * 100, 1)}% of the amount financed. At first, most of the payment is interest; at the end, almost all of it is principal — the chart shows the two lines crossing.`
+          + (r > 0 ? ` With constant amortization (SAC), the payments start higher and fall, and total interest would be ${money(sac)}, ${money(juros - sac)} less, because the debt falls faster.` : "")
+          + ` The formula is the sum of a <a href="${PAGE("soma-pg")}">geometric series</a>: the amount financed equals the sum of the payments brought to present value. It is the reverse of <a href="${PAGE("juros-aportes")}">compound interest with contributions</a>.`),
+      };
+    },
+
+    autoval({ a, b, c, d }) {
+      const tr = a + d, det = a * d - b * c, disc = tr * tr - 4 * det;
+      const mat = `\\begin{pmatrix} ${texNum(a)} & ${texNum(b)} \\\\ ${texNum(c)} & ${texNum(d)} \\end{pmatrix}`;
+      const circ = Array.from({ length: 121 }, (_, k) => { const t = 2 * Math.PI * k / 120; return [Math.cos(t), Math.sin(t)]; });
+      const img = circ.map(([x, y]) => [a * x + b * y, c * x + d * y]);
+      const real = disc >= -1e-12, sq = Math.sqrt(Math.max(0, disc));
+      const l1 = (tr + sq) / 2, l2 = (tr - sq) / 2;
+      const vec = l => {
+        let v = Math.abs(b) > 1e-12 ? [b, l - a] : Math.abs(c) > 1e-12 ? [l - d, c] : null;
+        if (!v) v = Math.abs(l - a) < 1e-12 ? [1, 0] : [0, 1];
+        const nn = Math.hypot(v[0], v[1]); return [v[0] / nn, v[1] / nn];
+      };
+      const v1 = real ? vec(l1) : null, v2 = real ? (Math.abs(l1 - l2) < 1e-12 && Math.abs(b) < 1e-12 && Math.abs(c) < 1e-12 ? [0, 1] : vec(l2)) : null;
+      const all = img.concat(circ);
+      let R = Math.max(1.2, ...all.map(p => Math.max(Math.abs(p[0]), Math.abs(p[1])))) * 1.1;
+      const ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      const lines = [{ pts: circ, cls: "chart-fit" }];
+      // Cada direção vai até a borda do quadro, que mede R · ratio por R.
+      if (real) [v1, v2].forEach(v => { const t = Math.min(Math.abs(v[0]) > 1e-12 ? R * ratio / Math.abs(v[0]) : Infinity, Math.abs(v[1]) > 1e-12 ? R / Math.abs(v[1]) : Infinity) * 0.999; lines.push({ pts: [[-v[0] * t, -v[1] * t], [v[0] * t, v[1] * t]], cls: "chart-ref" }); });
+      const vt = v => `\\begin{pmatrix} ${texNum(v[0], 4)} \\\\ ${texNum(v[1], 4)} \\end{pmatrix}`;
+      const steps = [
+        [T("Calcule o traço (soma da diagonal) e o determinante:", "Compute the trace (sum of the diagonal) and the determinant:"),
+          `\\operatorname{tr} A = ${texNum(a)} + ${paren(d, texNum(d))} = ${tone(texNum(tr, 6), 2)}, \\qquad \\det A = ${paren(a, texNum(a))} \\cdot ${paren(d, texNum(d))} - ${paren(b, texNum(b))} \\cdot ${paren(c, texNum(c))} = ${texNum(det, 6)}`],
+        [T("Os autovalores são as raízes de λ² − (tr A) λ + det A = 0. O discriminante:", "The eigenvalues are the roots of λ² − (tr A) λ + det A = 0. The discriminant:"),
+          `\\Delta = ${paren(tr, texNum(tr, 6))}^2 - 4 \\cdot ${paren(det, texNum(det, 6))} = ${tone(texNum(disc, 6), 3)}`],
+      ];
+      if (!real) {
+        const re = tr / 2, im = Math.sqrt(-disc) / 2;
+        steps.push([T("Com Δ negativo, as raízes são complexas:", "With a negative Δ, the roots are complex:"),
+          `\\lambda = ${texNum(re, 4)} \\pm ${texNum(im, 4)}\\,i`]);
+        return {
+          result: `\\lambda = ${tone(`${texNum(re, 4)} \\pm ${texNum(im, 4)}\\,i`, 1)}`,
+          chart: { type: "curve", height: 280, label: T("O círculo unitário e a sua imagem pela matriz", "The unit circle and its image under the matrix"), xLabel: T("escura: círculo unitário · colorida: sua imagem · nenhuma direção fica parada: a matriz gira o plano", "dark: unit circle · colored: its image · no direction stays put: the matrix rotates the plane"), xMin: -R * ratio, xMax: R * ratio, yMin: -R, yMax: R, pts: img, lines },
+          steps,
+          note: T(`Sem autovalores reais, nenhuma direção do plano é só esticada: a matriz gira tudo. O módulo dos autovalores, √det ≈ ${fmt(Math.sqrt(det), 4)}, diz quanto ela estica em média, e o ângulo de giro por aplicação é cerca de ${fmt(Math.atan2(im, re) * 180 / Math.PI, 1)}°. Uma matriz de rotação pura, como (0, −1; 1, 0), tem λ = ±i.`,
+            `With no real eigenvalues, no direction of the plane is just stretched: the matrix rotates everything. The eigenvalues' modulus, √det ≈ ${fmt(Math.sqrt(det), 4)}, says how much it stretches on average, and the rotation angle per application is about ${fmt(Math.atan2(im, re) * 180 / Math.PI, 1)}°. A pure rotation matrix, such as (0, −1; 1, 0), has λ = ±i.`),
+        };
+      }
+      steps.push(
+        [T("Aplique a fórmula quadrática:", "Apply the quadratic formula:"),
+          `\\lambda = \\dfrac{${tone(texNum(tr, 6), 2)} \\pm \\sqrt{${tone(texNum(disc, 6), 3)}}}{2} \\;\\Rightarrow\\; \\lambda_1 ${approx(l1, 6)} ${tone(texNum(l1, 6), 1)}, \\quad \\lambda_2 ${approx(l2, 6)} ${tone(texNum(l2, 6), 1)}`],
+        [T("Para cada autovalor, o autovetor é a direção que a matriz só estica (A v = λ v):", "For each eigenvalue, the eigenvector is the direction the matrix only stretches (A v = λ v):"),
+          `v_1 = ${vt(v1)}, \\qquad v_2 = ${vt(v2)}`],
+        [T("Confira: a soma dos autovalores é o traço, e o produto, o determinante.", "Check: the eigenvalues add up to the trace and multiply to the determinant."),
+          `${texNum(l1, 6)} + ${paren(l2, texNum(l2, 6))} ${approx(l1 + l2, 6)} ${texNum(l1 + l2, 6)}, \\qquad ${texNum(l1, 6)} \\cdot ${paren(l2, texNum(l2, 6))} ${approx(l1 * l2, 6)} ${texNum(l1 * l2, 6)}`],
+      );
+      const sym = Math.abs(b - c) < 1e-12;
+      return {
+        result: `\\lambda_1 ${approx(l1, 6)} ${tone(texNum(l1, 6), 1)}, \\qquad \\lambda_2 ${approx(l2, 6)} ${tone(texNum(l2, 6), 1)}`,
+        chart: {
+          type: "curve", height: 280, label: T(`O círculo unitário, a sua imagem pela matriz ${"(" + [a, b, c, d].map(v => fmt(v)).join(", ") + ")"} e as duas direções dos autovetores`, `The unit circle, its image under the matrix and the two eigenvector directions`),
+          xLabel: T("escura: círculo unitário · colorida: sua imagem · tracejadas: os autovetores", "dark: unit circle · colored: its image · dashed: the eigenvectors"),
+          xMin: -R * ratio, xMax: R * ratio, yMin: -R, yMax: R, pts: img, lines,
+        },
+        steps,
+        note: T(`A matriz leva o círculo unitário numa elipse. Ao longo de v₁, ela só multiplica por ${fmt(l1, 4)}; ao longo de v₂, por ${fmt(l2, 4)}${l2 < 0 || l1 < 0 ? " (um autovalor negativo inverte o sentido)" : ""}${Math.abs(l2) < 1e-9 ? " — com um autovalor zero, o plano é achatado numa reta" : ""}.`
+          + (sym ? " Como a matriz é simétrica, os autovalores são reais e os autovetores, perpendiculares: são os eixos da elipse." : " Como a matriz não é simétrica, os autovetores não precisam ser perpendiculares.")
+          + ` Numa <a href="${PAGE("covariancia")}">matriz de covariância</a>, os autovetores são as direções principais dos dados e os autovalores, a variância em cada uma — é a análise de componentes principais (PCA). As raízes vêm da <a href="${PAGE("formula-quadratica")}">fórmula quadrática</a>, aplicada ao polinômio característico.`,
+          `The matrix maps the unit circle to an ellipse. Along v₁, it only multiplies by ${fmt(l1, 4)}; along v₂, by ${fmt(l2, 4)}${l2 < 0 || l1 < 0 ? " (a negative eigenvalue flips the direction)" : ""}${Math.abs(l2) < 1e-9 ? " — with a zero eigenvalue, the plane is flattened onto a line" : ""}.`
+          + (sym ? " Since the matrix is symmetric, the eigenvalues are real and the eigenvectors perpendicular: they are the ellipse's axes." : " Since the matrix isn't symmetric, the eigenvectors needn't be perpendicular.")
+          + ` In a <a href="${PAGE("covariancia")}">covariance matrix</a>, the eigenvectors are the data's principal directions and the eigenvalues the variance along each one — this is principal component analysis (PCA). The roots come from the <a href="${PAGE("formula-quadratica")}">quadratic formula</a>, applied to the characteristic polynomial.`),
       };
     },
 

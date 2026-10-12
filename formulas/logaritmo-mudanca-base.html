@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Logaritmo e Mudança de Base — Interativo</title>
+  <meta name="description" content="O logaritmo em qualquer base explicado termo a termo, com calculadora pela mudança de base, gráfico da curva e o que ele mede: quantas vezes multiplicar.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/logaritmo-mudanca-base.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/logaritmo-mudanca-base.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/logarithm-change-of-base.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/logaritmo-mudanca-base.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/logaritmo-mudanca-base.html">
+  <meta property="og:title" content="Logaritmo e Mudança de Base — Interativo">
+  <meta property="og:description" content="O logaritmo em qualquer base explicado termo a termo, com calculadora pela mudança de base, gráfico da curva e o que ele mede: quantas vezes multiplicar.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Logaritmo e Mudança de Base — Interativo">
+  <meta name="twitter:description" content="O logaritmo em qualquer base explicado termo a termo, com calculadora pela mudança de base, gráfico da curva e o que ele mede: quantas vezes multiplicar.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/logarithm-change-of-base.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Logaritmo e Mudança de Base</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da mudança de base do logaritmo interativa">
+        <span class="part" data-part="L_lg" data-tone="1" data-tex="\log_b x"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="n_lg" data-tone="2" data-tex="\ln x"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="d_lg" data-tone="3" data-tex="\ln b"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?x=&b=. -->
+    <section class="calc" data-calc="logb" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: começando de 1 e dobrando sempre, quantas dobras são precisas para chegar a 1.000? É o logaritmo de 1.000 na base 2. Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Número <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1000" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="3">
+          <span>Base <i>b</i></span>
+          <input name="b" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="L_lg" data-tone="1">Logaritmo na Base b</dt>
+          <dd>O expoente que leva b até x: se b elevado a L dá x, então log_b x = L. Responde a quantas vezes multiplicar b por si mesmo.</dd>
+          <dt data-part="n_lg" data-tone="2">Logaritmo Natural de x (ln x)</dt>
+          <dd>O logaritmo na base e ≈ 2,718, o das calculadoras e das linguagens de programação. Qualquer base serve aqui, desde que seja a mesma em cima e embaixo.</dd>
+          <dt data-part="d_lg" data-tone="3">Logaritmo Natural da Base (ln b)</dt>
+          <dd>O fator de escala: dividir por ln b converte da base e para a base b. Logaritmos de bases diferentes são proporcionais.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="formula-quadratica.html" rel="prev"><span>Anterior</span>Fórmula Quadrática</a>
+      <a class="pager-next" href="soma-pa.html" rel="next"><span>Próxima</span>Soma da Progressão Aritmética</a>
+    </nav>
+  </main>
+</body>
+</html>

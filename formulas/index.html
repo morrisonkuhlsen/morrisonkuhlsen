@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">92 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">98 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -467,10 +467,25 @@
       <section class="formula-group">
         <h2>Álgebra</h2>
         <ul class="formula-list">
+          <li><a class="formula-card" href="equacao-reta.html">
+            <span class="card-tex" data-tex="m = \dfrac{y_2 - y_1}{x_2 - x_1}"></span>
+            <span class="card-name">Equação da Reta por Dois Pontos</span>
+            <span class="card-blurb">Inclinação e intercepto: uma parte fixa e uma proporcional.</span>
+          </a></li>
+          <li><a class="formula-card" href="sistema-linear-2x2.html">
+            <span class="card-tex" data-tex="x = \dfrac{D_x}{D},\ \ y = \dfrac{D_y}{D}"></span>
+            <span class="card-name">Sistema Linear 2×2</span>
+            <span class="card-blurb">A regra de Cramer e as duas retas que se cruzam.</span>
+          </a></li>
           <li><a class="formula-card" href="formula-quadratica.html">
             <span class="card-tex" data-tex="x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"></span>
             <span class="card-name">Fórmula Quadrática</span>
             <span class="card-blurb">As raízes de ax² + bx + c = 0.</span>
+          </a></li>
+          <li><a class="formula-card" href="logaritmo-mudanca-base.html">
+            <span class="card-tex" data-tex="\log_b x = \dfrac{\ln x}{\ln b}"></span>
+            <span class="card-name">Logaritmo e Mudança de Base</span>
+            <span class="card-blurb">Quantas vezes multiplicar, em qualquer base.</span>
           </a></li>
           <li><a class="formula-card" href="soma-pa.html">
             <span class="card-tex" data-tex="S_n = \dfrac{n(a_1 + a_n)}{2}"></span>
@@ -487,6 +502,16 @@
             <span class="card-name">Juros Compostos com Aportes</span>
             <span class="card-blurb">Quanto rende um valor inicial mais depósitos periódicos.</span>
           </a></li>
+          <li><a class="formula-card" href="tabela-price.html">
+            <span class="card-tex" data-tex="PMT = \dfrac{P \cdot i}{1 - (1 + i)^{-n}}"></span>
+            <span class="card-name">Tabela Price</span>
+            <span class="card-blurb">A prestação fixa, e quanto dela é juro.</span>
+          </a></li>
+          <li><a class="formula-card" href="tempo-duplicacao.html">
+            <span class="card-tex" data-tex="T = \dfrac{\ln 2}{\ln(1 + r)}"></span>
+            <span class="card-name">Tempo de Duplicação e Meia-Vida</span>
+            <span class="card-blurb">A conta exata e a regra dos 70.</span>
+          </a></li>
           <li><a class="formula-card" href="inflacao-acumulada.html">
             <span class="card-tex" data-tex="I = \textstyle\prod (1 + i_t) - 1"></span>
             <span class="card-name">Inflação Acumulada</span>
@@ -496,6 +521,11 @@
             <span class="card-tex" data-tex="A^{-1} = \dfrac{1}{ad - bc} \begin{pmatrix} d &amp; -b \\ -c &amp; a \end{pmatrix}"></span>
             <span class="card-name">Inversa de Matriz 2×2</span>
             <span class="card-blurb">O determinante, a inversa e a solução de um sistema 2 × 2.</span>
+          </a></li>
+          <li><a class="formula-card" href="autovalores-2x2.html">
+            <span class="card-tex" data-tex="\lambda = \dfrac{\operatorname{tr} A \pm \sqrt{(\operatorname{tr} A)^2 - 4 \det A}}{2}"></span>
+            <span class="card-name">Autovalores de Matriz 2×2</span>
+            <span class="card-blurb">As direções que a matriz só estica.</span>
           </a></li>
           <li><a class="formula-card" href="funcao-logistica.html">
             <span class="card-tex" data-tex="p = \dfrac{1}{1 + e^{-(\beta_0 + \beta_1 x)}}"></span>

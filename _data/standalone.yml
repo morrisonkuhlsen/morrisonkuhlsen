@@ -217,6 +217,36 @@
   description: "A entropia de Shannon explicada termo a termo, com calculadora em bits, gráfico das probabilidades e a leitura como surpresa média e número de perguntas."
   tags: "fórmula interativa calculadora passo a passo entropia Shannon informação bits teoria da informação"
   lang: pt
+- title: "Equação da Reta por Dois Pontos"
+  url: "/formulas/equacao-reta.html"
+  description: "A equação da reta por dois pontos explicada termo a termo, com calculadora da inclinação e do intercepto, gráfico e a ligação com a derivada."
+  tags: "fórmula interativa calculadora passo a passo reta inclinação coeficiente angular intercepto função afim"
+  lang: pt
+- title: "Sistema Linear 2×2"
+  url: "/formulas/sistema-linear-2x2.html"
+  description: "Sistema linear de duas equações resolvido pela regra de Cramer, termo a termo, com calculadora, as duas retas no gráfico e os casos sem solução ou com infinitas."
+  tags: "fórmula interativa calculadora passo a passo sistema linear regra de Cramer determinante equações"
+  lang: pt
+- title: "Logaritmo e Mudança de Base"
+  url: "/formulas/logaritmo-mudanca-base.html"
+  description: "O logaritmo em qualquer base explicado termo a termo, com calculadora pela mudança de base, gráfico da curva e o que ele mede: quantas vezes multiplicar."
+  tags: "fórmula interativa calculadora passo a passo logaritmo log ln mudança de base"
+  lang: pt
+- title: "Tabela Price"
+  url: "/formulas/tabela-price.html"
+  description: "A Tabela Price explicada termo a termo, com calculadora da prestação, gráfico de juros e amortização, tabela completa e a comparação com o SAC."
+  tags: "fórmula interativa calculadora passo a passo Tabela Price financiamento prestação amortização SAC juros"
+  lang: pt
+- title: "Tempo de Duplicação e Meia-Vida"
+  url: "/formulas/tempo-duplicacao.html"
+  description: "Tempo de duplicação e meia-vida explicados termo a termo, com calculadora, gráfico e a comparação com as regras dos 70 e dos 72."
+  tags: "fórmula interativa calculadora passo a passo tempo de duplicação meia-vida regra dos 70 regra dos 72"
+  lang: pt
+- title: "Autovalores de Matriz 2×2"
+  url: "/formulas/autovalores-2x2.html"
+  description: "Autovalores e autovetores de uma matriz 2×2 explicados termo a termo, com calculadora, gráfico do círculo transformado e a ligação com a PCA."
+  tags: "fórmula interativa calculadora passo a passo autovalores autovetores matriz PCA componentes principais"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -787,6 +817,36 @@
   url: "/en/formulas/shannon-entropy.html"
   description: "Shannon entropy explained term by term, with a calculator in bits, a chart of the probabilities and its reading as average surprise and number of questions."
   tags: "interactive formula calculator step by step entropy Shannon information bits information theory"
+  lang: en
+- title: "Equation of a Line Through Two Points"
+  url: "/en/formulas/line-through-two-points.html"
+  description: "The equation of a line through two points explained term by term, with a calculator for the slope and intercept, a chart and the link to the derivative."
+  tags: "interactive formula calculator step by step line slope intercept linear function"
+  lang: en
+- title: "2×2 Linear System"
+  url: "/en/formulas/2x2-linear-system.html"
+  description: "A system of two linear equations solved by Cramer's rule, term by term, with a calculator, the two lines on a chart and the cases with no solution or infinitely many."
+  tags: "interactive formula calculator step by step linear system Cramer's rule determinant equations"
+  lang: en
+- title: "Logarithm and Change of Base"
+  url: "/en/formulas/logarithm-change-of-base.html"
+  description: "The logarithm in any base explained term by term, with a calculator using the change of base, a chart of the curve and what it measures: how many times to multiply."
+  tags: "interactive formula calculator step by step logarithm log ln change of base"
+  lang: en
+- title: "Loan Amortization (Price Table)"
+  url: "/en/formulas/loan-amortization.html"
+  description: "The fixed loan payment (the French or Price system) explained term by term, with a calculator, a chart of interest and principal, the full table and a comparison with constant amortization."
+  tags: "interactive formula calculator step by step loan payment amortization mortgage interest Price"
+  lang: en
+- title: "Doubling Time and Half-Life"
+  url: "/en/formulas/doubling-time.html"
+  description: "Doubling time and half-life explained term by term, with a calculator, a chart and a comparison with the rules of 70 and 72."
+  tags: "interactive formula calculator step by step doubling time half-life rule of 70 rule of 72"
+  lang: en
+- title: "Eigenvalues of a 2×2 Matrix"
+  url: "/en/formulas/eigenvalues-2x2.html"
+  description: "Eigenvalues and eigenvectors of a 2×2 matrix explained term by term, with a calculator, a chart of the transformed circle and the link to PCA."
+  tags: "interactive formula calculator step by step eigenvalues eigenvectors matrix PCA principal components"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"
