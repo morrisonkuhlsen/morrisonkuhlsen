@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Confidence Interval for the Variance — Interactive</title>
+  <meta name="description" content="The confidence interval for the variance and standard deviation explained term by term, with a calculator, a chart of the chi-square and step-by-step working.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/variance-confidence-interval.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/ic-variancia.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/variance-confidence-interval.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/ic-variancia.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/variance-confidence-interval.html">
+  <meta property="og:title" content="Confidence Interval for the Variance — Interactive">
+  <meta property="og:description" content="The confidence interval for the variance and standard deviation explained term by term, with a calculator, a chart of the chi-square and step-by-step working.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Confidence Interval for the Variance — Interactive">
+  <meta name="twitter:description" content="The confidence interval for the variance and standard deviation explained term by term, with a calculator, a chart of the chi-square and step-by-step working.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/ic-variancia.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Confidence Interval for the Variance</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive confidence interval for the variance formula">
+        <span class="part" data-part="ic_v" data-tone="1" data-tex="\sigma^2 \in"></span>
+        <span class="part" data-part="ss_v" data-tone="2" data-tex="(n - 1)\,s^2"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="hi_v" data-tone="3" data-tex="\Big[\dfrac{1}{\chi^2_{1-\alpha/2}};"></span>
+        <span class="part" data-part="lo_v" data-tone="4" data-tex="\dfrac{1}{\chi^2_{\alpha/2}}\Big]"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com a qui-quadrado; estado em ?s=&n=&conf=. -->
+    <section class="calc" data-calc="icvar" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: a machine fills 500 ml bottles. In 25 bottles measured, the standard deviation was 4 ml. Between what values should the machine's standard deviation lie, with 95% confidence? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Sample standard deviation <i>s</i></span>
+          <input name="s" type="text" inputmode="decimal" value="4" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Sample size <i>n</i></span>
+          <input name="n" type="text" inputmode="numeric" value="25" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Confidence (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="ic_v" data-tone="1">Interval for the Variance</dt>
+          <dd>The range of plausible values for the population variance σ². Taking the square root of the bounds gives the interval for the standard deviation σ.</dd>
+          <dt data-part="ss_v" data-tone="2">Sum of Squares ((n − 1)s²)</dt>
+          <dd>The sample's total variation. With normal data, (n − 1)s²/σ² follows a chi-square with n − 1 degrees of freedom — that is where the interval comes from.</dd>
+          <dt data-part="hi_v" data-tone="3">Upper Critical Value</dt>
+          <dd>The chi-square value that leaves α/2 above it. Being in the denominator, it gives the lower bound of the interval.</dd>
+          <dt data-part="lo_v" data-tone="4">Lower Critical Value</dt>
+          <dd>The one that leaves α/2 below it, and gives the upper bound. Since the chi-square is skewed, the interval isn't centred on s².</dd>
+      </dl>
+    </section>
+
+    <p class="formula-catalog">When to use it, assumptions and alternatives: <a href="/en/statistical-tests/chi-square-test-for-variance/">the chi-square test for variance in the statistical tests catalog</a>.</p>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="proportion-confidence-interval.html" rel="prev"><span>Previous</span>Confidence Interval for a Proportion</a>
+      <a class="pager-next" href="bootstrap.html" rel="next"><span>Next</span>Bootstrap</a>
+    </nav>
+  </main>
+</body>
+</html>

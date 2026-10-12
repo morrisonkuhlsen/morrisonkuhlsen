@@ -34,6 +34,7 @@
     "margem-de-erro": "margin-of-error", "ic-proporcao": "proportion-confidence-interval",
     "quartis-iqr": "quartiles-iqr", "suavizacao-exponencial": "exponential-smoothing",
     "derivada": "derivative-definition", "qui-quadrado": "chi-square-test", "probabilidade-condicional": "conditional-probability",
+    "comparacoes-multiplas": "multiple-comparisons",
   };
   const PAGE = slug => `${EN ? EN_SLUG[slug] : slug}.html`;
 
@@ -3325,6 +3326,203 @@
       };
     },
 
+    cv({ x, y }) {
+      const stats = v => {
+        const n = v.length, m = v.reduce((a, b) => a + b, 0) / n;
+        const s = Math.sqrt(v.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1));
+        return { n, m, s, cv: s / Math.abs(m) };
+      };
+      for (const [v, nome] of [[x, "x"], [y, "y"]]) {
+        if (!v.length) continue;
+        if (v.length < 2) return { error: T(`Informe pelo menos dois valores em ${nome}.`, `Enter at least two values in ${nome}.`) };
+        if (v.length > 500) return { error: T("Use no máximo 500 valores por lista.", "Use at most 500 values per list.") };
+      }
+      const A = stats(x);
+      if (A.m === 0) return { error: T("A média é zero: o coeficiente de variação não se define.", "The mean is zero: the coefficient of variation is undefined.") };
+      const B = y.length ? stats(y) : null;
+      if (B && B.m === 0) return { error: T("A média do segundo grupo é zero: o coeficiente de variação não se define.", "The second group's mean is zero: the coefficient of variation is undefined.") };
+      const nivel = c => (c < 0.15 ? T("baixa dispersão", "low spread") : c < 0.3 ? T("dispersão média", "moderate spread") : T("alta dispersão", "high spread"));
+      const steps = [
+        [T("Calcule a média e o desvio padrão:", "Compute the mean and the standard deviation:"),
+          `\\bar{x} ${approx(A.m)} ${tone(texNum(A.m), 3)}, \\qquad s ${approx(A.s)} ${tone(texNum(A.s), 2)}`],
+        [T("Divida o desvio padrão pela média:", "Divide the standard deviation by the mean:"),
+          `CV = \\dfrac{${tone(texNum(A.s), 2)}}{${tone(texNum(Math.abs(A.m)), 3)}} ${approx(A.cv)} ${tone(pctTex(A.cv), 1)}`],
+      ];
+      if (B) steps.push([T("Faça o mesmo com o segundo grupo:", "Do the same for the second group:"),
+        `\\bar{y} ${approx(B.m)} ${texNum(B.m)}, \\quad s ${approx(B.s)} ${texNum(B.s)}, \\quad CV ${approx(B.cv)} ${pctTex(B.cv)}`]);
+      const cmp = B ? T(` O segundo grupo tem CV de ${fmt(B.cv * 100, 1)}%: ${Math.abs(A.cv - B.cv) < 0.005 ? "os dois variam o mesmo, em termos relativos" : A.cv > B.cv ? "em termos relativos, o primeiro varia mais" : "em termos relativos, o segundo varia mais"}, ainda que os desvios padrão, ${fmt(A.s)} e ${fmt(B.s)}, estejam em escalas que não se comparam.`,
+        ` The second group has a CV of ${fmt(B.cv * 100, 1)}%: ${Math.abs(A.cv - B.cv) < 0.005 ? "both vary the same, in relative terms" : A.cv > B.cv ? "in relative terms, the first varies more" : "in relative terms, the second varies more"}, even though the standard deviations, ${fmt(A.s)} and ${fmt(B.s)}, are on scales that don't compare.`) : "";
+      return {
+        result: `CV ${approx(A.cv)} ${tone(pctTex(A.cv), 1)}${B ? `, \\qquad CV_y ${approx(B.cv)} ${pctTex(B.cv)}` : ""}`,
+        steps,
+        note: T(`O desvio padrão é ${fmt(A.cv * 100, 1)}% da média — ${nivel(A.cv)}, pela régua comum de 15% e 30%.`, `The standard deviation is ${fmt(A.cv * 100, 1)}% of the mean — ${nivel(A.cv)}, by the common 15% and 30% yardstick.`)
+          + cmp
+          + T(` Por não ter unidade, o CV compara a variabilidade de coisas medidas em escalas diferentes. Só faz sentido para grandezas com zero de verdade, como peso ou preço — não para temperatura em graus Celsius. Veja o <a href="${PAGE("desvio-padrao")}?x=${encodeURIComponent(x.join(" "))}">desvio padrão destes valores</a>.`,
+            ` Being unitless, the CV compares the variability of things measured on different scales. It only makes sense for quantities with a true zero, such as weight or price — not for temperature in degrees Celsius. See the <a href="${PAGE("desvio-padrao")}?x=${encodeURIComponent(x.join(" "))}">standard deviation of these values</a>.`),
+      };
+    },
+
+    unif({ a, b, x1, x2 }) {
+      if (!(b > a)) return { error: T("O fim b precisa ser maior que o começo a.", "The end b must be greater than the start a.") };
+      if (!(x2 >= x1)) return { error: T("O intervalo pedido precisa ter x₂ ≥ x₁.", "The requested interval must have x₂ ≥ x₁.") };
+      const lo = Math.max(a, x1), hi = Math.min(b, x2), len = Math.max(0, hi - lo);
+      const h = 1 / (b - a), P = len * h;
+      const pad = (b - a) * 0.15;
+      return {
+        result: `P(${texNum(x1)} \\le X \\le ${texNum(x2)}) ${approx(P, 6)} ${tone(pctTex(P), 1)}`,
+        chart: {
+          type: "hist", label: T(`Densidade uniforme entre ${fmt(a)} e ${fmt(b)}, com o trecho de ${fmt(x1)} a ${fmt(x2)} em destaque`, `Uniform density between ${fmt(a)} and ${fmt(b)}, with the stretch from ${fmt(x1)} to ${fmt(x2)} highlighted`),
+          xLabel: "x", xMin: a - pad, xMax: b + pad, yMax: h,
+          bins: [{ x0: a, x1: b, y: h, count: 0 }, ...(len > 0 ? [{ x0: lo, x1: hi, y: h, count: 0, miss: true }] : [])],
+          binTip: bb => [fmt(bb.y, 4), bb.miss ? T(`área do trecho: ${fmt(P * 100, 2)}%`, `area of the stretch: ${fmt(P * 100, 2)}%`) : T("densidade constante", "constant density")],
+          pts: [],
+        },
+        steps: [
+          [T("A altura da densidade é 1 dividido pela largura do intervalo, para a área total dar 1:", "The density's height is 1 over the width of the interval, so the total area is 1:"),
+            `f(x) = \\dfrac{1}{${texNum(b)} - ${paren(a, texNum(a))}} ${approx(h, 6)} ${tone(texNum(h, 6), 2)}`],
+          [T("A probabilidade é a área de um retângulo: a parte do trecho que cai dentro de [a, b], vezes a altura:", "The probability is the area of a rectangle: the part of the stretch inside [a, b], times the height:"),
+            `P = (${texNum(hi)} - ${paren(lo, texNum(lo))}) \\cdot ${texNum(h, 6)} ${approx(P, 6)} ${tone(texNum(P, 6), 1)}`],
+        ],
+        note: T(`Na uniforme, todos os trechos do mesmo tamanho têm a mesma chance: só importa a largura. A média é (a + b)/2 = ${fmt((a + b) / 2)} e o desvio padrão (b − a)/√12 ≈ ${fmt((b - a) / Math.sqrt(12), 4)}.`
+          + " É o modelo do “sem preferência nenhuma” — a chegada num ponto de ônibus sem horário, o erro de arredondamento — e a base dos sorteios do computador: os números aleatórios entre 0 e 1 são uniformes, e as outras distribuições são construídas a partir deles.",
+          `In the uniform, every stretch of the same size has the same chance: only the width matters. The mean is (a + b)/2 = ${fmt((a + b) / 2)} and the standard deviation (b − a)/√12 ≈ ${fmt((b - a) / Math.sqrt(12), 4)}.`
+          + " It is the model of “no preference at all” — arriving at a bus stop with no timetable, a rounding error — and the basis of computer draws: random numbers between 0 and 1 are uniform, and the other distributions are built from them."),
+      };
+    },
+
+    icvar({ s, n, conf }) {
+      if (s <= 0) return sdError;
+      if (!Number.isInteger(n) || n < 2 || n > 100000) return { error: T("O tamanho da amostra precisa ser um inteiro entre 2 e 100.000.", "The sample size must be an integer between 2 and 100,000.") };
+      if (conf <= 0 || conf >= 100) return confError;
+      const df = n - 1, al = 1 - conf / 100;
+      // Quantil da qui-quadrado: busca binária sobre a cauda superior.
+      const chiQ = u => { let lo = 0, hi = df + 20 * Math.sqrt(2 * df) + 50; for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (1 - chiSurvival(m, df) < u) lo = m; else hi = m; } return (lo + hi) / 2; };
+      const qLo = chiQ(al / 2), qHi = chiQ(1 - al / 2);
+      const SS = df * s * s;
+      const vLo = SS / qHi, vHi = SS / qLo;
+      const lpdf = x => (df / 2 - 1) * Math.log(x) - x / 2 - (df / 2) * Math.LN2 - lgamma(df / 2);
+      const top = qHi + 4 * Math.sqrt(2 * df);
+      const pts = Array.from({ length: 241 }, (_, i) => { const x = top * (i + 0.5) / 240; return [x, Math.exp(lpdf(x))]; });
+      const confTxt = `${fmt(conf, 2)}%`;
+      return {
+        result: `\\sigma \\in ${tone(interval(Math.sqrt(vLo), Math.sqrt(vHi)), 1)}, \\qquad \\sigma^2 \\in ${interval(vLo, vHi)}`,
+        chart: {
+          type: "curve", label: T(`Distribuição qui-quadrado com ${df} graus de liberdade; sombreada, a faixa central de ${confTxt}`, `Chi-square distribution with ${df} degrees of freedom; shaded, the central ${confTxt}`),
+          xLabel: T(`χ² com ${df} graus de liberdade · sombreada: a faixa central de ${confTxt}`, `χ² with ${df} degrees of freedom · shaded: the central ${confTxt}`),
+          xMin: 0, xMax: top, yMax: Math.max(...pts.map(p => p[1])), pts, shadeRanges: [[qLo, qHi]],
+          tipAt: x => [`x = ${fmt(x, 2)}`, `P(χ² ≤ x) ≈ ${fmt((1 - chiSurvival(x, df)) * 100, 1)}%`],
+        },
+        steps: [
+          [T(`Ache os valores da qui-quadrado com ${dof(df)} que deixam ${fmt(al / 2 * 100, 2)}% em cada cauda:`, `Find the chi-square values with ${dof(df)} that leave ${fmt(al / 2 * 100, 2)}% in each tail:`),
+            `\\chi^2_{${texNum(al / 2, 4)}} ${approx(qLo, 4)} ${tone(texNum(qLo, 4), 4)}, \\qquad \\chi^2_{${texNum(1 - al / 2, 4)}} ${approx(qHi, 4)} ${tone(texNum(qHi, 4), 3)}`],
+          [T("Multiplique a variância da amostra pelos graus de liberdade:", "Multiply the sample variance by the degrees of freedom:"),
+            `(n - 1)s^2 = ${df} \\cdot ${texNum(s)}^2 ${approx(SS)} ${tone(texNum(SS), 2)}`],
+          [T("Divida pelos dois valores — o maior dá o limite de baixo:", "Divide by the two values — the larger one gives the lower bound:"),
+            `\\sigma^2 \\in \\left[\\dfrac{${tone(texNum(SS), 2)}}{${tone(texNum(qHi, 4), 3)}};\\ \\dfrac{${tone(texNum(SS), 2)}}{${tone(texNum(qLo, 4), 4)}}\\right] ${approx(vLo) === "=" && approx(vHi) === "=" ? "=" : "\\approx"} ${interval(vLo, vHi)}`.replace(";", T(";", ","))],
+          [T("Tire a raiz dos dois limites para ter o intervalo do desvio padrão:", "Take the square root of both bounds for the standard deviation's interval:"),
+            `\\sigma \\in ${tone(interval(Math.sqrt(vLo), Math.sqrt(vHi)), 1)}`],
+        ],
+        note: T(`Com ${confTxt} de confiança, o desvio padrão da população fica entre ${fmt(Math.sqrt(vLo))} e ${fmt(Math.sqrt(vHi))}. O intervalo não é simétrico em torno de s = ${fmt(s)}: a qui-quadrado é assimétrica, e a variância não pode ser negativa.`
+          + " Ele supõe dados normais e é sensível a isso — bem mais que o intervalo para a média. Com amostras pequenas, fica largo: estimar variabilidade pede muitos dados.",
+          `With ${confTxt} confidence, the population standard deviation lies between ${fmt(Math.sqrt(vLo))} and ${fmt(Math.sqrt(vHi))}. The interval isn't symmetric around s = ${fmt(s)}: the chi-square is skewed, and a variance can't be negative.`
+          + " It assumes normal data and is sensitive to that — much more than the interval for the mean. With small samples it is wide: estimating variability takes a lot of data."),
+      };
+    },
+
+    pval({ z, cauda, alpha }) {
+      if (Math.abs(z) > 10) return { error: T("Use |z| de no máximo 10.", "Use |z| of at most 10.") };
+      if (alpha <= 0 || alpha >= 100) return { error: T("O nível de significância precisa estar entre 0 e 100%, como 5.", "The significance level must be between 0 and 100%, such as 5.") };
+      const a = alpha / 100;
+      const p = cauda === "bi" ? 2 * (1 - phi(Math.abs(z))) : cauda === "dir" ? 1 - phi(z) : phi(z);
+      const R = Math.max(4, Math.abs(z) + 0.8);
+      const pts = Array.from({ length: 401 }, (_, i) => { const v = -R + 2 * R * i / 400; return [v, normPdf(v, 0, 1)]; });
+      const ranges = cauda === "bi" ? [[-R, -Math.abs(z)], [Math.abs(z), R]] : cauda === "dir" ? [[z, R]] : [[-R, z]];
+      const zc = cauda === "bi" ? probit(1 - a / 2) : probit(1 - a);
+      const rej = p < a;
+      const pTex = p < 1e-4 ? texSci(p, 2) : texNum(p, 4);
+      const tail = { bi: T("as duas caudas, além de ±|z|", "both tails, beyond ±|z|"), dir: T("a cauda à direita de z", "the tail to the right of z"), esq: T("a cauda à esquerda de z", "the tail to the left of z") }[cauda];
+      return {
+        result: `p ${approx(p, 6)} ${tone(pTex, 1)}`,
+        chart: {
+          type: "curve", label: T(`Normal padrão com ${tail} sombreada`, `Standard normal with ${tail} shaded`),
+          xLabel: T(`z · sombreado: ${tail}`, `z · shaded: ${tail}`), xMin: -R, xMax: R, yMax: normPdf(0, 0, 1), pts, shadeRanges: ranges,
+          marker: [z, normPdf(z, 0, 1)],
+          tipAt: v => [`z = ${fmt(v, 2)}`, T(`P(Z ≥ ${fmt(v, 2)}) ≈ ${fmt((1 - phi(v)) * 100, 2)}%`, `P(Z ≥ ${fmt(v, 2)}) ≈ ${fmt((1 - phi(v)) * 100, 2)}%`)],
+        },
+        steps: [
+          [T(`Suponha que H₀ é verdadeira: a estatística segue a normal padrão. O valor-p é a área de ${tail}:`, `Assume H₀ is true: the statistic follows the standard normal. The p-value is the area of ${tail}:`),
+            cauda === "bi" ? `p = 2 \\cdot P(Z \\ge ${texNum(Math.abs(z))}) = 2 \\cdot (1 - \\Phi(${texNum(Math.abs(z))})) ${approx(p, 6)} ${tone(pTex, 1)}`
+              : cauda === "dir" ? `p = P(Z \\ge ${texNum(z)}) = 1 - \\Phi(${texNum(z)}) ${approx(p, 6)} ${tone(pTex, 1)}`
+                : `p = P(Z \\le ${texNum(z)}) = \\Phi(${texNum(z)}) ${approx(p, 6)} ${tone(pTex, 1)}`],
+          [T(`Compare com o nível de significância α = ${fmt(alpha)}%:`, `Compare with the significance level α = ${fmt(alpha)}%:`),
+            `${pTex} ${rej ? "<" : "\\ge"} ${texNum(a, 4)} \\quad\\Longrightarrow\\quad \\text{${rej ? T("rejeita-se H₀", "reject H₀") : T("não se rejeita H₀", "do not reject H₀")}}`.replace(/H₀/g, "}H_0\\text{")],
+        ],
+        note: T(`O valor-p é a chance de, <strong>se H₀ fosse verdadeira</strong>, aparecer um resultado tão extremo quanto este ou mais. Ele <strong>não</strong> é a probabilidade de H₀ ser verdadeira, nem diz o tamanho do efeito: um efeito minúsculo dá p pequeno com amostra grande.`
+          + ` Equivalente: com α = ${fmt(alpha)}%, rejeita-se H₀ quando ${cauda === "bi" ? `|z| passa de ${fmt(zc, 3)}` : cauda === "dir" ? `z passa de ${fmt(zc, 3)}` : `z fica abaixo de ${fmt(-zc, 3)}`}.`
+          + ` Com muitos testes, valores-p pequenos aparecem por acaso — veja <a href="${PAGE("comparacoes-multiplas")}">comparações múltiplas</a>. E a chance de detectar um efeito real é o <a href="${PAGE("poder-estatistico")}">poder estatístico</a>.`,
+          `The p-value is the chance, <strong>if H₀ were true</strong>, of a result as extreme as this one or more. It is <strong>not</strong> the probability that H₀ is true, nor does it give the size of the effect: a tiny effect yields a small p with a large sample.`
+          + ` Equivalently: with α = ${fmt(alpha)}%, H₀ is rejected when ${cauda === "bi" ? `|z| exceeds ${fmt(zc, 3)}` : cauda === "dir" ? `z exceeds ${fmt(zc, 3)}` : `z falls below ${fmt(-zc, 3)}`}.`
+          + ` With many tests, small p-values turn up by chance — see <a href="${PAGE("comparacoes-multiplas")}">multiple comparisons</a>. And the chance of detecting a real effect is <a href="${PAGE("poder-estatistico")}">statistical power</a>.`),
+      };
+    },
+
+    mcnemar({ o }) {
+      if (o.length !== 2 || o.some(r => r.length !== 2)) return { error: T("Informe uma tabela 2 × 2: duas linhas de dois valores, separadas por ponto e vírgula.", "Enter a 2 × 2 table: two rows of two values, separated by a semicolon.") };
+      if (o.flat().some(v => !Number.isInteger(v) || v < 0)) return { error: T("As contagens precisam ser inteiros não negativos.", "The counts must be non-negative integers.") };
+      const [[a, b], [c, d]] = o, m = b + c, N = a + b + c + d;
+      if (m === 0) return { error: T("Não há pares discordantes (b + c = 0): ninguém mudou, e o teste não tem o que comparar.", "There are no discordant pairs (b + c = 0): nobody changed, and the test has nothing to compare.") };
+      const chi = (b - c) ** 2 / m, p = chiSurvival(chi, 1);
+      const chiC = Math.max(0, Math.abs(b - c) - 1) ** 2 / m, pC = chiSurvival(chiC, 1);
+      // Exato: sob H₀, cada discordante vai para um lado com chance 1/2.
+      let pe = 0; for (let k = 0; k <= Math.min(b, c); k++) pe += binPmf(m, 0.5, k);
+      pe = Math.min(1, 2 * pe);
+      const B = tone(texNum(b), 2), C = tone(texNum(c), 3);
+      const antes = (a + b) / N, depois = (a + c) / N;
+      return {
+        result: `\\chi^2 ${approx(chi)} ${tone(texNum(chi), 1)}, \\qquad p ${approx(p, 4)} ${texNum(p, 4)}`,
+        steps: [
+          [T("Separe os pares que mudaram de resposta: b mudou de sim para não, c de não para sim. Os que não mudaram (a e d) não dizem nada sobre a mudança.", "Pick out the pairs that changed answer: b went from yes to no, c from no to yes. Those that didn't change (a and d) say nothing about change."),
+            `\\begin{array}{c|cc} & ${T("\\text{depois sim}", "\\text{after yes}")} & ${T("\\text{depois não}", "\\text{after no}")} \\\\ \\hline ${T("\\text{antes sim}", "\\text{before yes}")} & ${texNum(a)} & ${B} \\\\ ${T("\\text{antes não}", "\\text{before no}")} & ${C} & ${texNum(d)} \\end{array}`],
+          [T("Se não houvesse efeito, as mudanças seriam meio a meio. Compare b com c:", "If there were no effect, the changes would split half and half. Compare b with c:"),
+            `\\chi^2 = \\dfrac{(${B} - ${C})^2}{${B} + ${C}} ${approx(chi)} ${tone(texNum(chi), 1)}`],
+          [T("Com 1 grau de liberdade, o valor-p:", "With 1 degree of freedom, the p-value:"), `p ${approx(p, 4)} ${texNum(p, 4)}`],
+        ],
+        note: T(`A proporção de “sim” passou de ${fmt(antes * 100, 1)}% para ${fmt(depois * 100, 1)}%. ${p < 0.05 ? "Ao nível de 5%, a mudança é significativa." : "Ao nível de 5%, a mudança não é significativa."}`
+          + ` Com a correção de continuidade, χ² ≈ ${fmt(chiC, 3)} e p ≈ ${fmt(pC, 4)}; pelo teste exato binomial, p ≈ ${fmt(pe, 4)}${m < 25 ? " — com poucos pares discordantes, como aqui, prefira o exato" : ""}.`
+          + ` É o teste para proporções <strong>pareadas</strong>, as mesmas pessoas medidas duas vezes; para grupos diferentes, use o <a href="${PAGE("qui-quadrado-independencia")}?o=${encodeURIComponent(o.map(r => r.join(" ")).join("; "))}">qui-quadrado de independência</a>.`,
+          `The share of “yes” went from ${fmt(antes * 100, 1)}% to ${fmt(depois * 100, 1)}%. ${p < 0.05 ? "At the 5% level, the change is significant." : "At the 5% level, the change is not significant."}`
+          + ` With the continuity correction, χ² ≈ ${fmt(chiC, 3)} and p ≈ ${fmt(pC, 4)}; by the exact binomial test, p ≈ ${fmt(pe, 4)}${m < 25 ? " — with few discordant pairs, as here, prefer the exact one" : ""}.`
+          + ` It is the test for <strong>paired</strong> proportions, the same people measured twice; for different groups, use the <a href="${PAGE("qui-quadrado-independencia")}?o=${encodeURIComponent(o.map(r => r.join(" ")).join("; "))}">chi-square test of independence</a>.`),
+      };
+    },
+
+    pa({ a1, r, n }) {
+      if (!Number.isInteger(n) || n < 1 || n > 100000) return { error: T("O número de termos precisa ser um inteiro entre 1 e 100.000.", "The number of terms must be an integer between 1 and 100,000.") };
+      const an = a1 + (n - 1) * r, S = n * (a1 + an) / 2;
+      const show = Math.min(n, 60);
+      const xs = Array.from({ length: show }, (_, i) => i + 1), ys = xs.map(i => a1 + (i - 1) * r);
+      const A1 = tone(texNum(a1), 3), AN = tone(texNum(an), 3), N = tone(n, 2);
+      return {
+        result: `S_{${n}} ${approx(S)} ${tone(texNum(S), 1)}`,
+        chart: ys.every(v => v >= 0) ? {
+          type: "bars", label: T(`Os ${show} primeiros termos da progressão aritmética`, `The first ${show} terms of the arithmetic series`),
+          xLabel: T(`termo${n > show ? ` (os ${show} primeiros de ${n})` : ""}`, `term${n > show ? ` (the first ${show} of ${n})` : ""}`),
+          xs, ys, xMin: 0.5, xMax: show + 0.5, yMax: Math.max(...ys, 1e-9), hi: () => false,
+          tip: (i, v) => [fmt(v), T(`termo ${i}`, `term ${i}`)],
+        } : null,
+        steps: [
+          [T("Ache o último termo: o primeiro mais (n − 1) vezes a razão.", "Find the last term: the first plus (n − 1) times the common difference."),
+            `a_n = ${texNum(a1)} + (${n} - 1) \\cdot ${paren(r, texNum(r))} ${approx(an)} ${AN}`],
+          [T("Some o primeiro com o último, multiplique por n e divida por 2:", "Add the first and the last, multiply by n and divide by 2:"),
+            `S_{${n}} = \\dfrac{${N} \\cdot (${A1} + ${AN})}{2} ${approx(S)} ${tone(texNum(S), 1)}`],
+        ],
+        note: T(`A ideia, que se conta do jovem Gauss somando 1 + 2 + … + 100: escreva a soma de trás para a frente embaixo dela mesma. Cada coluna soma a₁ + aₙ = ${fmt(a1 + an)}, e há ${n} colunas — mas assim cada termo entrou duas vezes, daí a divisão por 2.`
+          + ` A média dos termos é a média do primeiro com o último, ${fmt((a1 + an) / 2)}: a soma é essa média vezes o número de termos. Compare com a <a href="${PAGE("soma-pg")}">soma da progressão geométrica</a>, em que os termos se multiplicam em vez de se somar.`,
+          `The idea, told of the young Gauss adding 1 + 2 + … + 100: write the sum backwards under itself. Each column adds up to a₁ + aₙ = ${fmt(a1 + an)}, and there are ${n} columns — but that way every term went in twice, hence the division by 2.`
+          + ` The mean of the terms is the mean of the first and last, ${fmt((a1 + an) / 2)}: the sum is that mean times the number of terms. Compare with the <a href="${PAGE("soma-pg")}">geometric series</a>, where the terms multiply instead of add.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -4695,6 +4893,15 @@
         });
       }
       const line = (spec.pts || []).map(([x, y], i) => `${i ? "L" : "M"}${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("");
+      // shadeRanges: vários trechos sombreados, como as duas caudas de um teste.
+      (spec.shadeRanges || []).forEach(([lo, hi]) => {
+        const under = spec.pts.filter(([x]) => x >= lo && x <= hi);
+        if (under.length > 1) {
+          const d = `M${X(under[0][0])},${Y(0)}` + under.map(([x, y]) => `L${X(x).toFixed(1)},${Y(y).toFixed(1)}`).join("")
+            + `L${X(under[under.length - 1][0])},${Y(0)}Z`;
+          svg("path", { d, class: "chart-area" }, root);
+        }
+      });
       if (spec.shadeTo != null) {
         const under = spec.pts.filter(([x]) => x <= spec.shadeTo);
         if (under.length > 1) {

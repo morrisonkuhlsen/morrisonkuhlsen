@@ -157,6 +157,36 @@
   description: "Intervalo de confiança para uma proporção explicado termo a termo, com calculadora pelos métodos de Wald e de Wilson e gráfico da cobertura real de cada um."
   tags: "fórmula interativa calculadora passo a passo Wald Wilson proporção cobertura"
   lang: pt
+- title: "Coeficiente de Variação"
+  url: "/formulas/coeficiente-variacao.html"
+  description: "Coeficiente de variação explicado termo a termo, com calculadora para um ou dois grupos: a dispersão relativa à média, para comparar escalas diferentes."
+  tags: "fórmula interativa calculadora passo a passo CV dispersão relativa média desvio padrão"
+  lang: pt
+- title: "Distribuição Uniforme"
+  url: "/formulas/distribuicao-uniforme.html"
+  description: "Distribuição uniforme contínua explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de cair num trecho é proporcional à largura dele."
+  tags: "fórmula interativa calculadora passo a passo uniforme contínua densidade intervalo"
+  lang: pt
+- title: "Intervalo de Confiança para a Variância"
+  url: "/formulas/ic-variancia.html"
+  description: "Intervalo de confiança para a variância e o desvio padrão explicado termo a termo, com calculadora, gráfico da qui-quadrado e passo a passo."
+  tags: "fórmula interativa calculadora passo a passo variância desvio padrão qui-quadrado"
+  lang: pt
+- title: "Valor-p"
+  url: "/formulas/valor-p.html"
+  description: "O valor-p explicado termo a termo, com calculadora para testes bilaterais e unilaterais, gráfico das caudas da normal e o que ele significa — e o que não significa."
+  tags: "fórmula interativa calculadora passo a passo valor-p significância hipótese nula caudas"
+  lang: pt
+- title: "Teste de McNemar"
+  url: "/formulas/mcnemar.html"
+  description: "Teste de McNemar explicado termo a termo, com calculadora para proporções pareadas (antes e depois), correção de continuidade e teste exato."
+  tags: "fórmula interativa calculadora passo a passo McNemar pareado antes e depois proporções"
+  lang: pt
+- title: "Soma da Progressão Aritmética"
+  url: "/formulas/soma-pa.html"
+  description: "Soma da progressão aritmética explicada termo a termo, com calculadora, gráfico dos termos e o truque de Gauss para somar 1 + 2 + … + 100."
+  tags: "fórmula interativa calculadora passo a passo progressão aritmética PA Gauss soma"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -667,6 +697,36 @@
   url: "/en/formulas/proportion-confidence-interval.html"
   description: "The confidence interval for a proportion explained term by term, with a calculator using the Wald and Wilson methods and a chart of each one's actual coverage."
   tags: "formula interactive calculator step by step Wald Wilson proportion coverage"
+  lang: en
+- title: "Coefficient of Variation"
+  url: "/en/formulas/coefficient-of-variation.html"
+  description: "The coefficient of variation explained term by term, with a calculator for one or two groups: the spread relative to the mean, to compare different scales."
+  tags: "interactive formula calculator step by step CV relative spread mean standard deviation"
+  lang: en
+- title: "Uniform Distribution"
+  url: "/en/formulas/uniform-distribution.html"
+  description: "The continuous uniform distribution explained term by term, with a calculator, a chart and step-by-step working: the chance of landing in a stretch is proportional to its width."
+  tags: "interactive formula calculator step by step continuous uniform density interval"
+  lang: en
+- title: "Confidence Interval for the Variance"
+  url: "/en/formulas/variance-confidence-interval.html"
+  description: "The confidence interval for the variance and standard deviation explained term by term, with a calculator, a chart of the chi-square and step-by-step working."
+  tags: "interactive formula calculator step by step variance standard deviation chi-square"
+  lang: en
+- title: "P-Value"
+  url: "/en/formulas/p-value.html"
+  description: "The p-value explained term by term, with a calculator for two-sided and one-sided tests, a chart of the normal's tails and what it means — and what it doesn't."
+  tags: "interactive formula calculator step by step p-value significance null hypothesis tails"
+  lang: en
+- title: "McNemar Test"
+  url: "/en/formulas/mcnemar-test.html"
+  description: "The McNemar test explained term by term, with a calculator for paired proportions (before and after), the continuity correction and the exact test."
+  tags: "interactive formula calculator step by step McNemar paired before and after proportions"
+  lang: en
+- title: "Arithmetic Series"
+  url: "/en/formulas/arithmetic-series.html"
+  description: "The sum of an arithmetic series explained term by term, with a calculator, a chart of the terms and Gauss's trick for adding 1 + 2 + … + 100."
+  tags: "interactive formula calculator step by step arithmetic progression Gauss sum"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

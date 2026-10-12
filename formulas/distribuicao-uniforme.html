@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Distribuição Uniforme — Interativa</title>
+  <meta name="description" content="Distribuição uniforme contínua explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de cair num trecho é proporcional à largura dele.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/distribuicao-uniforme.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/distribuicao-uniforme.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/uniform-distribution.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/distribuicao-uniforme.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/distribuicao-uniforme.html">
+  <meta property="og:title" content="Distribuição Uniforme — Interativa">
+  <meta property="og:description" content="Distribuição uniforme contínua explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de cair num trecho é proporcional à largura dele.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Distribuição Uniforme — Interativa">
+  <meta name="twitter:description" content="Distribuição uniforme contínua explicada termo a termo, com calculadora, gráfico e passo a passo: a chance de cair num trecho é proporcional à largura dele.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/uniform-distribution.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Distribuição Uniforme</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da Distribuição Uniforme interativa">
+        <span class="part" data-part="f_un" data-tone="1" data-tex="f(x)"></span>
+        <span class="op">=</span>
+        <span class="frac">
+          <span class="num">
+            <span class="part" data-part="one_un" data-tone="0" data-tex="1"></span>
+          </span>
+          <span class="den">
+            <span class="part" data-part="w_un" data-tone="2" data-tex="b - a"></span>
+          </span>
+        </span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?a=&b=&x1=&x2=. -->
+    <section class="calc" data-calc="unif" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: um ônibus passa a cada 20 minutos, e você chega ao ponto sem olhar o horário. Qual a chance de esperar entre 5 e 12 minutos? Troque os valores para calcular o seu caso.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Começo <i>a</i></span>
+          <input name="a" type="text" inputmode="decimal" value="0" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Fim <i>b</i></span>
+          <input name="b" type="text" inputmode="decimal" value="20" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>De <i>x</i><sub>1</sub></span>
+          <input name="x1" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Até <i>x</i><sub>2</sub></span>
+          <input name="x2" type="text" inputmode="decimal" value="12" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="f_un" data-tone="1">Densidade (f(x))</dt>
+          <dd>Constante entre a e b e zero fora: nenhum valor do intervalo é mais provável que outro.</dd>
+          <dt data-part="one_un" data-tone="0">Um no Numerador</dt>
+          <dd>A área total sob a densidade precisa dar 1, a certeza de que o valor cai em algum lugar.</dd>
+          <dt data-part="w_un" data-tone="2">Largura do Intervalo (b − a)</dt>
+          <dd>Quanto mais largo o intervalo, mais baixa a densidade, para a área continuar 1. A chance de um trecho é a largura dele dividida por b − a.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="distribuicao-poisson.html" rel="prev"><span>Anterior</span>Distribuição de Poisson</a>
+      <a class="pager-next" href="distribuicao-exponencial.html" rel="next"><span>Próxima</span>Distribuição Exponencial</a>
+    </nav>
+  </main>
+</body>
+</html>

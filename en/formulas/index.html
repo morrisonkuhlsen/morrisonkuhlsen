@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Formulas</h1>
-      <p class="home-lede">80 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
+      <p class="home-lede">86 statistics and probability formulas explained term by term. Open one and tap each piece to see what it means.</p>
       <label class="filter">
         <span class="visually-hidden">Filter formulas</span>
         <input type="search" id="filtro" placeholder="Filter: bayes, sample, normal…" autocomplete="off">
@@ -167,6 +167,11 @@
             <span class="card-name">Poisson Distribution</span>
             <span class="card-blurb">The number of events in an interval, given a mean rate.</span>
           </a></li>
+          <li><a class="formula-card" href="uniform-distribution.html">
+            <span class="card-tex" data-tex="f(x) = \dfrac{1}{b - a}"></span>
+            <span class="card-name">Uniform Distribution</span>
+            <span class="card-blurb">Every value in an interval equally likely.</span>
+          </a></li>
           <li><a class="formula-card" href="exponential-distribution.html">
             <span class="card-tex" data-tex="f(x) = \lambda e^{-\lambda x}"></span>
             <span class="card-name">Exponential Distribution</span>
@@ -217,6 +222,11 @@
             <span class="card-name">Z-Score</span>
             <span class="card-blurb">How many standard deviations an observation is from the mean.</span>
           </a></li>
+          <li><a class="formula-card" href="p-value.html">
+            <span class="card-tex" data-tex="p = P\big(|Z| \ge |z_{\text{obs}}| \;\big|\; H_0\big)"></span>
+            <span class="card-name">P-Value</span>
+            <span class="card-blurb">What it measures, what it doesn&#x27;t, and the tails of the normal.</span>
+          </a></li>
           <li><a class="formula-card" href="students-t-test.html">
             <span class="card-tex" data-tex="t = \dfrac{\bar{x} - \mu_0}{s / \sqrt{n}}"></span>
             <span class="card-name">Student&#x27;s t-Test</span>
@@ -262,6 +272,11 @@
             <span class="card-name">Confidence Interval for a Proportion</span>
             <span class="card-blurb">The Wald and Wilson methods, and why the second is better.</span>
           </a></li>
+          <li><a class="formula-card" href="variance-confidence-interval.html">
+            <span class="card-tex" data-tex="\sigma^2 \in \left[\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2}};\ \dfrac{(n-1)s^2}{\chi^2_{\alpha/2}}\right]"></span>
+            <span class="card-name">Confidence Interval for the Variance</span>
+            <span class="card-blurb">Between what values the population standard deviation lies.</span>
+          </a></li>
           <li><a class="formula-card" href="bootstrap.html">
             <span class="card-tex" data-tex="CI = \left[\hat{\theta}^*_{(\alpha/2)};\ \hat{\theta}^*_{(1-\alpha/2)}\right]"></span>
             <span class="card-name">Bootstrap</span>
@@ -286,6 +301,11 @@
             <span class="card-tex" data-tex="\chi^2 = \sum_{i,j} \dfrac{(O_{ij} - E_{ij})^2}{E_{ij}}"></span>
             <span class="card-name">Chi-Square Test of Independence</span>
             <span class="card-blurb">Whether two categorical variables are associated, in a contingency table.</span>
+          </a></li>
+          <li><a class="formula-card" href="mcnemar-test.html">
+            <span class="card-tex" data-tex="\chi^2 = \dfrac{(b - c)^2}{b + c}"></span>
+            <span class="card-name">McNemar Test</span>
+            <span class="card-blurb">Proportions before and after, in the same people.</span>
           </a></li>
           <li><a class="formula-card" href="odds-ratio.html">
             <span class="card-tex" data-tex="OR = \dfrac{a \cdot d}{b \cdot c}"></span>
@@ -341,6 +361,11 @@
             <span class="card-tex" data-tex="s = \sqrt{\dfrac{\sum (x_i - \bar{x})^2}{n - 1}}"></span>
             <span class="card-name">Standard Deviation</span>
             <span class="card-blurb">How far the values spread around the mean.</span>
+          </a></li>
+          <li><a class="formula-card" href="coefficient-of-variation.html">
+            <span class="card-tex" data-tex="CV = \dfrac{s}{\bar{x}} \times 100\%"></span>
+            <span class="card-name">Coefficient of Variation</span>
+            <span class="card-blurb">The spread relative to the mean, to compare different scales.</span>
           </a></li>
           <li><a class="formula-card" href="quartiles-iqr.html">
             <span class="card-tex" data-tex="IQR = Q_3 - Q_1"></span>
@@ -421,6 +446,11 @@
             <span class="card-tex" data-tex="x = \dfrac{-b \pm \sqrt{b^2-4ac}}{2a}"></span>
             <span class="card-name">Quadratic Formula</span>
             <span class="card-blurb">The roots of ax² + bx + c = 0.</span>
+          </a></li>
+          <li><a class="formula-card" href="arithmetic-series.html">
+            <span class="card-tex" data-tex="S_n = \dfrac{n(a_1 + a_n)}{2}"></span>
+            <span class="card-name">Arithmetic Series</span>
+            <span class="card-blurb">Gauss&#x27;s trick for adding 1 + 2 + … + 100.</span>
           </a></li>
           <li><a class="formula-card" href="geometric-series.html">
             <span class="card-tex" data-tex="S_n = a \cdot \dfrac{1 - r^n}{1 - r}"></span>

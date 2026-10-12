@@ -499,6 +499,7 @@ testes:
       tex: 'OR = \dfrac{b}{c}'
     vars:
       - ['Versão exata binomial, para b + c pequeno', null]
+    page: mcnemar
     reporte: 'b = 18, c = 6; χ²(1) = 6,00; p = 0,014; OR = 3,0'
     codigo:
       r: |
@@ -597,6 +598,7 @@ testes:
       - 'Dados normais: o teste é muito sensível a desvios de normalidade'
     tex: '\chi^2 = \dfrac{(n - 1)\, s^2}{\sigma_0^2}'
     vars: []
+    veja: [ic-variancia]
     reporte: 'χ²(24) = 38,9; p = 0,056'
     codigo:
       r: |
