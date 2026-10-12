@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "anova-um-fator": "one-way-anova", "mann-whitney": "mann-whitney-test", "funcao-logistica": "logistic-function", "paradoxo-simpson": "simpsons-paradox",
     "numero-e": "number-e-limit", "soma-pa": "arithmetic-series", "tempo-duplicacao": "doubling-time",
     "equacao-reta": "line-through-two-points",
     "matriz-inversa-2x2": "inverse-2x2-matrix", "covariancia": "covariance", "entropia-shannon": "shannon-entropy", "logaritmo-mudanca-base": "logarithm-change-of-base",
@@ -4389,6 +4390,214 @@
       };
     },
 
+    kruskal({ o }) {
+      const k = o.length;
+      if (k < 2) return { error: T("Informe pelo menos dois grupos, um por linha, separados por ponto e vírgula.", "Enter at least two groups, one per row, separated by semicolons.") };
+      if (k > 12) return { error: T("Use no máximo 12 grupos.", "Use at most 12 groups.") };
+      if (o.some(g => g.length < 1)) return { error: T("Cada grupo precisa de pelo menos um valor.", "Each group needs at least one value.") };
+      const all = o.flatMap((g, j) => g.map(v => [v, j])).sort((p, q) => p[0] - q[0]);
+      const N = all.length;
+      if (N > 2000) return { error: T("Use no máximo 2.000 valores ao todo.", "Use at most 2,000 values in all.") };
+      if (N < 3) return { error: T("Use pelo menos três valores ao todo.", "Use at least three values in all.") };
+      const R = new Array(k).fill(0), ns = o.map(g => g.length);
+      let ties = 0;
+      for (let i = 0; i < N;) { let j = i; while (j + 1 < N && all[j + 1][0] === all[i][0]) j++; const t = j - i + 1; ties += t ** 3 - t; for (let m = i; m <= j; m++) R[all[m][1]] += (i + j) / 2 + 1; i = j + 1; }
+      const C = 1 - ties / (N ** 3 - N);
+      if (C <= 0) return { error: T("Todos os valores são iguais: não há postos para comparar.", "All values are equal: there are no ranks to compare.") };
+      const sumR = R.reduce((s, r, j) => s + r * r / ns[j], 0);
+      const H0 = 12 / (N * (N + 1)) * sumR - 3 * (N + 1), H = H0 / C, df = k - 1;
+      const p = chiSurvival(H, df), eps = H / (N - 1);
+      const mr = R.map((r, j) => r / ns[j]);
+      const flat = o.flat(), lo = Math.min(...flat), hi = Math.max(...flat), span = hi - lo || 1;
+      const boxes = o.map((g, i) => ({ ...boxStats(g), label: `${T("Grupo", "Group")} ${i + 1}` }));
+      const Ht = tone(texNum(H, 4), 1);
+      const rows = R.map((r, j) => `${j + 1} & ${ns[j]} & ${tone(texNum(r), 2)} & ${texNum(mr[j], 3)}`).join(" \\\\ ");
+      const veredito = p < 0.05
+        ? T("Ao nível de 5%, rejeita-se H₀: pelo menos um grupo tende a ter valores maiores que outro. Para saber quais, o seguimento usual é o teste de Dunn.", "At the 5% level, H₀ is rejected: at least one group tends to have larger values than another. To find which, the usual follow-up is Dunn's test.")
+        : T("Ao nível de 5%, não se rejeita H₀: as diferenças entre os postos médios são compatíveis com o acaso.", "At the 5% level, H₀ is not rejected: the differences between the mean ranks are consistent with chance.");
+      const enc = encodeURIComponent(o.map(g => g.join(" ")).join("; "));
+      return {
+        result: `H ${approx(H, 4)} ${Ht}, \\qquad p ${p < 1e-4 ? "<" : "\\approx"} ${p < 1e-4 ? "0{,}0001".replace("{,}", T("{,}", ".")) : texNum(p, 4)}`,
+        chart: {
+          type: "box", height: Math.min(360, 60 + k * 50), xMin: lo - span * 0.06, xMax: hi + span * 0.06, boxes,
+          label: T(`Caixas dos ${k} grupos`, `Boxes of the ${k} groups`), xLabel: T("valores · uma caixa por grupo", "values · one box per group"),
+        },
+        steps: [
+          [T(`Junte os ${N} valores, ordene e dê postos de 1 a ${N}; empates recebem a média dos postos que ocupariam. Some os postos de cada grupo:`, `Pool the ${N} values, sort them and rank them 1 to ${N}; ties get the average of the ranks they would take. Add up each group's ranks:`),
+            `\\begin{array}{c|c|c|c} ${T("\\text{grupo}", "\\text{group}")} & n_j & R_j & R_j / n_j \\\\ \\hline ${rows} \\end{array}`],
+          [T("Compare as somas de postos com o que se esperaria se os grupos fossem iguais:", "Compare the rank sums with what would be expected if the groups were the same:"),
+            `H = \\dfrac{12}{${N} \\cdot ${N + 1}} \\left(${R.slice(0, 5).map((r, j) => `\\dfrac{${tone(texNum(r), 2)}^2}{${ns[j]}}`).join(" + ")}${k > 5 ? " + \\cdots" : ""}\\right) - 3 \\cdot ${N + 1} ${approx(H0, 4)} ${texNum(H0, 4)}`],
+          ...(ties ? [[T("Com empates, divida pela correção:", "With ties, divide by the correction:"),
+            `C = 1 - \\dfrac{${texNum(ties)}}{${N}^3 - ${N}} ${approx(C, 6)} ${texNum(C, 6)}, \\qquad H = \\dfrac{${texNum(H0, 4)}}{${texNum(C, 6)}} ${approx(H, 4)} ${Ht}`]] : []),
+          [T(`Compare com a qui-quadrado com ${dof(df)}:`, `Compare with the chi-square with ${dof(df)}:`),
+            `p = P(\\chi^2_{${df}} \\ge ${texNum(H, 4)}) ${p < 1e-4 ? "<" : "\\approx"} ${p < 1e-4 ? T("0{,}0001", "0.0001") : tone(texNum(p, 4), 3)}`],
+        ],
+        note: `${veredito} `
+          + T(`O tamanho do efeito ε² = H/(N − 1) ≈ ${fmt(eps, 3)}. O teste usa só a ordem dos valores, então resiste a valores extremos e não supõe normalidade — é a <a href="${PAGE("anova-um-fator")}?o=${enc}">ANOVA de um fator</a> feita sobre postos, e, com dois grupos, equivale ao <a href="${PAGE("mann-whitney")}">Mann-Whitney</a>. A aproximação pela qui-quadrado pede uns cinco valores por grupo; com menos, o p é aproximado.`,
+            `The effect size ε² = H/(N − 1) ≈ ${fmt(eps, 3)}. The test only uses the order of the values, so it resists extreme values and doesn't assume normality — it is the <a href="${PAGE("anova-um-fator")}?o=${enc}">one-way ANOVA</a> done on ranks, and, with two groups, it is equivalent to <a href="${PAGE("mann-whitney")}">Mann-Whitney</a>. The chi-square approximation wants about five values per group; with fewer, the p is approximate.`),
+      };
+    },
+
+    reglog({ x, y, x0 }) {
+      const n = x.length;
+      if (n !== y.length) return { error: T(`Há ${n} valores de x e ${y.length} de y; as listas precisam ter o mesmo tamanho.`, `There are ${n} values of x and ${y.length} of y; the lists must have the same length.`) };
+      if (n < 4) return { error: T("Informe pelo menos quatro observações.", "Enter at least four observations.") };
+      if (n > 1000) return { error: T("Use no máximo 1.000 observações.", "Use at most 1,000 observations.") };
+      if (y.some(v => v !== 0 && v !== 1)) return { error: T("Os valores de y precisam ser 0 ou 1.", "The values of y must be 0 or 1.") };
+      const s1 = y.reduce((s, v) => s + v, 0);
+      if (s1 === 0 || s1 === n) return { error: T("Todos os y são iguais: é preciso ter zeros e uns.", "All the y are the same: there must be both zeros and ones.") };
+      if (x0 != null && x0.length > 1) return { error: T("Informe um único x para a previsão, ou deixe em branco.", "Enter a single x for the prediction, or leave it blank.") };
+      const sig = z => 1 / (1 + Math.exp(-z));
+      let b0 = Math.log(s1 / (n - s1)), b1 = 0, it = 0, I = null;
+      for (; it < 100; it++) {
+        let g0 = 0, g1 = 0, h00 = 0, h01 = 0, h11 = 0;
+        x.forEach((v, i) => { const p = sig(b0 + b1 * v), w = p * (1 - p); g0 += y[i] - p; g1 += (y[i] - p) * v; h00 += w; h01 += w * v; h11 += w * v * v; });
+        const det = h00 * h11 - h01 * h01;
+        if (!(det > 1e-300)) break;
+        const d0 = (h11 * g0 - h01 * g1) / det, d1 = (h00 * g1 - h01 * g0) / det;
+        b0 += d0; b1 += d1; I = [h00, h01, h11, det];
+        if (Math.abs(d0) + Math.abs(d1) < 1e-10) break;
+      }
+      if (!I || !Number.isFinite(b1) || Math.abs(b1) > 1e3 || it >= 100) return { error: T("O ajuste não converge: provavelmente há separação perfeita — um valor de x divide os zeros dos uns sem nenhuma exceção, e o coeficiente iria ao infinito.", "The fit doesn't converge: there is probably perfect separation — some x value splits the zeros from the ones with no exception, and the coefficient would go to infinity.") };
+      // Recalcula a informação no ponto final.
+      let h00 = 0, h01 = 0, h11 = 0, LL = 0;
+      x.forEach((v, i) => { const p = sig(b0 + b1 * v), w = p * (1 - p); h00 += w; h01 += w * v; h11 += w * v * v; LL += y[i] ? Math.log(p) : Math.log(1 - p); });
+      const det = h00 * h11 - h01 * h01, se1 = Math.sqrt(h00 / det), se0 = Math.sqrt(h11 / det);
+      const pb = s1 / n, LL0 = s1 * Math.log(pb) + (n - s1) * Math.log(1 - pb);
+      const LR = 2 * (LL - LL0), pLR = chiSurvival(LR, 1), r2 = 1 - LL / LL0;
+      const z = b1 / se1, pz = 2 * (1 - phi(Math.abs(z))), OR = Math.exp(b1);
+      const lo = Math.min(...x), hi = Math.max(...x), pad = (hi - lo) * 0.1 || 1;
+      const pts = Array.from({ length: 201 }, (_, i) => { const v = lo - pad + (hi - lo + 2 * pad) * i / 200; return [v, sig(b0 + b1 * v)]; });
+      const B0 = tone(texNum(b0, 4), 2), B1 = tone(texNum(b1, 4), 3);
+      const has = x0 != null && x0.length === 1, v0 = has ? x0[0] : null, p0 = has ? sig(b0 + b1 * v0) : null;
+      const steps = [
+        [T("Ajuste por máxima verossimilhança: o método de Newton parte de β₁ = 0 e corrige os coeficientes até a verossimilhança parar de subir.", "Fit by maximum likelihood: Newton's method starts from β₁ = 0 and corrects the coefficients until the likelihood stops rising."),
+          `\\beta_0 ${approx(b0, 4)} ${B0}, \\qquad \\beta_1 ${approx(b1, 4)} ${B1} \\qquad (${it + 1}\\ ${T("\\text{iterações}", "\\text{iterations}")})`],
+        [T("A razão de chances: cada unidade a mais de x multiplica as chances por e elevado a β₁.", "The odds ratio: each extra unit of x multiplies the odds by e to the β₁."),
+          `OR = e^{${texNum(b1, 4)}} ${approx(OR, 4)} ${tone(texNum(OR, 4), 1)}, \\qquad IC_{95\\%} = ${interval(Math.exp(b1 - 1.96 * se1), Math.exp(b1 + 1.96 * se1))}`],
+        [T("Teste de Wald para β₁ — o erro padrão sai da curvatura da verossimilhança:", "Wald test for β₁ — the standard error comes from the curvature of the likelihood:"),
+          `z = \\dfrac{${texNum(b1, 4)}}{${texNum(se1, 4)}} ${approx(z, 4)} ${texNum(z, 4)}, \\qquad p ${approx(pz, 4)} ${texNum(pz, 4)}`],
+        [T("Teste da razão de verossimilhança, contra o modelo sem x, e o R² de McFadden:", "Likelihood ratio test, against the model without x, and McFadden's R²:"),
+          `G = 2(${texNum(LL, 4)} - ${paren(LL0, texNum(LL0, 4))}) ${approx(LR, 4)} ${texNum(LR, 4)}, \\quad p ${approx(pLR, 4)} ${texNum(pLR, 4)}, \\quad R^2_{\\text{McF}} ${approx(r2, 3)} ${texNum(r2, 3)}`],
+      ];
+      if (has) steps.push([T(`Probabilidade prevista em x = ${fmt(v0)}:`, `Predicted probability at x = ${fmt(v0)}:`),
+        `\\hat{p} = \\dfrac{1}{1 + e^{-(${texNum(b0, 4)} ${b1 < 0 ? "-" : "+"} ${texNum(Math.abs(b1), 4)} \\cdot ${paren(v0, texNum(v0))})}} ${approx(p0, 4)} ${tone(texNum(p0, 4), 1)}`]);
+      return {
+        result: `\\ln\\dfrac{p}{1 - p} = ${B0} ${b1 < 0 ? "-" : "+"} ${tone(texNum(Math.abs(b1), 4), 3)}\\,x${has ? `, \\qquad \\hat{p}(${texNum(v0)}) ${approx(p0, 4)} ${texNum(p0, 4)}` : ""}`,
+        chart: {
+          type: "curve", label: T(`Curva logística ajustada a ${n} observações de 0 e 1`, `Logistic curve fitted to ${n} observations of 0 and 1`),
+          xLabel: T("x · pontos: as observações (0 ou 1) · curva: a probabilidade ajustada", "x · dots: the observations (0 or 1) · curve: the fitted probability"),
+          xMin: lo - pad, xMax: hi + pad, yMin: -0.08, yMax: 1.08, pts, dots: x.map((v, i) => [v, y[i]]),
+          hlines: [{ y: 0.5, cls: "chart-ref" }], marker: has ? [v0, p0] : null,
+          tipAt: v => [`p = ${fmt(sig(b0 + b1 * v), 4)}`, `x = ${fmt(v, 3)}`],
+        },
+        steps,
+        note: T(`Cada unidade a mais de x multiplica as chances de y = 1 por ${fmt(OR, 3)}${OR > 1 ? `, um aumento de ${fmt((OR - 1) * 100, 1)}%` : `, uma queda de ${fmt((1 - OR) * 100, 1)}%`} — o efeito é constante nas chances, não na probabilidade, que segue a curva em S. A probabilidade cruza 50% em x = ${fmt(-b0 / b1, 3)}. Pela razão de verossimilhança, p ${pValueText(pLR)}${pLR < 0.05 ? ": x ajuda a prever y" : ": os dados não mostram efeito de x"}.`
+          + ` Para explorar a curva com estes coeficientes, abra a <a href="${PAGE("funcao-logistica")}?b0=${Number(b0.toFixed(4))}&amp;b1=${Number(b1.toFixed(4))}&amp;x=${has ? v0 : Number((-b0 / b1).toFixed(3))}">função logística</a>. Com amostras pequenas, os testes de Wald e da razão de verossimilhança podem discordar; o segundo é mais confiável.`,
+          `Each extra unit of x multiplies the odds of y = 1 by ${fmt(OR, 3)}${OR > 1 ? `, a ${fmt((OR - 1) * 100, 1)}% increase` : `, a ${fmt((1 - OR) * 100, 1)}% drop`} — the effect is constant on the odds, not on the probability, which follows the S curve. The probability crosses 50% at x = ${fmt(-b0 / b1, 3)}. By the likelihood ratio, p ${pValueText(pLR)}${pLR < 0.05 ? ": x helps predict y" : ": the data show no effect of x"}.`
+          + ` To explore the curve with these coefficients, open the <a href="${PAGE("funcao-logistica")}?b0=${Number(b0.toFixed(4))}&amp;b1=${Number(b1.toFixed(4))}&amp;x=${has ? v0 : Number((-b0 / b1).toFixed(3))}">logistic function</a>. With small samples, the Wald and likelihood ratio tests can disagree; the second is more reliable.`),
+      };
+    },
+
+    parcial({ x, y, z }) {
+      const n = x.length;
+      if (y.length !== n || z.length !== n) return { error: T("As três listas precisam ter o mesmo número de valores.", "The three lists must have the same number of values.") };
+      if (n < 4) return { error: T("Informe pelo menos quatro observações.", "Enter at least four observations.") };
+      if (n > 5000) return { error: T("Use no máximo 5.000 observações.", "Use at most 5,000 observations.") };
+      const mean = a => a.reduce((s, v) => s + v, 0) / n;
+      const mx = mean(x), my = mean(y), mz = mean(z);
+      const cov = (a, ma, b, mb) => a.reduce((s, v, i) => s + (v - ma) * (b[i] - mb), 0);
+      const sxx = cov(x, mx, x, mx), syy = cov(y, my, y, my), szz = cov(z, mz, z, mz);
+      if (!sxx || !syy || !szz) return { error: T("Cada variável precisa variar: uma das listas tem todos os valores iguais.", "Each variable must vary: one of the lists has all values equal.") };
+      const rxy = cov(x, mx, y, my) / Math.sqrt(sxx * syy), rxz = cov(x, mx, z, mz) / Math.sqrt(sxx * szz), ryz = cov(y, my, z, mz) / Math.sqrt(syy * szz);
+      const den = (1 - rxz * rxz) * (1 - ryz * ryz);
+      if (den <= 1e-14) return { error: T("z explica x ou y por completo (correlação ±1): não sobra nada para correlacionar.", "z fully explains x or y (correlation ±1): nothing is left to correlate.") };
+      const r = (rxy - rxz * ryz) / Math.sqrt(den);
+      const df = n - 3, t = r * Math.sqrt(df / Math.max(1e-300, 1 - r * r)), p = df > 0 ? tTwoTail(t, df) : NaN;
+      // Resíduos de x e de y depois de tirar a reta em z.
+      const bx = cov(x, mx, z, mz) / szz, by = cov(y, my, z, mz) / szz;
+      const ex = x.map((v, i) => v - mx - bx * (z[i] - mz)), ey = y.map((v, i) => v - my - by * (z[i] - mz));
+      const sl = ex.reduce((s, v, i) => s + v * ey[i], 0) / ex.reduce((s, v) => s + v * v, 0);
+      const xl = Math.min(...ex), xh = Math.max(...ex), yl = Math.min(...ey), yh = Math.max(...ey);
+      const px = (xh - xl) * 0.1 || 1, py = (yh - yl) * 0.1 || 1;
+      const R1 = tone(texNum(rxy, 4), 2), R2 = tone(texNum(rxz, 4), 3), R3 = tone(texNum(ryz, 4), 4);
+      return {
+        result: `r_{xy \\cdot z} ${approx(r, 4)} ${tone(texNum(r, 4), 1)}, \\qquad r_{xy} ${approx(rxy, 4)} ${texNum(rxy, 4)}`,
+        chart: {
+          type: "curve", label: T("Resíduos de x contra resíduos de y, depois de tirar o efeito de z", "Residuals of x against residuals of y, after removing the effect of z"),
+          xLabel: T("o que sobra de x sem z · altura: o que sobra de y sem z", "what is left of x without z · height: what is left of y without z"),
+          xMin: xl - px, xMax: xh + px, yMin: yl - py, yMax: yh + py, pts: Array.from({ length: 101 }, (_, i) => { const v = xl - px + (xh - xl + 2 * px) * i / 100; return [v, sl * v]; }).filter(q => q[1] >= yl - py && q[1] <= yh + py),
+          dots: ex.map((v, i) => [v, ey[i]]), hlines: [{ y: 0, cls: "chart-ref" }],
+        },
+        steps: [
+          [T("Calcule as três correlações de Pearson, duas a duas:", "Compute the three Pearson correlations, pair by pair:"),
+            `r_{xy} ${approx(rxy, 4)} ${R1}, \\qquad r_{xz} ${approx(rxz, 4)} ${R2}, \\qquad r_{yz} ${approx(ryz, 4)} ${R3}`],
+          [T("Tire de r_xy a parte que passa por z e reescale:", "Remove from r_xy the part that goes through z and rescale:"),
+            `r_{xy \\cdot z} = \\dfrac{${R1} - ${paren(rxz, R2)} \\cdot ${paren(ryz, R3)}}{\\sqrt{(1 - ${paren(rxz, texNum(rxz, 4))}^2)(1 - ${paren(ryz, texNum(ryz, 4))}^2)}} ${approx(r, 4)} ${tone(texNum(r, 4), 1)}`],
+          ...(df > 0 ? [[T(`Teste se a correlação parcial é zero, com ${dof(df)} (perde-se um a mais, por z):`, `Test whether the partial correlation is zero, with ${dof(df)} (one more is lost, to z):`),
+            `t = ${texNum(r, 4)} \\sqrt{\\dfrac{${df}}{1 - ${paren(r, texNum(r, 4))}^2}} ${approx(t, 4)} ${texNum(t, 4)}, \\qquad p ${approx(p, 4)} ${texNum(p, 4)}`]] : []),
+        ],
+        note: T(`Sem controlar nada, x e y têm correlação ${fmt(rxy, 3)}; mantendo z fixo, ela ${Math.abs(r) < Math.abs(rxy) * 0.5 ? "quase some" : Math.abs(r) < Math.abs(rxy) ? "diminui" : "não diminui"}: ${fmt(r, 3)}. ${Math.abs(r) < Math.abs(rxy) * 0.5 ? "Boa parte da relação entre x e y vinha de z, que mexe com as duas ao mesmo tempo — a correlação era, em grande parte, espúria." : "A relação entre x e y não se explica por z."}`
+          + ` A correlação parcial é a correlação entre o que sobra de x e de y depois de tirar a reta de cada um em z — os pontos do gráfico. Ela só controla o que z explica em linha reta, e só controla z: outras variáveis de fora continuam podendo confundir. É a mesma ideia de pôr z como covariável numa regressão. Veja a <a href="${PAGE("coeficiente-pearson")}?x=${encodeURIComponent(x.join(" "))}&amp;y=${encodeURIComponent(y.join(" "))}">correlação simples de x e y</a> e o <a href="${PAGE("paradoxo-simpson")}">paradoxo de Simpson</a>.`
+          + (df > 0 ? ` Teste: p ${pValueText(p)}.` : ""),
+          `Without controlling for anything, x and y have a correlation of ${fmt(rxy, 3)}; holding z fixed, it ${Math.abs(r) < Math.abs(rxy) * 0.5 ? "almost disappears" : Math.abs(r) < Math.abs(rxy) ? "shrinks" : "doesn't shrink"}: ${fmt(r, 3)}. ${Math.abs(r) < Math.abs(rxy) * 0.5 ? "Much of the relationship between x and y came from z, which moves both at once — the correlation was largely spurious." : "The relationship between x and y isn't explained by z."}`
+          + ` The partial correlation is the correlation between what is left of x and of y after removing each one's line in z — the chart's dots. It only controls for what z explains linearly, and only for z: other outside variables can still confound. It is the same idea as putting z as a covariate in a regression. See the <a href="${PAGE("coeficiente-pearson")}?x=${encodeURIComponent(x.join(" "))}&amp;y=${encodeURIComponent(y.join(" "))}">simple correlation of x and y</a> and <a href="${PAGE("paradoxo-simpson")}">Simpson's paradox</a>.`
+          + (df > 0 ? ` Test: p ${pValueText(p)}.` : "")),
+      };
+    },
+
+    predint({ x, y, x0, conf }) {
+      const n = x.length;
+      if (n !== y.length) return { error: T(`Há ${n} valores de x e ${y.length} de y; as listas precisam ter o mesmo tamanho.`, `There are ${n} values of x and ${y.length} of y; the lists must have the same length.`) };
+      if (n < 3) return { error: T("Informe pelo menos três pares de valores.", "Enter at least three pairs of values.") };
+      if (n > 5000) return { error: T("Use no máximo 5.000 pares.", "Use at most 5,000 pairs.") };
+      if (conf <= 0 || conf >= 100) return confError;
+      const mx = x.reduce((s, v) => s + v, 0) / n, my = y.reduce((s, v) => s + v, 0) / n;
+      const sxx = x.reduce((s, v) => s + (v - mx) ** 2, 0);
+      if (!sxx) return { error: T("Todos os valores de x são iguais: não há reta.", "All values of x are equal: there is no line.") };
+      const b1 = x.reduce((s, v, i) => s + (v - mx) * (y[i] - my), 0) / sxx, b0 = my - b1 * mx;
+      const sse = y.reduce((s, v, i) => s + (v - b0 - b1 * x[i]) ** 2, 0), df = n - 2, s = Math.sqrt(sse / df);
+      const tc = tCrit(1 - conf / 100, df);
+      const yh = b0 + b1 * x0;
+      const hm = s * Math.sqrt(1 / n + (x0 - mx) ** 2 / sxx), hp = s * Math.sqrt(1 + 1 / n + (x0 - mx) ** 2 / sxx);
+      const lo = Math.min(...x, x0), hi = Math.max(...x, x0), pad = (hi - lo) * 0.08 || 1;
+      const band = (k, sgn) => Array.from({ length: 121 }, (_, i) => { const v = lo - pad + (hi - lo + 2 * pad) * i / 120; return [v, b0 + b1 * v + sgn * tc * s * Math.sqrt(k + 1 / n + (v - mx) ** 2 / sxx)]; });
+      const bs = [band(1, 1), band(1, -1), band(0, 1), band(0, -1)];
+      const ys = y.concat(bs.flat().map(q => q[1])), yl = Math.min(...ys), yu = Math.max(...ys), py = (yu - yl) * 0.05;
+      const fora = x0 < Math.min(...x) || x0 > Math.max(...x);
+      const confTxt = `${fmt(conf, 2)}%`;
+      const Y = tone(texNum(yh, 4), 1), TC = tone(texNum(tc, 4), 3), S = tone(texNum(s, 4), 2);
+      return {
+        result: `\\hat{y} ${approx(yh, 4)} ${Y}, \\qquad ${T("\\text{predição}", "\\text{prediction}")} \\in ${tone(interval(yh - tc * hp, yh + tc * hp), 1)}`,
+        chart: {
+          type: "curve", label: T(`Reta ajustada a ${n} pontos, com a faixa de confiança da média e a faixa de predição, mais larga`, `Line fitted to ${n} points, with the confidence band for the mean and the wider prediction band`),
+          xLabel: T(`x · tracejadas internas: confiança da média · externas: predição de um novo valor (${confTxt})`, `x · inner dashed: confidence for the mean · outer: prediction of a new value (${confTxt})`),
+          xMin: lo - pad, xMax: hi + pad, yMin: yl - py, yMax: yu + py,
+          pts: [[lo - pad, b0 + b1 * (lo - pad)], [hi + pad, b0 + b1 * (hi + pad)]],
+          lines: [{ pts: bs[0], cls: "chart-ref" }, { pts: bs[1], cls: "chart-ref" }, { pts: bs[2], cls: "chart-fit" }, { pts: bs[3], cls: "chart-fit" }],
+          dots: x.map((v, i) => [v, y[i]]), marker: [x0, yh],
+        },
+        steps: [
+          [T("Ajuste a reta por mínimos quadrados e calcule o erro padrão dos resíduos:", "Fit the line by least squares and compute the residual standard error:"),
+            `\\hat{y} = ${texNum(b0, 4)} ${b1 < 0 ? "-" : "+"} ${texNum(Math.abs(b1), 4)}\\,x, \\qquad s = \\sqrt{\\dfrac{${texNum(sse, 4)}}{${df}}} ${approx(s, 4)} ${S}`],
+          [T(`Previsão no ponto x₀ = ${fmt(x0)}:`, `Prediction at x₀ = ${fmt(x0)}:`), `\\hat{y}_0 = ${texNum(b0, 4)} ${b1 < 0 ? "-" : "+"} ${texNum(Math.abs(b1), 4)} \\cdot ${paren(x0, texNum(x0))} ${approx(yh, 4)} ${Y}`],
+          [T(`Valor crítico t com ${dof(df)}:`, `Critical t value with ${dof(df)}:`), `t ${approx(tc, 4)} ${TC}`],
+          [T("Intervalo de confiança para a média de y nesse x — a incerteza só da reta:", "Confidence interval for the mean of y at that x — the uncertainty of the line alone:"),
+            `${texNum(yh, 4)} \\pm ${TC} \\cdot ${S} \\sqrt{\\tfrac{1}{${n}} + \\tfrac{(${texNum(x0)} - ${paren(mx, texNum(mx, 4))})^2}{${texNum(sxx, 4)}}} = ${interval(yh - tc * hm, yh + tc * hm)}`],
+          [T("Intervalo de predição para um novo valor — soma a variação de cada ponto em torno da reta, o 1 dentro da raiz:", "Prediction interval for a new value — adds each point's variation around the line, the 1 inside the root:"),
+            `${texNum(yh, 4)} \\pm ${TC} \\cdot ${S} \\sqrt{${tone("1", 4)} + \\tfrac{1}{${n}} + \\tfrac{(${texNum(x0)} - ${paren(mx, texNum(mx, 4))})^2}{${texNum(sxx, 4)}}} = ${tone(interval(yh - tc * hp, yh + tc * hp), 1)}`],
+        ],
+        note: T(`Com ${confTxt} de confiança, a média de y em x = ${fmt(x0)} está entre ${fmt(yh - tc * hm)} e ${fmt(yh + tc * hm)}; já um novo valor observado nesse x deve cair entre ${fmt(yh - tc * hp)} e ${fmt(yh + tc * hp)}, uma faixa ${fmt(hp / hm, 2)} vezes mais larga.`
+          + " A diferença é o 1 dentro da raiz: a média fica cada vez mais precisa com mais dados, mas um valor individual sempre varia em torno da reta, e essa variação não some com n grande. As duas faixas se abrem longe do centro dos dados, em x̄."
+          + (fora ? ` ${warn} x₀ está fora da faixa dos dados: a extrapolação supõe que a reta continua valendo lá, o que os dados não garantem.` : "")
+          + ` Veja a <a href="${PAGE("regressao-linear")}?x=${encodeURIComponent(x.join(" "))}&amp;y=${encodeURIComponent(y.join(" "))}&amp;x0=${x0}">regressão linear destes dados</a>.`,
+          `With ${confTxt} confidence, the mean of y at x = ${fmt(x0)} lies between ${fmt(yh - tc * hm)} and ${fmt(yh + tc * hm)}; a new value observed at that x, though, should fall between ${fmt(yh - tc * hp)} and ${fmt(yh + tc * hp)}, a band ${fmt(hp / hm, 2)} times wider.`
+          + " The difference is the 1 inside the root: the mean gets ever more precise with more data, but an individual value always varies around the line, and that variation doesn't vanish with large n. Both bands widen away from the centre of the data, at x̄."
+          + (fora ? ` ${warn} x₀ is outside the range of the data: extrapolating assumes the line still holds there, which the data don't guarantee.` : "")
+          + ` See the <a href="${PAGE("regressao-linear")}?x=${encodeURIComponent(x.join(" "))}&amp;y=${encodeURIComponent(y.join(" "))}&amp;x0=${x0}">linear regression of these data</a>.`),
+      };
+    },
+
     harm({ x }) {
       const n = x.length;
       if (n < 2) return { error: T("Informe pelo menos dois valores.", "Enter at least two values.") };
@@ -5792,9 +6001,12 @@
       (spec.hlines || []).forEach(h => {
         svg("line", { x1: m.l, x2: W - m.r, y1: Y(h.y), y2: Y(h.y), class: h.cls }, root);
       });
+      // Pontos fixos dos dados, sem arrastar (o arrastável é o tipo scatter).
+      (spec.dots || []).forEach(([dx, dy]) => svg("circle", { cx: X(dx), cy: Y(dy), r: 4, class: "chart-pt" }, root));
       if (spec.marker) {
         const [mx, my] = spec.marker;
-        svg("line", { x1: X(mx), x2: X(mx), y1: Y(0), y2: Y(my), class: "chart-rule" }, root);
+        // O traço desce até o zero, ou até a borda quando o zero está fora do gráfico.
+        svg("line", { x1: X(mx), x2: X(mx), y1: Y(Math.min(yMax, Math.max(yMin, 0))), y2: Y(my), class: "chart-rule" }, root);
         svg("circle", { cx: X(mx), cy: Y(my), r: 5, class: "chart-dot" }, root);
       }
       if (spec.type === "scatter") scatter(box, root, spec, { W, H, m, iw, ih, X, Y, xMin, xMax, yMin, yMax, showTip, hideTip });

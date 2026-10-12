@@ -48,7 +48,7 @@
   <main class="card home">
     <header class="home-header">
       <h1 class="home-title">Fórmulas</h1>
-      <p class="home-lede">107 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
+      <p class="home-lede">111 fórmulas de estatística e probabilidade explicadas termo a termo. Abra uma e toque em cada pedaço para ver o que ele significa.</p>
       <label class="filter">
         <span class="visually-hidden">Filtrar fórmulas</span>
         <input type="search" id="filtro" placeholder="Filtrar: bayes, amostra, normal…" autocomplete="off">
@@ -262,6 +262,11 @@
             <span class="card-name">ANOVA de Um Fator</span>
             <span class="card-blurb">Compara as médias de três ou mais grupos.</span>
           </a></li>
+          <li><a class="formula-card" href="kruskal-wallis.html">
+            <span class="card-tex" data-tex="H = \dfrac{12}{N(N+1)} \sum \dfrac{R_j^2}{n_j} - 3(N+1)"></span>
+            <span class="card-name">Teste de Kruskal-Wallis</span>
+            <span class="card-blurb">A ANOVA feita sobre postos, sem supor normalidade.</span>
+          </a></li>
           <li><a class="formula-card" href="comparacoes-multiplas.html">
             <span class="card-tex" data-tex="P(\text{falso positivo}) = 1 - (1 - \alpha)^k"></span>
             <span class="card-name">Comparações Múltiplas e Bonferroni</span>
@@ -412,6 +417,11 @@
             <span class="card-name">Correlação de Spearman</span>
             <span class="card-blurb">Correlação pelos postos: capta relações crescentes que não são retas.</span>
           </a></li>
+          <li><a class="formula-card" href="correlacao-parcial.html">
+            <span class="card-tex" data-tex="r_{xy \cdot z} = \dfrac{r_{xy} - r_{xz} r_{yz}}{\sqrt{(1 - r_{xz}^2)(1 - r_{yz}^2)}}"></span>
+            <span class="card-name">Correlação Parcial</span>
+            <span class="card-blurb">A relação entre duas variáveis, descontando uma terceira.</span>
+          </a></li>
           <li><a class="formula-card" href="kappa-cohen.html">
             <span class="card-tex" data-tex="\kappa = \dfrac{p_o - p_e}{1 - p_e}"></span>
             <span class="card-name">Kappa de Cohen</span>
@@ -422,10 +432,20 @@
             <span class="card-name">Regressão Linear Simples</span>
             <span class="card-blurb">A reta que prevê y a partir de x.</span>
           </a></li>
+          <li><a class="formula-card" href="intervalo-predicao.html">
+            <span class="card-tex" data-tex="\hat{y}_0 \pm t\, s \sqrt{1 + \tfrac{1}{n} + \tfrac{(x_0 - \bar{x})^2}{S_{xx}}}"></span>
+            <span class="card-name">Intervalo de Predição da Regressão</span>
+            <span class="card-blurb">Onde deve cair um novo valor — e por que a faixa é larga.</span>
+          </a></li>
           <li><a class="formula-card" href="coeficiente-determinacao.html">
             <span class="card-tex" data-tex="R^2 = 1 - \dfrac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}"></span>
             <span class="card-name">Coeficiente de Determinação (R²)</span>
             <span class="card-blurb">Que fração da variação de y a reta explica.</span>
+          </a></li>
+          <li><a class="formula-card" href="regressao-logistica.html">
+            <span class="card-tex" data-tex="\ln\dfrac{p}{1 - p} = \beta_0 + \beta_1 x"></span>
+            <span class="card-name">Regressão Logística</span>
+            <span class="card-blurb">O ajuste para respostas sim ou não, e a razão de chances.</span>
           </a></li>
           <li><a class="formula-card" href="media-geometrica.html">
             <span class="card-tex" data-tex="G = \sqrt[n]{\prod_{i=1}^{n} x_i}"></span>

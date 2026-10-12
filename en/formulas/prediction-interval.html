@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Regression Prediction Interval — Interactive</title>
+  <meta name="description" content="The linear regression prediction interval explained term by term, with a calculator, a chart of the confidence and prediction bands and why one is wider.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/en/formulas/prediction-interval.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/intervalo-predicao.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/prediction-interval.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/intervalo-predicao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/en/formulas/prediction-interval.html">
+  <meta property="og:title" content="Regression Prediction Interval — Interactive">
+  <meta property="og:description" content="The linear regression prediction interval explained term by term, with a calculator, a chart of the confidence and prediction bands and why one is wider.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Regression Prediction Interval — Interactive">
+  <meta name="twitter:description" content="The linear regression prediction interval explained term by term, with a calculator, a chart of the confidence and prediction bands and why one is wider.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <script defer src="/formulas/script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="All formulas" title="All formulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/formulas/intervalo-predicao.html" hreflang="pt-BR" lang="pt-BR">Português</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Regression Prediction Interval</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Interactive prediction interval formula">
+        <span class="part" data-part="y_ip" data-tone="1" data-tex="\hat{y}_0"></span>
+        <span class="op">±</span>
+        <span class="part" data-part="t_ip" data-tone="3" data-tex="t_{\alpha/2}"></span>
+        <span class="op">·</span>
+        <span class="part" data-part="s_ip" data-tone="2" data-tex="s"></span>
+        <span class="part" data-part="r_ip" data-tone="4" data-tex="\sqrt{1 + \tfrac{1}{n} + \tfrac{(x_0 - \bar{x})^2}{S_{xx}}}"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Tap a term to see what it means, or <button type="button" class="toggle-all" aria-pressed="false">show them all</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?x=&y=&x0=&conf=. -->
+    <section class="calc" data-calc="predint" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculate</h2>
+      <p class="calc-lede">Example: ad spending (x, in thousands) and sales (y, in thousands of units) over eight months. If next month's spending is 6.5, in what range should sales fall? Change the values to work out your own case.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="0">
+          <span>Values of <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="1 2 3 4 5 6 7 8" data-list autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="0">
+          <span>Values of <i>y</i></span>
+          <input name="y" type="text" inputmode="decimal" value="52 58 65 70 80 83 90 97" data-list autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>New <i>x</i><sub>0</sub></span>
+          <input name="x0" type="text" inputmode="decimal" value="6.5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="0">
+          <span>Confidence (%)</span>
+          <input name="conf" type="text" inputmode="decimal" value="95" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Step by step</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>What each term means</h2>
+      <dl>
+          <dt data-part="y_ip" data-tone="1">Point Prediction (ŷ₀)</dt>
+          <dd>The line's value at x₀: the best guess for y.</dd>
+          <dt data-part="t_ip" data-tone="3">Critical Value t</dt>
+          <dd>From the t distribution with n − 2 degrees of freedom, for the chosen confidence.</dd>
+          <dt data-part="s_ip" data-tone="2">Residual Standard Error (s)</dt>
+          <dd>How much the points spread around the line, on average.</dd>
+          <dt data-part="r_ip" data-tone="4">Root of the Uncertainty</dt>
+          <dd>The 1 is a new value's variation around the line, which doesn't shrink with more data; 1/n and the (x₀ − x̄)² term are the uncertainty of the line itself. Without the 1, you get the confidence interval for the mean.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Other formulas">
+      <a class="pager-prev" href="linear-regression.html" rel="prev"><span>Previous</span>Simple Linear Regression</a>
+      <a class="pager-next" href="coefficient-of-determination.html" rel="next"><span>Next</span>Coefficient of Determination (R²)</a>
+    </nav>
+  </main>
+</body>
+</html>

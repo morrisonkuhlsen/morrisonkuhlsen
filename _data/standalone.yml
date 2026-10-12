@@ -292,6 +292,26 @@
   description: "Progressões de segunda ordem e números triangulares explicados termo a termo, com calculadora do termo geral, da soma e a tabela de diferenças."
   tags: "fórmula interativa calculadora passo a passo progressão de segunda ordem números triangulares diferenças sequência"
   lang: pt
+- title: "Teste de Kruskal-Wallis"
+  url: "/formulas/kruskal-wallis.html"
+  description: "O teste de Kruskal-Wallis explicado termo a termo, com calculadora, caixas dos grupos, postos, correção para empates e tamanho do efeito."
+  tags: "fórmula interativa calculadora passo a passo Kruskal-Wallis postos não paramétrico grupos"
+  lang: pt
+- title: "Correlação Parcial"
+  url: "/formulas/correlacao-parcial.html"
+  description: "A correlação parcial explicada termo a termo, com calculadora, gráfico dos resíduos e teste: a relação entre duas variáveis descontando uma terceira."
+  tags: "fórmula interativa calculadora passo a passo correlação parcial confundimento variável de controle espúria"
+  lang: pt
+- title: "Intervalo de Predição da Regressão"
+  url: "/formulas/intervalo-predicao.html"
+  description: "O intervalo de predição da regressão linear explicado termo a termo, com calculadora, gráfico das faixas de confiança e de predição e por que uma é mais larga."
+  tags: "fórmula interativa calculadora passo a passo intervalo de predição regressão faixa de confiança previsão"
+  lang: pt
+- title: "Regressão Logística"
+  url: "/formulas/regressao-logistica.html"
+  description: "A regressão logística simples explicada termo a termo, com ajuste por máxima verossimilhança, razão de chances, testes de Wald e da razão de verossimilhança e gráfico da curva."
+  tags: "fórmula interativa calculadora passo a passo regressão logística razão de chances máxima verossimilhança Wald"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -937,6 +957,26 @@
   url: "/en/formulas/second-order-sequence.html"
   description: "Second-order sequences and triangular numbers explained term by term, with a calculator for the general term, the sum and the difference table."
   tags: "interactive formula calculator step by step second-order sequence triangular numbers differences"
+  lang: en
+- title: "Kruskal-Wallis Test"
+  url: "/en/formulas/kruskal-wallis-test.html"
+  description: "The Kruskal-Wallis test explained term by term, with a calculator, box plots of the groups, ranks, the tie correction and the effect size."
+  tags: "interactive formula calculator step by step Kruskal-Wallis ranks nonparametric groups"
+  lang: en
+- title: "Partial Correlation"
+  url: "/en/formulas/partial-correlation.html"
+  description: "Partial correlation explained term by term, with a calculator, a chart of the residuals and a test: the relationship between two variables, discounting a third."
+  tags: "interactive formula calculator step by step partial correlation confounding control variable spurious"
+  lang: en
+- title: "Regression Prediction Interval"
+  url: "/en/formulas/prediction-interval.html"
+  description: "The linear regression prediction interval explained term by term, with a calculator, a chart of the confidence and prediction bands and why one is wider."
+  tags: "interactive formula calculator step by step prediction interval regression confidence band forecast"
+  lang: en
+- title: "Logistic Regression"
+  url: "/en/formulas/logistic-regression.html"
+  description: "Simple logistic regression explained term by term, with a maximum likelihood fit, the odds ratio, Wald and likelihood ratio tests and a chart of the curve."
+  tags: "interactive formula calculator step by step logistic regression odds ratio maximum likelihood Wald"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

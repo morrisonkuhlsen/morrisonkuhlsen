@@ -365,6 +365,7 @@ testes:
     vars:
       - ['Depois de rejeitar H₀', dunn]
       - ['Versão paramétrica', anova]
+    page: kruskal-wallis
     reporte: 'H(2) = 8,43; p = 0,015; ε² = 0,19'
     codigo:
       r: |

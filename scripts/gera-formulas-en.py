@@ -182,6 +182,7 @@ CATALOG = {
     "mann-whitney": ("mann-whitney-u-test", "the Mann-Whitney U test"),
     "ic-variancia": ("chi-square-test-for-variance", "the chi-square test for variance"),
     "mcnemar": ("mcnemar-test", "the McNemar test"),
+    "kruskal-wallis": ("kruskal-wallis-test", "the Kruskal-Wallis test"),
     "autocorrelacao": ("ljung-box-test", "the Ljung–Box test"),
     "qui-quadrado": ("chi-square-goodness-of-fit-test", "the chi-square goodness-of-fit test"),
     "qui-quadrado-independencia": ("chi-square-test-of-independence", "the chi-square test of independence"),
