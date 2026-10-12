@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -1270,6 +1270,18 @@
   url: "/matematica-basica/decimais.html"
   description: "Números decimais explicados do zero: décimos e centésimos num quadro interativo, e uma calculadora que faz a conta com vírgula passo a passo — somar e subtrair alinhando a vírgula, multiplicar contando as casas e dividir tirando a vírgula."
   tags: "números decimais vírgula décimos centésimos milésimos soma subtração multiplicação divisão com vírgula conta armada"
+  lang: pt
+
+- title: "Arredondamento e Algarismos Significativos"
+  url: "/matematica-basica/arredondamento.html"
+  description: "Arredondamento explicado do zero: a reta que mostra para qual lado o número fica mais perto, uma calculadora por casas decimais ou algarismos significativos, o empate no 5, e por que arredondar só no fim da conta."
+  tags: "arredondamento arredondar casas decimais algarismos significativos truncar meio para o par arredondamento bancário calculadora"
+  lang: pt
+
+- title: "Primos e Divisibilidade"
+  url: "/matematica-basica/primos.html"
+  description: "Números primos explicados do zero: o crivo de Eratóstenes passo a passo, os critérios de divisibilidade aplicados ao seu número e por que funcionam, e a fatoração em divisões sucessivas com a lista de divisores."
+  tags: "números primos crivo de eratóstenes critérios de divisibilidade fatoração decomposição em fatores primos divisores calculadora"
   lang: pt
 
 - title: "MDC — Máximo Divisor Comum"

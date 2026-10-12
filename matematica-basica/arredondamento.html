@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Arredondamento e Algarismos Significativos</title>
+  <meta name="description" content="Arredondamento explicado do zero: a reta que mostra para qual lado o número fica mais perto, uma calculadora por casas decimais ou algarismos significativos, o empate no 5, e por que arredondar só no fim da conta.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/arredondamento.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/arredondamento.html">
+  <meta property="og:title" content="Arredondamento e Algarismos Significativos">
+  <meta property="og:description" content="Arredondamento explicado do zero: a reta que mostra para qual lado o número fica mais perto, uma calculadora por casas decimais ou algarismos significativos, o empate no 5, e por que arredondar só no fim da conta.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Arredondamento e Algarismos Significativos">
+  <meta name="twitter:description" content="Arredondamento explicado do zero: a reta que mostra para qual lado o número fica mais perto, uma calculadora por casas decimais ou algarismos significativos, o empate no 5, e por que arredondar só no fim da conta.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="arredondamento.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Arredondamento e Algarismos Significativos</h1>
+    <p class="page-lede">Arredondar é trocar um número por outro mais curto <strong>que esteja o mais perto possível dele</strong>. A regra do “5 para cima” só decide de que lado da metade o número está — e saber até onde arredondar importa tanto quanto saber arredondar.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#zoom">A regra</a>
+      <a href="#calc">Calculadora</a>
+      <a href="#significativos">Significativos</a>
+      <a href="#no-fim">Arredondar no fim</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="3{,}14159 \approx 3{,}14 \qquad 2{,}675 \approx 2{,}68"></span>
+
+    <!-- 1. Zoom na reta; estado em ?zv=&zc=. -->
+    <section class="calc intro" id="zoom" aria-labelledby="zoom-title">
+      <h2 id="zoom-title">Para qual lado fica mais perto</h2>
+      <div class="vars var-wide">
+        <label class="var">
+          <i>n</i>
+          <input name="zv" type="range" min="2000" max="3000" step="1" value="2675" aria-label="Número entre 2 e 3">
+          <output class="out-zv">2,675</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Casas decimais">
+        <button type="button" data-casas="0" aria-pressed="false">0 casas</button>
+        <button type="button" data-casas="1" aria-pressed="true">1 casa</button>
+        <button type="button" data-casas="2" aria-pressed="false">2 casas</button>
+      </div>
+      <div class="intro-figure zoom-fig" aria-hidden="true"></div>
+      <div class="zoom-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?num=&modo=&k=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Arredonde um número</h2>
+      <p class="calc-lede">Por casas decimais (depois da vírgula) ou por algarismos significativos (a partir do primeiro que não é zero). A conta é feita com os algarismos, não com aproximações do computador.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Número</span>
+          <input name="num" type="text" inputmode="decimal" value="3,14159" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Arredondar por</span>
+          <select name="modo">
+            <option value="casas" selected>casas decimais</option>
+            <option value="sig">algarismos significativos</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="1">
+          <span>Quantas</span>
+          <input name="k" type="text" inputmode="numeric" value="2" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="3,14159;casas;2">π com 2 casas</button>
+        <button type="button" data-exemplo="2,675;casas;2">2,675</button>
+        <button type="button" data-exemplo="9,96;casas;1">9,96 com 1 casa</button>
+        <button type="button" data-exemplo="0,004567;sig;2">0,004567 com 2 sig.</button>
+        <button type="button" data-exemplo="123456;sig;2">123456 com 2 sig.</button>
+        <button type="button" data-exemplo="-1,25;casas;1">−1,25</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="meio-title">
+      <h2 id="meio-title">E quando cai bem no meio?</h2>
+      <p>2,5 está exatamente entre 2 e 3: nenhum dos dois é mais perto. A regra da escola (<strong>o 5 sobe</strong>) resolve, mas tem um defeito pequeno: em muitos arredondamentos, sobe mais vezes do que desce, e a soma dos arredondados fica um pouco maior que a soma verdadeira.</p>
+      <p>Por isso existe a regra do <strong>meio para o par</strong> (ou “arredondamento do banqueiro”): no empate exato, vai para o algarismo par. 2,5 → 2, 3,5 → 4, 4,5 → 4. Metade dos empates sobe, metade desce, e o viés some. É a regra padrão do Python, do R e da norma IEEE dos computadores — por isso <code>round(2.5)</code> dá 2 no Python.</p>
+      <p>Para números negativos, arredonda-se o tamanho e mantém-se o sinal: −1,25 com 1 casa vira −1,3.</p>
+    </section>
+
+    <section class="lesson" id="significativos" aria-labelledby="sig-title">
+      <h2 id="sig-title">Algarismos significativos</h2>
+      <p>Casas decimais contam a partir da vírgula. Algarismos significativos contam a partir do <strong>primeiro algarismo que não é zero</strong> — e dizem com quanta precisão o número foi medido, qualquer que seja a unidade.</p>
+      <div class="facts is-pairs">
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}00\underline{45}"></span>
+          <p><strong>Zeros à esquerda não contam:</strong> só marcam a vírgula. 2 significativos — o mesmo que 4,5 mm escrito em metros.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\underline{1{,}20}"></span>
+          <p><strong>Zero à direita, depois da vírgula, conta:</strong> 1,20 diz que a medida é precisa até o centésimo. 3 significativos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\underline{3}0\underline{0}5"></span>
+          <p><strong>Zeros entre outros algarismos contam.</strong> 4 significativos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1500 \;?"></span>
+          <p><strong>Zeros no fim de um inteiro são ambíguos:</strong> podem ser medida ou só lugar. A notação científica resolve: 1,5 × 10³ (2 sig.) ou 1,500 × 10³ (4 sig.).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="no-fim" aria-labelledby="fim-title">
+      <h2 id="fim-title">Arredonde no fim, não no meio</h2>
+      <p>Cada arredondamento erra um pouquinho. Feito no meio da conta, o erro entra nas contas seguintes e se acumula. A regra: <strong>faça as contas com todos os algarismos e arredonde só o resultado final</strong>.</p>
+
+      <article class="rule">
+        <header><h3>Somar partes já arredondadas</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="d \times \operatorname{arred}\!\left(\frac{100\%}{d}\right) \ne 100\%"></span>
+        <p>Um total dividido em d partes iguais, cada uma mostrada com k casas. Arraste d e k.</p>
+        <div class="rule-try" data-rule="meio" data-vars="d k"></div>
+      </article>
+
+      <div class="tip">
+        <strong>Na calculadora, guarde o número inteiro.</strong> Use a memória ou o resultado anterior em vez de digitar de novo a versão arredondada. Numa variância, arredondar a média para 2 casas antes de calcular os desvios pode mudar a terceira casa do resultado.
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Arredondamento na estatística</h2>
+      <p><strong>Quantas casas mostrar.</strong> Uma regra prática: médias e desvios com uma casa a mais que os dados. Se as notas são inteiras, a média 7,4 basta; 7,3846 sugere uma precisão que os dados não têm.</p>
+      <p><strong>Valores-p muito pequenos</strong> não viram 0,000: escreve-se p &lt; 0,001. Um valor-p nunca é exatamente zero. Veja o <a href="/formulas/valor-p.html">valor-p</a>.</p>
+      <p><strong>Tamanho de amostra arredonda sempre para cima.</strong> Se a fórmula pede 384,2 pessoas, entrevistam-se 385 — com 384, a margem de erro passa da desejada. É um dos poucos casos em que não se arredonda para o mais perto; veja a <a href="/formulas/cochran-formula.html">fórmula de Cochran</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Arredonde 7,846 para 1 e para 2 casas decimais.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>1 casa: o algarismo cortado é 4, fica <strong>7,8</strong>. 2 casas: o cortado é 6, sobe: <strong>7,85</strong>.</p>
+            <p><a href="?num=7,846&amp;modo=casas&amp;k=2#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Arredonde 19,97 para 1 casa decimal.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O cortado é 7: o 9 sobe para 10, e o vai-um passa pelo outro 9. Resultado: <strong>20,0</strong> — o zero fica, para mostrar que há uma casa.</p>
+            <p><a href="?num=19,97&amp;modo=casas&amp;k=1#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quantos algarismos significativos têm 0,0305 e 2,400?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>0,0305: os zeros antes do 3 não contam, o do meio conta: <strong>3</strong>. 2,400: os zeros depois da vírgula contam: <strong>4</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> A população de uma cidade é 2.483.912. Escreva com 2 algarismos significativos.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O terceiro algarismo é 8, sobe: <strong>2.500.000</strong>, ou 2,5 milhões, ou 2,5 × 10⁶.</p>
+            <p><a href="?num=2483912&amp;modo=sig&amp;k=2#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Três amigos dividem igualmente uma conta de R$ 100. Quanto paga cada um, em centavos, e por que a soma dá diferente?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>100 ÷ 3 = 33,333… ≈ <strong>R$ 33,33</strong>. Três vezes isso dá R$ 99,99: falta 1 centavo, que é a soma dos três pedacinhos arredondados para baixo. Na prática, um deles paga R$ 33,34.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="decimais.html" rel="prev"><span>Anterior</span>Números Decimais — A Vírgula e as Contas</a>
+      <a class="pager-next" href="primos.html" rel="next"><span>Próximo</span>Primos e Divisibilidade</a>
+    </nav>
+  </main>
+</body>
+</html>

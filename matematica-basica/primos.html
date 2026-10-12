@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Primos e Divisibilidade</title>
+  <meta name="description" content="Números primos explicados do zero: o crivo de Eratóstenes passo a passo, os critérios de divisibilidade aplicados ao seu número e por que funcionam, e a fatoração em divisões sucessivas com a lista de divisores.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/primos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/primos.html">
+  <meta property="og:title" content="Primos e Divisibilidade">
+  <meta property="og:description" content="Números primos explicados do zero: o crivo de Eratóstenes passo a passo, os critérios de divisibilidade aplicados ao seu número e por que funcionam, e a fatoração em divisões sucessivas com a lista de divisores.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Primos e Divisibilidade">
+  <meta name="twitter:description" content="Números primos explicados do zero: o crivo de Eratóstenes passo a passo, os critérios de divisibilidade aplicados ao seu número e por que funcionam, e a fatoração em divisões sucessivas com a lista de divisores.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="primos.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Primos e Divisibilidade</h1>
+    <p class="page-lede">Um número primo é um inteiro maior que 1 que <strong>só é divisível por 1 e por ele mesmo</strong>: 2, 3, 5, 7, 11… Todos os outros se escrevem como produto de primos, de um jeito só — os primos são os átomos da multiplicação.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#crivo">O crivo</a>
+      <a href="#calc">Fatorar e testar</a>
+      <a href="#criterios">Critérios</a>
+      <a href="#fatos">Fatos</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="360 = 2^3 \times 3^2 \times 5"></span>
+
+    <!-- 1. O crivo de Eratóstenes; estado em ?crivo=. -->
+    <section class="calc intro" id="crivo" aria-labelledby="crivo-title">
+      <h2 id="crivo-title">O crivo de Eratóstenes</h2>
+      <ol class="crivo" aria-label="Números de 1 a 100"></ol>
+      <div class="intro-text crivo-text" aria-live="polite"></div>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count crivo-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar o crivo pronto">⏭</button>
+      </div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?num=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Fatorar e testar um número</h2>
+      <p class="calc-lede">Digite um inteiro: ele é decomposto em primos por divisões sucessivas, e cada critério de divisibilidade é aplicado a ele.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Número</span>
+          <input name="num" type="text" inputmode="numeric" value="360" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="360">360</button>
+        <button type="button" data-exemplo="97">97</button>
+        <button type="button" data-exemplo="1452">1452</button>
+        <button type="button" data-exemplo="1001">1001</button>
+        <button type="button" data-exemplo="2024">2024</button>
+        <button type="button" data-exemplo="65536">65536</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="fat-cols">
+        <div>
+          <h3>Divisões sucessivas</h3>
+          <div class="ladder-box"></div>
+        </div>
+        <div class="fat-crit">
+          <h3>Critérios de divisibilidade</h3>
+          <div class="crit-box"></div>
+        </div>
+      </div>
+      <div class="divisors-box"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="criterios" aria-labelledby="crit-title">
+      <h2 id="crit-title">Por que os critérios funcionam</h2>
+      <p>Todo critério sai de escrever o número pelas casas. Com 1452 = 1 × 1000 + 4 × 100 + 5 × 10 + 2:</p>
+      <ul>
+        <li><strong>2, 5 e 10:</strong> 10, 100, 1000 já são divisíveis por 2, 5 e 10. Só a última casa decide.</li>
+        <li><strong>4 e 8:</strong> 100 é múltiplo de 4, e 1000 é múltiplo de 8. Decidem os dois e os três últimos algarismos.</li>
+        <li><strong>3 e 9:</strong> 10 = 9 + 1, 100 = 99 + 1, 1000 = 999 + 1. Tirando os múltiplos de 9, sobra 1 + 4 + 5 + 2: a <strong>soma dos algarismos</strong> deixa o mesmo resto que o número na divisão por 3 e por 9.</li>
+        <li><strong>11:</strong> 10 = 11 − 1, 100 = 99 + 1, 1000 = 1001 − 1. As casas alternam +1 e −1: decide a <strong>soma alternada</strong>, 2 − 5 + 4 − 1 = 0.</li>
+      </ul>
+      <div class="tip">
+        <strong>Para testar se é primo, basta ir até a raiz.</strong> Se n = a × b, um dos dois fatores é no máximo √n. Para 97, basta testar 2, 3, 5 e 7 (√97 ≈ 9,8): nenhum divide, então 97 é primo.
+      </div>
+    </section>
+
+    <section class="lesson" id="fatos" aria-labelledby="fatos-title">
+      <h2 id="fatos-title">Fatos sobre os primos</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="1 \text{ não é primo}"></span>
+          <p><strong>Por convenção — e por um bom motivo.</strong> Se 1 fosse primo, 6 = 2 × 3 = 1 × 2 × 3 = 1 × 1 × 2 × 3… e a fatoração deixaria de ser única.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="2"></span>
+          <p><strong>O único primo par.</strong> Todo outro par é divisível por 2.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\text{infinitos}"></span>
+          <p><strong>Os primos não acabam</strong> (Euclides). Multiplique todos os primos de uma lista e some 1: o resultado não é divisível por nenhum deles, então há um primo fora da lista.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1001 = 7 \times 11 \times 13"></span>
+          <p><strong>Parece primo, não é.</strong> Números “redondos” enganam: teste antes de concluir.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\text{única}"></span>
+          <p><strong>Teorema fundamental da aritmética:</strong> cada inteiro maior que 1 tem uma única fatoração em primos, a menos da ordem.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde os primos levam</h2>
+      <p><strong>MDC e MMC.</strong> Com os dois números fatorados, o <a href="mdc.html">MDC</a> fica com os primos comuns no menor expoente, e o <a href="mmc.html">MMC</a>, com todos os primos no maior expoente.</p>
+      <p><strong>Frações.</strong> <a href="fracoes.html">Simplificar uma fração</a> é cancelar os primos que o numerador e o denominador têm em comum.</p>
+      <p><strong>Segurança na internet.</strong> A criptografia RSA usa o fato de que multiplicar dois primos grandes é fácil, mas descobrir quais foram multiplicados, só tendo o produto, é dificílimo.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> 91 é primo?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Não: <strong>91 = 7 × 13</strong>. Não é par, a soma 10 não é múltiplo de 3, não termina em 0 ou 5 — mas o 7 divide.</p>
+            <p><a href="?num=91#calc">Veja a fatoração →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Fatore 504.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>504 ÷ 2 = 252, ÷ 2 = 126, ÷ 2 = 63, ÷ 3 = 21, ÷ 3 = 7, ÷ 7 = 1. <strong>504 = 2³ × 3² × 7</strong>.</p>
+            <p><a href="?num=504#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Sem dividir, diga se 7326 é divisível por 3, por 6 e por 9.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Soma dos algarismos: 7 + 3 + 2 + 6 = 18. É múltiplo de 3 e de 9, e o número é par: <strong>divisível por 3, 6 e 9</strong>.</p>
+            <p><a href="?num=7326#calc">Confira →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quantos divisores tem 72?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>72 = 2³ × 3². Expoentes 3 e 2: (3 + 1) × (2 + 1) = <strong>12 divisores</strong>.</p>
+            <p><a href="?num=72#calc">Veja a lista →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Qual algarismo pode ocupar o lugar do ? em 52?4 para o número ser divisível por 9?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>5 + 2 + ? + 4 = 11 + ? tem de ser múltiplo de 9: 18, então <strong>? = 7</strong> (5274 = 9 × 586).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="arredondamento.html" rel="prev"><span>Anterior</span>Arredondamento e Algarismos Significativos</a>
+      <a class="pager-next" href="mdc.html" rel="next"><span>Próximo</span>MDC — Máximo Divisor Comum</a>
+    </nav>
+  </main>
+</body>
+</html>
