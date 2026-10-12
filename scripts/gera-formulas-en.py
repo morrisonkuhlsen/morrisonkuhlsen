@@ -158,6 +158,8 @@ def build(slug, d):
         return (f'    <p class="formula-catalog">When to use it, assumptions and alternatives: '
                 f'<a href="/en/statistical-tests/{teste}/">{texto} in the statistical tests catalog</a>.</p>\n\n')
     s = re.sub(r'    <p class="formula-catalog">.*?</p>\n\n', catalogo, s)
+    # O Cálculo Intuitivo só existe em português: o link para a lição sai.
+    s = re.sub(r'    <p class="formula-lesson">.*?</p>\n\n', "", s)
 
     def pager(m):
         kind, target = m.group(1), m.group(2)

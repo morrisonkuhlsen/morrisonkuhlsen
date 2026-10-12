@@ -718,14 +718,16 @@ body {
 
 /* Link para o teste no catálogo (/testes-estatisticos/). Só existe em
    português: o gerador de /en/formulas/ tira o parágrafo. */
-.formula-catalog {
+.formula-catalog,
+.formula-lesson {
   width: 100%;
   max-width: 720px;
   margin: 0;
   line-height: 1.55;
 }
 
-.formula-catalog a {
+.formula-catalog a,
+.formula-lesson a {
   color: var(--text-strong);
   text-underline-offset: 3px;
 }

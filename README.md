@@ -28,6 +28,9 @@ _layouts/          base → home | page | post
 assets/js/site.js  todo o comportamento do site, sem dependências
 blog/index.html    listagem com filtro por tag
 search.json        índice de busca, gerado pelo Jekyll
+formulas/          as 80 fórmulas interativas (en/formulas/ é gerado delas)
+matematica-basica/ lições de matemática de base, uma por página
+calculo/           Cálculo Intuitivo: dez lições, da taxa de variação à estatística
 ```
 
 ## Contratos que valem conhecer
@@ -159,12 +162,13 @@ A coluna Z escreve o negativo com o sinal tipográfico − (U+2212), em que
 `parseFloat` devolve NaN — cuidado ao mexer no JS dela. E `ttable.html` e
 `ftable.html` usam CRLF, ao contrário do resto do repositório.
 
-**Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 23 fórmulas
-interativas, o quiz e o problema semanal são HTML solto, fora do ciclo do
-Jekyll — são aplicações com CSS e JS próprios, não conteúdo. Ficam assim de
-propósito. Para entrarem na busca há `_data/standalone.yml`, gerado a partir
-do `<title>` e do `<meta description>` de cada arquivo; regenere-o quando
-adicionar uma página nova.
+**Páginas avulsas.** As tabelas z/t/F, o alfabeto grego, as 80 fórmulas
+interativas, Matemática Básica, Cálculo Intuitivo, o quiz e o problema semanal
+são HTML solto, fora do ciclo do Jekyll — são aplicações com CSS e JS
+próprios, não conteúdo. Ficam assim de propósito. Para entrarem na busca há
+`_data/standalone.yml`, com o `<title>` e o `<meta description>` de cada
+arquivo; acrescente a entrada (nos dois idiomas, quando houver) ao criar uma
+página nova.
 
 **Fórmulas em inglês.** `/en/formulas/` é gerado a partir das páginas em
 português por `scripts/gera-formulas-en.py`, com as traduções em
@@ -175,6 +179,31 @@ português na versão inglesa. As duas versões usam o mesmo `script.js`, que l�
 o idioma do `<html lang>`: os textos gerados (passos, notas, erros) estão em
 `T("pt", "en")`, e números, decimais e listas seguem o idioma — em inglês, a
 vírgula separa milhar e itens de lista.
+
+**Anatomia de uma fórmula.** Cada página tem a fórmula montada em `.part`
+(com `data-part` e `data-tone`, que liga o termo ao seu verbete e à sua cor),
+uma `<section class="calc" data-calc="nome">` com um campo por variável e a
+lista de termos. `CALCS.nome`, em `formulas/script.js`, recebe os valores já
+lidos e devolve `{ result, steps, note, chart }`, ou `{ error }`. Campos com
+`data-list` viram listas; com `data-matrix`, tabelas (linhas separadas por
+ponto e vírgula); com `data-optional`, podem ficar vazios; `data-mostra`
+esconde um campo conforme o valor de outro. Os gráficos são SVG desenhados
+por `renderChart`: `bars`, `curve` (com `lines`, `hlines`, `shadeTo`,
+`marker` e `logX`), `hist`, `intervals`, `scatter` (pontos arrastáveis),
+`box` e `venn`. Uma fórmula nova pede: a página, a entrada em `CALCS`, o
+cartão no índice (e o número no `home-lede`), a paginação das vizinhas, a
+tradução em `scripts/formulas_en_data.py` (`PAGES` e `BLURBS`), rodar o
+gerador e as duas entradas em `_data/standalone.yml`. Se a fórmula é de um
+teste, `page`/`veja` em `_data/testes_estatisticos.yml` liga o catálogo a ela.
+
+**Cálculo Intuitivo.** `/calculo/`, só em português: dez lições no formato de
+Matemática Básica, cujo `style.css` e `licao.js` reaproveita. Cada lição é um
+HTML e um JS; `calculo/grafico.js` desenha os gráficos (curvas, secantes,
+tangentes, áreas e faixas, com escalas iguais quando a inclinação importa) e
+os sliders, cujo estado vai para a URL. As tabelas de derivadas e de integrais
+usam os cards de regra de `licao.js` (`opts.sides` troca os rótulos dos dois
+lados). Quinze fórmulas apontam de volta para a lição correspondente num
+`<p class="formula-lesson">`, que o gerador retira da versão em inglês.
 
 **Glossário.** `/pt/glossario`, montado por `glossary.html` a partir de
 `_data/glossario.yml` — 71 verbetes de uma ou duas frases, cada um com âncora
