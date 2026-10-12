@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Inequação do 1º Grau — Quando o Sinal Vira</title>
+  <meta name="description" content="Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/inequacoes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/inequacoes.html">
+  <meta property="og:title" content="Inequação do 1º Grau — Quando o Sinal Vira">
+  <meta property="og:description" content="Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Inequação do 1º Grau — Quando o Sinal Vira">
+  <meta name="twitter:description" content="Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="expressao.js"></script>
+  <script defer src="inequacoes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Inequação do 1º Grau — Quando o Sinal Vira</h1>
+    <p class="page-lede">Uma inequação troca o = por &lt;, &gt;, ≤ ou ≥, e a resposta deixa de ser um número para ser um <strong>pedaço da reta</strong>. Resolve-se igual à equação, com uma regra a mais: multiplicar ou dividir por um negativo <strong>vira o sinal</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#vira">Por que o sinal vira</a>
+      <a href="#calc">Resolva</a>
+      <a href="#intervalos">Intervalos</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="-2x < 6 \;\Rightarrow\; x > -3"></span>
+
+    <!-- 1. Por que o sinal vira; estado em ?vp=&vq=&vk=. -->
+    <section class="calc intro" id="vira" aria-labelledby="vira-title">
+      <h2 id="vira-title">Por que o sinal vira</h2>
+      <div class="vars">
+        <label class="var">
+          <i>p</i>
+          <input name="vp" type="range" min="-6" max="6" step="1" value="2" aria-label="Primeiro número">
+          <output class="out-vp">2</output>
+        </label>
+        <label class="var var-b">
+          <i>q</i>
+          <input name="vq" type="range" min="-6" max="6" step="1" value="5" aria-label="Segundo número">
+          <output class="out-vq">5</output>
+        </label>
+        <label class="var">
+          <i>×</i>
+          <input name="vk" type="range" min="-3" max="3" step="1" value="-2" aria-label="Fator que multiplica os dois">
+          <output class="out-vk">−2</output>
+        </label>
+      </div>
+      <div class="intro-figure vira-figure" aria-hidden="true"></div>
+      <div class="vira-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="regras-title">
+      <h2 id="regras-title">O que mexe e o que não mexe no sinal</h2>
+      <div class="facts is-pairs">
+        <div class="fact">
+          <span class="rule-tex" data-tex="a < b \Rightarrow a + c < b + c"></span>
+          <p><strong>Somar ou subtrair</strong> qualquer número dos dois lados: o sinal fica. É andar os dois pontos juntos na reta.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a < b,\ c > 0 \Rightarrow ac < bc"></span>
+          <p><strong>Multiplicar ou dividir por positivo:</strong> o sinal fica. A reta estica ou encolhe, mas não vira.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a < b,\ c < 0 \Rightarrow ac > bc"></span>
+          <p><strong>Multiplicar ou dividir por negativo:</strong> o sinal vira. A reta espelha em torno do zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3 < x \iff x > 3"></span>
+          <p><strong>Trocar os lados:</strong> leia ao contrário. A ponta do sinal continua apontando para o menor.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?ineq=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Resolva uma inequação passo a passo</h2>
+      <p class="calc-lede">Digite uma inequação do 1º grau em x, com &lt;, &gt;, &lt;= (≤) ou &gt;= (≥). A resposta sai na reta e como intervalo, e a prova testa um número de cada lado.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Inequação</span>
+          <input name="ineq" type="text" value="4 - 2x >= 10" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="3x + 5 < 20">3x + 5 &lt; 20</button>
+        <button type="button" data-exemplo="4 - 2x >= 10">4 − 2x ≥ 10</button>
+        <button type="button" data-exemplo="5x - 3 > 2x + 9">5x − 3 &gt; 2x + 9</button>
+        <button type="button" data-exemplo="-x <= 3">−x ≤ 3</button>
+        <button type="button" data-exemplo="2(x + 1) <= 2x + 3">sempre vale</button>
+        <button type="button" data-exemplo="x + 1 > x + 2">nunca vale</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="ineq-figure" aria-hidden="true"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="intervalos" aria-labelledby="int-title">
+      <h2 id="int-title">Três jeitos de escrever a resposta</h2>
+      <p>A solução de x ≥ −3 é a mesma coisa escrita de três formas:</p>
+      <ul>
+        <li><strong>Desigualdade:</strong> x ≥ −3.</li>
+        <li><strong>Na reta:</strong> uma bolinha <strong>cheia</strong> no −3 (ele entra) e uma seta para a direita. Com &gt; em vez de ≥, a bolinha seria <strong>vazia</strong>.</li>
+        <li><strong>Intervalo:</strong> [−3, +∞[. O colchete virado para dentro inclui a ponta; virado para fora, exclui. O infinito não é um número, então nunca entra: leva sempre colchete para fora.</li>
+      </ul>
+      <span class="tex-block" data-tex="x > 2 \;\leftrightarrow\; \left]2,\ +\infty\right[ \qquad x \le 5 \;\leftrightarrow\; \left]-\infty,\ 5\right] \qquad -1 \le x < 4 \;\leftrightarrow\; \left[-1,\ 4\right["></span>
+      <p>Em livros de outros países aparecem parênteses no lugar do colchete para fora: (2, +∞) é o mesmo que ]2, +∞[.</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-x < 4 \;\Rightarrow\; x > -4"></span>
+          <p><strong>O −x também conta.</strong> Tirar o sinal de menos do x é multiplicar por −1: vira.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-2x < 6 \not\Rightarrow x < -3"></span>
+          <p><strong>Esquecer de virar</strong> dá exatamente o lado errado da reta. Teste: x = 0 satisfaz −2x &lt; 6, mas não x &lt; −3.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x + 5 > 2 \;\Rightarrow\; x > -3"></span>
+          <p><strong>Resposta negativa não vira o sinal.</strong> Só vira quem multiplica ou divide por negativo; aqui só se subtraiu 5.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x > 3 \ne x \ge 3"></span>
+          <p><strong>A ponta importa.</strong> “Mais de 3” deixa o 3 de fora; “pelo menos 3” inclui.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Onde as inequações aparecem na estatística</h2>
+      <p><strong>Intervalo de confiança.</strong> “A média está a menos de 2 do valor verdadeiro” é |x̄ − μ| &lt; 2, que se abre em duas inequações: x̄ − 2 &lt; μ &lt; x̄ + 2. É a forma de todo <a href="/formulas/intervalo-confianca.html">intervalo de confiança</a>. A página de <a href="/formulas/modulo-inequacao.html">módulo e inequação</a> mostra esse passo.</p>
+      <p><strong>Teste de hipótese.</strong> Rejeita-se a hipótese quando o <a href="/formulas/valor-p.html">valor-p</a> &lt; 0,05, ou quando |z| &gt; 1,96: a decisão do teste é uma inequação.</p>
+      <p><strong>Tamanho de amostra.</strong> “Quantas pessoas entrevistar para a margem de erro ficar abaixo de 3 pontos?” é uma inequação em n, resolvida pela <a href="/formulas/margem-de-erro.html">margem de erro</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Resolva 2x + 3 &lt; 11.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>2x &lt; 8, e dividindo por 2 (positivo, o sinal fica): <strong>x &lt; 4</strong>, ou ]−∞, 4[.</p>
+            <p><a href="?ineq=2x+%2B+3+%3C+11#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Resolva 7 − 3x ≥ 1.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>−3x ≥ −6. Dividindo por −3, o sinal vira: <strong>x ≤ 2</strong>, ou ]−∞, 2].</p>
+            <p><a href="?ineq=7+-+3x+%3E%3D+1#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Resolva 4x − 1 &gt; 2x + 7.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>2x − 1 &gt; 7, 2x &gt; 8, <strong>x &gt; 4</strong>.</p>
+            <p><a href="?ineq=4x+-+1+%3E+2x+%2B+7#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Um plano de celular cobra R$ 30 por mês mais R$ 0,50 por gigabyte extra. Com R$ 45 de orçamento, quantos gigabytes extras dá para usar?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>30 + 0,5x ≤ 45, então 0,5x ≤ 15 e <strong>x ≤ 30</strong>: até 30 GB extras.</p>
+            <p><a href="?ineq=30+%2B+0%2C5x+%3C%3D+45#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Para passar, a média de duas provas tem de ser pelo menos 6. Quem tirou 4,5 na primeira precisa de quanto na segunda?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(4,5 + x) ÷ 2 ≥ 6, então 4,5 + x ≥ 12 e <strong>x ≥ 7,5</strong>.</p>
+            <p><a href="?ineq=(4%2C5+%2B+x)+%2F+2+%3E%3D+6#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="equacao-1grau.html" rel="prev"><span>Anterior</span>Equação do 1º Grau — A Balança</a>
+      <a class="pager-next" href="equacao-2grau.html" rel="next"><span>Próximo</span>Equação do 2º Grau</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -2113,3 +2113,95 @@
   opacity: .45;
   cursor: default;
 }
+
+/* ================================================================ somatório */
+
+/* Os limites do Σ passam um pouco da caixa do KaTeX: sem isso, a fórmula
+   ganha uma barra de rolagem. É curta, então não estoura no celular. */
+.rule-tex.is-tall {
+  overflow: visible;
+}
+
+.sum-eq {
+  margin-top: .8rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.sum-table {
+  margin-top: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sum-table th,
+.sum-table td {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Os cabeçalhos são fórmulas: nada de maiúsculas (xᵢ viraria Xᵢ). */
+.sum-table th {
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: .95rem;
+}
+
+.sum-table th:first-child,
+.sum-table td:first-child {
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* A linha do Σ, e a coluna da soma escolhida, na cor do resultado. */
+.sum-table tfoot td {
+  border-top: 2px solid var(--text-muted);
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.sum-table .is-on {
+  background: color-mix(in srgb, var(--tone-1) 14%, transparent);
+  color: var(--tone-1);
+}
+
+/* ================================================================ inequações */
+
+/* As linhas de cada número até a imagem dele: com fator negativo, cruzam. */
+.vira-map {
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.vira-map.is-p { stroke: var(--tone-2); }
+.vira-map.is-q { stroke: var(--tone-5); }
+.plot-dot.reta-q { fill: var(--tone-5); }
+
+.vira-eq {
+  margin-top: .4rem;
+}
+
+/* A solução: a semirreta, a seta e a bolinha cheia (entra) ou vazia (não entra). */
+.ineq-figure {
+  margin-top: .6rem;
+}
+
+.ineq-ray {
+  stroke: var(--tone-1);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.ineq-head {
+  fill: var(--tone-1);
+}
+
+.ineq-dot {
+  fill: var(--tone-1);
+  stroke: var(--tone-1);
+  stroke-width: 3;
+}
+
+.ineq-dot.is-open {
+  fill: var(--surface);
+}

@@ -104,63 +104,8 @@
     draw();
   }
 
-  /* ---------------------------------------------------------------- forma ax + b */
-
+  const { lin, linTex, termTex, subst } = E;
   const L0 = { a: E.Q(0), b: E.Q(0) };
-  const DOIS = "Aparece x vezes x, que é x²: isso já é uma equação do 2º grau. Veja a página da equação do 2º grau.";
-
-  // Cada lado vira a·x + b, com a e b frações exatas.
-  function lin(n) {
-    if (n.t === "num") return { a: E.Q(0), b: n.q };
-    if (n.t === "x") return { a: E.Q(1), b: E.Q(0) };
-    if (n.t === "grp") return lin(n.a);
-    if (n.t === "neg") { const l = lin(n.a); return { a: E.neg(l.a), b: E.neg(l.b) }; }
-    const p = lin(n.a), q = lin(n.b);
-    if (n.op === "+") return { a: E.add(p.a, q.a), b: E.add(p.b, q.b) };
-    if (n.op === "-") return { a: E.sub(p.a, q.a), b: E.sub(p.b, q.b) };
-    if (n.op === "*") {
-      if (!E.isZero(p.a) && !E.isZero(q.a)) throw new Error(DOIS);
-      return { a: E.add(E.mul(p.a, q.b), E.mul(q.a, p.b)), b: E.mul(p.b, q.b) };
-    }
-    if (n.op === "/") {
-      if (!E.isZero(q.a)) throw new Error("Há x no denominador: isso não é uma equação do 1º grau como está. Multiplique os dois lados pelo denominador antes.");
-      if (E.isZero(q.b)) throw new Error("Divisão por zero: a equação não tem sentido.");
-      return { a: E.div(p.a, q.b), b: E.div(p.b, q.b) };
-    }
-    // Potência: o expoente tem de ser um número; com x na base, só 0 ou 1.
-    if (!E.isZero(q.a)) throw new Error("Há x no expoente: isso é uma equação exponencial, não do 1º grau.");
-    if (E.isZero(p.a)) return { a: E.Q(0), b: E.pow(p.b, q.b) };
-    if (q.b.n === 1 && q.b.d === 1) return p;
-    if (q.b.n === 0) return { a: E.Q(0), b: E.Q(1) };
-    throw new Error(DOIS);
-  }
-
-  // 3x + 5, -x - 2, \frac{1}{2}x, 0.
-  function linTex({ a, b }) {
-    let s = "";
-    if (!E.isZero(a)) {
-      const abs = E.neg(a).n > 0 ? E.neg(a) : a;
-      s = `${a.n < 0 ? "-" : ""}${abs.n === 1 && abs.d === 1 ? "" : E.tex(abs)}x`;
-    }
-    if (!E.isZero(b) || !s) {
-      const neg = b.n < 0, abs = neg ? E.neg(b) : b;
-      s += s ? ` ${neg ? "-" : "+"} ${E.tex(abs)}` : E.tex(b);
-    }
-    return s;
-  }
-
-  // O termo para somar aos dois lados: "- 2x", "+ 5".
-  const termTex = (k, v) => {
-    const neg = k.n < 0, abs = neg ? E.neg(k) : k;
-    return `${neg ? "-" : "+"} ${v && abs.n === 1 && abs.d === 1 ? "" : E.tex(abs)}${v}`;
-  };
-
-  const subst = (n, q) => {
-    if (n.t === "x") return { t: "num", q };
-    if (n.t === "bin") return { ...n, a: subst(n.a, q), b: subst(n.b, q) };
-    if (n.t === "grp" || n.t === "neg") return { ...n, a: subst(n.a, q) };
-    return n;
-  };
 
   function solve(src) {
     const parts = src.split("=");

@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações do 1º e do 2º grau, conjuntos e constantes."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes e somatório."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -1314,6 +1314,12 @@
   tags: "equação do primeiro grau equação linear balança isolar o x incógnita passar para o outro lado calculadora passo a passo"
   lang: pt
 
+- title: "Inequação do 1º Grau — Quando o Sinal Vira"
+  url: "/matematica-basica/inequacoes.html"
+  description: "Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado."
+  tags: "inequação do primeiro grau desigualdade menor maior inverter o sinal intervalo conjunto solução reta calculadora passo a passo"
+  lang: pt
+
 - title: "Equação do 2º Grau — Fórmula Quadrática e Parábola"
   url: "/matematica-basica/equacao-2grau.html"
   description: "Equação do 2º grau explicada do zero: a parábola que muda com a, b e c, o discriminante, a fórmula quadrática com as raízes exatas, de onde ela vem, atalhos, soma e produto e exercícios."
@@ -1336,6 +1342,12 @@
   url: "/matematica-basica/logaritmos.html"
   description: "Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor."
   tags: "logaritmo logaritmos log ln logaritmo natural escala logarítmica mudança de base tempo para dobrar regra do 72"
+  lang: pt
+
+- title: "Somatório — A Notação Σ"
+  url: "/matematica-basica/somatorio.html"
+  description: "O somatório Σ explicado do zero: como ler o índice e os limites, uma tabela que soma os seus dados coluna por coluna (Σx, Σx², (Σx)², desvios), as propriedades testadas com os seus números e o Σ nas fórmulas da média, da variância e da covariância."
+  tags: "somatório sigma Σ notação soma índice soma dos quadrados quadrado da soma desvios média variância"
   lang: pt
 
 - title: "Cálculo Intuitivo"

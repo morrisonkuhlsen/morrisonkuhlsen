@@ -8,6 +8,8 @@
  * com op em + − * / ^. Os parênteses, colchetes e chaves que o leitor
  * escreveu viram nós grp, para a conta mostrar a expressão como ele a
  * escreveu; implicit marca o produto sem sinal, como 2(3 + 4) ou 3x.
+ *
+ * lin reduz um lado de equação ou inequação do 1º grau a a·x + b.
  */
 window.Expr = (() => {
   const { fmt, tone } = Licao;
@@ -192,5 +194,64 @@ window.Expr = (() => {
     return go(node, "top");
   }
 
-  return { Q, add, sub, mul, div, neg, pow, isZero, isInt, val, casas, text, tex, parse, toTex, NOME };
+  /* ---------------------------------------------------------------- forma ax + b */
+
+  // Para a equação e a inequação do 1º grau.
+
+  const DOIS = "Aparece x vezes x, que é x²: isso já é do 2º grau. Veja a página da equação do 2º grau.";
+
+  // Cada lado vira a·x + b, com a e b frações exatas.
+  function lin(n) {
+    if (n.t === "num") return { a: Q(0), b: n.q };
+    if (n.t === "x") return { a: Q(1), b: Q(0) };
+    if (n.t === "grp") return lin(n.a);
+    if (n.t === "neg") { const l = lin(n.a); return { a: neg(l.a), b: neg(l.b) }; }
+    const p = lin(n.a), q = lin(n.b);
+    if (n.op === "+") return { a: add(p.a, q.a), b: add(p.b, q.b) };
+    if (n.op === "-") return { a: sub(p.a, q.a), b: sub(p.b, q.b) };
+    if (n.op === "*") {
+      if (!isZero(p.a) && !isZero(q.a)) throw new Error(DOIS);
+      return { a: add(mul(p.a, q.b), mul(q.a, p.b)), b: mul(p.b, q.b) };
+    }
+    if (n.op === "/") {
+      if (!isZero(q.a)) throw new Error("Há x no denominador: isso não é do 1º grau como está. Multiplique os dois lados pelo denominador antes.");
+      if (isZero(q.b)) throw new Error("Divisão por zero: a conta não tem sentido.");
+      return { a: div(p.a, q.b), b: div(p.b, q.b) };
+    }
+    // Potência: o expoente tem de ser um número; com x na base, só 0 ou 1.
+    if (!isZero(q.a)) throw new Error("Há x no expoente: isso é exponencial, não do 1º grau.");
+    if (isZero(p.a)) return { a: Q(0), b: pow(p.b, q.b) };
+    if (q.b.n === 1 && q.b.d === 1) return p;
+    if (q.b.n === 0) return { a: Q(0), b: Q(1) };
+    throw new Error(DOIS);
+  }
+
+  // 3x + 5, -x - 2, \frac{1}{2}x, 0.
+  function linTex({ a, b }) {
+    let s = "";
+    if (!isZero(a)) {
+      const abs = neg(a).n > 0 ? neg(a) : a;
+      s = `${a.n < 0 ? "-" : ""}${abs.n === 1 && abs.d === 1 ? "" : tex(abs)}x`;
+    }
+    if (!isZero(b) || !s) {
+      const minus = b.n < 0, abs = minus ? neg(b) : b;
+      s += s ? ` ${minus ? "-" : "+"} ${tex(abs)}` : tex(b);
+    }
+    return s;
+  }
+
+  // O termo para somar aos dois lados: "- 2x", "+ 5".
+  const termTex = (k, v) => {
+    const minus = k.n < 0, abs = minus ? neg(k) : k;
+    return `${minus ? "-" : "+"} ${v && abs.n === 1 && abs.d === 1 ? "" : tex(abs)}${v}`;
+  };
+
+  const subst = (n, q) => {
+    if (n.t === "x") return { t: "num", q };
+    if (n.t === "bin") return { ...n, a: subst(n.a, q), b: subst(n.b, q) };
+    if (n.t === "grp" || n.t === "neg") return { ...n, a: subst(n.a, q) };
+    return n;
+  };
+
+  return { Q, add, sub, mul, div, neg, pow, isZero, isInt, val, casas, text, tex, parse, toTex, NOME, lin, linTex, termTex, subst };
 })();

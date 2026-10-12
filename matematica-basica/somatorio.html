@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Somatório — A Notação Σ</title>
+  <meta name="description" content="O somatório Σ explicado do zero: como ler o índice e os limites, uma tabela que soma os seus dados coluna por coluna (Σx, Σx², (Σx)², desvios), as propriedades testadas com os seus números e o Σ nas fórmulas da média, da variância e da covariância.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/somatorio.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/somatorio.html">
+  <meta property="og:title" content="Somatório — A Notação Σ">
+  <meta property="og:description" content="O somatório Σ explicado do zero: como ler o índice e os limites, uma tabela que soma os seus dados coluna por coluna (Σx, Σx², (Σx)², desvios), as propriedades testadas com os seus números e o Σ nas fórmulas da média, da variância e da covariância.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Somatório — A Notação Σ">
+  <meta name="twitter:description" content="O somatório Σ explicado do zero: como ler o índice e os limites, uma tabela que soma os seus dados coluna por coluna (Σx, Σx², (Σx)², desvios), as propriedades testadas com os seus números e o Σ nas fórmulas da média, da variância e da covariância.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="somatorio.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Somatório — A Notação Σ</h1>
+    <p class="page-lede">O <strong>Σ</strong> (sigma, o S grego) é um jeito curto de escrever uma soma comprida. Quase toda fórmula da estatística tem um: a média, a variância, a covariância, a regressão. Ler o Σ é ler a receita da conta.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#ler">Lendo o Σ</a>
+      <a href="#tabela">Somando dados</a>
+      <a href="#propriedades">Propriedades</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex is-tall" data-tex="\sum_{i=1}^{n} x_i = x_1 + x_2 + \cdots + x_n"></span>
+
+    <!-- 1. Lendo o Σ; estado em ?ini=&fim=&termo=. -->
+    <section class="calc intro" id="ler" aria-labelledby="ler-title">
+      <h2 id="ler-title">Lendo o Σ</h2>
+      <div class="vars">
+        <label class="var var-b">
+          <i>de</i>
+          <input name="ini" type="range" min="1" max="6" step="1" value="1" aria-label="Valor inicial de i">
+          <output class="out-ini">1</output>
+        </label>
+        <label class="var var-b">
+          <i>até</i>
+          <input name="fim" type="range" min="1" max="10" step="1" value="5" aria-label="Valor final de i">
+          <output class="out-fim">5</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Termo da soma">
+        <button type="button" data-termo="i" aria-pressed="true">i</button>
+        <button type="button" data-termo="quad" aria-pressed="false">i²</button>
+        <button type="button" data-termo="impar" aria-pressed="false">2i − 1</button>
+        <button type="button" data-termo="tres" aria-pressed="false">3</button>
+      </div>
+      <div class="sum-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="partes-title">
+      <h2 id="partes-title">As partes do Σ</h2>
+      <span class="tex-block" data-tex="\underbrace{\sum_{i=1}^{n}}_{\text{some, de } i = 1 \text{ até } n} \underbrace{x_i}_{\text{o termo}}"></span>
+      <ul>
+        <li><strong>Embaixo</strong>, o índice e onde ele começa: i = 1. O nome do índice não importa — i, j ou k dão a mesma soma.</li>
+        <li><strong>Em cima</strong>, onde ele para: n, o número de dados.</li>
+        <li><strong>À direita</strong>, o termo: o que se calcula para cada i. Com dados, xᵢ é o i-ésimo valor da lista: x₁ é o primeiro, x₂ o segundo.</li>
+      </ul>
+      <p>Quando os limites são óbvios — somar todos os dados —, eles costumam ser omitidos: Σxᵢ quer dizer “some todos os x”.</p>
+    </section>
+
+    <!-- 2. A tabela; estado em ?xs=&ys=&soma=. -->
+    <section class="calc" id="tabela" aria-labelledby="tab-title">
+      <h2 id="tab-title">Somando uma lista de dados</h2>
+      <p class="calc-lede">Digite os dados e escolha a soma. A tabela faz uma coluna para cada termo — é assim que se calcula à mão — e a última linha é o Σ de cada coluna.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Valores de x</span>
+          <input name="xs" type="text" inputmode="decimal" value="2 4 9" autocomplete="off" spellcheck="false">
+          <small>Separados por espaço ou ponto e vírgula; vírgula nos decimais.</small>
+        </label>
+        <label class="calc-field wide" data-tone="5">
+          <span>Valores de y (opcional)</span>
+          <input name="ys" type="text" inputmode="decimal" value="" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field wide" data-tone="1">
+          <span>Soma</span>
+          <select name="soma">
+            <option value="x" selected>Σxᵢ — soma dos valores</option>
+            <option value="x2">Σxᵢ² — soma dos quadrados</option>
+            <option value="sx2">(Σxᵢ)² — quadrado da soma</option>
+            <option value="dev">Σ(xᵢ − x̄) — soma dos desvios</option>
+            <option value="dev2">Σ(xᵢ − x̄)² — soma dos quadrados dos desvios</option>
+            <option value="xy">Σxᵢyᵢ — soma dos produtos (precisa de y)</option>
+          </select>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="2 4 9">2, 4, 9</button>
+        <button type="button" data-exemplo="6 8 10 7 9">notas</button>
+        <button type="button" data-exemplo="1,5 2,5 -1 3">com decimais e negativo</button>
+        <button type="button" data-exemplo="1 2 3 4 5|2 4 5 4 5">x e y</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="table-scroll">
+        <table class="plain-table sum-table"></table>
+      </div>
+
+      <h3>O que sai dessas somas</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="propriedades" aria-labelledby="prop-title">
+      <h2 id="prop-title">Propriedades</h2>
+      <p>Nos cards, os dados são xᵢ = i (1, 2, 3, …) e o número de termos é n. Arraste n e a constante c: os valores são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Constante sai do Σ</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sum c\, x_i = c \sum x_i"></span>
+        <div class="rule-try" data-rule="constante" data-vars="n c"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Σ de uma soma é a soma dos Σ</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sum (x_i + y_i) = \sum x_i + \sum y_i"></span>
+        <p>Aqui com yᵢ = i².</p>
+        <div class="rule-try" data-rule="somaDeSomas" data-vars="n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Somar uma constante n vezes</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sum_{i=1}^{n} c = n \cdot c"></span>
+        <div class="rule-try" data-rule="soConstante" data-vars="n c"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Soma dos quadrados não é quadrado da soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\sum x_i^2 \ne \left(\sum x_i\right)^2"></span>
+        <div class="rule-try" data-rule="quadrado" data-vars="n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Soma dos produtos não é produto das somas</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\sum x_i y_i \ne \sum x_i \cdot \sum y_i"></span>
+        <p>Aqui com yᵢ = i².</p>
+        <div class="rule-try" data-rule="produto" data-vars="n"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">O Σ nas fórmulas da estatística</h2>
+      <p>Com o Σ lido, as fórmulas viram instruções. Cada uma diz o que calcular para cada dado e o que fazer com a soma:</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\bar{x} = \frac{1}{n}\sum x_i"></span>
+          <p><strong>Média:</strong> some os valores e divida por quantos são.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}"></span>
+          <p><strong>Variância:</strong> para cada valor, desvio ao quadrado; some; divida por n − 1. A raiz é o <a href="/formulas/desvio-padrao.html">desvio padrão</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\bar{x}_p = \frac{\sum w_i x_i}{\sum w_i}"></span>
+          <p><strong>Média ponderada:</strong> dois Σ, um em cima e outro embaixo. Veja a <a href="/formulas/media-ponderada.html">média ponderada</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="s_{xy} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{n - 1}"></span>
+          <p><strong>Covariância:</strong> o produto dos dois desvios, somado. Veja a <a href="/formulas/covariancia.html">covariância</a>.</p>
+        </div>
+      </div>
+      <p>E o Σ tem um primo, o <strong>Π</strong> (pi maiúsculo), que multiplica em vez de somar: Π xᵢ = x₁ · x₂ · … · xₙ. Ele aparece na <a href="/formulas/media-geometrica.html">média geométrica</a> e na <a href="/formulas/inflacao-acumulada.html">inflação acumulada</a>.</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sum x_i^2 \ne \left(\sum x_i\right)^2"></span>
+          <p><strong>Onde está o quadrado.</strong> Dentro do Σ, eleva-se cada termo; fora, eleva-se a soma pronta. Com 2, 4, 9: 101 contra 225.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sum_{i=1}^{5} 3 = 15"></span>
+          <p><strong>Termo sem i também conta.</strong> O 3 é somado uma vez para cada i.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sum_{i=3}^{7} = 5 \text{ termos}"></span>
+          <p><strong>Contar os termos.</strong> De 3 a 7 são 7 − 3 + 1 = 5, não 4. O “+ 1” é o mais esquecido.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sum (x_i - \bar{x}) = 0"></span>
+          <p><strong>Os desvios sempre se anulam.</strong> Se a sua soma de desvios não deu zero (ou quase, por arredondamento), há erro na média.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Escreva por extenso e calcule Σ de i = 2 até 5 de i².</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>2² + 3² + 4² + 5² = 4 + 9 + 16 + 25 = <strong>54</strong>.</p>
+            <p><a href="?ini=2&amp;fim=5&amp;termo=quad#ler">Veja no Σ →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Escreva 3 + 6 + 9 + 12 + 15 com Σ.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Cada termo é 3 vezes um contador de 1 a 5: <strong>Σ de i = 1 até 5 de 3i</strong>, que dá 3 × (1 + 2 + 3 + 4 + 5) = 45.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Para os dados 1, 3, 5, 7, calcule Σxᵢ, Σxᵢ² e (Σxᵢ)².</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Σxᵢ = 16. Σxᵢ² = 1 + 9 + 25 + 49 = <strong>84</strong>. (Σxᵢ)² = 16² = <strong>256</strong>.</p>
+            <p><a href="?xs=1+3+5+7&amp;soma=x2#tabela">Veja na tabela →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Com os mesmos dados, calcule a variância pelo atalho Σx² − (Σx)²/n, dividido por n − 1.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>84 − 256/4 = 84 − 64 = 20. Dividido por n − 1 = 3: s² = 20/3 ≈ <strong>6,67</strong>.</p>
+            <p><a href="?xs=1+3+5+7&amp;soma=dev2#tabela">Confira pelos desvios →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Se Σxᵢ = 40 para n = 8 valores, quanto vale Σ(xᵢ + 2)? E Σ 5xᵢ?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Σ(xᵢ + 2) = Σxᵢ + Σ2 = 40 + 8 × 2 = <strong>56</strong>. Σ 5xᵢ = 5 × 40 = <strong>200</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="constantes.html" rel="prev"><span>Anterior</span>Constantes — π, e e o Número de Ouro</a>
+      <a class="pager-next" href="./" rel="next"><span>Todos os assuntos</span>Matemática básica</a>
+    </nav>
+  </main>
+</body>
+</html>
