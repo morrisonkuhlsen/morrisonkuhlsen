@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Divisão — Quociente, Resto e a Conta Armada</title>
-  <meta name="description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <meta name="description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com o nome de cada parte a um clique.">
   <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/divisao.html">
   <!-- OpenGraph / Twitter -->
   <meta property="og:site_name" content="MorrisonKühlsen">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/divisao.html">
   <meta property="og:title" content="Divisão — Quociente, Resto e a Conta Armada">
-  <meta property="og:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <meta property="og:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com o nome de cada parte a um clique.">
   <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -19,7 +19,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@morrisonkuhlsen">
   <meta name="twitter:title" content="Divisão — Quociente, Resto e a Conta Armada">
-  <meta name="twitter:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <meta name="twitter:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com o nome de cada parte a um clique.">
   <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
   <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
@@ -49,7 +49,7 @@
 
     <nav class="toc" aria-label="Nesta página">
       <a href="#repartir">Repartir</a>
-      <a href="#partes">Os nomes</a>
+      <a href="#partes">As partes</a>
       <a href="#conta">Conta armada</a>
       <a href="#porque">Por que funciona</a>
       <a href="#armadilhas">Armadilhas</a>
@@ -82,34 +82,42 @@
       <div class="intro-text" aria-live="polite"></div>
     </section>
 
-    <!-- 2. As partes, pintadas nas duas montagens de 85 ÷ 3. -->
-    <section class="lesson" id="partes" aria-labelledby="partes-title">
+    <!-- 2. A conta pronta, com as partes clicáveis; estado em ?a=&b=. -->
+    <section class="calc" id="partes" aria-labelledby="partes-title">
       <h2 id="partes-title">O nome de cada parte</h2>
-      <p>Na conta 85 ÷ 3, cada número tem um nome. As duas montagens abaixo são a mesma conta, escrita de jeitos diferentes: a primeira, com o quociente em cima, é a dos livros em inglês; a segunda, o <strong>método da chave</strong>, é a que se ensina nas escolas do Brasil.</p>
-      <div class="ld-pair">
-        <figure>
-          <div class="ld-box" data-formato="cima"></div>
-          <figcaption>Quociente em cima</figcaption>
-        </figure>
-        <figure>
-          <div class="ld-box" data-formato="chave"></div>
-          <figcaption>Método da chave</figcaption>
-        </figure>
+      <p class="calc-lede">Escolha os números e clique em qualquer parte da conta para saber o que ela é — dividendo, divisor, quociente, resto — e de onde veio.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Dividendo</span>
+          <input name="a" type="text" inputmode="numeric" value="85" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Divisor</span>
+          <input name="b" type="text" inputmode="numeric" value="3" autocomplete="off" spellcheck="false">
+        </label>
       </div>
-      <dl class="terms">
-        <div data-tone="2"><dt>Dividendo — 85</dt><dd>O que vai ser repartido.</dd></div>
-        <div data-tone="5"><dt>Divisor — 3</dt><dd>Em quantas partes se reparte (ou o tamanho de cada grupo).</dd></div>
-        <div data-tone="1"><dt>Quociente — 28</dt><dd>Quanto cabe em cada parte (ou quantos grupos saem). É o “resultado” da divisão.</dd></div>
-        <div data-tone="3"><dt>Resto — 1</dt><dd>O que sobra sem dar para repartir. É sempre menor que o divisor. Quando é 0, a divisão é <strong>exata</strong>.</dd></div>
-      </dl>
-      <p>Os números do meio da conta (o 6, o 25, o 24) são contas de passagem: <em>produtos</em> do divisor por um algarismo do quociente e <em>restos parciais</em>. Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
-      <span class="tex-block" data-tex="\htmlData{tone=2}{85} = \htmlData{tone=5}{3} \times \htmlData{tone=1}{28} + \htmlData{tone=3}{1}"></span>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="85;3">85 ÷ 3</button>
+        <button type="button" data-exemplo="96;4">96 ÷ 4</button>
+        <button type="button" data-exemplo="618;3">618 ÷ 3</button>
+        <button type="button" data-exemplo="1000;7">1000 ÷ 7</button>
+        <button type="button" data-exemplo="785;23">785 ÷ 23</button>
+      </div>
+
+      <div class="ld-box ld-anat"></div>
+      <div class="ld-info" aria-live="polite"></div>
+      <div class="terms"></div>
+      <p class="prova-label">Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
+      <div class="prova calc-result"></div>
+      <p class="calc-note"></p>
     </section>
 
-    <!-- 3. A conta armada; estado em ?dividendo=&divisor=&casas=&formato=. -->
+    <!-- 3. A conta armada; estado em ?dividendo=&divisor=&casas=. -->
     <section class="calc" id="conta" aria-labelledby="conta-title">
       <h2 id="conta-title">A conta armada, passo a passo</h2>
-      <p class="calc-lede">Digite uma divisão e avance um passo de cada vez. São só quatro movimentos, repetidos até acabarem os algarismos: <strong>divide, multiplica, subtrai, baixa</strong>.</p>
+      <p class="calc-lede">Digite uma divisão e avance um passo de cada vez (os números também podem ser clicados). São só quatro movimentos, repetidos até acabarem os algarismos: <strong>divide, multiplica, subtrai, baixa</strong>.</p>
 
       <div class="calc-fields">
         <label class="calc-field" data-tone="2">
@@ -143,13 +151,11 @@
 
       <output class="calc-result" data-tone="1" aria-live="polite"></output>
 
-      <div class="seg ld-format" role="group" aria-label="Formato da conta">
-        <button type="button" data-formato="cima" aria-pressed="true">quociente em cima</button>
-        <button type="button" data-formato="chave" aria-pressed="false">método da chave</button>
-      </div>
-
       <div class="ld-stage">
-        <div class="ld-box ld-main" aria-hidden="true"></div>
+        <div class="ld-main">
+          <div class="ld-box"></div>
+          <div class="ld-info" aria-live="polite" hidden></div>
+        </div>
         <div class="ld-side">
           <span class="ld-tab-label">Tabuada do divisor</span>
           <ol class="ld-tab"></ol>

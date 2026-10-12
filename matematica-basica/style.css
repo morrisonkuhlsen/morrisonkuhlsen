@@ -1368,32 +1368,84 @@
   margin-top: 1rem;
 }
 
-/* ---------------------------------------------------------------- divisão: termos */
+/* ---------------------------------------------------------------- divisão: partes */
 
 .terms {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: .6rem;
-  margin: 1rem 0;
+  gap: .5rem;
+  margin-top: 1rem;
 }
 
-.terms > div {
-  padding: .7rem .85rem;
+.terms button {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  padding: .65rem .8rem;
   border: 1px solid var(--border);
   border-top: 3px solid var(--tone);
   border-radius: 10px;
-  background: var(--surface);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: .85rem;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
 }
 
-.terms dt {
-  font-weight: 700;
+.terms button strong {
+  color: var(--tone);
+  font-size: .95rem;
+}
+
+.terms button[aria-pressed="true"] {
+  border-color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 12%, var(--bg));
+}
+
+.ld-info {
+  max-width: 560px;
+  min-height: 4.6rem;
+  margin: .8rem auto 0;
+  padding: .7rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--tone, var(--border));
+  border-radius: 0 10px 10px 0;
+  background: var(--bg);
+  line-height: 1.55;
+}
+
+.ld-info[hidden] {
+  display: none;
+}
+
+.ld-info strong {
   color: var(--tone);
 }
 
-.terms dd {
-  margin: .3rem 0 0;
+.ld-info p {
+  margin: .25rem 0 0;
+}
+
+.ld-info .ld-hint {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.prova-label {
+  margin: 1.2rem 0 0;
+  text-align: center;
+}
+
+.prova {
+  margin-top: .3rem;
+}
+
+.ld-main .ld-info {
+  max-width: 340px;
+  min-height: 0;
   font-size: .9rem;
-  line-height: 1.5;
 }
 
 .tex-block .katex [data-tone] {
@@ -1401,24 +1453,6 @@
 }
 
 /* ---------------------------------------------------------------- divisão: conta armada */
-
-.ld-pair {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem 3rem;
-}
-
-.ld-pair figure {
-  margin: 0;
-  text-align: center;
-}
-
-.ld-pair figcaption {
-  margin-top: .5rem;
-  font-size: .85rem;
-  color: var(--text-muted);
-}
 
 .ld-box {
   display: flex;
@@ -1437,10 +1471,6 @@
   line-height: 1.25;
   font-variant-numeric: tabular-nums;
   color: var(--text-strong);
-}
-
-.ld-pair .ld {
-  font-size: 1.4rem;
 }
 
 .ld-cell {
@@ -1480,35 +1510,6 @@
   border-left: 2px solid var(--text-strong);
   border-radius: 0;
   margin-left: -.15em;
-}
-
-/* Método da chave: o traço vertical à esquerda do divisor e o de baixo. */
-.is-chave .ld-divisor {
-  margin-left: .4em;
-  padding: 0 .3em;
-  border-left: 2px solid var(--text-strong);
-  border-bottom: 2px solid var(--text-strong);
-  border-radius: 0;
-  text-align: left;
-}
-
-.is-chave .ld-divisor.is-hl {
-  border-radius: 0;
-}
-
-.ld-qbox {
-  margin-left: .4em;
-  padding: 0 .3em;
-  text-align: left;
-  white-space: nowrap;
-}
-
-.ld-qbox > .ld-cell {
-  padding: 0;
-}
-
-.ld-format {
-  margin-top: 1.2rem;
 }
 
 .ld-stage {
@@ -1683,8 +1684,10 @@
   color: var(--text-strong);
 }
 
-.calc.has-error .ld-format,
 .calc.has-error .ld-stage,
+.calc.has-error .ld-info,
+.calc.has-error .terms,
+.calc.has-error .prova-label,
 .calc.has-error .ld-tags,
 .calc.has-error .ld-say,
 .calc.has-error .ld-nav,
@@ -1692,7 +1695,30 @@
   display: none;
 }
 
-/* Na anatomia, só a cor separa as partes; o fundo é para o passo a passo. */
-.ld-pair .ld-cell.is-hl {
+/* Na conta das partes, só a cor separa as partes; o fundo é para o clique. */
+.ld-anat .ld-cell.is-hl {
   background: none;
+}
+
+.ld-cell[data-i] {
+  cursor: pointer;
+}
+
+.ld-cell[data-i]:hover {
+  outline: 1px dashed var(--text-muted);
+  outline-offset: 1px;
+}
+
+.ld-cell[data-i]:focus-visible {
+  outline: 2px solid var(--tone-1);
+}
+
+/* As células do número clicado: fundo e cor da parte, sem contorno, para
+   o número ler como um bloco só. */
+.ld-cell.is-pick,
+.ld-cell.is-pick:hover {
+  color: var(--pk);
+  background: color-mix(in srgb, var(--pk) 28%, transparent);
+  outline: none;
+  border-radius: 0;
 }

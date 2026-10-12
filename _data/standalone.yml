@@ -1232,8 +1232,8 @@
 
 - title: "Divisão — Quociente, Resto e a Conta Armada"
   url: "/matematica-basica/divisao.html"
-  description: "Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave."
-  tags: "divisão conta armada divisão longa método da chave dividendo divisor quociente resto prova real divisão com vírgula"
+  description: "Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com o nome de cada parte a um clique."
+  tags: "divisão conta armada divisão longa dividendo divisor quociente resto prova real divisão com vírgula"
   lang: pt
 
 - title: "MDC — Máximo Divisor Comum"
