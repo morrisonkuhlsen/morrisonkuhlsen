@@ -286,3 +286,10 @@
   font: inherit;
   cursor: pointer;
 }
+
+/* O apoio sob a densidade, no ponto de equilíbrio (a média). */
+.plot-fulcrum {
+  fill: var(--tone-2);
+  stroke: var(--surface);
+  stroke-width: 1.5;
+}

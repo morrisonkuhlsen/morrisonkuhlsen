@@ -936,7 +936,7 @@
 
 - title: "Cálculo Intuitivo"
   url: "/calculo/"
-  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas, máximos e mínimos, integral, teorema fundamental, tabela de integrais e as duas tabelas lado a lado, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
+  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite, derivada, tabela de derivadas, máximos e mínimos, integral, teorema fundamental, tabela de integrais, as duas tabelas lado a lado e o cálculo na estatística, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
   tags: "cálculo intuitivo derivada limite aulas lições"
   lang: pt
 
@@ -992,4 +992,10 @@
   url: "/calculo/derivadas-integrais.html"
   description: "Derivadas e integrais lado a lado, de forma interativa: a escada que anda da primitiva para a derivada, a família F + C e as duas tabelas numa só, com a ligação com densidade e probabilidade acumulada."
   tags: "derivadas e integrais tabela primitiva antiderivada relação inversa constante de integração cálculo"
+  lang: pt
+
+- title: "Cálculo na Estatística — Densidade, Média e Verossimilhança"
+  url: "/calculo/calculo-estatistica.html"
+  description: "Cálculo aplicado à estatística, de forma intuitiva: a densidade como derivada da probabilidade acumulada, a média como integral e ponto de equilíbrio, e a máxima verossimilhança como um máximo, com gráficos interativos e exercícios."
+  tags: "cálculo estatística densidade acumulada média integral máxima verossimilhança cálculo"
   lang: pt

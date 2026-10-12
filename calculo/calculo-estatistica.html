@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cálculo na Estatística — Densidade, Média e Verossimilhança</title>
+  <meta name="description" content="Cálculo aplicado à estatística, de forma intuitiva: a densidade como derivada da probabilidade acumulada, a média como integral e ponto de equilíbrio, e a máxima verossimilhança como um máximo, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/calculo-estatistica.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/calculo-estatistica.html">
+  <meta property="og:title" content="Cálculo na Estatística — Densidade, Média e Verossimilhança">
+  <meta property="og:description" content="Cálculo aplicado à estatística, de forma intuitiva: a densidade como derivada da probabilidade acumulada, a média como integral e ponto de equilíbrio, e a máxima verossimilhança como um máximo, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Cálculo na Estatística — Densidade, Média e Verossimilhança">
+  <meta name="twitter:description" content="Cálculo aplicado à estatística, de forma intuitiva: a densidade como derivada da probabilidade acumulada, a média como integral e ponto de equilíbrio, e a máxima verossimilhança como um máximo, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="calculo-estatistica.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Cálculo na Estatística — Densidade, Média e Verossimilhança</h1>
+    <p class="page-lede">Esta é a lição em que as nove anteriores se juntam. A probabilidade de uma variável contínua é uma <a href="integral.html">integral</a>; a densidade é uma <a href="derivada.html">derivada</a>; a média é outra integral; e a melhor estimativa de um parâmetro sai de um <a href="maximos-minimos.html">máximo</a>. Três painéis, um para cada ideia.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#densidade">Densidade e acumulada</a>
+      <a href="#media">A média</a>
+      <a href="#verossimilhanca">Verossimilhança</a>
+      <a href="#caminho">O caminho todo</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="f(x) = F'(x) \qquad P(a \le X \le b) = \int_a^b f(x)\,dx \qquad E[X] = \int x\,f(x)\,dx"></span>
+
+    <!-- 1. Densidade e acumulada; estado em ?d=&x=. -->
+    <section class="calc intro" id="densidade" aria-labelledby="dens-title">
+      <h2 id="dens-title">Densidade e acumulada</h2>
+      <p class="calc-lede">Em cima, a <strong>acumulada</strong> F(x) = P(X ≤ x): a chance de a variável ficar até x. Embaixo, a <strong>densidade</strong> f(x). As duas contam a mesma história de dois jeitos — a área sombreada embaixo é a altura de cima, e a inclinação de cima é a altura de baixo.</p>
+      <div class="seg" role="group" aria-label="Distribuição">
+        <button type="button" data-d="normal" aria-pressed="true">normal</button>
+        <button type="button" data-d="expo" aria-pressed="false">exponencial</button>
+        <button type="button" data-d="unif" aria-pressed="false">uniforme</button>
+      </div>
+      <div class="vars dens-vars"></div>
+      <div class="plot-box dens-F"></div>
+      <p class="plot-caption">acumulada F(x) = P(X ≤ x) — tracejada, a tangente</p>
+      <div class="plot-box dens-f"></div>
+      <p class="plot-caption">densidade f(x) — sombreada, a área até x</p>
+      <p class="readout dens-out" aria-live="polite"></p>
+      <div class="intro-text dens-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. A média como integral; estado em ?k=. -->
+    <section class="calc intro" id="media" aria-labelledby="media-title">
+      <h2 id="media-title">A média é uma integral</h2>
+      <p class="calc-lede">Para dados, a média soma cada valor vezes a sua frequência. Para uma densidade, a soma vira integral: cada x pesado por f(x). Geometricamente, a média é o <strong>ponto de equilíbrio</strong> da curva — onde ela ficaria parada sobre um apoio. Mude a forma <i>k</i> de uma distribuição Gama e veja o apoio andar.</p>
+      <div class="vars media-vars"></div>
+      <div class="plot-box media-f"></div>
+      <p class="plot-caption">densidade f(x), com o apoio na média</p>
+      <div class="plot-box media-xf"></div>
+      <p class="plot-caption">x · f(x) — a área sombreada é a média</p>
+      <p class="readout media-out" aria-live="polite"></p>
+      <div class="intro-text media-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 3. Máxima verossimilhança; estado em ?n=&s=&p=. -->
+    <section class="calc intro" id="verossimilhanca" aria-labelledby="mv-title">
+      <h2 id="mv-title">Máxima verossimilhança: a melhor estimativa é um máximo</h2>
+      <p class="calc-lede">Uma moeda deu <i>k</i> caras em <i>n</i> lançamentos. Para cada valor possível de <i>p</i>, a chance de ver exatamente esses dados é L(p) = pᵏ(1 − p)ⁿ⁻ᵏ: a <strong>verossimilhança</strong>. O melhor palpite para <i>p</i> é o que torna os dados mais prováveis — o topo da curva, onde a derivada zera.</p>
+      <div class="vars mv-vars"></div>
+      <div class="plot-box mv-L"></div>
+      <p class="plot-caption">verossimilhança L(p), dividida pelo valor máximo — tracejada, a tangente</p>
+      <div class="plot-box mv-ll"></div>
+      <p class="plot-caption">log-verossimilhança ln L(p) — o máximo fica no mesmo lugar</p>
+      <p class="readout mv-out" aria-live="polite"></p>
+      <div class="intro-text mv-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="caminho" aria-labelledby="cam-title">
+      <h2 id="cam-title">O caminho todo</h2>
+      <ol>
+        <li><a href="taxa-variacao.html">Taxa de variação</a>: quão rápido algo muda, em média e num instante.</li>
+        <li><a href="limite.html">Limite</a>: chegar perto sem chegar, para fugir do 0/0.</li>
+        <li><a href="derivada.html">Derivada</a>: a inclinação num ponto, a curva vista de perto.</li>
+        <li><a href="tabela-derivadas.html">Tabela de derivadas</a>: as regras, tiradas uma vez e guardadas.</li>
+        <li><a href="maximos-minimos.html">Máximos e mínimos</a>: onde a derivada zera está o melhor.</li>
+        <li><a href="integral.html">Integral</a>: a área como soma de faixas, o acúmulo.</li>
+        <li><a href="teorema-fundamental.html">Teorema fundamental</a>: derivar e integrar se desfazem.</li>
+        <li><a href="tabela-integrais.html">Tabela de integrais</a>: as primitivas e as técnicas.</li>
+        <li><a href="derivadas-integrais.html">Derivar e integrar lado a lado</a>: as duas tabelas como uma escada.</li>
+        <li>E aqui: probabilidade é área, densidade é derivada, média é integral, estimativa é máximo.</li>
+      </ol>
+      <p>Daqui, as <a href="/formulas/">fórmulas interativas</a> aprofundam cada peça: a <a href="/formulas/distribuicao-normal.html">normal</a>, a <a href="/formulas/integral-gaussiana.html">integral gaussiana</a>, o <a href="/formulas/teorema-central-limite.html">teorema central do limite</a>, a <a href="/formulas/regressao-linear.html">regressão</a> e a <a href="/formulas/distribuicao-beta.html">distribuição Beta</a>, que é a verossimilhança desta página vista pelo lado bayesiano.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> A acumulada de uma variável é F(x) = x² para 0 ≤ x ≤ 1. Qual a densidade?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>A derivada da acumulada: f(x) = <strong>2x</strong>, entre 0 e 1. Confira: a área sob 2x de 0 a 1 é 1.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Com densidade f(x) = 2x entre 0 e 1, qual a média?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>E[X] = ∫₀¹ x · 2x dx = ∫₀¹ 2x² dx = 2/3 ≈ <strong>0,667</strong>. Os valores altos são mais prováveis, então a média fica acima de 1/2.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Qual a média de uma exponencial de taxa λ?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>E[X] = ∫₀^∞ x λe^(−λx) dx = <strong>1/λ</strong> (integrando por partes). Com 3 clientes por hora, a espera média é 1/3 de hora.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Em 20 lançamentos de uma moeda, saíram 14 caras. Qual a estimativa de máxima verossimilhança de p?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Derivando ln L = 14 ln p + 6 ln(1 − p) e igualando a zero: 14/p = 6/(1 − p), então p = <strong>14/20 = 0,7</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Por que se maximiza ln L em vez de L?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>O logaritmo é crescente, então o máximo fica no mesmo lugar. E ele troca o produto de muitas probabilidades por uma <strong>soma</strong>, mais fácil de derivar e que não vira zero no computador.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="derivadas-integrais.html" rel="prev"><span>Anterior</span>Derivar e Integrar Lado a Lado</a>
+    </nav>
+  </main>
+</body>
+</html>
