@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Limite — Chegar Perto Sem Chegar</title>
+  <meta name="description" content="Limite explicado do zero e de forma intuitiva: aproximar dos dois lados, o desafio do ε e do δ, quando o limite não existe, continuidade e limites no infinito, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/limite.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/limite.html">
+  <meta property="og:title" content="Limite — Chegar Perto Sem Chegar">
+  <meta property="og:description" content="Limite explicado do zero e de forma intuitiva: aproximar dos dois lados, o desafio do ε e do δ, quando o limite não existe, continuidade e limites no infinito, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Limite — Chegar Perto Sem Chegar">
+  <meta name="twitter:description" content="Limite explicado do zero e de forma intuitiva: aproximar dos dois lados, o desafio do ε e do δ, quando o limite não existe, continuidade e limites no infinito, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="limite.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Limite — Chegar Perto Sem Chegar</h1>
+    <p class="page-lede">Na <a href="taxa-variacao.html">lição anterior</a>, a velocidade num instante esbarrou num 0 ÷ 0. A saída é não fazer a conta no ponto, e sim perguntar <strong>de que valor a função se aproxima quando x chega perto dele</strong>. Essa é a ideia de limite — e sobre ela se constroem a derivada e a integral.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#aproximar">Aproximar</a>
+      <a href="#epsilon">Quão perto?</a>
+      <a href="#quando">Quando não existe</a>
+      <a href="#continuidade">Continuidade</a>
+      <a href="#infinito">No infinito</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\lim_{x \to a} f(x) = L"></span>
+
+    <!-- 1. Aproximando dos dois lados; estado em ?fn=&k=. -->
+    <section class="calc intro" id="aproximar" aria-labelledby="apr-title">
+      <h2 id="apr-title">Aproximando dos dois lados</h2>
+      <p class="calc-lede">Escolha uma função e encolha a distância <i>h</i>: os pontos se aproximam de <i>a</i>, um pela esquerda e outro pela direita. O que acontece com os valores de <i>f</i>?</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-fn="buraco" aria-pressed="true">(x² − 1)/(x − 1)</button>
+        <button type="button" data-fn="sinc" aria-pressed="false">sen x / x</button>
+        <button type="button" data-fn="salto" aria-pressed="false">salto</button>
+        <button type="button" data-fn="infinito" aria-pressed="false">1/x²</button>
+        <button type="button" data-fn="oscila" aria-pressed="false">sen(1/x)</button>
+      </div>
+      <p class="readout apr-fn" aria-live="polite"></p>
+      <div class="vars apr-vars"></div>
+      <div class="plot-box apr-plot"></div>
+      <p class="readout apr-out" aria-live="polite"></p>
+      <div class="approx-table apr-table"></div>
+      <div class="intro-text apr-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. O jogo do ε e do δ; estado em ?ep=&e=. -->
+    <section class="calc intro" id="epsilon" aria-labelledby="eps-title">
+      <h2 id="eps-title">Quão perto? O desafio do ε</h2>
+      <p class="calc-lede">“Se aproxima de <i>L</i>” tem um sentido preciso. Alguém escolhe uma margem <i>ε</i> em volta de <i>L</i> (a faixa horizontal), tão estreita quanto quiser. O limite é <i>L</i> se, para qualquer margem, existir uma distância <i>δ</i> em volta de <i>a</i> (a faixa vertical) em que a curva fica toda dentro da margem.</p>
+      <div class="seg" role="group" aria-label="Função do desafio">
+        <button type="button" data-ep="sinc" aria-pressed="true">sen x / x, L = 1</button>
+        <button type="button" data-ep="buraco" aria-pressed="false">(x² − 1)/(x − 1), L = 2</button>
+        <button type="button" data-ep="salto" aria-pressed="false">salto, L = 0?</button>
+      </div>
+      <div class="vars eps-vars"></div>
+      <div class="plot-box eps-plot"></div>
+      <p class="readout eps-out" aria-live="polite"></p>
+      <div class="intro-text eps-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="quando" aria-labelledby="quando-title">
+      <h2 id="quando-title">Quando o limite não existe</h2>
+      <p>Para o limite existir, os dois lados precisam chegar ao <strong>mesmo número</strong>. Há três jeitos clássicos de isso falhar — todos aparecem no primeiro gráfico:</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\lim_{x \to 0^-} \tfrac{x}{|x|} = -1 \ne 1 = \lim_{x \to 0^+} \tfrac{x}{|x|}"></span>
+          <p><strong>Salto:</strong> cada lado vai para um número, mas números diferentes. Os <em>limites laterais</em> existem; o limite, não.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\lim_{x \to 0} \tfrac{1}{x^2} = \infty"></span>
+          <p><strong>Explosão:</strong> os valores crescem sem parar. Escrever “= ∞” é um jeito de dizer <em>como</em> o limite deixa de existir.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\operatorname{sen} \tfrac{1}{x}"></span>
+          <p><strong>Oscilação:</strong> perto de 0, a função vai e volta entre −1 e 1 cada vez mais depressa, sem se acomodar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="continuidade" aria-labelledby="cont-title">
+      <h2 id="cont-title">Continuidade: quando o limite é o valor</h2>
+      <p>Na maioria das funções do dia a dia — polinômios, exponenciais, seno e cosseno —, o limite em <i>a</i> é simplesmente <i>f</i>(<i>a</i>): basta substituir. Essas funções são <strong>contínuas</strong>, e o gráfico delas se desenha sem tirar o lápis do papel.</p>
+      <span class="rule-tex" data-tex="f \text{ contínua em } a \iff \lim_{x \to a} f(x) = f(a)"></span>
+      <p>O limite só pede trabalho onde a conta direta falha: um 0/0, uma divisão por zero, um salto. É justamente o caso da velocidade num instante — e por isso o limite é a peça que faltava.</p>
+      <div class="tip">
+        <strong>Truque do 0/0.</strong> Muitas vezes dá para simplificar antes de substituir: (x² − 1)/(x − 1) = (x − 1)(x + 1)/(x − 1) = x + 1, para x ≠ 1. A simplificação vale perto do ponto, e é isso que o limite olha. Quando não dá para simplificar, a <a href="/formulas/regra-lhopital.html">regra de L’Hôpital</a> costuma resolver.
+      </div>
+    </section>
+
+    <section class="lesson" id="infinito" aria-labelledby="inf-title">
+      <h2 id="inf-title">Limites no infinito</h2>
+      <p>Também se pergunta para onde vai uma função quando <i>x</i> <strong>cresce sem parar</strong>. A pergunta é a mesma — de que valor ela se aproxima —, só que agora quem se aproxima é o “fim” do eixo.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\lim_{x \to \infty} \tfrac{1}{x} = 0"></span>
+          <p>Dividir 1 por números cada vez maiores dá números cada vez mais perto de zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\lim_{n \to \infty} \left(1 + \tfrac{1}{n}\right)^n = e"></span>
+          <p>A definição do <a href="/formulas/numero-e.html">número e</a>, que veio de juros compostos cada vez mais frequentes.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sum_{k=1}^{\infty} \tfrac{1}{2^k} = 1"></span>
+          <p>Uma soma infinita é o limite das somas parciais: a <a href="/formulas/soma-pg.html">soma da progressão geométrica</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Limites na estatística</h2>
+      <p><strong>Lei dos grandes números.</strong> A média de muitas repetições se aproxima do valor esperado: é um limite quando o número de repetições vai ao infinito. Veja a <a href="/formulas/lei-grandes-numeros.html">média acumulada se acomodando</a>.</p>
+      <p><strong>Teorema central do limite.</strong> O nome já diz: a distribuição da média de n valores se aproxima da normal quando n cresce. Veja o <a href="/formulas/teorema-central-limite.html">histograma virar sino</a>.</p>
+      <p><strong>Derivada e integral.</strong> A derivada é o limite das taxas médias, e a integral, o limite das somas de retângulos (<a href="/formulas/soma-riemann.html">soma de Riemann</a>). Toda densidade de probabilidade e toda probabilidade de variável contínua dependem dessas duas ideias.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule o limite de (x² − 9)/(x − 3) quando x tende a 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Em x = 3 a fórmula dá 0/0. Mas x² − 9 = (x − 3)(x + 3), e para x ≠ 3 a fração é só x + 3. Quando x se aproxima de 3, isso se aproxima de <strong>6</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> A função f(x) = 2x + 1 é contínua em x = 4. Qual o limite quando x tende a 4?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Em funções contínuas, o limite é o próprio valor: f(4) = <strong>9</strong>. O limite só dá trabalho quando a conta direta não funciona.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> O limite de 1/x quando x tende a 0 existe?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Não. Pela direita, 1/x cresce sem parar (vai a +∞); pela esquerda, cai sem parar (vai a −∞). Os dois lados nem concordam entre si, e nenhum vai para um número.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Para onde vai (1 + 1/n)ⁿ quando n cresce sem parar?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Para <strong>e ≈ 2,71828</strong>: com n = 10 dá 2,594; com n = 1.000, 2,717; com n = 1 milhão, 2,718280. Veja na <a href="/formulas/numero-e.html">fórmula do número e</a>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Usando sen x / x → 1 quando x → 0, quanto vale o limite de sen(3x)/x?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Escreva sen(3x)/x = 3 · sen(3x)/(3x). Quando x → 0, 3x também → 0, e a segunda parte vai a 1. O limite é <strong>3</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="taxa-variacao.html" rel="prev"><span>Anterior</span>Taxa de Variação</a>
+      <a class="pager-next" href="derivada.html" rel="next"><span>Próxima</span>Derivada — Dê Zoom Até Virar Reta</a>
+    </nav>
+  </main>
+</body>
+</html>

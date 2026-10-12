@@ -11,6 +11,7 @@ pt:
   - { name: "Testes estatísticos",   url: "/testes-estatisticos/" }
   - { name: "Glossário",             url: "/pt/glossario" }
   - { name: "Matemática básica",     url: "/matematica-basica/" }
+  - { name: "Cálculo intuitivo",     url: "/calculo/" }
   - { name: "Problema Semanal",      url: "/problema-semanal/", external: true, featured: true }
 
 en:

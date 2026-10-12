@@ -1,0 +1,105 @@
+/* Cálculo intuitivo: o que as lições acrescentam ao estilo de Matemática
+ * Básica (de onde vêm as seções, os sliders, os exercícios e o gráfico). */
+
+/* Secante e tangente: a secante é a reta “medida”, a tangente é o limite. */
+.plot-secant {
+  stroke: var(--tone-2);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.plot-tangent {
+  stroke: var(--text-strong);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+}
+
+.plot-curve.is-faint {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  opacity: .6;
+}
+
+.plot-curve.is-second {
+  stroke: var(--tone-3);
+}
+
+/* Catetos do triângulo da taxa de variação: Δt na horizontal, Δs na vertical. */
+.plot-run,
+.plot-rise {
+  stroke-width: 2;
+  stroke-dasharray: 3 3;
+}
+
+.plot-run { stroke: var(--tone-4); }
+.plot-rise { stroke: var(--tone-3); }
+
+.plot-guide {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+/* Faixas do ε e do δ. */
+.plot-band {
+  fill: var(--tone-1);
+  fill-opacity: .12;
+}
+
+.plot-band.is-delta {
+  fill: var(--tone-3);
+}
+
+.plot-band.is-fail {
+  fill: var(--tone-4);
+  fill-opacity: .14;
+}
+
+/* Buraco: o ponto que a função não tem. */
+.plot-dot.is-hole {
+  fill: var(--surface);
+  stroke: var(--tone-1);
+  stroke-width: 2;
+}
+
+.plot-dot.is-a { fill: var(--tone-2); }
+.plot-dot.is-b { fill: var(--tone-3); }
+
+/* Leitura grande do resultado de cada painel. */
+.readout {
+  margin: .9rem 0 .2rem;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.readout .katex {
+  font-size: 1.15em;
+}
+
+.plot-box + .plot-box {
+  margin-top: .4rem;
+}
+
+.plot-caption {
+  margin: .2rem 0 0;
+  font-size: .85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Tabela de aproximações: uma coluna por lado ou por passo. */
+.approx-table {
+  margin-top: .8rem;
+  overflow-x: auto;
+}
+
+/* Lista das próximas lições no índice: texto, sem cartão. */
+.next-list {
+  margin: .4rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--text-muted);
+}
+
+.next-list li + li {
+  margin-top: .3rem;
+}

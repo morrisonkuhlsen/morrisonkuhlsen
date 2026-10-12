@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Derivada — Dê Zoom Até Virar Reta</title>
+  <meta name="description" content="Derivada explicada do zero e de forma intuitiva: o zoom que transforma a curva em reta, o gráfico da derivada, a definição peça por peça e as regras básicas, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/derivada.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/derivada.html">
+  <meta property="og:title" content="Derivada — Dê Zoom Até Virar Reta">
+  <meta property="og:description" content="Derivada explicada do zero e de forma intuitiva: o zoom que transforma a curva em reta, o gráfico da derivada, a definição peça por peça e as regras básicas, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Derivada — Dê Zoom Até Virar Reta">
+  <meta name="twitter:description" content="Derivada explicada do zero e de forma intuitiva: o zoom que transforma a curva em reta, o gráfico da derivada, a definição peça por peça e as regras básicas, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="derivada.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Derivada — Dê Zoom Até Virar Reta</h1>
+    <p class="page-lede">Chegue bem perto de qualquer curva lisa e ela parece uma <strong>reta</strong>. A inclinação dessa reta é a <strong>derivada</strong>: a taxa de variação num ponto, o número que a <a href="taxa-variacao.html">velocidade num instante</a> procurava e que o <a href="limite.html">limite</a> sabe calcular.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#zoom">Zoom</a>
+      <a href="#grafico">O gráfico da derivada</a>
+      <a href="#definicao">A definição</a>
+      <a href="#regras">Regras básicas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="f'(x) = \lim_{h \to 0} \dfrac{f(x + h) - f(x)}{h}"></span>
+
+    <!-- 1. O microscópio; estado em ?f=&x=&z=. -->
+    <section class="calc intro" id="zoom" aria-labelledby="zoom-title">
+      <h2 id="zoom-title">O microscópio</h2>
+      <p class="calc-lede">Escolha uma função e um ponto e aumente o zoom. Com as duas escalas iguais, a inclinação que você vê é a inclinação de verdade. Em algum momento, a curva fica indistinguível de uma reta.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-g="x2" aria-pressed="true">x²</button>
+        <button type="button" data-g="cubo" aria-pressed="false">x³ − 3x</button>
+        <button type="button" data-g="sen" aria-pressed="false">sen x</button>
+        <button type="button" data-g="exp" aria-pressed="false">eˣ</button>
+      </div>
+      <div class="vars zoom-vars"></div>
+      <div class="plot-box zoom-plot"></div>
+      <p class="plot-caption zoom-cap" aria-live="polite"></p>
+      <p class="readout zoom-out" aria-live="polite"></p>
+      <div class="intro-text zoom-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. f e f′ lado a lado; estado em ?h=&p=. -->
+    <section class="calc intro" id="grafico" aria-labelledby="graf-title">
+      <h2 id="graf-title">O gráfico da derivada</h2>
+      <p class="calc-lede">A derivada não é um número só: em cada ponto há uma inclinação, e juntas elas formam uma nova função, <i>f</i>′. Arraste o ponto pela curva de cima e veja a inclinação da tangente desenhar a curva de baixo.</p>
+      <div class="seg" role="group" aria-label="Função">
+        <button type="button" data-h="x2" aria-pressed="false">x²</button>
+        <button type="button" data-h="cubo" aria-pressed="true">x³ − 3x</button>
+        <button type="button" data-h="sen" aria-pressed="false">sen x</button>
+        <button type="button" data-h="exp" aria-pressed="false">eˣ</button>
+      </div>
+      <div class="vars graf-vars"></div>
+      <div class="plot-box graf-f"></div>
+      <p class="plot-caption graf-cap-f"></p>
+      <div class="plot-box graf-d"></div>
+      <p class="plot-caption graf-cap-d"></p>
+      <p class="readout graf-out" aria-live="polite"></p>
+      <div class="intro-text graf-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="definicao" aria-labelledby="def-title">
+      <h2 id="def-title">A definição, peça por peça</h2>
+      <p>A fórmula do topo junta as duas lições anteriores. A fração é a <strong>taxa média</strong> entre <i>x</i> e <i>x</i> + <i>h</i>: a inclinação da secante. O limite com <i>h</i> → 0 é o <strong>encolher do intervalo</strong> que leva a secante até a tangente.</p>
+      <p>Veja com x²: [(x + h)² − x²] / h = [2xh + h²] / h = 2x + h. Quando <i>h</i> some, sobra <strong>2x</strong>. Geometricamente, um quadrado de lado <i>x</i> que cresce <i>h</i> ganha duas tiras de área <i>x</i>·<i>h</i> e um quadradinho <i>h</i>² que, para <i>h</i> pequeno, não conta.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="f'(x)"></span>
+          <p>Notação de Lagrange: “f linha de x”.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\dfrac{dy}{dx}"></span>
+          <p>Notação de Leibniz: uma variação pequeníssima de y sobre uma de x. Lembra que a derivada é uma razão.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\dot{s}(t)"></span>
+          <p>Notação de Newton, comum na física para derivadas no tempo: a velocidade.</p>
+        </div>
+      </div>
+      <div class="tip">
+        <strong>Para calcular com os seus números,</strong> a fórmula da <a href="/formulas/derivada.html">derivada pela definição</a> mostra a secante girando até a tangente com o passo <i>h</i> que você escolher.
+      </div>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras básicas</h2>
+      <p>Ninguém calcula limite toda vez. Algumas derivadas, tiradas uma vez pela definição, viram regras:</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="(c)' = 0"></span>
+          <p>Uma constante não muda: inclinação zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(ax + b)' = a"></span>
+          <p>Uma reta tem a mesma inclinação em todo ponto.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(x^n)' = n\,x^{n-1}"></span>
+          <p>A regra da potência, que generaliza o 2x de x².</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(e^x)' = e^x"></span>
+          <p>A exponencial cresce na velocidade do próprio tamanho — é isso que define o <a href="/formulas/numero-e.html">número e</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(\operatorname{sen} x)' = \cos x"></span>
+          <p>Sai do limite sen h / h → 1, da <a href="limite.html#aproximar">lição de limite</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(f + g)' = f' + g'"></span>
+          <p>A derivada de uma soma é a soma das derivadas; constantes multiplicando saem para fora.</p>
+        </div>
+      </div>
+      <p>Para funções dentro de funções, como sen(x²), entra a <a href="/formulas/regra-cadeia.html">regra da cadeia</a>. E a derivada também serve para achar raízes, pelo <a href="/formulas/metodo-newton.html">método de Newton</a>, e para aproximar funções por polinômios, pela <a href="/formulas/serie-taylor.html">série de Taylor</a>.</p>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Derivadas na estatística</h2>
+      <p><strong>Achar o melhor.</strong> No ponto mais alto ou mais baixo de uma curva lisa, a tangente é horizontal: a derivada é zero. A reta da <a href="/formulas/regressao-linear.html">regressão linear</a> sai assim — é a que zera a derivada da soma dos quadrados dos resíduos.</p>
+      <p><strong>Máxima verossimilhança.</strong> Para estimar um parâmetro, procura-se o valor que torna os dados observados mais prováveis — de novo, onde a derivada se anula. É assim que se estimam desde uma proporção até os coeficientes de uma <a href="/formulas/funcao-logistica.html">regressão logística</a>.</p>
+      <p><strong>Densidade.</strong> A densidade de uma variável contínua é a derivada da probabilidade acumulada: a curva em sino da <a href="/formulas/distribuicao-normal.html">normal</a> é a inclinação da curva em S de P(X ≤ x).</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Pela definição, mostre que a derivada de f(x) = 3x é 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>[f(x + h) − f(x)] / h = [3x + 3h − 3x] / h = 3h / h = 3, para qualquer h ≠ 0. O limite é <strong>3</strong>: a reta y = 3x tem inclinação 3 em todo ponto.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Qual a derivada de x³? E de 5x² + 2x − 7?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Pela regra da potência, (x³)′ = <strong>3x²</strong>. Derivando termo a termo, (5x² + 2x − 7)′ = 5 · 2x + 2 − 0 = <strong>10x + 2</strong>: constantes somadas não mudam a inclinação.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Em que ponto a parábola y = x² − 6x + 5 tem tangente horizontal?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Tangente horizontal é derivada zero: 2x − 6 = 0, então <strong>x = 3</strong>. É o vértice da parábola, o ponto mais baixo, em y = 9 − 18 + 5 = −4.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> A posição de uma pedra que cai é s(t) = 4,9t² metros. Qual a velocidade dela em t = 2 s?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>A velocidade é a derivada da posição: s′(t) = 9,8t. Em t = 2, <strong>19,6 m/s</strong> — a cada segundo de queda, a velocidade aumenta 9,8 m/s, a aceleração da gravidade.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Olhando o gráfico de f′, como saber onde f é crescente?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Onde f′ é <strong>positiva</strong>, a inclinação de f é para cima: f cresce. Onde f′ é negativa, f decresce; onde f′ cruza o zero, f tem um topo ou um fundo.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="limite.html" rel="prev"><span>Anterior</span>Limite — Chegar Perto Sem Chegar</a>
+    </nav>
+  </main>
+</body>
+</html>

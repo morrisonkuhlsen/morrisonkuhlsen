@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Taxa de Variação — Quão Rápido Algo Muda</title>
+  <meta name="description" content="Taxa de variação explicada do zero e de forma intuitiva: velocidade média, a velocidade num instante, inclinação de retas e curvas, com gráficos interativos e exercícios.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/taxa-variacao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/taxa-variacao.html">
+  <meta property="og:title" content="Taxa de Variação — Quão Rápido Algo Muda">
+  <meta property="og:description" content="Taxa de variação explicada do zero e de forma intuitiva: velocidade média, a velocidade num instante, inclinação de retas e curvas, com gráficos interativos e exercícios.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Taxa de Variação — Quão Rápido Algo Muda">
+  <meta name="twitter:description" content="Taxa de variação explicada do zero e de forma intuitiva: velocidade média, a velocidade num instante, inclinação de retas e curvas, com gráficos interativos e exercícios.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="taxa-variacao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Taxa de Variação — Quão Rápido Algo Muda</h1>
+    <p class="page-lede">O velocímetro marca 54 km/h. Mas 54 quilômetros <em>em que hora</em>, se você está dirigindo há só dez segundos? Essa pergunta — o que é a velocidade <strong>num instante</strong> — é o ponto de partida do cálculo. Antes dela, a pergunta mais simples: quão rápido algo mudou, em média.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#media">Taxa média</a>
+      <a href="#instante">Num instante</a>
+      <a href="#inclinacao">É uma inclinação</a>
+      <a href="#unidades">Em toda parte</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\text{taxa média} = \dfrac{\Delta s}{\Delta t} = \dfrac{s(b) - s(a)}{b - a}"></span>
+
+    <!-- 1. Taxa média entre dois instantes; estado em ?a=&b=. -->
+    <section class="calc intro" id="media" aria-labelledby="media-title">
+      <h2 id="media-title">Velocidade média</h2>
+      <p class="calc-lede">Um carro sai do sinal, acelera, anda e freia no sinal seguinte, 100 metros adiante, em 10 segundos. O gráfico mostra a posição <i>s</i> a cada instante <i>t</i>. Escolha dois instantes, <i>a</i> e <i>b</i>: a velocidade média entre eles é quanto andou dividido por quanto tempo levou.</p>
+      <div class="vars media-vars"></div>
+      <div class="plot-box media-plot"></div>
+      <p class="readout media-out" aria-live="polite"></p>
+      <div class="intro-text media-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Encolhendo o intervalo; estado em ?t=&k=. -->
+    <section class="calc intro" id="instante" aria-labelledby="inst-title">
+      <h2 id="inst-title">E num instante?</h2>
+      <p class="calc-lede">Para saber a velocidade num instante <i>t</i>, meça a média num intervalo curto, de <i>t</i> até <i>t</i> + <i>h</i> — e vá encolhendo <i>h</i>. A reta que liga os dois pontos, a <strong>secante</strong>, vai girando até encostar na curva num ponto só: a <strong>tangente</strong>.</p>
+      <div class="vars inst-vars"></div>
+      <div class="plot-box inst-plot"></div>
+      <p class="readout inst-out" aria-live="polite"></p>
+      <div class="approx-table inst-table"></div>
+      <div class="intro-text inst-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="inclinacao" aria-labelledby="incl-title">
+      <h2 id="incl-title">Taxa de variação é inclinação</h2>
+      <p>No gráfico, Δs é quanto a curva sobe e Δt é quanto ela anda para o lado. A razão entre os dois é a <strong>inclinação</strong> da reta que liga os pontos: subida sobre avanço. Por isso falar de taxa de variação e de inclinação é falar da mesma coisa.</p>
+      <p>Numa <strong>reta</strong>, a inclinação é a mesma em todo lugar, e a taxa não depende de onde se mede: um carro a 15 m/s constantes tem velocidade média de 15 m/s em qualquer intervalo. Numa <strong>curva</strong>, cada trecho tem a sua inclinação — e a velocidade num instante é a inclinação da curva naquele ponto, a da reta tangente.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\dfrac{\Delta y}{\Delta x} &gt; 0"></span>
+          <p>A grandeza está aumentando: a curva sobe da esquerda para a direita.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\dfrac{\Delta y}{\Delta x} &lt; 0"></span>
+          <p>Está diminuindo: a curva desce.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\dfrac{\Delta y}{\Delta x} = 0"></span>
+          <p>Não mudou, na média. Num instante, é o topo ou o fundo de uma curva.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="unidades" aria-labelledby="un-title">
+      <h2 id="un-title">Taxas em toda parte</h2>
+      <p>Velocidade é só o exemplo mais conhecido. Toda vez que uma grandeza depende de outra, dá para perguntar quão depressa uma muda quando a outra muda — e a unidade da resposta é sempre <strong>“unidade de cima por unidade de baixo”</strong>:</p>
+      <ul>
+        <li><strong>Vazão:</strong> litros por minuto que entram numa caixa d’água.</li>
+        <li><strong>Crescimento:</strong> habitantes por ano numa cidade.</li>
+        <li><strong>Custo marginal:</strong> reais a mais por unidade a mais produzida.</li>
+        <li><strong>Inflação:</strong> pontos do índice de preços por mês.</li>
+        <li><strong>Febre:</strong> graus por hora de uma temperatura que sobe.</li>
+      </ul>
+      <div class="tip">
+        <strong>A pergunta do cálculo.</strong> A taxa média é só uma divisão. A dificuldade — e a ideia que fez nascer o cálculo, com Newton e Leibniz — é a taxa <em>num instante</em>, em que o intervalo é zero. O caminho é encolher o intervalo sem nunca chegar a zero: um <a href="limite.html">limite</a>.
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Taxa de variação na estatística</h2>
+      <p><strong>A inclinação da regressão.</strong> Na <a href="/formulas/regressao-linear.html">regressão linear</a>, o coeficiente b₁ é uma taxa de variação: quanto y muda, em média, quando x aumenta uma unidade — reais de salário por ano de estudo, pontos na prova por hora estudada.</p>
+      <p><strong>Densidade.</strong> Uma curva de densidade, como a da <a href="/formulas/distribuicao-normal.html">normal</a>, é a taxa com que a probabilidade se acumula ao longo do eixo: onde a curva é alta, cada pedacinho do eixo junta muita probabilidade.</p>
+      <p><strong>Taxas relativas.</strong> Crescimento costuma ser medido em porcentagem — quanto mudou em relação ao tamanho —, como nos <a href="/formulas/juros-aportes.html">juros compostos</a>. É a taxa de variação dividida pelo próprio valor.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Um ciclista está no km 12 às 9h e no km 42 às 11h. Qual foi a velocidade média dele?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Δs = 42 − 12 = 30 km em Δt = 2 h, então a velocidade média é 30 ÷ 2 = <strong>15 km/h</strong>. Em alguns trechos ele foi mais rápido, em outros mais devagar: a média não conta isso.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> A população de uma cidade passou de 200 mil para 230 mil habitantes em 10 anos. Qual a taxa média de variação, e em que unidade?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(230 − 200) ÷ 10 = <strong>3 mil habitantes por ano</strong>. A unidade de uma taxa é sempre “unidade de cima por unidade de baixo”.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> A reta y = 4 − 2x tem a mesma taxa de variação em todo ponto. Qual é ela, e o que o sinal diz?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>É a inclinação, <strong>−2</strong>: cada unidade a mais em x tira 2 de y. Taxa negativa quer dizer que a grandeza está diminuindo.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Na curva y = x², calcule a taxa média de x = 1 a x = 1,1 e de x = 1 a x = 1,01. Para onde ela parece ir?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(1,21 − 1) ÷ 0,1 = 2,1 e (1,0201 − 1) ÷ 0,01 = 2,01. Os valores se aproximam de <strong>2</strong>: é a taxa instantânea em x = 1, a derivada de x² nesse ponto.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Por que não dá para calcular a velocidade num instante fazendo Δt = 0 direto na conta?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Porque Δs também vira zero, e a conta fica <strong>0 ÷ 0</strong>, que não tem valor. O que se faz é ver de que número a razão se aproxima quando Δt fica cada vez menor: um limite, assunto da <a href="limite.html">próxima lição</a>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-next" href="limite.html" rel="next"><span>Próxima</span>Limite — Chegar Perto Sem Chegar</a>
+    </nav>
+  </main>
+</body>
+</html>

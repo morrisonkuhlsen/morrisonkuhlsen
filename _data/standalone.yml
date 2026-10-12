@@ -933,3 +933,27 @@
   description: "Logaritmos explicados do zero: a pergunta inversa da potência, a escala logarítmica, as regras testadas com os seus números, as armadilhas e uma calculadora de tempo para dobrar um valor."
   tags: "logaritmo logaritmos log ln logaritmo natural escala logarítmica mudança de base tempo para dobrar regra do 72"
   lang: pt
+
+- title: "Cálculo Intuitivo"
+  url: "/calculo/"
+  description: "Cálculo explicado do zero e de forma intuitiva, uma ideia por página: taxa de variação, limite e derivada, cada uma com gráficos interativos, a ligação com a estatística e exercícios."
+  tags: "cálculo intuitivo derivada limite aulas lições"
+  lang: pt
+
+- title: "Taxa de Variação — Quão Rápido Algo Muda"
+  url: "/calculo/taxa-variacao.html"
+  description: "Taxa de variação explicada do zero e de forma intuitiva: velocidade média, a velocidade num instante, inclinação de retas e curvas, com gráficos interativos e exercícios."
+  tags: "taxa de variação velocidade média instantânea inclinação secante tangente cálculo"
+  lang: pt
+
+- title: "Limite — Chegar Perto Sem Chegar"
+  url: "/calculo/limite.html"
+  description: "Limite explicado do zero e de forma intuitiva: aproximar dos dois lados, o desafio do ε e do δ, quando o limite não existe, continuidade e limites no infinito, com gráficos interativos e exercícios."
+  tags: "limite cálculo épsilon delta continuidade limites laterais infinito"
+  lang: pt
+
+- title: "Derivada — Dê Zoom Até Virar Reta"
+  url: "/calculo/derivada.html"
+  description: "Derivada explicada do zero e de forma intuitiva: o zoom que transforma a curva em reta, o gráfico da derivada, a definição peça por peça e as regras básicas, com gráficos interativos e exercícios."
+  tags: "derivada cálculo tangente inclinação regras de derivação zoom"
+  lang: pt
