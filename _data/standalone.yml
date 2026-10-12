@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -1314,6 +1314,18 @@
   tags: "fração frações simplificar fração somar frações denominador comum dízima periódica decimal porcentagem"
   lang: pt
 
+- title: "Dízimas Periódicas — A Fração Geratriz"
+  url: "/matematica-basica/dizimas.html"
+  description: "Dízimas periódicas explicadas do zero: a divisão que mostra por que os algarismos se repetem, período e anteperíodo, uma calculadora da fração geratriz passo a passo e por que 0,999… é igual a 1."
+  tags: "dízima periódica fração geratriz período anteperíodo decimal infinito 0,999 igual a 1 calculadora"
+  lang: pt
+
+- title: "Razão e Proporção"
+  url: "/matematica-basica/razao-proporcao.html"
+  description: "Razão e proporção explicadas do zero: a mesma razão em quantidades diferentes, proporção direta e inversa, uma calculadora do termo que falta passo a passo e as razões da estatística, como taxas e proporção amostral."
+  tags: "razão proporção regra de três diretamente proporcional inversamente proporcional escala taxa calculadora"
+  lang: pt
+
 - title: "Porcentagem — Aumento, Desconto e Pontos Percentuais"
   url: "/matematica-basica/porcentagem.html"
   description: "Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento."
@@ -1330,6 +1342,12 @@
   url: "/matematica-basica/inequacoes.html"
   description: "Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado."
   tags: "inequação do primeiro grau desigualdade menor maior inverter o sinal intervalo conjunto solução reta calculadora passo a passo"
+  lang: pt
+
+- title: "Produtos Notáveis e Fatoração"
+  url: "/matematica-basica/produtos-notaveis.html"
+  description: "Produtos notáveis explicados do zero: o quadrado da soma, o da diferença e o produto da soma pela diferença desenhados como áreas, testados com os seus números, as contas de cabeça, a fatoração e o atalho da variância."
+  tags: "produtos notáveis quadrado da soma quadrado da diferença diferença de quadrados fatoração trinômio quadrado perfeito álgebra"
   lang: pt
 
 - title: "Equação do 2º Grau — Fórmula Quadrática e Parábola"

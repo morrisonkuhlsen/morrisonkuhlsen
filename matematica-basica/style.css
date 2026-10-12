@@ -2439,3 +2439,123 @@
 .zoom-eq {
   margin-top: .4rem;
 }
+
+/* ================================================================ dízimas */
+
+.diz-eq {
+  margin-top: .4rem;
+}
+
+/* Os restos da divisão: o ciclo destacado, e o resto que volta marcado. */
+.restos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .35rem;
+  max-width: 640px;
+  margin: .8rem auto 0;
+  padding: 0;
+  list-style: none;
+  font-size: .82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.restos li {
+  display: grid;
+  justify-items: center;
+  gap: .1rem;
+  min-width: 4.6rem;
+  padding: .35rem .4rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.restos li.is-ciclo {
+  border-color: var(--tone-1);
+  background: color-mix(in srgb, var(--tone-1) 12%, var(--bg));
+}
+
+.restos li.is-volta {
+  outline: 2px solid var(--tone-4);
+  outline-offset: 1px;
+}
+
+.resto {
+  color: var(--tone-5);
+  font-weight: 700;
+}
+
+.resto-op {
+  color: var(--text-muted);
+  font-size: .75rem;
+}
+
+.resto-dig {
+  color: var(--tone-1);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+/* ================================================================ razão e proporção */
+
+.copos-svg {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+}
+
+.copo {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.copo-suco { fill: var(--tone-2); }
+.copo-agua { fill: color-mix(in srgb, var(--tone-5) 55%, transparent); }
+
+.copos-eq {
+  margin-top: .4rem;
+}
+
+.prop-table td,
+.prop-table th {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.prop-table td:first-child,
+.prop-table th:first-child {
+  text-align: left;
+  color: var(--text-muted);
+}
+
+.prop-table td.is-x {
+  color: var(--tone-1);
+  font-weight: 700;
+}
+
+.prop-table tfoot td {
+  border-bottom: none;
+  font-size: .85rem;
+}
+
+/* ================================================================ produtos notáveis */
+
+.pn-svg {
+  max-width: 380px;
+}
+
+/* (a + b)(a − b) são duas figuras lado a lado: precisam de mais largura. */
+.pn-svg.is-largo {
+  max-width: 560px;
+}
+
+.pn-svg .is-out {
+  opacity: .25;
+}
+
+.pn-eq {
+  margin-top: .4rem;
+}

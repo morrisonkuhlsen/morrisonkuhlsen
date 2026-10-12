@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Razão e Proporção</title>
+  <meta name="description" content="Razão e proporção explicadas do zero: a mesma razão em quantidades diferentes, proporção direta e inversa, uma calculadora do termo que falta passo a passo e as razões da estatística, como taxas e proporção amostral.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/razao-proporcao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/razao-proporcao.html">
+  <meta property="og:title" content="Razão e Proporção">
+  <meta property="og:description" content="Razão e proporção explicadas do zero: a mesma razão em quantidades diferentes, proporção direta e inversa, uma calculadora do termo que falta passo a passo e as razões da estatística, como taxas e proporção amostral.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Razão e Proporção">
+  <meta name="twitter:description" content="Razão e proporção explicadas do zero: a mesma razão em quantidades diferentes, proporção direta e inversa, uma calculadora do termo que falta passo a passo e as razões da estatística, como taxas e proporção amostral.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="razao-proporcao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Razão e Proporção</h1>
+    <p class="page-lede">Uma <strong>razão</strong> compara duas quantidades dividindo uma pela outra: 2 de suco para 3 de água. Uma <strong>proporção</strong> diz que duas razões são iguais: 2/3 = 8/12. É a matemática de toda receita, mapa, velocidade e regra de três.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#copos">Razão</a>
+      <a href="#calc">Proporção</a>
+      <a href="#regras">Regras</a>
+      <a href="#direta-inversa">Direta ou inversa</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\frac{a}{b} = \frac{c}{d} \iff a \cdot d = b \cdot c"></span>
+
+    <!-- 1. Os copos; estado em ?sa=&sb=&sk=. -->
+    <section class="calc intro" id="copos" aria-labelledby="copos-title">
+      <h2 id="copos-title">A mesma razão em quantidades diferentes</h2>
+      <div class="vars">
+        <label class="var">
+          <i>suco</i>
+          <input name="sa" type="range" min="1" max="6" step="1" value="2" aria-label="Partes de suco">
+          <output class="out-sa">2</output>
+        </label>
+        <label class="var var-b">
+          <i>água</i>
+          <input name="sb" type="range" min="1" max="6" step="1" value="3" aria-label="Partes de água">
+          <output class="out-sb">3</output>
+        </label>
+        <label class="var">
+          <i>copos</i>
+          <input name="sk" type="range" min="1" max="4" step="1" value="1" aria-label="Quantos copos">
+          <output class="out-sk">1</output>
+        </label>
+      </div>
+      <div class="intro-figure copos-fig" aria-hidden="true"></div>
+      <div class="copos-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?pa=&pb=&pc=&tipo=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Achar o termo que falta</h2>
+      <p class="calc-lede">Três números conhecidos e um desconhecido, x. Diga se as grandezas são direta ou inversamente proporcionais.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Grandeza 1, conhecida</span>
+          <input name="pa" type="text" inputmode="decimal" value="3" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Grandeza 2, conhecida</span>
+          <input name="pb" type="text" inputmode="decimal" value="12" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Grandeza 1, nova</span>
+          <input name="pc" type="text" inputmode="decimal" value="5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Proporção</span>
+          <select name="tipo">
+            <option value="direta" selected>direta</option>
+            <option value="inversa">inversa</option>
+          </select>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="3;12;5;direta">3 kg custam 12; e 5 kg?</button>
+        <button type="button" data-exemplo="4;6;3;inversa">4 pintores em 6 dias; e 3?</button>
+        <button type="button" data-exemplo="60;5;80;inversa">60 km/h em 5 h; e a 80?</button>
+        <button type="button" data-exemplo="2;350;3,5;direta">2 xícaras para 350 g</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="table-scroll">
+        <table class="plain-table prop-table"></table>
+      </div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">Regras</h2>
+      <p>Arraste a, b e k: os valores são os mesmos nos três cards.</p>
+
+      <article class="rule">
+        <header><h3>Multiplicar os dois termos</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} = \frac{k \cdot a}{k \cdot b}"></span>
+        <div class="rule-try" data-rule="equivalente" data-vars="a b k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Produto dos extremos é o produto dos meios</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} = \frac{c}{d} \;\Rightarrow\; a \cdot d = b \cdot c"></span>
+        <p>Aqui com c = k·a e d = k·b.</p>
+        <div class="rule-try" data-rule="cruzado" data-vars="a b k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Somar aos dois termos</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{a}{b} \ne \frac{a + k}{b + k}"></span>
+        <div class="rule-try" data-rule="somar" data-vars="a b k"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="direta-inversa" aria-labelledby="di-title">
+      <h2 id="di-title">Direta ou inversa: a pergunta certa</h2>
+      <p>Antes de montar a conta, pergunte: <strong>se uma grandeza dobrar, a outra dobra ou cai pela metade?</strong></p>
+      <div class="facts is-pairs">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{y}{x} = k \quad (y = kx)"></span>
+          <p><strong>Direta:</strong> o dobro de quilos custa o dobro; o dobro de tempo, andando na mesma velocidade, percorre o dobro da distância. O gráfico é uma <a href="funcao-1grau.html">reta</a> que passa pela origem.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x \cdot y = k \quad \left(y = \tfrac{k}{x}\right)"></span>
+          <p><strong>Inversa:</strong> o dobro de pintores termina na metade do tempo; o dobro da velocidade leva a metade do tempo. O gráfico é uma curva que nunca toca os eixos.</p>
+        </div>
+      </div>
+      <p>E muitas grandezas não são proporcionais de jeito nenhum: a altura de uma criança não dobra quando a idade dobra, e o preço de um táxi (bandeirada mais quilômetro) não dobra quando a corrida dobra. Aplicar regra de três a elas dá resposta errada com cara de certa.</p>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Razões e proporções na estatística</h2>
+      <p><strong>Proporção amostral.</strong> Na estatística, “proporção” costuma querer dizer a fração de um grupo com uma característica: 120 de 400 entrevistados, p̂ = 0,30. É a razão “parte para o todo”, a mesma da <a href="porcentagem.html">porcentagem</a>.</p>
+      <p><strong>Taxas por mil ou por cem mil.</strong> Comparar 50 casos numa cidade de 20 mil com 300 numa de 500 mil exige uma razão comum: 250 contra 60 casos por 100 mil habitantes. A cidade pequena, com menos casos, tem a taxa maior.</p>
+      <p><strong>Chances.</strong> “3 para 1” é uma razão entre quem tem e quem não tem — diferente da proporção 3/4. A <a href="/formulas/razao-chances.html">razão de chances</a> compara duas dessas razões.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Numa turma há 12 meninas e 18 meninos. Qual é a razão de meninas para meninos, simplificada? E de meninas para o total?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>12 : 18 = <strong>2 : 3</strong>. Para o total: 12/30 = <strong>2/5</strong>, ou 40%.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Se 3 cadernos custam R$ 27, quanto custam 7?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Direta: 3/27 = 7/x, 3x = 189, <strong>x = R$ 63</strong>.</p>
+            <p><a href="?pa=3&amp;pb=27&amp;pc=7&amp;tipo=direta#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Uma obra leva 10 dias com 6 operários. Quantos dias levaria com 15?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Inversa: mais gente, menos tempo. 6 × 10 = 15 × x, <strong>x = 4 dias</strong>.</p>
+            <p><a href="?pa=6&amp;pb=10&amp;pc=15&amp;tipo=inversa#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Num mapa de escala 1 : 50.000, duas cidades estão a 8 cm. Qual a distância real?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Cada 1 cm vale 50.000 cm: 8 × 50.000 = 400.000 cm = <strong>4 km</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Divida R$ 600 entre duas pessoas na razão 2 : 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>São 2 + 3 = 5 partes de 600 ÷ 5 = 120. Uma recebe 2 × 120 = <strong>R$ 240</strong>; a outra, 3 × 120 = <strong>R$ 360</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="dizimas.html" rel="prev"><span>Anterior</span>Dízimas Periódicas — A Fração Geratriz</a>
+      <a class="pager-next" href="porcentagem.html" rel="next"><span>Próximo</span>Porcentagem — Aumento, Desconto e Pontos Percentuais</a>
+    </nav>
+  </main>
+</body>
+</html>

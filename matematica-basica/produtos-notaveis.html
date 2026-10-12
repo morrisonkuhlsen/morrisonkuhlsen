@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Produtos Notáveis e Fatoração</title>
+  <meta name="description" content="Produtos notáveis explicados do zero: o quadrado da soma, o da diferença e o produto da soma pela diferença desenhados como áreas, testados com os seus números, as contas de cabeça, a fatoração e o atalho da variância.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/produtos-notaveis.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/produtos-notaveis.html">
+  <meta property="og:title" content="Produtos Notáveis e Fatoração">
+  <meta property="og:description" content="Produtos notáveis explicados do zero: o quadrado da soma, o da diferença e o produto da soma pela diferença desenhados como áreas, testados com os seus números, as contas de cabeça, a fatoração e o atalho da variância.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Produtos Notáveis e Fatoração">
+  <meta name="twitter:description" content="Produtos notáveis explicados do zero: o quadrado da soma, o da diferença e o produto da soma pela diferença desenhados como áreas, testados com os seus números, as contas de cabeça, a fatoração e o atalho da variância.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="produtos-notaveis.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Produtos Notáveis e Fatoração</h1>
+    <p class="page-lede">Alguns produtos aparecem tanto que ganharam nome e fórmula pronta: o quadrado da soma, o quadrado da diferença e o produto da soma pela diferença. Vistos como áreas, eles deixam de ser fórmulas para decorar.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#area">Por área</a>
+      <a href="#regras">As fórmulas</a>
+      <a href="#cabeca">Contas de cabeça</a>
+      <a href="#fatorar">Fatoração</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="(a + b)^2 = a^2 + 2ab + b^2"></span>
+
+    <!-- 1. Por área; estado em ?pa=&pb=&modo=. -->
+    <section class="calc intro" id="area" aria-labelledby="area-title">
+      <h2 id="area-title">Cada fórmula é uma área</h2>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="pa" type="range" min="2" max="9" step="1" value="5" aria-label="a">
+          <output class="out-pa">5</output>
+        </label>
+        <label class="var var-b">
+          <i>b</i>
+          <input name="pb" type="range" min="1" max="8" step="1" value="3" aria-label="b">
+          <output class="out-pb">3</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Produto">
+        <button type="button" data-modo="soma" aria-pressed="true">(a + b)²</button>
+        <button type="button" data-modo="dif" aria-pressed="false">(a − b)²</button>
+        <button type="button" data-modo="prod" aria-pressed="false">(a + b)(a − b)</button>
+      </div>
+      <div class="intro-figure pn-fig" aria-hidden="true"></div>
+      <div class="pn-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As fórmulas, com os seus números</h2>
+      <p>Todas saem da propriedade distributiva — multiplicar cada termo de um parêntese por cada termo do outro. Arraste a e b: os valores são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Quadrado da soma</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(a + b)^2 = a^2 + 2ab + b^2"></span>
+        <div class="rule-try" data-rule="quadSoma" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Quadrado da diferença</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(a - b)^2 = a^2 - 2ab + b^2"></span>
+        <div class="rule-try" data-rule="quadDif" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Produto da soma pela diferença</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(a + b)(a - b) = a^2 - b^2"></span>
+        <div class="rule-try" data-rule="prodSD" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Cubo da soma</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3"></span>
+        <p>A versão em três dimensões: um cubo de aresta a + b cortado em oito blocos. A partir daqui, o <a href="/formulas/binomio-newton.html">binômio de Newton</a> dá qualquer potência.</p>
+        <div class="rule-try" data-rule="cubo" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>O erro mais comum</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="(a + b)^2 \ne a^2 + b^2"></span>
+        <div class="rule-try" data-rule="errado" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="cabeca" aria-labelledby="cabeca-title">
+      <h2 id="cabeca-title">Contas de cabeça</h2>
+      <p>Com as fórmulas, contas que parecem difíceis viram contas com números redondos. Arraste a dezena t e a unidade u.</p>
+
+      <article class="rule">
+        <header><h3>Quadrado de um número de dois algarismos</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(10t + u)^2 = 100t^2 + 20tu + u^2"></span>
+        <div class="rule-try" data-rule="cabeca" data-vars="t u"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Vizinhos de um número redondo</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(10t - u)(10t + u) = (10t)^2 - u^2"></span>
+        <p>Por exemplo, 49 × 51 = 50² − 1² = 2499.</p>
+        <div class="rule-try" data-rule="vizinhos" data-vars="t u"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="fatorar" aria-labelledby="fatorar-title">
+      <h2 id="fatorar-title">O caminho de volta: fatoração</h2>
+      <p>Fatorar é ler as fórmulas da direita para a esquerda: transformar uma soma num produto. Isso simplifica frações e resolve equações, porque um produto só dá zero se um dos fatores der zero.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="6x^2 + 9x = 3x(2x + 3)"></span>
+          <p><strong>Fator comum:</strong> o que aparece em todos os termos sai para fora do parêntese.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x^2 - 49 = (x + 7)(x - 7)"></span>
+          <p><strong>Diferença de quadrados:</strong> dois quadrados separados por menos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x^2 + 6x + 9 = (x + 3)^2"></span>
+          <p><strong>Trinômio quadrado perfeito:</strong> o termo do meio é 2 × 3 × x, então é um quadrado da soma.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x^2 - 5x + 6 = (x - 2)(x - 3)"></span>
+          <p><strong>Soma e produto:</strong> dois números que somam 5 e multiplicam 6. Daí as raízes da <a href="equacao-2grau.html">equação do 2º grau</a> saem sem fórmula.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Onde os produtos notáveis aparecem na estatística</h2>
+      <p>O atalho da variância, que calcula a soma dos quadrados dos desvios sem calcular desvio nenhum, é o quadrado da diferença aplicado a cada termo de um <a href="somatorio.html">somatório</a>:</p>
+      <span class="tex-block" data-tex="\sum (x_i - \bar{x})^2 = \sum \left(x_i^2 - 2x_i\bar{x} + \bar{x}^2\right) = \sum x_i^2 - 2\bar{x}\sum x_i + n\bar{x}^2 = \sum x_i^2 - n\bar{x}^2"></span>
+      <p>No último passo, Σxᵢ = n x̄, e −2n x̄² + n x̄² = −n x̄². A mesma ideia mostra que a variância é “a média dos quadrados menos o quadrado da média”.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Desenvolva (x + 4)².</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>x² + 2 · x · 4 + 4² = <strong>x² + 8x + 16</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Desenvolva (2x − 3)².</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(2x)² − 2 · 2x · 3 + 3² = <strong>4x² − 12x + 9</strong>. Cuidado: o quadrado de 2x é 4x², não 2x².</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule de cabeça 31² e 39 × 41.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>31² = 900 + 60 + 1 = <strong>961</strong>. 39 × 41 = 40² − 1 = <strong>1599</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Fatore x² − 25 e 4x² + 4x + 1.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>x² − 25 = <strong>(x + 5)(x − 5)</strong>. 4x² + 4x + 1 = (2x)² + 2 · 2x · 1 + 1² = <strong>(2x + 1)²</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Simplifique (x² − 9)/(x + 3), para x ≠ −3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>(x + 3)(x − 3)/(x + 3) = <strong>x − 3</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="inequacoes.html" rel="prev"><span>Anterior</span>Inequação do 1º Grau — Quando o Sinal Vira</a>
+      <a class="pager-next" href="equacao-2grau.html" rel="next"><span>Próximo</span>Equação do 2º Grau</a>
+    </nav>
+  </main>
+</body>
+</html>

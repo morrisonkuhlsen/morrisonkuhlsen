@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dízimas Periódicas — A Fração Geratriz</title>
+  <meta name="description" content="Dízimas periódicas explicadas do zero: a divisão que mostra por que os algarismos se repetem, período e anteperíodo, uma calculadora da fração geratriz passo a passo e por que 0,999… é igual a 1.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/dizimas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/dizimas.html">
+  <meta property="og:title" content="Dízimas Periódicas — A Fração Geratriz">
+  <meta property="og:description" content="Dízimas periódicas explicadas do zero: a divisão que mostra por que os algarismos se repetem, período e anteperíodo, uma calculadora da fração geratriz passo a passo e por que 0,999… é igual a 1.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Dízimas Periódicas — A Fração Geratriz">
+  <meta name="twitter:description" content="Dízimas periódicas explicadas do zero: a divisão que mostra por que os algarismos se repetem, período e anteperíodo, uma calculadora da fração geratriz passo a passo e por que 0,999… é igual a 1.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="dizimas.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Dízimas Periódicas — A Fração Geratriz</h1>
+    <p class="page-lede">Uma dízima periódica é um decimal infinito em que um bloco de algarismos <strong>se repete para sempre</strong>: 1/3 = 0,333…, 1/7 = 0,142857142857… Toda fração vira um decimal exato ou uma dízima — e toda dízima volta a ser uma fração.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#restos">Por que se repete</a>
+      <a href="#calc">Fração geratriz</a>
+      <a href="#noves">0,999… = 1</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="0{,}1\overline{6} = 0{,}1666\ldots = \frac{1}{6}"></span>
+
+    <!-- 1. Os restos da divisão; estado em ?dn=&dd=. -->
+    <section class="calc intro" id="restos" aria-labelledby="restos-title">
+      <h2 id="restos-title">Por que os algarismos se repetem</h2>
+      <div class="vars">
+        <label class="var">
+          <i>n</i>
+          <input name="dn" type="range" min="1" max="12" step="1" value="1" aria-label="Numerador">
+          <output class="out-dn">1</output>
+        </label>
+        <label class="var var-b">
+          <i>d</i>
+          <input name="dd" type="range" min="2" max="17" step="1" value="7" aria-label="Denominador">
+          <output class="out-dd">7</output>
+        </label>
+      </div>
+      <div class="diz-eq calc-result"></div>
+      <ol class="restos" aria-label="Restos da divisão, um por algarismo"></ol>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="nomes-title">
+      <h2 id="nomes-title">Os nomes</h2>
+      <ul>
+        <li><strong>Período:</strong> o bloco que se repete. Em 0,1666…, é o 6. Escreve-se com um traço em cima, 0,1<span style="text-decoration: overline">6</span>, ou entre parênteses, 0,1(6).</li>
+        <li><strong>Anteperíodo:</strong> o que vem depois da vírgula e antes do período, e não se repete. Em 0,1666…, é o 1.</li>
+        <li><strong>Simples ou composta:</strong> sem anteperíodo, a dízima é simples (0,333…); com ele, composta (0,1666…).</li>
+      </ul>
+      <p>Quem decide é o denominador da fração simplificada. Só com fatores 2 e 5 (como 8 = 2³ ou 20 = 2² × 5), o decimal é exato. Com qualquer outro primo, é dízima — e, se houver também 2 ou 5, ela tem anteperíodo. Fatore o denominador na página de <a href="primos.html">primos</a> para prever o que vem.</p>
+    </section>
+
+    <!-- 2. Fração geratriz; estado em ?diz=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">A fração geratriz</h2>
+      <p class="calc-lede">O caminho de volta: de uma dízima, a fração que a gerou. Escreva o período entre parênteses — 0,(3), 0,1(6), 2,1(45) — ou com reticências depois de algumas repetições, como 0,1666...</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Dízima</span>
+          <input name="diz" type="text" inputmode="decimal" value="0,1(6)" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="0,(3)">0,333…</button>
+        <button type="button" data-exemplo="0,1(6)">0,1666…</button>
+        <button type="button" data-exemplo="0,(142857)">0,142857…</button>
+        <button type="button" data-exemplo="2,1(45)">2,14545…</button>
+        <button type="button" data-exemplo="0,58333...">0,58333…</button>
+        <button type="button" data-exemplo="0,(9)">0,999…</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="noves" aria-labelledby="noves-title">
+      <h2 id="noves-title">0,999… é igual a 1</h2>
+      <p>Não “quase 1”, nem “tende a 1”: é o mesmo número escrito de outro jeito. Três argumentos, cada um suficiente:</p>
+      <ul>
+        <li><strong>Pela fração:</strong> 1/3 = 0,333… Multiplicando por 3: 3/3 = 0,999… E 3/3 = 1.</li>
+        <li><strong>Pela geratriz:</strong> x = 0,999…, 10x = 9,999…, e subtraindo, 9x = 9. Então x = 1.</li>
+        <li><strong>Pela distância:</strong> se fossem números diferentes, haveria algum número entre eles — a média dos dois, por exemplo. Mas não há decimal que caiba entre 0,999… e 1: qualquer um que você escreva é menor que 0,999… a partir de alguma casa.</li>
+      </ul>
+      <p>Por isso todo decimal exato tem duas escritas: 0,5 = 0,4999… A estranheza vem de imaginar o “…” como um processo que nunca termina; ele é, na verdade, o número inteiro, com todas as infinitas casas já lá.</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}\overline{3} \ne 0{,}33"></span>
+          <p><strong>Arredondar não é igual.</strong> 0,33 é 33/100; 1/3 é um pouquinho mais. Para contas exatas, use a fração.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}1\overline{6} \ne \tfrac{16}{99}"></span>
+          <p><strong>O anteperíodo muda a geratriz.</strong> 16/99 = 0,1616…; para 0,1666… é (16 − 1)/90 = 1/6.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\pi = 3{,}14159\ldots"></span>
+          <p><strong>Infinito não é periódico.</strong> π e √2 têm infinitas casas, mas nenhum bloco se repete: não são frações. Veja as <a href="constantes.html">constantes</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1 \div 3 \approx 0{,}3333333"></span>
+          <p><strong>A calculadora corta.</strong> Ela mostra 8 a 12 casas e arredonda a última; o resto da dízima some. Veja <a href="arredondamento.html">arredondamento</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Ache a fração geratriz de 0,777…</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>x = 0,777…, 10x = 7,777…; subtraindo, 9x = 7: <strong>x = 7/9</strong>.</p>
+            <p><a href="?diz=0%2C(7)#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Ache a fração geratriz de 0,2(36) = 0,23636…</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(236 − 2)/990 = 234/990 = <strong>13/55</strong>.</p>
+            <p><a href="?diz=0%2C2(36)#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Sem dividir, diga se 7/40, 5/12 e 9/14 dão decimal exato ou dízima.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>40 = 2³ × 5: <strong>exato</strong> (0,175). 12 = 2² × 3: o 3 faz <strong>dízima</strong>, e o 2² dá anteperíodo (0,41666…). 14 = 2 × 7: <strong>dízima</strong> com anteperíodo (0,6428571…).</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quantos algarismos tem o período de 1/7? E o de 1/13?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>1/7 = 0,(142857): <strong>6</strong>, o máximo possível para o 7 (são 6 restos diferentes de zero). 1/13 = 0,(076923): também <strong>6</strong>, menos que os 12 possíveis.</p>
+            <p><a href="?dn=1&amp;dd=13#restos">Veja os restos de 1/13 →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule 0,333… + 0,666… e explique o resultado.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>1/3 + 2/3 = 3/3 = <strong>1</strong>. Somando casa a casa dá 0,999…, que é o mesmo número.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="fracoes.html" rel="prev"><span>Anterior</span>Frações — Simplificar, Somar e Converter</a>
+      <a class="pager-next" href="razao-proporcao.html" rel="next"><span>Próximo</span>Razão e Proporção</a>
+    </nav>
+  </main>
+</body>
+</html>
