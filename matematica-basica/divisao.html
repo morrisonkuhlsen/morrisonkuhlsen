@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Divisão — Quociente, Resto e a Conta Armada</title>
+  <meta name="description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/divisao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/divisao.html">
+  <meta property="og:title" content="Divisão — Quociente, Resto e a Conta Armada">
+  <meta property="og:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Divisão — Quociente, Resto e a Conta Armada">
+  <meta name="twitter:description" content="Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com quociente em cima ou no método da chave.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+    <script defer src="licao.js"></script>
+  <script defer src="divisao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Divisão — Quociente, Resto e a Conta Armada</h1>
+    <p class="page-lede">Dividir é <strong>repartir em partes iguais</strong> — ou, o que dá no mesmo, perguntar <strong>quantas vezes um número cabe no outro</strong>. Quase nunca cabe certinho: o que não dá para repartir é o resto. A conta armada só faz essa pergunta um pedaço de cada vez.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#repartir">Repartir</a>
+      <a href="#partes">Os nomes</a>
+      <a href="#conta">Conta armada</a>
+      <a href="#porque">Por que funciona</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\text{dividendo} = \text{divisor} \times \text{quociente} + \text{resto}, \qquad 0 \le \text{resto} < \text{divisor}"></span>
+
+    <!-- 1. Partilha com bolinhas; estado em ?total=&grupos=&modo=. -->
+    <section class="calc intro share" id="repartir" aria-labelledby="share-title">
+      <h2 id="share-title">Dividir é repartir</h2>
+      <div class="seg" role="group" aria-label="Leitura da divisão">
+        <button type="button" data-modo="repartir" aria-pressed="true">repartir entre amigos</button>
+        <button type="button" data-modo="agrupar" aria-pressed="false">montar pacotes</button>
+      </div>
+      <div class="vars share-vars">
+        <label class="var">
+          <i>balas</i>
+          <input name="total" type="range" min="0" max="60" step="1" value="17" aria-label="Número de balas">
+          <output class="out-total">17</output>
+        </label>
+        <label class="var var-grupos">
+          <i>amigos</i>
+          <input name="grupos" type="range" min="1" max="9" step="1" value="5" aria-label="Divisor">
+          <output class="out-grupos">5</output>
+        </label>
+      </div>
+      <div class="share-figure" aria-hidden="true"></div>
+      <div class="share-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. As partes, pintadas nas duas montagens de 85 ÷ 3. -->
+    <section class="lesson" id="partes" aria-labelledby="partes-title">
+      <h2 id="partes-title">O nome de cada parte</h2>
+      <p>Na conta 85 ÷ 3, cada número tem um nome. As duas montagens abaixo são a mesma conta, escrita de jeitos diferentes: a primeira, com o quociente em cima, é a dos livros em inglês; a segunda, o <strong>método da chave</strong>, é a que se ensina nas escolas do Brasil.</p>
+      <div class="ld-pair">
+        <figure>
+          <div class="ld-box" data-formato="cima"></div>
+          <figcaption>Quociente em cima</figcaption>
+        </figure>
+        <figure>
+          <div class="ld-box" data-formato="chave"></div>
+          <figcaption>Método da chave</figcaption>
+        </figure>
+      </div>
+      <dl class="terms">
+        <div data-tone="2"><dt>Dividendo — 85</dt><dd>O que vai ser repartido.</dd></div>
+        <div data-tone="5"><dt>Divisor — 3</dt><dd>Em quantas partes se reparte (ou o tamanho de cada grupo).</dd></div>
+        <div data-tone="1"><dt>Quociente — 28</dt><dd>Quanto cabe em cada parte (ou quantos grupos saem). É o “resultado” da divisão.</dd></div>
+        <div data-tone="3"><dt>Resto — 1</dt><dd>O que sobra sem dar para repartir. É sempre menor que o divisor. Quando é 0, a divisão é <strong>exata</strong>.</dd></div>
+      </dl>
+      <p>Os números do meio da conta (o 6, o 25, o 24) são contas de passagem: <em>produtos</em> do divisor por um algarismo do quociente e <em>restos parciais</em>. Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
+      <span class="tex-block" data-tex="\htmlData{tone=2}{85} = \htmlData{tone=5}{3} \times \htmlData{tone=1}{28} + \htmlData{tone=3}{1}"></span>
+    </section>
+
+    <!-- 3. A conta armada; estado em ?dividendo=&divisor=&casas=&formato=. -->
+    <section class="calc" id="conta" aria-labelledby="conta-title">
+      <h2 id="conta-title">A conta armada, passo a passo</h2>
+      <p class="calc-lede">Digite uma divisão e avance um passo de cada vez. São só quatro movimentos, repetidos até acabarem os algarismos: <strong>divide, multiplica, subtrai, baixa</strong>.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Dividendo</span>
+          <input name="dividendo" type="text" inputmode="numeric" value="85" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Divisor</span>
+          <input name="divisor" type="text" inputmode="numeric" value="3" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="1">
+          <span>Casas decimais</span>
+          <select name="casas">
+            <option value="0" selected>nenhuma</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="85;3;0">85 ÷ 3</button>
+        <button type="button" data-exemplo="618;3;0">618 ÷ 3</button>
+        <button type="button" data-exemplo="1000;7;0">1000 ÷ 7</button>
+        <button type="button" data-exemplo="785;23;0">785 ÷ 23</button>
+        <button type="button" data-exemplo="85;3;2">85 ÷ 3 com 2 casas</button>
+        <button type="button" data-exemplo="3;8;3">3 ÷ 8</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="seg ld-format" role="group" aria-label="Formato da conta">
+        <button type="button" data-formato="cima" aria-pressed="true">quociente em cima</button>
+        <button type="button" data-formato="chave" aria-pressed="false">método da chave</button>
+      </div>
+
+      <div class="ld-stage">
+        <div class="ld-box ld-main" aria-hidden="true"></div>
+        <div class="ld-side">
+          <span class="ld-tab-label">Tabuada do divisor</span>
+          <ol class="ld-tab"></ol>
+        </div>
+      </div>
+
+      <div class="ld-tags" aria-hidden="true">
+        <span data-tag="Divide">divide</span>
+        <span data-tag="Multiplica">multiplica</span>
+        <span data-tag="Subtrai">subtrai</span>
+        <span data-tag="Baixa">baixa</span>
+      </div>
+      <p class="ld-say" aria-live="polite"></p>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar a conta pronta">⏭</button>
+      </div>
+
+      <details class="ld-details">
+        <summary>Ver todos os passos em texto</summary>
+        <ol class="ld-all"></ol>
+      </details>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que a conta funciona</h2>
+      <p>A conta armada parece um ritual, mas cada passo é uma partilha de verdade. Pense em 85 reais para 3 pessoas, em <strong>8 notas de 10</strong> e <strong>5 moedas de 1</strong>.</p>
+      <ol>
+        <li><strong>As notas de 10 primeiro.</strong> São 8 notas para 3 pessoas: cada uma recebe 2 notas (o 2 do quociente, na casa das dezenas). Foram 3 × 2 = 6 notas, e sobram 8 − 6 = 2.</li>
+        <li><strong>Troque o que sobrou.</strong> As 2 notas de 10 que sobraram viram 20 moedas de 1. Juntando com as 5 moedas que já havia, são 25 moedas. É isso que “baixar o 5” faz: o 2 ao lado do 5 forma 25.</li>
+        <li><strong>Agora as moedas.</strong> 25 moedas para 3 pessoas: 8 para cada (o 8 do quociente, na casa das unidades). Foram 3 × 8 = 24, e sobra 1 moeda — o resto.</li>
+      </ol>
+      <p>Cada pessoa ficou com 2 notas de 10 e 8 moedas: <strong>28 reais</strong>. A conta reparte primeiro as casas grandes e passa o que sobra para a casa seguinte, dez vezes maior em quantidade. Por isso cada algarismo do quociente fica em cima da casa a que pertence.</p>
+      <span class="tex-block" data-tex="\begin{aligned} 85 &= 8 \text{ dezenas} + 5 \text{ unidades} \\ &= (3 \times 2 + 2) \text{ dezenas} + 5 \text{ unidades} \\ &= 3 \times 2 \text{ dezenas} + 25 \text{ unidades} \\ &= 3 \times 2 \text{ dezenas} + 3 \times 8 + 1 \\ &= 3 \times 28 + 1 \end{aligned}"></span>
+      <p>E as casas decimais? 85 é o mesmo que 85,000…: quando as unidades acabam, o resto vira décimos (1 inteiro = 10 décimos), e a partilha continua do mesmo jeito. Por isso, ao baixar o primeiro zero, a vírgula entra no quociente.</p>
+
+      <div class="tip">
+        <strong>Divisor de dois algarismos ou mais.</strong> A pergunta “quantas vezes cabe?” fica mais difícil de responder de cabeça. Arredonde o divisor para estimar: em 78 ÷ 23, pense em 78 ÷ 20 ≈ 3. Confira multiplicando (23 × 3 = 69, cabe; 23 × 4 = 92, passa). Se o resto der maior que o divisor, a estimativa foi baixa; se o produto passar do número, foi alta. Ajuste em um e tente de novo.
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas e casos especiais</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="618 \div 3 = 206"></span>
+          <p><strong>O zero do meio.</strong> Ao baixar o 1, o 3 não cabe: escreva 0 no quociente antes de baixar o 8. Quem pula o zero chega em 26, e a prova real denuncia: 3 × 26 = 78.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\text{resto} \ge \text{divisor}"></span>
+          <p><strong>Resto grande demais.</strong> Sinal de que o algarismo do quociente ficou pequeno: o divisor ainda cabia mais uma vez.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\text{produto} > \text{número da vez}"></span>
+          <p><strong>Produto grande demais.</strong> Não dá para subtrair: o algarismo do quociente ficou grande. Diminua um.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="5 \div 8 = 0 \ \text{resto}\ 5"></span>
+          <p><strong>Divisor maior que o dividendo.</strong> Não cabe nenhuma vez: quociente 0 e o dividendo inteiro sobra. Com casas decimais, a conta segue: 5 ÷ 8 = 0,625.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="7 \div 0\ \text{?}"></span>
+          <p><strong>Dividir por zero não existe.</strong> Nenhum número vezes 0 dá 7. Já 0 ÷ 7 = 0: não há nada para repartir.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="150 \div 40 = 3 \ \text{resto}\ 30"></span>
+          <p><strong>O resto muda a resposta.</strong> 150 pessoas em ônibus de 40 lugares: 3 ônibus deixam 30 pessoas para trás. São precisos 4.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde a divisão leva</h2>
+      <p><strong>Divisibilidade.</strong> Resto zero quer dizer que um número divide o outro. O <a href="mdc.html">MDC</a> procura o maior número que divide todos, e o algoritmo de Euclides que o calcula é uma sequência de divisões com resto.</p>
+      <p><strong>Frações.</strong> A fração 85/3 <em>é</em> a divisão 85 ÷ 3, só que deixada indicada. Escrever como número misto, 28 ⅓, é ler o quociente e o resto: 28 inteiros e 1 de 3 pedaços. Continuar a conta depois da vírgula é <a href="fracoes.html#converter">converter a fração em decimal</a> — e um resto que se repete gera uma dízima periódica.</p>
+      <p><strong>Estatística.</strong> A média é uma soma dividida pela quantidade de valores; uma proporção é uma contagem dividida por um total. Toda vez que se fala em “por pessoa”, “por cento” ou “em média”, há uma divisão.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 96 ÷ 4 armando a conta.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O 4 cabe 2 vezes no 9 (8), sobra 1. Baixando o 6: 16, onde o 4 cabe 4 vezes, sobra 0. Quociente <strong>24</strong>, resto 0 — divisão exata.</p>
+            <p><a href="?dividendo=96&amp;divisor=4&amp;casas=0#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 618 ÷ 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>6 ÷ 3 = 2, sobra 0. Baixando o 1: o 3 não cabe em 1, então entra um <strong>0</strong> no quociente. Baixando o 8: 18 ÷ 3 = 6. Quociente <strong>206</strong>.</p>
+            <p><a href="?dividendo=618&amp;divisor=3&amp;casas=0#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quanto é 1000 ÷ 7? Diga o quociente e o resto, e faça a prova real.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>10 ÷ 7 = 1, sobra 3; 30 ÷ 7 = 4, sobra 2; 20 ÷ 7 = 2, sobra 6. Quociente <strong>142</strong>, resto <strong>6</strong>.</p>
+            <p>Prova real: 7 × 142 + 6 = 994 + 6 = 1000.</p>
+            <p><a href="?dividendo=1000&amp;divisor=7&amp;casas=0#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule 785 ÷ 23.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O 23 não cabe em 7; em 78, estimando 78 ÷ 20 ≈ 3: 23 × 3 = 69, sobra 9. Baixando o 5: 95, e 95 ÷ 20 ≈ 4: 23 × 4 = 92, sobra 3. Quociente <strong>34</strong>, resto <strong>3</strong>.</p>
+            <p><a href="?dividendo=785&amp;divisor=23&amp;casas=0#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Divida 85 por 3 com duas casas decimais.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Até as unidades, 28 e resto 1. Vírgula no quociente, baixa um zero: 10 ÷ 3 = 3, sobra 1. Baixa outro zero: 10 ÷ 3 = 3, sobra 1. Resultado <strong>28,33</strong>, com resto 0,01 — e o 1 vai sobrar para sempre: 85 ÷ 3 = 28,333…</p>
+            <p><a href="?dividendo=85&amp;divisor=3&amp;casas=2#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Uma escola vai levar 150 alunos a um passeio em ônibus de 40 lugares. Quantos ônibus precisa contratar?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>150 ÷ 40 = 3, resto 30. Três ônibus levam 120 alunos e deixam 30 de fora, então são precisos <strong>4 ônibus</strong>. Aqui o resto não se descarta: ele pede mais um.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="./" rel="prev"><span>Voltar</span>Matemática básica</a>
+      <a class="pager-next" href="mdc.html" rel="next"><span>Próximo</span>MDC — Máximo Divisor Comum</a>
+    </nav>
+  </main>
+</body>
+</html>

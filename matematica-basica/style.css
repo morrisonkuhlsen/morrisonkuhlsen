@@ -1308,3 +1308,391 @@
   stroke: var(--surface);
   stroke-width: 2;
 }
+
+/* ---------------------------------------------------------------- divisão: partilha */
+
+.share-vars {
+  max-width: 520px;
+  margin: 1rem auto 0;
+}
+
+.share-figure {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+
+.share-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  min-width: 3.4rem;
+  padding: .45rem .5rem .35rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.share-box.is-r {
+  border-style: dashed;
+  border-color: var(--tone-3);
+}
+
+.share-dots {
+  display: grid;
+  grid-template-columns: repeat(5, .7rem);
+  gap: .2rem;
+  min-height: .7rem;
+}
+
+.dot {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background: var(--tone-1);
+}
+
+.share-box.is-r .dot {
+  background: var(--tone-3);
+}
+
+.share-label {
+  font-size: .7rem;
+  color: var(--text-muted);
+}
+
+.share-eq {
+  margin-top: 1rem;
+}
+
+/* ---------------------------------------------------------------- divisão: termos */
+
+.terms {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .6rem;
+  margin: 1rem 0;
+}
+
+.terms > div {
+  padding: .7rem .85rem;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--tone);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.terms dt {
+  font-weight: 700;
+  color: var(--tone);
+}
+
+.terms dd {
+  margin: .3rem 0 0;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+
+.tex-block .katex [data-tone] {
+  color: var(--tone);
+}
+
+/* ---------------------------------------------------------------- divisão: conta armada */
+
+.ld-pair {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 3rem;
+}
+
+.ld-pair figure {
+  margin: 0;
+  text-align: center;
+}
+
+.ld-pair figcaption {
+  margin-top: .5rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+}
+
+.ld-box {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: .4rem 0;
+}
+
+/* Uma célula por algarismo; as que ainda não apareceram guardam o lugar. */
+.ld {
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-strong);
+}
+
+.ld-pair .ld {
+  font-size: 1.4rem;
+}
+
+.ld-cell {
+  padding: 0 .08em;
+  border-radius: 4px;
+  text-align: center;
+  transition: background-color .2s, color .2s;
+}
+
+.ld-cell.is-off {
+  visibility: hidden;
+}
+
+.ld-cell.is-hl {
+  color: var(--tone);
+  background: color-mix(in srgb, var(--tone) 16%, transparent);
+}
+
+.ld-cell.is-line {
+  border-bottom: 2px solid var(--text-muted);
+  border-radius: 0;
+}
+
+.ld-menos {
+  text-align: right;
+}
+
+.ld-divisor {
+  padding-right: .3em;
+  text-align: right;
+}
+
+/* Quociente em cima: a barra cobre o dividendo e desce à esquerda dele. */
+.ld-barra {
+  z-index: -1;
+  border-top: 2px solid var(--text-strong);
+  border-left: 2px solid var(--text-strong);
+  border-radius: 0;
+  margin-left: -.15em;
+}
+
+/* Método da chave: o traço vertical à esquerda do divisor e o de baixo. */
+.is-chave .ld-divisor {
+  margin-left: .4em;
+  padding: 0 .3em;
+  border-left: 2px solid var(--text-strong);
+  border-bottom: 2px solid var(--text-strong);
+  border-radius: 0;
+  text-align: left;
+}
+
+.is-chave .ld-divisor.is-hl {
+  border-radius: 0;
+}
+
+.ld-qbox {
+  margin-left: .4em;
+  padding: 0 .3em;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ld-qbox > .ld-cell {
+  padding: 0;
+}
+
+.ld-format {
+  margin-top: 1.2rem;
+}
+
+.ld-stage {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem 2.5rem;
+  margin-top: 1rem;
+}
+
+.ld-main {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.ld-side {
+  font-size: .85rem;
+}
+
+.ld-tab-label {
+  display: block;
+  margin-bottom: .35rem;
+  color: var(--text-muted);
+}
+
+.ld-tab {
+  display: grid;
+  gap: .15rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.ld-tab li {
+  padding: .05rem .5rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+
+.ld-tab li.is-common {
+  color: var(--text-strong);
+}
+
+.ld-tab li.is-best {
+  border-color: var(--tone-1);
+  background: var(--tone-1);
+  color: var(--surface);
+  font-weight: 700;
+}
+
+.ld-tab li.is-past {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  opacity: .6;
+}
+
+.ld-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: 1.2rem;
+}
+
+.ld-tags span {
+  padding: .15rem .65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+}
+
+.ld-tags span.is-on {
+  border-color: var(--tone-2);
+  color: var(--tone-2);
+  font-weight: 700;
+}
+
+.ld-say {
+  max-width: 600px;
+  min-height: 4.8em;
+  margin: .8rem auto 0;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.ld-say strong {
+  color: var(--text-strong);
+}
+
+.ld-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: .4rem;
+  margin-top: .8rem;
+}
+
+.ld-nav button {
+  padding: .4rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+.ld-nav button.is-main {
+  border-color: var(--tone-1);
+  background: var(--tone-1);
+  color: var(--surface);
+  font-weight: 600;
+}
+
+.ld-nav button:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+.ld-count {
+  min-width: 7.5rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.ld-details {
+  margin-top: 1.2rem;
+}
+
+.ld-details summary {
+  width: fit-content;
+  color: var(--tone-1);
+  cursor: pointer;
+}
+
+.ld-all {
+  margin: .8rem 0 0;
+  padding-left: 1.4rem;
+  line-height: 1.55;
+}
+
+.ld-all li + li {
+  margin-top: .35rem;
+}
+
+.ld-all button {
+  padding: .1rem .3rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ld-all li.is-on button {
+  background: color-mix(in srgb, var(--tone-2) 14%, transparent);
+  color: var(--text-strong);
+}
+
+.ld-all b {
+  color: var(--text-strong);
+}
+
+.calc.has-error .ld-format,
+.calc.has-error .ld-stage,
+.calc.has-error .ld-tags,
+.calc.has-error .ld-say,
+.calc.has-error .ld-nav,
+.calc.has-error .ld-details {
+  display: none;
+}
+
+/* Na anatomia, só a cor separa as partes; o fundo é para o passo a passo. */
+.ld-pair .ld-cell.is-hl {
+  background: none;
+}
