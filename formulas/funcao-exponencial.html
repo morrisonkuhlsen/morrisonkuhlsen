@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Função Exponencial e Logarítmica — Interativa</title>
+  <meta name="description" content="A função exponencial e a sua inversa, a logarítmica, explicadas termo a termo, com calculadora e o gráfico das duas espelhadas na reta y = x.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/formulas/funcao-exponencial.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://morrisonkuhlsen.com/formulas/funcao-exponencial.html">
+  <link rel="alternate" hreflang="en" href="https://morrisonkuhlsen.com/en/formulas/exponential-function.html">
+  <link rel="alternate" hreflang="x-default" href="https://morrisonkuhlsen.com/formulas/funcao-exponencial.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/formulas/funcao-exponencial.html">
+  <meta property="og:title" content="Função Exponencial e Logarítmica — Interativa">
+  <meta property="og:description" content="A função exponencial e a sua inversa, a logarítmica, explicadas termo a termo, com calculadora e o gráfico das duas espelhadas na reta y = x.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Função Exponencial e Logarítmica — Interativa">
+  <meta name="twitter:description" content="A função exponencial e a sua inversa, a logarítmica, explicadas termo a termo, com calculadora e o gráfico das duas espelhadas na reta y = x.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Todas as fórmulas" title="Todas as fórmulas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <a class="lang-link" href="/en/formulas/exponential-function.html" hreflang="en" lang="en">English</a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Função Exponencial e Logarítmica</h1>
+
+    <div class="formula-scroll">
+      <div class="formula-wrap" role="group" aria-label="Fórmula da função exponencial e logarítmica interativa">
+        <span class="part" data-part="y_fe" data-tone="1" data-tex="y = b^x"></span>
+        <span class="op">⟺</span>
+        <span class="part" data-part="x_fe" data-tone="2" data-tex="x = \log_b y"></span>
+      </div>
+    </div>
+    <p class="formula-hint">Toque num termo para ver o que ele significa, ou <button type="button" class="toggle-all" aria-pressed="false">mostre todos</button>.</p>
+
+    <!-- Calculadora com gráfico; estado em ?b=&x=. -->
+    <section class="calc" data-calc="funcexp" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calcule</h2>
+      <p class="calc-lede">Exemplo: uma população dobra a cada geração, então depois de x gerações é 2ˣ vezes a inicial. Quanto é depois de 3 gerações — e quantas gerações levam a 8 vezes? Troque os valores para calcular o seu caso; uma base entre 0 e 1 dá decaimento.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="0">
+          <span>Base <i>b</i></span>
+          <input name="b" type="text" inputmode="decimal" value="2" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span>Expoente <i>x</i></span>
+          <input name="x" type="text" inputmode="decimal" value="3" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="calc-chart"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="formula-static-info">
+      <h2>O que significa cada termo</h2>
+      <dl>
+          <dt data-part="y_fe" data-tone="1">Exponencial (y = bˣ)</dt>
+          <dd>A base multiplicada por si mesma x vezes — e, para x fracionário ou negativo, a extensão contínua disso. Cada passo de 1 em x multiplica y por b.</dd>
+          <dt data-part="x_fe" data-tone="2">Logarítmica (x = log_b y)</dt>
+          <dd>A pergunta inversa: a que expoente elevar b para chegar a y? As duas funções se desfazem, e os gráficos são espelhos um do outro na reta y = x.</dd>
+      </dl>
+    </section>
+
+    <nav class="pager" aria-label="Outras fórmulas">
+      <a class="pager-prev" href="binomio-newton.html" rel="prev"><span>Anterior</span>Binômio de Newton</a>
+      <a class="pager-next" href="logaritmo-mudanca-base.html" rel="next"><span>Próxima</span>Logaritmo e Mudança de Base</a>
+    </nav>
+  </main>
+</body>
+</html>

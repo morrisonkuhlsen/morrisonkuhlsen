@@ -277,6 +277,21 @@
   description: "A multiplicação de matrizes 2×2 explicada termo a termo, com calculadora, gráfico das transformações compostas e por que AB é diferente de BA."
   tags: "fórmula interativa calculadora passo a passo multiplicação de matrizes produto transformação composição"
   lang: pt
+- title: "Módulo e Inequações"
+  url: "/formulas/modulo-inequacao.html"
+  description: "Inequações com módulo explicadas termo a termo, com calculadora, gráfico do V e a leitura como distância, tolerância e margem de erro."
+  tags: "fórmula interativa calculadora passo a passo módulo valor absoluto inequação intervalo tolerância"
+  lang: pt
+- title: "Função Exponencial e Logarítmica"
+  url: "/formulas/funcao-exponencial.html"
+  description: "A função exponencial e a sua inversa, a logarítmica, explicadas termo a termo, com calculadora e o gráfico das duas espelhadas na reta y = x."
+  tags: "fórmula interativa calculadora passo a passo função exponencial logarítmica inversa crescimento decaimento"
+  lang: pt
+- title: "Progressão de Segunda Ordem"
+  url: "/formulas/pa-segunda-ordem.html"
+  description: "Progressões de segunda ordem e números triangulares explicados termo a termo, com calculadora do termo geral, da soma e a tabela de diferenças."
+  tags: "fórmula interativa calculadora passo a passo progressão de segunda ordem números triangulares diferenças sequência"
+  lang: pt
 - title: "Função Logística e Chances"
   url: "/formulas/funcao-logistica.html"
   description: "Função logística e chances (odds) explicadas termo a termo, com calculadora, curva em S e a leitura dos coeficientes de uma regressão logística."
@@ -907,6 +922,21 @@
   url: "/en/formulas/matrix-multiplication-2x2.html"
   description: "2×2 matrix multiplication explained term by term, with a calculator, a chart of the composed transformations and why AB differs from BA."
   tags: "interactive formula calculator step by step matrix multiplication product transformation composition"
+  lang: en
+- title: "Absolute Value Inequalities"
+  url: "/en/formulas/absolute-value-inequality.html"
+  description: "Absolute value inequalities explained term by term, with a calculator, a chart of the V and their reading as distance, tolerance and margin of error."
+  tags: "interactive formula calculator step by step absolute value inequality interval tolerance"
+  lang: en
+- title: "Exponential and Logarithmic Functions"
+  url: "/en/formulas/exponential-function.html"
+  description: "The exponential function and its inverse, the logarithm, explained term by term, with a calculator and a chart of both mirrored in the line y = x."
+  tags: "interactive formula calculator step by step exponential logarithmic function inverse growth decay"
+  lang: en
+- title: "Second-Order Sequences"
+  url: "/en/formulas/second-order-sequence.html"
+  description: "Second-order sequences and triangular numbers explained term by term, with a calculator for the general term, the sum and the difference table."
+  tags: "interactive formula calculator step by step second-order sequence triangular numbers differences"
   lang: en
 - title: "Bootstrap"
   url: "/en/formulas/bootstrap.html"

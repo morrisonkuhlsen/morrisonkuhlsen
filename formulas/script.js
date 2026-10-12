@@ -17,6 +17,7 @@
   const LOCALE = EN ? "en-US" : "pt-BR";
   // Slugs das páginas para os links que uma calculadora faz para outra.
   const EN_SLUG = {
+    "numero-e": "number-e-limit", "soma-pa": "arithmetic-series", "tempo-duplicacao": "doubling-time",
     "equacao-reta": "line-through-two-points",
     "matriz-inversa-2x2": "inverse-2x2-matrix", "covariancia": "covariance", "entropia-shannon": "shannon-entropy", "logaritmo-mudanca-base": "logarithm-change-of-base",
     "neyman-allocation": "neyman-allocation", "juros-aportes": "compound-interest-contributions", "media-geometrica": "geometric-mean",
@@ -4272,6 +4273,119 @@
           + ` As áreas se multiplicam: det(AB) = det A · det B. Por isso o produto só tem <a href="${PAGE("matriz-inversa-2x2")}">inversa</a> se as duas têm, e (AB)⁻¹ = B⁻¹A⁻¹ — desfaz-se na ordem contrária.`,
           `Multiplying matrices composes transformations: AB applies B first and then A, which is why the chart shows the square going through B (dashed) before reaching AB. ${same ? "Here, AB and BA are the same — the two transformations commute, which is the exception." : "Here, AB ≠ BA: rotating then stretching is not the same as stretching then rotating. Order matters, and that is the big difference from numbers."}`
           + ` Areas multiply: det(AB) = det A · det B. That is why the product only has an <a href="${PAGE("matriz-inversa-2x2")}">inverse</a> if both do, and (AB)⁻¹ = B⁻¹A⁻¹ — undone in the opposite order.`),
+      };
+    },
+
+    modulo({ a, r, tipo }) {
+      if (r < 0) return { error: T("O raio r não pode ser negativo: um módulo nunca é menor que zero.", "The radius r can't be negative: an absolute value is never below zero.") };
+      const menor = tipo === "menor";
+      const lo = a - r, hi = a + r, w = Math.max(1, r) * 2.2;
+      const x0 = a - w, x1 = a + w;
+      const pts = Array.from({ length: 241 }, (_, i) => { const t = x0 + (x1 - x0) * i / 240; return [t, Math.abs(t - a)]; });
+      const L = tone(texNum(lo, 6), 2), H = tone(texNum(hi, 6), 3);
+      const sol = menor ? `${L} \\le x \\le ${H}` : `x \\le ${L} \\ \\text{${T("ou", "or")}}\\ x \\ge ${H}`;
+      const solTxt = menor ? T(`de ${fmt(lo, 4)} a ${fmt(hi, 4)}`, `from ${fmt(lo, 4)} to ${fmt(hi, 4)}`) : T(`até ${fmt(lo, 4)} ou a partir de ${fmt(hi, 4)}`, `up to ${fmt(lo, 4)} or from ${fmt(hi, 4)} on`);
+      const xa = a === 0 ? "x" : `x ${a < 0 ? "+" : "-"} ${texNum(Math.abs(a))}`;
+      const ineq = `|${xa}| ${menor ? "\\le" : "\\ge"} ${texNum(r)}`;
+      return {
+        result: `${ineq} \\iff ${sol}`,
+        chart: {
+          type: "curve", label: T(`A função |x − ${fmt(a)}| e a linha y = ${fmt(r)}; sombreados, os x ${solTxt}`, `The function |x − ${fmt(a)}| and the line y = ${fmt(r)}; shaded, the x ${solTxt}`),
+          xLabel: T(`x · tracejada: y = r · sombreado: a solução, ${solTxt}`, `x · dashed: y = r · shaded: the solution, ${solTxt}`),
+          xMin: x0, xMax: x1, yMax: w, pts, hlines: [{ y: r, cls: "chart-ref" }],
+          shadeRanges: menor ? [[lo, hi]] : [[x0, lo], [hi, x1]],
+          tipAt: t => [`|x − ${fmt(a)}| = ${fmt(Math.abs(t - a), 4)}`, `x = ${fmt(t, 3)}: ${(menor ? Math.abs(t - a) <= r : Math.abs(t - a) >= r) ? T("satisfaz", "satisfies") : T("não satisfaz", "doesn't satisfy")}`],
+        },
+        steps: [
+          [T(`|x − a| é a distância de x até ${fmt(a)} na reta. A desigualdade pede os x a uma distância ${menor ? "de no máximo" : "de pelo menos"} ${fmt(r)}:`, `|x − a| is the distance from x to ${fmt(a)} on the line. The inequality asks for the x at a distance of ${menor ? "at most" : "at least"} ${fmt(r)}:`),
+            menor ? `-${texNum(r)} \\le ${xa} \\le ${texNum(r)}` : `${xa} \\le -${texNum(r)} \\ \\text{${T("ou", "or")}}\\ ${xa} \\ge ${texNum(r)}`],
+          [T(`Some ${fmt(a)} em todos os lados:`, `Add ${fmt(a)} to every side:`), sol],
+        ],
+        note: (menor ? T(`A solução é o intervalo ${solTxt}, centrado em ${fmt(a)} e de raio ${fmt(r)}: tudo o que está perto o bastante do centro. É a forma de uma tolerância — uma peça de ${fmt(a)} mm aceita com folga de ${fmt(r)} mm — e de uma <a href="${PAGE("margem-de-erro")}">margem de erro</a>: dizer que |p̂ − p| ≤ E é dizer que p está entre p̂ − E e p̂ + E.`,
+            `The solution is the interval ${solTxt}, centred on ${fmt(a)} with radius ${fmt(r)}: everything close enough to the centre. It is the shape of a tolerance — a ${fmt(a)} mm part accepted within ${fmt(r)} mm — and of a <a href="${PAGE("margem-de-erro")}">margin of error</a>: saying |p̂ − p| ≤ E is saying p lies between p̂ − E and p̂ + E.`)
+          : T(`A solução é tudo o que fica longe do centro: ${solTxt}, duas semirretas. É a forma de uma região de rejeição num teste bilateral, |z| ≥ 1,96: os resultados a mais de 1,96 desvios do centro, para qualquer lado.`,
+            `The solution is everything far from the centre: ${solTxt}, two rays. It is the shape of a rejection region in a two-sided test, |z| ≥ 1.96: results more than 1.96 standard deviations from the centre, on either side.`))
+          + T(" No gráfico, a função |x − a| é um V com a ponta em a; a solução são os x em que o V fica " + (menor ? "abaixo" : "acima") + " da linha tracejada.",
+            " On the chart, the function |x − a| is a V with its tip at a; the solution is the x where the V lies " + (menor ? "below" : "above") + " the dashed line."),
+      };
+    },
+
+    funcexp({ b, x }) {
+      if (!(b > 0) || b === 1) return { error: T("A base precisa ser positiva e diferente de 1.", "The base must be positive and different from 1.") };
+      if (Math.abs(x * Math.log(b)) > 50) return { error: T("Esse expoente dá um número grande ou pequeno demais para o gráfico; use |x · ln b| até 50.", "That exponent gives a number too large or too small for the chart; keep |x · ln b| up to 50."), };
+      const y = b ** x, lb = Math.log(b);
+      const ratio = (640 - 48 - 14) / (280 - 14 - 34);
+      const R = Math.min(12, Math.max(3, Math.abs(x) + 1, Math.min(y, 10) + 1));
+      // Mesma escala nos dois eixos, com folga para o ponto e o seu reflexo.
+      const Y0 = -R * 0.45, Y1 = R * 1.05, Wd = (Y1 - Y0) * ratio, X0 = -Wd * 0.35, X1 = X0 + Wd;
+      const inY = p => p[1] >= Y0 && p[1] <= Y1;
+      const ex = Array.from({ length: 401 }, (_, i) => { const t = X0 + (X1 - X0) * i / 400; return [t, b ** t]; }).filter(inY);
+      const lg = Array.from({ length: 401 }, (_, i) => { const t = 1e-4 + X1 * i / 400; return [t, Math.log(t) / lb]; }).filter(inY);
+      const diag = [[Math.max(X0, Y0), Math.max(X0, Y0)], [Math.min(X1, Y1), Math.min(X1, Y1)]];
+      const show = Math.abs(y) <= Y1 && Math.abs(x) <= X1;
+      const B = texNum(b), Xt = tone(texNum(x, 6), 2), Yt = tone(texNum(y, 6), 1);
+      return {
+        result: `${paren(b, B)}^{${texNum(x, 6)}} ${approx(y, 6)} ${Yt}, \\qquad \\log_{${B}} ${texNum(y, 6)} = ${Xt}`,
+        chart: {
+          type: "curve", height: 280, label: T(`A exponencial ${fmt(b)}^x e a sua inversa, o logaritmo na base ${fmt(b)}, espelhadas na reta y = x`, `The exponential ${fmt(b)}^x and its inverse, the base-${fmt(b)} logarithm, mirrored in the line y = x`),
+          xLabel: T("colorida: a exponencial · escura: o logaritmo · tracejada: y = x, o espelho", "colored: the exponential · dark: the logarithm · dashed: y = x, the mirror"),
+          xMin: X0, xMax: X1, yMin: Y0, yMax: Y1, pts: ex,
+          lines: [{ pts: lg, cls: "chart-fit" }, { pts: diag, cls: "chart-ref" }, ...(show ? [{ pts: [[x, y], [y, x]], cls: "chart-ref" }] : [])],
+          hlines: [{ y: 0, cls: "chart-ref" }], marker: show ? [x, y] : null,
+          tipAt: t => [`${fmt(b)}^x = ${fmt(b ** t, 4)}`, t > 0 ? `x = ${fmt(t, 3)} · log = ${fmt(Math.log(t) / lb, 4)}` : `x = ${fmt(t, 3)}`],
+        },
+        steps: [
+          [T(`Eleve a base ao expoente:`, `Raise the base to the exponent:`), `${paren(b, B)}^{${Xt}} = e^{${texNum(x, 6)} \\cdot \\ln ${B}} ${approx(y, 6)} ${Yt}`],
+          [T("O logaritmo desfaz a exponencial e devolve o expoente:", "The logarithm undoes the exponential and gives back the exponent:"),
+            `\\log_{${B}} ${Yt} = \\dfrac{\\ln ${texNum(y, 6)}}{\\ln ${B}} ${approx(x, 6)} ${Xt}`],
+          [T(`Somar no expoente é multiplicar na exponencial — e o logaritmo faz o caminho contrário:`, `Adding in the exponent is multiplying in the exponential — and the logarithm goes the other way:`),
+            `b^{x + y} = b^x \\cdot b^y \\iff \\log_b (uv) = \\log_b u + \\log_b v`],
+        ],
+        note: T(`Com base ${b > 1 ? "maior que 1, a exponencial cresce" : "entre 0 e 1, a exponencial decresce"}: cada passo de 1 em x multiplica o valor por ${fmt(b, 4)}. O logaritmo é a função inversa: troca x e y, e o gráfico dele é o da exponencial espelhado na reta y = x — o ponto (${fmt(x, 3)}, ${fmt(y, 3)}) de uma vira (${fmt(y, 3)}, ${fmt(x, 3)}) na outra.`
+          + ` A exponencial é sempre positiva e passa por (0, 1); o logaritmo só existe para x > 0 e passa por (1, 0). Entre todas as bases, a de <a href="${PAGE("numero-e")}">e ≈ 2,718</a> é a natural: é a única em que a inclinação da curva é igual à própria altura. Para quanto tempo leva para dobrar, veja o <a href="${PAGE("tempo-duplicacao")}">tempo de duplicação</a>; para trocar de base, a <a href="${PAGE("logaritmo-mudanca-base")}">mudança de base</a>.`,
+          `With a base ${b > 1 ? "greater than 1, the exponential grows" : "between 0 and 1, the exponential decays"}: each step of 1 in x multiplies the value by ${fmt(b, 4)}. The logarithm is the inverse function: it swaps x and y, and its graph is the exponential's mirrored in the line y = x — the point (${fmt(x, 3)}, ${fmt(y, 3)}) on one becomes (${fmt(y, 3)}, ${fmt(x, 3)}) on the other.`
+          + ` The exponential is always positive and passes through (0, 1); the logarithm only exists for x > 0 and passes through (1, 0). Of all the bases, <a href="${PAGE("numero-e")}">e ≈ 2.718</a> is the natural one: the only one where the curve's slope equals its own height. For how long it takes to double, see the <a href="${PAGE("tempo-duplicacao")}">doubling time</a>; to switch bases, the <a href="${PAGE("logaritmo-mudanca-base")}">change of base</a>.`),
+      };
+    },
+
+    pa2({ x, n }) {
+      if (x.length < 3) return { error: T("Informe pelo menos os três primeiros termos.", "Enter at least the first three terms.") };
+      if (x.length > 50) return { error: T("Use no máximo 50 termos.", "Use at most 50 terms.") };
+      if (!Number.isInteger(n) || n < 1 || n > 1e6) return { error: T("A posição n precisa ser um inteiro entre 1 e 1 milhão.", "The position n must be an integer between 1 and 1 million.") };
+      const d1 = x.slice(1).map((v, i) => v - x[i]), d2 = d1.slice(1).map((v, i) => v - d1[i]);
+      const D1 = d1[0], D2 = d2[0];
+      const ok = d2.every(v => Math.abs(v - D2) < 1e-9 * Math.max(1, Math.abs(D2)));
+      const term = k => x[0] + (k - 1) * D1 + (k - 1) * (k - 2) / 2 * D2;
+      const an = term(n), Sn = n * x[0] + n * (n - 1) / 2 * D1 + n * (n - 1) * (n - 2) / 6 * D2;
+      const m = Math.min(Math.max(n, x.length), 40), ks = Array.from({ length: m }, (_, i) => i + 1), ys = ks.map(term);
+      const neg = ys.some(v => v < 0);
+      const row = (lab, v) => `${lab} & ${v.slice(0, 8).map(u => texNum(u, 6)).join(" & ")}${v.length > 8 ? " & \\cdots" : ""}`;
+      const N = tone(texNum(n), 0);
+      return {
+        result: `a_{${texNum(n)}} ${approx(an, 6)} ${tone(texNum(an, 6), 1)}, \\qquad S_{${texNum(n)}} ${approx(Sn, 6)} ${texNum(Sn, 6)}`,
+        chart: {
+          type: "bars", label: T(`Os primeiros ${m} termos da sequência`, `The first ${m} terms of the sequence`),
+          xLabel: T(`posição · destaque: o termo ${fmt(n)}${n > m ? " (fora do gráfico)" : ""}`, `position · highlighted: term ${fmt(n)}${n > m ? " (off the chart)" : ""}`),
+          xs: ks, ys, xMin: 0.5, xMax: m + 0.5, ...(neg ? { yMin: Math.min(...ys) * 1.08, yMax: Math.max(0, ...ys) * 1.08 || 1 } : { yMax: Math.max(...ys) || 1 }),
+          hi: k => k === n,
+          tip: (k, v) => [fmt(v, 6), T(`termo ${k}`, `term ${k}`)],
+        },
+        steps: [
+          [T("Tire as diferenças entre termos vizinhos, e depois as diferenças das diferenças:", "Take the differences between neighbouring terms, and then the differences of the differences:"),
+            `\\begin{array}{l|${"c".repeat(Math.min(x.length, 8) + (x.length > 8 ? 1 : 0))}} ${row("a_n", x)} \\\\ ${row("\\Delta", d1)} \\\\ ${row("\\Delta^2", d2)} \\end{array}`],
+          [T(ok ? "As segundas diferenças são constantes: é uma progressão de segunda ordem, com" : "As segundas diferenças não são todas iguais; usando só os três primeiros termos,", ok ? "The second differences are constant: it is a second-order progression, with" : "The second differences aren't all equal; using just the first three terms,"),
+            `\\Delta_1 = ${tone(texNum(D1, 6), 2)}, \\qquad \\Delta_2 = ${tone(texNum(D2, 6), 3)}`],
+          [T(`O termo na posição ${fmt(n)}:`, `The term at position ${fmt(n)}:`),
+            `a_{${N}} = ${texNum(x[0], 6)} + (${N} - 1) \\cdot ${tone(texNum(D1, 6), 2)} + \\dfrac{(${N} - 1)(${N} - 2)}{2} \\cdot ${tone(texNum(D2, 6), 3)} ${approx(an, 6)} ${tone(texNum(an, 6), 1)}`],
+          [T(`A soma dos ${fmt(n)} primeiros termos:`, `The sum of the first ${fmt(n)} terms:`),
+            `S_{${N}} = ${N} \\cdot ${texNum(x[0], 6)} + \\dbinom{${N}}{2} \\cdot ${texNum(D1, 6)} + \\dbinom{${N}}{3} \\cdot ${texNum(D2, 6)} ${approx(Sn, 6)} ${texNum(Sn, 6)}`],
+        ],
+        note: T(`Numa <a href="${PAGE("soma-pa")}">progressão aritmética</a>, as diferenças são constantes e o termo cresce em linha reta. Aqui são as diferenças das diferenças que se repetem, e o termo geral é um polinômio de grau 2 em n: o gráfico curva como uma parábola.`
+          + ` O caso clássico são os números triangulares, 1, 3, 6, 10…: Tₙ = n(n + 1)/2, as bolas num triângulo de n linhas. Também é o número de apertos de mão entre n + 1 pessoas, o <a href="${PAGE("coeficiente-binomial")}?n=${Math.min(n + 1, 1000)}&amp;k=2">coeficiente binomial</a> C(n + 1, 2).`
+          + (ok ? "" : ` ${warn} as segundas diferenças variam, então a sequência não é de segunda ordem; a fórmula usa só os três primeiros termos e não reproduz os demais.`),
+          `In an <a href="${PAGE("soma-pa")}">arithmetic progression</a>, the differences are constant and the term grows in a straight line. Here it is the differences of the differences that repeat, and the general term is a degree-2 polynomial in n: the chart curves like a parabola.`
+          + ` The classic case is the triangular numbers, 1, 3, 6, 10…: Tₙ = n(n + 1)/2, the balls in a triangle with n rows. It is also the number of handshakes among n + 1 people, the <a href="${PAGE("coeficiente-binomial")}?n=${Math.min(n + 1, 1000)}&amp;k=2">binomial coefficient</a> C(n + 1, 2).`
+          + (ok ? "" : ` ${warn} the second differences vary, so the sequence isn't second-order; the formula uses only the first three terms and doesn't reproduce the rest.`)),
       };
     },
 
