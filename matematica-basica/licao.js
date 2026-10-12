@@ -13,6 +13,9 @@
  * o gráfico da parábola): [{ box, vars, render(estado) }]. Os controles entram
  * no começo do box, e render roda a cada mudança. Uma variável com `skip`
  * pula esse valor no slider (o a da equação do 2º grau nunca é 0).
+ *
+ * `opts.sides` troca os rótulos dos dois lados (por padrão, lado esquerdo e
+ * lado direito), como “pela definição” e “pela regra” no cálculo.
  */
 window.Licao = (() => {
   // Negativo com o sinal tipográfico − (U+2212), no texto e no KaTeX.
@@ -67,7 +70,8 @@ window.Licao = (() => {
     history.replaceState(null, "", `${location.pathname}?${q}${location.hash}`);
   }
 
-  function regras(VARS, RULES, panels = []) {
+  function regras(VARS, RULES, panels = [], opts = {}) {
+    const sides = opts.sides || ["Lado esquerdo", "Lado direito"];
     const state = {};
     const params = new URLSearchParams(location.search);
     for (const [v, cfg] of Object.entries(VARS)) {
@@ -130,7 +134,7 @@ window.Licao = (() => {
         c.lines.replaceChildren();
         c.figure.hidden = !out.draw;
         if (out.draw) out.draw(c.figure);
-        [["Lado esquerdo", out.lhs], ["Lado direito", out.rhs]].forEach(([label, [src]]) => {
+        [[sides[0], out.lhs], [sides[1], out.rhs]].forEach(([label, [src]]) => {
           const row = el("div", "rule-line");
           row.appendChild(el("span", "rule-side", label));
           const m = el("span", "rule-math");

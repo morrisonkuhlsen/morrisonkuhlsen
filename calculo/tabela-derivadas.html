@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Tabela de Derivadas — De Onde Vem Cada Regra</title>
+  <meta name="description" content="Tabela de derivadas explicada: constante, variável, potência, raiz, eˣ, aˣ, ln, seno, cosseno, tangente e as regras da soma, do produto, do quociente e da cadeia, cada uma com a intuição e um teste com os seus números.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/calculo/tabela-derivadas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/calculo/tabela-derivadas.html">
+  <meta property="og:title" content="Tabela de Derivadas — De Onde Vem Cada Regra">
+  <meta property="og:description" content="Tabela de derivadas explicada: constante, variável, potência, raiz, eˣ, aˣ, ln, seno, cosseno, tangente e as regras da soma, do produto, do quociente e da cadeia, cada uma com a intuição e um teste com os seus números.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Tabela de Derivadas — De Onde Vem Cada Regra">
+  <meta name="twitter:description" content="Tabela de derivadas explicada: constante, variável, potência, raiz, eˣ, aˣ, ln, seno, cosseno, tangente e as regras da soma, do produto, do quociente e da cadeia, cada uma com a intuição e um teste com os seus números.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <!-- O estilo e o licao.js de Matemática Básica valem aqui; style.css
+       acrescenta só o que é do cálculo (secantes, tangentes, faixas). -->
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="/matematica-basica/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="/matematica-basica/licao.js"></script>
+  <script defer src="grafico.js"></script>
+  <script defer src="tabela-derivadas.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Cálculo intuitivo" title="Cálculo intuitivo"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Tabela de Derivadas — De Onde Vem Cada Regra</h1>
+    <p class="page-lede">Na <a href="derivada.html">lição anterior</a>, a derivada era um limite. Calcular o limite toda vez cansaria: por isso as derivadas das funções básicas — constante, potência, eˣ, logaritmo, seno — foram tiradas uma vez e viraram uma tabela. Aqui está cada regra com a <strong>ideia</strong> por trás dela e um teste com os seus números: a página calcula a derivada pela definição e compara com a regra.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#resumo">Resumo</a>
+      <a href="#basicas">Básicas</a>
+      <a href="#exponenciais">Exponenciais e logaritmos</a>
+      <a href="#trigonometricas">Trigonométricas</a>
+      <a href="#combinando">Combinando funções</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <section class="lesson" id="resumo" aria-labelledby="resumo-title">
+      <h2 id="resumo-title">Resumo</h2>
+      <span class="rule-tex" data-tex="\begin{array}{ll|ll} f(x) & f'(x) & f(x) & f'(x) \\ \hline c & 0 & e^x & e^x \\ x & 1 & a^x & a^x \ln a \\ ax + b & a & \ln x & 1/x \\ x^n & n\,x^{n-1} & \log_a x & 1/(x \ln a) \\ \sqrt{x} & 1/(2\sqrt{x}) & \operatorname{sen} x & \cos x \\ 1/x & -1/x^2 & \cos x & -\operatorname{sen} x \\  &  & \tan x & 1/\cos^2 x \end{array}"></span>
+      <p>Em cada card abaixo, os controles valem para todos: <i>x</i> é o ponto onde se mede a inclinação; <i>n</i>, o expoente; <i>a</i>, uma base ou um coeficiente; <i>c</i>, uma constante. O primeiro lado é a derivada <strong>pela definição</strong> — o limite, com um passo minúsculo —, e o segundo, <strong>pela regra</strong>. O gráfico mostra a função e a tangente no ponto.</p>
+    </section>
+
+    <section class="lesson" id="basicas" aria-labelledby="bas-title">
+      <h2 id="bas-title">Básicas</h2>
+      <article class="rule" id="constante">
+        <header><h3>Constante</h3></header>
+        <span class="rule-tex" data-tex="(c)' = 0"></span>
+        <p>Uma constante não muda quando x muda: o gráfico é uma reta horizontal, de inclinação zero. Pela definição, f(x + h) − f(x) = c − c = 0, para qualquer h.</p>
+        <div class="rule-try" data-rule="constante" data-vars="c x"></div>
+      </article>
+      <article class="rule" id="variavel">
+        <header><h3>A própria variável</h3></header>
+        <span class="rule-tex" data-tex="(x)' = 1"></span>
+        <p>O gráfico de y = x sobe exatamente 1 para cada 1 que anda: inclinação 1 em todo ponto. Pela definição, [(x + h) − x] / h = h / h = 1.</p>
+        <div class="rule-try" data-rule="variavel" data-vars="x"></div>
+      </article>
+      <article class="rule" id="reta">
+        <header><h3>Reta</h3></header>
+        <span class="rule-tex" data-tex="(ax + b)' = a"></span>
+        <p>Toda reta tem a mesma inclinação em todo lugar: o coeficiente que multiplica x. O termo solto, b, só sobe ou desce a reta, sem inclinar.</p>
+        <div class="rule-try" data-rule="reta" data-vars="a c x"></div>
+      </article>
+      <article class="rule" id="potencia">
+        <header><h3>Potência</h3></header>
+        <span class="rule-tex" data-tex="(x^n)' = n\,x^{n-1}"></span>
+        <p>O expoente desce multiplicando e diminui uma unidade. Para x²: (x + h)² − x² = 2xh + h², que dividido por h dá 2x + h → 2x. Vale para qualquer expoente, inclusive negativo e fracionário.</p>
+        <div class="rule-try" data-rule="potencia" data-vars="n x"></div>
+      </article>
+      <article class="rule" id="raiz">
+        <header><h3>Raiz quadrada</h3></header>
+        <span class="rule-tex" data-tex="(\sqrt{x})' = \dfrac{1}{2\sqrt{x}}"></span>
+        <p>É a regra da potência com n = 1/2, porque √x = x^(1/2). A inclinação fica cada vez menor: a raiz cresce, mas cada vez mais devagar.</p>
+        <div class="rule-try" data-rule="raiz" data-vars="x"></div>
+      </article>
+      <article class="rule" id="inverso">
+        <header><h3>Inverso</h3></header>
+        <span class="rule-tex" data-tex="\left(\dfrac{1}{x}\right)' = -\dfrac{1}{x^2}"></span>
+        <p>A potência com n = −1. O sinal negativo diz que 1/x diminui quando x aumenta, e o x² embaixo diz que essa queda vai ficando suave.</p>
+        <div class="rule-try" data-rule="inverso" data-vars="x"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="exponenciais" aria-labelledby="exp-title">
+      <h2 id="exp-title">Exponenciais e logaritmos</h2>
+      <article class="rule" id="exp">
+        <header><h3>Exponencial de Euler</h3></header>
+        <span class="rule-tex" data-tex="(e^x)' = e^x"></span>
+        <p>A única função (a menos de um fator) que é a própria derivada: em todo ponto, a inclinação é igual à altura. É isso que torna o <a href="/formulas/numero-e.html">número e</a> especial — crescer na velocidade do próprio tamanho.</p>
+        <div class="rule-try" data-rule="exp" data-vars="x"></div>
+      </article>
+      <article class="rule" id="expa">
+        <header><h3>Exponencial de outra base</h3></header>
+        <span class="rule-tex" data-tex="(a^x)' = a^x \ln a"></span>
+        <p>Escrevendo aˣ = e^(x ln a), a regra da cadeia traz o fator ln a. Para a = e, ln e = 1 e volta a regra anterior. Base maior, crescimento mais rápido.</p>
+        <div class="rule-try" data-rule="expa" data-vars="a x"></div>
+      </article>
+      <article class="rule" id="ln">
+        <header><h3>Logaritmo natural</h3></header>
+        <span class="rule-tex" data-tex="(\ln x)' = \dfrac{1}{x}"></span>
+        <p>O logaritmo cresce sempre, mas cada vez mais devagar: em x = 1 a inclinação é 1, em x = 10, só 0,1. É por isso que ele “achata” dados com cauda longa.</p>
+        <div class="rule-try" data-rule="ln" data-vars="x"></div>
+      </article>
+      <article class="rule" id="loga">
+        <header><h3>Logaritmo em outra base</h3></header>
+        <span class="rule-tex" data-tex="(\log_a x)' = \dfrac{1}{x \ln a}"></span>
+        <p>Pela mudança de base, logₐ x = ln x / ln a: é o logaritmo natural dividido por uma constante, e a derivada também.</p>
+        <div class="rule-try" data-rule="loga" data-vars="a x"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="trigonometricas" aria-labelledby="trig-title">
+      <h2 id="trig-title">Trigonométricas</h2>
+      <p>Com x em radianos — é só nessa unidade que a derivada do seno é o cosseno, sem fator extra.</p>
+      <article class="rule" id="sen">
+        <header><h3>Seno</h3></header>
+        <span class="rule-tex" data-tex="(\operatorname{sen} x)' = \cos x"></span>
+        <p>Sai do limite sen h / h → 1, visto na <a href="limite.html#aproximar">lição de limite</a>. Onde o seno está no topo, a inclinação é zero — e o cosseno vale zero ali.</p>
+        <div class="rule-try" data-rule="sen" data-vars="x"></div>
+      </article>
+      <article class="rule" id="cos">
+        <header><h3>Cosseno</h3></header>
+        <span class="rule-tex" data-tex="(\cos x)' = -\operatorname{sen} x"></span>
+        <p>O cosseno é o seno adiantado de um quarto de volta, e a derivada também. O sinal negativo: logo depois de x = 0, o cosseno começa a descer.</p>
+        <div class="rule-try" data-rule="cos" data-vars="x"></div>
+      </article>
+      <article class="rule" id="tan">
+        <header><h3>Tangente</h3></header>
+        <span class="rule-tex" data-tex="(\tan x)' = \dfrac{1}{\cos^2 x}"></span>
+        <p>Sai da regra do quociente aplicada a sen x / cos x. Como cos² x nunca passa de 1, a inclinação da tangente é sempre pelo menos 1: ela só sobe.</p>
+        <div class="rule-try" data-rule="tan" data-vars="x"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="combinando" aria-labelledby="comb-title">
+      <h2 id="comb-title">Combinando funções</h2>
+      <p>Com a tabela e estas cinco regras, dá para derivar qualquer função escrita com as funções básicas.</p>
+      <article class="rule" id="soma">
+        <header><h3>Soma</h3></header>
+        <span class="rule-tex" data-tex="(f + g)' = f' + g'"></span>
+        <p>A inclinação de uma soma é a soma das inclinações: o que cada parte sobe se junta. É o que permite derivar um polinômio termo a termo.</p>
+        <div class="rule-try" data-rule="soma" data-vars="n x"></div>
+      </article>
+      <article class="rule" id="multc">
+        <header><h3>Constante multiplicando</h3></header>
+        <span class="rule-tex" data-tex="(c \cdot f)' = c \cdot f'"></span>
+        <p>Esticar o gráfico na vertical por um fator c estica todas as inclinações pelo mesmo fator.</p>
+        <div class="rule-try" data-rule="multc" data-vars="c n x"></div>
+      </article>
+      <article class="rule" id="produto">
+        <header><h3>Produto</h3></header>
+        <span class="rule-tex" data-tex="(f \cdot g)' = f' \cdot g + f \cdot g'"></span>
+        <p>Pense num retângulo de lados f e g: quando os dois crescem um pouco, a área ganha uma tira f′·g de um lado e uma tira f·g′ do outro. O cantinho que sobra é pequeno demais para contar.</p>
+        <div class="rule-try" data-rule="produto" data-vars="n x"></div>
+      </article>
+      <article class="rule" id="quociente">
+        <header><h3>Quociente</h3></header>
+        <span class="rule-tex" data-tex="\left(\dfrac{f}{g}\right)' = \dfrac{f' \cdot g - f \cdot g'}{g^2}"></span>
+        <p>Sai da regra do produto aplicada a f · (1/g). A ordem importa no numerador: primeiro f′ · g, depois o menos.</p>
+        <div class="rule-try" data-rule="quociente" data-vars="x"></div>
+      </article>
+      <article class="rule" id="cadeia">
+        <header><h3>Cadeia</h3></header>
+        <span class="rule-tex" data-tex="\big(f(g(x))\big)' = f'(g(x)) \cdot g'(x)"></span>
+        <p>Para uma função dentro de outra, multiplique as duas derivadas: se g corre a vezes mais que x, f(g) também. A <a href="/formulas/regra-cadeia.html">calculadora da regra da cadeia</a> monta outras combinações.</p>
+        <div class="rule-try" data-rule="cadeia" data-vars="a x"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Derive f(x) = 7.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>f′(x) = <strong>0</strong>: uma constante não muda.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Derive f(x) = x⁵ − 4x² + 3x − 9.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Termo a termo: <strong>5x⁴ − 8x + 3</strong>. A constante −9 some.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Derive f(x) = 3eˣ + ln x.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p><strong>3eˣ + 1/x</strong>: a constante 3 fica multiplicando, e cada parte segue a sua regra.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Derive f(x) = x² · sen x.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Pela regra do produto: 2x · sen x + x² · cos x = <strong>2x sen x + x² cos x</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Derive f(x) = e^(3x).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Regra da cadeia: a derivada de fora é e^(3x) e a de dentro, 3. Resultado: <strong>3e^(3x)</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Derive f(x) = 1/x³.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Escreva como x⁻³: a regra da potência dá −3x⁻⁴ = <strong>−3/x⁴</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outras lições">
+      <a class="pager-prev" href="derivada.html" rel="prev"><span>Anterior</span>Derivada — Dê Zoom Até Virar Reta</a>
+    </nav>
+  </main>
+</body>
+</html>
