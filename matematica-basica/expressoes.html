@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Expressões Numéricas — Ordem das Operações</title>
+  <meta name="description" content="Ordem das operações explicada do zero: parênteses, colchetes e chaves, potências, multiplicação e divisão, soma e subtração, e uma calculadora que resolve qualquer expressão uma operação por passo, dizendo por que cada uma vem naquela hora.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/expressoes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/expressoes.html">
+  <meta property="og:title" content="Expressões Numéricas — Ordem das Operações">
+  <meta property="og:description" content="Ordem das operações explicada do zero: parênteses, colchetes e chaves, potências, multiplicação e divisão, soma e subtração, e uma calculadora que resolve qualquer expressão uma operação por passo, dizendo por que cada uma vem naquela hora.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Expressões Numéricas — Ordem das Operações">
+  <meta name="twitter:description" content="Ordem das operações explicada do zero: parênteses, colchetes e chaves, potências, multiplicação e divisão, soma e subtração, e uma calculadora que resolve qualquer expressão uma operação por passo, dizendo por que cada uma vem naquela hora.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="expressao.js"></script>
+  <script defer src="expressoes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Expressões Numéricas — Ordem das Operações</h1>
+    <p class="page-lede">Numa expressão com várias operações, a ordem muda o resultado: 2 + 3 × 4 dá 14, não 20. A regra é uma só, e vale em todo lugar — na escola, na calculadora e nas fórmulas da estatística.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#ordem">A ordem</a>
+      <a href="#calc">Calculadora</a>
+      <a href="#porque">Por que essa ordem</a>
+      <a href="#regras">Na prática</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <section class="lesson" id="ordem" aria-labelledby="ordem-title">
+      <h2 id="ordem-title">A ordem das operações</h2>
+      <ol>
+        <li><strong>Parênteses ( ), colchetes [ ] e chaves { }</strong> — de dentro para fora. O que está dentro de um sinal de agrupamento se resolve antes, como uma conta à parte.</li>
+        <li><strong>Potências e raízes.</strong></li>
+        <li><strong>Multiplicações e divisões</strong> — na ordem em que aparecem, da esquerda para a direita. Uma não vem antes da outra.</li>
+        <li><strong>Somas e subtrações</strong> — também da esquerda para a direita.</li>
+      </ol>
+      <span class="tex-block" data-tex="10 - 2 \times \left[\,1 + (5 - 3)^2\,\right] = 10 - 2 \times \left[\,1 + 4\,\right] = 10 - 2 \times 5 = 10 - 10 = 0"></span>
+      <p>A conta acima vai camada por camada: os parênteses (5 − 3 = 2), a potência (2² = 4), o resto dos colchetes (1 + 4 = 5), a multiplicação (2 × 5 = 10) e, por último, a subtração.</p>
+    </section>
+
+    <!-- Calculadora; estado em ?expr=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Resolva uma expressão passo a passo</h2>
+      <p class="calc-lede">Digite uma expressão e veja uma operação por passo, cada uma com o motivo de vir naquela hora. Vale + − × ÷ (ou * e /), ^ para potência, vírgula nos decimais e ( ), [ ], { }.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Expressão</span>
+          <input name="expr" type="text" value="10 - 2 × [1 + (5 - 3)^2]" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="2 + 3 × 4">2 + 3 × 4</button>
+        <button type="button" data-exemplo="8 ÷ 2 × 4">8 ÷ 2 × 4</button>
+        <button type="button" data-exemplo="10 - 3 + 2">10 − 3 + 2</button>
+        <button type="button" data-exemplo="-3^2">−3²</button>
+        <button type="button" data-exemplo="(-3)^2">(−3)²</button>
+        <button type="button" data-exemplo="6 ÷ 2(1 + 2)">6 ÷ 2(1 + 2)</button>
+        <button type="button" data-exemplo="{2 + [3 × (4 - 1)]^2} ÷ 11">{2 + [3 × (4 − 1)]²} ÷ 11</button>
+        <button type="button" data-exemplo="((2 - 5)^2 + (4 - 5)^2 + (9 - 5)^2) ÷ 2">variância de 2, 4 e 9</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que essa ordem</h2>
+      <p>É uma convenção — mas não é arbitrária. Multiplicar é somar parcelas iguais, e potência é multiplicar fatores iguais. Cada operação é um <strong>atalho</strong> para várias da anterior, e o atalho fica “colado” como um número só:</p>
+      <span class="tex-block" data-tex="2 + 3 \times 4 = 2 + \underbrace{(4 + 4 + 4)}_{3 \times 4} = 14 \qquad 2 \times 3^2 = 2 \times \underbrace{(3 \times 3)}_{3^2} = 18"></span>
+      <p>Por isso quem é mais forte vai primeiro. E, como subtrair é somar o oposto e dividir é multiplicar pelo inverso, subtração tem a mesma força que a soma, e divisão, a mesma que a multiplicação: entre elas, decide a ordem da leitura.</p>
+      <p>Quando se quer outra ordem, escrevem-se parênteses. Colchetes e chaves são só parênteses de outro formato, para o olho achar qual fecha qual.</p>
+
+      <div class="tip">
+        <strong>Uma operação por linha.</strong> Ao resolver à mão, reescreva a expressão inteira a cada passo, trocando só a operação feita pelo resultado. Parece lento, mas é assim que não se perde um sinal no caminho.
+      </div>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">A regra na prática</h2>
+      <p>Arraste os valores: os números são os mesmos nos três cards.</p>
+
+      <article class="rule">
+        <header><h3>Multiplicação antes da soma</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="a + b \times c = a + (b \times c)"></span>
+        <p>A multiplicação age como se tivesse parênteses invisíveis em volta.</p>
+        <div class="rule-try" data-rule="multAntes" data-vars="a b c"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Soma e subtração: da esquerda para a direita</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="a - b + c \ne a - (b + c)"></span>
+        <p>Fazer a soma primeiro “porque soma vem antes” é o erro. As duas têm a mesma força.</p>
+        <div class="rule-try" data-rule="esqDir" data-vars="a b c"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Divisão e multiplicação: da esquerda para a direita</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="a \div b \times c \ne a \div (b \times c)"></span>
+        <p>O mesmo vale aqui: quem aparece primeiro, vai primeiro.</p>
+        <div class="rule-try" data-rule="divMult" data-vars="a b c"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-3^2 = -9"></span>
+          <p><strong>O sinal fica de fora.</strong> A potência pega só o 3; o menos entra depois. Para elevar o −3, escreva (−3)² = 9.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="8 \div 2 \times 4 = 16"></span>
+          <p><strong>Não é 8 ÷ 8.</strong> Divisão e multiplicação vão na ordem da leitura: 8 ÷ 2 = 4, e 4 × 4 = 16.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="10 - 3 + 2 = 9"></span>
+          <p><strong>Não é 10 − 5.</strong> Primeiro 10 − 3 = 7, depois 7 + 2.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="6 \div 2(1 + 2) = 9"></span>
+          <p><strong>A conta que viraliza.</strong> Pela regra, 6 ÷ 2 = 3 e 3 × 3 = 9. Há quem leia o 2(…) colado como um bloco só e chegue a 1 — por isso, numa conta que importa, use parênteses e não deixe dúvida.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{4 + 6}{2} = 5"></span>
+          <p><strong>A barra de fração é um parêntese.</strong> Ela agrupa o numerador inteiro: na calculadora, digite (4 + 6) ÷ 2, não 4 + 6 ÷ 2 = 7.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sqrt{9 + 16} = 5"></span>
+          <p><strong>A raiz também agrupa.</strong> Tudo o que está embaixo dela se resolve antes: √25 = 5, e não √9 + √16 = 7.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Onde a ordem aparece na estatística</h2>
+      <p>A variância é a média dos quadrados dos desvios. A fórmula diz em que ordem fazer — e cada ordem diferente dá outra coisa:</p>
+      <span class="tex-block" data-tex="s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1}"></span>
+      <p>Para cada valor: primeiro a subtração dentro do parêntese, depois o quadrado. Só então a soma de todos, e por último a divisão. Somar os desvios antes de elevar ao quadrado daria sempre zero; elevar antes de subtrair daria outra fórmula. Os exemplos da calculadora incluem uma variância pronta para seguir passo a passo, e o <a href="/formulas/desvio-padrao.html">desvio padrão</a> é a raiz dela.</p>
+      <p>Para quem programa: Python, R, Excel e as calculadoras científicas seguem a mesma ordem. Em Excel há uma exceção conhecida — <code>=-3^2</code> dá 9, porque o Excel aplica o sinal antes da potência.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 5 + 4 × 3 − 2.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Multiplicação primeiro: 4 × 3 = 12. Depois, da esquerda para a direita: 5 + 12 = 17, 17 − 2 = <strong>15</strong>.</p>
+            <p><a href="?expr=5+%2B+4+%C3%97+3+-+2#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 20 ÷ 4 × 5.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Na ordem da leitura: 20 ÷ 4 = 5, e 5 × 5 = <strong>25</strong> (e não 20 ÷ 20 = 1).</p>
+            <p><a href="?expr=20+%C3%B7+4+%C3%97+5#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule 2 × (3 + 4)² − 10.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Parênteses: 3 + 4 = 7. Potência: 7² = 49. Multiplicação: 2 × 49 = 98. Subtração: 98 − 10 = <strong>88</strong>.</p>
+            <p><a href="?expr=2+%C3%97+(3+%2B+4)%5E2+-+10#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quanto vale −2⁴ + (−2)⁴?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>−2⁴ = −16 (o sinal fica de fora) e (−2)⁴ = 16 (expoente par). Soma: <strong>0</strong>.</p>
+            <p><a href="?expr=-2%5E4+%2B+(-2)%5E4#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule 50 − {4 × [12 − (3 + 1) × 2]}.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Parênteses: 3 + 1 = 4. Colchetes: 4 × 2 = 8 e 12 − 8 = 4. Chaves: 4 × 4 = 16. Fim: 50 − 16 = <strong>34</strong>.</p>
+            <p><a href="?expr=50+-+%7B4+%C3%97+%5B12+-+(3+%2B+1)+%C3%97+2%5D%7D#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> As notas de uma prova foram 6, 8 e 10. Escreva a média como uma expressão só e calcule. Por que 6 + 8 + 10 ÷ 3 está errado?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(6 + 8 + 10) ÷ 3 = 24 ÷ 3 = <strong>8</strong>. Sem os parênteses, a divisão pega só o 10: 6 + 8 + 3,33… ≈ 17,33 — uma “média” maior que todas as notas.</p>
+            <p><a href="?expr=(6+%2B+8+%2B+10)+%C3%B7+3#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="negativos.html" rel="prev"><span>Anterior</span>Números Negativos — Regra de Sinais</a>
+      <a class="pager-next" href="decimais.html" rel="next"><span>Próximo</span>Números Decimais — A Vírgula e as Contas</a>
+    </nav>
+  </main>
+</body>
+</html>

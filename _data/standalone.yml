@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, MDC, MMC, frações, porcentagem, potências, raízes, logaritmos, equações do 1º e do 2º grau, conjuntos e constantes."
   tags: "matemática básica aritmética exercícios"
   lang: pt
 
@@ -1252,6 +1252,24 @@
   url: "/matematica-basica/divisao.html"
   description: "Divisão explicada do zero: o que são dividendo, divisor, quociente e resto, por que a conta armada funciona e uma calculadora que faz a conta à mão, um passo de cada vez, com o nome de cada parte a um clique."
   tags: "divisão conta armada divisão longa dividendo divisor quociente resto prova real divisão com vírgula"
+  lang: pt
+
+- title: "Números Negativos — Regra de Sinais"
+  url: "/matematica-basica/negativos.html"
+  description: "Números negativos explicados do zero: a reta numérica em que somar e subtrair é andar, por que subtrair é somar o oposto, por que menos com menos dá mais, o quadro de sinais com os seus números e exercícios resolvidos."
+  tags: "números negativos inteiros regra de sinais menos com menos dá mais reta numérica oposto módulo valor absoluto"
+  lang: pt
+
+- title: "Expressões Numéricas — Ordem das Operações"
+  url: "/matematica-basica/expressoes.html"
+  description: "Ordem das operações explicada do zero: parênteses, colchetes e chaves, potências, multiplicação e divisão, soma e subtração, e uma calculadora que resolve qualquer expressão uma operação por passo, dizendo por que cada uma vem naquela hora."
+  tags: "expressões numéricas ordem das operações parênteses colchetes chaves precedência pemdas calculadora passo a passo"
+  lang: pt
+
+- title: "Números Decimais — A Vírgula e as Contas"
+  url: "/matematica-basica/decimais.html"
+  description: "Números decimais explicados do zero: décimos e centésimos num quadro interativo, e uma calculadora que faz a conta com vírgula passo a passo — somar e subtrair alinhando a vírgula, multiplicar contando as casas e dividir tirando a vírgula."
+  tags: "números decimais vírgula décimos centésimos milésimos soma subtração multiplicação divisão com vírgula conta armada"
   lang: pt
 
 - title: "MDC — Máximo Divisor Comum"
@@ -1282,6 +1300,18 @@
   url: "/matematica-basica/fracoes.html"
   description: "Frações explicadas do zero com barras interativas: frações equivalentes, simplificar pelo MDC, somar pelo MMC, multiplicar e dividir, as armadilhas e a conversão entre fração, decimal e porcentagem."
   tags: "fração frações simplificar fração somar frações denominador comum dízima periódica decimal porcentagem"
+  lang: pt
+
+- title: "Porcentagem — Aumento, Desconto e Pontos Percentuais"
+  url: "/matematica-basica/porcentagem.html"
+  description: "Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento."
+  tags: "porcentagem percentual por cento aumento desconto fator variação percentual aumentos sucessivos pontos percentuais calculadora"
+  lang: pt
+
+- title: "Equação do 1º Grau — A Balança"
+  url: "/matematica-basica/equacao-1grau.html"
+  description: "Equação do 1º grau explicada do zero: a balança em que o que se faz de um lado se faz do outro, de onde vem o “passar para o outro lado”, como montar a equação de um problema e uma calculadora que resolve qualquer equação do 1º grau passo a passo, com a prova."
+  tags: "equação do primeiro grau equação linear balança isolar o x incógnita passar para o outro lado calculadora passo a passo"
   lang: pt
 
 - title: "Equação do 2º Grau — Fórmula Quadrática e Parábola"

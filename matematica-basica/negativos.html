@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Números Negativos — Regra de Sinais</title>
+  <meta name="description" content="Números negativos explicados do zero: a reta numérica em que somar e subtrair é andar, por que subtrair é somar o oposto, por que menos com menos dá mais, o quadro de sinais com os seus números e exercícios resolvidos.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/negativos.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/negativos.html">
+  <meta property="og:title" content="Números Negativos — Regra de Sinais">
+  <meta property="og:description" content="Números negativos explicados do zero: a reta numérica em que somar e subtrair é andar, por que subtrair é somar o oposto, por que menos com menos dá mais, o quadro de sinais com os seus números e exercícios resolvidos.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Números Negativos — Regra de Sinais">
+  <meta name="twitter:description" content="Números negativos explicados do zero: a reta numérica em que somar e subtrair é andar, por que subtrair é somar o oposto, por que menos com menos dá mais, o quadro de sinais com os seus números e exercícios resolvidos.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="negativos.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Números Negativos — Regra de Sinais</h1>
+    <p class="page-lede">Um número negativo é um número <strong>abaixo do zero</strong>: −5 °C, uma dívida de 30 reais, 2 andares abaixo do térreo. Na reta numérica eles ficam à esquerda do zero, e todas as regras de sinais saem de andar nessa reta.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#reta">Na reta</a>
+      <a href="#escada">Menos com menos</a>
+      <a href="#regras">Regras</a>
+      <a href="#quadro">Quadro de sinais</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="a - b = a + (-b)"></span>
+
+    <!-- 1. A reta numérica; estado em ?p=&q=&op=. -->
+    <section class="calc intro" id="reta" aria-labelledby="reta-title">
+      <h2 id="reta-title">Somar e subtrair é andar na reta</h2>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="p" type="range" min="-9" max="9" step="1" value="-3" aria-label="Ponto de partida">
+          <output class="out-p">−3</output>
+        </label>
+        <label class="var var-b">
+          <i>b</i>
+          <input name="q" type="range" min="-9" max="9" step="1" value="-5" aria-label="Quanto somar ou subtrair">
+          <output class="out-q">−5</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Operação">
+        <button type="button" data-op="mais" aria-pressed="true">a + b</button>
+        <button type="button" data-op="menos" aria-pressed="false">a − b</button>
+      </div>
+      <div class="reta-box" aria-hidden="true"></div>
+      <div class="reta-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="oposto-title">
+      <h2 id="oposto-title">O oposto e o módulo</h2>
+      <p>Todo número tem um <strong>oposto</strong>: o que fica à mesma distância do zero, do outro lado. O oposto de 3 é −3, e o oposto de −3 é 3. Somados, dão zero: 3 + (−3) = 0. O sinal de menos na frente de um número quer dizer exatamente isso — “o oposto de”. Por isso −(−3) = 3.</p>
+      <p>A distância até o zero, sem olhar o lado, é o <strong>módulo</strong> (ou valor absoluto): |−7| = 7 e |7| = 7. É ele que se usa para dizer “quão longe” sem dizer “para onde”.</p>
+      <p>Na reta, quanto mais à direita, maior. Então <strong>−2 é maior que −5</strong>, mesmo com o 5 “parecendo” maior: −2 °C é mais quente que −5 °C, e dever 2 reais é melhor que dever 5.</p>
+    </section>
+
+    <!-- 2. A escada da multiplicação; estado em ?fator=. -->
+    <section class="calc intro" id="escada" aria-labelledby="escada-title">
+      <h2 id="escada-title">Por que menos com menos dá mais</h2>
+      <div class="vars var-wide">
+        <label class="var">
+          <i>b</i>
+          <input name="fator" type="range" min="-5" max="5" step="1" value="-2" aria-label="Segundo fator">
+          <output class="out-fator">−2</output>
+        </label>
+      </div>
+      <ol class="ladder-steps" aria-label="Produtos de 3 até −3 vezes b"></ol>
+      <div class="intro-text escada-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As regras, com os seus números</h2>
+      <p>Arraste <i>a</i> e <i>b</i> para valores negativos e positivos: os dois são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Subtrair é somar o oposto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="a - b = a + (-b)"></span>
+        <p>Toda subtração vira uma soma. Com <i>b</i> negativo, aparece o famoso “menos com menos dá mais”: 5 − (−3) = 5 + 3.</p>
+        <div class="rule-try" data-rule="subOposto" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Sinais na multiplicação</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="(+)\cdot(+) = +\quad (-)\cdot(-) = +\quad (+)\cdot(-) = -\quad (-)\cdot(+) = -"></span>
+        <p>Multiplique os números sem sinal e decida o sinal à parte: <strong>sinais iguais, positivo; diferentes, negativo</strong>.</p>
+        <div class="rule-try" data-rule="mult" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Sinais na divisão</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{-a}{-b} = \frac{a}{b} \qquad \frac{-a}{b} = \frac{a}{-b} = -\frac{a}{b}"></span>
+        <p>A mesma regra da multiplicação, porque dividir é desfazer uma multiplicação: se (−4) × (−3) = 12, então 12 ÷ (−3) = −4.</p>
+        <div class="rule-try" data-rule="div" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Menos antes dos parênteses</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="-(a + b) = -a - b"></span>
+        <p>O sinal de menos é um −1 multiplicando, e ele multiplica <strong>cada</strong> termo de dentro.</p>
+        <div class="rule-try" data-rule="menosParen" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Trocar só o primeiro sinal</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="-(a - b) \ne -a - b"></span>
+        <div class="rule-try" data-rule="errado" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="quadro" aria-labelledby="quadro-title">
+      <h2 id="quadro-title">Quadro de sinais</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-3 - 5 = -8"></span>
+          <p><strong>Soma com sinais iguais:</strong> some as distâncias e mantenha o sinal. Duas dívidas viram uma dívida maior.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-8 + 3 = -5"></span>
+          <p><strong>Soma com sinais diferentes:</strong> subtraia as distâncias e fique com o sinal da maior. Dever 8 e pagar 3 deixa uma dívida de 5.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(-4) \times (-3) = 12"></span>
+          <p><strong>Produto ou divisão, sinais iguais:</strong> positivo.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(-4) \times 3 = -12"></span>
+          <p><strong>Produto ou divisão, sinais diferentes:</strong> negativo.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(-1)^n"></span>
+          <p><strong>Muitos fatores:</strong> conte os negativos. Número par deles, positivo; ímpar, negativo. É a regra da <a href="potencias.html#sinal">potência de base negativa</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-3 - 5 \ne 8"></span>
+          <p><strong>“Menos com menos dá mais” é da multiplicação.</strong> Em −3 − 5 não há produto: é andar 5 para a esquerda a partir de −3. Dá −8.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-3^2 = -9"></span>
+          <p><strong>O expoente não pega o sinal.</strong> Sem parênteses, a potência é só do 3. Para elevar o −3, escreva (−3)² = 9.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-5 < -2"></span>
+          <p><strong>Mais longe do zero, à esquerda, é menor.</strong> Ordene −5, −2, 0, 3 olhando a reta, não os algarismos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="5 \times (-2)"></span>
+          <p><strong>Dois sinais seguidos pedem parênteses.</strong> “5 × −2” se lê, mas escreve-se 5 × (−2), para não confundir o sinal do número com o da conta.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde os negativos levam</h2>
+      <p><strong>Ordem das operações.</strong> Com negativos, cada sinal conta, e a ordem em que as contas são feitas também. É o assunto da próxima página, <a href="expressoes.html">expressões numéricas</a>.</p>
+      <p><strong>Desvios.</strong> Na estatística, o desvio de um valor é x − x̄: positivo acima da média, negativo abaixo. Os desvios de uma lista sempre somam zero — os negativos compensam os positivos —, e é por isso que a <a href="/formulas/desvio-padrao.html">variância</a> eleva cada um ao quadrado antes de somar: (−3)² = 9, e o sinal deixa de atrapalhar.</p>
+      <p><strong>Escore z.</strong> Um <a href="/formulas/z-score.html">escore z</a> negativo quer dizer “abaixo da média”, e o módulo dele diz quantos desvios padrão abaixo.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule −7 + 4 e −7 − 4.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>−7 + 4: sinais diferentes, 7 − 4 = 3 com o sinal do 7: <strong>−3</strong>. −7 − 4: andar mais 4 para a esquerda: <strong>−11</strong>.</p>
+            <p><a href="?p=-7&amp;q=4&amp;op=mais#reta">Veja na reta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 6 − (−9).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Subtrair −9 é somar 9: 6 + 9 = <strong>15</strong>.</p>
+            <p><a href="?p=6&amp;q=-9&amp;op=menos#reta">Veja na reta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule (−6) × (−7) e (−48) ÷ 6.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Sinais iguais: (−6) × (−7) = <strong>42</strong>. Sinais diferentes: (−48) ÷ 6 = <strong>−8</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Qual é o sinal de (−1) × (−2) × (−3) × (−4) × (−5)?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>São cinco fatores negativos, um número ímpar: o resultado é <strong>negativo</strong>. Vale −120.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Simplifique −(4 − 9) + (−2).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>4 − 9 = −5, e −(−5) = 5. Depois 5 + (−2) = <strong>3</strong>. Ou, trocando os sinais dos parênteses: −4 + 9 − 2 = 3.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Às 6 h, um termômetro marcava −4 °C. Ao meio-dia, marcava 7 °C. Quanto a temperatura subiu?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A variação é o final menos o inicial: 7 − (−4) = 7 + 4 = <strong>11 °C</strong>. Na reta, de −4 até 0 são 4 graus, e de 0 até 7, mais 7.</p>
+            <p><a href="?p=7&amp;q=-4&amp;op=menos#reta">Veja na reta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>7.</strong> As notas 4, 6 e 11 têm média 7. Calcule os desvios (nota − média) e a soma deles.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>4 − 7 = −3, 6 − 7 = −1, 11 − 7 = 4. Soma: −3 − 1 + 4 = <strong>0</strong>. Sempre dá zero: o que falta abaixo da média é o que sobra acima.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="divisao.html" rel="prev"><span>Anterior</span>Divisão — Quociente, Resto e a Conta Armada</a>
+      <a class="pager-next" href="expressoes.html" rel="next"><span>Próximo</span>Expressões Numéricas — Ordem das Operações</a>
+    </nav>
+  </main>
+</body>
+</html>

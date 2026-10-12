@@ -1899,3 +1899,217 @@
     repeating-linear-gradient(to bottom, transparent 0 calc(10% - 1px), var(--surface) calc(10% - 1px) 10%),
     var(--tone-1);
 }
+
+/* ================================================================ negativos */
+
+/* ---------------------------------------------------------------- reta numérica */
+
+.reta-box {
+  margin-top: .9rem;
+}
+
+.reta {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.plot-tick.is-zero {
+  fill: var(--text-strong);
+  font-weight: 700;
+}
+
+/* O salto tem a cor do b; a partida, a do a; a chegada, a do resultado. */
+.reta-jump {
+  fill: none;
+  stroke: var(--tone-5);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.reta-head {
+  fill: var(--tone-5);
+}
+
+.plot-dot.reta-a { fill: var(--tone-2); }
+.plot-dot.reta-r { fill: var(--tone-1); }
+
+.reta-eq {
+  margin-top: .4rem;
+}
+
+/* ================================================================ decimais */
+
+/* ---------------------------------------------------------------- quadro de centésimos */
+
+.dec-svg {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+}
+
+.dec-cell {
+  fill: transparent;
+  stroke: var(--chart-grid);
+  stroke-width: .6;
+}
+
+/* Inteiros, décimos (colunas) e centésimos (quadradinhos), cada um com a cor
+   do termo correspondente na igualdade. */
+.dec-cell.is-int { fill: color-mix(in srgb, var(--tone-1) 55%, transparent); }
+.dec-cell.is-dec { fill: color-mix(in srgb, var(--tone-2) 55%, transparent); }
+.dec-cell.is-cent { fill: color-mix(in srgb, var(--tone-3) 60%, transparent); }
+
+.dec-edge {
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+}
+
+.dec-eq {
+  margin-top: .6rem;
+}
+
+/* ---------------------------------------------------------------- conta com vírgula */
+
+/* Contas com vírgula ganham mais ar entre as colunas, para ela caber. */
+.ld:has(.ld-virgula) .ld-cell {
+  padding: 0 .17em;
+}
+
+/* A vírgula divide a casa com o algarismo das unidades, encostada à direita
+   dele, para não empurrar as colunas. */
+.ld .ld-cell.ld-virgula {
+  justify-self: end;
+  padding: 0;
+  transform: translateX(85%);
+  color: var(--tone-4);
+}
+
+.ld .ld-cell.ld-virgula.is-hl,
+.ld .ld-cell.ld-virgula.is-pick {
+  background: none;
+}
+
+/* ================================================================ porcentagem */
+
+/* ---------------------------------------------------------------- quadro de 100 */
+
+.pct-svg {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+}
+
+.pct-cell {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 1;
+  transition: fill .15s;
+}
+
+.pct-cell.is-on {
+  fill: var(--tone-2);
+  stroke: var(--tone-2);
+}
+
+.pct-eq {
+  margin-top: .6rem;
+}
+
+/* ================================================================ equação do 1º grau */
+
+/* ---------------------------------------------------------------- balança */
+
+.bal-hint {
+  margin: 0 0 .8rem;
+  font-size: .9rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.bal-svg {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+}
+
+.bal-stand {
+  fill: var(--border);
+}
+
+.bal-beam {
+  stroke: var(--text-muted);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.bal-pivot {
+  fill: var(--text-muted);
+}
+
+.bal-rope {
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+
+.bal-pan {
+  fill: var(--surface);
+  stroke: var(--text-muted);
+  stroke-width: 2;
+}
+
+/* As caixas x com a cor do a; as bolinhas, com a do b. */
+.bal-x {
+  fill: color-mix(in srgb, var(--tone-2) 30%, var(--surface));
+  stroke: var(--tone-2);
+  stroke-width: 2;
+}
+
+.bal-xlabel {
+  fill: var(--tone-2);
+  font-family: KaTeX_Math, serif;
+  font-size: 15px;
+  font-style: italic;
+}
+
+.bal-u {
+  fill: var(--tone-5);
+}
+
+/* Tiradas dos dois pratos, ou fora do grupo destacado ao repartir. */
+.bal-u.is-out {
+  opacity: .18;
+}
+
+.bal-x.is-dim,
+.bal-xlabel.is-dim,
+.bal-u.is-dim {
+  opacity: .35;
+}
+
+.bal-u.is-pick {
+  fill: var(--tone-1);
+}
+
+.bal-x.is-pick {
+  fill: color-mix(in srgb, var(--tone-1) 30%, var(--surface));
+  stroke: var(--tone-1);
+}
+
+.bal-xlabel.is-pick {
+  fill: var(--tone-1);
+}
+
+/* Grupos alternados, para ver a partilha em partes iguais. */
+.bal-u.is-g1 {
+  fill: var(--tone-3);
+}
+
+.bal-eq {
+  margin-top: .4rem;
+}
+
+.seg button:disabled {
+  opacity: .45;
+  cursor: default;
+}

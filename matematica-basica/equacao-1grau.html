@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Equação do 1º Grau — A Balança</title>
+  <meta name="description" content="Equação do 1º grau explicada do zero: a balança em que o que se faz de um lado se faz do outro, de onde vem o “passar para o outro lado”, como montar a equação de um problema e uma calculadora que resolve qualquer equação do 1º grau passo a passo, com a prova.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/equacao-1grau.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/equacao-1grau.html">
+  <meta property="og:title" content="Equação do 1º Grau — A Balança">
+  <meta property="og:description" content="Equação do 1º grau explicada do zero: a balança em que o que se faz de um lado se faz do outro, de onde vem o “passar para o outro lado”, como montar a equação de um problema e uma calculadora que resolve qualquer equação do 1º grau passo a passo, com a prova.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Equação do 1º Grau — A Balança">
+  <meta name="twitter:description" content="Equação do 1º grau explicada do zero: a balança em que o que se faz de um lado se faz do outro, de onde vem o “passar para o outro lado”, como montar a equação de um problema e uma calculadora que resolve qualquer equação do 1º grau passo a passo, com a prova.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="expressao.js"></script>
+  <script defer src="equacao-1grau.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Equação do 1º Grau — A Balança</h1>
+    <p class="page-lede">Uma equação é uma <strong>balança em equilíbrio</strong> com um peso desconhecido, o x. Resolver é descobrir o x sem desequilibrar a balança: tudo o que se faz de um lado, faz-se do outro.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#balanca">A balança</a>
+      <a href="#calc">Resolva</a>
+      <a href="#passar">“Passar para o outro lado”</a>
+      <a href="#problemas">Montar a equação</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="ax + b = c \;\Rightarrow\; x = \frac{c - b}{a}"></span>
+
+    <!-- 1. A balança; estado em ?ba=&bb=&bx=. -->
+    <section class="calc intro" id="balanca" aria-labelledby="bal-title">
+      <h2 id="bal-title">O que se faz de um lado, faz-se do outro</h2>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="ba" type="range" min="1" max="4" step="1" value="3" aria-label="Quantas caixas x">
+          <output class="out-ba">3</output>
+        </label>
+        <label class="var var-b">
+          <i>b</i>
+          <input name="bb" type="range" min="0" max="8" step="1" value="5" aria-label="Bolinhas ao lado das caixas">
+          <output class="out-bb">5</output>
+        </label>
+        <label class="var">
+          <i>x</i>
+          <input name="bx" type="range" min="0" max="6" step="1" value="4" aria-label="O peso escondido de cada caixa">
+          <output class="out-bx">4</output>
+        </label>
+      </div>
+      <p class="bal-hint">Escolha quantas caixas (a), quantas bolinhas soltas (b) e o peso secreto de cada caixa (x). Depois resolva com os botões.</p>
+      <div class="seg" role="group" aria-label="Passo">
+        <button type="button" data-passo="0" aria-pressed="true">1. a equação</button>
+        <button type="button" data-passo="1" aria-pressed="false">2. tira b</button>
+        <button type="button" data-passo="2" aria-pressed="false">3. divide por a</button>
+      </div>
+      <div class="intro-figure bal-figure" aria-hidden="true"></div>
+      <div class="bal-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?eq=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Resolva uma equação passo a passo</h2>
+      <p class="calc-lede">Digite uma equação do 1º grau em x. Pode ter parênteses, frações (com /), decimais (com vírgula) e x dos dois lados. No fim, a prova confere a resposta.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="2">
+          <span>Equação</span>
+          <input name="eq" type="text" value="5x - 7 = 2x + 8" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="3x + 5 = 20">3x + 5 = 20</button>
+        <button type="button" data-exemplo="5x - 7 = 2x + 8">5x − 7 = 2x + 8</button>
+        <button type="button" data-exemplo="2(x - 3) = x + 4">2(x − 3) = x + 4</button>
+        <button type="button" data-exemplo="x/2 + 1 = 5">x/2 + 1 = 5</button>
+        <button type="button" data-exemplo="4 - x = 10">4 − x = 10</button>
+        <button type="button" data-exemplo="3x = 2">3x = 2</button>
+        <button type="button" data-exemplo="2x + 1 = 2x + 3">sem solução</button>
+        <button type="button" data-exemplo="2(x + 1) = 2x + 2">infinitas</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="passar" aria-labelledby="passar-title">
+      <h2 id="passar-title">“Passar para o outro lado trocando o sinal”</h2>
+      <p>É o atalho que todo mundo aprende — e ele é só a balança escrita de um jeito mais curto. Em 3x + 5 = 20, “passar o 5 para o outro lado com sinal trocado” é subtrair 5 dos dois lados:</p>
+      <span class="tex-block" data-tex="3x + 5 - 5 = 20 - 5 \quad\Longrightarrow\quad 3x = 20 - 5"></span>
+      <p>Do lado esquerdo, o + 5 e o − 5 se anulam; do lado direito, o − 5 fica. Parece que o 5 “pulou” trocando de sinal. Do mesmo jeito, o 3 que multiplica o x “passa dividindo”: é dividir os dois lados por 3.</p>
+      <p>Saber de onde vem o atalho evita os erros dele: o que <strong>soma</strong> passa <strong>subtraindo</strong>, o que <strong>multiplica</strong> passa <strong>dividindo</strong> — e o 3 de 3x passa dividindo o lado inteiro, não só um termo.</p>
+
+      <div class="tip">
+        <strong>A ordem: desfaça do último para o primeiro.</strong> Em 3x + 5, o x primeiro foi multiplicado por 3 e depois somado com 5. Para chegar ao x, desfaça ao contrário: tire o 5, depois divida por 3 — como tirar os sapatos antes das meias.
+      </div>
+    </section>
+
+    <section class="lesson" id="problemas" aria-labelledby="problemas-title">
+      <h2 id="problemas-title">Montar a equação a partir de um problema</h2>
+      <p>Quase sempre o difícil é escrever a equação; resolver é a parte mecânica. O roteiro:</p>
+      <ol>
+        <li><strong>Chame de x</strong> o que o problema pergunta.</li>
+        <li><strong>Traduza</strong> cada frase em conta: “o dobro” é 2x, “5 a mais” é + 5, “o total é 41” é = 41.</li>
+        <li><strong>Resolva</strong> e <strong>confira</strong> a resposta no texto do problema, não só na equação.</li>
+      </ol>
+      <p>Exemplo: um táxi cobra R$ 5 de bandeirada e R$ 3 por quilômetro. Uma corrida custou R$ 41. Quantos quilômetros foram? Com x quilômetros, o preço é 3x + 5. Então <a href="?eq=3x+%2B+5+%3D+41#calc">3x + 5 = 41</a>, 3x = 36, x = <strong>12 km</strong>. Conferindo: 5 + 3 × 12 = 41.</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="3x + 6 = 12 \;\Rightarrow\; x + 2 = 4"></span>
+          <p><strong>Dividir é dividir tudo.</strong> Dividindo por 3, cada termo dos dois lados é dividido — não só o 3x.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-x = 6 \;\Rightarrow\; x = -6"></span>
+          <p><strong>Não pare no −x.</strong> −x é −1 vezes x: multiplique os dois lados por −1.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="2(x - 3) = 2x - 6"></span>
+          <p><strong>A distributiva pega todo mundo.</strong> O 2 multiplica o x e o 3. Esquecer o segundo dá 2x − 3.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="5 - (x + 2) = 3 - x"></span>
+          <p><strong>Menos antes dos parênteses troca todos os sinais</strong> de dentro — veja <a href="negativos.html">números negativos</a>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0 \cdot x = 5"></span>
+          <p><strong>Quando o x some.</strong> Se sobrar algo como 0 = 5, não há solução; se sobrar 0 = 0, qualquer x serve.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde a equação do 1º grau leva</h2>
+      <p><strong>Equação do 2º grau.</strong> Quando aparece x², a balança não basta, mas a ideia de fazer o mesmo dos dois lados continua — é ela que deduz a fórmula quadrática na <a href="equacao-2grau.html">equação do 2º grau</a>.</p>
+      <p><strong>Escore z.</strong> A fórmula z = (x − μ)/σ é uma equação do 1º grau em x. Para achar o valor que fica 2 desvios acima da média, isola-se o x: x = μ + zσ. O <a href="/formulas/z-score.html">escore z</a> faz isso nos dois sentidos.</p>
+      <p><strong>Regressão.</strong> Uma reta de regressão y = a + bx prevê y a partir de x. Para saber qual x leva a um y desejado, resolve-se uma equação do 1º grau — veja a <a href="/formulas/regressao-linear.html">regressão linear</a>.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Resolva 4x − 3 = 25.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Some 3 aos dois lados: 4x = 28. Divida por 4: <strong>x = 7</strong>. Prova: 4 × 7 − 3 = 25.</p>
+            <p><a href="?eq=4x+-+3+%3D+25#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Resolva 7x + 2 = 3x + 18.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Subtraia 3x: 4x + 2 = 18. Subtraia 2: 4x = 16. Divida por 4: <strong>x = 4</strong>.</p>
+            <p><a href="?eq=7x+%2B+2+%3D+3x+%2B+18#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Resolva 3(x + 2) = 5x − 4.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Distributiva: 3x + 6 = 5x − 4. Subtraia 5x: −2x + 6 = −4. Subtraia 6: −2x = −10. Divida por −2: <strong>x = 5</strong>.</p>
+            <p><a href="?eq=3(x+%2B+2)+%3D+5x+-+4#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Resolva x/3 − 1 = 4.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Some 1: x/3 = 5. Multiplique por 3: <strong>x = 15</strong>.</p>
+            <p><a href="?eq=x%2F3+-+1+%3D+4#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> A soma de três números consecutivos é 72. Quais são?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Chamando o primeiro de x: x + (x + 1) + (x + 2) = 72, ou 3x + 3 = 72. Então 3x = 69 e x = 23. Os números são <strong>23, 24 e 25</strong>.</p>
+            <p><a href="?eq=x+%2B+(x+%2B+1)+%2B+(x+%2B+2)+%3D+72#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Numa prova com peso 2 e um trabalho com peso 1, a média ponderada é (2 × prova + trabalho) ÷ 3. Quem tirou 6 no trabalho precisa de quanto na prova para ficar com média 7?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(2x + 6) ÷ 3 = 7. Multiplique por 3: 2x + 6 = 21. Então 2x = 15 e <strong>x = 7,5</strong>. Veja também a <a href="/formulas/media-ponderada.html">média ponderada</a>.</p>
+            <p><a href="?eq=(2x+%2B+6)+%2F+3+%3D+7#calc">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="logaritmos.html" rel="prev"><span>Anterior</span>Logaritmos — O Expoente que Falta</a>
+      <a class="pager-next" href="equacao-2grau.html" rel="next"><span>Próximo</span>Equação do 2º Grau</a>
+    </nav>
+  </main>
+</body>
+</html>

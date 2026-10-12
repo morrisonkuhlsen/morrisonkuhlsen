@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Porcentagem — Aumento, Desconto e Pontos Percentuais</title>
+  <meta name="description" content="Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/porcentagem.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/porcentagem.html">
+  <meta property="og:title" content="Porcentagem — Aumento, Desconto e Pontos Percentuais">
+  <meta property="og:description" content="Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Porcentagem — Aumento, Desconto e Pontos Percentuais">
+  <meta name="twitter:description" content="Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="porcentagem.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Porcentagem — Aumento, Desconto e Pontos Percentuais</h1>
+    <p class="page-lede">Porcentagem é uma fração com denominador 100: <strong>15% = 15/100 = 0,15</strong>. Com essa ideia e uma multiplicação, saem o desconto da loja, o reajuste do aluguel, a inflação e a margem de erro da pesquisa.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#quadro">O que é</a>
+      <a href="#calc">Calculadora</a>
+      <a href="#fator">O fator</a>
+      <a href="#sucessivos">Sucessivos</a>
+      <a href="#pontos">Pontos percentuais</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="p\% \text{ de } V = \frac{p}{100} \times V"></span>
+
+    <!-- 1. O quadro de 100; estado em ?pp=&vv=. -->
+    <section class="calc intro" id="quadro" aria-labelledby="quadro-title">
+      <h2 id="quadro-title">A cada cem</h2>
+      <div class="vars">
+        <label class="var">
+          <i>p</i>
+          <input name="pp" type="range" min="0" max="100" step="1" value="15" aria-label="Porcentagem">
+          <output class="out-pp">15%</output>
+        </label>
+        <label class="var var-b">
+          <i>V</i>
+          <input name="vv" type="range" min="0" max="1000" step="10" value="80" aria-label="Valor">
+          <output class="out-vv">80</output>
+        </label>
+      </div>
+      <div class="intro-figure pct-figure" aria-hidden="true"></div>
+      <div class="pct-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. Calculadora; estado em ?modo=&x=&y=. -->
+    <section class="calc" id="calc" aria-labelledby="calc-title">
+      <h2 id="calc-title">Calculadora de porcentagem</h2>
+      <p class="calc-lede">Escolha a pergunta e digite os números. A resposta vem com a conta inteira.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field wide" data-tone="4">
+          <span>Pergunta</span>
+          <select name="modo">
+            <option value="parte" selected>Quanto é p% de um valor?</option>
+            <option value="aumento">Quanto fica com aumento de p%?</option>
+            <option value="desconto">Quanto fica com desconto de p%?</option>
+            <option value="quanto">Uma parte é quantos % do total?</option>
+            <option value="variacao">De quantos % foi a variação?</option>
+            <option value="antes">Quanto era antes do aumento?</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="2">
+          <span class="lab-x">Porcentagem (%)</span>
+          <input name="x" type="text" inputmode="decimal" value="15" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span class="lab-y">do valor</span>
+          <input name="y" type="text" inputmode="decimal" value="80" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="parte;15;80">15% de 80</button>
+        <button type="button" data-exemplo="aumento;1200;8">aluguel de 1200 + 8%</button>
+        <button type="button" data-exemplo="desconto;250;30">250 com 30% off</button>
+        <button type="button" data-exemplo="quanto;18;24">18 de 24</button>
+        <button type="button" data-exemplo="variacao;80;100">de 80 para 100</button>
+        <button type="button" data-exemplo="variacao;100;80">de 100 para 80</button>
+        <button type="button" data-exemplo="antes;115;15">115 depois de +15%</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="fator" aria-labelledby="fator-title">
+      <h2 id="fator-title">Aumento e desconto numa conta só: o fator</h2>
+      <p>Aumentar 15% é ficar com 100% + 15% = 115% do valor. Em vez de calcular os 15% e somar, multiplique direto por <strong>1,15</strong>. Desconto de 30% é ficar com 70%: multiplique por <strong>0,70</strong>.</p>
+      <span class="tex-block" data-tex="\text{aumento de } p\%: \; V \times \left(1 + \frac{p}{100}\right) \qquad \text{desconto de } p\%: \; V \times \left(1 - \frac{p}{100}\right)"></span>
+      <p>O fator faz o caminho de volta também: se um preço subiu 15% e agora é 115, o preço antigo é 115 ÷ 1,15 = 100. Tirar 15% de 115 daria 97,75 — os 15% foram calculados sobre o antigo, não sobre o novo.</p>
+      <div class="tip">
+        <strong>De cabeça.</strong> 10% é dividir por 10; 1%, por 100; 5% é metade de 10%. Então 15% de 80 = 8 + 4 = 12. E p% de V é igual a V% de p: 8% de 50 é o mesmo que 50% de 8, que é 4.
+      </div>
+    </section>
+
+    <section class="lesson" id="sucessivos" aria-labelledby="suc-title">
+      <h2 id="suc-title">Aumentos sucessivos não se somam</h2>
+      <p>Cada aumento é calculado sobre o valor que já mudou. Por isso as variações se <strong>multiplicam</strong> pelos fatores, em vez de se somarem. Arraste as porcentagens (valores negativos são quedas).</p>
+
+      <article class="rule">
+        <header><h3>Duas variações seguidas</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="(1 + a\%)(1 + b\%) \ne 1 + (a + b)\%"></span>
+        <p>Partindo de 100, compare a conta certa com a soma das porcentagens.</p>
+        <div class="rule-try" data-rule="sucessivos" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Subir e descer a mesma porcentagem</h3><span class="badge is-bad">não volta</span></header>
+        <span class="rule-tex" data-tex="(1 + p\%)(1 - p\%) = 1 - (p\%)^2 < 1"></span>
+        <p>Uma ação que sobe 50% e depois cai 50% não volta ao preço: 100 → 150 → 75.</p>
+        <div class="rule-try" data-rule="vaiVolta" data-vars="p"></div>
+      </article>
+
+      <p>É assim que se calcula a <a href="/formulas/inflacao-acumulada.html">inflação acumulada</a> de vários meses e os <a href="/formulas/juros-aportes.html">juros compostos</a>: multiplicando fatores.</p>
+    </section>
+
+    <section class="lesson" id="pontos" aria-labelledby="pontos-title">
+      <h2 id="pontos-title">Pontos percentuais não são porcentagem</h2>
+      <p>Quando a própria grandeza já é uma porcentagem, há dois jeitos de dizer que ela mudou. Se a taxa de juros passou de 10% para 12%:</p>
+      <ul>
+        <li>subiu <strong>2 pontos percentuais</strong> (12 − 10 = 2), a diferença simples;</li>
+        <li>subiu <strong>20%</strong> (2 ÷ 10 = 0,2), a variação relativa.</li>
+      </ul>
+      <p>As duas frases são verdadeiras, e confundir uma com a outra é a forma mais comum de exagerar ou esconder uma mudança. A <a href="/formulas/margem-de-erro.html">margem de erro</a> de uma pesquisa eleitoral é dada em pontos percentuais: um candidato com 30% e margem de 2 pontos está entre 28% e 32%, não entre 29,4% e 30,6%.</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="80 \to 100: +25\%"></span>
+          <p><strong>A base é o valor de onde se parte.</strong> De 100 para 80 é −20%; de 80 para 100 é +25%. A mesma diferença de 20, sobre bases diferentes.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="+10\%,\ +10\% = +21\%"></span>
+          <p><strong>Não é 20%.</strong> 1,1 × 1,1 = 1,21.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="-100\%"></span>
+          <p><strong>Uma queda não passa de 100%.</strong> Cair 100% é zerar. Já um aumento pode passar: dobrar é +100%; triplicar, +200%.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}5\% \ne 0{,}5"></span>
+          <p><strong>0,5% é meio por cento</strong> — 0,005 em decimal, não metade.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Quanto é 35% de 240?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>0,35 × 240 = <strong>84</strong>. De cabeça: 10% = 24, 30% = 72, 5% = 12, total 84.</p>
+            <p><a href="?modo=parte&amp;x=35&amp;y=240#calc">Veja a conta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Uma camisa de R$ 120 está com 25% de desconto. Quanto custa?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Paga-se 75%: 120 × 0,75 = <strong>R$ 90</strong>.</p>
+            <p><a href="?modo=desconto&amp;x=120&amp;y=25#calc">Veja a conta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Numa turma de 32 alunos, 12 tiraram nota acima de 8. Que porcentagem da turma é essa?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>12 ÷ 32 = 0,375 = <strong>37,5%</strong>.</p>
+            <p><a href="?modo=quanto&amp;x=12&amp;y=32#calc">Veja a conta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Um produto subiu de R$ 40 para R$ 46. De quantos por cento foi o aumento?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Subiu 6, sobre a base de 40: 6 ÷ 40 = 0,15 = <strong>15%</strong>.</p>
+            <p><a href="?modo=variacao&amp;x=40&amp;y=46#calc">Veja a conta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Um salário teve aumento de 10% num ano e de 5% no ano seguinte. Qual foi o aumento total?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>1,10 × 1,05 = 1,155: aumento de <strong>15,5%</strong>, não 15%.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Depois de um reajuste de 20%, uma mensalidade passou a custar R$ 360. Quanto custava antes?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>360 ÷ 1,2 = <strong>R$ 300</strong>. (Tirar 20% de 360 daria 288 — errado.)</p>
+            <p><a href="?modo=antes&amp;x=360&amp;y=20#calc">Veja a conta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>7.</strong> O desemprego caiu de 8% para 6%. Em quantos pontos percentuais? E em quantos por cento?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>8 − 6 = <strong>2 pontos percentuais</strong>. Em termos relativos, 2 ÷ 8 = 0,25: uma queda de <strong>25%</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="fracoes.html" rel="prev"><span>Anterior</span>Frações — Simplificar, Somar e Converter</a>
+      <a class="pager-next" href="potencias.html" rel="next"><span>Próximo</span>Potências — Regras de Potenciação</a>
+    </nav>
+  </main>
+</body>
+</html>

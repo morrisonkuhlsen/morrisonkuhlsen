@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Números Decimais — A Vírgula e as Contas</title>
+  <meta name="description" content="Números decimais explicados do zero: décimos e centésimos num quadro interativo, e uma calculadora que faz a conta com vírgula passo a passo — somar e subtrair alinhando a vírgula, multiplicar contando as casas e dividir tirando a vírgula.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/decimais.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/decimais.html">
+  <meta property="og:title" content="Números Decimais — A Vírgula e as Contas">
+  <meta property="og:description" content="Números decimais explicados do zero: décimos e centésimos num quadro interativo, e uma calculadora que faz a conta com vírgula passo a passo — somar e subtrair alinhando a vírgula, multiplicar contando as casas e dividir tirando a vírgula.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Números Decimais — A Vírgula e as Contas">
+  <meta name="twitter:description" content="Números decimais explicados do zero: décimos e centésimos num quadro interativo, e uma calculadora que faz a conta com vírgula passo a passo — somar e subtrair alinhando a vírgula, multiplicar contando as casas e dividir tirando a vírgula.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="conta.js"></script>
+  <script defer src="decimais.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Números Decimais — A Vírgula e as Contas</h1>
+    <p class="page-lede">Um número decimal é um inteiro mais <strong>pedaços de 10, 100, 1000</strong>. A vírgula marca onde acabam os inteiros, e cada casa depois dela vale dez vezes menos que a anterior: décimos, centésimos, milésimos.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#quadro">O que é</a>
+      <a href="#conta">Conta com vírgula</a>
+      <a href="#por-10">× e ÷ por 10</a>
+      <a href="#comparar">Comparar</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="2{,}47 = 2 + \frac{4}{10} + \frac{7}{100}"></span>
+
+    <!-- 1. O quadro de centésimos; estado em ?v= (em centésimos). -->
+    <section class="calc intro" id="quadro" aria-labelledby="quadro-title">
+      <h2 id="quadro-title">Inteiros, décimos e centésimos</h2>
+      <div class="vars var-wide">
+        <label class="var">
+          <i>n</i>
+          <input name="v" type="range" min="0" max="399" step="1" value="247" aria-label="Número decimal, em centésimos">
+          <output class="out-v">2,47</output>
+        </label>
+      </div>
+      <div class="intro-figure dec-figure" aria-hidden="true"></div>
+      <div class="dec-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="casas-title">
+      <h2 id="casas-title">O nome de cada casa</h2>
+      <p>É o mesmo sistema dos inteiros, continuado para a direita. À esquerda da vírgula, cada casa vale 10 vezes a da direita (unidades, dezenas, centenas); à direita da vírgula, a regra continua — cada casa vale um décimo da anterior.</p>
+      <span class="tex-block" data-tex="\underset{\text{centenas}}{3}\;\underset{\text{dezenas}}{5}\;\underset{\text{unidades}}{8}\;{,}\;\underset{\text{décimos}}{2}\;\underset{\text{centésimos}}{7}\;\underset{\text{milésimos}}{1}"></span>
+      <p>Lê-se a parte decimal pelo nome da última casa: 0,7 são <strong>sete décimos</strong>; 0,25, <strong>vinte e cinco centésimos</strong>; 3,125, três inteiros e <strong>cento e vinte e cinco milésimos</strong>. E é assim que um decimal vira fração: 0,25 = 25/100, 3,125 = 3125/1000. A página de <a href="fracoes.html#converter">frações</a> faz o caminho de volta.</p>
+    </section>
+
+    <!-- 2. A conta com vírgula; estado em ?a=&op=&b=. -->
+    <section class="calc" id="conta" aria-labelledby="conta-title">
+      <h2 id="conta-title">A conta com vírgula, passo a passo</h2>
+      <p class="calc-lede">Escolha a operação e avance um passo de cada vez (os números também podem ser clicados). A regra muda com a operação: <strong>somar e subtrair alinham a vírgula</strong>; <strong>multiplicar conta as casas</strong>; <strong>dividir tira a vírgula</strong>.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Primeiro número</span>
+          <input name="a" type="text" inputmode="decimal" value="3,5" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="4">
+          <span>Operação</span>
+          <select name="op">
+            <option value="+" selected>+ somar</option>
+            <option value="-">− subtrair</option>
+            <option value="*">× multiplicar</option>
+            <option value="/">÷ dividir</option>
+          </select>
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Segundo número</span>
+          <input name="b" type="text" inputmode="decimal" value="1,25" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="3,5;+;1,25">3,5 + 1,25</button>
+        <button type="button" data-exemplo="12;+;0,75">12 + 0,75</button>
+        <button type="button" data-exemplo="10;-;0,01">10 − 0,01</button>
+        <button type="button" data-exemplo="1,25;*;3,2">1,25 × 3,2</button>
+        <button type="button" data-exemplo="0,2;*;0,3">0,2 × 0,3</button>
+        <button type="button" data-exemplo="1,5;/;0,25">1,5 ÷ 0,25</button>
+        <button type="button" data-exemplo="7;/;2">7 ÷ 2</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="ld-stage">
+        <div class="ld-main">
+          <div class="ld-box"></div>
+          <div class="ld-info" aria-live="polite" hidden></div>
+        </div>
+      </div>
+
+      <div class="ld-tags" aria-hidden="true">
+        <span data-tag="Monta">monta</span>
+        <span data-tag="Completa">completa</span>
+        <span data-tag="Conta">conta</span>
+        <span data-tag="Casas">casas</span>
+        <span data-tag="Vírgula">vírgula</span>
+      </div>
+      <p class="ld-say" aria-live="polite"></p>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar a conta pronta">⏭</button>
+      </div>
+
+      <details class="ld-details">
+        <summary>Ver todos os passos em texto</summary>
+        <ol class="ld-all"></ol>
+      </details>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que cada regra</h2>
+      <p><strong>Somar e subtrair: vírgula embaixo de vírgula.</strong> Só se juntam coisas da mesma espécie — décimos com décimos, centésimos com centésimos. Alinhar a vírgula é o mesmo que alinhar as unidades na conta de inteiros.</p>
+      <p><strong>Multiplicar: some as casas.</strong> Um número com 2 casas é um inteiro dividido por 100; com 1 casa, dividido por 10. O produto fica dividido por 100 × 10 = 1000, ou seja, 3 casas:</p>
+      <span class="tex-block" data-tex="1{,}25 \times 3{,}2 = \frac{125}{100} \times \frac{32}{10} = \frac{125 \times 32}{1000} = \frac{4000}{1000} = 4"></span>
+      <p><strong>Dividir: tire a vírgula dos dois.</strong> Multiplicar o dividendo e o divisor pelo mesmo número não muda o resultado (é o mesmo que simplificar uma fração ao contrário). Então 1,5 ÷ 0,25 = 150 ÷ 25 = 6 — e uma divisão por inteiro qualquer um já sabe armar.</p>
+    </section>
+
+    <section class="lesson" id="por-10" aria-labelledby="por10-title">
+      <h2 id="por10-title">Multiplicar e dividir por 10, 100, 1000</h2>
+      <p>Multiplicar por 10 faz cada algarismo subir uma casa; na escrita, é a <strong>vírgula que anda uma casa para a direita</strong>. Dividir por 10 anda para a esquerda. Com 100, duas casas; com 1000, três — uma para cada zero. Quando faltam algarismos, completa-se com zeros.</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="3{,}47 \times 10 = 34{,}7"></span>
+          <p>Uma casa para a direita.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3{,}47 \times 1000 = 3470"></span>
+          <p>Três casas: falta uma, entra um zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3{,}47 \div 100 = 0{,}0347"></span>
+          <p>Duas casas para a esquerda, com zeros na frente.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}1 \times 0{,}1 = 0{,}01"></span>
+          <p>Multiplicar por 0,1 é dividir por 10 — por isso o resultado diminui.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="comparar" aria-labelledby="comparar-title">
+      <h2 id="comparar-title">Qual é maior?</h2>
+      <p>Compare casa por casa, da esquerda para a direita, depois de igualar o número de casas com zeros: 0,5 = 0,50, e 0,50 &gt; 0,45. O número com mais algarismos depois da vírgula não é o maior — é só o mais detalhado.</p>
+      <span class="tex-block" data-tex="0{,}5 = 0{,}50 > 0{,}45 \qquad 0{,}09 < 0{,}1 \qquad 2{,}3 = 2{,}30 = 2{,}300"></span>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}45 < 0{,}5"></span>
+          <p><strong>45 não é maior que 5 aqui.</strong> São 45 centésimos contra 50 centésimos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="2{,}5 + 1{,}25 = 3{,}75"></span>
+          <p><strong>Na soma, não se alinha pela direita.</strong> Quem se alinha é a vírgula; alinhando os últimos algarismos, o 5 dos décimos cairia embaixo do 5 dos centésimos.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}3 \times 0{,}2 = 0{,}06"></span>
+          <p><strong>Não é 0,6.</strong> 1 casa + 1 casa = 2 casas. Na dúvida, estime: três décimos de dois décimos é bem pouco.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="6 \div 0{,}5 = 12"></span>
+          <p><strong>Dividir por menos de 1 aumenta.</strong> Quantas metades cabem em 6? Doze.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1.500{,}75"></span>
+          <p><strong>Ponto e vírgula.</strong> No Brasil, a vírgula é decimal e o ponto separa milhares. Em inglês, e em quase todo programa de computador, é o contrário: 1,500.75.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde os decimais levam</h2>
+      <p><strong>Porcentagem.</strong> 15% é 0,15, e aumentar 15% é multiplicar por 1,15. A <a href="porcentagem.html">porcentagem</a> é feita de contas com decimais.</p>
+      <p><strong>Estatística.</strong> Médias, desvios e probabilidades quase nunca dão inteiros. Uma probabilidade é sempre um decimal entre 0 e 1, e um valor-p de 0,03 é menor que um nível de 0,05 — a comparação de decimais é a decisão do teste.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 4,7 + 2,85.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Com vírgula embaixo de vírgula: 4,70 + 2,85 = <strong>7,55</strong>.</p>
+            <p><a href="?a=4,7&amp;op=%2B&amp;b=2,85#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 10 − 3,46.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>10,00 − 3,46 = <strong>6,54</strong>. O 10 ganha vírgula e dois zeros para ter as mesmas casas.</p>
+            <p><a href="?a=10&amp;op=-&amp;b=3,46#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule 2,4 × 0,15.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>24 × 15 = 360, e são 1 + 2 = 3 casas: 0,360 = <strong>0,36</strong>.</p>
+            <p><a href="?a=2,4&amp;op=*&amp;b=0,15#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule 4,5 ÷ 0,09.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Duas casas no divisor: multiplique os dois por 100. 450 ÷ 9 = <strong>50</strong>.</p>
+            <p><a href="?a=4,5&amp;op=/&amp;b=0,09#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Ponha em ordem crescente: 0,3; 0,29; 0,301; 0,03.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Com três casas: 0,300; 0,290; 0,301; 0,030. Em ordem: <strong>0,03 &lt; 0,29 &lt; 0,3 &lt; 0,301</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Um litro de gasolina custa R$ 5,89. Quanto custam 12,5 litros?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>589 × 125 = 73625, com 2 + 1 = 3 casas: 73,625, ou <strong>R$ 73,63</strong> arredondando para centavos. Estimativa: 6 × 12,5 = 75, perto.</p>
+            <p><a href="?a=5,89&amp;op=*&amp;b=12,5#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="expressoes.html" rel="prev"><span>Anterior</span>Expressões Numéricas — Ordem das Operações</a>
+      <a class="pager-next" href="mdc.html" rel="next"><span>Próximo</span>MDC — Máximo Divisor Comum</a>
+    </nav>
+  </main>
+</body>
+</html>
