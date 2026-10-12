@@ -41,6 +41,20 @@
   display: none;
 }
 
+/* Resultados longos (uma expressão inteira, uma soma aberta) rolam dentro
+   da própria caixa em vez de alargar a página no celular. */
+.calc .calc-result {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Itens de grid não encolhem abaixo do conteúdo: sem isso, uma fórmula
+   larga no passo a passo alarga a lista inteira em vez de rolar. */
+.calc-steps li {
+  min-width: 0;
+}
+
 /* ---------------------------------------------------------------- tabela de divisões */
 
 .ladder-box {
@@ -1029,6 +1043,7 @@
 /* ---------------------------------------------------------------- tabela */
 
 .table-scroll {
+  position: relative; /* contém o MathML escondido do KaTeX, que é absoluto */
   margin: 0 0 1rem;
   overflow-x: auto;
 }
@@ -1873,6 +1888,23 @@
 .bar.is-out,
 .cube.is-out {
   opacity: .18;
+}
+
+/* No celular, muitas barras (99 + 99 dá 19) quebram em duas fileiras. */
+@media (max-width: 520px) {
+  .blk {
+    gap: 1rem;
+  }
+
+  .blk-col {
+    min-width: 0;
+  }
+
+  .blk-tens {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 6px;
+  }
 }
 
 /* ---------------------------------------------------------------- adição: blocos */
