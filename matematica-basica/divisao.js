@@ -9,7 +9,8 @@
  * pula quando anda.
  */
 (() => {
-  const { fmt, tone, math, el, saveParams } = Licao;
+  const { fmt, tone, el, saveParams, math } = Licao;
+  const { casa: casaDe, readInt, tones } = Conta;
 
   const pl = (n, um, varios) => `${fmt(n)} ${n === 1 ? um : varios}`;
   // 2833 com 2 casas → "28,33"; 1 com 2 casas → "0,01".
@@ -80,15 +81,14 @@
 
   /* ---------------------------------------------------------------- a conta armada */
 
-  const CASA_INT = ["unidades", "dezenas", "centenas", "unidades de milhar", "dezenas de milhar", "centenas de milhar", "unidades de milhão", "dezenas de milhão", "centenas de milhão"];
   // Cada tipo de célula: nome, tom e o que vale para todas desse tipo.
   const KINDS = {
     dividendo: { nome: "Dividendo", tone: 2 },
     divisor: { nome: "Divisor", tone: 5 },
     quociente: { nome: "Quociente", tone: 1 },
     resto: { nome: "Resto", tone: 3 },
-    produto: { nome: "Produto", tone: 4 },
-    parcial: { nome: "Resto parcial", tone: 0 },
+    produto: { nome: "Produto", plural: "Produtos", tone: 4 },
+    parcial: { nome: "Resto parcial", plural: "Restos parciais", tone: 0 },
     baixa: { nome: "Algarismo baixado", tone: 2 },
   };
 
@@ -103,7 +103,7 @@
     for (let r = D % d; r && casas < casasPedidas; casas++) r = r * 10 % d;
     const n = L + casas;
     const dig = j => (j < L ? ds[j] : 0);
-    const casa = j => (j < L ? CASA_INT[L - 1 - j] || "casas altas" : CASA[j - L + 1]);
+    const casa = j => (j < L ? casaDe(L - 1 - j) : CASA[j - L + 1]);
     // Coluna 1 da grade: o divisor e os sinais de menos.
     const col = j => 2 + j + (casas && j >= L ? 1 : 0);
     const commaCol = 2 + L;
@@ -117,7 +117,6 @@
       return cells.length - 1;
     };
     const frame = (tag, html, show = [], hl = [], extra = {}) => frames.push({ tag, html, show, hl, ...extra });
-    const tones = (ids, t) => ids.map(id => [id, t]);
 
     const divId = cell(2, 1, String(d), "divisor", "divisor",
       `O número pelo qual se divide: em quantas partes o ${D} é repartido, ou o tamanho de cada grupo. Ele não muda durante a conta — é a tabuada dele que se consulta a cada passo.`);
@@ -195,7 +194,9 @@
           ? `${exata ? `A divisão deu exata com ${pl(casas, "casa decimal", "casas decimais")}` : `Parando em ${pl(casas, "casa decimal", "casas decimais")}`}: quociente <strong>${Qs}</strong>${exata ? "" : `, resto <strong>${Rs}</strong> (o ${r} que sobrou está na casa dos ${CASA[casas]})`}. ${prova}`
           : `Não há mais algarismos para baixar: acabou. Quociente <strong>${Qs}</strong>, resto <strong>${Rs}</strong>${exata ? " — divisão exata" : ""}. ${prova}`,
           [], [[divId, 5], ...tones(dvdIds, 2), ...tones(qIds, 1), ...tones(partIds, 3)], { fim: true });
-        return { cells, frames, cols: lastCol, comma: casas ? commaCol : 0, casas, Q: Qs, R: Rs, D, d };
+        const template = ["auto", ...Array.from({ length: lastCol - 1 }, (_, i) => (casas && i + 2 === commaCol ? ".3em" : "auto"))].join(" ");
+        const value = c => ({ dividendo: D, divisor: d, quociente: Qs, resto: Rs })[c.kind];
+        return { cells, frames, template, value, casas, Q: Qs, R: Rs, D, d };
       }
 
       j++;
@@ -222,256 +223,52 @@
     }
   }
 
-  // Desenha a grade. Devolve show(k), que mostra o quadro k, e pick(teste),
-  // que contorna as células visíveis que passam no teste. Clicar num
-  // número chama onPick com a célula.
-  function grid(box, b, onPick) {
-    const g = el("div", "ld");
-    const cols = ["auto"];
-    for (let c = 2; c <= b.cols; c++) cols.push(c === b.comma ? ".3em" : "auto");
-    g.style.gridTemplateColumns = cols.join(" ");
-    const nodes = b.cells.map((c, i) => {
-      const e = el("span", `ld-cell ld-${c.kind}`, c.text);
-      e.style.gridRow = c.row;
-      e.style.gridColumn = c.col;
-      if (c.kind === "produto") e.classList.add("is-line");
-      if (c.info && c.text) {
-        e.tabIndex = 0;
-        e.setAttribute("role", "button");
-        e.setAttribute("aria-label", `${c.text}: ${KINDS[c.kind].nome.toLowerCase()}`);
-        e.dataset.i = i;
-      }
-      g.appendChild(e);
-      return e;
-    });
-    box.replaceChildren(g);
-
-    const choose = e => {
-      const t = e.target.closest("[data-i]");
-      if (t && !t.classList.contains("is-off")) onPick(b.cells[t.dataset.i]);
-    };
-    g.addEventListener("click", choose);
-    g.addEventListener("keydown", e => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(e); }
-    });
-
-    return {
-      show(k) {
-        const vis = new Set();
-        b.frames.slice(0, k + 1).forEach(f => f.show.forEach(id => vis.add(id)));
-        const hl = new Map(b.frames[k].hl);
-        nodes.forEach((e, i) => {
-          e.classList.toggle("is-off", !vis.has(i));
-          e.classList.toggle("is-hl", hl.has(i));
-          if (hl.has(i)) e.dataset.tone = hl.get(i);
-          else delete e.dataset.tone;
-        });
-      },
-      pick(test) {
-        nodes.forEach((e, i) => {
-          const c = b.cells[i];
-          const on = !!test && !!c.info && test(c) && !e.classList.contains("is-off");
-          e.classList.toggle("is-pick", on);
-          if (on) e.style.setProperty("--pk", `var(--tone-${KINDS[c.kind].tone})`);
-        });
-      },
-    };
+  // Lê dividendo e divisor; os nomes dos campos mudam de uma seção para outra.
+  function readPair(sD, sd) {
+    const D = readInt(sD, 9), d = readInt(sd, 5);
+    if (Number.isNaN(D)) return { err: "Digite um dividendo inteiro, sem sinal, com até 9 algarismos.", bad: ["first"] };
+    if (Number.isNaN(d)) return { err: "Digite um divisor inteiro, sem sinal, com até 5 algarismos.", bad: ["second"] };
+    if (d === 0) return { err: `Não existe divisão por zero: nenhum número vezes 0 dá ${D}. Não é que o resultado seja grande demais — é que a pergunta “quantas vezes o 0 cabe?” não tem resposta.`, bad: ["second"] };
+    return { args: [D, d] };
   }
-
-  // O quadro com o nome e a explicação do número clicado.
-  function say(panel, kind, text, value) {
-    const k = KINDS[kind];
-    panel.dataset.tone = k.tone;
-    panel.replaceChildren(el("strong", null, value == null ? k.nome : `${k.nome} — ${value}`), el("p", null, text));
-  }
-  const valueOf = (b, c) => ({ dividendo: b.D, divisor: b.d, quociente: b.Q, resto: b.R })[c.kind]
-    ?? b.cells.filter(x => x.group === c.group && x.text !== "−").map(x => x.text).join("");
-
-  const readInt = (s, max) => (new RegExp(`^\\s*\\d{1,${max}}\\s*$`).test(s) ? Number(s.trim()) : NaN);
-  function readPair(inD, ind) {
-    const D = readInt(inD.value, 9), d = readInt(ind.value, 5);
-    inD.setAttribute("aria-invalid", Number.isNaN(D));
-    ind.setAttribute("aria-invalid", Number.isNaN(d) || d === 0);
-    const err = Number.isNaN(D) ? "Digite um dividendo inteiro, sem sinal, com até 9 algarismos."
-      : Number.isNaN(d) ? "Digite um divisor inteiro, sem sinal, com até 5 algarismos."
-        : d === 0 ? `Não existe divisão por zero: nenhum número vezes 0 dá ${D}. Não é que o resultado seja grande demais — é que a pergunta “quantas vezes o 0 cabe?” não tem resposta.`
-          : "";
-    return { D, d, err };
-  }
-
-  /* ---------------------------------------------------------------- as partes */
-
-  // A conta pronta, para clicar nos números; estado em ?a=&b=.
-  function initPartes(section) {
-    const inD = section.querySelector("input[name=a]");
-    const ind = section.querySelector("input[name=b]");
-    const box = section.querySelector(".ld-box");
-    const info = section.querySelector(".ld-info");
-    const terms = section.querySelector(".terms");
-    const prova = section.querySelector(".prova");
-    const note = section.querySelector(".calc-note");
-    const q = new URLSearchParams(location.search);
-    if (q.has("a")) inD.value = q.get("a");
-    if (q.has("b")) ind.value = q.get("b");
-    let b = null, view = null;
-
-    const blank = () => {
-      delete info.dataset.tone;
-      info.replaceChildren(el("p", "ld-hint", "Clique em qualquer número da conta — ou num dos cartões abaixo — para ver o nome dele."));
-      terms.querySelectorAll("button").forEach(t => t.setAttribute("aria-pressed", "false"));
-    };
-
-    function update() {
-      const { D, d, err } = readPair(inD, ind);
-      saveParams({ a: inD.value.trim(), b: ind.value.trim() });
-      section.classList.toggle("has-error", !!err);
-      note.textContent = err;
-      if (err) { b = null; box.replaceChildren(); terms.replaceChildren(); prova.textContent = ""; return; }
-      b = build(D, d, 0);
-      view = grid(box, b, c => {
-        view.pick(x => x.group === c.group);
-        say(info, c.kind, c.info, valueOf(b, c));
-        terms.querySelectorAll("button").forEach(t => t.setAttribute("aria-pressed", t.dataset.kind === c.kind));
-      });
-      view.show(b.frames.length - 1);
-
-      const R = Number(b.R);
-      const cards = [
-        ["dividendo", D, "O que vai ser repartido."],
-        ["divisor", d, "Em quantas partes se reparte, ou o tamanho de cada grupo."],
-        ["quociente", b.Q, "Quanto cabe em cada parte: o resultado da divisão."],
-        ["resto", b.R, R ? `O que sobra no fim. Sempre menor que o divisor.` : "Deu 0: a divisão é exata."],
-        ["produto", null, "O divisor vezes cada algarismo do quociente: o que se reparte em cada passo."],
-        ["parcial", null, "O que sobra em cada passo e desce para a casa seguinte."],
-      ];
-      terms.replaceChildren(...cards.filter(([k]) => b.cells.some(c => c.kind === k)).map(([k, v, txt]) => {
-        const t = el("button", null);
-        t.type = "button";
-        t.dataset.kind = k;
-        t.dataset.tone = KINDS[k].tone;
-        t.setAttribute("aria-pressed", "false");
-        t.append(el("strong", null, v == null ? (k === "produto" ? "Produtos" : "Restos parciais") : `${KINDS[k].nome} — ${v}`), el("span", null, txt));
-        t.addEventListener("click", () => {
-          view.pick(x => x.kind === k || (k === "parcial" && x.kind === "baixa"));
-          say(info, k, txt, v);
-          terms.querySelectorAll("button").forEach(o => o.setAttribute("aria-pressed", o === t));
-        });
-        return t;
-      }));
-      math(prova, `\\displaystyle ${tone(D, 2)} = ${tone(d, 5)} \\times ${tone(b.Q, 1)} + ${tone(b.R, 3)}`);
-      view.pick(null);
-      blank();
-    }
-
-    section.querySelectorAll("[data-exemplo]").forEach(btn => btn.addEventListener("click", () => {
-      [inD.value, ind.value] = btn.dataset.exemplo.split(";");
-      update();
-    }));
-    inD.addEventListener("input", update);
-    ind.addEventListener("input", update);
-    update();
-  }
-
-  /* ---------------------------------------------------------------- passo a passo */
-
-  function initConta(section) {
-    const inD = section.querySelector("input[name=dividendo]");
-    const ind = section.querySelector("input[name=divisor]");
-    const inC = section.querySelector("select[name=casas]");
-    const result = section.querySelector(".calc-result");
-    const box = section.querySelector(".ld-box");
-    const info = section.querySelector(".ld-info");
-    const tag = section.querySelector(".ld-tags");
-    const sayEl = section.querySelector(".ld-say");
-    const count = section.querySelector(".ld-count");
-    const tab = section.querySelector(".ld-tab");
-    const all = section.querySelector(".ld-all");
-    const note = section.querySelector(".calc-note");
-    const nav = {};
-    section.querySelectorAll("[data-nav]").forEach(btn => { nav[btn.dataset.nav] = btn; });
-
-    const q = new URLSearchParams(location.search);
-    if (q.has("dividendo")) inD.value = q.get("dividendo");
-    if (q.has("divisor")) ind.value = q.get("divisor");
-    if (["0", "1", "2", "3", "4"].includes(q.get("casas"))) inC.value = q.get("casas");
-    let b = null, view = null, k = 0;
-
-    const blank = () => { info.hidden = true; view.pick(null); };
-
-    function go(to) {
-      if (!b) return;
-      k = Math.max(0, Math.min(b.frames.length - 1, to));
-      const f = b.frames[k];
-      view.show(k);
-      blank();
-      tag.querySelectorAll("span").forEach(s => s.classList.toggle("is-on", s.dataset.tag === f.tag));
-      sayEl.innerHTML = f.html;
-      count.textContent = `Passo ${k + 1} de ${b.frames.length}`;
-      nav.first.disabled = nav.prev.disabled = k === 0;
-      nav.next.disabled = nav.last.disabled = k === b.frames.length - 1;
-      // A tabuada do divisor, acesa só quando a pergunta é "quantas vezes cabe?".
-      tab.querySelectorAll("li").forEach((li, i) => {
-        const m = i + 1;
-        li.className = !f.tab ? "" : m === f.tab.q ? "is-best" : m * b.d <= f.tab.p ? "is-common" : "is-past";
-      });
-      all.querySelectorAll("li").forEach((li, i) => li.classList.toggle("is-on", i === k));
-    }
-
-    function update() {
-      const { D, d, err } = readPair(inD, ind);
-      const casas = Number(inC.value);
-      saveParams({ dividendo: inD.value.trim(), divisor: ind.value.trim(), casas });
-      section.classList.toggle("has-error", !!err);
-      if (err) {
-        b = null;
-        result.textContent = "";
-        box.replaceChildren();
-        all.replaceChildren();
-        note.textContent = err;
-        return;
-      }
-      b = build(D, d, casas);
-      view = grid(box, b, c => {
-        view.pick(x => x.group === c.group);
-        info.hidden = false;
-        say(info, c.kind, c.info, valueOf(b, c));
-      });
-      math(result, `${tone(D, 2)} \\div ${tone(d, 5)} = ${tone(b.Q.replace(",", "{,}"), 1)}${/^0(,0*)?$/.test(b.R) ? "" : `\\ \\ \\text{resto } ${tone(b.R.replace(",", "{,}"), 3)}`}`);
-      tab.replaceChildren(...Array.from({ length: 9 }, (_, i) => el("li", null, `${d} × ${i + 1} = ${d * (i + 1)}`)));
-      all.replaceChildren(...b.frames.map((f, i) => {
-        const li = el("li");
-        const btn = el("button");
-        btn.type = "button";
-        btn.innerHTML = `<b>${f.tag}.</b> ${f.html}`;
-        btn.addEventListener("click", () => go(i));
-        li.appendChild(btn);
-        return li;
-      }));
-      note.innerHTML = casas && b.casas < casas
-        ? `A divisão ficou exata antes das ${casas} casas pedidas: não há o que continuar.`
-        : casas && !/^0,0*$/.test(b.R) ? `Quer saber se os decimais se repetem para sempre? <a href="fracoes.html?conv=${D}/${d}#converter">Converta ${D}/${d} em decimal →</a>` : "";
-      go(0);
-    }
-
-    nav.first.addEventListener("click", () => go(0));
-    nav.prev.addEventListener("click", () => go(k - 1));
-    nav.next.addEventListener("click", () => go(k + 1));
-    nav.last.addEventListener("click", () => go(Infinity));
-    section.querySelectorAll("[data-exemplo]").forEach(btn => btn.addEventListener("click", () => {
-      [inD.value, ind.value, inC.value] = btn.dataset.exemplo.split(";");
-      update();
-    }));
-    inD.addEventListener("input", update);
-    ind.addEventListener("input", update);
-    inC.addEventListener("change", update);
-    update();
-  }
+  const named = (out, a, b) => ({ ...out, bad: (out.bad || []).map(x => (x === "first" ? a : b)) });
 
   Licao.renderTex();
   const share = document.querySelector(".share");
   if (share) initShare(share);
+
   const partes = document.querySelector("#partes");
-  if (partes) initPartes(partes);
+  if (partes) Conta.partes(partes, {
+    kinds: KINDS,
+    fields: ["a", "b"],
+    read: v => named(readPair(v.a, v.b), "a", "b"),
+    build: ([D, d]) => build(D, d, 0),
+    cards: (b, [D, d]) => [
+      ["dividendo", D, "O que vai ser repartido."],
+      ["divisor", d, "Em quantas partes se reparte, ou o tamanho de cada grupo."],
+      ["quociente", b.Q, "Quanto cabe em cada parte: o resultado da divisão."],
+      ["resto", b.R, b.R === "0" ? "Deu 0: a divisão é exata." : "O que sobra no fim. Sempre menor que o divisor."],
+      ["produto", null, "O divisor vezes cada algarismo do quociente: o que se reparte em cada passo."],
+      ["parcial", null, "O que sobra em cada passo e desce para a casa seguinte.", x => x.kind === "parcial" || x.kind === "baixa"],
+    ],
+    prova: (b, [D, d]) => `${tone(D, 2)} = ${tone(d, 5)} \\times ${tone(b.Q, 1)} + ${tone(b.R, 3)}`,
+  });
+
   const conta = document.querySelector("#conta");
-  if (conta) initConta(conta);
+  if (conta) Conta.passos(conta, {
+    kinds: KINDS,
+    fields: ["dividendo", "divisor", "casas"],
+    read: v => {
+      const out = named(readPair(v.dividendo, v.divisor), "dividendo", "divisor");
+      if (out.args) out.args.push(Number(v.casas));
+      return out;
+    },
+    build: ([D, d, casas]) => build(D, d, casas),
+    result: b => `${tone(b.D, 2)} \\div ${tone(b.d, 5)} = ${tone(b.Q.replace(",", "{,}"), 1)}${/^0(,0*)?$/.test(b.R) ? "" : `\\ \\ \\text{resto } ${tone(b.R.replace(",", "{,}"), 3)}`}`,
+    // A tabuada do divisor, acesa só quando a pergunta é "quantas vezes cabe?".
+    side: (el, b, f) => Conta.tabuada(el, "Tabuada do divisor", b.d, i => (!f.tab ? "" : i === f.tab.q ? "is-best" : i * b.d <= f.tab.p ? "is-common" : "is-past")),
+    note: (b, [D, d, casas]) => (casas && b.casas < casas
+      ? `A divisão ficou exata antes das ${casas} casas pedidas: não há o que continuar.`
+      : casas && !/^0,0*$/.test(b.R) ? `Quer saber se os decimais se repetem para sempre? <a href="fracoes.html?conv=${D}/${d}#converter">Converta ${D}/${d} em decimal →</a>` : ""),
+  });
 })();

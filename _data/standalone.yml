@@ -1226,8 +1226,20 @@
 
 - title: "Matemática Básica"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por divisão, MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por subtração, multiplicação, divisão, MDC, MMC, frações, potências, raízes, logaritmos, equação do 2º grau, conjuntos e constantes."
   tags: "matemática básica aritmética exercícios"
+  lang: pt
+
+- title: "Subtração — Empréstimo e a Conta Armada"
+  url: "/matematica-basica/subtracao.html"
+  description: "Subtração explicada do zero: tirar com blocos de dezena e unidade, o que são minuendo, subtraendo e diferença, por que se pede emprestado e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique."
+  tags: "subtração conta armada empréstimo pedir emprestado minuendo subtraendo diferença resto prova real troco"
+  lang: pt
+
+- title: "Multiplicação — Tabuada, Vai Um e a Conta Armada"
+  url: "/matematica-basica/multiplicacao.html"
+  description: "Multiplicação explicada do zero: o retângulo de quadradinhos, o que são multiplicando, multiplicador e produto, o vai um, por que cada linha anda uma casa e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique."
+  tags: "multiplicação conta armada vai um reserva tabuada multiplicando multiplicador produto fatores produtos parciais prova real"
   lang: pt
 
 - title: "Divisão — Quociente, Resto e a Conta Armada"

@@ -1722,3 +1722,155 @@
   outline: none;
   border-radius: 0;
 }
+
+/* ---------------------------------------------------------------- contas: peças comuns */
+
+/* O traço que separa os números do resultado, por baixo de toda a linha. */
+.ld-linha {
+  z-index: -1;
+  border-bottom: 2px solid var(--text-strong);
+  border-radius: 0;
+}
+
+.ld-sinal {
+  padding-right: .25em;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* Vai um e empréstimos: pequenos, em cima da casa. */
+.ld-cell.is-small {
+  align-self: end;
+  font-size: .55em;
+  line-height: 1.1;
+  color: var(--tone-4);
+}
+
+/* Zero de posição: está lá, mas é marcação, não conta. */
+.ld-cell.is-ghost {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.ld-cell.is-crossed {
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--tone-4);
+  opacity: .55;
+}
+
+/* ---------------------------------------------------------------- multiplicação: retângulo */
+
+.array-figure {
+  display: grid;
+  gap: 3px;
+  margin: 1rem auto 0;
+}
+
+.sq {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--tone-1) 75%, transparent);
+}
+
+.sq.is-alt {
+  background: color-mix(in srgb, var(--tone-1) 45%, transparent);
+}
+
+.array .seg {
+  margin-top: .8rem;
+}
+
+.area-box {
+  overflow-x: auto;
+}
+
+.area-table {
+  margin: .4rem auto 1rem;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.area-table th {
+  padding: .2rem .6rem;
+  color: var(--tone);
+  font-weight: 700;
+}
+
+.area-table td {
+  min-width: 4.5rem;
+  padding: .7rem 1rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--tone-1) 18%, transparent);
+  color: var(--text-strong);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- subtração: blocos */
+
+.blk {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.blk-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+}
+
+.blk-tens {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  min-height: 7rem;
+}
+
+/* Uma barra de dez: dez cubinhos empilhados. */
+.bar {
+  width: .7rem;
+  height: 7rem;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 calc(10% - 1px), var(--surface) calc(10% - 1px) 10%),
+    var(--tone-2);
+}
+
+.bar.is-broken {
+  border: 2px dashed var(--tone-2);
+  background: none;
+}
+
+.blk-units {
+  display: grid;
+  grid-template-columns: repeat(5, .7rem);
+  align-content: end;
+  gap: 4px;
+  min-height: 7rem;
+}
+
+.cube {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 2px;
+  background: var(--tone-2);
+}
+
+/* Os dez que vieram da troca. */
+.cube.is-new {
+  outline: 1px dashed var(--tone-2);
+  outline-offset: 1px;
+  background: color-mix(in srgb, var(--tone-2) 60%, transparent);
+}
+
+/* O que foi tirado. */
+.bar.is-out,
+.cube.is-out {
+  opacity: .18;
+}

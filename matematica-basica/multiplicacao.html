@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Multiplicação — Tabuada, Vai Um e a Conta Armada</title>
+  <meta name="description" content="Multiplicação explicada do zero: o retângulo de quadradinhos, o que são multiplicando, multiplicador e produto, o vai um, por que cada linha anda uma casa e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/multiplicacao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/multiplicacao.html">
+  <meta property="og:title" content="Multiplicação — Tabuada, Vai Um e a Conta Armada">
+  <meta property="og:description" content="Multiplicação explicada do zero: o retângulo de quadradinhos, o que são multiplicando, multiplicador e produto, o vai um, por que cada linha anda uma casa e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Multiplicação — Tabuada, Vai Um e a Conta Armada">
+  <meta name="twitter:description" content="Multiplicação explicada do zero: o retângulo de quadradinhos, o que são multiplicando, multiplicador e produto, o vai um, por que cada linha anda uma casa e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="conta.js"></script>
+  <script defer src="multiplicacao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Multiplicação — Tabuada, Vai Um e a Conta Armada</h1>
+    <p class="page-lede">Multiplicar é <strong>somar parcelas iguais</strong> sem escrevê-las todas: 4 × 3 é 3 + 3 + 3 + 3. A conta armada faz isso casa por casa, com a tabuada, e o que passa de 9 numa casa sobe para a seguinte — o famoso <strong>vai um</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#retangulo">Retângulo</a>
+      <a href="#partes">As partes</a>
+      <a href="#conta">Conta armada</a>
+      <a href="#porque">Por que funciona</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\text{multiplicando} \times \text{multiplicador} = \text{produto}"></span>
+
+    <!-- 1. O retângulo de quadradinhos; estado em ?linhas=&colunas=. -->
+    <section class="calc intro array" id="retangulo" aria-labelledby="ret-title">
+      <h2 id="ret-title">Multiplicar é contar um retângulo</h2>
+      <div class="vars share-vars">
+        <label class="var">
+          <i>fileiras</i>
+          <input name="linhas" type="range" min="1" max="10" step="1" value="3" aria-label="Número de fileiras">
+          <output class="out-linhas">3</output>
+        </label>
+        <label class="var">
+          <i>em cada</i>
+          <input name="colunas" type="range" min="1" max="10" step="1" value="4" aria-label="Quadradinhos em cada fileira">
+          <output class="out-colunas">4</output>
+        </label>
+      </div>
+      <div class="seg"><button type="button" data-girar>girar o retângulo ↻</button></div>
+      <div class="array-figure" aria-hidden="true"></div>
+      <div class="array-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. A conta pronta, com as partes clicáveis; estado em ?a=&b=. -->
+    <section class="calc" id="partes" aria-labelledby="partes-title">
+      <h2 id="partes-title">O nome de cada parte</h2>
+      <p class="calc-lede">Escolha os números e clique em qualquer parte da conta para saber o que ela é — multiplicando, multiplicador, vai um, produto — e de onde veio.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Multiplicando</span>
+          <input name="a" type="text" inputmode="numeric" value="46" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Multiplicador</span>
+          <input name="b" type="text" inputmode="numeric" value="23" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="46;3">46 × 3</button>
+        <button type="button" data-exemplo="46;23">46 × 23</button>
+        <button type="button" data-exemplo="305;24">305 × 24</button>
+        <button type="button" data-exemplo="125;8">125 × 8</button>
+        <button type="button" data-exemplo="999;99">999 × 99</button>
+      </div>
+
+      <div class="ld-box ld-anat"></div>
+      <div class="ld-info" aria-live="polite"></div>
+      <div class="terms"></div>
+      <p class="prova-label">Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
+      <div class="prova calc-result"></div>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 3. A conta armada; estado em ?multiplicando=&multiplicador=. -->
+    <section class="calc" id="conta" aria-labelledby="conta-title">
+      <h2 id="conta-title">A conta armada, passo a passo</h2>
+      <p class="calc-lede">Digite uma multiplicação e avance um passo de cada vez (os números também podem ser clicados). Cada algarismo de baixo <strong>multiplica</strong> todos os de cima, da direita para a esquerda; o que passa de 9 <strong>vai um</strong>; a linha de cada algarismo novo se <strong>desloca</strong> uma casa; no fim, as linhas se <strong>somam</strong>.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Multiplicando</span>
+          <input name="multiplicando" type="text" inputmode="numeric" value="46" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Multiplicador</span>
+          <input name="multiplicador" type="text" inputmode="numeric" value="23" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="46;3">46 × 3</button>
+        <button type="button" data-exemplo="46;23">46 × 23</button>
+        <button type="button" data-exemplo="305;24">305 × 24</button>
+        <button type="button" data-exemplo="125;8">125 × 8</button>
+        <button type="button" data-exemplo="999;99">999 × 99</button>
+        <button type="button" data-exemplo="1234;506">1234 × 506</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="ld-stage">
+        <div class="ld-main">
+          <div class="ld-box"></div>
+          <div class="ld-info" aria-live="polite" hidden></div>
+        </div>
+        <div class="ld-side"></div>
+      </div>
+
+      <div class="ld-tags" aria-hidden="true">
+        <span data-tag="Multiplica">multiplica</span>
+        <span data-tag="Vai um">vai um</span>
+        <span data-tag="Desloca">desloca</span>
+        <span data-tag="Soma">soma</span>
+      </div>
+      <p class="ld-say" aria-live="polite"></p>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar a conta pronta">⏭</button>
+      </div>
+
+      <details class="ld-details">
+        <summary>Ver todos os passos em texto</summary>
+        <ol class="ld-all"></ol>
+      </details>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que a conta funciona</h2>
+      <p>A conta armada só usa a tabuada até 9 × 9 porque quebra os números nas suas casas. Em 46 × 23, o 23 é 20 + 3 e o 46 é 40 + 6. O retângulo de 46 por 23 se divide em quatro pedaços, cada um uma conta de tabuada com zeros:</p>
+      <div class="area-box">
+        <table class="area-table">
+          <tr><th></th><th data-tone="2">40</th><th data-tone="2">6</th></tr>
+          <tr><th data-tone="5">20</th><td>800</td><td>120</td></tr>
+          <tr><th data-tone="5">3</th><td>120</td><td>18</td></tr>
+        </table>
+      </div>
+      <p>A <strong>primeira linha</strong> da conta armada é a de baixo do retângulo: 46 × 3 = 120 + 18 = 138. O 18 é 1 dezena e 8 unidades: o 8 fica, e a dezena <strong>vai um</strong> — sobe para se juntar às 12 dezenas de 4 × 3, dando 13. A <strong>segunda linha</strong> é a de cima: 46 × 20 = 800 + 120 = 920. Como o 2 vale 20, tudo sai dez vezes maior, e por isso a linha anda uma casa para a esquerda. Somando as duas, o retângulo inteiro:</p>
+      <span class="tex-block" data-tex="\begin{aligned} 46 \times 23 &= 46 \times (20 + 3) \\ &= 46 \times 3 + 46 \times 20 \\ &= 138 + 920 \\ &= 1058 \end{aligned}"></span>
+
+      <div class="tip">
+        <strong>Atalhos.</strong> A tabuada é menor do que parece: como 7 × 8 = 8 × 7, metade dela se repete. Vezes 10, põe um zero; vezes 5, é vezes 10 dividido por 2 (46 × 5 = 460 ÷ 2 = 230); vezes 9, é vezes 10 menos uma vez (46 × 9 = 460 − 46 = 414). E na conta armada, ponha em cima o número com mais algarismos: sai menos linha para somar.
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas e casos especiais</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="46 \times 3 = 138"></span>
+          <p><strong>Esquecer o vai um.</strong> 3 × 6 = 18: fica 8, sobe 1. Depois 3 × 4 = 12, mais 1 = 13. Quem esquece o 1 chega em 128.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3 \times 4 + 1 = 13"></span>
+          <p><strong>Somar o vai um antes.</strong> O vai um se soma ao resultado da multiplicação, não ao algarismo: 3 × 4 + 1 = 13, e não 3 × (4 + 1) = 15.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="138 + 920 = 1058"></span>
+          <p><strong>Esquecer de deslocar.</strong> Sem o zero de posição, 46 × 23 viraria 138 + 92 = 230 — como se o 2 valesse 2, e não 20.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="305 \times 4 = 1220"></span>
+          <p><strong>Zero no multiplicando.</strong> 4 × 0 = 0, mas o vai um que veio de 4 × 5 ainda entra: 0 + 2 = 2.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a \times 0 = 0, \quad a \times 1 = a"></span>
+          <p><strong>Vezes 0 e vezes 1.</strong> Nenhuma vez o número dá 0; uma vez o número é o próprio número.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a \times b = b \times a"></span>
+          <p><strong>A ordem não importa.</strong> O retângulo girado tem os mesmos quadradinhos. Na subtração e na divisão, a ordem importa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde a multiplicação leva</h2>
+      <p><strong>Divisão.</strong> A <a href="divisao.html">divisão</a> é a multiplicação ao contrário: 1058 ÷ 23 pergunta “23 vezes quanto dá 1058?”. É por isso que ela é a prova real da multiplicação.</p>
+      <p><strong>Potências.</strong> Multiplicar um número por ele mesmo várias vezes tem nome próprio: 2 × 2 × 2 = 2³. As <a href="potencias.html">potências</a> são a multiplicação repetida, como a multiplicação é a soma repetida.</p>
+      <p><strong>Estatística.</strong> A área de um retângulo é base × altura, e a probabilidade de dois eventos independentes acontecerem juntos é o produto das probabilidades: ½ × ½ = ¼ de tirar duas caras seguidas.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 46 × 3 armando a conta.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>3 × 6 = 18: escreve 8, vai 1. 3 × 4 = 12, mais 1 = 13. Produto <strong>138</strong>.</p>
+            <p><a href="?multiplicando=46&amp;multiplicador=3#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 23 × 14.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Primeira linha, 23 × 4 = 92. Segunda, 23 × 10 = 230 (a linha anda uma casa). Soma: 92 + 230 = <strong>322</strong>.</p>
+            <p><a href="?multiplicando=23&amp;multiplicador=14#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Quanto é 125 × 8?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>8 × 5 = 40: escreve 0, vai 4. 8 × 2 = 16, mais 4 = 20: escreve 0, vai 2. 8 × 1 = 8, mais 2 = 10. Produto <strong>1000</strong>.</p>
+            <p><a href="?multiplicando=125&amp;multiplicador=8#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule 305 × 24.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>305 × 4 = 1220 (o 0 do meio recebe o vai um: 4 × 0 + 2 = 2). 305 × 20 = 6100. Soma: <strong>7320</strong>.</p>
+            <p><a href="?multiplicando=305&amp;multiplicador=24#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule 999 × 99. Há um jeito de fazer de cabeça?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Pela conta armada: 999 × 9 = 8991 e 999 × 90 = 89910; somando, <strong>98901</strong>.</p>
+            <p>De cabeça: 999 × 99 = 999 × 100 − 999 = 99900 − 999 = 98901.</p>
+            <p><a href="?multiplicando=999&amp;multiplicador=99#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Um mercado recebeu 12 caixas com 24 ovos cada. Quantos ovos chegaram?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>12 × 24 = 24 × 12: 24 × 2 = 48 e 24 × 10 = 240; somando, <strong>288 ovos</strong>.</p>
+            <p><a href="?multiplicando=24&amp;multiplicador=12#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="subtracao.html" rel="prev"><span>Anterior</span>Subtração — Empréstimo e a Conta Armada</a>
+      <a class="pager-next" href="divisao.html" rel="next"><span>Próximo</span>Divisão — Quociente, Resto e a Conta Armada</a>
+    </nav>
+  </main>
+</body>
+</html>

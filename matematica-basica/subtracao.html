@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Subtração — Empréstimo e a Conta Armada</title>
+  <meta name="description" content="Subtração explicada do zero: tirar com blocos de dezena e unidade, o que são minuendo, subtraendo e diferença, por que se pede emprestado e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/subtracao.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/subtracao.html">
+  <meta property="og:title" content="Subtração — Empréstimo e a Conta Armada">
+  <meta property="og:description" content="Subtração explicada do zero: tirar com blocos de dezena e unidade, o que são minuendo, subtraendo e diferença, por que se pede emprestado e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Subtração — Empréstimo e a Conta Armada">
+  <meta name="twitter:description" content="Subtração explicada do zero: tirar com blocos de dezena e unidade, o que são minuendo, subtraendo e diferença, por que se pede emprestado e uma calculadora que faz a conta à mão, passo a passo, com o nome de cada parte a um clique.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="conta.js"></script>
+  <script defer src="subtracao.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática básica" title="Matemática básica"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Subtração — Empréstimo e a Conta Armada</h1>
+    <p class="page-lede">Subtrair é <strong>tirar</strong> — ou perguntar <strong>quanto falta</strong> de um número até o outro. A conta armada tira casa por casa, da direita para a esquerda; quando numa casa falta o que tirar, ela troca 1 da casa vizinha por 10: é o <strong>empréstimo</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#blocos">Tirar</a>
+      <a href="#partes">As partes</a>
+      <a href="#conta">Conta armada</a>
+      <a href="#porque">Por que funciona</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\text{minuendo} - \text{subtraendo} = \text{diferença}"></span>
+
+    <!-- 1. Blocos de dezena e unidade; estado em ?tem=&tira=. -->
+    <section class="calc intro blocos" id="blocos" aria-labelledby="blk-title">
+      <h2 id="blk-title">Subtrair é tirar</h2>
+      <div class="vars share-vars">
+        <label class="var">
+          <i>tenho</i>
+          <input name="tem" type="range" min="10" max="99" step="1" value="52" aria-label="Quanto se tem">
+          <output class="out-tem">52</output>
+        </label>
+        <label class="var">
+          <i>tiro</i>
+          <input name="tira" type="range" min="0" max="52" step="1" value="17" aria-label="Quanto se tira">
+          <output class="out-tira">17</output>
+        </label>
+      </div>
+      <div class="blk" aria-hidden="true">
+        <div class="blk-col"><div class="blk-tens"></div><span class="share-label">dezenas</span></div>
+        <div class="blk-col"><div class="blk-units"></div><span class="share-label">unidades</span></div>
+      </div>
+      <div class="blk-eq calc-result"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <!-- 2. A conta pronta, com as partes clicáveis; estado em ?a=&b=. -->
+    <section class="calc" id="partes" aria-labelledby="partes-title">
+      <h2 id="partes-title">O nome de cada parte</h2>
+      <p class="calc-lede">Escolha os números e clique em qualquer parte da conta para saber o que ela é — minuendo, subtraendo, diferença, empréstimo — e de onde veio.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Minuendo</span>
+          <input name="a" type="text" inputmode="numeric" value="803" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Subtraendo</span>
+          <input name="b" type="text" inputmode="numeric" value="256" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="52;17">52 − 17</button>
+        <button type="button" data-exemplo="803;256">803 − 256</button>
+        <button type="button" data-exemplo="1000;7">1000 − 7</button>
+        <button type="button" data-exemplo="4005;1238">4005 − 1238</button>
+        <button type="button" data-exemplo="96;43">96 − 43</button>
+      </div>
+
+      <div class="ld-box ld-anat"></div>
+      <div class="ld-info" aria-live="polite"></div>
+      <div class="terms"></div>
+      <p class="prova-label">Tudo se amarra numa igualdade só, a <strong>prova real</strong>:</p>
+      <div class="prova calc-result"></div>
+      <p class="calc-note"></p>
+    </section>
+
+    <!-- 3. A conta armada; estado em ?minuendo=&subtraendo=. -->
+    <section class="calc" id="conta" aria-labelledby="conta-title">
+      <h2 id="conta-title">A conta armada, passo a passo</h2>
+      <p class="calc-lede">Digite uma subtração e avance um passo de cada vez (os números também podem ser clicados). Em cada casa, da direita para a esquerda: se o de cima é menor, <strong>empresta</strong>; depois <strong>subtrai</strong>.</p>
+
+      <div class="calc-fields">
+        <label class="calc-field" data-tone="2">
+          <span>Minuendo</span>
+          <input name="minuendo" type="text" inputmode="numeric" value="52" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="calc-field" data-tone="5">
+          <span>Subtraendo</span>
+          <input name="subtraendo" type="text" inputmode="numeric" value="17" autocomplete="off" spellcheck="false">
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="52;17">52 − 17</button>
+        <button type="button" data-exemplo="96;43">96 − 43</button>
+        <button type="button" data-exemplo="803;256">803 − 256</button>
+        <button type="button" data-exemplo="1000;7">1000 − 7</button>
+        <button type="button" data-exemplo="4005;1238">4005 − 1238</button>
+        <button type="button" data-exemplo="70000;1">70000 − 1</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <div class="ld-stage">
+        <div class="ld-main">
+          <div class="ld-box"></div>
+          <div class="ld-info" aria-live="polite" hidden></div>
+        </div>
+      </div>
+
+      <div class="ld-tags" aria-hidden="true">
+        <span data-tag="Empresta">empresta</span>
+        <span data-tag="Subtrai">subtrai</span>
+      </div>
+      <p class="ld-say" aria-live="polite"></p>
+      <div class="ld-nav">
+        <button type="button" data-nav="first" aria-label="Voltar ao início">⏮</button>
+        <button type="button" data-nav="prev">◀ Voltar</button>
+        <span class="ld-count"></span>
+        <button type="button" data-nav="next" class="is-main">Avançar ▶</button>
+        <button type="button" data-nav="last" aria-label="Mostrar a conta pronta">⏭</button>
+      </div>
+
+      <details class="ld-details">
+        <summary>Ver todos os passos em texto</summary>
+        <ol class="ld-all"></ol>
+      </details>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="porque" aria-labelledby="porque-title">
+      <h2 id="porque-title">Por que a conta funciona</h2>
+      <p>Emprestar é só <strong>trocar</strong>, como trocar uma nota de 10 por dez moedas de 1. Nada se perde e nada se devolve depois — o nome “empréstimo” é antigo; “troca” descreve melhor. O número continua o mesmo, só escrito de outro jeito:</p>
+      <span class="tex-block" data-tex="\begin{aligned} 52 &= 5 \text{ dezenas} + 2 \text{ unidades} \\ &= 4 \text{ dezenas} + 12 \text{ unidades} \\[4pt] 52 - 17 &= (4 - 1) \text{ dezenas} + (12 - 7) \text{ unidades} \\ &= 3 \text{ dezenas} + 5 \text{ unidades} = 35 \end{aligned}"></span>
+      <p>Quando a casa vizinha tem 0, a troca vem de mais longe e desce casa por casa. Em 1000 − 7, o milhar vira 10 centenas; uma centena vira 10 dezenas; uma dezena vira 10 unidades. Fica 9 centenas, 9 dezenas e 10 unidades — os mesmos 1000 —, e agora dá para tirar 7.</p>
+      <span class="tex-block" data-tex="1000 = 9 \text{ centenas} + 9 \text{ dezenas} + 10 \text{ unidades}"></span>
+
+      <div class="tip">
+        <strong>Outros caminhos.</strong> Para o troco, conte para cima: de 37 até 100, são 3 até 40 e mais 60 até 100 — 63. E para subtrair de um número redondo, tire 1 dos dois lados antes: 1000 − 7 = 999 − 6 = 993. Subtrair de 999 nunca pede empréstimo.
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas e casos especiais</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="52 - 17 = 35"></span>
+          <p><strong>Tirar o menor do maior.</strong> Nas unidades, 2 − 7 não dá; quem faz 7 − 2 chega em 45. O de baixo sempre sai do de cima: empreste.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="81 - 35 = 46"></span>
+          <p><strong>Esquecer quem emprestou.</strong> O 8 emprestou 1 e virou 7: 7 − 3 = 4. Quem esquece faz 8 − 3 e chega em 56.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="1000 - 7 = 993"></span>
+          <p><strong>Zeros no meio.</strong> O empréstimo atravessa os zeros, que viram 9. Não é 1003, nem 1007.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="352 - 17 = 335"></span>
+          <p><strong>Alinhar pela direita.</strong> Unidades embaixo de unidades: o 7 vai embaixo do 2, não do 3.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="17 - 52 = -35"></span>
+          <p><strong>A ordem importa.</strong> Ao contrário da soma, trocar a ordem muda o resultado: dá o mesmo número com o sinal trocado.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="35 + 17 = 52"></span>
+          <p><strong>Prova real.</strong> Some a diferença com o que se tirou: tem de voltar ao número do começo.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde a subtração leva</h2>
+      <p><strong>Números negativos.</strong> Tirar mais do que se tem é possível, só que o resultado fica abaixo de zero: 17 − 52 = −35. É a mesma conta ao contrário, com o sinal de menos.</p>
+      <p><strong>Multiplicação e divisão.</strong> A <a href="divisao.html">divisão</a> armada é uma sequência de subtrações: a cada passo tira-se do número da vez o quanto foi repartido. E a <a href="multiplicacao.html">multiplicação</a> usa o mesmo vai um da soma.</p>
+      <p><strong>Estatística.</strong> A amplitude de um conjunto de dados é o maior valor menos o menor; um desvio é um valor menos a média; uma variação é o valor de agora menos o de antes. Medir diferença é subtrair.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule 52 − 17 armando a conta.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Nas unidades, 2 − 7 não dá: o 5 empresta e vira 4, o 2 vira 12. 12 − 7 = 5 e 4 − 1 = 3. Diferença <strong>35</strong>.</p>
+            <p><a href="?minuendo=52&amp;subtraendo=17#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule 81 − 35.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>1 − 5 não dá: o 8 vira 7 e o 1 vira 11. 11 − 5 = 6 e 7 − 3 = 4. Diferença <strong>46</strong>.</p>
+            <p><a href="?minuendo=81&amp;subtraendo=35#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule 803 − 256.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>3 − 6 não dá, e as dezenas têm 0: o 8 vira 7, o 0 vira 9 e o 3 vira 13. 13 − 6 = 7; 9 − 5 = 4; 7 − 2 = 5. Diferença <strong>547</strong>.</p>
+            <p><a href="?minuendo=803&amp;subtraendo=256#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Quanto é 1000 − 7?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O empréstimo atravessa os três zeros: 9 centenas, 9 dezenas e 10 unidades. 10 − 7 = 3, e os 9 descem. Diferença <strong>993</strong>.</p>
+            <p>Prova real: 993 + 7 = 1000.</p>
+            <p><a href="?minuendo=1000&amp;subtraendo=7#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Calcule 4005 − 1238.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>5 − 8 não dá: o empréstimo vem do 4, atravessando dois zeros. Fica 3, 9, 9 e 15. 15 − 8 = 7; 9 − 3 = 6; 9 − 2 = 7; 3 − 1 = 2. Diferença <strong>2767</strong>.</p>
+            <p><a href="?minuendo=4005&amp;subtraendo=1238#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Uma compra deu 37 reais e foi paga com uma nota de 100. Qual é o troco?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>100 − 37 = <strong>63 reais</strong>. Contando para cima: de 37 a 40 são 3, de 40 a 100 são 60.</p>
+            <p><a href="?minuendo=100&amp;subtraendo=37#conta">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="./" rel="prev"><span>Voltar</span>Matemática básica</a>
+      <a class="pager-next" href="multiplicacao.html" rel="next"><span>Próximo</span>Multiplicação — Tabuada, Vai Um e a Conta Armada</a>
+    </nav>
+  </main>
+</body>
+</html>
