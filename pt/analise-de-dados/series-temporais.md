@@ -10,7 +10,7 @@ mathjax: true
 description: "Análise de dados ordenados no tempo para identificar padrões, tendências e fazer previsões."
 ---
 
-<img src="{{ site.baseurl }}/assets/images/timeseries.png" alt="Ilustração de séries temporais" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/timeseries.avif" alt="Ilustração de séries temporais" style="max-width: 600px; display: block; margin: 1em auto;">
 
 As **séries temporais** são conjuntos de dados coletados e organizados em ordem cronológica. Elas permitem analisar como uma variável evolui ao longo do tempo, sendo fundamentais em áreas como economia, finanças, meteorologia, saúde, indústria, web analytics, entre outras.
 

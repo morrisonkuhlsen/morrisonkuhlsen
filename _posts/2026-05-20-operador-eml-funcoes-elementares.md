@@ -218,7 +218,7 @@ O artigo <em>All elementary functions from a single operator</em>, de Andrzej Od
 </div>
 
 <figure style="text-align:center; margin: 2em auto; max-width: 700px;">
-  <img src="/assets/images/eml-phylogenetic-tree.png" alt="Árvore filogenética das funções elementares derivadas do operador EML" style="width:100%; border-radius:8px;" />
+  <img src="/assets/images/eml-phylogenetic-tree.avif" alt="Árvore filogenética das funções elementares derivadas do operador EML" style="width:100%; border-radius:8px;" />
   <figcaption style="margin-top:0.75em; font-size:0.88rem; color:#555;">
     <strong>Figura 1</strong> — Árvore "filogenética" de bootstrapping das funções elementares derivadas do EML como LUCA (<em>Last Universal Common Ancestor</em>) e da constante 1. A espiral se desenrola conforme novas primitivas são descobertas; as setas indicam de quais elementos cada função foi composta. As que usam EML e 1 diretamente estão marcadas com setas grossas. Fonte: Odrzywołek (2026), <em>All elementary functions from a single operator</em>, arXiv:2603.21852v2.
   </figcaption>

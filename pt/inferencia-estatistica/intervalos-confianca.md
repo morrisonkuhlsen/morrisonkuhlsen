@@ -14,7 +14,7 @@ description: "Intervalos que estimam, com um dado nível de confiança, a locali
 
 Um intervalo de confiança é uma estimativa de um parâmetro populacional baseada em uma amostra, fornecendo um intervalo de valores prováveis com um determinado nível de confiança. Em vez de estimar o parâmetro por um único valor (estimativa pontual), o intervalo de confiança fornece um intervalo de valores plausíveis.
 
-![Conceito de Intervalos de Confiança]({{ site.baseurl }}/assets/images/concept.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+![Conceito de Intervalos de Confiança]({{ site.baseurl }}/assets/images/concept.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Assim como a luz do sol que incide sobre a parede revela uma faixa de tonalidade entre sombras e claridade, o intervalo de confiança delimita a região onde, com certo grau de certeza, acreditamos que o verdadeiro valor de um parâmetro populacional se encontra.</div>
 
 ---

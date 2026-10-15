@@ -49,3 +49,7 @@ defaults:
     values:
       layout: page
       lang: pt
+  # Arquivo de verificação do Search Console: precisa existir, mas não é página.
+  - scope: { path: "google420a39717b8e1fc8.html" }
+    values:
+      sitemap: false

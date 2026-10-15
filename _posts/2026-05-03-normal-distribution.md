@@ -227,7 +227,7 @@ This shows that the coefficient $\dfrac{1}{\sigma\sqrt{2\pi}}$ is not arbitrary 
 One of the most widely used properties of the normal distribution is the so-called **empirical rule** (or 68-95-99.7 rule). It describes how much probability is concentrated around the mean:
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/normal.png" alt="68-95-99.7 rule of the normal distribution" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/normal.avif" alt="68-95-99.7 rule of the normal distribution" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figure:</strong> The empirical rule shows that 68%, 95%, and 99.7% of values fall within 1, 2, and 3 standard deviations of the mean, respectively.
   </figcaption>

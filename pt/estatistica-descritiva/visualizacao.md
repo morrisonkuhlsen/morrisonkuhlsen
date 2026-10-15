@@ -27,7 +27,7 @@ A visualização de dados não é apenas sobre criar gráficos bonitos, mas sim 
 Edward Tufte, um dos maiores especialistas em visualização de dados, estabeleceu princípios fundamentais para criar visualizações eficazes:
 
 <div style="text-align: center; margin: 20px 0;">
-  <img src="{{ site.baseurl }}/assets/images/EdwardTufte.jpg" alt="Edward Tufte, especialista em visualização de dados" style="max-width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+  <img src="{{ site.baseurl }}/assets/images/EdwardTufte.avif" alt="Edward Tufte, especialista em visualização de dados" style="max-width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
   <p style="font-style: italic; margin-top: 10px; color: #555;">Edward Tufte, especialista em visualização de dados</p>
 </div>
 

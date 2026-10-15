@@ -22,7 +22,7 @@ A ANOVA rapidamente se tornou uma das ferramentas mais importantes da estatísti
 
 > **Curiosidade:** O termo "variância" também foi cunhado por Fisher, que considerava a decomposição da variância uma das ideias centrais da estatística moderna.
 
-![Exemplo de ANOVA]({{ site.baseurl }}/assets/images/statistics.png){:style="max-width: 600px; display: block; margin: 0 auto;"}
+![Exemplo de ANOVA]({{ site.baseurl }}/assets/images/statistics.avif){:style="max-width: 600px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Estatístico mostrando os resultados</div>
 
 ---

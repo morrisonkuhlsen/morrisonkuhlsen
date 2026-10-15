@@ -10,7 +10,7 @@ mathjax: true
 description: "Procedimentos estatísticos para tomar decisões sobre hipóteses com base em dados amostrais."
 ---
 
-<img src="{{ site.baseurl }}/assets/images/testedehipotese.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/testedehipotese.avif" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
 
 Os **Testes de Hipótese** são procedimentos estatísticos que nos permitem tomar decisões sobre parâmetros populacionais com base em dados amostrais. São ferramentas fundamentais para a inferência estatística e tomada de decisões baseadas em evidências.
 
@@ -319,7 +319,7 @@ Você pode:
 
 ---
 
-<img src="{{ site.baseurl }}/assets/images/teste_erros.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/teste_erros.avif" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
   <strong>A imagem acima ilustra, de forma didática e bem-humorada, os quatro possíveis resultados de um teste diagnóstico ou de hipótese, usando o exemplo de um teste de gravidez. Essa estrutura é chamada de matriz de decisão ou matriz de confusão, muito usada em Estatística, Machine Learning e Testes de Hipóteses.</strong>
 
   <h4 style="margin-top:1em; color:#4361ee;">🧠 Matriz de Decisão (Confusão)</h4>

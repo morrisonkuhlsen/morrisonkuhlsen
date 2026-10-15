@@ -227,7 +227,7 @@ Isso demonstra que o coeficiente $\dfrac{1}{\sigma\sqrt{2\pi}}$ não é arbitrá
 Uma das propriedades mais usadas da distribuição normal é a chamada **regra empírica** (ou regra 68-95-99,7). Ela descreve quanto da probabilidade está concentrada em torno da média:
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
-  <img src="/assets/images/normal.png" alt="Regra 68-95-99,7 da distribuição normal" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/normal.avif" alt="Regra 68-95-99,7 da distribuição normal" style="max-width: 80%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
     <strong>Figura:</strong> A regra empírica mostra que 68%, 95% e 99,7% dos valores se concentram a 1, 2 e 3 desvios padrão da média, respectivamente.
   </figcaption>

@@ -59,9 +59,9 @@ ads:
     - url: /blog
       site: "morrisonkuhlsen.com"
       images:
-        - /assets/images/concept.png
-        - /assets/images/dados.png
-        - /assets/images/office.png
+        - /assets/images/concept.avif
+        - /assets/images/dados.avif
+        - /assets/images/office.avif
       headline:
         pt: ["Estatística", "descomplicada."]
         en: ["Statistics", "made simple."]

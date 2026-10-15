@@ -10,7 +10,7 @@ mathjax: true
 description: "Funções de amostras utilizadas para estimar parâmetros desconhecidos de uma população."
 ---
 
-![Estimadores Estatísticos]({{ site.baseurl }}/assets/images/estimadores.png){:style="max-width: 600px; display: block; margin: 0 auto;"}
+![Estimadores Estatísticos]({{ site.baseurl }}/assets/images/estimadores.avif){:style="max-width: 600px; display: block; margin: 0 auto;"}
 
 $$
 \text{Dados} \;\longrightarrow\; \text{Distribuição} \;\longrightarrow\; \text{Verossimilhança} \;\longrightarrow\; \text{Suficiência} \;\longrightarrow\; \text{Estimador} \;\longrightarrow\; \text{Inferência} \;\longrightarrow\; \text{Decisão}

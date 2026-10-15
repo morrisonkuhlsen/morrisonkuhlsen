@@ -10,7 +10,7 @@ mathjax: true
 description: "Método estatístico para modelar a relação linear entre variáveis independentes e dependentes."
 ---
 
-<img src="{{ site.baseurl }}/assets/images/regressao.png" alt="Ilustração de regressão linear" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/regressao.avif" alt="Ilustração de regressão linear" style="max-width: 600px; display: block; margin: 1em auto;">
 
 A regressão linear é uma das técnicas estatísticas mais utilizadas para modelar a relação entre duas variáveis quantitativas. Ela permite prever o valor de uma variável (dependente) a partir do valor de outra (independente), ajustando uma reta aos dados observados.
 

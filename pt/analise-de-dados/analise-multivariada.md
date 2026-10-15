@@ -10,7 +10,7 @@ mathjax: true
 description: "Técnicas para analisar simultaneamente múltiplas variáveis em um conjunto de dados."
 ---
 
-<img src="{{ site.baseurl }}/assets/images/multivariate.png" alt="Ilustração de análise multivariada" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/multivariate.avif" alt="Ilustração de análise multivariada" style="max-width: 600px; display: block; margin: 1em auto;">
 
 A análise multivariada é um conjunto de técnicas estatísticas utilizadas para analisar dados que envolvem mais de uma variável ao mesmo tempo. Ela permite compreender relações complexas entre variáveis, identificar padrões ocultos e construir modelos preditivos mais robustos e realistas.
 

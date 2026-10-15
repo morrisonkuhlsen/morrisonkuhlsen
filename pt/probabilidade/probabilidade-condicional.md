@@ -419,7 +419,7 @@ O uso de partições no Teorema de Bayes é fundamental para:
 
 ### 6.1 Exercício Resolvido: Estudo Epidemiológico
 
-![Ilustração de carrapatos]({{ site.baseurl }}/assets/images/carrapato.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+![Ilustração de carrapatos]({{ site.baseurl }}/assets/images/carrapato.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Diferentes tipos de carrapatos que podem transmitir doenças</div>
 
 > **Problema**: Carrapatos podem transportar tanto a doença de <span style="color:indigo;">**Lyme**</span> quanto a <span style="color:steelblue;">**erliquiose granulocítica humana (HGE)**</span>. Em um estudo com carrapatos no *mid-west americano* foi descoberto que:
@@ -734,7 +734,7 @@ analise_completa_hiv()</code></pre>
 
 ### 6.3 Exercício Resolvido: Controle de Qualidade
 
-![Ilustração de controle de qualidade]({{ site.baseurl }}/assets/images/qualidade.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+![Ilustração de controle de qualidade]({{ site.baseurl }}/assets/images/qualidade.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Processo de controle de qualidade em linha de produção</div>
 
 > **Problema**: Suponha que em uma fábrica, **2** em cada **1000** produtos `são defeituosos`. A fábrica realiza um teste de qualidade que pode resultar em `defeituoso (D)` ou em `perfeitas condições (E)`. Suponha que o teste acerte a resposta em **95% dos casos**, isto é, para um produto que é defeituoso ou não, o teste dá o resultado correto 95% das vezes.
@@ -853,7 +853,7 @@ analise_controle_qualidade()</code></pre>
 
 ### 6.4 Exercício Resolvido: Previsão do Tempo
 
-![Ilustração de previsão do tempo]({{ site.baseurl }}/assets/images/chuva.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+![Ilustração de previsão do tempo]({{ site.baseurl }}/assets/images/chuva.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Previsão meteorológica e probabilidade de chuva</div>
 
 > **Problema**: Suponha que, em uma determinada cidade, 1 em cada 10 dias de verão apresenta chuvas. Um meteorologista utiliza um modelo de previsão do tempo que, em média, acerta a previsão de chuvas em 80% dos casos. Isso significa que, se vai chover, o modelo tem 80% de chance de prever "chuva", e se não vai chover, ele tem 80% de chance de prever "sem chuva".

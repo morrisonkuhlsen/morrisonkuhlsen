@@ -78,7 +78,7 @@ Cada painel soma 100% ao longo do ano — é a única forma de comparar escorpi�
 A média nacional esconde um problema: o regime de chuvas do Norte não tem nada a ver com o do Sul, e as espécies dominantes mudam de bioma. Refiz a mesma normalização, mas cruzando **quatro animais × cinco regiões**, e sobrepus a faixa climática (temperatura e chuva mensal, via NASA POWER) na mesma escala de coluna.
 
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 1.5em 0 2em 0;">
-  <img src="/assets/images/sazonalidade_peconhentos_regioes_clima.png" alt="Matriz de dezesseis painéis cruzando quatro animais peçonhentos com cinco regiões do Brasil, mais uma linha de clima com temperatura e chuva mensal por região" style="max-width: 1100px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
+  <img src="/assets/images/sazonalidade_peconhentos_regioes_clima.avif" alt="Matriz de dezesseis painéis cruzando quatro animais peçonhentos com cinco regiões do Brasil, mais uma linha de clima com temperatura e chuva mensal por região" style="max-width: 1100px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
 </figure>
 
 O contraste mais claro é **Norte/Nordeste versus Sul**:

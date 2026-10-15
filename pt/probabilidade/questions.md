@@ -12,7 +12,7 @@ mathjax: true
 ## Questões Práticas Resolvidas
 
 <div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/lampiao.png" alt="Lampião a querosene" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/lampiao.avif" alt="Lampião a querosene" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">🎲 Questão de Probabilidade: Lampiões em uma Vila</h4>
   <p><strong>Enunciado:</strong></p>
   <p>Em uma vila onde o fornecimento elétrico é instável, cada morador possui um lampião a querosene. Estudos mostram que, em média, 1 em cada 5 lampiões falha ao ser aceso devido a impurezas no combustível.</p>
@@ -101,7 +101,7 @@ Com o combustível filtrado, a probabilidade de nenhum lampião falhar é de **5
 </div>
 
 <div style="border-left: 4px solid #2196F3; padding: 1em; background-color: #e3f2fd; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/lampiao.png" alt="Lampião a querosene" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/lampiao.avif" alt="Lampião a querosene" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">🎲 Questão 2: A Vida Útil dos Lampiões (Distribuição Exponencial)</h4>
   <p><strong>Enunciado:</strong></p>
   <p>Sabe-se que a vida útil (em horas) de um lampião de citronela segue uma <strong>distribuição exponencial</strong> com média de 6 horas (ou seja, o parâmetro de taxa $\lambda = 1/6$).</p>
@@ -194,7 +194,7 @@ A probabilidade de o lampião durar pelo menos mais 4 horas é de **51,34%**, in
 </div>
 
 <div style="border-left: 4px solid #673AB7; padding: 1em; background-color: #ede7f6; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/telephone.png" alt="Telefone antigo" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/telephone.avif" alt="Telefone antigo" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">📞 Questão 3: Chamadas em um Call Center (Distribuição de Poisson)</h4>
   <p><strong>Enunciado:</strong></p>
   <p>Um pequeno call center recebe chamadas a uma taxa média de 12 chamadas por hora. O número de chamadas recebidas segue uma <strong>distribuição de Poisson</strong>.</p>
@@ -276,7 +276,7 @@ A probabilidade de receber mais de 3 chamadas em 20 minutos é de **56,65%**.
 </div>
 
 <div style="border-left: 4px solid #FF9800; padding: 1em; background-color: #fff3e0; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/telephone.png" alt="Telefone antigo" style="float: right; width: 320px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/telephone.avif" alt="Telefone antigo" style="float: right; width: 320px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">📞 Questão 4: Duração das Chamadas (Distribuição Normal)</h4>
   <p><strong>Enunciado:</strong></p>
   <p>A duração das chamadas de suporte técnico em um call center segue uma <strong>distribuição Normal</strong> com uma média ($\mu$) de 10 minutos e um desvio padrão ($\sigma$) de 2 minutos.</p>
@@ -343,7 +343,7 @@ As 5% chamadas mais longas duram pelo menos **13,29 minutos**.
 </div>
 
 <div style="border-left: 4px solid #009688; padding: 1em; background-color: #e0f2f1; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/boxkite.png" alt="Pipa de caixa (box kite)" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/boxkite.avif" alt="Pipa de caixa (box kite)" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">🪁 Questão 5: Tentativas para Empinar Pipa (Distribuição Geométrica)</h4>
   <p><strong>Enunciado:</strong></p>
   <p>Um entusiasta de pipas sabe que, devido às condições variáveis do vento, a probabilidade de conseguir empinar sua pipa em uma determinada tentativa é de 40% (p=0.4). Cada tentativa é independente da anterior.</p>
@@ -405,7 +405,7 @@ A probabilidade de precisar de mais de 4 tentativas para empinar a pipa é de **
 </div>
 
 <div style="border-left: 4px solid #009688; padding: 1em; background-color: #e0f2f1; margin: 1em 0; border-radius: 4px;">
-  <img src="{{ site.baseurl }}/assets/images/boxkite.png" alt="Pipa de caixa (box kite)" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
+  <img src="{{ site.baseurl }}/assets/images/boxkite.avif" alt="Pipa de caixa (box kite)" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">🪁 Questão 6: Múltiplos Sucessos com a Pipa (Binomial Negativa)</h4>
   <p><strong>Enunciado:</strong></p>
   <p>O mesmo entusiasta de pipas, com uma probabilidade de sucesso de 40% em cada tentativa, agora quer conseguir empinar a pipa um total de 3 vezes para praticar uma manobra. As tentativas são independentes.</p>

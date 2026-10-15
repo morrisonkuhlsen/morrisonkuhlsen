@@ -22,7 +22,7 @@ Para que a inferência seja **válida**, três condições fundamentais devem se
 <strong>Lei dos rendimentos decrescentes:</strong> O erro padrão da média é \(\text{SE}(\bar{X}) = \sigma/\sqrt{n}\). Com \(n = 100\): \(\text{SE} = \sigma/10\). Com \(n = 400\): \(\text{SE} = \sigma/20\). Quadruplicar a amostra <em>dobra</em> a precisão — mas nunca a elimina por completo.
 </div>
 
-![Amostragem]({{ site.baseurl }}/assets/images/amostragem.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
+![Amostragem]({{ site.baseurl }}/assets/images/amostragem.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
 <div class="image-caption" style="text-align: center;">Figura: Exemplo visual de amostragem em uma população.</div>
 
 ---
