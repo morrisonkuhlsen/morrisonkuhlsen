@@ -1,71 +1,7 @@
-/* Home: hero em duas colunas (texto + tábua de Galton) e o destaque com uma
-   coluna lateral. Tudo aqui só existe dentro de .home. */
+/* Home: o destaque com uma coluna lateral. Tudo aqui só existe dentro de
+   .home. */
 
 .home { --container: 90rem; }
-
-/* ─── Hero dividido ───────────────────────────────────────────────────────── */
-
-.galton { display: none; }
-
-@media (min-width: 64rem) {
-  .hero__body--split {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
-    align-items: end;
-    gap: clamp(2rem, 4vw, 5rem);
-  }
-
-  .galton {
-    display: block;
-    position: relative;
-    isolation: isolate;
-    /* Sobe o painel para não ser coberto pelo destaque, que invade o hero. */
-    margin-bottom: 3rem;
-    padding: 1rem 1rem 1.1rem;
-  }
-
-  /* O vidro é uma faixa atrás do painel: entra em degradê pela esquerda e,
-     pela direita, vai até a borda da página — a distância do painel até ela
-     é a margem do container mais o gutter. O hero tem overflow: hidden, então
-     o 100vw (que conta a barra de rolagem) não cria rolagem horizontal. */
-  .galton::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    inset: 0 calc(-1 * (max(0px, (100vw - var(--container)) / 2) + var(--gutter))) 0 -7rem;
-    background: var(--glass-bg);
-    backdrop-filter: blur(8px);
-    mask-image: linear-gradient(to right, transparent, #000 8rem);
-  }
-}
-
-.galton__canvas {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 0.9;
-}
-
-.galton__cap {
-  margin-top: 0.75rem;
-  font-size: var(--step--1);
-  line-height: 1.45;
-  color: var(--on-dark-soft);
-}
-
-.galton__count {
-  display: block;
-  margin-bottom: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--galton-curve);
-}
-
-.galton__cap a {
-  display: inline-block;
-  margin-top: 0.5rem;
-  font-weight: 700;
-  color: var(--on-dark);
-}
 
 /* ─── Destaque + coluna lateral ──────────────────────────────────────────── */
 

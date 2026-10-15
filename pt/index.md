@@ -8,7 +8,6 @@ permalink: /
 order: 0
 mathjax: true
 
-hero_galton: true
 hero_title: "Estatística que se entende"
 hero_lede: "Conceitos técnicos em linguagem clara, com exemplos práticos e ferramentas interativas."
 hero_cta_text: "Ver os artigos"
