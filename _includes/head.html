@@ -12,7 +12,19 @@
 {{ page.description | default: page.excerpt | default: site.data.site.tagline[lang] | strip_html | normalize_whitespace | truncate: 200 }}
 {%- endcapture -%}
 
-{%- assign social_image = page.image | default: seo.social_card | absolute_url -%}
+{%- comment -%}
+  WhatsApp, Facebook e LinkedIn não mostram AVIF na og:image. Capa em AVIF
+  usa o JPG 1200×630 de mesmo nome em assets/images/social/; sem ele, o card
+  padrão do site.
+{%- endcomment -%}
+{%- assign social_src = page.image -%}
+{%- if social_src contains '.avif' -%}
+  {%- assign social_base = social_src | split: '/' | last | replace: '.avif', '' -%}
+  {%- assign social_jpg = '/assets/images/social/' | append: social_base | append: '.jpg' -%}
+  {%- assign social_file = site.static_files | where: 'path', social_jpg | first -%}
+  {%- if social_file -%}{%- assign social_src = social_jpg -%}{%- else -%}{%- assign social_src = nil -%}{%- endif -%}
+{%- endif -%}
+{%- assign social_image = social_src | default: seo.social_card | absolute_url -%}
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
