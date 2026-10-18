@@ -80,6 +80,58 @@
     }
   }
 
+  // Progresso só neste navegador: a lista de ids resolvidos fica no
+  // localStorage, que pode estar bloqueado (aba anônima, cookies desligados).
+  const SOLVED_KEY = "dailystats.solved";
+
+  function loadSolved() {
+    try {
+      const list = JSON.parse(localStorage.getItem(SOLVED_KEY) || "[]");
+      return new Set(Array.isArray(list) ? list : []);
+    } catch (e) {
+      return new Set();
+    }
+  }
+
+  function saveSolved(solved) {
+    try { localStorage.setItem(SOLVED_KEY, JSON.stringify([...solved])); } catch (e) {}
+  }
+
+  function renderSolvedToggle(problem, solved) {
+    const button = document.getElementById("solvedToggle");
+    const done = solved.has(problem.id);
+    button.setAttribute("aria-pressed", String(done));
+    button.textContent = done ? "solved ✓" : "mark as solved";
+  }
+
+  // Semanas já publicadas, da mais recente para a mais antiga, sem a atual.
+  // A rotação recomeça depois do último problema, então cada id aparece uma
+  // vez só, na semana mais recente em que saiu.
+  function renderArchive(currentWeek, shownWeek, solved) {
+    const list = document.getElementById("archiveList");
+    const seen = new Set();
+    list.textContent = "";
+    for (let week = new Date(currentWeek); weeksSinceFirstProblem(week) >= 0; week.setDate(week.getDate() - 7)) {
+      const problem = pickProblemForDate(week);
+      if (!problem || seen.has(problem.id)) continue;
+      seen.add(problem.id);
+      if (week.getTime() === currentWeek.getTime()) continue;
+
+      const date = getYYYYMMDD(week);
+      const item = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `?date=${date}`;
+      link.textContent = problem.title;
+      if (week.getTime() === shownWeek.getTime()) link.setAttribute("aria-current", "page");
+      const meta = document.createElement("span");
+      meta.className = "archive-meta";
+      meta.textContent = `${problem.id} · ${date}${solved.has(problem.id) ? " · solved ✓" : ""}`;
+      item.append(link, meta);
+      list.append(item);
+    }
+    document.getElementById("archive").hidden = list.children.length === 0;
+  }
+
   function updateTimeLeft() {
     const now = new Date();
     const next = getNextRollover(now);
@@ -148,6 +200,17 @@
 
     const problem = pickProblemForDate(problemDate);
     renderProblem(problem, dateStr);
+
+    const solved = loadSolved();
+    renderSolvedToggle(problem, solved);
+    renderArchive(maxAllowed, problemDate, solved);
+    document.getElementById("solvedToggle").addEventListener("click", function () {
+      if (solved.has(problem.id)) solved.delete(problem.id);
+      else solved.add(problem.id);
+      saveSolved(solved);
+      renderSolvedToggle(problem, solved);
+      renderArchive(maxAllowed, problemDate, solved);
+    });
 
     updateTimeLeft();
     setInterval(updateTimeLeft, 1000);

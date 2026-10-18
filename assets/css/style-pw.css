@@ -111,11 +111,13 @@ main {
   flex: 1;
   padding: 18px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.content {
+.content,
+.archive {
   width: min(820px, 100%);
   padding: clamp(8px, 2vw, 12px);
 }
@@ -172,6 +174,69 @@ details > div {
   color: var(--muted);
   font-size: 0.95rem;
   margin-top: 18px;
+}
+
+.solved-toggle {
+  margin-top: 14px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border, rgba(128,128,128,0.35));
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.solved-toggle:hover {
+  color: var(--fg);
+}
+
+.solved-toggle[aria-pressed="true"] {
+  color: var(--fg);
+  border-color: currentColor;
+}
+
+.archive {
+  margin-top: 2.5rem;
+  padding: 0 clamp(8px, 2vw, 12px);
+}
+
+.archive h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.archive-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.archive-list li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border, rgba(128,128,128,0.2));
+}
+
+.archive-list a {
+  color: var(--fg);
+  text-underline-offset: 3px;
+}
+
+.archive-list a[aria-current="page"] {
+  font-weight: 700;
+}
+
+.archive-meta {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--muted);
 }
 
 footer {
@@ -351,6 +416,7 @@ mjx-container[display="true"] {
   }
 
   .content,
+  .archive,
   .topbar {
     padding: 0;
   }
