@@ -126,4 +126,12 @@ a.home-aside__card:hover { transform: translateY(-3px); }
   background: var(--paper);
   border: 1px solid var(--line);
 }
-.home-tools .home-aside__chips a:hover { border-color: var(--accent); }
+/* O hover precisa repetir o seletor: com fundo --paper vencendo o
+   .home-aside__chips a:hover (mesma especificidade, declarado antes), só a
+   cor do texto trocava — --accent-ink, escuro no tema escuro, sobre --paper
+   escuro, e o chip sumia. */
+.home-tools .home-aside__chips a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
