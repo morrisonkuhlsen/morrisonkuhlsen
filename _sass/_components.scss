@@ -65,8 +65,8 @@
 .post-card__badge {
   padding: 0.15rem 0.45rem;
   border-radius: 2px;
-  background: var(--highlight);
-  color: var(--on-dark);
+  background: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -76,8 +76,10 @@
   line-height: 1.25;
 }
 
-.post-card__title a { text-decoration: none; color: var(--accent); }
-.post-card__title a:hover { text-decoration: underline; }
+/* Em --ink: três títulos azuis em negrito pesavam mais que as capas. O azul
+   fica para o hover, que já indica que é link. */
+.post-card__title a { text-decoration: none; color: var(--ink); transition: color var(--speed) var(--ease); }
+.post-card__title a:hover { color: var(--accent); text-decoration: underline; }
 
 .post-card__excerpt { color: var(--ink-soft); font-size: var(--step--1); }
 

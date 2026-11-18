@@ -1,6 +1,10 @@
 {%- assign lang = page.lang | default: site.lang -%}
 {%- assign ui = site.data.site.ui -%}
 {%- assign posts = site.posts | where: "lang", lang -%}
+{%- comment -%}
+  Mostra `limit` posts e um link para o blog, que tem a lista completa com
+  filtros. O antigo "Mostrar mais" repetia o blog dentro da home.
+{%- endcomment -%}
 {%- assign initial = include.limit | default: 3 | plus: 0 -%}
 {%- comment -%}
   Com skip_featured, a grade pula o post do card de destaque da home.
@@ -10,14 +14,25 @@
   {%- include featured-post.html -%}
   {%- assign skip_url = featured.url -%}
 {%- endif -%}
+{%- assign blog = site.pages | where: "ref", "blog" | where: "lang", lang | first -%}
+{%- assign blog_url = blog.url | default: "/blog/" -%}
 {%- assign shown = 0 -%}
+
+<div class="section-head">
+  <h2 class="section-head__title">{{ ui.recent[lang] }}</h2>
+  <a class="read-more section-head__link" href="{{ blog_url | relative_url }}">
+    {{ ui.all_posts[lang] }}
+    <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+  </a>
+</div>
 
 <div class="grid" style="--min: 20rem">
   {%- for post in posts -%}
     {%- if post.url == skip_url -%}{%- continue -%}{%- endif -%}
+    {%- if shown >= initial -%}{%- break -%}{%- endif -%}
     {%- assign shown = shown | plus: 1 -%}
     {%- assign read_min = post.content | number_of_words | divided_by: 200 | plus: 1 -%}
-    <article class="post-card post-item" {% if shown > initial %}hidden{% endif %}>
+    <article class="post-card">
       {%- if post.image -%}
         <a href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">
           <img class="post-card__img" src="{{ post.image | relative_url }}"
@@ -28,7 +43,7 @@
         <div class="post-card__meta">
           {%- if post.url == posts.first.url %}<span class="post-card__badge">{{ ui.fresh[lang] }}</span>{% endif -%}
           <time datetime="{{ post.date | date_to_xmlschema }}">
-            {{ post.date | date: "%-d/%m/%Y" }}
+            {% include date.html date=post.date short=true %}
           </time>
           <span>{{ read_min }} {{ ui.read_time[lang] }}</span>
         </div>
@@ -40,9 +55,3 @@
     </article>
   {%- endfor -%}
 </div>
-
-{%- if shown > initial -%}
-  <p style="text-align:center;margin-top:2.5rem">
-    <button class="btn btn--primary" type="button" data-show-more="3">{{ ui.more[lang] }}</button>
-  </p>
-{%- endif -%}

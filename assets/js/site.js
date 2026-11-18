@@ -152,19 +152,6 @@
     });
   }
 
-  /* ── "Mostrar mais" na lista de posts ────────────────────────────────────── */
-  function initShowMore() {
-    var button = document.querySelector('[data-show-more]');
-    if (!button) return;
-    var step = parseInt(button.dataset.showMore, 10) || 3;
-
-    button.addEventListener('click', function () {
-      var hidden = document.querySelectorAll('.post-item[hidden]');
-      for (var i = 0; i < step && hidden[i]; i++) hidden[i].hidden = false;
-      if (!document.querySelector('.post-item[hidden]')) button.hidden = true;
-    });
-  }
-
   /* ── Índice do post ──────────────────────────────────────────────────────
      Porta o bootstrap-toc da versão 1.0 para JS puro: mesma árvore
      (ul.nav > li > a.nav-link + ul.nav aninhada), sub-listas fechadas e
@@ -791,7 +778,6 @@
     initHeader();
     initMegaMenu();
     initDrawer();
-    initShowMore();
     initToc();
     initTheme();
     initBlog();

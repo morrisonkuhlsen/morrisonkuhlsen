@@ -5,7 +5,16 @@
 {%- assign lang = page.lang | default: site.lang -%}
 {%- assign day = include.date | date: "%-d" -%}
 {%- assign year = include.date | date: "%Y" -%}
-{%- if lang == 'pt' -%}
+{%- comment -%} short=true: "9 out. 2026" / "Oct 9, 2026", para os cards. {%- endcomment -%}
+{%- if include.short -%}
+  {%- if lang == 'pt' -%}
+    {%- assign months = "jan.,fev.,mar.,abr.,mai.,jun.,jul.,ago.,set.,out.,nov.,dez." | split: "," -%}
+    {%- assign index = include.date | date: "%-m" | minus: 1 -%}
+    {{ day }} {{ months[index] }} {{ year }}
+  {%- else -%}
+    {{ include.date | date: "%b" }} {{ day }}, {{ year }}
+  {%- endif -%}
+{%- elsif lang == 'pt' -%}
   {%- assign months = "janeiro,fevereiro,março,abril,maio,junho,julho,agosto,setembro,outubro,novembro,dezembro" | split: "," -%}
   {%- assign index = include.date | date: "%-m" | minus: 1 -%}
   {{ day }} de {{ months[index] }} de {{ year }}

@@ -20,7 +20,7 @@
       {%- else -%}
         <span class="post-card__badge">{{ ui.featured[lang] }}</span>
       {%- endif -%}
-      <time datetime="{{ featured.date | date_to_xmlschema }}">{{ featured.date | date: "%-d/%m/%Y" }}</time>
+      <time datetime="{{ featured.date | date_to_xmlschema }}">{% include date.html date=featured.date short=true %}</time>
       <span>{{ read_min }} {{ ui.read_time[lang] }}</span>
     </div>
     <h2 class="feature-card__title">

@@ -67,7 +67,7 @@
           <div class="post-card__body">
             <div class="post-card__meta">
               <time datetime="{{ p.date | date_to_xmlschema }}">
-                {{ p.date | date: "%-d/%m/%Y" }}
+                {% include date.html date=p.date short=true %}
               </time>
             </div>
             <h3 class="post-card__title">

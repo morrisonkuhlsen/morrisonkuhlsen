@@ -9,6 +9,11 @@
   overflow: hidden;
 }
 
+/* A faixa de categorias fecha a home: com a margem de cima, sobrava uma tira
+   branca entre ela e o rodapé. (Não dá para usar :last-child — os <script>
+   do letreiro vêm depois da seção.) */
+.site-main:has(> .tags-section) + .site-footer { margin-top: 0; }
+
 /* Marca d'água de fórmulas. É um SVG em data URI que se repete, então cobre
    qualquer altura de rodapé sem DOM extra e sem MathJax — a notação vem de
    caracteres Unicode numa serifada em itálico. A cor é fixa porque o fundo do

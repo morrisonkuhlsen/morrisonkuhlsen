@@ -24,6 +24,8 @@ ui:
   featured:   { pt: "DESTAQUE",         en: "FEATURED" }
   read_time:  { pt: "min de leitura",   en: "min read" }
   more:       { pt: "Mostrar mais",     en: "Show more" }
+  recent:     { pt: "Artigos recentes", en: "Recent articles" }
+  all_posts:  { pt: "Ver todos no blog", en: "See all on the blog" }
   read_more:  { pt: "Leia mais",        en: "Read more" }
   share:      { pt: "Compartilhar",     en: "Share" }
   copy_link:  { pt: "Copiar link",      en: "Copy link" }
