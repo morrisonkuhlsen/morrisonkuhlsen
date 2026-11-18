@@ -5,10 +5,10 @@
 # (assets/js/tools-board.js).
 
 pt:
-  - { name: "Standard Normal Table", url: "/ztable.html", board: z }
-  - { name: "Student's T Table",     url: "/ttable.html", board: t }
-  - { name: "Snedecor F Table",      url: "/ftable.html", board: f }
-  - { name: "Chi-Square Table",      url: "/chitable.html", board: chi }
+  - { name: "Tabela normal padrão (Z)", url: "/ztable.html", board: z }
+  - { name: "Tabela t de Student",      url: "/ttable.html", board: t }
+  - { name: "Tabela F de Snedecor",     url: "/ftable.html", board: f }
+  - { name: "Tabela qui-quadrado",      url: "/chitable.html", board: chi }
   - { name: "Fórmulas",              url: "/formulas/", board: formulas }
   - { name: "Testes estatísticos",   url: "/testes-estatisticos/", board: testes }
   - { name: "Glossário",             url: "/pt/glossario", board: glossario }

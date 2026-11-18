@@ -83,8 +83,8 @@ ads:
 
 footer_links:
   pt:
-    - { name: "Privacy policy", url: "/pt/privacy-policy" }
-    - { name: "Cookie policy",  url: "/pt/cookie-policy" }
+    - { name: "Política de privacidade", url: "/pt/privacy-policy" }
+    - { name: "Política de cookies",     url: "/pt/cookie-policy" }
   en:
     - { name: "Privacy policy", url: "/en/privacy-policy" }
     - { name: "Cookie policy",  url: "/en/cookie-policy" }
