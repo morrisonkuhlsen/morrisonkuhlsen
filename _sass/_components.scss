@@ -140,6 +140,17 @@
 
 .feature-card__text { margin-top: 0.75rem; color: var(--ink-soft); max-width: var(--measure); }
 
+/* No celular o resumo de 60 palavras passava de nove linhas. */
+@media (max-width: 47.99rem) {
+  .feature-card__text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    overflow: hidden;
+  }
+}
+
 .read-more {
   display: inline-flex;
   align-items: center;
@@ -245,6 +256,14 @@
      nas laterais em vez de disputar a leitura com eles. */
   -webkit-mask-image: radial-gradient(ellipse 42% 75% at 50% 50%, transparent 55%, #000 100%);
   mask-image: radial-gradient(ellipse 42% 75% at 50% 50%, transparent 55%, #000 100%);
+}
+
+/* No celular o título ocupa a largura toda e não sobra lateral para o
+   letreiro: as palhetas das bordas encostavam em "Navegar por categoria".
+   visibility, e não display: none, para o canvas manter o tamanho que o
+   tags-board.js mede. */
+@media (max-width: 39.99rem) {
+  .tags-board { visibility: hidden; }
 }
 
 /* Sobre o painel, o chip precisa de fundo próprio */

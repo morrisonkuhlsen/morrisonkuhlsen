@@ -29,7 +29,16 @@
     <a class="home-aside__card" href="{{ '/pt/glossario' | relative_url }}#{{ term.slug }}">
       <span class="home-aside__kicker">{% if lang == 'en' %}From the glossary{% else %}Do glossário{% endif %}</span>
       <strong class="home-aside__term">{{ term.termo }}</strong>
-      <p>{{ term.def | markdownify | strip_html | truncatewords: 32 }}</p>
+      {%- comment -%}
+        Só a primeira frase: cortar por número de palavras parava no meio de
+        uma ("…estar naquele..."). O espaço anexado antes do split faz o ponto
+        final de uma definição de frase única também servir de separador.
+        Nenhuma primeira frase do glossário passa de 30 palavras; o
+        truncatewords fica só de rede de segurança.
+      {%- endcomment -%}
+      {%- assign def_text = term.def | markdownify | strip_html | strip | append: " " -%}
+      {%- assign first_sentence = def_text | split: ". " | first | strip | truncatewords: 40 -%}
+      <p>{{ first_sentence }}{% unless first_sentence contains "..." %}.{% endunless %}</p>
     </a>
   {%- endif -%}
 </aside>
