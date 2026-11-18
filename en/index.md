@@ -13,12 +13,6 @@ hero_lede: "Technical concepts in plain language, with worked examples and inter
 hero_cta_text: "Browse the articles"
 hero_cta_url: "#articles"
 hero_image: /assets/images/spiral.avif
-hero_slideshow:
-  - { src: /assets/images/spiral.avif,    alt: "Spiral" }
-  - { src: /assets/images/dados.avif,     alt: "Dice" }
-  - { src: /assets/images/office.avif,    alt: "Office" }
-  - { src: /assets/images/hourglass.avif, alt: "Hourglass" }
-  - { src: /assets/images/cartas.avif,    alt: "Playing cards" }
 ---
 
 {%- include feature-post.html id="articles" -%}

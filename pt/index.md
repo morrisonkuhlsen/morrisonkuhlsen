@@ -13,14 +13,6 @@ hero_lede: "Conceitos técnicos em linguagem clara, com exemplos práticos e fer
 hero_cta_text: "Ver os artigos"
 hero_cta_url: "#artigos"
 hero_image: /assets/images/spiral.avif
-hero_slideshow:
-  - { src: /assets/images/spiral.avif,          alt: "Espiral" }
-  - { src: /assets/images/dados.avif,           alt: "Dados" }
-  - { src: /assets/images/office.avif,          alt: "Escritório" }
-  - { src: /assets/images/hourglass.avif,       alt: "Ampulheta" }
-  - { src: /assets/images/cartas.avif,          alt: "Cartas de baralho" }
-  - { src: /assets/images/mkh-background.avif,  alt: "" }
-  - { src: /assets/images/mkh-background-2.avif, alt: "" }
 ---
 
 {%- include feature-post.html id="artigos" -%}
