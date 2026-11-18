@@ -72,6 +72,8 @@
 }
 
 .hero__cta { margin-top: 2rem; }
+.hero .btn--primary { background: var(--hero-cta); color: var(--on-dark); }
+.hero .btn--primary:hover { background: var(--hero-cta-hover); }
 
 /* Slideshow: as imagens se alternam por classe, sem biblioteca. */
 .hero__media img {

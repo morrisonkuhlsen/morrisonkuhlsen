@@ -34,6 +34,11 @@
   --code-bg:      #14161c;
   --code-ink:     #e8eaf0;
   --footer-bg:    #14161c;
+  /* Botão sobre o hero, que é escuro nos dois temas: no tema escuro o
+     --accent clareia e o botão ficava lavado sobre a foto. Não é redefinido
+     em [data-theme="dark"] de propósito. */
+  --hero-cta:       #2540d8;
+  --hero-cta-hover: #1a2fa3;
   --toc-ink:      #767676;
   --toc-active:   #0066cc;
   --chip-bg:      #f2f2f2;
