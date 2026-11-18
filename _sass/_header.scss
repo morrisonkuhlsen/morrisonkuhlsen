@@ -56,8 +56,11 @@
 }
 
 /* No fundo branco a mesma marca pesa mais, porque o contraste é maior. */
-.site-header:not(.is-over-hero)::after,
-.site-header.is-scrolled::after { opacity: 0.05; }
+.site-header:not(.is-over-hero)::after { opacity: 0.05; }
+
+/* Depois de rolar, o header compacto fica liso: a marca some (em 0,3s, pela
+   transition acima) e volta quando a página retorna ao topo. */
+.site-header.is-scrolled::after { opacity: 0; }
 
 /* No hover a marca sai de cena junto com o degradê: os dois levam 0,3s, então
    o header resolve em branco limpo em vez de trocar fórmulas claras por

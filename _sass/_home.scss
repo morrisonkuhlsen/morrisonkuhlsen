@@ -101,3 +101,15 @@ a.home-aside__card:hover { transform: translateY(-3px); }
 
 .home-tools .home-aside__kicker { margin-bottom: 0; }
 .home-tools .home-aside__chips { flex: 1; }
+
+/* Com flex: 1 puro a lista encolhia até a largura do maior chip e empilhava
+   os nove no celular. A base de 24rem faz a lista descer para baixo do
+   rótulo quando não cabe ao lado dele. */
+.home-tools .home-aside__chips { flex: 1 1 24rem; }
+
+/* Sobre o --paper-alt da faixa, o --chip-bg quase não aparecia. */
+.home-tools .home-aside__chips a {
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+.home-tools .home-aside__chips a:hover { border-color: var(--accent); }

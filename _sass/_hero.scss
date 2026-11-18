@@ -30,12 +30,21 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(
-    to top,
-    rgb(0 0 0 / 72%) 0%,
-    rgb(0 0 0 / 34%) 42%,
-    rgb(0 0 0 / 10%) 100%
-  );
+  /* O segundo degradê escurece só o lado do texto: com o de baixo sozinho, o
+     subtítulo caía sobre as partes claras da foto. */
+  background:
+    linear-gradient(
+      to top,
+      rgb(0 0 0 / 72%) 0%,
+      rgb(0 0 0 / 34%) 42%,
+      rgb(0 0 0 / 10%) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgb(0 0 0 / 55%) 0%,
+      rgb(0 0 0 / 30%) 40%,
+      rgb(0 0 0 / 0%) 70%
+    );
 }
 
 .hero__body {
