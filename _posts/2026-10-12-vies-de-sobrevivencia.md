@@ -181,14 +181,15 @@ proporcional a $1 - q_i$. Com 30% de letalidade, os motores aparecem com 70%
 da densidade de uma região inofensiva — diferença real, mas discreta. Para o
 "vazio" famoso aparecer, um tiro ali precisa ser quase sempre fatal.
 
-Subi para 65% e 70%. Aí sim:
+Subi para 65% e 70%. Ainda não é o vazio do desenho famoso — para isso
+seria preciso chegar perto de 100% —, mas a diferença já salta aos olhos:
 
 <figure>
   <a href="/assets/images/sobrevivencia-avioes.png" title="Abrir em tamanho original">
   <img src="/assets/images/sobrevivencia-avioes.avif" alt="À esquerda, a silhueta de um bombardeiro de quatro motores vista de cima, com 1.100 pontos vermelhos marcando furos dos aviões que voltaram: fuselagem, asas e cauda cheias de furos, motores e cabine com poucos. À direita, barras comparando a letalidade verdadeira de um tiro em cada região com a estimada só a partir dos que voltaram: motores 65% e 65,1%, cabine 70% e 69,9%, fuselagem 3% e 2,0%, asas 4% e 4,3%, cauda 10% e 14,5%" />
   </a>
   <figcaption>
-    <strong>Figura 1:</strong> à esquerda, furos dos aviões que voltaram; motores e cabine aparecem quase limpos porque quem foi atingido ali não voltou. À direita, a letalidade de cada região: em cinza, a verdadeira; em azul, a estimada pelas fórmulas acima usando só os sobreviventes. Clique na imagem para vê-la em tamanho original.
+    <strong>Figura 1:</strong> à esquerda, furos dos aviões que voltaram; motores e cabine aparecem com cerca de um terço dos furos das outras regiões, porque a maioria dos aviões atingidos ali não voltou. À direita, a letalidade de cada região: em cinza, a verdadeira; em azul, a estimada pelas fórmulas acima usando só os sobreviventes. Clique na imagem para vê-la em tamanho original.
   </figcaption>
 </figure>
 
