@@ -8,3 +8,6 @@ vendor/
 # Gemfile.lock fica versionado: o deploy usa bundler-cache: true e precisa
 # dele para instalar as mesmas versões que rodam aqui.
 scripts/validacao/referencia.csv
+
+# Cache do Python dos scripts
+__pycache__/
