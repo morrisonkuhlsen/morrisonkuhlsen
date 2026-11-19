@@ -1,6 +1,6 @@
 ---
 layout: post
-image: /assets/images/sobrevivencia-avioes.avif
+image: /assets/images/capa-sobrevivencia.avif
 title: "Os aviões que voltaram: o viés de sobrevivência, de Abraham Wald aos fundos que batem o mercado"
 categories: [ESTATÍSTICA, JULIA, PROBABILIDADE]
 tags: [Estatística, Probabilidade, Julia]
