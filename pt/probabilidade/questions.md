@@ -5,7 +5,7 @@ lang: pt
 ref: questions
 parent: probabilidade
 permalink: /pt/probabilidade/questions
-order: 6
+order: 7
 mathjax: true
 ---
 

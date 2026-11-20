@@ -5,7 +5,7 @@ lang: pt
 ref: probabilidade-condicional
 parent: probabilidade
 permalink: /pt/probabilidade/probabilidade-condicional
-order: 5
+order: 6
 mathjax: true
 description: "Probabilidade de um evento ocorrer dado que outro evento já ocorreu, com o Teorema de Bayes."
 ---

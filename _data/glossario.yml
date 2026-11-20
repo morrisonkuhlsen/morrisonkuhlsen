@@ -288,6 +288,7 @@ pt:
     auto: false
     def: "Dois eventos são independentes quando a ocorrência de um não altera a probabilidade do outro — isto é, quando P(A ∩ B) = P(A) · P(B)."
     veja:
+      - { t: "Eventos independentes e a regra do produto", u: "/pt/probabilidade/eventos-independentes" }
       - { t: "Probabilidade condicional", u: "/pt/probabilidade/probabilidade-condicional" }
 
   - termo: "Inferência bayesiana"
