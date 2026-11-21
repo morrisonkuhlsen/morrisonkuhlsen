@@ -31,6 +31,80 @@ ter saído de um livro de física.
 Aviso logo: ninguém sabe se a hipótese é verdadeira. Nada aqui a prova. O
 que dá para fazer é ver o que ela diz, e o que estaria em jogo se fosse falsa.
 
+## A ideia, antes de qualquer fórmula
+
+Imagine uma estrada infinita com uma placa em cada número inteiro, e você
+andando por ela com um caderno, anotando os primos que encontra pelo
+caminho.
+
+No começo eles aparecem a toda hora: 2, 3, 5, 7, 11, 13. Depois vão
+rareando, num ritmo que dá para prever. Perto da placa mil, a distância
+média entre um primo e o seguinte é de umas 7 placas; perto de um milhão, de
+14; perto de um bilhão, de 21. (A regra é que, perto de $x$, essa distância
+média é $\ln x$.) Essa parte está resolvida desde 1896: no longo prazo, a
+média nunca falha.
+
+Mas quem anda pela estrada não vê a média. Vê o caminho de perto, e de perto
+os primos não têm ritmo nenhum:
+
+- Logo depois de um bilhão vem um par colado: 1.000.000.007 e
+  1.000.000.009. O par seguinte só aparece 402 placas depois.
+- Antes de mil, o trecho mais longo sem primos vai de 887 a 907: são 19
+  placas vazias seguidas, quase o triplo da distância média por ali.
+- Antes de um milhão, o recorde é de 492.113 a 492.227: 113 placas sem
+  nenhum primo, onde a média seria 13.
+- Logo depois de um bilhão, entre 1.002.901.069 e 1.002.901.279, são 209
+  placas vazias, dez vezes a média local.
+- Divida os 10 milhões de placas depois de um bilhão em trechos de mil. Em
+  média, cada trecho tem 48 primos. Mas houve trecho com 29 e trecho com 71.
+
+Nada disso é aleatório: se um número é primo ou não está decidido desde
+sempre. Mesmo assim, ninguém consegue dizer onde vai cair o próximo primo
+sem ir lá conferir. E aí vem a pergunta que interessa: **até onde a
+realidade pode se afastar da média?**
+
+Dá para imaginar estradas bem piores que a nossa. Uma em que, lá pela placa
+$10^{100}$, os primos simplesmente somem por um trecho gigantesco e depois
+reaparecem em bando, compensando o atraso. A média de longo prazo
+continuaria certa, mas quem estivesse no meio do caminho contaria muito
+menos primos do que a regra promete, e por muito tempo.
+
+A hipótese de Riemann diz que a nossa estrada não é assim. Depois de andar
+até a placa $x$, o seu caderno nunca vai discordar da conta da média por
+mais do que algo da ordem de $\sqrt{x}$ (vezes um logaritmo). Parece muito,
+mas é quase nada. Até um bilhão você anota 50.847.534 primos, a média
+previa 50.849.235, e a hipótese só permitiria uma diferença de uns 26 mil,
+cerca de 0,05% do total. A diferença real é 1.701.
+
+E não é só no total. Se a hipótese for verdadeira, nenhum deserto pode ser
+comprido demais: depois da placa $x$, o próximo primo aparece no máximo a
+uma distância da ordem de $\sqrt{x}\,\ln x$ (Harald Cramér provou isso em
+1920, supondo a hipótese). Os desertos existem e crescem sem limite, mas
+crescem devagar perto do tamanho da estrada. O de 209 placas, logo depois
+de um bilhão, está a anos-luz do que esse limite permitiria, que é da ordem
+de 600 mil.
+
+Por que justamente $\sqrt{x}$? Uma intuição é pensar em moedas. Jogue um
+bilhão de moedas: a quantidade de caras vai ficar perto de meio bilhão, mas
+quase nunca exatamente; o desvio típico é de uns 16 mil, que é
+$\sqrt{x}/2$. A hipótese diz que os primos, que não têm nada de sorteados,
+oscilam em torno da média no máximo tanto quanto oscilaria uma coisa
+sorteada ao acaso. Parecem espalhados sem regra, mas o tamanho das
+oscilações tem dono.
+
+E quem é o dono, mais adiante, fica literal: as oscilações dos primos são
+uma soma de ondas, uma para cada zero da função zeta, e a parte real do zero
+dita quanto a onda dele cresce. Parte real 1/2 quer dizer que toda onda
+cresce como $\sqrt{x}$. Um único zero fora da reta seria uma onda crescendo
+mais rápido que as outras, e aí sim, em algum lugar muito longe na estrada,
+os primos sairiam do controle.
+
+Também por isso conferir no computador não basta. Os primeiros 12 trilhões
+de zeros já foram verificados, todos na reta. Mas são infinitos, e o zero
+que estragaria tudo pode estar numa altura que nenhum computador vai
+alcançar. É o mesmo problema da estrada: dá para andar um trecho enorme,
+mas nunca até o fim.
+
 ## Primeiro, os primos
 
 Os [números primos](/matematica-basica/primos.html) não seguem padrão
