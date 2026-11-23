@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações, inequações e sistemas do 1º grau, módulo, produtos notáveis, frações algébricas, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações, inequações e sistemas do 1º grau, módulo, produtos notáveis, frações algébricas, equação do 2º grau, conjuntos, constantes, somatório, fatorial, contagem, plano cartesiano e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1408,6 +1408,12 @@
   url: "/matematica-basica/fatorial.html"
   description: "Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência."
   tags: "fatorial n! zero fatorial permutação contagem filas arranjo calculadora stirling"
+  lang: pt
+
+- title: "Contagem — Princípio Multiplicativo, Arranjos e Combinações"
+  url: "/matematica-basica/contagem.html"
+  description: "Contagem explicada do zero: a árvore de escolhas do princípio multiplicativo, quando a ordem importa (arranjo) e quando não importa (combinação), com a lista dos grupos para ver por que se divide por k!, o triângulo de Pascal clicável e por que a distribuição binomial começa com C(n, k)."
+  tags: "análise combinatória contagem princípio multiplicativo princípio fundamental da contagem árvore de possibilidades arranjo combinação permutação coeficiente binomial triângulo de pascal mega-sena binomial"
   lang: pt
 
 - title: "Plano Cartesiano — Pontos, Distância e Ponto Médio"

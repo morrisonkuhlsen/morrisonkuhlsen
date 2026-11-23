@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contagem — Princípio Multiplicativo, Arranjos e Combinações</title>
+  <meta name="description" content="Contagem explicada do zero: a árvore de escolhas do princípio multiplicativo, quando a ordem importa (arranjo) e quando não importa (combinação), com a lista dos grupos para ver por que se divide por k!, o triângulo de Pascal clicável e por que a distribuição binomial começa com C(n, k).">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/contagem.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/contagem.html">
+  <meta property="og:title" content="Contagem — Princípio Multiplicativo, Arranjos e Combinações">
+  <meta property="og:description" content="Contagem explicada do zero: a árvore de escolhas do princípio multiplicativo, quando a ordem importa (arranjo) e quando não importa (combinação), com a lista dos grupos para ver por que se divide por k!, o triângulo de Pascal clicável e por que a distribuição binomial começa com C(n, k).">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Contagem — Princípio Multiplicativo, Arranjos e Combinações">
+  <meta name="twitter:description" content="Contagem explicada do zero: a árvore de escolhas do princípio multiplicativo, quando a ordem importa (arranjo) e quando não importa (combinação), com a lista dos grupos para ver por que se divide por k!, o triângulo de Pascal clicável e por que a distribuição binomial começa com C(n, k).">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="contagem.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Contagem — Princípio Multiplicativo, Arranjos e Combinações</h1>
+    <p class="page-lede">Quantas senhas de 4 dígitos existem? Quantos pódios numa corrida de 8? Quantos jogos na Mega-Sena? Contar sem listar tudo se resume a duas ideias: <strong>multiplicar as etapas</strong> e <strong>saber se a ordem importa</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#arvore">Princípio multiplicativo</a>
+      <a href="#ordem">Arranjo e combinação</a>
+      <a href="#pascal">Triângulo de Pascal</a>
+      <a href="#regras">Regras</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\binom{n}{k} = \frac{n!}{k!\,(n - k)!}"></span>
+
+    <!-- 1. A árvore; estado em ?e1=&e2=&e3=. -->
+    <section class="calc intro" id="arvore" aria-labelledby="arvore-title">
+      <h2 id="arvore-title">Etapas se multiplicam</h2>
+      <p class="calc-lede">Quantas roupas diferentes dá para montar com camisas, calças e tênis? Escolha quantas peças de cada.</p>
+      <div class="vars">
+        <label class="var">
+          <i>camisas</i>
+          <input name="e1" type="range" min="1" max="4" step="1" value="3" aria-label="Número de camisas">
+          <output class="out-e1">3</output>
+        </label>
+        <label class="var var-b">
+          <i>calças</i>
+          <input name="e2" type="range" min="1" max="4" step="1" value="2" aria-label="Número de calças">
+          <output class="out-e2">2</output>
+        </label>
+        <label class="var var-c">
+          <i>tênis</i>
+          <input name="e3" type="range" min="1" max="3" step="1" value="2" aria-label="Número de tênis">
+          <output class="out-e3">2</output>
+        </label>
+      </div>
+      <div class="calc-result"></div>
+      <div class="arvore-box" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="mult-title">
+      <h2 id="mult-title">Com repetição e sem repetição</h2>
+      <p>O mesmo princípio conta senhas. Uma senha de 4 dígitos tem 4 etapas, e cada uma tem 10 opções (0 a 9): <strong>10 × 10 × 10 × 10 = 10⁴ = 10.000</strong>. É por isso que senhas mais longas são tão mais seguras: cada dígito a mais multiplica por 10.</p>
+      <p>Se os dígitos não puderem se repetir, cada etapa tem uma opção a menos que a anterior: <strong>10 × 9 × 8 × 7 = 5.040</strong>. E se todas as etapas usam os mesmos n objetos até acabarem — formar uma fila com todos —, a conta vai até o 1: é o <a href="fatorial.html">fatorial</a>, n!.</p>
+    </section>
+
+    <!-- 2. Arranjo e combinação; estado em ?cn=&ck=. -->
+    <section class="calc" id="ordem" aria-labelledby="ordem-title">
+      <h2 id="ordem-title">A ordem importa?</h2>
+      <p class="calc-lede">Escolher k entre n letras. Num pódio a ordem importa (1º, 2º, 3º); numa comissão, não. A lista mostra cada grupo e as ordens em que ele pode aparecer.</p>
+      <div class="vars">
+        <label class="var">
+          <i>n</i>
+          <input name="n" type="range" min="2" max="10" step="1" value="5" aria-label="Total de elementos n">
+          <output class="out-n">5</output>
+        </label>
+        <label class="var var-b">
+          <i>k</i>
+          <input name="k" type="range" min="1" max="5" step="1" value="3" aria-label="Quantos escolher, k">
+          <output class="out-k">3</output>
+        </label>
+      </div>
+
+      <output class="calc-result" aria-live="polite"></output>
+      <ul class="grupos" aria-label="Os grupos e as suas ordens"></ul>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="qual-title">
+      <h2 id="qual-title">Qual conta usar</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="n^k"></span>
+          <p><strong>Ordem importa, pode repetir.</strong> Senhas, placas, respostas de uma prova de múltipla escolha.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="A_{n,k} = \frac{n!}{(n-k)!}"></span>
+          <p><strong>Ordem importa, sem repetir.</strong> Pódios, cargos diferentes (presidente e vice), filas parciais.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\binom{n}{k} = \frac{n!}{k!\,(n-k)!}"></span>
+          <p><strong>Ordem não importa.</strong> Comissões, apostas de loteria, mãos de cartas, grupos de trabalho.</p>
+        </div>
+      </div>
+      <p>O teste é trocar dois escolhidos de lugar: se o resultado vira outra coisa (outro pódio, outra senha), a ordem importa. Se continua sendo o mesmo grupo, não importa. A <a href="/formulas/permutacoes-arranjos.html">página de permutações e arranjos</a> tem uma calculadora para cada caso.</p>
+    </section>
+
+    <!-- 3. Pascal; usa o n e o k da seção 2. -->
+    <section class="calc intro" id="pascal" aria-labelledby="pascal-title">
+      <h2 id="pascal-title">O triângulo de Pascal</h2>
+      <p class="calc-lede">Cada linha n do triângulo lista C(n, 0), C(n, 1), …, C(n, n). Cada número é a soma dos dois de cima. A casa destacada é a do n e do k escolhidos acima.</p>
+      <div class="calc-result"></div>
+      <div class="pascal" role="group" aria-label="Triângulo de Pascal, linhas 0 a 10"></div>
+      <div class="intro-text" aria-live="polite"></div>
+      <p class="calc-note">A história e outras propriedades do triângulo estão no texto <a href="/triangulo-de-pascal/">O triângulo de Pascal</a>.</p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As regras, com os seus números</h2>
+      <p>Arraste n e k: os mesmos valores valem em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Simetria</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\binom{n}{k} = \binom{n}{n - k}"></span>
+        <div class="rule-try" data-rule="simetria" data-vars="n k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>A soma de Pascal</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\binom{n}{k} = \binom{n - 1}{k - 1} + \binom{n - 1}{k}"></span>
+        <div class="rule-try" data-rule="pascal" data-vars="n k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Uma linha soma uma potência de 2</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{n} = 2^n"></span>
+        <div class="rule-try" data-rule="linha" data-vars="n"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Arranjo é combinação vezes a ordem</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="A_{n,k} = \binom{n}{k} \cdot k!"></span>
+        <div class="rule-try" data-rule="arranjo" data-vars="n k"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Esquecer o (n − k)!</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\binom{n}{k} \ne \frac{n!}{k!}"></span>
+        <div class="rule-try" data-rule="erroFat" data-vars="n k"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="3 \text{ camisas e } 2 \text{ calças}: 3 \times 2"></span>
+          <p><strong>“E” entre etapas multiplica.</strong> Somar 3 + 2 conta peças, não combinações delas.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3 \text{ filmes ou } 2 \text{ séries}: 3 + 2"></span>
+          <p><strong>“Ou” entre alternativas soma.</strong> Assistir a um filme ou a uma série é uma escolha só, entre 5 opções.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\binom{n}{0} = 1"></span>
+          <p><strong>Escolher nenhum tem um jeito.</strong> O grupo vazio. É por isso que 0! = 1 deixa a fórmula funcionar.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="AB = BA \;?"></span>
+          <p><strong>Decida a ordem pela pergunta, não pelos números.</strong> Os mesmos 8 e 3 dão 336 pódios ou 56 comissões.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística: por que a binomial tem C(n, k)</h2>
+      <p>Jogue uma moeda 4 vezes. Qual a chance de sair exatamente 2 caras? Cada sequência específica, como Cara-Cara-Coroa-Coroa, tem chance (1/2)⁴ = 1/16. Mas há várias sequências com 2 caras: CCKK, CKCK, CKKC, KCCK, KCKC, KKCC. São 6, que é o número de jeitos de escolher <strong>em quais 2 das 4 jogadas</strong> sai cara: C(4, 2) = 6. A chance é 6 × 1/16 = 6/16 = 0,375.</p>
+      <p>Trocando 4 por n, 2 por k e 1/2 por uma probabilidade p qualquer, sai a <a href="/formulas/distribuicao-binomial.html">distribuição binomial</a>:</p>
+      <span class="tex-block" data-tex="P(X = k) = \binom{n}{k}\, p^k\, (1 - p)^{n - k}"></span>
+      <p>O C(n, k) conta os caminhos; o resto é a chance de cada um. O mesmo número aparece no <a href="/formulas/binomio-newton.html">binômio de Newton</a> e tem uma página própria em <a href="/formulas/coeficiente-binomial.html">coeficiente binomial</a>.</p>
+      <p><strong>Loteria.</strong> Na Mega-Sena escolhem-se 6 números entre 60, sem ordem: C(60, 6) = 50.063.860 jogos possíveis. Uma aposta simples tem 1 chance nesse total.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Quantas placas há com 3 letras (26 opções) seguidas de 4 dígitos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>7 etapas, ordem importa, pode repetir: 26³ × 10⁴ = 17.576 × 10.000 = <strong>175.760.000</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Numa corrida com 8 atletas, quantos pódios (1º, 2º e 3º) são possíveis?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A ordem importa: 8 × 7 × 6 = <strong>336</strong>.</p>
+            <p><a href="?cn=8&amp;ck=3#ordem">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> E quantas comissões de 3 pessoas dá para formar com esses 8?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A ordem não importa: 336 ÷ 3! = 336 ÷ 6 = <strong>56</strong>.</p>
+            <p><a href="?cn=8&amp;ck=3#ordem">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Numa reunião com 10 pessoas, cada uma aperta a mão de todas as outras uma vez. Quantos apertos de mão?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Cada aperto é um par, sem ordem: C(10, 2) = 10 × 9 ÷ 2 = <strong>45</strong>.</p>
+            <p><a href="?cn=10&amp;ck=2#ordem">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Uma pizzaria oferece 6 sabores, e a pizza leva 2 sabores diferentes. Quantas pizzas diferentes existem?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Metade calabresa e metade queijo é a mesma pizza que metade queijo e metade calabresa: C(6, 2) = <strong>15</strong>.</p>
+            <p><a href="?cn=6&amp;ck=2#ordem">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Jogando uma moeda 5 vezes, qual a chance de sair exatamente 2 caras?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>São C(5, 2) = 10 sequências com 2 caras, entre 2⁵ = 32 possíveis: 10/32 = <strong>0,3125</strong>.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="fatorial.html" rel="prev"><span>Anterior</span>Fatorial — Contar Filas</a>
+      <a class="pager-next" href="plano-cartesiano.html" rel="next"><span>Próximo</span>Plano Cartesiano — Pontos, Distância e Ponto Médio</a>
+    </nav>
+  </main>
+</body>
+</html>
