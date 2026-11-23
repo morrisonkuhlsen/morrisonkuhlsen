@@ -2517,6 +2517,46 @@
   .grupo { grid-template-columns: 1fr; gap: .1rem; }
 }
 
+/* ================================================================ crescimento exponencial */
+
+/* As duas contas do topo, uma embaixo da outra. */
+#comparar .res-part { display: block; }
+
+/* A escada de valores quebra em linhas em vez de rolar. */
+#funcao .ladder-steps { flex-wrap: wrap; justify-content: center; row-gap: .5rem; }
+
+@media (max-width: 520px) {
+  #comparar .calc-result { font-size: .95rem; }
+}
+
+.exp-plot {
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* Somando em laranja (reta), multiplicando na cor da curva. */
+.exp-lin { stroke: var(--tone-2); stroke-width: 2; stroke-dasharray: 6 4; }
+.plot-dot.exp-dot-lin { fill: var(--tone-2); }
+
+.exp-tabela {
+  margin: 1rem auto 0;
+  border-collapse: collapse;
+  font-size: .9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.exp-tabela th,
+.exp-tabela td {
+  padding: .3rem .9rem;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+}
+
+.exp-tabela th { font-weight: 600; color: var(--text-muted); font-size: .8rem; }
+.exp-tabela .is-lin { color: var(--tone-2); }
+.exp-tabela .is-exp { color: var(--tone-1); font-weight: 600; }
+.exp-tabela .exp-gap { text-align: center; color: var(--text-muted); }
+
 /* ================================================================ função do 1º grau */
 
 .reta-plot {

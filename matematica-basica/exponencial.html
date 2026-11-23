@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Crescimento Exponencial — Somar ou Multiplicar</title>
+  <meta name="description" content="Crescimento exponencial explicado do zero: juros simples contra compostos num gráfico e numa tabela, a função y = a·bˣ que cresce ou decai com os seus valores de a e b, por que ela nunca chega a zero, a escala logarítmica em que a curva vira reta, e onde isso aparece na estatística.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/exponencial.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/exponencial.html">
+  <meta property="og:title" content="Crescimento Exponencial — Somar ou Multiplicar">
+  <meta property="og:description" content="Crescimento exponencial explicado do zero: juros simples contra compostos num gráfico e numa tabela, a função y = a·bˣ que cresce ou decai com os seus valores de a e b, por que ela nunca chega a zero, a escala logarítmica em que a curva vira reta, e onde isso aparece na estatística.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Crescimento Exponencial — Somar ou Multiplicar">
+  <meta name="twitter:description" content="Crescimento exponencial explicado do zero: juros simples contra compostos num gráfico e numa tabela, a função y = a·bˣ que cresce ou decai com os seus valores de a e b, por que ela nunca chega a zero, a escala logarítmica em que a curva vira reta, e onde isso aparece na estatística.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="exponencial.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Crescimento Exponencial — Somar ou Multiplicar</h1>
+    <p class="page-lede">Um valor pode crescer <strong>somando</strong> sempre a mesma quantia ou <strong>multiplicando</strong> sempre pelo mesmo fator. No começo os dois andam juntos; depois, a multiplicação dispara. A diferença entre juros simples e compostos, entre uma reta e uma exponencial, é só essa.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#comparar">Somar × multiplicar</a>
+      <a href="#funcao">A função a·bˣ</a>
+      <a href="#decai">Decaimento</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="y = a \cdot b^{\,x}"></span>
+
+    <!-- 1. Somar × multiplicar; estado em ?r=&n=. -->
+    <section class="calc intro" id="comparar" aria-labelledby="comp-title">
+      <h2 id="comp-title">Juros simples e compostos</h2>
+      <p class="calc-lede">Começando com 100, aplique a mesma taxa por período de dois jeitos: somando sempre a taxa sobre os 100 iniciais (laranja) ou sobre o valor do momento (azul).</p>
+      <div class="vars">
+        <label class="var">
+          <i>taxa</i>
+          <input name="r" type="range" min="-30" max="50" step="5" value="20" aria-label="Taxa por período, em porcentagem">
+          <output class="out-r">20%</output>
+        </label>
+        <label class="var var-b">
+          <i>períodos</i>
+          <input name="n" type="range" min="1" max="20" step="1" value="10" aria-label="Número de períodos">
+          <output class="out-n">10</output>
+        </label>
+      </div>
+      <div class="calc-result"></div>
+      <div class="intro-figure exp-fig" aria-hidden="true"></div>
+      <table class="exp-tabela">
+        <thead><tr><th>período</th><th class="is-lin">somando</th><th class="is-exp">multiplicando</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="formulas-title">
+      <h2 id="formulas-title">As duas fórmulas</h2>
+      <span class="tex-block" data-tex="\text{simples: } V = V_0\,(1 + n\,r) \qquad \text{compostos: } V = V_0\,(1 + r)^n"></span>
+      <p>Nos simples, a taxa r é somada n vezes: é uma <a href="funcao-1grau.html">função do 1º grau</a> em n. Nos compostos, o fator (1 + r) é multiplicado n vezes — é a mesma ideia dos <a href="porcentagem.html#sucessivos">aumentos sucessivos</a>, e por isso o n vai para o <a href="potencias.html">expoente</a>. Para achar o n que leva a um certo valor, como no tempo para dobrar, é preciso tirar o n do expoente, e para isso servem os <a href="logaritmos.html">logaritmos</a>.</p>
+    </section>
+
+    <!-- 2. y = a·bˣ; estado em ?fa=&fb=&esc=. -->
+    <section class="calc intro" id="funcao" aria-labelledby="func-title">
+      <h2 id="func-title">A função y = a·bˣ</h2>
+      <p class="calc-lede">a é o valor inicial, em x = 0; b é o fator por passo. Com b maior que 1 ela cresce, com b entre 0 e 1 ela decai.</p>
+      <div class="vars">
+        <label class="var var-b">
+          <i>a</i>
+          <input name="fa" type="range" min="1" max="5" step="1" value="2" aria-label="Valor inicial a">
+          <output class="out-fa">2</output>
+        </label>
+        <label class="var">
+          <i>b</i>
+          <input name="fb" type="range" min="0.25" max="3" step="0.25" value="1.5" aria-label="Fator b">
+          <output class="out-fb">1,5</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Escala do eixo y">
+        <button type="button" data-escala="comum" aria-pressed="true">escala comum</button>
+        <button type="button" data-escala="log" aria-pressed="false">escala logarítmica</button>
+      </div>
+      <div class="calc-result"></div>
+      <div class="intro-figure exp-fig" aria-hidden="true"></div>
+      <ol class="ladder-steps" aria-label="Valores de y para x de 0 a 4"></ol>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="decai" aria-labelledby="decai-title">
+      <h2 id="decai-title">Decaimento e meia-vida</h2>
+      <p>Com b entre 0 e 1, a mesma conta descreve coisas que <strong>diminuem</strong> por uma fração fixa: um carro que perde 20% do valor por ano (b = 0,8), um remédio que o corpo elimina pela metade a cada 6 horas (b = 0,5 por meia-vida). A <strong>meia-vida</strong> é o tempo para cair à metade, e ela não depende de quanto havia no começo: de 80 para 40 leva o mesmo que de 40 para 20.</p>
+      <p>É o espelho do tempo para dobrar, e a conta é a mesma: veja <a href="logaritmos.html#dobrar">em quanto tempo dobra</a> e a calculadora de <a href="/formulas/tempo-duplicacao.html">tempo de duplicação e meia-vida</a>.</p>
+      <div class="tip">
+        <strong>O número e.</strong> Se os juros forem capitalizados não por ano, mas por mês, por dia, por segundo…, o fator anual de 100% se aproxima de 2,71828…, o número e da página de <a href="constantes.html">constantes</a>. É por isso que crescimentos contínuos se escrevem como y = a·eᵏˣ — ainda uma exponencial, só com outra base. A versão completa, com a inversa logarítmica, está em <a href="/formulas/funcao-exponencial.html">função exponencial</a>.
+      </div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="(1{,}1)^2 = 1{,}21 \ne 1{,}2"></span>
+          <p><strong>Duas altas de 10% dão 21%.</strong> A segunda incide sobre o valor que já subiu.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0{,}5 \times 1{,}5 = 0{,}75"></span>
+          <p><strong>Perder 50% e ganhar 50% não empata.</strong> Sobram 75%: o ganho incide sobre a metade.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="2^{10} = 1024"></span>
+          <p><strong>Dobrar 10 vezes multiplica por 1.024</strong>, não por 20. A intuição pensa em soma; a exponencial multiplica.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x^2 \ne 2^x"></span>
+          <p><strong>Potência com x na base não é exponencial.</strong> Em x², o expoente é fixo; em 2ˣ, o x está no expoente. Para x grande, 2ˣ ganha de qualquer potência fixa.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística</h2>
+      <p><strong>Transformar com log.</strong> Quando os dados crescem de forma exponencial — renda, população, casos numa epidemia —, um gráfico comum vira uma parede no fim. Tirando o log de y, a curva vira reta, e aí a <a href="/formulas/regressao-linear.html">regressão linear</a> funciona: a inclinação da reta em log é o log do fator b. É o que a escala logarítmica do segundo gráfico mostra.</p>
+      <p><strong>Tempo de espera.</strong> Na <a href="/formulas/distribuicao-exponencial.html">distribuição exponencial</a>, a chance de ainda não ter acontecido nada depois de um tempo t é e<sup>−λt</sup>: um decaimento exponencial. A cada unidade de tempo, a chance de continuar esperando é multiplicada pelo mesmo fator.</p>
+      <p><strong>Crescer até um teto.</strong> Nada cresce exponencialmente para sempre: a população esbarra em recursos, a adoção de um produto esbarra no mercado. A <a href="/formulas/funcao-logistica.html">função logística</a> começa como uma exponencial e depois freia, e é a base da regressão logística.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Uma cultura começa com 50 bactérias e dobra a cada hora. Quantas há depois de 6 horas?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>50 · 2⁶ = 50 · 64 = <strong>3.200</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> R$ 1.000 rendem 10% ao ano durante 3 anos. Quanto dá a juros simples? E a juros compostos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Simples: 1.000 · (1 + 3 · 0,1) = <strong>R$ 1.300</strong>. Compostos: 1.000 · 1,1³ = <strong>R$ 1.331</strong>. Os R$ 31 a mais são juros sobre juros.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Partindo de 100, o que fica maior depois de 10 períodos: somar 15 por período ou multiplicar por 1,15?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Somando: 100 + 10 · 15 = 250. Multiplicando: 100 · 1,15¹⁰ ≈ <strong>404,56</strong>, mais de uma vez e meia.</p>
+            <p><a href="?r=15&amp;n=10#comparar">Veja no gráfico →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Um carro de R$ 50.000 perde 20% do valor por ano. Quanto vale depois de 3 anos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>50.000 · 0,8³ = 50.000 · 0,512 = <strong>R$ 25.600</strong>. Não é 50.000 − 3 · 10.000 = 20.000: a perda é de 20% do valor de cada ano, que vai diminuindo.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Uma substância tem meia-vida de 5 anos. De 80 g, quanto resta depois de 15 anos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>15 anos são 3 meias-vidas: 80 → 40 → 20 → <strong>10 g</strong>. Em fórmula, 80 · 0,5³.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Por que y = 3 · 0,5ˣ nunca chega a zero, por maior que seja x?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Cada passo divide o valor pela metade, e a metade de um número positivo ainda é positiva. O y fica cada vez mais perto de zero (3; 1,5; 0,75; 0,375…), mas nunca chega.</p>
+            <p><a href="?fa=3&amp;fb=0.5#funcao">Veja no gráfico →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="logaritmos.html" rel="prev"><span>Anterior</span>Logaritmos — O Expoente que Falta</a>
+      <a class="pager-next" href="expressoes-algebricas.html" rel="next"><span>Próximo</span>Expressões Algébricas — Parênteses, Colchetes e Chaves</a>
+    </nav>
+  </main>
+</body>
+</html>
