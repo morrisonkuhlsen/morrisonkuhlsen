@@ -59,11 +59,13 @@
 
 /* No celular, a expressão inteira do resultado cabe numa linha. */
 @media (max-width: 520px) {
-  #passos .calc-result {
+  #passos .calc-result,
+  #simplificar .calc-result {
     font-size: 1.1rem;
   }
   #passos .calc-math,
-  #metodos .calc-math {
+  #metodos .calc-math,
+  #simplificar .calc-math {
     font-size: .95rem;
   }
 }
@@ -2387,6 +2389,15 @@
 
 .sis-eq {
   margin-bottom: .8rem;
+}
+
+/* ================================================================ frações algébricas */
+
+/* O buraco: o ponto que a forma simplificada tem e a fração original não. */
+.fa-buraco {
+  fill: var(--surface);
+  stroke: var(--tone-1);
+  stroke-width: 2.5;
 }
 
 /* ================================================================ função do 1º grau */

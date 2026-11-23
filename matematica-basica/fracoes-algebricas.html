@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Frações Algébricas — Simplificar, Somar e o Buraco no Gráfico</title>
+  <meta name="description" content="Frações algébricas explicadas do zero: simplificar fatorando, por que só se corta fator e nunca parcela, a condição de existência e o buraco que ela deixa no gráfico, e as quatro operações com os seus valores de x, com o passo a passo e a conferência numérica.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/fracoes-algebricas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/fracoes-algebricas.html">
+  <meta property="og:title" content="Frações Algébricas — Simplificar, Somar e o Buraco no Gráfico">
+  <meta property="og:description" content="Frações algébricas explicadas do zero: simplificar fatorando, por que só se corta fator e nunca parcela, a condição de existência e o buraco que ela deixa no gráfico, e as quatro operações com os seus valores de x, com o passo a passo e a conferência numérica.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Frações Algébricas — Simplificar, Somar e o Buraco no Gráfico">
+  <meta name="twitter:description" content="Frações algébricas explicadas do zero: simplificar fatorando, por que só se corta fator e nunca parcela, a condição de existência e o buraco que ela deixa no gráfico, e as quatro operações com os seus valores de x, com o passo a passo e a conferência numérica.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="fracoes-algebricas.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Frações Algébricas — Simplificar, Somar e o Buraco no Gráfico</h1>
+    <p class="page-lede">Uma fração algébrica é uma fração com letras no denominador, como (x² − 4)/(x − 2). As regras são as mesmas das <a href="fracoes.html">frações com números</a>, com uma ferramenta a mais — <strong>fatorar</strong> — e um cuidado a mais: o denominador <strong>nunca pode ser zero</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#simplificar">Simplificar</a>
+      <a href="#existe">Condição de existência</a>
+      <a href="#regras">Operações</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\frac{a\cdot c}{b \cdot c} = \frac{a}{b} \quad (c \ne 0)"></span>
+
+    <!-- 1. Simplificar; estado em ?ex=&fx=. -->
+    <section class="calc" id="simplificar" aria-labelledby="simp-title">
+      <h2 id="simp-title">Simplifique fatorando</h2>
+      <p class="calc-lede">Escolha uma fração e um valor de x. Cada linha do passo a passo mostra quanto vale com esse x, e o gráfico marca o ponto.</p>
+
+      <div class="calc-examples">Frações: </div>
+      <div class="vars">
+        <label class="var">
+          <i>x</i>
+          <input name="fx" type="range" min="-6" max="6" step="1" value="3" aria-label="Valor de x">
+          <output class="out-fx">3</output>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="intro-figure fa-fig" aria-hidden="true"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="existe" aria-labelledby="existe-title">
+      <h2 id="existe-title">A condição de existência</h2>
+      <p>Dividir por zero não tem resultado, então uma fração algébrica só existe para os x que <strong>não zeram o denominador</strong>. Para achá-los, iguale o denominador a zero e resolva: em (x² − 4)/(x − 2), x − 2 = 0 dá x = 2, e a condição é <strong>x ≠ 2</strong>.</p>
+      <p>Ao simplificar, o fator que causava o problema some, e a forma simplificada passa a funcionar também em x = 2: x + 2 dá 4. Mas a fração original continua sem valor ali. As duas são iguais em todo o resto, e por isso se escreve:</p>
+      <span class="tex-block" data-tex="\frac{x^2 - 4}{x - 2} = x + 2, \quad \text{para } x \ne 2"></span>
+      <p>No gráfico, a original é a reta y = x + 2 com <strong>um buraco</strong> em (2, 4). Já em 2/x, o x de baixo não corta: em x = 0 não há buraco, e sim uma <strong>assíntota</strong> — a curva dispara para cima e para baixo. A diferença entre buraco e assíntota volta, com mais detalhes, nos <a href="/calculo/limite.html">limites</a>.</p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As operações, com o seu x</h2>
+      <p>Arraste x (de 1 a 9, longe dos valores proibidos destes exemplos): o mesmo valor vale em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Cortar um fator comum</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{2x + 6}{x + 3} = \frac{2(x + 3)}{x + 3} = 2"></span>
+        <div class="rule-try" data-rule="corta" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Somar com denominador comum</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{1}{x} + \frac{1}{x + 1} = \frac{(x + 1) + x}{x(x + 1)} = \frac{2x + 1}{x(x + 1)}"></span>
+        <div class="rule-try" data-rule="soma" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Multiplicar: em cima com em cima</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{x}{x + 1} \cdot \frac{x + 1}{x + 2} = \frac{x}{x + 2}"></span>
+        <div class="rule-try" data-rule="mult" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Dividir é multiplicar pelo inverso</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\frac{x}{x + 1} \div \frac{x}{x + 2} = \frac{x}{x + 1} \cdot \frac{x + 2}{x} = \frac{x + 2}{x + 1}"></span>
+        <div class="rule-try" data-rule="divide" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Cortar uma parcela</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{x + 6}{x + 2} \ne \frac{6}{2}"></span>
+        <div class="rule-try" data-rule="erroParcela" data-vars="x"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Somar em cima e embaixo</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\frac{1}{x} + \frac{1}{x + 1} \ne \frac{2}{2x + 1}"></span>
+        <div class="rule-try" data-rule="erroSoma" data-vars="x"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{x + 6}{x + 2} \ne 3"></span>
+          <p><strong>Só se corta o que multiplica.</strong> Para cortar, o fator tem de multiplicar o numerador inteiro e o denominador inteiro. Na dúvida, fatore primeiro.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{x - 3}{3 - x} = -1"></span>
+          <p><strong>Fatores opostos cortam deixando −1.</strong> 3 − x = −(x − 3), então a fração é −(x − 3)/(x − 3) = −1, para x ≠ 3.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{x^2 + 9}{x + 3}"></span>
+          <p><strong>Soma de quadrados não fatora.</strong> x² + 9 não é (x + 3)(x − 3) — essa é a <em>diferença</em> x² − 9. Esta fração não simplifica.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x \ne 2"></span>
+          <p><strong>A condição vem da fração original.</strong> Ache os x proibidos antes de simplificar; depois, o fator que os denunciava já sumiu.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística</h2>
+      <p><strong>Chance e probabilidade.</strong> A chance (odds) de um evento de probabilidade p é c = p/(1 − p): com p = 0,8, a chance é 0,8/0,2 = 4, ou “4 para 1”. Para voltar da chance para a probabilidade, isola-se p, mexendo numa fração algébrica:</p>
+      <span class="tex-block" data-tex="c = \frac{p}{1 - p} \;\Rightarrow\; c(1 - p) = p \;\Rightarrow\; c = p + cp = p(1 + c) \;\Rightarrow\; p = \frac{c}{1 + c}"></span>
+      <p>É a conta por trás da <a href="/formulas/razao-chances.html">razão de chances</a> e da regressão logística, que trabalham com chances em vez de probabilidades.</p>
+      <p><strong>Média harmônica.</strong> Um carro vai a 60 km/h e volta pelo mesmo caminho a 40 km/h. A velocidade média não é 50: ida e volta levam d/60 + d/40 horas para 2d quilômetros. O d corta, porque é fator de tudo:</p>
+      <span class="tex-block" data-tex="\frac{2d}{\frac{d}{60} + \frac{d}{40}} = \frac{2}{\frac{1}{60} + \frac{1}{40}} = \frac{2 \cdot 60 \cdot 40}{40 + 60} = 48 \text{ km/h}"></span>
+      <p>Com letras no lugar de 60 e 40, sai a fórmula da <a href="/formulas/media-harmonica.html">média harmônica</a> de dois números: 2ab/(a + b).</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Simplifique (x² − 25)/(x + 5).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>x² − 25 = (x + 5)(x − 5). Cortando (x + 5): <strong>x − 5</strong>, para x ≠ −5.</p>
+            <p><a href="?ex=ex1&amp;fx=-5#simplificar">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Simplifique (3x² − 12x)/(x² − 4x).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Em cima, 3x(x − 4); embaixo, x(x − 4). Corta tudo menos o 3: <strong>3</strong>, para x ≠ 0 e x ≠ 4. O gráfico é uma reta horizontal com dois buracos.</p>
+            <p><a href="?ex=ex2&amp;fx=4#simplificar">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule 1/x + 1/(x + 1).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Denominador comum x(x + 1): ((x + 1) + x)/(x(x + 1)) = <strong>(2x + 1)/(x(x + 1))</strong>, para x ≠ 0 e x ≠ −1.</p>
+            <p><a href="?ex=ex3#simplificar">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Para que valores de x a fração (x + 1)/(x² − 9) não existe?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>x² − 9 = 0 quando x² = 9: <strong>x = 3 ou x = −3</strong>. O numerador não importa para isso.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Um aluno “simplificou” (x + 8)/(x + 4) para 2. Teste com x = 1 e explique o erro.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Com x = 1: 9/5 = 1,8, e não 2. Ele cortou o x, que é parcela (está somado), e depois fez 8/4. A fração <strong>não simplifica</strong>: nem o numerador nem o denominador têm fator em comum.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Uma chance de 3 para 1 (c = 3) corresponde a que probabilidade?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>p = c/(1 + c) = 3/4 = <strong>0,75</strong>. Confere: 0,75/0,25 = 3.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="produtos-notaveis.html" rel="prev"><span>Anterior</span>Produtos Notáveis e Fatoração</a>
+      <a class="pager-next" href="equacao-2grau.html" rel="next"><span>Próximo</span>Equação do 2º Grau</a>
+    </nav>
+  </main>
+</body>
+</html>

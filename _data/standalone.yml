@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações, inequações e sistemas do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações, inequações e sistemas do 1º grau, produtos notáveis, frações algébricas, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1360,6 +1360,12 @@
   url: "/matematica-basica/produtos-notaveis.html"
   description: "Produtos notáveis explicados do zero: o quadrado da soma, o da diferença e o produto da soma pela diferença desenhados como áreas, testados com os seus números, as contas de cabeça, a fatoração e o atalho da variância."
   tags: "produtos notáveis quadrado da soma quadrado da diferença diferença de quadrados fatoração trinômio quadrado perfeito álgebra"
+  lang: pt
+
+- title: "Frações Algébricas — Simplificar, Somar e o Buraco no Gráfico"
+  url: "/matematica-basica/fracoes-algebricas.html"
+  description: "Frações algébricas explicadas do zero: simplificar fatorando, por que só se corta fator e nunca parcela, a condição de existência e o buraco que ela deixa no gráfico, e as quatro operações com os seus valores de x, com o passo a passo e a conferência numérica."
+  tags: "frações algébricas simplificar fração algébrica fatorar cortar fator condição de existência domínio denominador zero mmc de polinômios soma multiplicação divisão buraco assíntota"
   lang: pt
 
 - title: "Equação do 2º Grau — Fórmula Quadrática e Parábola"
