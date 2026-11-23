@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1390,6 +1390,12 @@
   url: "/matematica-basica/fatorial.html"
   description: "Fatorial explicado do zero: a escada que mostra por que 0! = 1, as filas que o n! conta, uma calculadora exata até 1000! que também simplifica n!/k!, as regras e o crescimento mais rápido que qualquer potência."
   tags: "fatorial n! zero fatorial permutação contagem filas arranjo calculadora stirling"
+  lang: pt
+
+- title: "Plano Cartesiano — Pontos, Distância e Ponto Médio"
+  url: "/matematica-basica/plano-cartesiano.html"
+  description: "Plano cartesiano explicado do zero: o par ordenado (x, y) num plano em que você arrasta o ponto, os quadrantes, a distância entre dois pontos como Pitágoras desenhado, o ponto médio e o gráfico de dispersão dividido pelas médias, que é a ideia da covariância."
+  tags: "plano cartesiano par ordenado coordenadas abscissa ordenada eixo x eixo y origem quadrantes distância entre dois pontos ponto médio pitágoras gráfico de dispersão"
   lang: pt
 
 - title: "Função do 1º Grau — A Reta y = ax + b"

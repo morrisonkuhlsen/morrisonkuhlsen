@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Plano Cartesiano — Pontos, Distância e Ponto Médio</title>
+  <meta name="description" content="Plano cartesiano explicado do zero: o par ordenado (x, y) num plano em que você arrasta o ponto, os quadrantes, a distância entre dois pontos como Pitágoras desenhado, o ponto médio e o gráfico de dispersão dividido pelas médias, que é a ideia da covariância.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/plano-cartesiano.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/plano-cartesiano.html">
+  <meta property="og:title" content="Plano Cartesiano — Pontos, Distância e Ponto Médio">
+  <meta property="og:description" content="Plano cartesiano explicado do zero: o par ordenado (x, y) num plano em que você arrasta o ponto, os quadrantes, a distância entre dois pontos como Pitágoras desenhado, o ponto médio e o gráfico de dispersão dividido pelas médias, que é a ideia da covariância.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Plano Cartesiano — Pontos, Distância e Ponto Médio">
+  <meta name="twitter:description" content="Plano cartesiano explicado do zero: o par ordenado (x, y) num plano em que você arrasta o ponto, os quadrantes, a distância entre dois pontos como Pitágoras desenhado, o ponto médio e o gráfico de dispersão dividido pelas médias, que é a ideia da covariância.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="plano-cartesiano.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Plano Cartesiano — Pontos, Distância e Ponto Médio</h1>
+    <p class="page-lede">Duas retas numéricas cruzadas no zero, uma deitada e uma em pé, e cada ponto do plano ganha um endereço: o par <strong>(x, y)</strong>. É nesse plano que se desenham as funções, as retas de regressão e os gráficos de dispersão.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#ponto">O par (x, y)</a>
+      <a href="#quadrantes">Quadrantes</a>
+      <a href="#distancia">Distância</a>
+      <a href="#dispersao">Dispersão</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="P = (x,\ y)"></span>
+
+    <!-- 1. Um ponto; estado em ?px=&py=. -->
+    <section class="calc intro" id="ponto" aria-labelledby="ponto-title">
+      <h2 id="ponto-title">Cada ponto é um par (x, y)</h2>
+      <p class="calc-lede">Arraste o ponto no plano, ou mexa nos sliders.</p>
+      <div class="vars">
+        <label class="var">
+          <i>x</i>
+          <input name="px" type="range" min="-6" max="6" step="1" value="3" aria-label="Coordenada x">
+          <output class="out-px">3</output>
+        </label>
+        <label class="var var-b">
+          <i>y</i>
+          <input name="py" type="range" min="-6" max="6" step="1" value="-2" aria-label="Coordenada y">
+          <output class="out-py">−2</output>
+        </label>
+      </div>
+      <div class="calc-result"></div>
+      <div class="intro-figure plano-fig" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="quadrantes" aria-labelledby="quadrantes-title">
+      <h2 id="quadrantes-title">Eixos, origem e quadrantes</h2>
+      <p>A reta deitada é o <strong>eixo x</strong> (das abscissas) e a reta em pé, o <strong>eixo y</strong> (das ordenadas). Elas se cruzam na <strong>origem</strong>, o ponto (0, 0). Em cada eixo vale o que se viu nos <a href="negativos.html">números negativos</a>: à direita e para cima, positivo; à esquerda e para baixo, negativo.</p>
+      <p>Os eixos dividem o plano em quatro <strong>quadrantes</strong>, numerados no sentido anti-horário a partir do de cima à direita. O quadrante se descobre só pelos sinais:</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="1^{\text{º}}:\ (+,\ +)"></span>
+          <p>Em cima, à direita. Exemplo: (3, 2).</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="2^{\text{º}}:\ (-,\ +)"></span>
+          <p>Em cima, à esquerda. Exemplo: (−3, 2).</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3^{\text{º}}:\ (-,\ -)"></span>
+          <p>Embaixo, à esquerda. Exemplo: (−3, −2).</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="4^{\text{º}}:\ (+,\ -)"></span>
+          <p>Embaixo, à direita. Exemplo: (3, −2).</p>
+        </div>
+      </div>
+      <p>Um ponto com x = 0 ou y = 0 fica <strong>sobre um eixo</strong> e não pertence a nenhum quadrante. Trocar o sinal de uma coordenada espelha o ponto: (3, −2) é o reflexo de (3, 2) no eixo x, e (−3, 2), o reflexo no eixo y.</p>
+    </section>
+
+    <!-- 2. Distância e ponto médio; estado em ?xa=&ya=&xb=&yb=. -->
+    <section class="calc" id="distancia" aria-labelledby="dist-title">
+      <h2 id="dist-title">Distância entre dois pontos é Pitágoras</h2>
+      <p class="calc-lede">Arraste A e B (ou use os sliders). Ir de A até B andando só na horizontal e na vertical desenha um triângulo retângulo; a distância em linha reta é a hipotenusa.</p>
+      <div class="vars">
+        <label class="var">
+          <i>x<sub>A</sub></i>
+          <input name="xa" type="range" min="-6" max="6" step="1" value="-2" aria-label="x de A">
+          <output class="out-xa">−2</output>
+        </label>
+        <label class="var">
+          <i>y<sub>A</sub></i>
+          <input name="ya" type="range" min="-6" max="6" step="1" value="-1" aria-label="y de A">
+          <output class="out-ya">−1</output>
+        </label>
+        <label class="var var-b">
+          <i>x<sub>B</sub></i>
+          <input name="xb" type="range" min="-6" max="6" step="1" value="2" aria-label="x de B">
+          <output class="out-xb">2</output>
+        </label>
+        <label class="var var-b">
+          <i>y<sub>B</sub></i>
+          <input name="yb" type="range" min="-6" max="6" step="1" value="2" aria-label="y de B">
+          <output class="out-yb">2</output>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="-2;-1;2;2">triângulo 3-4-5</button>
+        <button type="button" data-exemplo="-5;-4;1;4">triângulo 6-8-10</button>
+        <button type="button" data-exemplo="0;0;3;3">diagonal</button>
+        <button type="button" data-exemplo="-4;2;3;2">mesma horizontal</button>
+        <button type="button" data-exemplo="-3;1;2;-1">raiz não exata</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="intro-figure plano-fig" aria-hidden="true"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="formulas-title">
+      <h2 id="formulas-title">As duas fórmulas</h2>
+      <span class="tex-block" data-tex="d(A, B) = \sqrt{(x_B - x_A)^2 + (y_B - y_A)^2} \qquad M = \left(\frac{x_A + x_B}{2},\ \frac{y_A + y_B}{2}\right)"></span>
+      <p>A da <strong>distância</strong> é o teorema de Pitágoras com os catetos medidos nos eixos. Como cada diferença é elevada ao quadrado, tanto faz fazer x<sub>B</sub> − x<sub>A</sub> ou x<sub>A</sub> − x<sub>B</sub>: a distância de A até B é a mesma de B até A. A versão para qualquer número de dimensões está em <a href="/formulas/distancia-pontos.html">distância entre pontos</a>.</p>
+      <p>A do <strong>ponto médio</strong> é a média das coordenadas. Ela funciona eixo por eixo: o meio do caminho na horizontal é a média dos x, e na vertical, a média dos y.</p>
+    </section>
+
+    <!-- 3. Dispersão; sem estado na URL. -->
+    <section class="calc" id="dispersao" aria-labelledby="disp-title">
+      <h2 id="disp-title">Na estatística: o gráfico de dispersão</h2>
+      <p class="calc-lede">Quando cada observação tem dois números, como horas de estudo e nota de cada aluno, cada uma vira um ponto (x, y), e o conjunto vira uma nuvem. Arraste os pontos ou escolha um conjunto.</p>
+      <div class="calc-examples">
+        Conjuntos:
+        <button type="button" data-conjunto="positiva">relação positiva</button>
+        <button type="button" data-conjunto="negativa">relação negativa</button>
+        <button type="button" data-conjunto="nenhuma">sem relação</button>
+      </div>
+      <div class="calc-result"></div>
+      <div class="intro-figure plano-fig" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="(2,\ 5) \ne (5,\ 2)"></span>
+          <p><strong>A ordem importa.</strong> Primeiro o x, depois o y. Por isso se chama <em>par ordenado</em>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(0,\ 4)"></span>
+          <p><strong>x = 0 fica no eixo y</strong>, não no eixo x. É o ponto que não andou nada para os lados.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\sqrt{3^2 + 4^2} \ne 3 + 4"></span>
+          <p><strong>A raiz não se distribui.</strong> √(9 + 16) = √25 = 5, não 7. Somar os catetos é andar em L, não em linha reta.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(-3)^2 = 9"></span>
+          <p><strong>Diferença negativa não dá distância negativa.</strong> Na fórmula, o quadrado vem antes da soma e apaga o sinal.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\frac{x_A + x_B}{2}"></span>
+          <p><strong>Ponto médio é soma, não diferença.</strong> A diferença entra na distância; o ponto médio é uma média.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde o plano leva</h2>
+      <p><strong>Funções.</strong> O gráfico de uma função é o conjunto de todos os pontos (x, y) em que y é o valor da função em x. Os de y = ax + b formam uma reta: é a próxima página, <a href="funcao-1grau.html">função do 1º grau</a>.</p>
+      <p><strong>Regressão.</strong> A <a href="/formulas/regressao-linear.html">reta de regressão</a> é a reta que passa mais perto de todos os pontos de um gráfico de dispersão, e ela sempre passa pelo centro (x̄, ȳ) que aparece no gráfico acima.</p>
+      <p><strong>Distâncias entre observações.</strong> Agrupar clientes parecidos ou achar os vizinhos mais próximos de um dado são contas com a mesma fórmula da distância, só que com mais de dois eixos.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Em que quadrante está cada ponto: (−4, 1), (5, −3), (−2, −6) e (0, 3)?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>(−4, 1): <strong>2º</strong>. (5, −3): <strong>4º</strong>. (−2, −6): <strong>3º</strong>. (0, 3): <strong>nenhum</strong>, está sobre o eixo y.</p>
+            <p><a href="?px=-4&amp;py=1#ponto">Veja no plano →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Qual é o reflexo de (4, −1) no eixo x? E no eixo y?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>No eixo x, troca o sinal do y: <strong>(4, 1)</strong>. No eixo y, troca o sinal do x: <strong>(−4, −1)</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Calcule a distância entre A = (−5, −4) e B = (1, 4).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Δx = 1 − (−5) = 6 e Δy = 4 − (−4) = 8. d = √(36 + 64) = √100 = <strong>10</strong>.</p>
+            <p><a href="?xa=-5&amp;ya=-4&amp;xb=1&amp;yb=4#distancia">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule a distância e o ponto médio entre (−3, 1) e (2, −1).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Δx = 5 e Δy = −2. d = √(25 + 4) = <strong>√29 ≈ 5,39</strong>. Ponto médio: ((−3 + 2)/2, (1 − 1)/2) = <strong>(−0,5; 0)</strong>.</p>
+            <p><a href="?xa=-3&amp;ya=1&amp;xb=2&amp;yb=-1#distancia">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> O ponto médio de A e B é M = (1, 2), e A = (−3, 5). Quem é B?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Para cada eixo, a média de A e B dá M: (−3 + x<sub>B</sub>)/2 = 1, então x<sub>B</sub> = 5; (5 + y<sub>B</sub>)/2 = 2, então y<sub>B</sub> = −1. <strong>B = (5, −1)</strong>. Atalho: de A até M anda-se (4, −3); de M até B, de novo (4, −3).</p>
+            <p><a href="?xa=-3&amp;ya=5&amp;xb=5&amp;yb=-1#distancia">Veja no plano →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Cinco alunos tiveram (horas de estudo, nota) iguais a (2, 4), (4, 6), (5, 5), (6, 8) e (8, 7). Calcule o centro (x̄, ȳ) e diga quantos pontos ficam nas regiões em que x e y estão juntos acima ou juntos abaixo da média.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>x̄ = 25/5 = 5 e ȳ = 30/5 = 6: o centro é <strong>(5, 6)</strong>. (2, 4) está abaixo nos dois, (6, 8) e (8, 7) estão acima nos dois: <strong>3 pontos</strong>. (4, 6) e (5, 5) caem sobre uma das linhas e não contam para nenhum lado. Com mais pontos “de acordo” que “do contra”, a covariância é positiva.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="fatorial.html" rel="prev"><span>Anterior</span>Fatorial — Contar Filas</a>
+      <a class="pager-next" href="funcao-1grau.html" rel="next"><span>Próximo</span>Função do 1º Grau — A Reta y = ax + b</a>
+    </nav>
+  </main>
+</body>
+</html>

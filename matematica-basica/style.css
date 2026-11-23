@@ -2325,6 +2325,58 @@
   text-align: left;
 }
 
+/* ================================================================ plano cartesiano */
+
+/* Arrastar no gráfico não rola a página. */
+.plano-plot {
+  max-width: 420px;
+  margin: 0 auto;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.plano-plot.is-dragging {
+  cursor: grabbing;
+}
+
+.plano-eixo {
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* Os quatro sliders de A e B: dois por linha (A em cima, B embaixo). */
+#distancia .vars {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.quad-fill { fill: var(--tone-1); opacity: .08; }
+.quad-conc { fill: var(--tone-3); opacity: .1; }
+.quad-disc { fill: var(--tone-4); opacity: .1; }
+
+/* Os catetos: horizontal em laranja, vertical em roxo, como Δx e Δy no texto. */
+.cat-x { stroke: var(--tone-2); stroke-width: 3; stroke-linecap: round; }
+.cat-y { stroke: var(--tone-5); stroke-width: 3; stroke-linecap: round; }
+
+.mean-line {
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+
+.plot-dot.is-origem { fill: var(--text-muted); r: 4; }
+.plot-dot.is-a { fill: var(--tone-2); }
+.plot-dot.is-bpt { fill: var(--tone-5); }
+.plot-dot.is-m { fill: var(--tone-3); }
+.plot-dot.is-conc { fill: var(--tone-3); }
+.plot-dot.is-disc { fill: var(--tone-4); }
+.plot-dot.is-neutro { fill: var(--text-muted); }
+.plot-dot.is-centro { fill: var(--text-strong); }
+
+.plot-label.is-a, .plot-label.is-cx { fill: var(--tone-2); }
+.plot-label.is-bpt, .plot-label.is-cy { fill: var(--tone-5); }
+.plot-label.is-centro { fill: var(--text-muted); font-weight: 500; }
+
 /* ================================================================ função do 1º grau */
 
 .reta-plot {
