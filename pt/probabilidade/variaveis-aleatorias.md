@@ -341,7 +341,7 @@ plot(p1, p2, layout=(1,2), size=(800,400))</code></pre>
 </div>
 
 ![Transformação de Variável Aleatória]({{ site.baseurl }}/assets/images/distribuicoes.png)
-<div class="image-caption">Figura 1: Simulação de diferentes tipos de variáveis aleatórias - Binomial (esquerda), Normal (centro) e Exponencial (direita)</div>
+<div class="image-caption">Figura 1: Transformação de uma variável aleatória normal (esquerda) em qui-quadrado (direita)</div>
 
 ### 4.2 Simulação de Variáveis Aleatórias
 
@@ -458,7 +458,7 @@ plot(p1, p2, p3,
 </div>
 
 ![Simulação de Variáveis Aleatórias]({{ site.baseurl }}/assets/images/variaveis_aleatorias.png)
-<div class="image-caption">Figura 2: Transformação de uma variável aleatória normal (esquerda) em qui-quadrado (direita)</div>
+<div class="image-caption">Figura 2: Simulação de diferentes tipos de variáveis aleatórias - Binomial (esquerda), Normal (centro) e Exponencial (direita)</div>
 
 ---
 

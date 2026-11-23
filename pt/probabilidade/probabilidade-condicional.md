@@ -14,7 +14,7 @@ A **Probabilidade Condicional** é um conceito fundamental que nos permite calcu
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
   <strong>🎯 Importante:</strong><br>
-  A probabilidade condicional de um evento $$A$$ dado que $$B$$ ocorreu é denotada por $$P(A\mid B)$$ e é calculada como:
+  A probabilidade condicional de um evento $A$ dado que $B$ ocorreu é denotada por $P(A\mid B)$ e é calculada como:
   $$P(A\mid B) = \frac{P(A \cap B)}{P(B)}, \text{ onde } P(B) > 0$$
 </div>
 
@@ -360,14 +360,14 @@ Dados:
 
 1. **Probabilidade Total de Defeito**:
    $$P(B) = \sum_{j=1}^{3} P(B\mid A_j)P(A_j)$$
-   $$P(B) = (0,02 \cdot 0,5) + (0,03 \cdot 0,3) + (0,04 \cdot 0,2) = 0,029$$
+   $$P(B) = (0,02 \cdot 0,5) + (0,03 \cdot 0,3) + (0,04 \cdot 0,2) = 0,027$$
 
 2. **Probabilidade da Fábrica 2 dado Defeito**:
-   $$P(A_2\mid B) = \frac{P(B\mid A_2)P(A_2)}{P(B)} = \frac{0,03 \cdot 0,3}{0,029} \approx 0,3103$$
+   $$P(A_2\mid B) = \frac{P(B\mid A_2)P(A_2)}{P(B)} = \frac{0,03 \cdot 0,3}{0,027} = \frac{1}{3} \approx 0,3333$$
 
 Portanto:
-- A probabilidade total de um produto ser defeituoso é 2,9%
-- Se um produto é defeituoso, há aproximadamente 31,03% de chance de ter sido produzido pela Fábrica 2
+- A probabilidade total de um produto ser defeituoso é 2,7%
+- Se um produto é defeituoso, há aproximadamente 33,33% de chance de ter sido produzido pela Fábrica 2
 
 #### 4.5.3 Importância das Partições
 

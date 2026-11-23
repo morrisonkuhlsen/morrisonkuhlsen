@@ -4,7 +4,7 @@ title: About Us
 lang: en
 ref: about-us
 permalink: /en/about-us
-order: 2
+order: 99
 ---
 
 <div style="text-align: center; margin: 2rem 0;">
