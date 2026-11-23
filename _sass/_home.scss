@@ -284,6 +284,7 @@ a.home-aside__card:hover { transform: translateY(-3px); }
   transition: transform var(--speed) var(--ease), box-shadow var(--speed) var(--ease);
 }
 .home-learn__card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.home-learn__body { display: flex; flex-direction: column; gap: 0.35rem; }
 
 .home-learn__num {
   font-size: var(--step-2);
@@ -305,3 +306,182 @@ a.home-aside__card:hover { transform: translateY(-3px); }
 .home-learn__card strong { margin-top: 0.5rem; font-size: var(--step-0); line-height: 1.3; }
 .home-learn__card--big strong { font-size: var(--step-1); }
 .home-learn__card p { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* ─── Retângulo de Fibonacci ─────────────────────────────────────────────
+   A partir de 72rem a grade vira um retângulo 13 × 8 sem espaço entre os
+   cartões: com gap, os quadrados deixavam de bater com a espiral, que é
+   desenhada num viewBox 13 × 8 esticado sobre a grade inteira. As linhas
+   entre os cartões são sombras internas, que não ocupam espaço.
+   Os tamanhos de letra usam cqw (largura da grade): 1 unidade de Fibonacci
+   = 100cqw / 13 ≈ 7,7cqw. Abaixo de 72rem o quadrado de 1 ficaria pequeno
+   demais para o número, e a grade comum de cima continua valendo. */
+.fib { display: none; }
+
+@media (min-width: 72rem) {
+  .home-learn {
+    position: relative;
+    container-type: inline-size;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+    aspect-ratio: 13 / 8;
+    gap: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--paper-alt);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .home-learn .home-learn__card {
+    display: flex;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: inset 0 0 0 0.5px var(--line);
+    transition: background var(--speed) var(--ease);
+  }
+  .home-learn .home-learn__card:hover {
+    transform: none;
+    box-shadow: inset 0 0 0 0.5px var(--line);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  /* Posição de cada quadrado. Logo abaixo, o canto onde fica o centro do
+     seu arco: o conteúdo encosta nesse canto, por dentro da curva. */
+  .home-learn .fib-8  { grid-area: 1 / 1 / 9 / 9; }
+  .home-learn .fib-5  { grid-area: 1 / 9 / 6 / 14; }
+  .home-learn .fib-3  { grid-area: 6 / 11 / 9 / 14; }
+  .home-learn .fib-2  { grid-area: 7 / 9 / 9 / 11; }
+  .home-learn .fib-1a { grid-area: 6 / 9 / 7 / 10; }
+  .home-learn .fib-1b { grid-area: 6 / 10 / 7 / 11; }
+
+  /* O cartão é flex em coluna: justify-content é o eixo vertical e
+     align-items, o horizontal. */
+  .fib-8  { justify-content: flex-end;   align-items: flex-end;   padding: 4cqw; }
+  .fib-5  { justify-content: flex-end;   align-items: flex-start; padding: 2.6cqw; }
+  .fib-3  { justify-content: flex-start; align-items: flex-start; padding: 1.6cqw; }
+  .fib-2  { justify-content: flex-start; align-items: flex-end;   padding: 1.1cqw; }
+  .fib-1a { justify-content: flex-end;   align-items: flex-end;   padding: 0.7cqw; }
+  .fib-1b { justify-content: flex-end;   align-items: flex-start; padding: 0.7cqw; }
+  .fib-2 .home-learn__body, .fib-1a .home-learn__body { align-items: flex-end; text-align: right; }
+
+  /* Largura do texto: o que cabe por dentro do arco a partir do canto. */
+  .fib-8 .home-learn__body { max-width: 30cqw; }
+  .fib-5 .home-learn__body { max-width: 22cqw; }
+  .fib-3 .home-learn__body { max-width: 15cqw; }
+
+  .fib-8 .home-learn__num { font-size: 9cqw; }
+  .fib-5 .home-learn__num { font-size: 5.5cqw; }
+  .fib-3 .home-learn__num { font-size: 3.4cqw; }
+  .fib-2 .home-learn__num { font-size: 2.6cqw; }
+  .fib-1a .home-learn__num, .fib-1b .home-learn__num { font-size: 2.2cqw; }
+
+  .fib-8 strong { font-size: 2.2cqw; }
+  .fib-8 p { font-size: 1.15cqw; }
+  .fib-5 strong { font-size: 1.6cqw; }
+  .fib-5 p { font-size: 1cqw; }
+  .fib-3 strong { font-size: 1.25cqw; }
+  .fib-3 p { font-size: 0.95cqw; }
+  .fib-2 strong { font-size: 1.05cqw; }
+
+  .fib-2 p, .fib-1a p, .fib-1b p,
+  .fib-1a strong, .fib-1b strong { display: none; }
+  .fib-1a .home-learn__unit, .fib-1b .home-learn__unit { font-size: 0.65rem; }
+
+  .fib {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--accent);
+    pointer-events: none;
+  }
+}
+
+.fib__spiral {
+  fill: none;
+  stroke: currentColor;
+  /* Em unidades do viewBox (~2px): com non-scaling-stroke o pathLength
+     deixa de valer e o dasharray 1 virava um tracejado. */
+  stroke-width: 0.02;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  opacity: 0.85;
+}
+
+/* No hover de qualquer cartão a espiral se redesenha, do 8 até o centro. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-learn:has(.home-learn__card:is(:hover, :focus-visible)) .fib__spiral {
+    animation: ai-draw 1.6s cubic-bezier(0.45, 0, 0.25, 1) both;
+  }
+}
+
+/* ─── Tema vintage do "Aprenda fazendo" ───────────────────────────────────
+   Papel bege, tinta sépia e números em Garamond, como uma prancha de livro
+   antigo. As cores ficam em variáveis da própria seção e trocam no tema
+   escuro por um papel queimado com tinta clara. A seção redefine --ink,
+   --ink-soft, --ink-faint, --line e --accent, então tudo o que já usa essas
+   variáveis lá dentro (cartões, espiral, linhas) entra no tema sozinho. */
+.vintage {
+  --vin-paper:   #f3ead6;
+  --vin-paper-2: #ebdfc4;
+  --ink:         #3a2e21;
+  --ink-soft:    #6b5944;
+  --ink-faint:   #9a8466;
+  --line:        #d3c19c;
+  --accent:      #8b4a26;
+  --paper-alt:   var(--vin-paper-2);
+  --serif: "EB Garamond", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+
+  background:
+    radial-gradient(ellipse at 50% 40%, rgb(255 250 238 / 55%), transparent 70%),
+    var(--vin-paper);
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .vintage {
+  --vin-paper:   #221c15;
+  --vin-paper-2: #2b241b;
+  --ink:         #ece0c8;
+  --ink-soft:    #bba98b;
+  --ink-faint:   #8d7c62;
+  --line:        #43392a;
+  --accent:      #d89a66;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgb(255 220 170 / 5%), transparent 70%),
+    var(--vin-paper);
+}
+
+.vintage .section-head__title {
+  font-family: var(--serif);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.vintage .section-head__lede { font-family: var(--serif); font-style: italic; font-size: var(--step-0); }
+
+.vintage .home-learn__num {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  letter-spacing: -0.01em;
+}
+.vintage .home-learn__unit { color: var(--ink-faint); letter-spacing: 0.18em; }
+.vintage .home-learn__card strong { font-family: var(--serif); font-weight: 600; letter-spacing: 0.005em; }
+.vintage .home-learn__card p { color: var(--ink-soft); }
+
+@media (min-width: 72rem) {
+  /* Fio duplo em volta da prancha, como a moldura de uma gravura. */
+  .vintage .home-learn {
+    overflow: visible;
+    background: rgb(255 255 255 / 18%);
+    box-shadow: inset 0 0 0 1px var(--line);
+    outline: 1px solid var(--line);
+    outline-offset: 6px;
+    border-radius: 0;
+  }
+  :root[data-theme="dark"] .vintage .home-learn { background: rgb(0 0 0 / 12%); }
+
+  .vintage .fib-8 .home-learn__num { font-size: 11cqw; line-height: 0.9; }
+  .vintage .fib-5 .home-learn__num { font-size: 6.5cqw; line-height: 0.9; }
+  .vintage .fib__spiral { opacity: 0.75; }
+}

@@ -13,50 +13,75 @@
 {%- assign n_test = site.data.testes_estatisticos.testes | size -%}
 {%- assign n_glos = site.data.glossario.pt | size -%}
 
-<section class="section">
+<section class="section vintage">
   <div class="container">
     <div class="section-head">
       <h2 class="section-head__title">Aprenda fazendo</h2>
       <p class="section-head__lede">Páginas interativas: você muda os números e a conta se refaz na hora.</p>
     </div>
 
+    {%- comment -%}
+      Em tela larga, a grade é um retângulo de Fibonacci 13 × 8: cada cartão é
+      um quadrado (8, 5, 3, 2, 1, 1), do mais importante ao menor, e a espiral
+      áurea (.fib) passa por todos. Cada arco é um quarto de círculo com o
+      centro num canto do quadrado; o conteúdo do cartão fica encostado nesse
+      canto, por dentro da curva, para a espiral não cortar o texto. Os
+      quadrados de 1 mostram só o número e o rótulo; o nome vai no
+      aria-label. Em tela estreita volta a grade comum (_home.scss,
+      "Aprenda fazendo" e "Retângulo de Fibonacci").
+    {%- endcomment -%}
     <div class="home-learn">
-      <a class="home-learn__card home-learn__card--big" href="{{ '/matematica-basica/' | relative_url }}">
-        <span class="home-learn__num">{{ n_elem }}</span>
-        <span class="home-learn__unit">lições</span>
-        <strong>Matemática elementar</strong>
-        <p>A base que a estatística pressupõe, do zero: das quatro operações a matrizes, cada assunto com calculadora que mostra a conta inteira.</p>
+      <a class="home-learn__card home-learn__card--big fib-8" href="{{ '/matematica-basica/' | relative_url }}">
+        <div class="home-learn__body">
+          <span class="home-learn__num">{{ n_elem }}</span>
+          <span class="home-learn__unit">lições</span>
+          <strong>Matemática elementar</strong>
+          <p>A base que a estatística pressupõe, do zero: das quatro operações a matrizes, cada assunto com calculadora que mostra a conta inteira.</p>
+        </div>
       </a>
-      <a class="home-learn__card home-learn__card--big" href="{{ '/calculo/' | relative_url }}">
-        <span class="home-learn__num">{{ n_calc }}</span>
-        <span class="home-learn__unit">lições</span>
-        <strong>Cálculo intuitivo</strong>
-        <p>Limite, derivada e integral explicados pela ideia, com gráficos que se mexem e a ligação com a estatística.</p>
+      <a class="home-learn__card home-learn__card--big fib-5" href="{{ '/calculo/' | relative_url }}">
+        <div class="home-learn__body">
+          <span class="home-learn__num">{{ n_calc }}</span>
+          <span class="home-learn__unit">lições</span>
+          <strong>Cálculo intuitivo</strong>
+          <p>Limite, derivada e integral explicados pela ideia, com gráficos que se mexem e a ligação com a estatística.</p>
+        </div>
       </a>
-      <a class="home-learn__card" href="{{ '/formulas/' | relative_url }}">
-        <span class="home-learn__num">{{ n_form }}</span>
-        <span class="home-learn__unit">fórmulas</span>
-        <strong>Fórmulas interativas</strong>
-        <p>Cada fórmula termo a termo, com calculadora e passo a passo.</p>
+      <a class="home-learn__card fib-3" href="{{ '/formulas/' | relative_url }}">
+        <div class="home-learn__body">
+          <span class="home-learn__num">{{ n_form }}</span>
+          <span class="home-learn__unit">fórmulas</span>
+          <strong>Fórmulas interativas</strong>
+          <p>Cada fórmula termo a termo, com calculadora e passo a passo.</p>
+        </div>
       </a>
-      <a class="home-learn__card" href="{{ '/testes-estatisticos/' | relative_url }}">
-        <span class="home-learn__num">{{ n_test }}</span>
-        <span class="home-learn__unit">testes</span>
-        <strong>Testes estatísticos</strong>
-        <p>Quando usar cada um, o código em R e Python e uma calculadora.</p>
+      <a class="home-learn__card fib-2" href="{{ '/testes-estatisticos/' | relative_url }}">
+        <div class="home-learn__body">
+          <span class="home-learn__num">{{ n_test }}</span>
+          <span class="home-learn__unit">testes</span>
+          <strong>Testes estatísticos</strong>
+          <p>Quando usar cada um, o código em R e Python e uma calculadora.</p>
+        </div>
       </a>
-      <a class="home-learn__card" href="{{ '/pt/glossario' | relative_url }}">
-        <span class="home-learn__num">{{ n_glos }}</span>
-        <span class="home-learn__unit">verbetes</span>
-        <strong>Glossário</strong>
-        <p>O que cada termo significa, em uma ou duas frases.</p>
+      <a class="home-learn__card fib-1a" href="{{ '/pt/glossario' | relative_url }}" aria-label="Glossário: {{ n_glos }} verbetes">
+        <div class="home-learn__body">
+          <span class="home-learn__num">{{ n_glos }}</span>
+          <span class="home-learn__unit">verbetes</span>
+          <strong>Glossário</strong>
+          <p>O que cada termo significa, em uma ou duas frases.</p>
+        </div>
       </a>
-      <a class="home-learn__card" href="{{ '/quiz/' | relative_url }}">
-        <span class="home-learn__num">?</span>
-        <span class="home-learn__unit">quiz</span>
-        <strong>Quiz de testes</strong>
-        <p>Um cenário por vez: escolha o teste certo e veja por quê.</p>
+      <a class="home-learn__card fib-1b" href="{{ '/quiz/' | relative_url }}" aria-label="Quiz de testes">
+        <div class="home-learn__body">
+          <span class="home-learn__num">?</span>
+          <span class="home-learn__unit">quiz</span>
+          <strong>Quiz de testes</strong>
+          <p>Um cenário por vez: escolha o teste certo e veja por quê.</p>
+        </div>
       </a>
+      <svg class="fib" viewBox="0 0 13 8" preserveAspectRatio="none" aria-hidden="true">
+        <path class="fib__spiral" pathLength="1" d="M0 8A8 8 0 0 1 8 0A5 5 0 0 1 13 5A3 3 0 0 1 10 8A2 2 0 0 1 8 6A1 1 0 0 1 9 5A1 1 0 0 1 10 6"/>
+      </svg>
     </div>
   </div>
 </section>
