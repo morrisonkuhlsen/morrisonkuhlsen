@@ -15,4 +15,5 @@
 @use "search";
 @use "glossary";
 @use "footer";
+@use "type";    // fontes por elemento: depois dos componentes
 @use "print";   // por último: vence as anteriores sem !important

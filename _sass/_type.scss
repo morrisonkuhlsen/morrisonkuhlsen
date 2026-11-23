@@ -1,0 +1,41 @@
+/* Tipografia: onde entra a JetBrains Mono (--font-display). O texto corrido
+   fica na Source Sans 3 (--font-body), que lê melhor em parágrafos longos;
+   a mono vai para títulos, números e interface. A seção vintage da home
+   mantém a Garamond com seletores de duas classes, que vencem estes.
+   Ligaduras desligadas: com elas "!=" virava "≠" e ">=" virava "≥". Vem
+   depois dos componentes em main.scss para vencer as regras deles. */
+
+/* Títulos: 700, um pouco mais fechados. */
+h1, h2, h3, h4,
+.hero__title, .feature-card__title, .post-card__title, .section-head__title,
+.home-area__title, .home-aside__term, .home-aside__card--weekly strong,
+.tags-section__title, .home-learn__card strong {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-ligatures: none;
+}
+
+/* Números em destaque e datas: 500. */
+.home-learn__num, time, .post-card__meta {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-variant-ligatures: none;
+}
+
+/* Interface: menu, rótulos, chips, botões. */
+.site-nav, .home-aside__kicker, .home-area__num, .home-learn__unit,
+.chip, .home-aside__chips a, .read-more, .btn, .post-card__badge {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-variant-ligatures: none;
+}
+
+/* Itálico no subtítulo do topo e nas legendas. */
+.hero__lede, figcaption {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-variant-ligatures: none;
+}
+.hero__lede { font-size: 0.95em; }

@@ -44,10 +44,10 @@
   --chip-bg:      #f2f2f2;
 
   /* Tipografia */
-  /* Uma família só no site inteiro: o display é a mesma do corpo, no peso
-     máximo. Economiza uma requisição de fonte e dá coerência tipográfica. */
+  /* Source Sans 3 no texto corrido; JetBrains Mono (--font-display) nos
+     títulos, números e interface. Quem usa cada uma: _type.scss. */
   --font-body:    "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: var(--font-body);
+  --font-display: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
   --font-mono:    ui-monospace, "SFMono-Regular", "Roboto Mono", monospace;
 
   --step--1: clamp(0.84rem, 0.82rem + 0.1vw, 0.9rem);
