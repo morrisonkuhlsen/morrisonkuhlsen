@@ -1,0 +1,44 @@
+{%- comment -%}
+  As quatro áreas do site, cada uma com os tópicos que tem dentro. Áreas são
+  as páginas com `order` de 1 a 9 e sem `parent`; os tópicos, as páginas com
+  `parent` igual ao `ref` da área. Uma área nova ou um tópico novo aparecem
+  aqui sozinhos. O ícone vem do `ref` da área (area-icon.html); uma área sem
+  ícone mapeado aparece só com o número.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- assign areas = site.pages | where: "lang", lang | where_exp: "p", "p.order > 0 and p.order < 10 and p.parent == nil and p.ref != 'blog'" | sort: "order" -%}
+
+{%- if areas.size > 0 -%}
+<section class="section section--alt">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-head__title">{% if lang == 'en' %}Start with an area{% else %}Comece por uma área{% endif %}</h2>
+    </div>
+
+    <div class="home-areas">
+      {%- for area in areas -%}
+        {%- assign topics = site.pages | where: "parent", area.ref | where: "lang", lang | sort: "order" -%}
+        <article class="home-area">
+          <div class="home-area__head">
+            {%- include area-icon.html ref=area.ref -%}
+            <span class="home-area__num">{{ forloop.index | prepend: "0" }}</span>
+          </div>
+          <h3 class="home-area__title"><a href="{{ area.url | relative_url }}">{{ area.title }}</a></h3>
+          {%- if area.description -%}<p class="home-area__desc">{{ area.description }}</p>{%- endif -%}
+          {%- if topics.size > 0 -%}
+            <ul class="home-area__topics">
+              {%- for t in topics -%}
+                <li><a href="{{ t.url | relative_url }}">{{ t.title }}</a></li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+          <a class="read-more" href="{{ area.url | relative_url }}">
+            {% if lang == 'en' %}Open the area{% else %}Abrir a área{% endif %}
+            <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
+          </a>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}

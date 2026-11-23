@@ -1,6 +1,6 @@
 {%- comment -%}
-  Coluna ao lado do post em destaque, na home: Problema Semanal e um verbete
-  do glossário. Os atalhos das ferramentas ficam em home-tools.html, embaixo
+  Coluna ao lado do post em destaque, na home: Problema Semanal, a árvore
+  de decisão dos testes (só em português) e um verbete do glossário. Os atalhos das ferramentas ficam em home-tools.html, embaixo
   do destaque, para as duas colunas terminarem na mesma altura. O verbete é
   escolhido pelo dia do ano no momento do build — por isso o rótulo não
   promete "do dia".
@@ -19,6 +19,14 @@
         {% if lang == 'en' %}Solve it{% else %}Resolver{% endif %}
         <svg aria-hidden="true"><use href="#i-arrow-right"></use></svg>
       </span>
+    </a>
+  {%- endif -%}
+
+  {%- if lang == 'pt' -%}
+    <a class="home-aside__card" href="{{ '/testes-estatisticos/arvore/' | relative_url }}">
+      <span class="home-aside__kicker">Árvore de decisão</span>
+      <strong class="home-aside__term">Qual teste usar?</strong>
+      <p>Responda o que quer fazer, o tipo de dado e o delineamento, e chegue a um dos {{ site.data.testes_estatisticos.testes | size }} testes do catálogo.</p>
     </a>
   {%- endif -%}
 

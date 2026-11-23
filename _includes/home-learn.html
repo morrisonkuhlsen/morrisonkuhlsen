@@ -1,0 +1,63 @@
+{%- comment -%}
+  Vitrine dos materiais interativos. Os números saem dos próprios dados no
+  build: as lições e fórmulas de _data/standalone.yml (contadas pelo prefixo
+  da URL, sem a página de índice), os testes de testes_estatisticos.yml e os
+  verbetes de glossario.yml. Só em português: o inglês não tem estas páginas.
+{%- endcomment -%}
+{%- assign lang = page.lang | default: site.lang -%}
+{%- if lang == 'pt' -%}
+{%- assign pages = site.data.standalone | where: "lang", "pt" -%}
+{%- assign n_elem = pages | where_exp: "p", "p.url contains '/matematica-basica/'" | where_exp: "p", "p.url != '/matematica-basica/'" | size -%}
+{%- assign n_calc = pages | where_exp: "p", "p.url contains '/calculo/'" | where_exp: "p", "p.url != '/calculo/'" | size -%}
+{%- assign n_form = pages | where_exp: "p", "p.url contains '/formulas/'" | where_exp: "p", "p.url != '/formulas/'" | size -%}
+{%- assign n_test = site.data.testes_estatisticos.testes | size -%}
+{%- assign n_glos = site.data.glossario.pt | size -%}
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-head__title">Aprenda fazendo</h2>
+      <p class="section-head__lede">Páginas interativas: você muda os números e a conta se refaz na hora.</p>
+    </div>
+
+    <div class="home-learn">
+      <a class="home-learn__card home-learn__card--big" href="{{ '/matematica-basica/' | relative_url }}">
+        <span class="home-learn__num">{{ n_elem }}</span>
+        <span class="home-learn__unit">lições</span>
+        <strong>Matemática elementar</strong>
+        <p>A base que a estatística pressupõe, do zero: das quatro operações a matrizes, cada assunto com calculadora que mostra a conta inteira.</p>
+      </a>
+      <a class="home-learn__card home-learn__card--big" href="{{ '/calculo/' | relative_url }}">
+        <span class="home-learn__num">{{ n_calc }}</span>
+        <span class="home-learn__unit">lições</span>
+        <strong>Cálculo intuitivo</strong>
+        <p>Limite, derivada e integral explicados pela ideia, com gráficos que se mexem e a ligação com a estatística.</p>
+      </a>
+      <a class="home-learn__card" href="{{ '/formulas/' | relative_url }}">
+        <span class="home-learn__num">{{ n_form }}</span>
+        <span class="home-learn__unit">fórmulas</span>
+        <strong>Fórmulas interativas</strong>
+        <p>Cada fórmula termo a termo, com calculadora e passo a passo.</p>
+      </a>
+      <a class="home-learn__card" href="{{ '/testes-estatisticos/' | relative_url }}">
+        <span class="home-learn__num">{{ n_test }}</span>
+        <span class="home-learn__unit">testes</span>
+        <strong>Testes estatísticos</strong>
+        <p>Quando usar cada um, o código em R e Python e uma calculadora.</p>
+      </a>
+      <a class="home-learn__card" href="{{ '/pt/glossario' | relative_url }}">
+        <span class="home-learn__num">{{ n_glos }}</span>
+        <span class="home-learn__unit">verbetes</span>
+        <strong>Glossário</strong>
+        <p>O que cada termo significa, em uma ou duas frases.</p>
+      </a>
+      <a class="home-learn__card" href="{{ '/quiz/' | relative_url }}">
+        <span class="home-learn__num">?</span>
+        <span class="home-learn__unit">quiz</span>
+        <strong>Quiz de testes</strong>
+        <p>Um cenário por vez: escolha o teste certo e veja por quê.</p>
+      </a>
+    </div>
+  </div>
+</section>
+{%- endif -%}

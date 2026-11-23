@@ -1,0 +1,21 @@
+{%- comment -%}
+  Ícone de cada área da home, em SVG inline numa grade de 32. Não fica no
+  sprite de icons.html porque o <use> esconde as partes do desenho do CSS, e
+  a animação do hover (_home.scss, "Ícones das áreas") mexe em cada barra,
+  pip, ponto e curva separadamente. pathLength="1" deixa a curva e a reta
+  serem desenhadas com dasharray 1, qualquer que seja o comprimento.
+  A curva normal é uma polilinha da densidade de verdade (μ = 16, σ = 4,6),
+  com a cauda pintada a partir de 1,3σ, onde cai a linha de corte.
+  Uso: {% include area-icon.html ref=area.ref %}
+{%- endcomment -%}
+{%- capture svg_open -%}<svg class="home-area__icon home-area__icon--{{ include.ref }}" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{%- endcapture -%}
+{%- case include.ref -%}
+{%- when "estatistica-descritiva" -%}
+{{ svg_open }}<g class="ai-bars"><rect class="ai-bar" x="5" y="19" width="4.5" height="8" rx="1"/><rect class="ai-bar" x="11" y="10" width="4.5" height="17" rx="1"/><rect class="ai-bar" x="17" y="7" width="4.5" height="20" rx="1"/><rect class="ai-bar" x="23" y="15" width="4.5" height="12" rx="1"/></g><path d="M3 27h26"/></svg>
+{%- when "probabilidade" -%}
+{{ svg_open }}<g class="ai-die"><rect class="ai-face" x="5" y="5" width="22" height="22" rx="5"/><g fill="currentColor" stroke="none"><circle class="ai-pip" cx="11" cy="11" r="1.75"/><circle class="ai-pip" cx="21" cy="11" r="1.75"/><circle class="ai-pip" cx="16" cy="16" r="1.75"/><circle class="ai-pip" cx="11" cy="21" r="1.75"/><circle class="ai-pip" cx="21" cy="21" r="1.75"/></g></g></svg>
+{%- when "inferencia-estatistica" -%}
+{{ svg_open }}<path class="ai-tail" d="M22 26.5 L22 18.38 L22.5 19.5 L23 20.53 L23.5 21.47 L24 22.31 L24.5 23.05 L25 23.7 L25.5 24.25 L26 24.71 L26.5 25.1 L27 25.41 L27.5 25.67 L28 25.87 L28.5 26.03 L29 26.15 L29 26.5Z" fill="currentColor" stroke="none"/><path class="ai-curve" pathLength="1" d="M3 26.15 L3.5 26.03 L4 25.87 L4.5 25.67 L5 25.41 L5.5 25.1 L6 24.71 L6.5 24.25 L7 23.7 L7.5 23.05 L8 22.31 L8.5 21.47 L9 20.53 L9.5 19.5 L10 18.38 L10.5 17.2 L11 15.98 L11.5 14.73 L12 13.48 L12.5 12.28 L13 11.14 L13.5 10.11 L14 9.21 L14.5 8.48 L15 7.94 L15.5 7.61 L16 7.5 L16.5 7.61 L17 7.94 L17.5 8.48 L18 9.21 L18.5 10.11 L19 11.14 L19.5 12.28 L20 13.48 L20.5 14.73 L21 15.98 L21.5 17.2 L22 18.38 L22.5 19.5 L23 20.53 L23.5 21.47 L24 22.31 L24.5 23.05 L25 23.7 L25.5 24.25 L26 24.71 L26.5 25.1 L27 25.41 L27.5 25.67 L28 25.87 L28.5 26.03 L29 26.15"/><path class="ai-cut" d="M22 4.5V27" stroke-width="1.4" stroke-dasharray="0.1 3"/><path d="M3 27h26"/></svg>
+{%- when "analise-de-dados" -%}
+{{ svg_open }}<path d="M5 4v23h23"/><path class="ai-line" pathLength="1" d="M8 23.5 27 8"/><g class="ai-dots" fill="currentColor"><circle class="ai-dot" cx="10" cy="19" r="1.9"/><circle class="ai-dot" cx="13.5" cy="22.5" r="1.9"/><circle class="ai-dot" cx="16" cy="15" r="1.9"/><circle class="ai-dot" cx="20" cy="17" r="1.9"/><circle class="ai-dot" cx="22" cy="9.5" r="1.9"/><circle class="ai-dot" cx="25.5" cy="13" r="1.9"/></g></svg>
+{%- endcase -%}
