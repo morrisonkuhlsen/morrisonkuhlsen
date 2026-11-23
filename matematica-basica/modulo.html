@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Módulo e Valor Absoluto — A Distância na Reta</title>
+  <meta name="description" content="Módulo explicado do zero: |x| como distância até o zero e |x − a| como distância entre dois números, numa reta que você mexe; as equações e inequações com módulo resolvidas e desenhadas na reta, as propriedades testadas com os seus números e a margem de erro como uma inequação modular.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/modulo.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/modulo.html">
+  <meta property="og:title" content="Módulo e Valor Absoluto — A Distância na Reta">
+  <meta property="og:description" content="Módulo explicado do zero: |x| como distância até o zero e |x − a| como distância entre dois números, numa reta que você mexe; as equações e inequações com módulo resolvidas e desenhadas na reta, as propriedades testadas com os seus números e a margem de erro como uma inequação modular.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Módulo e Valor Absoluto — A Distância na Reta">
+  <meta name="twitter:description" content="Módulo explicado do zero: |x| como distância até o zero e |x − a| como distância entre dois números, numa reta que você mexe; as equações e inequações com módulo resolvidas e desenhadas na reta, as propriedades testadas com os seus números e a margem de erro como uma inequação modular.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="modulo.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Módulo e Valor Absoluto — A Distância na Reta</h1>
+    <p class="page-lede">O módulo de um número, |x|, é a <strong>distância dele até o zero</strong>: |−5| = 5 e |5| = 5. Ele joga fora o sinal e fica com o tamanho. E |x − a| é a distância entre x e a — é assim que a estatística mede o quanto um valor se afasta de outro.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#distancia">Distância</a>
+      <a href="#definicao">Definição</a>
+      <a href="#equacoes">Equações e inequações</a>
+      <a href="#regras">Propriedades</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="|x - a| = \text{distância entre } x \text{ e } a"></span>
+
+    <!-- 1. Distância; estado em ?dx=&da=. -->
+    <section class="calc intro" id="distancia" aria-labelledby="dist-title">
+      <h2 id="dist-title">Módulo é distância</h2>
+      <div class="vars">
+        <label class="var">
+          <i>x</i>
+          <input name="dx" type="range" min="-9" max="9" step="1" value="-3" aria-label="O número x">
+          <output class="out-dx">−3</output>
+        </label>
+        <label class="var var-b">
+          <i>a</i>
+          <input name="da" type="range" min="-9" max="9" step="1" value="4" aria-label="O número a">
+          <output class="out-da">4</output>
+        </label>
+      </div>
+      <div class="calc-result"></div>
+      <div class="reta-box" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="definicao" aria-labelledby="def-title">
+      <h2 id="def-title">A definição, em duas partes</h2>
+      <p>Para tirar o sinal de um número negativo, basta pegar o oposto dele. Por isso o módulo se define em duas partes:</p>
+      <span class="tex-block" data-tex="|x| = \begin{cases} x, & \text{se } x \ge 0 \\ -x, & \text{se } x < 0 \end{cases}"></span>
+      <p>O “−x” assusta, mas com x negativo ele é positivo: se x = −5, então −x = −(−5) = 5. É o <a href="negativos.html">oposto</a> de que se fala nos números negativos. O módulo nunca dá negativo, e só dá zero para o zero.</p>
+      <p>Outra forma de escrever a mesma coisa: <strong>|x| = √(x²)</strong>. Elevar ao quadrado apaga o sinal, e a <a href="raizes.html">raiz quadrada</a> devolve sempre o valor positivo. É por isso que √((−3)²) = 3, e não −3.</p>
+    </section>
+
+    <!-- 2. Equações e inequações; estado em ?ea=&er=&rel=. -->
+    <section class="calc" id="equacoes" aria-labelledby="eq-title">
+      <h2 id="eq-title">Equações e inequações com módulo</h2>
+      <p class="calc-lede">Lendo |x − a| como distância, cada pergunta vira um desenho: quais x estão a uma distância r de a? A menos de r? A mais de r? Escolha a, r e o sinal.</p>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="ea" type="range" min="-6" max="6" step="1" value="1" aria-label="O centro a">
+          <output class="out-ea">1</output>
+        </label>
+        <label class="var var-b">
+          <i>r</i>
+          <input name="er" type="range" min="-3" max="6" step="1" value="3" aria-label="A distância r">
+          <output class="out-er">3</output>
+        </label>
+      </div>
+      <div class="seg" role="group" aria-label="Sinal">
+        <button type="button" data-rel="=" aria-pressed="false">= r</button>
+        <button type="button" data-rel="&lt;" aria-pressed="true">&lt; r</button>
+        <button type="button" data-rel="&lt;=" aria-pressed="false">≤ r</button>
+        <button type="button" data-rel="&gt;" aria-pressed="false">&gt; r</button>
+        <button type="button" data-rel="&gt;=" aria-pressed="false">≥ r</button>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+      <div class="reta-box" aria-hidden="true"></div>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+    </section>
+
+    <section class="lesson" aria-labelledby="resumo-title">
+      <h2 id="resumo-title">O resumo, com r positivo</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x - a| = r \iff x = a \pm r"></span>
+          <p><strong>Igual:</strong> dois pontos, um de cada lado de a.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x - a| < r \iff a - r < x < a + r"></span>
+          <p><strong>Menor:</strong> um intervalo só, centrado em a. É “perto de a”.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x - a| > r \iff x < a - r \ \text{ou}\ x > a + r"></span>
+          <p><strong>Maior:</strong> dois pedaços, longe de a para os dois lados.</p>
+        </div>
+      </div>
+      <p>Se r for negativo ou zero, o desenho resolve sem conta: nenhuma distância é negativa, e só o próprio a está a distância zero de a. A versão com coeficientes, como |2x − 6| ≤ 4, está em <a href="/formulas/modulo-inequacao.html">inequação modular</a>.</p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As propriedades, com os seus números</h2>
+      <p>Arraste a e b para valores negativos e positivos: os mesmos valores valem em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Oposto tem o mesmo módulo</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\lvert -a \rvert = |a|"></span>
+        <div class="rule-try" data-rule="oposto" data-vars="a"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Módulo do produto</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="|a \cdot b| = |a| \cdot |b| \qquad \left|\frac{a}{b}\right| = \frac{|a|}{|b|}"></span>
+        <div class="rule-try" data-rule="produto" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>A ordem não importa na distância</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="|a - b| = |b - a|"></span>
+        <div class="rule-try" data-rule="ordem" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Raiz do quadrado</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{a^2} = |a|"></span>
+        <div class="rule-try" data-rule="raiz" data-vars="a"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Módulo da soma</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="|a + b| \ne |a| + |b|"></span>
+        <div class="rule-try" data-rule="erroSoma" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Raiz do quadrado devolve o número</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="\sqrt{a^2} \ne a"></span>
+        <div class="rule-try" data-rule="erroRaiz" data-vars="a"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-\lvert -2 \rvert = -2"></span>
+          <p><strong>O sinal de fora fica.</strong> O módulo tira o sinal só do que está dentro das barras: |−2| = 2, e o menos de fora faz −2.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x| = -3 \Rightarrow S = \varnothing"></span>
+          <p><strong>Módulo igual a negativo não tem solução.</strong> Não é preciso fazer conta: distância não é negativa.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x| < 3 \iff -3 < x < 3"></span>
+          <p><strong>“Menor que” é um pedaço só</strong>, e não x &lt; 3 e x &lt; −3. Escrever só x &lt; 3 deixa entrar o −10, que está a distância 10 do zero.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="|x + 1| = |x - (-1)|"></span>
+          <p><strong>Ache o centro com o sinal certo.</strong> |x + 1| é a distância até −1, não até 1.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística</h2>
+      <p><strong>Margem de erro.</strong> Uma pesquisa dá 42% para um candidato, com margem de erro de 3 pontos. Isso diz que a porcentagem verdadeira p está a no máximo 3 pontos de 42: |p − 42| ≤ 3. É uma inequação modular, e a resposta é o intervalo 39 ≤ p ≤ 45. A conta por trás está em <a href="/formulas/margem-de-erro.html">margem de erro</a> e em <a href="/formulas/intervalo-confianca.html">intervalo de confiança</a>.</p>
+      <p><strong>Erro absoluto.</strong> Quando uma previsão dá 120 e o valor real é 112, o erro absoluto é |112 − 120| = 8. A média desses erros, o MAE, é uma das formas mais simples de dizer o quanto um modelo erra, sem que os erros para cima e para baixo se cancelem.</p>
+      <p><strong>Desvio absoluto e desvio padrão.</strong> Os desvios x − x̄ somam zero, porque os negativos compensam os positivos. Para medir a dispersão, é preciso tirar o sinal. O desvio médio absoluto faz isso com o módulo, Σ|x − x̄|/n; o <a href="/formulas/desvio-padrao.html">desvio padrão</a> faz com o quadrado. O quadrado é mais fácil de manipular algebricamente, e por isso ganhou a estatística clássica.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Calcule |−7|, |3 − 10| e −|−2|.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>|−7| = <strong>7</strong>. |3 − 10| = |−7| = <strong>7</strong>. −|−2| = −2: o módulo vale 2, e o menos de fora fica, dando <strong>−2</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Qual é a distância entre −4 e 5 na reta?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>|−4 − 5| = |−9| = <strong>9</strong>. Na reta: 4 casas até o zero e mais 5 até o 5.</p>
+            <p><a href="?dx=-4&amp;da=5#distancia">Veja na reta →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Resolva |x − 2| = 5.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Os x a distância 5 de 2: <strong>x = 7 ou x = −3</strong>.</p>
+            <p><a href="?ea=2&amp;er=5&amp;rel=%3D#equacoes">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Resolva |x + 1| &lt; 4.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>|x + 1| é a distância até −1. Menos de 4 de −1: <strong>−5 &lt; x &lt; 3</strong>, ou S = ]−5, 3[.</p>
+            <p><a href="?ea=-1&amp;er=4&amp;rel=%3C#equacoes">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Resolva |x| ≥ 2.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Pelo menos 2 longe do zero: <strong>x ≤ −2 ou x ≥ 2</strong>, ou S = ]−∞, −2] ∪ [2, +∞[.</p>
+            <p><a href="?ea=0&amp;er=2&amp;rel=%3E%3D#equacoes">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Uma pesquisa dá 55% para uma proposta, com margem de erro de 4 pontos. O resultado é compatível com a proposta ter, na verdade, menos da metade dos votos?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>|p − 55| ≤ 4 dá 51 ≤ p ≤ 59. O intervalo inteiro está acima de 50: <strong>não</strong>, pela margem declarada a proposta tem a maioria.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="inequacoes.html" rel="prev"><span>Anterior</span>Inequação do 1º Grau — Quando o Sinal Vira</a>
+      <a class="pager-next" href="sistemas.html" rel="next"><span>Próximo</span>Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam</a>
+    </nav>
+  </main>
+</body>
+</html>

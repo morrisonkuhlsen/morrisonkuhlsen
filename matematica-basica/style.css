@@ -60,7 +60,8 @@
 /* No celular, a expressão inteira do resultado cabe numa linha. */
 @media (max-width: 520px) {
   #passos .calc-result,
-  #simplificar .calc-result {
+  #simplificar .calc-result,
+  #equacoes .calc-result {
     font-size: 1.1rem;
   }
   #passos .calc-math,
@@ -2399,6 +2400,21 @@
   stroke: var(--tone-1);
   stroke-width: 2.5;
 }
+
+/* ================================================================ módulo */
+
+/* A régua entre x e a, com a medida em cima, na cor do resultado. */
+.mod-regua {
+  fill: none;
+  stroke: var(--tone-1);
+  stroke-width: 2;
+}
+
+.plot-label.mod-medida { fill: var(--tone-1); font-size: 14px; }
+
+/* O centro a das inequações: um triângulo embaixo da reta. */
+.mod-centro { fill: var(--tone-5); }
+.plot-label.mod-centro-txt { fill: var(--tone-5); }
 
 /* ================================================================ função do 1º grau */
 
