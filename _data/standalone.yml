@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, crescimento exponencial, expressões algébricas, equações, inequações e sistemas do 1º grau, módulo, produtos notáveis, frações algébricas, equação do 2º grau, conjuntos, constantes, somatório, fatorial, contagem, plano cartesiano e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, crescimento exponencial, expressões algébricas, equações, inequações e sistemas do 1º grau, módulo, matrizes, produtos notáveis, frações algébricas, equação do 2º grau, conjuntos, constantes, somatório, fatorial, contagem, plano cartesiano e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1366,6 +1366,12 @@
   url: "/matematica-basica/sistemas.html"
   description: "Sistemas de equações do 1º grau explicados do zero: as duas retas no plano com os coeficientes nos sliders, por que há uma, nenhuma ou infinitas soluções, e o passo a passo dos métodos da substituição e da adição para o sistema que você montar, com frações exatas e a prova."
   tags: "sistema de equações sistema linear duas incógnitas método da substituição método da adição eliminação retas concorrentes paralelas coincidentes possível determinado indeterminado impossível equações normais regressão calculadora passo a passo"
+  lang: pt
+
+- title: "Matrizes — Tabelas que se Multiplicam"
+  url: "/matematica-basica/matrizes.html"
+  description: "Matrizes explicadas do zero: o que são linhas, colunas e o elemento aᵢⱼ, a multiplicação linha por coluna com as matrizes que você digita e a conta de cada casa a um clique, por que AB ≠ BA, a identidade, o determinante e a inversa 2×2, e a regressão escrita em forma de matriz."
+  tags: "matrizes matriz multiplicação de matrizes linha por coluna produto de matrizes identidade determinante matriz inversa 2x2 ordem da matriz matriz de dados regressão matricial"
   lang: pt
 
 - title: "Produtos Notáveis e Fatoração"

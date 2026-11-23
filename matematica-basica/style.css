@@ -2557,6 +2557,72 @@
 .exp-tabela .is-exp { color: var(--tone-1); font-weight: 600; }
 .exp-tabela .exp-gap { text-align: center; color: var(--text-muted); }
 
+/* ================================================================ matrizes */
+
+/* A × B = AB numa linha; no celular, uma embaixo da outra. */
+.mat-linha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem 1rem;
+  margin-top: 1rem;
+}
+
+.mat-bloco {
+  display: grid;
+  justify-items: center;
+  gap: .3rem;
+}
+
+.mat-nome { font-style: italic; font-weight: 700; }
+.mat-nome.is-a { color: var(--tone-2); }
+.mat-nome.is-b { color: var(--tone-5); }
+.mat-nome.is-c { color: var(--tone-1); }
+.mat-op { font-size: 1.4rem; color: var(--text-muted); }
+
+/* Os parênteses grandes são as bordas laterais da grade. */
+.mat-grade {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 2), 3rem);
+  gap: .3rem;
+  padding: .35rem .5rem;
+  border-left: 2px solid var(--text-muted);
+  border-right: 2px solid var(--text-muted);
+  border-radius: 10px;
+}
+
+.mat-cell {
+  width: 3rem;
+  height: 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-strong);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.mat-cell::-webkit-inner-spin-button,
+.mat-cell::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.mat-cell.is-res { cursor: pointer; font-weight: 600; }
+.mat-a .mat-cell.is-on { border-color: var(--tone-2); box-shadow: inset 0 0 0 1px var(--tone-2); }
+.mat-b .mat-cell.is-on { border-color: var(--tone-5); box-shadow: inset 0 0 0 1px var(--tone-5); }
+.mat-c .mat-cell.is-on { background: var(--tone-1); border-color: var(--tone-1); color: var(--surface); }
+
+.mat-conta { margin-top: 1rem; }
+.mat-ba { overflow-x: auto; text-align: center; }
+.mat-ba-txt { margin: .5rem 0 0; text-align: center; }
+
+@media (max-width: 520px) {
+  .mat-grade { grid-template-columns: repeat(var(--cols, 2), 2.5rem); }
+  .mat-cell { width: 2.5rem; }
+  #produto .mat-conta { font-size: 1rem; }
+}
+
 /* ================================================================ função do 1º grau */
 
 .reta-plot {

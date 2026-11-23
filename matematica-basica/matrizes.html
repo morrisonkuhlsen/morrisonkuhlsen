@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Matrizes — Tabelas que se Multiplicam</title>
+  <meta name="description" content="Matrizes explicadas do zero: o que são linhas, colunas e o elemento aᵢⱼ, a multiplicação linha por coluna com as matrizes que você digita e a conta de cada casa a um clique, por que AB ≠ BA, a identidade, o determinante e a inversa 2×2, e a regressão escrita em forma de matriz.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/matrizes.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/matrizes.html">
+  <meta property="og:title" content="Matrizes — Tabelas que se Multiplicam">
+  <meta property="og:description" content="Matrizes explicadas do zero: o que são linhas, colunas e o elemento aᵢⱼ, a multiplicação linha por coluna com as matrizes que você digita e a conta de cada casa a um clique, por que AB ≠ BA, a identidade, o determinante e a inversa 2×2, e a regressão escrita em forma de matriz.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Matrizes — Tabelas que se Multiplicam">
+  <meta name="twitter:description" content="Matrizes explicadas do zero: o que são linhas, colunas e o elemento aᵢⱼ, a multiplicação linha por coluna com as matrizes que você digita e a conta de cada casa a um clique, por que AB ≠ BA, a identidade, o determinante e a inversa 2×2, e a regressão escrita em forma de matriz.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="matrizes.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Matrizes — Tabelas que se Multiplicam</h1>
+    <p class="page-lede">Uma matriz é uma tabela de números arrumados em <strong>linhas</strong> e <strong>colunas</strong>. Toda planilha de dados é uma. O que faz delas uma ferramenta, e não só uma tabela, é um jeito próprio de multiplicar: <strong>linha por coluna</strong>.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#nomes">Linhas e colunas</a>
+      <a href="#produto">Multiplicar</a>
+      <a href="#inversa">Inversa</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="c_{ij} = a_{i1}b_{1j} + \cdots + a_{ik}b_{kj}\,"></span>
+
+    <section class="lesson" id="nomes" aria-labelledby="nomes-title">
+      <h2 id="nomes-title">Linhas, colunas e o elemento a<sub>ij</sub></h2>
+      <p>Uma matriz com m linhas e n colunas é <strong>m × n</strong> (lê-se “m por n”). O número na linha i e na coluna j se chama a<sub>ij</sub> — primeiro a linha, depois a coluna, como no par (x, y) do <a href="plano-cartesiano.html">plano cartesiano</a>. As notas de 3 alunos em 2 provas formam uma matriz 3 × 2:</p>
+      <span class="tex-block" data-tex="A = \begin{pmatrix} 7 & 8 \\ 5 & 9 \\ 6 & 6 \end{pmatrix} \qquad a_{21} = 5 \ (\text{2º aluno, 1ª prova})"></span>
+      <p><strong>Somar</strong> duas matrizes do mesmo tamanho é somar casa com casa, e <strong>multiplicar por um número</strong> é multiplicar cada casa: se as provas valiam 10 e passam a valer 100, a matriz inteira é multiplicada por 10. Até aqui, nada diferente de uma tabela. A novidade é o produto de uma matriz por outra.</p>
+    </section>
+
+    <!-- 1. Produto; estado em ?m=&k=&n=&A=&B=. -->
+    <section class="calc" id="produto" aria-labelledby="prod-title">
+      <h2 id="prod-title">Multiplicar é linha por coluna</h2>
+      <p class="calc-lede">Escolha os tamanhos e digite os números. Cada casa do resultado é a linha de A “vezes” a coluna de B: multiplica-se par a par e soma-se. Clique numa casa do resultado para ver a conta dela.</p>
+      <div class="vars mat-vars">
+        <label class="var">
+          <i>m</i>
+          <input name="m" type="range" min="1" max="3" step="1" value="2" aria-label="Linhas de A">
+          <output class="out-m">2</output>
+        </label>
+        <label class="var var-c">
+          <i>k</i>
+          <input name="k" type="range" min="1" max="3" step="1" value="2" aria-label="Colunas de A e linhas de B">
+          <output class="out-k">2</output>
+        </label>
+        <label class="var var-b">
+          <i>n</i>
+          <input name="n" type="range" min="1" max="3" step="1" value="2" aria-label="Colunas de B">
+          <output class="out-n">2</output>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="2|3|1|2,1,0,1,3,2|4,5,7">pedidos × preços</button>
+        <button type="button" data-exemplo="2|2|2|1,2,3,4|5,6,7,8">2 × 2</button>
+        <button type="button" data-exemplo="2|2|2|1,2,3,4|0,1,1,0">AB ≠ BA</button>
+        <button type="button" data-exemplo="2|2|2|3,-1,2,5|1,0,0,1">identidade</button>
+      </div>
+
+      <div class="mat-linha">
+        <div class="mat-bloco"><span class="mat-nome is-a">A</span><div class="mat-grade mat-a"></div></div>
+        <span class="mat-op">×</span>
+        <div class="mat-bloco"><span class="mat-nome is-b">B</span><div class="mat-grade mat-b"></div></div>
+        <span class="mat-op">=</span>
+        <div class="mat-bloco"><span class="mat-nome is-c">AB</span><div class="mat-grade mat-c"></div></div>
+      </div>
+      <div class="calc-result mat-conta" data-tone="1" aria-live="polite"></div>
+      <p class="calc-note mat-dims"></p>
+
+      <h3>E na ordem trocada?</h3>
+      <div class="mat-ba"></div>
+    </section>
+
+    <section class="lesson" aria-labelledby="pq-title">
+      <h2 id="pq-title">Por que multiplicar assim</h2>
+      <p>Porque é o jeito que aparece sozinho em problemas. Dois pedidos numa lanchonete: o primeiro tem 2 sucos e 1 pastel; o segundo, 1 suco, 3 pastéis e 2 bolos. O suco custa 4, o pastel 5 e o bolo 7. O total de cada pedido é quantidade vezes preço, somado item a item — exatamente linha por coluna:</p>
+      <span class="tex-block" data-tex="\begin{pmatrix} 2 & 1 & 0 \\ 1 & 3 & 2 \end{pmatrix} \begin{pmatrix} 4 \\ 5 \\ 7 \end{pmatrix} = \begin{pmatrix} 2 \cdot 4 + 1 \cdot 5 + 0 \cdot 7 \\ 1 \cdot 4 + 3 \cdot 5 + 2 \cdot 7 \end{pmatrix} = \begin{pmatrix} 13 \\ 33 \end{pmatrix}"></span>
+      <p>O mesmo vale para um sistema de equações: as duas equações de um <a href="sistemas.html">sistema</a> são uma matriz de coeficientes vezes o vetor (x, y).</p>
+      <span class="tex-block" data-tex="\begin{cases} 2x + y = 5 \\ 5x + 3y = 13 \end{cases} \iff \begin{pmatrix} 2 & 1 \\ 5 & 3 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 5 \\ 13 \end{pmatrix}"></span>
+      <p>A <strong>identidade</strong> I, com 1 na diagonal e 0 no resto, é a matriz que não muda nada: A · I = I · A = A, como o 1 nos números.</p>
+    </section>
+
+    <!-- 2. Inversa; estado em ?ia=&ib=&ic=&id=. -->
+    <section class="calc" id="inversa" aria-labelledby="inv-title">
+      <h2 id="inv-title">Determinante e inversa 2 × 2</h2>
+      <p class="calc-lede">A inversa A⁻¹ é a matriz que desfaz A: A · A⁻¹ = I. Para uma 2 × 2, ela sai de uma conta curta — quando existe. Escolha os quatro números de A.</p>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="ia" type="range" min="-5" max="5" step="1" value="2" aria-label="a, linha 1, coluna 1">
+          <output class="out-ia">2</output>
+        </label>
+        <label class="var">
+          <i>b</i>
+          <input name="ib" type="range" min="-5" max="5" step="1" value="1" aria-label="b, linha 1, coluna 2">
+          <output class="out-ib">1</output>
+        </label>
+        <label class="var var-b">
+          <i>c</i>
+          <input name="ic" type="range" min="-5" max="5" step="1" value="5" aria-label="c, linha 2, coluna 1">
+          <output class="out-ic">5</output>
+        </label>
+        <label class="var var-b">
+          <i>d</i>
+          <input name="id" type="range" min="-5" max="5" step="1" value="3" aria-label="d, linha 2, coluna 2">
+          <output class="out-id">3</output>
+        </label>
+      </div>
+      <span class="rule-tex" data-tex="A^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}"></span>
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="AB \ne BA"></span>
+          <p><strong>A ordem importa.</strong> Às vezes BA nem existe; quando existe, quase sempre é outra matriz.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(2 \times 3)(3 \times 4) = 2 \times 4"></span>
+          <p><strong>Os números de dentro têm de bater.</strong> Colunas de A = linhas de B. O resultado fica com os de fora.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\begin{pmatrix} 1 & 2 \end{pmatrix} \cdot \begin{pmatrix} 3 & 4 \end{pmatrix} \ \text{não existe}"></span>
+          <p><strong>Não é casa com casa.</strong> Multiplicar casa a casa é outra operação; o produto de matrizes cruza linhas com colunas.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(A + B)^2 \ne A^2 + 2AB + B^2"></span>
+          <p><strong>Os produtos notáveis mudam.</strong> Abrindo, sai A² + AB + BA + B², e AB e BA não se juntam.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística</h2>
+      <p><strong>A matriz de dados.</strong> Uma planilha com n observações e p variáveis é uma matriz X de tamanho n × p: cada linha é uma pessoa (ou um dia, ou uma loja), cada coluna é uma variável.</p>
+      <p><strong>A regressão inteira numa linha.</strong> A previsão de uma <a href="/formulas/regressao-linear.html">regressão</a> para cada observação é ŷ = b₀ + b₁x₁ + b₂x₂ + …: uma linha de X vezes o vetor de coeficientes. Para todas as observações ao mesmo tempo, ŷ = Xb. E as equações normais, o sistema 2 × 2 da página de <a href="sistemas.html#estatistica">sistemas</a>, viram XᵀXb = Xᵀy — o mesmo sistema, com qualquer número de variáveis. Resolvê-lo é, no fundo, inverter a matriz XᵀX.</p>
+      <p><strong>Matriz de covariâncias.</strong> Com várias variáveis, a <a href="/formulas/covariancia.html">covariância</a> de cada par fica numa matriz p × p, simétrica, com as variâncias na diagonal.</p>
+      <p>As calculadoras de <a href="/formulas/multiplicacao-matrizes.html">multiplicação de matrizes</a> e <a href="/formulas/matriz-inversa-2x2.html">inversa 2 × 2</a> mostram cada termo da fórmula.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> A é 2 × 3 e B é 3 × 4. AB existe? De que tamanho? E BA?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>AB existe (3 = 3) e é <strong>2 × 4</strong>. BA seria (3 × 4)(2 × 3): 4 ≠ 2, então <strong>não existe</strong>.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Calcule o produto de (1 2 / 3 4) por (5 6 / 7 8), escritas linha por linha.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>1·5 + 2·7 = 19, 1·6 + 2·8 = 22, 3·5 + 4·7 = 43, 3·6 + 4·8 = 50: <strong>(19 22 / 43 50)</strong>.</p>
+            <p><a href="?m=2&amp;k=2&amp;n=2&amp;A=1,2,0,3,4,0,0,0,0&amp;B=5,6,0,7,8,0,0,0,0#produto">Veja casa por casa →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Com A = (1 2 / 3 4) e B = (0 1 / 1 0), calcule AB e BA.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>AB = <strong>(2 1 / 4 3)</strong>: B troca as colunas de A. BA = <strong>(3 4 / 1 2)</strong>: B troca as linhas de A. Diferentes.</p>
+            <p><a href="?m=2&amp;k=2&amp;n=2&amp;A=1,2,0,3,4,0,0,0,0&amp;B=0,1,0,1,0,0,0,0,0#produto">Veja as duas →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Ache a inversa de (3 1 / 4 2).</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>det = 3·2 − 1·4 = 2. A⁻¹ = ½ · (2 −1 / −4 3) = <strong>(1 −1/2 / −2 3/2)</strong>.</p>
+            <p><a href="?ia=3&amp;ib=1&amp;ic=4&amp;id=2#inversa">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> A matriz (2 4 / 1 2) tem inversa?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>det = 2·2 − 4·1 = 0: <strong>não tem</strong>. A primeira linha é o dobro da segunda.</p>
+            <p><a href="?ia=2&amp;ib=4&amp;ic=1&amp;id=2#inversa">Veja →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Na lanchonete de cima, um terceiro pedido tem 0 sucos, 2 pastéis e 1 bolo. Quanto custa?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A linha (0 2 1) vezes a coluna de preços (4 5 7): 0·4 + 2·5 + 1·7 = <strong>17</strong>.</p>
+            <p><a href="?m=3&amp;k=3&amp;n=1&amp;A=2,1,0,1,3,2,0,2,1&amp;B=4,0,0,5,0,0,7,0,0#produto">Veja com os três pedidos →</a></p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="sistemas.html" rel="prev"><span>Anterior</span>Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam</a>
+      <a class="pager-next" href="produtos-notaveis.html" rel="next"><span>Próximo</span>Produtos Notáveis e Fatoração</a>
+    </nav>
+  </main>
+</body>
+</html>
