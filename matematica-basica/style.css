@@ -62,7 +62,8 @@
   #passos .calc-result {
     font-size: 1.1rem;
   }
-  #passos .calc-math {
+  #passos .calc-math,
+  #metodos .calc-math {
     font-size: .95rem;
   }
 }
@@ -2376,6 +2377,17 @@
 .plot-label.is-a, .plot-label.is-cx { fill: var(--tone-2); }
 .plot-label.is-bpt, .plot-label.is-cy { fill: var(--tone-5); }
 .plot-label.is-centro { fill: var(--text-muted); font-weight: 500; }
+
+/* ================================================================ sistemas */
+
+/* As duas retas nas cores das duas equações; a mesma reta, tracejada por cima. */
+.sis-r1 { stroke: var(--tone-2); stroke-width: 2.5; }
+.sis-r2 { stroke: var(--tone-5); stroke-width: 2.5; }
+.sis-r2.is-same { stroke-dasharray: 8 8; }
+
+.sis-eq {
+  margin-bottom: .8rem;
+}
 
 /* ================================================================ função do 1º grau */
 

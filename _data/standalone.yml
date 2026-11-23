@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações, inequações e sistemas do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial, plano cartesiano e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1348,6 +1348,12 @@
   url: "/matematica-basica/inequacoes.html"
   description: "Inequação do 1º grau explicada do zero: por que o sinal vira ao multiplicar por um número negativo, a solução na reta e em intervalo, e uma calculadora que resolve passo a passo e testa um número de cada lado."
   tags: "inequação do primeiro grau desigualdade menor maior inverter o sinal intervalo conjunto solução reta calculadora passo a passo"
+  lang: pt
+
+- title: "Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam"
+  url: "/matematica-basica/sistemas.html"
+  description: "Sistemas de equações do 1º grau explicados do zero: as duas retas no plano com os coeficientes nos sliders, por que há uma, nenhuma ou infinitas soluções, e o passo a passo dos métodos da substituição e da adição para o sistema que você montar, com frações exatas e a prova."
+  tags: "sistema de equações sistema linear duas incógnitas método da substituição método da adição eliminação retas concorrentes paralelas coincidentes possível determinado indeterminado impossível equações normais regressão calculadora passo a passo"
   lang: pt
 
 - title: "Produtos Notáveis e Fatoração"

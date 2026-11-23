@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam</title>
+  <meta name="description" content="Sistemas de equações do 1º grau explicados do zero: as duas retas no plano com os coeficientes nos sliders, por que há uma, nenhuma ou infinitas soluções, e o passo a passo dos métodos da substituição e da adição para o sistema que você montar, com frações exatas e a prova.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/sistemas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/sistemas.html">
+  <meta property="og:title" content="Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam">
+  <meta property="og:description" content="Sistemas de equações do 1º grau explicados do zero: as duas retas no plano com os coeficientes nos sliders, por que há uma, nenhuma ou infinitas soluções, e o passo a passo dos métodos da substituição e da adição para o sistema que você montar, com frações exatas e a prova.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam">
+  <meta name="twitter:description" content="Sistemas de equações do 1º grau explicados do zero: as duas retas no plano com os coeficientes nos sliders, por que há uma, nenhuma ou infinitas soluções, e o passo a passo dos métodos da substituição e da adição para o sistema que você montar, com frações exatas e a prova.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="sistemas.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Sistemas de Equações do 1º Grau — Onde as Retas se Cruzam</h1>
+    <p class="page-lede">Uma equação com duas incógnitas, como x + y = 5, tem infinitas soluções: (1, 4), (2, 3), (0,5; 4,5)… Uma segunda equação ao mesmo tempo estreita a busca. Resolver o <strong>sistema</strong> é achar o par (x, y) que satisfaz as duas — no plano, o ponto onde as duas retas se cruzam.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#retas">As duas retas</a>
+      <a href="#casos">Quantas soluções</a>
+      <a href="#metodos">Substituição e adição</a>
+      <a href="#problemas">Problemas</a>
+      <a href="#estatistica">Na estatística</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="\begin{cases} a_1x + b_1y = c_1 \\ a_2x + b_2y = c_2 \end{cases}"></span>
+
+    <!-- 1. As retas; estado em ?a1=&b1=&c1=&a2=&b2=&c2=&metodo= (o mesmo da seção 2). -->
+    <section class="calc intro" id="retas" aria-labelledby="retas-title">
+      <h2 id="retas-title">Cada equação é uma reta</h2>
+      <p class="calc-lede">Monte o sistema com os sliders: a primeira linha é a primeira equação (laranja), a segunda linha é a segunda (roxa).</p>
+      <div class="vars sis-vars">
+        <label class="var">
+          <i>a<sub>1</sub></i>
+          <input name="a1" type="range" min="-5" max="5" step="1" value="1" aria-label="Coeficiente de x na 1ª equação">
+          <output class="out-a1">1</output>
+        </label>
+        <label class="var">
+          <i>b<sub>1</sub></i>
+          <input name="b1" type="range" min="-5" max="5" step="1" value="1" aria-label="Coeficiente de y na 1ª equação">
+          <output class="out-b1">1</output>
+        </label>
+        <label class="var">
+          <i>c<sub>1</sub></i>
+          <input name="c1" type="range" min="-20" max="20" step="1" value="5" aria-label="Lado direito da 1ª equação">
+          <output class="out-c1">5</output>
+        </label>
+        <label class="var var-b">
+          <i>a<sub>2</sub></i>
+          <input name="a2" type="range" min="-5" max="5" step="1" value="1" aria-label="Coeficiente de x na 2ª equação">
+          <output class="out-a2">1</output>
+        </label>
+        <label class="var var-b">
+          <i>b<sub>2</sub></i>
+          <input name="b2" type="range" min="-5" max="5" step="1" value="-1" aria-label="Coeficiente de y na 2ª equação">
+          <output class="out-b2">−1</output>
+        </label>
+        <label class="var var-b">
+          <i>c<sub>2</sub></i>
+          <input name="c2" type="range" min="-20" max="20" step="1" value="1" aria-label="Lado direito da 2ª equação">
+          <output class="out-c2">1</output>
+        </label>
+      </div>
+      <div class="calc-examples">
+        Exemplos:
+        <button type="button" data-exemplo="1;1;5;1;-1;1">uma solução</button>
+        <button type="button" data-exemplo="2;3;4;3;-2;1">solução com fração</button>
+        <button type="button" data-exemplo="1;2;2;1;2;-4">paralelas</button>
+        <button type="button" data-exemplo="1;2;4;2;4;8">a mesma reta</button>
+        <button type="button" data-exemplo="1;0;3;1;1;1">reta vertical</button>
+      </div>
+      <div class="calc-result"></div>
+      <div class="intro-figure sis-fig" aria-hidden="true"></div>
+      <div class="intro-text" aria-live="polite"></div>
+    </section>
+
+    <section class="lesson" id="casos" aria-labelledby="casos-title">
+      <h2 id="casos-title">Uma, nenhuma ou infinitas soluções</h2>
+      <p>Duas retas no plano só podem estar de três jeitos, e cada um é um tipo de sistema:</p>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="\begin{cases} x + y = 5 \\ x - y = 1 \end{cases}"></span>
+          <p><strong>Concorrentes: uma solução.</strong> As retas têm inclinações diferentes e se cruzam num ponto só, aqui (3, 2). O sistema é <em>possível e determinado</em>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\begin{cases} x + 2y = 2 \\ x + 2y = -4 \end{cases}"></span>
+          <p><strong>Paralelas: nenhuma.</strong> Mesmo lado esquerdo, lados direitos diferentes: x + 2y não pode valer 2 e −4 ao mesmo tempo. O sistema é <em>impossível</em>.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="\begin{cases} x + 2y = 4 \\ 2x + 4y = 8 \end{cases}"></span>
+          <p><strong>Coincidentes: infinitas.</strong> A segunda é a primeira vezes 2: é a mesma reta, e todos os pontos dela servem. O sistema é <em>possível e indeterminado</em>.</p>
+        </div>
+      </div>
+      <p>Dá para saber o caso antes de resolver comparando os coeficientes. Se a<sub>1</sub>/a<sub>2</sub> ≠ b<sub>1</sub>/b<sub>2</sub>, as inclinações são diferentes e há uma solução. Se as razões são iguais, as retas são paralelas, e a pergunta passa a ser se o c acompanha a mesma razão (a mesma reta) ou não (paralelas distintas). Em uma conta só: o número <strong>a<sub>1</sub>b<sub>2</sub> − a<sub>2</sub>b<sub>1</sub></strong> é diferente de zero exatamente quando há uma solução.</p>
+    </section>
+
+    <!-- 2. Os métodos, para o sistema da seção 1. -->
+    <section class="calc" id="metodos" aria-labelledby="metodos-title">
+      <h2 id="metodos-title">Resolva pela substituição ou pela adição</h2>
+      <p class="calc-lede">O passo a passo usa o sistema montado nos sliders acima. As contas são feitas com frações exatas, sem arredondar.</p>
+      <div class="sis-eq calc-result"></div>
+      <div class="seg" role="group" aria-label="Método">
+        <button type="button" data-metodo="substituicao" aria-pressed="true">Substituição</button>
+        <button type="button" data-metodo="adicao" aria-pressed="false">Adição</button>
+      </div>
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+    </section>
+
+    <section class="lesson" aria-labelledby="qual-title">
+      <h2 id="qual-title">Qual método usar</h2>
+      <p>Os dois chegam na mesma resposta; a ideia de ambos é <strong>sumir com uma incógnita</strong> para cair numa <a href="equacao-1grau.html">equação do 1º grau</a> comum.</p>
+      <ul>
+        <li><strong>Substituição</strong> rende quando alguma incógnita tem coeficiente 1 ou −1, como o x de x − y = 1: isolar não cria frações.</li>
+        <li><strong>Adição</strong> rende quando os coeficientes de uma incógnita já são opostos (+y e −y) ou viram opostos multiplicando por números pequenos.</li>
+      </ul>
+      <div class="tip">
+        <strong>Multiplicar uma equação inteira não muda as soluções.</strong> Se 2x + 3y = 4, então 4x + 6y = 8: os mesmos pares (x, y) satisfazem as duas. É a balança: o que se faz de um lado, faz-se do outro. Por isso o método da adição pode multiplicar as equações antes de somar.
+      </div>
+    </section>
+
+    <section class="lesson" id="problemas" aria-labelledby="problemas-title">
+      <h2 id="problemas-title">Montar o sistema a partir de um problema</h2>
+      <p>Quando o problema pergunta <strong>duas</strong> quantidades, chame uma de x e a outra de y e procure <strong>duas</strong> informações independentes. Exemplo: numa lanchonete, 2 sucos e 1 pastel custam R$ 13; 1 suco e 3 pastéis custam R$ 19. Quanto custa cada um?</p>
+      <span class="tex-block" data-tex="\begin{cases} 2s + p = 13 \\ s + 3p = 19 \end{cases}"></span>
+      <p>Na primeira, p = 13 − 2s. Substituindo na segunda: s + 3(13 − 2s) = 19, então s + 39 − 6s = 19, −5s = −20 e <strong>s = 4</strong>. Voltando: p = 13 − 8 = <strong>5</strong>. Prova: 2 · 4 + 5 = 13 e 4 + 3 · 5 = 19.</p>
+      <p><a href="?a1=2&amp;b1=1&amp;c1=13&amp;a2=1&amp;b2=3&amp;c2=19#retas">Veja as duas retas e o passo a passo →</a> (lá, x é o suco e y é o pastel.)</p>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="x + y = 5 \;\xrightarrow{\times 2}\; 2x + 2y = 10"></span>
+          <p><strong>Multiplique os dois lados.</strong> Escrever 2x + 2y = 5, multiplicando só o lado esquerdo, muda a equação.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="x = 3 \not\Rightarrow \text{fim}"></span>
+          <p><strong>Achar uma incógnita é metade.</strong> A resposta de um sistema é o par (x, y); volte numa equação para achar a outra.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="(x - y) - (x + y) = -2y"></span>
+          <p><strong>Subtrair uma equação inteira troca todos os sinais dela</strong>, como em <a href="expressoes-algebricas.html">expressões algébricas</a>. Somando depois de multiplicar por −1, o erro some.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="0 = 0 \quad \text{vs.} \quad 0 = 6"></span>
+          <p><strong>Se as incógnitas sumirem, não é erro de conta.</strong> 0 = 0 quer dizer infinitas soluções; 0 = 6, nenhuma.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" id="estatistica" aria-labelledby="est-title">
+      <h2 id="est-title">Na estatística: a reta de regressão</h2>
+      <p>A <a href="/formulas/regressao-linear.html">regressão linear</a> procura a reta ŷ = b<sub>0</sub> + b<sub>1</sub>x que passa mais perto de um conjunto de pontos. Os dois números que ela procura saem de um sistema 2 × 2, as <strong>equações normais</strong>, escritas com <a href="somatorio.html">somatórios</a>:</p>
+      <span class="tex-block" data-tex="\begin{cases} n\,b_0 + \left(\sum x\right) b_1 = \sum y \\ \left(\sum x\right) b_0 + \left(\sum x^2\right) b_1 = \sum xy \end{cases}"></span>
+      <p>Para os pontos (1, 2), (2, 3) e (3, 5): n = 3, Σx = 6, Σx² = 14, Σy = 10 e Σxy = 23. O sistema fica 3b<sub>0</sub> + 6b<sub>1</sub> = 10 e 6b<sub>0</sub> + 14b<sub>1</sub> = 23. Pela adição, multiplicando a primeira por −2 e somando: 2b<sub>1</sub> = 3, então <strong>b<sub>1</sub> = 1,5</strong>; e 3b<sub>0</sub> = 10 − 9, então <strong>b<sub>0</sub> = 1/3</strong>. A reta é ŷ = 1/3 + 1,5x.</p>
+      <p>Com mais variáveis explicativas, o sistema cresce (uma equação por coeficiente), mas a ideia é a mesma, e o computador resolve pelo mesmo princípio da adição: eliminar uma incógnita por vez.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Resolva: x + y = 7 e x − y = 3.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Somando as duas, o y some: 2x = 10, x = 5. Então y = 7 − 5 = 2. <strong>(x, y) = (5, 2)</strong>.</p>
+            <p><a href="?a1=1&amp;b1=1&amp;c1=7&amp;a2=1&amp;b2=-1&amp;c2=3&amp;metodo=adicao#metodos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Resolva: 2x + y = 1 e 3x − 2y = 12.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Multiplicando a primeira por 2: 4x + 2y = 2. Somando com a segunda: 7x = 14, x = 2. Então 2 · 2 + y = 1, y = −3. <strong>(2, −3)</strong>.</p>
+            <p><a href="?a1=2&amp;b1=1&amp;c1=1&amp;a2=3&amp;b2=-2&amp;c2=12&amp;metodo=adicao#metodos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Sem resolver, diga quantas soluções tem o sistema 2x − y = 3 e 4x − 2y = 5.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O lado esquerdo da segunda é o da primeira vezes 2, mas 3 · 2 = 6 ≠ 5. Retas paralelas: <strong>nenhuma solução</strong>.</p>
+            <p><a href="?a1=2&amp;b1=-1&amp;c1=3&amp;a2=4&amp;b2=-2&amp;c2=5#retas">Veja as retas →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> As retas y = 2x − 1 e y = −x + 5 se cruzam em que ponto?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>No cruzamento, os dois y são iguais: 2x − 1 = −x + 5, 3x = 6, x = 2. Então y = 2 · 2 − 1 = 3. <strong>(2, 3)</strong>. No formato dos sliders: 2x − y = 1 e x + y = 5.</p>
+            <p><a href="?a1=2&amp;b1=-1&amp;c1=1&amp;a2=1&amp;b2=1&amp;c2=5#retas">Veja as retas →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Num quintal há galinhas e coelhos: 15 cabeças e 40 pés. Quantos de cada?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>g + c = 15 e 2g + 4c = 40. Multiplicando a primeira por −2 e somando: 2c = 10, <strong>c = 5 coelhos</strong>, e <strong>g = 10 galinhas</strong>. Prova: 10 · 2 + 5 · 4 = 40.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Um show vendeu 30 ingressos, entre inteiras de R$ 20 e meias de R$ 10, e arrecadou R$ 450. Quantas inteiras foram vendidas?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>i + m = 30 e 20i + 10m = 450. Pela substituição, m = 30 − i: 20i + 300 − 10i = 450, 10i = 150, <strong>i = 15 inteiras</strong> (e 15 meias).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="inequacoes.html" rel="prev"><span>Anterior</span>Inequação do 1º Grau — Quando o Sinal Vira</a>
+      <a class="pager-next" href="produtos-notaveis.html" rel="next"><span>Próximo</span>Produtos Notáveis e Fatoração</a>
+    </nav>
+  </main>
+</body>
+</html>
