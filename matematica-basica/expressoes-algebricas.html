@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Expressões Algébricas — Parênteses, Colchetes e Chaves</title>
+  <meta name="description" content="Como simplificar expressões algébricas com parênteses, colchetes e chaves: o sinal de menos que troca todos os termos do grupo, a distributiva, os termos semelhantes e um passo a passo que mostra, com os seus valores de a e b, que cada linha vale o mesmo que a anterior.">
+  <link rel="canonical" href="https://morrisonkuhlsen.com/matematica-basica/expressoes-algebricas.html">
+  <!-- OpenGraph / Twitter -->
+  <meta property="og:site_name" content="MorrisonKühlsen">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://morrisonkuhlsen.com/matematica-basica/expressoes-algebricas.html">
+  <meta property="og:title" content="Expressões Algébricas — Parênteses, Colchetes e Chaves">
+  <meta property="og:description" content="Como simplificar expressões algébricas com parênteses, colchetes e chaves: o sinal de menos que troca todos os termos do grupo, a distributiva, os termos semelhantes e um passo a passo que mostra, com os seus valores de a e b, que cada linha vale o mesmo que a anterior.">
+  <meta property="og:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="pt_BR">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@morrisonkuhlsen">
+  <meta name="twitter:title" content="Expressões Algébricas — Parênteses, Colchetes e Chaves">
+  <meta name="twitter:description" content="Como simplificar expressões algébricas com parênteses, colchetes e chaves: o sinal de menos que troca todos os termos do grupo, a distributiva, os termos semelhantes e um passo a passo que mostra, com os seus valores de a e b, que cada linha vale o mesmo que a anterior.">
+  <meta name="twitter:image" content="https://morrisonkuhlsen.com/assets/images/favicons/social-card.png">
+  <link rel="icon" href="/assets/images/favicons/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-icon-180x180.png">
+
+  <!-- O tema do site (botão do topo, guardado em mk-theme) vale aqui também.
+       Vem antes da folha de estilo para a página não piscar no tema errado. -->
+  <script>
+    try {
+      var t = localStorage.getItem('mk-theme');
+      if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <link rel="stylesheet" href="/formulas/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="licao.js"></script>
+  <script defer src="expressoes-algebricas.js"></script>
+</head>
+<body>
+  <a href="./" class="back-link" aria-label="Matemática elementar" title="Matemática elementar"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5"/></svg></a>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title" class="formula-title">Expressões Algébricas — Parênteses, Colchetes e Chaves</h1>
+    <p class="page-lede">Simplificar uma expressão como 5a − [2b + (3a − b) − (a − 2b)] é reescrevê-la de um jeito mais curto <strong>sem mudar o valor</strong>. Bastam três ferramentas: tirar os grupos de dentro para fora, cuidar do sinal de menos e juntar os termos semelhantes.</p>
+
+    <nav class="toc" aria-label="Nesta página">
+      <a href="#passos">Passo a passo</a>
+      <a href="#semelhantes">Termos semelhantes</a>
+      <a href="#regras">Regras</a>
+      <a href="#armadilhas">Armadilhas</a>
+      <a href="#exercicios">Exercícios</a>
+    </nav>
+
+    <span class="rule-tex" data-tex="-(a - b) = -a + b"></span>
+
+    <!-- 1. Passo a passo; estado em ?ex=&pa=&pb=. -->
+    <section class="calc" id="passos" aria-labelledby="passos-title">
+      <h2 id="passos-title">Simplifique uma expressão passo a passo</h2>
+      <p class="calc-lede">Escolha uma expressão e dê valores a <i>a</i> e <i>b</i>. Cada linha do passo a passo é reescrita a partir da anterior, e embaixo dela aparece quanto ela vale com os seus números: o valor não muda de uma linha para a outra.</p>
+
+      <div class="calc-examples">Expressões: </div>
+      <div class="vars">
+        <label class="var">
+          <i>a</i>
+          <input name="pa" type="range" min="-9" max="9" step="1" value="4" aria-label="Valor de a">
+          <output class="out-pa">4</output>
+        </label>
+        <label class="var var-b">
+          <i>b</i>
+          <input name="pb" type="range" min="-9" max="9" step="1" value="-2" aria-label="Valor de b">
+          <output class="out-pb">−2</output>
+        </label>
+      </div>
+
+      <output class="calc-result" data-tone="1" aria-live="polite"></output>
+
+      <h3>Passo a passo</h3>
+      <ol class="calc-steps"></ol>
+      <p class="calc-note"></p>
+    </section>
+
+    <section class="lesson" aria-labelledby="ordem-title">
+      <h2 id="ordem-title">De dentro para fora</h2>
+      <p>Parênteses ( ), colchetes [ ] e chaves { } fazem o mesmo papel: juntam um pedaço da expressão num grupo. Os três nomes servem só para enxergar qual grupo está dentro de qual. É a mesma convenção das <a href="expressoes.html">expressões numéricas</a>; a diferença é que, com letras, a conta de dentro não vira um número só, e o grupo precisa ser <strong>aberto</strong>.</p>
+      <p>Para abrir um grupo, olhe o que está imediatamente antes dele:</p>
+      <ul>
+        <li><strong>Um +</strong> (ou nada, no começo): o grupo sai e os sinais de dentro ficam como estão. 2b + (3a − b) = 2b + 3a − b.</li>
+        <li><strong>Um −</strong>: o grupo sai e <strong>todos</strong> os sinais de dentro trocam. 5a − (a − 2b) = 5a − a + 2b.</li>
+        <li><strong>Um número</strong>: ele multiplica cada termo de dentro, com o sinal junto. −2(2a − b) = −4a + 2b.</li>
+      </ul>
+      <p>Depois de abrir um grupo, junte o que der para juntar antes de abrir o próximo. Assim a expressão encolhe a cada passo e há menos sinais para errar.</p>
+
+      <div class="tip">
+        <strong>Dá para começar por fora?</strong> Dá: o resultado é o mesmo, desde que cada sinal seja aplicado a todos os termos do grupo, inclusive aos que estão dentro de outro grupo. Começar por dentro é só o caminho em que há menos sinais para acompanhar de uma vez.
+      </div>
+    </section>
+
+    <section class="lesson" id="semelhantes" aria-labelledby="semelhantes-title">
+      <h2 id="semelhantes-title">Termos semelhantes</h2>
+      <p>Dois termos são <strong>semelhantes</strong> quando têm exatamente a mesma parte com letras: 3a e −a são semelhantes; 2b e 5b também. Já 3a e 3b não são, nem a e a². Juntar termos semelhantes é somar os números da frente (os <em>coeficientes</em>) e manter a letra:</p>
+      <span class="tex-block" data-tex="3a - a + 2b - b + 2b = (3 - 1)\,a + (2 - 1 + 2)\,b = 2a + 3b"></span>
+      <p>É como contar coisas: 3 maçãs menos 1 maçã são 2 maçãs, mas 3 maçãs mais 2 laranjas não são 5 “maçãranjas”. Uma letra sozinha tem coeficiente 1: <strong>a = 1a</strong> e <strong>−a = −1a</strong>.</p>
+      <p>Coeficiente, monômio, termo e grau são o vocabulário da álgebra; o texto <a href="/linguagem-basica-algebra/">Monômios, polinômios e coeficientes</a> explica cada um com calma.</p>
+    </section>
+
+    <section class="lesson" id="regras" aria-labelledby="regras-title">
+      <h2 id="regras-title">As regras, com os seus números</h2>
+      <p>Uma regra de simplificação só vale se der o mesmo número dos dois lados para quaisquer valores das letras. Arraste <i>a</i> e <i>b</i>: os valores são os mesmos em todos os cards.</p>
+
+      <article class="rule">
+        <header><h3>Mais antes do grupo: nada muda</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="+(a - b) = a - b"></span>
+        <div class="rule-try" data-rule="mais" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Menos antes do grupo: troca todos os sinais</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="-(a - b) = -a + b"></span>
+        <div class="rule-try" data-rule="menos" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Número antes do grupo: distributiva</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="-2(a - b) = -2a + 2b"></span>
+        <div class="rule-try" data-rule="distribui" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Juntar termos semelhantes</h3><span class="badge is-ok">vale</span></header>
+        <span class="rule-tex" data-tex="5a - 2a = 3a"></span>
+        <div class="rule-try" data-rule="junta" data-vars="a"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Trocar só o primeiro sinal</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="-(a - b) \ne -a - b"></span>
+        <div class="rule-try" data-rule="erroMenos" data-vars="a b"></div>
+      </article>
+
+      <article class="rule">
+        <header><h3>Juntar termos que não são semelhantes</h3><span class="badge is-bad">não vale</span></header>
+        <span class="rule-tex" data-tex="3a + 2b \ne 5ab"></span>
+        <div class="rule-try" data-rule="erroJunta" data-vars="a b"></div>
+      </article>
+    </section>
+
+    <section class="lesson" id="armadilhas" aria-labelledby="armadilhas-title">
+      <h2 id="armadilhas-title">Armadilhas</h2>
+      <div class="facts">
+        <div class="fact">
+          <span class="rule-tex" data-tex="-(2a - 3b + 1) = -2a + 3b - 1"></span>
+          <p><strong>O menos pega o grupo inteiro.</strong> Não só o primeiro termo: o último também troca, mesmo sendo um número sem letra.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="4(a + 3) = 4a + 12"></span>
+          <p><strong>A distributiva também pega todos.</strong> Escrever 4a + 3 é multiplicar só o primeiro termo.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="6a - a = 5a"></span>
+          <p><strong>A letra sozinha vale 1.</strong> 6a − a não é 6, nem 6a − 1: é tirar um a de seis.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="a + a = 2a \qquad a \cdot a = a^2"></span>
+          <p><strong>Somar não é multiplicar.</strong> Somar termos iguais aumenta o coeficiente; multiplicá-los aumenta o expoente.</p>
+        </div>
+        <div class="fact">
+          <span class="rule-tex" data-tex="3b - 3b = 0"></span>
+          <p><strong>Uma letra pode sumir.</strong> Se os termos dela se cancelam, o resultado não depende dela. Não é erro; veja o exemplo 7a − [4b − (2a + b) + (a − 3b)] lá em cima.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson" aria-labelledby="depois-title">
+      <h2 id="depois-title">Para onde isso leva</h2>
+      <p><strong>Equações.</strong> Antes de isolar o x numa <a href="equacao-1grau.html">equação do 1º grau</a>, o primeiro passo é quase sempre este: tirar os parênteses e juntar os semelhantes de cada lado.</p>
+      <p><strong>Produtos notáveis.</strong> Quando um grupo multiplica outro grupo, como (a + b)(a − b), a distributiva vale termo a termo. Os casos que aparecem sempre estão em <a href="produtos-notaveis.html">produtos notáveis</a>.</p>
+      <p><strong>Desvios somam zero.</strong> Na estatística, com três valores e média x̄ = (x₁ + x₂ + x₃)/3, tirar os parênteses e juntar os semelhantes mostra que os desvios se anulam:</p>
+      <span class="tex-block" data-tex="(x_1 - \bar x) + (x_2 - \bar x) + (x_3 - \bar x) = x_1 + x_2 + x_3 - 3\bar x = 0"></span>
+      <p>Porque 3x̄ é justamente x₁ + x₂ + x₃. É por isso que a <a href="/formulas/desvio-padrao.html">variância</a> eleva os desvios ao quadrado antes de somar.</p>
+    </section>
+
+    <section class="lesson" id="exercicios" aria-labelledby="ex-title">
+      <h2 id="ex-title">Teste você mesmo</h2>
+
+      <div class="exercise">
+        <p><strong>1.</strong> Simplifique 4a − [b + (3a − 2b) − (a + b)].</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>Parênteses: b + 3a − 2b − a − b. Juntando, 2a − 2b. Tirando o colchete: 4a − 2a + 2b = <strong>2a + 2b</strong>.</p>
+            <p><a href="?ex=ex1#passos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>2.</strong> Simplifique 6a − {2b − [a − (3b − a)]}.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>De dentro para fora: a − 3b + a = 2a − 3b; depois 2b − 2a + 3b = 5b − 2a; por fim 6a − 5b + 2a = <strong>8a − 5b</strong>.</p>
+            <p><a href="?ex=ex2#passos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>3.</strong> Simplifique 2(3a − b) − 3[a − (2b − a)].</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>O colchete fica 2a − 2b. Distribuindo: 6a − 2b − 6a + 6b = <strong>4b</strong>. Os termos em a se cancelam.</p>
+            <p><a href="?ex=ex3#passos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>4.</strong> Calcule 5a − [2b + (3a − b) − (a − 2b)] para a = 7 e b = 5. Simplifique antes de pôr os números.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div>
+            <p>A expressão simplificada é 3a − 3b. Com a = 7 e b = 5: 21 − 15 = <strong>6</strong>. Na expressão original dá o mesmo, mas com bem mais contas.</p>
+            <p><a href="?ex=colchete&amp;pa=7&amp;pb=5#passos">Veja passo a passo →</a></p>
+          </div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>5.</strong> Um aluno escreveu 8a − (3a − 2b) = 5a − 2b. Onde está o erro?</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Ele trocou só o sinal do 3a. O menos troca os dois: 8a − 3a + 2b = <strong>5a + 2b</strong>. Teste com a = 1 e b = 1: a expressão original dá 8 − (3 − 2) = 7; a resposta do aluno dá 3, e a correta, 7.</p></div>
+        </details>
+      </div>
+
+      <div class="exercise">
+        <p><strong>6.</strong> Um retângulo tem lados 2a + b e a − b. Escreva o perímetro da forma mais simples e calcule-o para a = 5 e b = 2.</p>
+        <details>
+          <summary>Ver resposta</summary>
+          <div><p>Perímetro: 2(2a + b) + 2(a − b) = 4a + 2b + 2a − 2b = <strong>6a</strong>. Com a = 5, dá <strong>30</strong>, qualquer que seja b (desde que a − b continue positivo, para o lado existir).</p></div>
+        </details>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="Outros assuntos">
+      <a class="pager-prev" href="logaritmos.html" rel="prev"><span>Anterior</span>Logaritmos — O Expoente que Falta</a>
+      <a class="pager-next" href="equacao-1grau.html" rel="next"><span>Próximo</span>Equação do 1º Grau — A Balança</a>
+    </nav>
+  </main>
+</body>
+</html>

@@ -37,6 +37,29 @@
   border-color: var(--tone-1);
 }
 
+/* O exemplo aberto, quando os botões escolhem o que a seção mostra
+   (expressões algébricas). */
+.calc-examples button[aria-pressed="true"] {
+  border-color: var(--tone-1);
+  background: var(--tone-1);
+  color: var(--surface);
+  font-weight: 600;
+}
+
+/* Sliders logo abaixo dos botões de exemplo. */
+.calc-examples + .vars {
+  margin-top: 1rem;
+}
+
+/* Quanto vale cada linha do passo a passo com os valores do leitor. */
+.step-val {
+  display: block;
+  margin-top: .25rem;
+  font-size: .85rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .calc-extra[hidden] {
   display: none;
 }

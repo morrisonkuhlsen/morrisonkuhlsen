@@ -1226,7 +1226,7 @@
 
 - title: "Matemática Elementar"
   url: "/matematica-basica/"
-  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
+  description: "A matemática de base que a estatística pressupõe, um assunto por página: explicação do zero, calculadora que mostra a conta inteira e exercícios resolvidos. Começando por adição, subtração, multiplicação, divisão, números negativos, expressões numéricas, decimais, arredondamento, primos, MDC, MMC, frações, dízimas, razão e proporção, porcentagem, potências, raízes, logaritmos, expressões algébricas, equações e inequações do 1º grau, produtos notáveis, equação do 2º grau, conjuntos, constantes, somatório, fatorial e função do 1º grau."
   tags: "matemática elementar matemática básica aritmética exercícios"
   lang: pt
 
@@ -1330,6 +1330,12 @@
   url: "/matematica-basica/porcentagem.html"
   description: "Porcentagem explicada do zero: o quadro de 100, o fator de aumento e de desconto, por que aumentos sucessivos não se somam, pontos percentuais e uma calculadora que mostra a conta de parte, aumento, desconto, variação e valor antes do aumento."
   tags: "porcentagem percentual por cento aumento desconto fator variação percentual aumentos sucessivos pontos percentuais calculadora"
+  lang: pt
+
+- title: "Expressões Algébricas — Parênteses, Colchetes e Chaves"
+  url: "/matematica-basica/expressoes-algebricas.html"
+  description: "Como simplificar expressões algébricas com parênteses, colchetes e chaves: o sinal de menos que troca todos os termos do grupo, a distributiva, os termos semelhantes e um passo a passo que mostra, com os seus valores de a e b, que cada linha vale o mesmo que a anterior."
+  tags: "expressões algébricas simplificar eliminar parênteses colchetes chaves sinal de menos antes dos parênteses termos semelhantes distributiva redução passo a passo"
   lang: pt
 
 - title: "Equação do 1º Grau — A Balança"
