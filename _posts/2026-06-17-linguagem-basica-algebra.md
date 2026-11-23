@@ -603,6 +603,8 @@ $$
 }
 $$
 
+Quando os termos estão dentro de parênteses, colchetes e chaves, é preciso abrir os grupos antes de juntar. A página <a href="/matematica-basica/expressoes-algebricas.html">Expressões Algébricas</a> mostra isso passo a passo, com valores que você escolhe.
+
 ---
 
 ## Polinômio redutível e irredutível

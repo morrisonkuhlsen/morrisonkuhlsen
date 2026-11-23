@@ -120,7 +120,7 @@
     steps.push({ tag: null, html: "A equação, como foi escrita:", tex: start });
 
     if (E.toTex(TL) !== linTex(Lf) || E.toTex(TR) !== linTex(Rf)) {
-      steps.push({ tag: "Simplifique", html: "Em cada lado, tire os parênteses (multiplicando o que está fora por cada termo de dentro) e junte os termos semelhantes — x com x, número com número.",
+      steps.push({ tag: "Simplifique", html: "Em cada lado, tire os parênteses (multiplicando o que está fora por cada termo de dentro) e junte os termos semelhantes — x com x, número com número. Como fazer isso está em <a href=\"expressoes-algebricas.html\">expressões algébricas</a>.",
         tex: `${linTex(Lf)} = ${linTex(Rf)}` });
     }
 

@@ -180,14 +180,20 @@
       const vals = passos.map(p => p.f(a, b));
       const fim = passos[passos.length - 1];
 
-      math(result, `\\displaystyle ${passos[0].tex} = ${fim.tex}`);
+      // Dois blocos inteiros: na tela estreita a linha quebra antes do =, e
+      // não no meio de um parêntese.
+      const ini = el("span", "res-part"), res = el("span", "res-part");
+      math(ini, `\\displaystyle {${passos[0].tex}}`);
+      math(res, `\\displaystyle {} = ${fim.tex}`);
+      result.replaceChildren(ini, " ", res);
       list.replaceChildren();
       passos.forEach((p, i) => {
         const li = el("li");
         const txt = el("span");
         txt.innerHTML = p.tag ? `<strong>${p.tag}.</strong> ${p.html}` : p.html;
         const m = el("span", "calc-math");
-        math(m, `\\displaystyle ${p.tex}`);
+        // Entre chaves o KaTeX não parte a linha; se não couber, a caixa rola.
+        math(m, `\\displaystyle {${p.tex}}`);
         const v = el("span", "step-val", `Com a = ${fmt(a)} e b = ${fmt(b)}, vale ${fmt(vals[i])}.`);
         li.append(txt, m, v);
         list.appendChild(li);
