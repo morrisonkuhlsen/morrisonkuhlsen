@@ -4,3 +4,4 @@ import Provas.Probabilidade
 import Provas.TendenciaCentral
 import Provas.Distribuicoes
 import Provas.VariaveisAleatorias
+import Provas.LimiteCentral
