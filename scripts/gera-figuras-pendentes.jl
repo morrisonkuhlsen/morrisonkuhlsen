@@ -24,66 +24,8 @@ salva(p, nome) = (savefig(p, joinpath(SAIDA, nome)); println("ok  ", nome))
 # Número com vírgula decimal, para os textos das figuras.
 br(x) = replace(string(x), "." => ",")
 
-# ─── pt/estatistica-descritiva/graficos ─────────────────────────────────────
-
-# Pizza: sistemas operacionais móveis em 2023.
-let partes = [70, 28, 2], nomes = ["Android", "iOS", "Outros"]
-    p = pie(nomes .* " (" .* string.(partes) .* "%)", partes;
-            color = [AZUL, LARANJA, CINZA], linecolor = :white, linewidth = 2,
-            legend = :outerright, legendfontsize = 10, framestyle = :none, grid = false,
-            title = "Participação de mercado dos sistemas móveis (2023)", size = (700, 450))
-    salva(p, "grafico_pizza.png")
-end
-
-# Histograma: notas de 100 alunos, já agrupadas em classes de 2 pontos.
-let bordas = 0:2:10, freq = [5, 15, 30, 35, 15]
-    p = bar(1:2:9, freq; bar_width = 2, color = AZUL, linecolor = :white, linewidth = 1.5,
-            xticks = bordas, xlims = (0, 10), ylims = (0, 40),
-            xlabel = "Nota", ylabel = "Frequência (alunos)", title = "Distribuição das notas de 100 alunos")
-    annotate!(p, [(x, f + 1.6, text(string(f), 9, :center)) for (x, f) in zip(1:2:9, freq)])
-    salva(p, "histograma.png")
-end
-
-# Boxplot: idades de participantes, desenhado direto dos cinco números e dos
-# outliers do texto (Q1 = 22, Q3 = 30, cercas em 10 e 42).
-let q1 = 22, med = 25, q3 = 30, lo = 18, hi = 41, outl = [45, 50]
-    p = plot(; xlims = (10, 55), ylims = (0, 2), yticks = false, grid = :x,
-             xlabel = "Idade (anos)", title = "Idades dos participantes do evento", size = (800, 320))
-    plot!(p, Shape([q1, q3, q3, q1], [0.6, 0.6, 1.4, 1.4]); color = AZUL, fillalpha = 0.25, linecolor = AZUL, linewidth = 2)
-    plot!(p, [med, med], [0.6, 1.4]; color = AZUL, linewidth = 3)
-    plot!(p, [lo, q1], [1, 1]; color = AZUL, linewidth = 2)
-    plot!(p, [q3, hi], [1, 1]; color = AZUL, linewidth = 2)
-    plot!(p, [lo, lo], [0.8, 1.2]; color = AZUL, linewidth = 2)
-    plot!(p, [hi, hi], [0.8, 1.2]; color = AZUL, linewidth = 2)
-    scatter!(p, outl, fill(1, length(outl)); color = LARANJA, markersize = 7, markerstrokewidth = 0)
-    for (x, t) in [(lo, "mín\n$lo"), (q1, "Q1\n$q1"), (med, "mediana\n$med"), (q3, "Q3\n$q3"), (hi, "máx\n$hi")]
-        annotate!(p, x, 0.3, text(t, 8, :center, CINZA))
-    end
-    annotate!(p, 47.5, 1.45, text("outliers", 8, :center, LARANJA))
-    salva(p, "boxplot.png")
-end
-
-# Dispersão: horas de estudo × nota. A, B e C são os da tabela da página.
-let rng = MersenneTwister(2025)
-    horas = vcat([2, 5, 8], round.(rand(rng, Uniform(0.5, 10), 27); digits = 1))
-    nota = vcat([4.5, 6.8, 7.2], clamp.(round.(3.2 .+ 0.55 .* horas[4:end] .+ randn(rng, 27) .* 0.8; digits = 1), 0, 10))
-    b = cov(horas, nota) / var(horas); a = mean(nota) - b * mean(horas)
-    p = scatter(horas, nota; color = AZUL, markersize = 6, markerstrokewidth = 0, alpha = 0.8,
-                xlabel = "Horas de estudo", ylabel = "Nota na prova", xlims = (0, 10.5), ylims = (0, 10), xticks = 0:2:10,
-                title = "Horas de estudo × nota (r = $(br(round(cor(horas, nota); digits = 2))))")
-    plot!(p, [0, 10.5], a .+ b .* [0, 10.5]; color = LARANJA, linewidth = 2, linestyle = :dash)
-    salva(p, "scatter_plot.png")
-end
-
-# Linha temporal: vendas mensais. Jan, Fev, Mar e Dez são os da página; os
-# meses do meio seguem a mesma tendência, com um pico no meio do ano.
-let meses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
-    vendas = [12_500, 14_200, 15_800, 16_900, 18_400, 21_000, 20_300, 21_600, 22_900, 24_200, 26_100, 28_300]
-    p = plot(1:12, vendas ./ 1000; color = AZUL, linewidth = 2.5, marker = :circle, markersize = 5,
-             markerstrokewidth = 0, xticks = (1:12, meses), ylims = (0, 30),
-             xlabel = "Mês", ylabel = "Vendas (R\$ mil)", title = "Vendas mensais ao longo do ano")
-    salva(p, "linha_temporal.png")
-end
+# As figuras de pt/estatistica-descritiva/graficos saíram daqui: agora são
+# geradas em português e em inglês por scripts/figuras-graficos.jl.
 
 # ─── pt/probabilidade/eventos-espaco-amostral ───────────────────────────────
 

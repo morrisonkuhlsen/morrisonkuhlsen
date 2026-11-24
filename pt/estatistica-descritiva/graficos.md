@@ -33,11 +33,13 @@ Os **gráficos estatísticos** são ferramentas visuais essenciais para a análi
    - Gráfico de Linha Temporal
    - Gráfico de Área
 
+Esta página detalha seis deles: barras, pizza, histograma, boxplot, dispersão e linha temporal.
+
 ---
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
   <strong>📊 Princípios do Design Visual</strong><br>
-  Um bom gráfico deve ser: <em>preciso, claro, eficiente e revelador</em>. Lembre-se: "O objetivo da visualização é o insight, não apenas imagens bonitas" - Ben Shneiderman
+  Um bom gráfico deve ser: <em>preciso, claro, eficiente e revelador</em>. Como resume Ben Shneiderman, um dos pioneiros da visualização de informação: “o objetivo da visualização é o <em>insight</em>, não as imagens” (em tradução livre; no original, “The purpose of visualization is insight, not pictures”; ver a <a href="https://medium.com/multiple-views-visualization-research-explained/the-purpose-of-visualization-is-insight-not-pictures-an-interview-with-visualization-pioneer-ben-beb15b2d8e9b">entrevista com Shneiderman</a> no blog <em>Multiple Views</em>).
 </div>
 
 ---
@@ -53,21 +55,22 @@ O **gráfico de barras** é ideal para comparar categorias ou mostrar a distribu
 
 ### Exemplo Prático
 
-Considere o número de alunos por curso em uma faculdade:
+Considere o número de alunos por curso em uma faculdade (números ilustrativos):
 
-```
-Curso        | Alunos
-----------------------
-Engenharia   | 120
-Medicina     | 90
-Direito      | 85
-Administração| 110
-```
+| Curso | Alunos |
+|---|---:|
+| Engenharia | 120 |
+| Medicina | 90 |
+| Direito | 85 |
+| Administração | 110 |
+| **Total** | **405** |
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/grafico_barras.png" alt="Gráfico de Barras - Alunos por Curso" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 1: Número de alunos por curso</p>
+  <img src="{{ site.baseurl }}/assets/images/grafico-barras-cursos.png" alt="Gráfico de barras com o número de alunos por curso: Engenharia 120, Medicina 90, Direito 85 e Administração 110" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 1: Número de alunos por curso. A altura de cada barra é o número de alunos; compare as alturas lendo o eixo vertical.</p>
 </div>
+
+**Leitura:** Engenharia tem o maior número de alunos (120) e Direito o menor (85). A diferença entre eles é $120 - 85 = 35$ alunos. Como todas as barras começam no zero, a altura é proporcional ao número de alunos: a barra de Engenharia é $120 / 85 \approx 1{,}41$ vez a de Direito.
 
 ### Vantagens e Limitações
 
@@ -82,36 +85,49 @@ Administração| 110
 
 <div style="border-left: 4px solid #2196F3; padding: 0.5em; background-color: #e3f2fd; margin: 1em 0;">
   <strong>💡 Dica de Visualização</strong><br>
-  Ordene as barras por valor para facilitar a comparação. Use cores consistentes e evite rótulos muito longos que podem sobrepor.
+  Ordene as barras por valor para facilitar a comparação. Use cores consistentes e evite rótulos muito longos que podem se sobrepor. O eixo de um gráfico de barras deve começar no zero: cortar o eixo faz diferenças pequenas parecerem enormes.
 </div>
 
 ---
 
 ## 2. Gráfico de Pizza
 
-O **gráfico de pizza** (ou gráfico de setores) é um gráfico circular dividido em fatias que representam proporções de um todo. Cada fatia corresponde a uma categoria e seu tamanho é proporcional à quantidade que representa.
+O **gráfico de pizza** (ou gráfico de setores) é um gráfico circular dividido em fatias que representam proporções de um todo. Cada fatia corresponde a uma categoria, e seu ângulo (e sua área) é proporcional à quantidade que representa.
 
 ### Quando Usar
 - Mostrar proporções de um todo (quando as partes somam 100%)
-- Comparar algumas poucas categorias (idealmente até 5)
+- Comparar poucas categorias
 - Comunicar rapidamente distribuições simples
 
 ### Exemplo Prático
 
-Distribuição de sistemas operacionais móveis em 2023:
+Participação de cada sistema operacional nos acessos à internet feitos por celular no mundo, na média de 2023, segundo a StatCounter:
 
-```
-Sistema    | Participação de Mercado
------------------------------
-Android    | 70%
-iOS        | 28%
-Outros     | 2%
-```
+| Sistema | Participação |
+|---|---:|
+| Android | 70,37% |
+| iOS | 29,06% |
+| Outros (Samsung, KaiOS, Windows, Linux e demais) | 0,57% |
+| **Total** | **100,00%** |
+
+Fonte: StatCounter Global Stats, *Mobile Operating System Market Share Worldwide*, granularidade anual, 2023 ([gs.statcounter.com](https://gs.statcounter.com/os-market-share/mobile/worldwide)), acesso em 23 nov. 2026. A StatCounter mede a participação nas **páginas visitadas** em sites que usam o seu contador, não nas vendas de aparelhos.
+
+Para desenhar a pizza, cada porcentagem vira um ângulo. O círculo tem 360°, então:
+
+$$\text{ângulo} = \frac{\text{porcentagem}}{100} \times 360°$$
+
+- Android: $\dfrac{70{,}37}{100} \times 360° = 0{,}7037 \times 360° = 253{,}332° \approx 253{,}3°$
+- iOS: $\dfrac{29{,}06}{100} \times 360° = 0{,}2906 \times 360° = 104{,}616° \approx 104{,}6°$
+- Outros: $\dfrac{0{,}57}{100} \times 360° = 0{,}0057 \times 360° = 2{,}052° \approx 2{,}1°$
+
+Conferência: $253{,}332° + 104{,}616° + 2{,}052° = 360{,}000°$.
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/grafico_pizza.png" alt="Gráfico de Pizza - Participação de Mercado" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 2: Participação de mercado de sistemas operacionais móveis</p>
+  <img src="{{ site.baseurl }}/assets/images/grafico_pizza.png" alt="Gráfico de pizza: Android 70,4%, iOS 29,1% e outros 0,6% dos acessos por celular no mundo em 2023" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 2: Sistemas operacionais móveis no mundo, média de 2023 (StatCounter). Na legenda, os valores estão arredondados para uma casa; por isso somam 100,1%.</p>
 </div>
+
+**Leitura:** a mensagem que a pizza passa bem é uma só: o Android responde por mais de dois terços do total ($70{,}37\% > 66{,}67\%$). Já a fatia "Outros", com 0,57%, quase não aparece — e comparar fatias pequenas a olho é justamente onde a pizza falha.
 
 ### Vantagens e Limitações
 
@@ -121,7 +137,7 @@ Outros     | 2%
 - Visualmente atraente para apresentações
 
 **Limitações:**
-- Difícil comparar fatias de tamanho similar
+- Difícil comparar fatias de tamanho parecido
 - Ineficiente para muitas categorias
 - Dificulta comparações precisas
 
@@ -129,69 +145,76 @@ Outros     | 2%
 
 <div style="border-left: 4px solid #FF9800; padding: 0.5em; background-color: #FFF3E0; margin: 1em 0;">
   <strong>🔍 John Tukey</strong><br>
-  Conhecido como o "pai da análise exploratória de dados", Tukey tinha uma visão pragmática sobre visualização. Embora seja mais famoso por desenvolver o boxplot, ele acreditava que "o objetivo mais simples da análise de dados é a descrição" e que os gráficos deveriam ser ferramentas para descoberta. Sobre gráficos de pizza, Tukey era cético, argumentando que "há poucas situações em que um gráfico circular consegue transmitir informações de forma mais clara que outras alternativas". Ele preferia técnicas que revelassem a distribuição subjacente dos dados.
+  Conhecido como o "pai da análise exploratória de dados", Tukey criou gráficos pensados para mostrar a <em>distribuição</em> dos dados, como o boxplot e o diagrama de ramo e folhas, apresentados no livro <em>Exploratory Data Analysis</em> (1977). Uma pizza mostra só as proporções de cada categoria e não diz nada sobre como os valores se distribuem — por isso os gráficos de Tukey resolvem um problema diferente.
 </div>
 
 <div style="border-left: 4px solid #f44336; padding: 0.5em; background-color: #ffebee; margin: 1em 0;">
   <strong>❌ Edward Tufte</strong><br>
-  No clássico "The Visual Display of Quantitative Information", Tufte é categórico: gráficos de pizza são "pobres de dados", pois usam muito espaço para transmitir pouca informação. Ele argumenta que o olho humano tem dificuldade em comparar ângulos e áreas de forma precisa, especialmente quando as fatias têm tamanhos similares.
+  No clássico <em>The Visual Display of Quantitative Information</em>, Tufte escreve que “uma tabela é quase sempre melhor do que um gráfico de pizza tolo; o único desenho pior do que um gráfico de pizza é vários deles, porque então o leitor precisa comparar quantidades espalhadas em desordem pelo espaço” (em tradução livre; no original: “A table is nearly always better than a dumb pie chart; the only worse design than a pie chart is several of them, for then the viewer is asked to compare quantities located in spatial disarray”).
 </div>
 
 <div style="border-left: 4px solid #2196F3; padding: 0.5em; background-color: #e3f2fd; margin: 1em 0;">
   <strong>📊 Stephen Few</strong><br>
-  Few sugere que "há poucas situações em que um gráfico de pizza é a melhor escolha". Em seu livro "Show Me the Numbers", ele demonstra que gráficos de barras permitem comparações mais precisas entre categorias. No entanto, ele reconhece que podem ser úteis para mostrar uma única proporção dominante (ex: 80/20).
+  No artigo <em>Save the Pies for Dessert</em> (2007), Few argumenta que o gráfico de barras compara as mesmas informações com muito mais precisão do que a pizza. Ele reconhece na pizza uma única vantagem: mostrar a relação de cada parte com o todo.
 </div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
   <strong>📈 Naomi Robbins</strong><br>
-  Autora de "Creating More Effective Graphs", Robbins argumenta que gráficos de pizza são aceitáveis apenas quando mostram poucas categorias (no máximo 3-4) e quando a mensagem principal é "esta parte é metade" ou "esta parte é um quarto". Para comparações detalhadas, ela recomenda gráficos de barras.
+  Em <em>Creating More Effective Graphs</em> (2005), Robbins coloca o gráfico de pizza entre os gráficos comuns que têm limitações e recomenda alternativas em que os valores são lidos numa escala comum, como o gráfico de barras e o gráfico de pontos (<em>dot plot</em>).
 </div>
 
 ### Alternativas Recomendadas
 
-1. **Gráfico de Barras**: Para comparações precisas entre categorias
-2. **Gráfico de Barras Empilhadas**: Para mostrar partes de um todo com mais categorias
-3. **Gráfico de Área**: Para mostrar mudanças nas proporções ao longo do tempo
-4. **Gráfico de Waffle**: Alternativa visualmente atraente para mostrar proporções
+1. **Gráfico de Barras**: para comparações precisas entre categorias
+2. **Gráfico de Barras Empilhadas**: para mostrar partes de um todo com mais categorias
+3. **Gráfico de Área**: para mostrar mudanças nas proporções ao longo do tempo
+4. **Gráfico de Waffle**: alternativa visualmente atraente para mostrar proporções
 
 <div style="border-left: 4px solid #9c27b0; padding: 0.5em; background-color: #f3e5f5; margin: 1em 0;">
   <strong>💡 Quando Usar o Gráfico de Pizza?</strong><br>
-  Apesar das críticas, o gráfico de pizza pode ser eficaz quando:
-  - Você tem apenas 2-3 categorias
-  - A mensagem é simples (ex: "mais da metade")
-  - O público é leigo e familiarizado com esse formato
-  - O contexto é informal ou de alto nível
+  Apesar das críticas, o gráfico de pizza pode funcionar quando:
+  <ul>
+    <li>Você tem apenas 2 ou 3 categorias</li>
+    <li>A mensagem é simples (ex.: "mais da metade", "dois terços")</li>
+    <li>O público é leigo e está acostumado com esse formato</li>
+    <li>O que importa é a relação de cada parte com o todo, não a comparação precisa entre as partes</li>
+  </ul>
 </div>
 
 ---
 
 ## 3. Histograma
 
-O **histograma** mostra a distribuição de uma variável quantitativa contínua, agrupando os dados em intervalos (bins).
+O **histograma** mostra a distribuição de uma variável quantitativa contínua, agrupando os dados em intervalos (classes, ou *bins*).
 
 ### Quando Usar
 - Visualizar a distribuição de dados contínuos
-- Identificar tendências centrais e dispersão
+- Identificar tendência central e dispersão
 - Detectar assimetria e outliers
 
 ### Exemplo Prático
 
-Considere as notas de 100 alunos em uma prova (escala de 0 a 10):
+Considere as notas de 100 alunos em uma prova, de 0 a 10, agrupadas em classes de 2 pontos (números ilustrativos):
 
-```
-Intervalo | Frequência
--------------------
-0-2      | 5
-2-4      | 15
-4-6      | 30
-6-8      | 35
-8-10     | 15
-```
+| Classe de nota | Frequência (alunos) |
+|---|---:|
+| [0, 2) | 5 |
+| [2, 4) | 15 |
+| [4, 6) | 30 |
+| [6, 8) | 35 |
+| [8, 10] | 15 |
+| **Total** | **100** |
+
+A notação [4, 6) quer dizer "de 4 até 6, incluindo o 4 e excluindo o 6": um aluno com nota 6 entra na classe [6, 8). A última classe, [8, 10], inclui o 10.
+
+Conferência do total: $5 + 15 + 30 + 35 + 15 = 100$ alunos.
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/histograma.png" alt="Histograma - Distribuição de Notas" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 2: Distribuição de notas dos alunos</p>
+  <img src="{{ site.baseurl }}/assets/images/histograma.png" alt="Histograma das notas de 100 alunos em classes de 2 pontos: 5, 15, 30, 35 e 15 alunos" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 3: Distribuição das notas dos 100 alunos. As barras se encostam porque as classes são contínuas.</p>
 </div>
+
+**Leitura:** a classe mais frequente é [6, 8), com 35 alunos. Somando as duas classes do meio, $30 + 35 = 65$ alunos — 65% da turma — tiraram entre 4 e 8. A cauda da esquerda (notas baixas) é mais comprida que a da direita, um sinal de leve assimetria à esquerda.
 
 ### Vantagens e Limitações
 
@@ -201,17 +224,26 @@ Intervalo | Frequência
 - Bom para grandes conjuntos de dados
 
 **Limitações:**
-- A escolha do número de bins afeta a interpretação
+- A escolha do número de classes afeta a interpretação
 - Pode esconder detalhes importantes
 
 <div style="border-left: 4px solid #9c27b0; padding: 0.5em; background-color: #f3e5f5; margin: 1em 0;">
   <strong>🔍 Regra de Sturges</strong><br>
-  Para definir o número ideal de bins: $k = 1 + 3.322 \log_{10}(n)$, onde $n$ é o número de observações. Arredonde para o inteiro mais próximo.
+  Uma regra prática para o número de classes $k$, proposta por Herbert Sturges (1926), é $k = 1 + \log_2(n)$, que costuma ser escrita com logaritmo na base 10 como $k \approx 1 + 3{,}322 \log_{10}(n)$, onde $n$ é o número de observações. O resultado é arredondado para um número inteiro de classes.
 </div>
+
+**Exemplo com os 100 alunos.** Aqui, $n = 100$.
+
+1. Logaritmo na base 10: $\log_{10}(100) = 2$, porque $10^2 = 100$.
+2. Multiplicação: $3{,}322 \times 2 = 6{,}644$.
+3. Soma: $k = 1 + 6{,}644 = 7{,}644$.
+4. Arredondamento: $k \approx 8$ classes.
+
+Com 8 classes no intervalo de 0 a 10, cada classe teria largura $\dfrac{10 - 0}{8} = 1{,}25$ ponto. A Figura 3 usa 5 classes de 2 pontos porque números redondos são mais fáceis de ler — uma escolha legítima, mas que muda o desenho. É uma boa ilustração da limitação acima: o mesmo conjunto de dados pode parecer diferente com outra quantidade de classes. A regra de Sturges é só um ponto de partida, não uma regra obrigatória.
 
 ---
 
-## 3. Boxplot (Diagrama de Caixa)
+## 4. Boxplot (Diagrama de Caixa)
 
 O **boxplot** resume a distribuição de uma variável quantitativa através de seus quartis, destacando a mediana e possíveis outliers.
 
@@ -222,64 +254,63 @@ O **boxplot** resume a distribuição de uma variável quantitativa através de 
 
 ### Elementos do Boxplot
 
-```
-     +-----+----+
-     |     |  o | ← Outliers
-+----+-----+    
-|         |    
-|    +-+  |    
-|    | |  |    ← Terceiro Quartil (Q3)
-|    +-+  |    
-|    | |  |    ← Mediana (Q2)
-|    +-+  |    
-|    | |  |    ← Primeiro Quartil (Q1)
-+----+-----+
-     |     |
-     +-----+
-     |     |
-     +-----+
-     |     |
-     +-----+----+
-```
+Na versão mais usada, proposta por Tukey, o boxplot tem cinco elementos (veja a Figura 4):
+
+1. **A caixa**, que vai do primeiro quartil ($Q_1$) ao terceiro quartil ($Q_3$) e contém os 50% centrais dos dados.
+2. **A linha dentro da caixa**, que marca a mediana ($Q_2$).
+3. **As cercas**, que não aparecem desenhadas: ficam a $1{,}5 \times IQR$ abaixo de $Q_1$ e acima de $Q_3$, onde $IQR = Q_3 - Q_1$.
+4. **Os bigodes**, que vão da caixa até o menor e o maior valor que ainda estão **dentro** das cercas.
+5. **Os pontos isolados**, que são os valores **fora** das cercas: os outliers.
+
+Há outras convenções (bigodes até o mínimo e o máximo, ou até certos percentis); quando ler um boxplot, confira qual foi usada.
 
 ### Exemplo Prático
 
-Considere as idades de participantes de um evento:
-- Menor valor (sem contar outliers): 18
-- Q1: 22
+Considere as idades dos participantes de um evento (números ilustrativos), resumidas assim:
+- Menor valor dentro das cercas: 18
+- $Q_1$: 22
 - Mediana: 25
-- Q3: 30
-- Maior valor (sem contar outliers): 41
-- Outliers: 45 e 50
+- $Q_3$: 30
+- Maior valor dentro das cercas: 41
+- Valores acima de 41: 45 e 50
 
-Com $IQR = 30 - 22 = 8$, as cercas ficam em $22 - 12 = 10$ e $30 + 12 = 42$: só 45 e 50 passam delas.
+Para saber se 45 e 50 são outliers, calculamos as cercas passo a passo:
+
+1. Intervalo interquartil: $IQR = Q_3 - Q_1 = 30 - 22 = 8$.
+2. Margem: $1{,}5 \times IQR = 1{,}5 \times 8 = 12$.
+3. Cerca inferior: $Q_1 - 12 = 22 - 12 = 10$.
+4. Cerca superior: $Q_3 + 12 = 30 + 12 = 42$.
+
+Agora comparamos cada valor com as cercas: $45 > 42$ e $50 > 42$, então os dois são outliers. Já $41 \le 42$ e $18 \ge 10$, então 41 e 18 estão dentro das cercas e são os fins dos bigodes.
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/boxplot.png" alt="Boxplot - Distribuição de Idades" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 3: Distribuição de idades dos participantes</p>
+  <img src="{{ site.baseurl }}/assets/images/boxplot.png" alt="Boxplot das idades: bigode de 18 a 22, caixa de 22 a 30 com a mediana em 25, bigode de 30 a 41 e dois outliers em 45 e 50" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 4: Distribuição das idades dos participantes. Os pontos laranja (45 e 50) estão além da cerca superior, em 42.</p>
 </div>
+
+**Leitura:** metade dos participantes tem entre 22 e 30 anos (a caixa). A mediana, 25, está mais perto de $Q_1$ do que de $Q_3$ ($25 - 22 = 3$ contra $30 - 25 = 5$), e o bigode da direita é bem mais comprido que o da esquerda ($41 - 30 = 11$ contra $22 - 18 = 4$): a distribuição é assimétrica à direita, puxada por poucas pessoas mais velhas.
 
 ### Vantagens e Limitações
 
 **Vantagens:**
-- Mostra múltiplas estatísticas em uma única visualização
+- Mostra várias estatísticas em uma única visualização
 - Eficiente para comparar grupos
 - Boa visualização de outliers
 
 **Limitações:**
-- Pode esconder a forma da distribuição
+- Pode esconder a forma da distribuição (duas modas, por exemplo, não aparecem)
 - Menos intuitivo para leigos
 
 <div style="border-left: 4px solid #ff9800; padding: 0.5em; background-color: #fff3e0; margin: 1em 0;">
   <strong>⚠️ Cuidado com Outliers</strong><br>
-  Valores são considerados outliers se estiverem abaixo de $Q1 - 1.5 \times IQR$ ou acima de $Q3 + 1.5 \times IQR$, onde $IQR = Q3 - Q1$.
+  Um valor fora das cercas $Q_1 - 1{,}5 \times IQR$ e $Q_3 + 1{,}5 \times IQR$ é um outlier <em>pelo critério do boxplot</em>. Isso não quer dizer que ele seja um erro: pode ser um dado legítimo e importante. Investigue antes de remover.
 </div>
 
 ---
 
-## 4. Gráfico de Dispersão (Scatter Plot)
+## 5. Gráfico de Dispersão (Scatter Plot)
 
-O **gráfico de dispersão** mostra a relação entre duas variáveis quantitativas, onde cada ponto representa uma observação.
+O **gráfico de dispersão** mostra a relação entre duas variáveis quantitativas: cada ponto representa uma observação.
 
 ### Quando Usar
 - Verificar correlação entre variáveis
@@ -288,21 +319,21 @@ O **gráfico de dispersão** mostra a relação entre duas variáveis quantitati
 
 ### Exemplo Prático
 
-Relação entre horas de estudo e notas em uma prova:
+Relação entre horas de estudo e nota em uma prova (números ilustrativos):
 
-```
-Aluno | Horas | Nota
-------|-------|-----
-A     | 2     | 4.5
-B     | 5     | 6.8
-C     | 8     | 7.2
-...   | ...   | ...
-```
+| Aluno | Horas | Nota |
+|---|---:|---:|
+| A | 2 | 4,5 |
+| B | 5 | 6,8 |
+| C | 8 | 7,2 |
+| … | … | … |
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/scatter_plot.png" alt="Gráfico de Dispersão - Horas de Estudo x Nota" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 4: Relação entre horas de estudo e notas</p>
+  <img src="{{ site.baseurl }}/assets/images/scatter_plot.png" alt="Gráfico de dispersão de horas de estudo contra nota para 30 alunos, com uma reta de tendência crescente e r igual a 0,91" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 5: Horas de estudo × nota, para 30 alunos: os três da tabela e mais 27 ilustrativos. A linha tracejada é a reta de mínimos quadrados.</p>
 </div>
+
+**Leitura:** os pontos sobem da esquerda para a direita — quem estudou mais horas tende a ter nota maior. Com os 30 alunos da figura, o coeficiente de correlação de Pearson é $r \approx 0{,}91$, uma relação linear positiva forte. Isso **não** prova que estudar mais causa a nota maior: o gráfico mostra associação, não causa.
 
 ### Vantagens e Limitações
 
@@ -312,17 +343,17 @@ C     | 8     | 7.2
 - Útil para grandes conjuntos de dados
 
 **Limitações:**
-- Ponto de sobreposição com muitos dados
+- Com muitos dados, os pontos se sobrepõem e escondem onde há mais observações
 - Difícil de interpretar com muitas variáveis
 
 <div style="border-left: 4px solid #2196F3; padding: 0.5em; background-color: #e3f2fd; margin: 1em 0;">
   <strong>💡 Dica de Análise</strong><br>
-  Adicione uma linha de tendência para destacar a relação entre as variáveis. O coeficiente de correlação de Pearson ($r$) pode quantificar a força e direção da relação linear.
+  Adicione uma linha de tendência para destacar a relação entre as variáveis. O coeficiente de correlação de Pearson ($r$) quantifica a força e a direção da relação <em>linear</em>: ele pode ser perto de zero mesmo quando há uma relação forte, mas curva.
 </div>
 
 ---
 
-## 5. Gráfico de Linha Temporal
+## 6. Gráfico de Linha Temporal
 
 O **gráfico de linha temporal** mostra como uma variável quantitativa muda ao longo do tempo.
 
@@ -333,22 +364,22 @@ O **gráfico de linha temporal** mostra como uma variável quantitativa muda ao 
 
 ### Exemplo Prático
 
-Vendas mensais ao longo de um ano:
+Vendas mensais de uma loja ao longo de um ano (números ilustrativos):
 
-```
-Mês    | Vendas (R$)
--------|------------
-Jan    | 12,500
-Fev    | 14,200
-Mar    | 15,800
-...    | ...
-Dez    | 28,300
-```
+| Mês | Vendas (R$) |
+|---|---:|
+| Jan | 12.500 |
+| Fev | 14.200 |
+| Mar | 15.800 |
+| … | … |
+| Dez | 28.300 |
 
 <div style="text-align: center; margin: 1em 0;">
-  <img src="{{ site.baseurl }}/assets/images/linha_temporal.png" alt="Gráfico de Linha - Vendas Mensais" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-  <p style="font-size: 0.8em; color: #666;">Figura 5: Vendas mensais ao longo do ano</p>
+  <img src="{{ site.baseurl }}/assets/images/linha_temporal.png" alt="Gráfico de linha das vendas mensais, subindo de 12,5 mil reais em janeiro para 28,3 mil reais em dezembro" style="max-width: 100%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+  <p style="font-size: 0.8em; color: #666;">Figura 6: Vendas mensais ao longo do ano, em milhares de reais.</p>
 </div>
+
+**Leitura:** as vendas mais que dobraram no ano. De janeiro a dezembro, o aumento foi de $28.300 - 12.500 = 15.800$ reais, ou seja, $\dfrac{15.800}{12.500} = 1{,}264 = 126{,}4\%$. A única queda é de junho para julho.
 
 ### Vantagens e Limitações
 
@@ -373,7 +404,7 @@ Dez    | 28,300
 | Tipo de Dados | Objetivo | Gráfico Recomendado |
 |---------------|----------|---------------------|
 | Categórico   | Comparar categorias | Barras ou Colunas |
-| Categórico   | Proporções | Pizza ou Rosca |
+| Categórico   | Proporções | Pizza ou Rosca (poucas categorias) |
 | Quantitativo | Distribuição | Histograma ou Boxplot |
 | Duas Variáveis Quantitativas | Relação | Dispersão (Scatter) |
 | Temporal     | Tendência | Linha |
@@ -383,35 +414,45 @@ Dez    | 28,300
 
 ## Boas Práticas em Visualização de Dados
 
-1. **Simplicidade**: Menos é mais. Evite elementos desnecessários.
-2. **Precisão**: Escalas devem ser proporcionais e começar em zero quando apropriado.
-3. **Consistência**: Use as mesmas cores e estilos para os mesmos elementos.
-4. **Legibilidade**: Fontes devem ser claras e tamanhos adequados.
-5. **Contexto**: Inclua títulos, rótulos e fontes quando necessário.
+1. **Simplicidade**: menos é mais. Evite elementos desnecessários.
+2. **Precisão**: escalas devem ser proporcionais; em gráficos de barras, o eixo começa no zero.
+3. **Consistência**: use as mesmas cores e estilos para os mesmos elementos.
+4. **Legibilidade**: fontes claras e de tamanho adequado.
+5. **Contexto**: inclua títulos, rótulos e a fonte dos dados.
 
 <div style="border-left: 4px solid #f44336; padding: 0.5em; background-color: #ffebee; margin: 1em 0;">
-  <strong>❌ Erros Comuns a Evitar</strong><br>
-  - Gráficos 3D desnecessários que distorcem a percepção
-  - Escalas enganosas (eixos não iniciando em zero sem justificativa)
-  - Muitas cores ou elementos que competem pela atenção
-  - Falta de rótulos ou legendas claras
+  <strong>❌ Erros Comuns a Evitar</strong>
+  <ul>
+    <li>Gráficos 3D desnecessários que distorcem a percepção</li>
+    <li>Escalas enganosas (eixos que não começam no zero sem justificativa)</li>
+    <li>Muitas cores ou elementos que competem pela atenção</li>
+    <li>Falta de rótulos, legendas ou fonte dos dados</li>
+  </ul>
 </div>
 
 ---
 
 ## Ferramentas Recomendadas
 
+- **Julia**: Plots.jl, Makie.jl, StatsPlots.jl
 - **Python**: Matplotlib, Seaborn, Plotly
 - **R**: ggplot2, plotly, lattice
-- **Ferramentas Visuais**: Tableau, Power BI, Google Data Studio
+- **Ferramentas Visuais**: Tableau, Power BI, Looker Studio (antigo Google Data Studio)
 - **Online**: Datawrapper, Flourish, RAWGraphs
+
+As figuras desta página foram geradas em Julia, com Plots.jl, pelo script `scripts/figuras-graficos.jl` do repositório do site.
 
 ---
 
 ## Referências
 
-1. Tufte, E. R. (2001). *The Visual Display of Quantitative Information*. Graphics Press.
-2. Cairo, A. (2016). *The Truthful Art: Data, Charts, and Maps for Communication*. New Riders.
-3. Few, S. (2012). *Show Me the Numbers: Designing Tables and Graphs to Enlighten*. Analytics Press.
+1. Cairo, A. (2016). *The Truthful Art: Data, Charts, and Maps for Communication*. New Riders.
+2. Few, S. (2007). Save the Pies for Dessert. *Visual Business Intelligence Newsletter*, Perceptual Edge, ago. 2007.
+3. Few, S. (2012). *Show Me the Numbers: Designing Tables and Graphs to Enlighten*. 2. ed. Analytics Press.
 4. Healy, K. (2018). *Data Visualization: A Practical Introduction*. Princeton University Press.
 5. Nussbaumer Knaflic, C. (2015). *Storytelling with Data: A Data Visualization Guide for Business Professionals*. Wiley.
+6. Robbins, N. B. (2005). *Creating More Effective Graphs*. Wiley-Interscience.
+7. StatCounter Global Stats. *Mobile Operating System Market Share Worldwide*, 2023 (dados anuais). Disponível em: <https://gs.statcounter.com/os-market-share/mobile/worldwide>. Acesso em: 23 nov. 2026.
+8. Sturges, H. A. (1926). The choice of a class interval. *Journal of the American Statistical Association*, 21(153), 65–66. DOI: [10.1080/01621459.1926.10502161](https://doi.org/10.1080/01621459.1926.10502161).
+9. Tufte, E. R. (2001). *The Visual Display of Quantitative Information*. 2. ed. Graphics Press.
+10. Tukey, J. W. (1977). *Exploratory Data Analysis*. Addison-Wesley.
