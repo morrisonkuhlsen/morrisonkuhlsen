@@ -14,54 +14,49 @@ description: "A first exploration of the data to uncover patterns, detect anomal
 
 ### John Tukey and the Birth of EDA
 
-Exploratory Data Analysis, as we know it today, is rooted in the pioneering work of **John Wilder Tukey** (1915-2000), one of the most influential statisticians of the 20th century. Tukey, who was also a chemist and a computer scientist, revolutionized the way data are analyzed and interpreted.
+Exploratory Data Analysis, as we know it today, is rooted in the work of **John Wilder Tukey** (1915–2000), one of the most influential statisticians of the 20th century.
 
 #### Who was John Tukey?
 
 - **Born**: June 16, 1915, in New Bedford, Massachusetts, USA
-- **Education**: B.A. in Chemistry from Brown University (1936) and Ph.D. in Mathematics from Princeton University (1939)
-- **Career**: Professor at Princeton and senior researcher at Bell Labs
-- **Contributions**: besides EDA, Tukey coined terms such as "bit" (binary digit) and "software"
-
-<div style="text-align: center; margin: 20px 0;">
-  <img src="{{ site.baseurl }}/assets/images/JohnTukey.jpg" alt="John Wilder Tukey (1915-2000)" style="max-width: 300px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-  <p style="font-style: italic; margin-top: 10px; color: #555;">John Wilder Tukey (1915-2000), the father of Exploratory Data Analysis</p>
-</div>
+- **Education**: bachelor's (1936) and master's (1937) degrees in Chemistry from Brown University, and a Ph.D. in Mathematics from Princeton University (1939)
+- **Career**: professor at Princeton and researcher at Bell Labs
+- **Words he gave to computing**: the term **"bit"** (short for *binary digit*) is credited to Tukey — it first appears in print in Claude Shannon's 1948 paper, which gives him the credit. He is also remembered for using the word **"software"** in 1958 to mean computer programs — its first known use in print (Leonhardt, 2000).
 
 ### The Exploratory Revolution
 
-In 1977, Tukey published the seminal book **"Exploratory Data Analysis"**, which laid the foundations of EDA. In it, he argued that statistical analysis should not be limited to testing hypotheses (confirmatory analysis), but should also explore the data to uncover unexpected patterns and generate new hypotheses.
+In 1977, Tukey published the book **"Exploratory Data Analysis"**, which laid the foundations of EDA. The central idea is that statistical analysis should not be limited to testing hypotheses that were already formulated (*confirmatory* analysis): before that, we need to explore the data to uncover unexpected patterns and generate new hypotheses.
 
 #### Tukey's Core Principles:
 
-1. **Emphasis on Visualization**: Tukey believed that "the simplest possible picture is the best, as long as it does what needs to be done".
+1. **Emphasis on Visualization**: in the 1977 book, Tukey writes that “the greatest value of a picture is when it forces us to notice what we never expected to see.”
 
-2. **Resistance**: he developed robust techniques that are not thrown off by atypical values, such as the median and the quartiles.
+2. **Resistance**: Tukey valued *resistant* measures, which are not dragged around by a few atypical values, such as the median and the quartiles — rather than relying only on the mean and the standard deviation.
 
-3. **Active Exploration**: he encouraged analysts to "play" with the data, asking different questions and trying different views.
+3. **Active Exploration**: looking at the same data in several ways, with different questions and charts, before choosing a model.
 
-4. **Innovative Tools**: he created several visual tools that are standard today, including:
+4. **New Tools**: he created visual tools that are standard today, including:
    - **Boxplot** (box-and-whisker plot)
    - **Stem-and-leaf plot**
-   - **Five-number summary**
+   - **Five-number summary**: minimum, $Q_1$, median, $Q_3$ and maximum
 
 ### Impact and Legacy
 
 Tukey's approach had a deep impact on many fields:
 
-- **Modern Data Science**: EDA is considered the essential first step of any data science project.
-- **Big Data**: the principles of visualization and exploration are even more critical in the age of large data volumes.
+- **Modern Data Science**: EDA is treated as the first step of any data analysis project.
+- **Big Data**: with large volumes of data, looking before modeling has become even more important.
 - **Education**: EDA is taught in statistics and data science courses around the world.
 
 ### EDA Today
 
-Although the core principles remain the same, EDA has evolved with technology:
+Although the principles remain the same, EDA has evolved with technology:
 
-- **Modern Tools**: languages such as Python, R and Julia build Tukey's principles into their visualization libraries.
+- **Modern Tools**: languages such as Python, R and Julia ship Tukey's charts in their visualization libraries.
 - **Interactive Visualizations**: tools such as Tableau and Power BI allow dynamic exploration of data.
 - **Automation**: machine learning techniques are being used to automate parts of the exploratory process.
 
-Tukey's view that "the most important goal of data analysis is to discover what you were not looking for" continues to guide analysts and data scientists around the world.
+As Behrens (1997) sums it up, the goal of EDA is to discover patterns in the data and generate hypotheses, not to reach verdicts — verdicts are left to confirmatory analysis.
 
 ## Goals of Exploratory Analysis
 
@@ -201,14 +196,14 @@ statistical_summary(df)</code></pre>
   <div>  Median: 20.5</div>
   <div>  Minimum: 18</div>
   <div>  Maximum: 24</div>
-  <div>  Standard Deviation: 2.39</div>
+  <div>  Standard Deviation: 2.26</div>
   <div> </div>
   <div>Variable: Grade</div>
   <div>  Mean: 7.0</div>
   <div>  Median: 7.0</div>
   <div>  Minimum: 5</div>
   <div>  Maximum: 9</div>
-  <div>  Standard Deviation: 1.41</div>
+  <div>  Standard Deviation: 1.31</div>
   <div> </div>
   <div>Variable: StudyHours</div>
   <div>  Mean: 15.12</div>
@@ -222,9 +217,45 @@ statistical_summary(df)</code></pre>
   <div> Row │ Passed  Count </div>
   <div>     │ String  Int64 </div>
   <div>─────┼───────────────</div>
-  <div>   1 │ No          3</div>
-  <div>   2 │ Yes         5</div>
+  <div>   1 │ Yes         5</div>
+  <div>   2 │ No          3</div>
 </div>
+
+#### Checking it by hand: the standard deviation of the grades
+
+Julia's `std` function computes the **sample** standard deviation, which divides by $n - 1$. Let's redo the calculation for the grades to see where the 1.31 comes from.
+
+**Data:** the 8 grades are 7, 6, 9, 8, 7, 5, 8, 6, so $n = 8$.
+
+**Step 1 — mean:**
+
+$$\bar{x} = \frac{7 + 6 + 9 + 8 + 7 + 5 + 8 + 6}{8} = \frac{56}{8} = 7$$
+
+**Step 2 — each grade's deviation from the mean, and the squared deviation:**
+
+| Student | Grade $x_i$ | $x_i - \bar{x}$ | $(x_i - \bar{x})^2$ |
+|---|---:|---:|---:|
+| Ana | 7 | $7 - 7 = 0$ | 0 |
+| Carlos | 6 | $6 - 7 = -1$ | 1 |
+| Maria | 9 | $9 - 7 = 2$ | 4 |
+| João | 8 | $8 - 7 = 1$ | 1 |
+| Julia | 7 | $7 - 7 = 0$ | 0 |
+| Pedro | 5 | $5 - 7 = -2$ | 4 |
+| Luiza | 8 | $8 - 7 = 1$ | 1 |
+| Rafael | 6 | $6 - 7 = -1$ | 1 |
+| **Sum** | | $0$ | $12$ |
+
+The deviations add up to zero (they always do, around the mean) — that's why the deviations are squared.
+
+**Step 3 — sample variance:**
+
+$$s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1} = \frac{12}{8 - 1} = \frac{12}{7} \approx 1.7143$$
+
+**Step 4 — standard deviation:**
+
+$$s = \sqrt{s^2} = \sqrt{\frac{12}{7}} \approx 1.3093 \approx 1.31$$
+
+**Interpretation:** on average, the grades lie about 1.31 points from the mean grade of 7. It's the same value Julia printed.
 
 ### Visualizing the Data
 
@@ -256,7 +287,9 @@ histogram(df.Grade,
 
 #### Histogram output:
 
-![Histogram of the grades]({{ site.baseurl }}/assets/images/histograma_notas.png)
+![Histogram of the 8 students' grades: one 5, two 6s, two 7s, two 8s and one 9]({{ site.baseurl }}/assets/images/histograma_notas-en.png)
+
+**Reading it:** the grades range from 5 to 9. One 5, two 6s, two 7s, two 8s and one 9: the distribution is symmetric around 7, which is both the mean and the median.
 
 #### 2. Scatter Plot: Study Hours vs. Grades
 
@@ -299,7 +332,67 @@ plot!(x_range, x -> intercept + coef * x,
 
 #### Scatter plot output:
 
-![Scatter plot]({{ site.baseurl }}/assets/images/grafico_dispersao.png)
+![Scatter plot of the 8 students' study hours against grade, with an almost flat trend line]({{ site.baseurl }}/assets/images/grafico_dispersao-en.png)
+
+The trend line is almost flat: it rises only 0.03 points per hour of study. To measure the strength of the linear relationship, we compute Pearson's correlation coefficient:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Statistics
+
+hours = [17, 18, 15, 12, 19, 10, 14, 16]
+grades = [7, 6, 9, 8, 7, 5, 8, 6]
+
+println("Correlation between hours and grade: ", round(cor(hours, grades), digits=2))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>Correlation between hours and grade: 0.07</div>
+</div>
+
+#### Checking it by hand: the correlation
+
+Pearson's formula is
+
+$$r = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \cdot \sum (y_i - \bar{y})^2}}$$
+
+where $x$ is study hours and $y$ is the grade.
+
+**Step 1 — means:**
+
+$$\bar{x} = \frac{17 + 18 + 15 + 12 + 19 + 10 + 14 + 16}{8} = \frac{121}{8} = 15.125 \qquad \bar{y} = 7 \text{ (computed above)}$$
+
+**Step 2 — deviations, products and squares:**
+
+| Student | $x_i$ | $y_i$ | $x_i - \bar{x}$ | $y_i - \bar{y}$ | $(x_i - \bar{x})(y_i - \bar{y})$ | $(x_i - \bar{x})^2$ | $(y_i - \bar{y})^2$ |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Ana | 17 | 7 | 1.875 | 0 | 0 | 3.515625 | 0 |
+| Carlos | 18 | 6 | 2.875 | −1 | −2.875 | 8.265625 | 1 |
+| Maria | 15 | 9 | −0.125 | 2 | −0.25 | 0.015625 | 4 |
+| João | 12 | 8 | −3.125 | 1 | −3.125 | 9.765625 | 1 |
+| Julia | 19 | 7 | 3.875 | 0 | 0 | 15.015625 | 0 |
+| Pedro | 10 | 5 | −5.125 | −2 | 10.25 | 26.265625 | 4 |
+| Luiza | 14 | 8 | −1.125 | 1 | −1.125 | 1.265625 | 1 |
+| Rafael | 16 | 6 | 0.875 | −1 | −0.875 | 0.765625 | 1 |
+| **Sum** | | | $0$ | $0$ | $2$ | $64.875$ | $12$ |
+
+**Step 3 — substituting into the formula:**
+
+$$r = \frac{2}{\sqrt{64.875 \times 12}} = \frac{2}{\sqrt{778.5}} = \frac{2}{27.9016\ldots} \approx 0.0717 \approx 0.07$$
+
+**Interpretation:** $r \approx 0.07$ is very close to zero. For these 8 students, **there is no linear relationship** between study hours and grade: knowing how many hours a student studied barely helps predict their grade.
+
+Look at the products column: nearly all of the positive part comes from a single student, Pedro (10 hours, grade 5), with $+10.25$; the other seven add up to $2 - 10.25 = -8.25$. Without Pedro, the correlation for the other seven students is $r \approx -0.60$ — negative. With so little data, a single student decides the sign of the result.
 
 #### 3. Boxplot of Study Hours by Pass Status
 
@@ -325,27 +418,36 @@ boxplot(df.Passed, df.StudyHours;
 
 #### Boxplot output:
 
-![Boxplot of study hours by pass status]({{ site.baseurl }}/assets/images/boxplot_horas_estudo.png)
+![Boxplots of study hours for students who failed and passed, with medians of 16 and 15 hours]({{ site.baseurl }}/assets/images/boxplot_horas_estudo-en.png)
+
+**Reading it:** the 3 students who failed (Carlos, Pedro and Rafael) studied 18, 10 and 16 hours, with a median of 16; the 5 who passed (Ana, Maria, João, Julia and Luiza) studied 17, 15, 12, 19 and 14 hours, with a median of 15. Those who passed did not study more than those who failed — consistent with the near-zero correlation. With 3 and 5 students, each box is drawn from very few points, and the picture changes a lot if one student changes.
 
 ## What the Results Show
 
 Based on the exploratory analysis, we can draw the following conclusions:
 
-1. **Distribution of Grades**: grades range from 5 to 9, with a mean of 7.0.
-2. **Relationship Between Variables**: there is a positive correlation between study hours and grades, suggesting that students who study more tend to get better grades.
-3. **Passing**: 5 of the 8 students passed (grade ≥ 7).
-4. **Students' Ages**: the mean age is about 21, ranging from 18 to 24.
+1. **Distribution of Grades**: grades range from 5 to 9, with a mean of 7.0, a median of 7.0 and a standard deviation of 1.31 points; the distribution is symmetric.
+2. **Relationship Between Variables**: in these data, **there is no linear relationship** between study hours and grade ($r \approx 0.07$). The little positive correlation there is comes from a single student; without him, the correlation turns negative.
+3. **Passing**: 5 of the 8 students passed (grade ≥ 7), that is, $\frac{5}{8} = 62.5\%$. Those who passed did not study more hours than those who failed (medians of 15 and 16 hours).
+4. **Students' Ages**: the mean age is $\frac{165}{8} = 20.625 \approx 20.6$ years, ranging from 18 to 24, with a standard deviation of 2.26 years.
+
+<div style="border-left: 4px solid #ff9800; padding: 0.5em; background-color: #fff3e0; margin: 1em 0;">
+  <strong>⚠️ What this example teaches</strong><br>
+  You would expect students who study more to get higher grades — and these data do <em>not</em> show that. That is exactly the value of exploratory analysis: it shows what the data say, even when they contradict expectations. With 8 students (made-up data for the example), none of these conclusions applies to other students; they only describe this group.
+</div>
 
 ## Next Steps
 
 Based on this exploratory analysis, we could:
 
-1. Run statistical tests to check whether the relationships found are significant
-2. Collect more data to make the conclusions more reliable
-3. Build a classification model to predict passing from the other variables
+1. Collect data on many more students: with 8, a single student flips the sign of the correlation
+2. Look into Pedro's case (few hours and the lowest grade) and into students who studied a lot and failed, such as Carlos
+3. With more data, test whether the relationship between hours and grade is statistically significant, and consider other variables (such as how students study)
 
 ## References
 
-1. Tukey, J. W. (1977). *Exploratory Data Analysis*. Addison-Wesley.
-2. Behrens, J. T. (1997). *Principles and Procedures of Exploratory Data Analysis*. Psychological Methods.
-3. Wickham, H., & Grolemund, G. (2016). *R for Data Science*. O'Reilly Media.
+1. Behrens, J. T. (1997). Principles and procedures of exploratory data analysis. *Psychological Methods*, 2(2), 131–160. DOI: [10.1037/1082-989X.2.2.131](https://doi.org/10.1037/1082-989X.2.2.131).
+2. Shannon, C. E. (1948). A mathematical theory of communication. *The Bell System Technical Journal*, 27(3), 379–423. DOI: [10.1002/j.1538-7305.1948.tb01338.x](https://doi.org/10.1002/j.1538-7305.1948.tb01338.x).
+3. Leonhardt, D. (2000, July 28). John Tukey, 85, statistician; coined the word "software". *The New York Times*.
+4. Tukey, J. W. (1977). *Exploratory Data Analysis*. Addison-Wesley.
+5. Wickham, H.; Grolemund, G. (2016). *R for Data Science*. O'Reilly Media.
