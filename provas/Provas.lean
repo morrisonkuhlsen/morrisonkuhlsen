@@ -3,3 +3,4 @@ import Provas.Matrizes
 import Provas.Probabilidade
 import Provas.TendenciaCentral
 import Provas.Distribuicoes
+import Provas.VariaveisAleatorias
