@@ -6,7 +6,7 @@ ref: estatistica-descritiva
 permalink: /en/descriptive-statistics/
 order: 1
 mathjax: true
-description: "Concepts and tools for describing and summarizing data clearly and objectively."
+description: "What Descriptive Statistics is: mean, median, mode, range, variance, standard deviation and quartiles, with a step-by-step worked example."
 ---
 
 <style>
@@ -259,7 +259,7 @@ $$
 
 Where:
 
-- $$\bar{x}$$ is the mean;
+- $$\bar{x}$$ is the sample mean;
 - $$x_i$$ is each observed value;
 - $$n$$ is the total number of observations.
 
@@ -354,7 +354,7 @@ $$
 5
 $$
 
-because the number 5 appears more times than any other.
+because the number 5 appears 3 times, more than any other value.
 
 <div class="mk-note">
   A data set can have one mode, more than one mode, or no mode at all.
@@ -373,7 +373,21 @@ For example:
 - Class A: $$7,\ 7,\ 7,\ 7,\ 7$$
 - Class B: $$2,\ 5,\ 7,\ 9,\ 12$$
 
-Both can have a similar mean, but Class B varies much more.
+Both have exactly the same mean:
+
+<div class="mk-formula">
+
+$$
+\bar{x}_A = \frac{7 + 7 + 7 + 7 + 7}{5} = \frac{35}{5} = 7
+\qquad
+\bar{x}_B = \frac{2 + 5 + 7 + 9 + 12}{5} = \frac{35}{5} = 7
+$$
+
+</div>
+
+But in Class A everyone scored 7, while in Class B the grades go from 2 to 12. The mean
+alone does not show this difference; measures of dispersion do. The range, for example,
+is $$7 - 7 = 0$$ in Class A and $$12 - 2 = 10$$ in Class B.
 
 ---
 
@@ -419,7 +433,11 @@ $$
 
 ### Variance
 
-The variance measures how far, on average, the data lie from the mean.  
+The variance measures how far the data lie from the mean. To compute it, we subtract the
+mean from each value (this is the **deviation** of each value), square each deviation
+and take a kind of average of those squares. The deviations are squared because,
+otherwise, the positive and negative ones would cancel out: the sum of the deviations
+from the mean is always zero.  
 The larger the variance, the more spread out the values.
 
 For a population:
@@ -447,7 +465,12 @@ Where:
 - $$\sigma^2$$ is the population variance;
 - $$s^2$$ is the sample variance;
 - $$\mu$$ is the population mean;
-- $$\bar{x}$$ is the sample mean.
+- $$\bar{x}$$ is the sample mean;
+- $$N$$ is the population size and $$n$$ is the sample size.
+
+For a sample, we divide by $$n - 1$$ rather than $$n$$. This corrects the tendency of the
+variance computed with $$n$$ to underestimate, on average, the population variance.
+The full explanation is in [Measures of Dispersion]({{ '/en/descriptive-statistics/dispersion' | relative_url }}).
 
 ---
 
@@ -459,7 +482,7 @@ It is widely used because it is back in the same unit as the original data.
 <div class="mk-formula">
 
 $$
-s = \sqrt{s^2}
+s = \sqrt{s^2} \qquad \text{(sample)} \qquad\qquad \sigma = \sqrt{\sigma^2} \qquad \text{(population)}
 $$
 
 </div>
@@ -479,13 +502,16 @@ Measures of position show where a value sits relative to the rest of the data se
 
 The main ones are:
 
-- quartiles;
-- deciles;
-- percentiles.
+- **quartiles** ($$Q_1$$, $$Q_2$$, $$Q_3$$) split the sorted data into four parts;
+- **deciles** ($$D_1$$ to $$D_9$$) split it into ten parts;
+- **percentiles** ($$P_1$$ to $$P_{99}$$) split it into a hundred parts. The 90th percentile,
+  for example, is the value with about 90% of the data below it.
+
+So $$Q_1 = P_{25}$$, $$Q_2 = D_5 = P_{50}$$ and $$Q_3 = P_{75}$$.
 
 ### Quartiles
 
-Quartiles split the sorted data into four parts.
+Quartiles split the sorted data into four parts, each holding about 25% of the data.
 
 <table class="mk-table">
   <thead>
@@ -497,18 +523,25 @@ Quartiles split the sorted data into four parts.
   <tbody>
     <tr>
       <td>Q1</td>
-      <td>25% of the data lie below this value.</td>
+      <td>About 25% of the data lie below this value.</td>
     </tr>
     <tr>
       <td>Q2</td>
-      <td>50% of the data lie below this value. It is the same as the median.</td>
+      <td>About 50% of the data lie below this value. It is the median.</td>
     </tr>
     <tr>
       <td>Q3</td>
-      <td>75% of the data lie below this value.</td>
+      <td>About 75% of the data lie below this value.</td>
     </tr>
   </tbody>
 </table>
+
+<div class="mk-note">
+  <strong>Why "about"?</strong> With few data points, there is not always a value with
+  exactly 25% of the data below it. That is why there are several methods for computing
+  quartiles (Hyndman and Fan, 1996, describe nine), and different software can give slightly
+  different values for the same data. When you report a quartile, say which method you used.
+</div>
 
 ---
 
@@ -551,7 +584,8 @@ Besides numerical measures, Descriptive Statistics uses charts to make interpret
 
 ## A worked example
 
-Consider the service time, in minutes, of 8 people:
+Consider the service time, in minutes, of 8 people (illustrative numbers, chosen to keep
+the arithmetic simple). We treat these 8 people as a **sample** of the customers served:
 
 $$
 5,\ 7,\ 8,\ 8,\ 10,\ 12,\ 15,\ 18
@@ -575,11 +609,8 @@ $$
 
 </div>
 
-The mean service time is approximately:
-
-$$
-10.38 \text{ minutes}
-$$
+The mean service time is $$10.375$$ minutes (exact value), or $$10.38$$ minutes
+rounded to two decimal places.
 
 ### Median
 
@@ -620,6 +651,88 @@ So the mode is:
 $$
 Mo = 8
 $$
+
+The value 8 appears 2 times; every other value appears once.
+
+### Range
+
+The longest time is $$x_{\max} = 18$$ and the shortest is $$x_{\min} = 5$$:
+
+<div class="mk-formula">
+
+$$
+R = 18 - 5 = 13
+$$
+
+</div>
+
+### Variance and standard deviation
+
+Since the data are a sample, we use the formula with $$n - 1 = 8 - 1 = 7$$ in the denominator.
+The mean, computed above, is $$\bar{x} = 10.375$$. Each row of the table shows the deviation
+$$x_i - \bar{x}$$ and its square:
+
+<table class="mk-table">
+  <thead>
+    <tr>
+      <th>x<sub>i</sub></th>
+      <th>x<sub>i</sub> − x̄</th>
+      <th>(x<sub>i</sub> − x̄)²</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>5</td><td>5 − 10.375 = −5.375</td><td>28.890625</td></tr>
+    <tr><td>7</td><td>7 − 10.375 = −3.375</td><td>11.390625</td></tr>
+    <tr><td>8</td><td>8 − 10.375 = −2.375</td><td>5.640625</td></tr>
+    <tr><td>8</td><td>8 − 10.375 = −2.375</td><td>5.640625</td></tr>
+    <tr><td>10</td><td>10 − 10.375 = −0.375</td><td>0.140625</td></tr>
+    <tr><td>12</td><td>12 − 10.375 = 1.625</td><td>2.640625</td></tr>
+    <tr><td>15</td><td>15 − 10.375 = 4.625</td><td>21.390625</td></tr>
+    <tr><td>18</td><td>18 − 10.375 = 7.625</td><td>58.140625</td></tr>
+    <tr><td><strong>Sum</strong></td><td><strong>0</strong></td><td><strong>133.875</strong></td></tr>
+  </tbody>
+</table>
+
+The deviations add up to zero, as expected. Now we divide the sum of squares by 7:
+
+<div class="mk-formula">
+
+$$
+s^2 = \frac{133.875}{7}
+$$
+
+$$
+s^2 = 19.125 \text{ minutes}^2
+$$
+
+</div>
+
+And take the square root:
+
+<div class="mk-formula">
+
+$$
+s = \sqrt{19.125}
+$$
+
+$$
+s \approx 4.37 \text{ minutes}
+$$
+
+</div>
+
+### Interpretation
+
+- A typical service takes around 9 to 10 minutes: the median is 9 minutes and the mean is
+  10.375 minutes.
+- The mean is above the median because the two longest times (15 and 18 minutes) pull the
+  mean up. The median does not react to them: if the last time were 40 minutes instead of 18,
+  the median would still be 9 minutes.
+- The standard deviation of about 4.37 minutes says that the times typically lie around
+  4 minutes above or below the mean.
+- What these numbers do **not** say: with only 8 services, they describe this sample. Claiming
+  that the mean time of **all** services is 10.375 minutes is already inference, and it calls
+  for the tools of Statistical Inference (such as a confidence interval).
 
 ---
 
@@ -714,5 +827,21 @@ Along the way, we look for:
   variation and behavior that would go unnoticed just by looking at the raw data.
 </div>
 
-> “Statistics is the grammar of science.”  
-> — Karl Pearson
+## Further reading on this site
+
+- [Measures of Central Tendency]({{ '/en/descriptive-statistics/central-tendency' | relative_url }}): mean, median, mode and when each one misleads.
+- [Measures of Dispersion]({{ '/en/descriptive-statistics/dispersion' | relative_url }}): range, variance, standard deviation, coefficient of variation and interquartile range.
+- [Statistical Charts]({{ '/en/descriptive-statistics/charts' | relative_url }}): which chart to use for each kind of data.
+- [Exploratory Data Analysis]({{ '/en/descriptive-statistics/exploratory-analysis' | relative_url }}): how to investigate a data set before modeling it.
+- [Data Visualization]({{ '/en/descriptive-statistics/visualization' | relative_url }}): principles for clear and honest charts.
+
+---
+
+## References
+
+1. Hyndman, R. J.; Fan, Y. (1996). Sample quantiles in statistical packages. *The American Statistician*, 50(4), 361–365. DOI: [10.1080/00031305.1996.10473566](https://doi.org/10.1080/00031305.1996.10473566).
+
+### Further reading
+
+- Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10th ed. Saraiva Uni. (in Portuguese)
+- Triola, M. F. (2024). *Introdução à Estatística*. 14th ed. LTC. (in Portuguese; translation of *Elementary Statistics*)

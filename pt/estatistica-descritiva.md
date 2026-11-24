@@ -5,7 +5,7 @@ lang: pt
 ref: estatistica-descritiva
 order: 1
 mathjax: true
-description: "Conceitos e ferramentas para descrever e resumir dados de forma clara e objetiva."
+description: "O que é Estatística Descritiva: média, mediana, moda, amplitude, variância, desvio padrão e quartis, com exemplo resolvido passo a passo."
 ---
 
 <style>
@@ -258,7 +258,7 @@ $$
 
 Onde:
 
-- $$\bar{x}$$ representa a média;
+- $$\bar{x}$$ representa a média da amostra (média amostral);
 - $$x_i$$ representa cada valor observado;
 - $$n$$ representa o número total de observações.
 
@@ -353,7 +353,7 @@ $$
 5
 $$
 
-porque o número 5 aparece mais vezes.
+porque o número 5 aparece 3 vezes, mais do que qualquer outro valor.
 
 <div class="mk-note">
   Um conjunto de dados pode ter uma moda, mais de uma moda ou nenhuma moda.
@@ -372,7 +372,21 @@ Por exemplo:
 - Turma A: $$7,\ 7,\ 7,\ 7,\ 7$$
 - Turma B: $$2,\ 5,\ 7,\ 9,\ 12$$
 
-As duas podem ter média semelhante, mas a Turma B apresenta maior variação.
+As duas têm exatamente a mesma média:
+
+<div class="mk-formula">
+
+$$
+\bar{x}_A = \frac{7 + 7 + 7 + 7 + 7}{5} = \frac{35}{5} = 7
+\qquad
+\bar{x}_B = \frac{2 + 5 + 7 + 9 + 12}{5} = \frac{35}{5} = 7
+$$
+
+</div>
+
+Mas na Turma A todos tiraram 7, e na Turma B as notas vão de 2 a 12. A média sozinha
+não mostra essa diferença; as medidas de dispersão mostram. A amplitude, por exemplo,
+é $$7 - 7 = 0$$ na Turma A e $$12 - 2 = 10$$ na Turma B.
 
 ---
 
@@ -418,7 +432,11 @@ $$
 
 ### Variância
 
-A variância mede o afastamento médio dos dados em relação à média.  
+A variância mede o quanto os dados se afastam da média. Para calculá-la, subtraímos a
+média de cada valor (esse é o **desvio** de cada valor), elevamos cada desvio ao quadrado
+e tiramos uma espécie de média desses quadrados. Os desvios são elevados ao quadrado
+porque, sem isso, os positivos e os negativos se cancelariam: a soma dos desvios em
+relação à média é sempre zero.  
 Quanto maior a variância, mais espalhados estão os valores.
 
 Para uma população:
@@ -446,7 +464,12 @@ Onde:
 - $$\sigma^2$$ é a variância populacional;
 - $$s^2$$ é a variância amostral;
 - $$\mu$$ é a média populacional;
-- $$\bar{x}$$ é a média amostral.
+- $$\bar{x}$$ é a média amostral;
+- $$N$$ é o tamanho da população e $$n$$, o tamanho da amostra.
+
+Na amostra, dividimos por $$n - 1$$ e não por $$n$$. Isso corrige a tendência que a
+variância calculada com $$n$$ teria de subestimar, em média, a variância da população.
+A explicação completa está em [Medidas de Dispersão]({{ '/pt/estatistica-descritiva/dispersao' | relative_url }}).
 
 ---
 
@@ -458,7 +481,7 @@ Ele é muito utilizado porque volta para a mesma unidade dos dados originais.
 <div class="mk-formula">
 
 $$
-s = \sqrt{s^2}
+s = \sqrt{s^2} \qquad \text{(amostra)} \qquad\qquad \sigma = \sqrt{\sigma^2} \qquad \text{(população)}
 $$
 
 </div>
@@ -478,13 +501,16 @@ As medidas de posição indicam a localização relativa de um valor dentro do c
 
 As principais são:
 
-- quartis;
-- decis;
-- percentis.
+- os **quartis** ($$Q_1$$, $$Q_2$$, $$Q_3$$) dividem os dados ordenados em quatro partes;
+- os **decis** ($$D_1$$ a $$D_9$$) dividem em dez partes;
+- os **percentis** ($$P_1$$ a $$P_{99}$$) dividem em cem partes. O percentil 90, por exemplo,
+  é o valor que deixa cerca de 90% dos dados abaixo dele.
+
+Assim, $$Q_1 = P_{25}$$, $$Q_2 = D_5 = P_{50}$$ e $$Q_3 = P_{75}$$.
 
 ### Quartis
 
-Os quartis dividem os dados ordenados em quatro partes.
+Os quartis dividem os dados ordenados em quatro partes, cada uma com cerca de 25% dos dados.
 
 <table class="mk-table">
   <thead>
@@ -496,18 +522,25 @@ Os quartis dividem os dados ordenados em quatro partes.
   <tbody>
     <tr>
       <td>Q1</td>
-      <td>25% dos dados estão abaixo desse valor.</td>
+      <td>Cerca de 25% dos dados estão abaixo desse valor.</td>
     </tr>
     <tr>
       <td>Q2</td>
-      <td>50% dos dados estão abaixo desse valor. É equivalente à mediana.</td>
+      <td>Cerca de 50% dos dados estão abaixo desse valor. É a mediana.</td>
     </tr>
     <tr>
       <td>Q3</td>
-      <td>75% dos dados estão abaixo desse valor.</td>
+      <td>Cerca de 75% dos dados estão abaixo desse valor.</td>
     </tr>
   </tbody>
 </table>
+
+<div class="mk-note">
+  <strong>Por que "cerca de"?</strong> Com poucos dados, nem sempre existe um valor que
+  deixe exatamente 25% abaixo dele. Por isso há vários métodos para calcular quartis
+  (Hyndman e Fan, 1996, descrevem nove), e programas diferentes podem dar valores um pouco
+  diferentes para os mesmos dados. Ao relatar um quartil, diga qual método foi usado.
+</div>
 
 ---
 
@@ -550,7 +583,9 @@ Além das medidas numéricas, a Estatística Descritiva usa gráficos para facil
 
 ## Exemplo prático
 
-Considere o tempo de atendimento, em minutos, de 8 pessoas:
+Considere o tempo de atendimento, em minutos, de 8 pessoas (números ilustrativos, escolhidos
+para a conta ficar simples). Vamos tratar essas 8 pessoas como uma **amostra** dos clientes
+atendidos:
 
 $$
 5,\ 7,\ 8,\ 8,\ 10,\ 12,\ 15,\ 18
@@ -574,11 +609,8 @@ $$
 
 </div>
 
-A média do tempo de atendimento é aproximadamente:
-
-$$
-10{,}38 \text{ minutos}
-$$
+A média do tempo de atendimento é $$10{,}375$$ minutos (valor exato), ou
+$$10{,}38$$ minutos arredondando para duas casas.
 
 ### Mediana
 
@@ -619,6 +651,88 @@ Logo, a moda é:
 $$
 Mo = 8
 $$
+
+O valor 8 aparece 2 vezes; todos os outros aparecem 1 vez.
+
+### Amplitude
+
+O maior tempo é $$x_{\max} = 18$$ e o menor é $$x_{\min} = 5$$:
+
+<div class="mk-formula">
+
+$$
+A = 18 - 5 = 13
+$$
+
+</div>
+
+### Variância e desvio padrão
+
+Como os dados são uma amostra, usamos a fórmula com $$n - 1 = 8 - 1 = 7$$ no denominador.
+A média, calculada acima, é $$\bar{x} = 10{,}375$$. Cada linha da tabela mostra o desvio
+$$x_i - \bar{x}$$ e o seu quadrado:
+
+<table class="mk-table">
+  <thead>
+    <tr>
+      <th>x<sub>i</sub></th>
+      <th>x<sub>i</sub> − x̄</th>
+      <th>(x<sub>i</sub> − x̄)²</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>5</td><td>5 − 10,375 = −5,375</td><td>28,890625</td></tr>
+    <tr><td>7</td><td>7 − 10,375 = −3,375</td><td>11,390625</td></tr>
+    <tr><td>8</td><td>8 − 10,375 = −2,375</td><td>5,640625</td></tr>
+    <tr><td>8</td><td>8 − 10,375 = −2,375</td><td>5,640625</td></tr>
+    <tr><td>10</td><td>10 − 10,375 = −0,375</td><td>0,140625</td></tr>
+    <tr><td>12</td><td>12 − 10,375 = 1,625</td><td>2,640625</td></tr>
+    <tr><td>15</td><td>15 − 10,375 = 4,625</td><td>21,390625</td></tr>
+    <tr><td>18</td><td>18 − 10,375 = 7,625</td><td>58,140625</td></tr>
+    <tr><td><strong>Soma</strong></td><td><strong>0</strong></td><td><strong>133,875</strong></td></tr>
+  </tbody>
+</table>
+
+A soma dos desvios dá zero, como esperado. Agora dividimos a soma dos quadrados por 7:
+
+<div class="mk-formula">
+
+$$
+s^2 = \frac{133{,}875}{7}
+$$
+
+$$
+s^2 = 19{,}125 \text{ minutos}^2
+$$
+
+</div>
+
+E tiramos a raiz quadrada:
+
+<div class="mk-formula">
+
+$$
+s = \sqrt{19{,}125}
+$$
+
+$$
+s \approx 4{,}37 \text{ minutos}
+$$
+
+</div>
+
+### Interpretação
+
+- Um atendimento típico leva por volta de 9 a 10 minutos: a mediana é 9 minutos e a média,
+  10,375 minutos.
+- A média ficou acima da mediana porque os dois tempos mais longos (15 e 18 minutos) puxam
+  a média para cima. A mediana não se altera com eles: se o último tempo fosse 40 minutos
+  em vez de 18, a mediana continuaria 9 minutos.
+- O desvio padrão de cerca de 4,37 minutos diz que os tempos se afastam da média, tipicamente,
+  em torno de 4 minutos para mais ou para menos.
+- O que esses números **não** dizem: com só 8 atendimentos, eles descrevem esta amostra. Dizer
+  que o tempo médio de **todos** os atendimentos é 10,375 minutos já é inferência, e exige as
+  ferramentas da Inferência Estatística (como um intervalo de confiança).
 
 ---
 
@@ -713,5 +827,21 @@ Nesse processo, procuramos:
   variações e comportamentos que não seriam percebidos apenas olhando para os dados brutos.
 </div>
 
-> “A Estatística é a gramática da ciência.”  
-> — Karl Pearson
+## Para aprofundar
+
+- [Medidas de Tendência Central]({{ '/pt/estatistica-descritiva/tendencia-central' | relative_url }}): média, mediana, moda e quando cada uma engana.
+- [Medidas de Dispersão]({{ '/pt/estatistica-descritiva/dispersao' | relative_url }}): amplitude, variância, desvio padrão, coeficiente de variação e intervalo interquartil.
+- [Gráficos Estatísticos]({{ '/pt/estatistica-descritiva/graficos' | relative_url }}): qual gráfico usar para cada tipo de dado.
+- [Análise Exploratória de Dados]({{ '/pt/estatistica-descritiva/analise-exploratoria' | relative_url }}): como investigar um conjunto de dados antes de modelar.
+- [Visualização de Dados]({{ '/pt/estatistica-descritiva/visualizacao' | relative_url }}): princípios para gráficos claros e honestos.
+
+---
+
+## Referências
+
+1. Hyndman, R. J.; Fan, Y. (1996). Sample quantiles in statistical packages. *The American Statistician*, 50(4), 361–365. DOI: [10.1080/00031305.1996.10473566](https://doi.org/10.1080/00031305.1996.10473566).
+
+### Para saber mais
+
+- Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+- Triola, M. F. (2024). *Introdução à Estatística*. 14. ed. LTC.
