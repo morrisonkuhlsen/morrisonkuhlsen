@@ -11,3 +11,6 @@ scripts/validacao/referencia.csv
 
 # Cache do Python dos scripts
 __pycache__/
+
+# Lean: dependências e compilação do projeto de provas (refeitas com `lake exe cache get`)
+provas/.lake/

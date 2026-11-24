@@ -1,0 +1,20 @@
+name = "provas"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Provas"]
+
+[leanOptions]
+pp.unicode.fun = true # pretty-prints `fun a ↦ b`
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+# O cabeçalho de copyright é regra do repositório do Mathlib, não destas provas.
+weak.linter.style.header = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.37.0-rc1"
+
+[[lean_lib]]
+name = "Provas"

@@ -1,0 +1,348 @@
+# CLAUDE.md — morrisonkuhlsen.com
+
+Site de estatística, probabilidade e matemática de base, em português (principal)
+e inglês. Jekyll puro; a estrutura técnica está no `README.md`. Este arquivo
+trata do **conteúdo**: como escrever, calcular, programar, citar, traduzir,
+revisar e publicar.
+
+O leitor é **leigo ou iniciante**. Ele não sabe o que pulamos, não conserta uma
+conta errada sozinho e confia no que lê. Um erro numa página de ensino ensina o
+erro. Por isso a regra que vale acima de todas as outras:
+
+> **Nada é publicado sem ter sido verificado.** Toda conta foi refeita, todo
+> código foi rodado, toda referência existe e diz o que citamos, todo número
+> do texto bate com o da tabela, do gráfico, do código e do resumo.
+> Na dúvida, não publique: pergunte ou marque como pendente.
+
+---
+
+## 1. Cálculos
+
+### 1.1 Toda conta é refeita de forma independente
+
+- Recalcule **cada** número que aparece na página com código (Julia, Python ou
+  Node, no scratchpad), não de cabeça. Vale para resultados finais **e** para
+  os intermediários: somas parciais, produtos, médias, desvios, quadrados.
+- Refaça por um segundo caminho quando der: fórmula fechada × simulação,
+  fração exata × decimal, função de biblioteca × conta manual, força bruta ×
+  fórmula. Se os dois caminhos discordarem, o texto não sai.
+- Confira as contas **já existentes** ao revisar ou traduzir uma página. Erros
+  reais já encontrados assim: soma 0,01 + 0,009 + 0,008 escrita como 0,029
+  (é 0,027), e uma probabilidade derivada dela (31,03% em vez de 33,33%).
+- Quando um erro aparece numa versão, corrija **nas duas** (PT e EN) e diga o
+  que foi corrigido na mensagem de commit.
+
+### 1.2 Os três níveis de verificação
+
+| Nível | Quando | Como |
+|---|---|---|
+| **1. Recálculo** | **Sempre**, em toda conta da página | Refazer em Julia (ou Python/Node). Frações em aritmética exata (`Rational` do Julia: `1//3`), decimais com todas as casas. |
+| **2. Teste da fórmula** | Fórmula ou algoritmo novo (calculadora, função em JS, exemplo com regra geral) | Comparar contra força bruta (enumerar todos os casos) ou simulação com muitas repetições, em vários valores, inclusive bordas (0, 1, n pequeno, valores negativos, denominador perto de zero). |
+| **3. Prova formal em Lean** | Demonstração, identidade ou propriedade que a página **afirma valer sempre** | Enunciado e prova em Lean 4 + Mathlib, em `provas/` (ver §1.3). |
+
+O nível 3 entra quando a página diz "para todo…", "sempre vale…", "prova",
+"demonstração" ou "identidade": produtos notáveis, propriedades de potências e
+logaritmos, fórmula da inversa 2×2, identidades combinatórias (Pascal,
+binômio), Var(X) = E[X²] − E[X]², linearidade da esperança, regra do
+complemento, regra da adição, Bayes, propriedade de falta de memória da
+exponencial, e assim por diante. O que ele **não** cobre, e continua nos níveis
+1 e 2: código em Julia/JS, simulações, gráficos, valores numéricos de
+distribuições (quantis, p-valores, tabelas) e, claro, referências (§5).
+
+### 1.3 O projeto Lean (`provas/`)
+
+- Lean 4 com Mathlib, em `provas/`; o Jekyll ignora a pasta (`exclude` no
+  `_config.yml`) e o git ignora `provas/.lake/` (dependências e compilação).
+- Em máquina nova: `cd provas && lake exe cache get` baixa o Mathlib já
+  compilado; depois `lake build` verifica todas as provas.
+- Uma prova por assunto, em `provas/Provas/<Assunto>.lean` (ex.:
+  `ProdutosNotaveis.lean`, `Probabilidade.lean`), importada em
+  `provas/Provas.lean`. Cada teorema leva um comentário `/-- … -/` com a
+  página do site que o afirma (URL relativa) e o enunciado em português.
+- O enunciado em Lean é **exatamente** o que a página afirma, com as mesmas
+  hipóteses. Se a prova exigir uma hipótese que a página não diz (denominador ≠ 0,
+  n ≥ 1, eventos independentes, P(B) > 0), **a página está incompleta**:
+  acrescente a hipótese no texto, nas duas línguas.
+- Proibido `sorry`, `admit` ou `axiom` novo: `lake build` precisa passar sem
+  avisos de `sorry`. Prova que não sai fica fora do repositório e a afirmação
+  da página fica marcada como pendente, com aviso ao usuário.
+- Prefira as táticas que deixam a prova legível e estável: `ring`, `field_simp`,
+  `norm_num`, `linarith`, `nlinarith`, `simp`, `omega`, `decide`, e lemas do
+  Mathlib citados pelo nome.
+- Ao terminar: `cd provas && lake build` sem erros nem `sorry`, e o resultado
+  citado na resposta ao usuário.
+
+### 1.4 Arredondamento
+
+- Faça a conta com todos os algarismos e **arredonde só o resultado final**.
+  Valores intermediários exibidos podem ser arredondados, mas o passo seguinte
+  usa o valor completo — e o texto diz isso quando a diferença aparece.
+- Mantenha o mesmo número de casas para a mesma grandeza na página inteira.
+- Probabilidades: diga a forma (0,1477 ou 14,77%) e não misture as duas na
+  mesma frase sem necessidade.
+- Se o arredondamento muda a conclusão (ex.: o p-valor cruza 0,05), mostre o
+  valor com mais casas.
+
+### 1.5 Resolução "à mão": completa, sem pular nada
+
+O formato de toda resolução passo a passo:
+
+1. **Dados**: liste cada valor com nome, símbolo e unidade, e diga de onde veio
+   ("do enunciado", "calculado no passo 2").
+2. **Fórmula** escrita por extenso, com cada símbolo explicado na primeira vez
+   que aparece.
+3. **Substituição**: a mesma fórmula com os números no lugar dos símbolos,
+   antes de qualquer conta.
+4. **Conta**, uma operação por linha: potências, depois produtos, depois somas.
+   Frações mostram numerador e denominador separados antes de dividir. Somas de
+   muitos termos mostram cada termo (de preferência numa tabela) e o total.
+5. **Resultado** com unidade e o arredondamento declarado.
+6. **Interpretação** em português corrente (ver §2).
+
+Não presumir, não resumir, não pular o "óbvio":
+- Nada de "fazendo as contas, obtemos…": as contas aparecem.
+- Nada de "é fácil ver que…", "trivialmente", "analogamente" sem mostrar.
+- Sinais, parênteses, ordem das operações e propriedades usadas são ditos
+  ("pela regra do complemento", "como os eventos são independentes").
+- Se um passo depende de uma condição (independência, n grande, variância
+  conhecida), a condição é dita **antes** de usar o passo, e conferida.
+- Tabela estatística ou função de software usada: diga qual, com qual
+  argumento, e mostre o valor lido (`P(Z < −1,5) = 0,0668`, da tabela Z).
+
+### 1.6 Coerência numérica da página
+
+Antes de publicar, os mesmos números precisam bater em todos os lugares:
+texto, fórmulas, tabelas, legendas, gráficos, saída do código, caixas de
+resumo, `description` do front matter e versão na outra língua.
+
+---
+
+## 2. Resultados e interpretação
+
+- Todo resultado ganha uma frase de interpretação: **o que o número diz sobre a
+  situação do enunciado**, na unidade do problema ("em média, cada nota se
+  afasta 1,14 ponto da média").
+- Diga também **o que o número não diz** quando o erro comum é previsível:
+  - intervalo de confiança: 95% é sobre o **método**, não "95% de chance de μ
+    estar neste intervalo";
+  - p-valor: não é a probabilidade de H₀ ser verdadeira, nem tamanho de efeito;
+    "não rejeitar H₀" não prova H₀;
+  - correlação não é causalidade; r mede só relação **linear**;
+  - "1 em N" é média de longo prazo, não garantia em N tentativas;
+  - independentes ≠ mutuamente exclusivos;
+  - significância estatística ≠ importância prática.
+- Contexto e limites: hipóteses do modelo, tamanho da amostra, o que mudaria o
+  resultado, quando a técnica não deveria ser usada.
+- Números pequenos ou enormes ganham uma imagem concreta ("1 em 151.200").
+
+---
+
+## 3. Rigor estatístico e matemático
+
+- **Amostra × população**: notação distinta (x̄, s, s² × μ, σ, σ²) e divisor
+  correto (n − 1 × N). Diga qual se está calculando.
+- **Parametrizações**: declare sempre. Armadilhas conhecidas:
+  - Julia `Exponential(θ)` usa a **escala** θ = 1/λ (`Exponential(2)` tem
+    média 2, λ = 1/2); R `rexp(n, rate)` usa a taxa; SciPy usa `scale`.
+  - `Normal(μ, σ)` recebe o **desvio padrão**; a notação N(μ, σ²) usa a variância.
+  - Geométrica: "tentativas até o 1º sucesso" (k ≥ 1) × "fracassos antes" (k ≥ 0).
+  - Binomial negativa: há várias definições; diga qual.
+  - Quartis: há vários métodos (Tukey, tipo 7 do R…); diga qual, e que outro
+    software pode dar outro valor.
+- **Condições de uso** declaradas e conferidas antes de aplicar: independência,
+  normalidade, variâncias iguais, n·p ≥ 5 e n·(1−p) ≥ 5 para aproximação normal,
+  correção de continuidade (dizer se foi usada).
+- "n ≥ 30" é **regra de bolso**, não teorema; diga isso quando aparecer.
+- Notação consistente na página inteira; símbolos definidos antes do uso.
+- Fórmulas conferidas contra uma referência (§5), não de memória.
+- Nunca chamar a fórmula da equação do 2º grau de "Bhaskara": é **fórmula
+  quadrática** (ou fórmula resolutiva), em todo o site.
+
+---
+
+## 4. Código
+
+- **Roda como está.** Cada bloco é autossuficiente: todos os `using`/`import`,
+  funções e dados que usa estão no próprio bloco (nada de depender de uma
+  função definida em outro bloco). Simulações fixam a semente
+  (`Random.seed!(123)`).
+- **Foi executado.** Rode todo código novo ou alterado antes de publicar. Julia
+  está instalado, com Distributions, StatsBase, DataFrames, Plots, StatsPlots,
+  GLM e HypothesisTests. A "Saída esperada" é **copiada da execução real**,
+  nunca escrita à mão nem "aproximada".
+- Erros que já passaram e não podem voltar: variável com erro de digitação
+  (`vendes` em vez de `vendas`), `mean` sem `using Statistics`, função usada
+  num bloco e definida em outro, comentário dizendo que aplica correção de
+  continuidade sem aplicar.
+- **Boas práticas**: nomes de variáveis claros e no idioma da página;
+  comentários explicando o porquê; nada de código morto; funções da biblioteca
+  padrão em vez de reimplementações (a não ser que a conta manual seja o ponto
+  didático — então mostre as duas e compare); sem laço iterativo para o que tem
+  solução fechada, salvo se o objetivo for ilustrar.
+- O resultado do código **bate com a conta à mão** da mesma página. Se divergir
+  (semente, arredondamento, outro método de quartil), explique a diferença.
+- Gráficos gerados por código: título, eixos e legenda no idioma da página.
+  Se a imagem publicada foi gerada por outro código ou outra língua, diga isso
+  ou gere de novo.
+- Blocos usam o markup do site (`code-container`, `code-header`, botão
+  "Copiar"/"Copy", `code-output` para saídas).
+
+---
+
+## 5. Referências bibliográficas e citações
+
+Esta é a regra com tolerância zero. Uma referência falsa ou uma frase posta na
+boca de quem não a disse destrói a credibilidade do site inteiro, e o leitor
+iniciante não tem como desconfiar.
+
+### 5.1 Proibido, sem exceção
+
+- **Inventar** autor, coautor, título, ano, edição, editora, revista, volume,
+  número, páginas, DOI, ISBN ou URL. Nem "completar" um dado que falta com um
+  valor plausível.
+- **Atribuir a alguém uma frase que essa pessoa não disse ou escreveu**, ou
+  pôr entre aspas uma paráfrase como se fosse citação literal.
+- **Traduzir uma citação e apresentá-la como se fosse o original.** Citação
+  traduzida é marcada ("em tradução livre") e o original fica acessível.
+- Citar uma obra para sustentar algo que **ela não diz**, ou que não foi
+  conferido nela.
+- Citar uma obra que **não foi consultada**, só porque "costuma aparecer" em
+  bibliografias do assunto.
+- Atribuir uma descoberta, um termo, um símbolo ou uma data sem fonte
+  (ex.: "Fulano criou o conceito em 18xx").
+- Juntar duas fontes numa referência, trocar autores entre obras ou misturar
+  edições (ano de uma, editora de outra).
+- Gerar referência ou citação "de memória". Memória de modelo não é fonte.
+
+### 5.2 Obrigatório
+
+- **Só obras reais e conferidas.** Antes de citar, confirme a existência e os
+  dados (catálogo da editora, DOI, catálogo de biblioteca, Google Books, página
+  oficial). Se não for possível confirmar, **não cite** — e diga ao usuário
+  que a referência ficou de fora e por quê.
+- Formato: Sobrenome, Iniciais. (Ano). *Título*. Edição. Editora. Para artigo:
+  Sobrenome, Iniciais. (Ano). Título do artigo. *Revista*, volume(número),
+  páginas. DOI quando houver.
+- A obra citada **sustenta exatamente o que o texto afirma**. Para fato
+  específico (data, primazia, fórmula, frase), cite a obra que traz esse fato,
+  de preferência com página ou seção.
+- **Citações literais** (entre aspas) só quando a frase foi conferida na fonte
+  original ou numa fonte secundária confiável que a reproduz com referência.
+  Indique autor, obra e, quando possível, página. Sem conferência: parafraseie
+  **sem aspas** e sem atribuir palavras exatas ("Tukey defendia que a análise
+  exploratória vem antes da confirmatória").
+- **Frases célebres** têm atribuição falsa com frequência ("a Estatística é a
+  gramática da ciência", "mentiras, malditas mentiras e estatísticas"…).
+  Confira a origem em fonte que discuta a atribuição; se for incerta, diga
+  "frase atribuída a…" ou retire.
+- **Fatos históricos** (quem criou, quando, onde, com que nome) conferidos em
+  fonte de história da estatística (ex.: Stigler, *The History of
+  Statistics*; Hald, *A History of Mathematical Statistics from 1750 to 1930*).
+  Na dúvida, suavize ("costuma ser atribuído a…") ou corte.
+- Ao revisar uma página, **toda** referência e citação existente passa por
+  esta verificação. O que não se confirma é corrigido ou removido, e a mudança
+  vai registrada no commit.
+- Quando a verificação não puder ser feita na sessão (sem acesso à fonte),
+  **não publique a referência ou a citação**: deixe anotada como pendente e
+  avise o usuário.
+- Na versão em inglês: use o título e a edição em inglês quando a obra os tem
+  (Triola, *Elementary Statistics*; Montgomery & Runger, *Applied Statistics and
+  Probability for Engineers*; Devore, *Probability and Statistics for
+  Engineering and the Sciences*); obra só em português ganha "(in Portuguese)".
+- Links externos: só para fontes estáveis (editora, DOI, documentação oficial).
+
+---
+
+## 6. Texto
+
+- Português do Brasil correto, com todos os acentos. Frases curtas e diretas.
+  Explique antes de formalizar: intuição → exemplo → fórmula → caso geral.
+- Termo técnico é definido na primeira vez que aparece; depois, o mesmo termo
+  sempre (não alternar "desvio padrão" e "desvio-padrão" na mesma página).
+- Exemplos com números simples o bastante para conferir à mão, e realistas.
+- Números: em PT, vírgula decimal e ponto de milhar (0,375; 151.200); em LaTeX
+  use `0{,}375` para a vírgula não ganhar espaço. Em EN, ponto decimal e
+  vírgula de milhar (0.375; 151,200).
+- MathJax: `$...$` inline e `$$...$$` em bloco. **Dentro de um bloco HTML**
+  (`<div>`), `$$...$$` vira fórmula centrada em linha própria; para fórmula
+  dentro da frase, use `$...$`.
+- Caixas (`border-left`), cards e tabelas existentes seguem o padrão visual da
+  página; não inventar um estilo novo numa página só.
+- Numeração de seções, figuras e tabelas sequencial e sem repetição; legenda
+  conferida contra a imagem (já houve legendas trocadas).
+- Imagens: `alt` descritivo no idioma da página; legenda que diga o que olhar.
+
+---
+
+## 7. Tradução (PT → EN)
+
+- Versão em inglês com **o mesmo `ref`** da página em português (é o que liga
+  as duas no seletor PT/EN e no `hreflang`), `lang: en`, `permalink` em
+  `/en/...` com slug em inglês, e o mesmo `parent`/`order` para entrar no menu.
+- Traduz tudo: front matter (`title`, `description`), corpo, `alt`, legendas,
+  tabelas, comentários e variáveis do código, saídas, rótulos dos gráficos no
+  código, botão "Copiar" → "Copy".
+- Notação: cara/coroa → H/T (heads/tails); números no padrão inglês (§6).
+- Links internos apontam para a versão em inglês quando ela existe; senão,
+  para a portuguesa com "(in Portuguese)".
+- Traduzir é também **revisar** (§1–§5): erro achado vira correção nas duas
+  versões, registrada no commit.
+- Cada página traduzida fecha a sua issue de tradução no commit
+  (`Closes #N`); a issue geral é a #116.
+
+---
+
+## 8. Tipos de conteúdo
+
+- **Posts** (`_posts/`): front matter com `title`, `description`, `lang`,
+  `ref`, `author`, `tags`, `mathjax: true` se houver fórmula. Capa AVIF exige o
+  JPG social: `vips thumbnail assets/images/NOME.avif
+  "assets/images/social/NOME.jpg[Q=82,strip]" 1200 --height 630 --crop centre`.
+- **Páginas de área** (`pt/<area>.md` e `pt/<area>/*.md`): `order`, `parent`,
+  `permalink` explícito.
+- **Páginas avulsas** (`formulas/`, `matematica-basica/`, `calculo/`): HTML com
+  cabeçalho próprio e JS de cálculo. A lógica nova é testada em Node contra
+  força bruta antes do navegador. Página nova entra em `_data/standalone.yml`
+  (busca), no índice da seção e na paginação dos vizinhos.
+
+---
+
+## 9. Fluxo de trabalho
+
+1. Leia a página inteira antes de mexer.
+2. Revise contra este arquivo (§1–§7); verifique contas e código executando
+   e, quando couber, prove em Lean (§1.2–§1.3).
+3. `bundle exec jekyll build` sem erros; confira a página renderizada
+   (captura de tela no Chromium headless do Playwright, em
+   `~/.cache/ms-playwright/`), inclusive o tema escuro e o celular quando a
+   mudança for visual.
+4. Commit e push **só quando o usuário pedir**. Direto no `master`, mensagem em
+   português dizendo o que mudou e o que foi corrigido. Nunca incluir
+   `assets/images/image-post.png`.
+5. Indexação no Search Console: ver a memória sobre o Search Console — cota de
+   11 pedidos numa janela de 24 h; as páginas principais primeiro.
+
+---
+
+## 10. Checklist antes de publicar
+
+- [ ] Toda conta foi refeita por código, inclusive os intermediários.
+- [ ] Fórmula ou algoritmo novo testado contra força bruta ou simulação.
+- [ ] Identidade ou propriedade que a página afirma valer sempre está provada
+      em `provas/` e `lake build` passa sem `sorry`.
+- [ ] Resoluções à mão completas: dados → fórmula → substituição → uma conta
+      por linha → resultado com unidade → interpretação.
+- [ ] Arredondamento só no fim; casas decimais consistentes.
+- [ ] Interpretação diz o que o resultado significa e o que não significa.
+- [ ] Condições de uso declaradas e conferidas; parametrizações explícitas.
+- [ ] Todo bloco de código roda sozinho; saídas copiadas da execução real.
+- [ ] Código, texto, tabelas, gráficos, legendas e resumos com os mesmos números.
+- [ ] Toda referência foi conferida (existe, dados corretos, sustenta o que é
+      dito); nenhum autor, obra ou dado inventado.
+- [ ] Toda citação entre aspas foi conferida na fonte e é do autor a quem é
+      atribuída; o que não se confirmou virou paráfrase sem aspas ou saiu.
+- [ ] Fatos históricos (datas, primazias, nomes) conferidos em fonte confiável.
+- [ ] Numeração de seções/figuras sequencial; legendas batem com as imagens.
+- [ ] Sem "Bhaskara".
+- [ ] PT e EN coerentes; correções feitas nas duas.
+- [ ] Build sem erros e página conferida renderizada.

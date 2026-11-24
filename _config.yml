@@ -19,6 +19,8 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - README.md
+  - CLAUDE.md
+  - provas   # projeto Lean das demonstrações; não vai para o site
   - vendor
 
 # Deixe vazio para desligar. Só carrega em produção.
