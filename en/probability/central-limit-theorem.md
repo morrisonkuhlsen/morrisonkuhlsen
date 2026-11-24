@@ -53,7 +53,7 @@ Or, equivalently, for the sample mean $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$:
 
 $$\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0,1)$$
 
-where $\xrightarrow{d}$ denotes **convergence in distribution**: for every number $z$, the probability $P\!\left(\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right)$ gets close to $P(Z \leq z)$, with $Z \sim N(0, 1)$, as $n$ grows.
+where $\xrightarrow{d}$ denotes **convergence in distribution**: for every number $z$, the probability $P\\!\left(\frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \leq z\right)$ gets close to $P(Z \leq z)$, with $Z \sim N(0, 1)$, as $n$ grows.
 
 In practice, this means that, for large $n$,
 
