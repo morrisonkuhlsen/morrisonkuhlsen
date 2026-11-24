@@ -18,3 +18,4 @@ Cada teorema traz no comentário a página do site que faz a afirmação. Nada d
 | `ProdutosNotaveis.lean` | (a+b)², (a−b)², (a+b)(a−b) |
 | `Matrizes.lean` | inversa 2×2 (com ad − bc ≠ 0), determinante 2×2, AB ≠ BA |
 | `Probabilidade.lean` | regra do complemento, regra da adição, atalho da variância (caso finito), contas exatas dos exemplos das fábricas e dos carrapatos |
+| `TendenciaCentral.lean` | a média minimiza Σ(xᵢ − c)² (com a decomposição da soma dos quadrados), a mediana minimiza Σ\|xᵢ − c\|, e a tabela do exemplo {1, 2, 10} |

@@ -296,7 +296,7 @@ println("\nManual computation (even): ", median_manual(data_even))</code></pre>
 
 <div style="border-left: 4px solid #007BFF; padding: 0.5em; background-color: #e7f1ff;">
   <strong>🔎 Definition – Robustness:</strong> in statistics, <strong>robustness</strong> is <em>the ability of an estimator or measure to resist the influence of atypical data (outliers)</em>.<br>
-  A robust method keeps giving reliable results even when the data contain <strong>extreme values</strong> or <strong>small violations of the assumptions</strong>. The <strong>median</strong>, for example, is considered a robust measure because it is not affected by very high or very low values.
+  A robust method keeps giving reliable results even when the data contain <strong>extreme values</strong> or <strong>small violations of the assumptions</strong>. The <strong>median</strong>, for example, is considered a robust measure because it is barely affected by very high or very low values.
 </div>
 <br>
 
@@ -306,7 +306,9 @@ With **distorted or skewed values**, the median is **more representative** than 
 
 #### The Median in Robust Statistics
 
-The median has a **50% breakdown point**, which means that **up to half of the data can be contaminated** (with errors or extreme values) without the median being significantly affected.
+The median has a **50% breakdown point**: **less than half of the data** can be contaminated (with errors or extreme values, however large) without the median being dragged far away. The mean has a breakdown point of zero — **a single** absurd value can take it anywhere.
+
+An example: in $\{2, 3, 4, 5, 6\}$, the mean is $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ and the median is 4. Replacing the 6 with 600 (a typo), the mean becomes $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122.8$, while the median stays at 4.
 
 That makes the median essential in areas such as:
 - Income analysis (e.g. avoiding distortion by billionaires)
@@ -328,74 +330,45 @@ That makes the median essential in areas such as:
 
 ### 📜 History of the Median
 
-The **median** is a statistical measure that represents the central value of a sorted data set. Although it is widely used today, its origin and formalization took place over centuries.
+The idea of a "middle value" is old, but the median took a long time to get a name and a place in statistics.
 
-#### 🔹 Ancient Origins
+#### 🔹 17th Century: mean or median lifetime?
 
-The idea of a "middle value" in a data set appears implicitly since Antiquity, in contexts linked to justice, proportional division and impartial decisions. However, **there was no clear mathematical formulation of the median** at that time.
+In 1669, the brothers **Christiaan** and **Lodewijk Huygens** exchanged letters about the London mortality table published by John Graunt in 1662. Trying to work out how much longer a person of a given age lives, the two reached different answers: one computed the **mean** remaining lifetime, and the other the age by which **half** of the people have died — that is, the **median**. Both measures are still used in life tables today, and the gap between them is exactly the gap between mean and median in a skewed distribution.
 
-#### 🔹 17th Century: First Formal Steps
+#### 🔹 A property that explains the robustness
 
-The first mention closest to the modern concept of the median appears in the writings of the **astronomer and mathematician Christiaan Huygens** (1629–1695). He considered the idea of a central point as an alternative to the mean in situations involving **noisy observations**.
-
-#### 🔹 18th Century: Development with Laplace
-
-It was **Pierre-Simon Laplace** (1749–1827), the French mathematician, who formalized the median as a robust statistical tool. Laplace used the median as an alternative to the arithmetic mean when the data contained **extreme errors**, as in the problem of estimating the true position of a celestial body from several imprecise observations.
-
-> Laplace showed that the median minimizes the sum of absolute deviations:
+The median has a property that helps explain why it resists extreme values: it is the value $m$ that **minimizes the sum of the absolute distances** to the data,
 
 $$
 \text{Median} = \underset{m}{\arg\min} \sum_{i=1}^{n} \left| x_i - m \right|
 $$
 
 - $x_i$ are the data values,
-- $m$ is the candidate value for the median,
-- $\arg\min$ indicates the value of $m$ that minimizes the sum,
+- $m$ is the candidate value,
+- $\arg\min$ indicates the value of $m$ that makes the sum as small as possible,
 - $\sum \left| x_i - m \right|$ is the sum of the absolute distances between the data and $m$.
 
-This definition shows why the median is **resistant to outliers**: it minimizes absolute distances, whereas the mean minimizes squared deviations.
+The mean, by contrast, is the value that minimizes the sum of the **squared** distances, $\sum (x_i - m)^2$. Squaring gives huge weight to a large distance; the absolute value does not — which is why an extreme value pulls the mean much more than the median.
 
+**Example with the data $\{1, 2, 10\}$**, whose median is 2 and whose mean is $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4.33$:
 
-**Reference**:  
-Laplace, P.S. (1812). *Théorie Analytique des Probabilités*. Paris.
+| Candidate $m$ | $\lvert 1 - m \rvert + \lvert 2 - m \rvert + \lvert 10 - m \rvert$ | Sum |
+|---|---|---:|
+| 1 | $0 + 1 + 9$ | 10 |
+| 2 (median) | $1 + 0 + 8$ | **9** |
+| 3 | $2 + 1 + 7$ | 10 |
+| 4.33 (mean) | $3.33 + 2.33 + 5.67$ | 11.33 |
 
-#### 🔹 19th Century: The Median Becomes an Established Measure
+The smallest sum, 9, occurs at $m = 2$, the median.
 
-During the 19th century, the median began to be recognized as a **measure of central tendency** distinct from the mean and the mode. It was studied mainly in contexts where **the mean was distorted by outliers**.
+#### 🔹 19th Century: the name
 
-<div style="float: right; margin: 0 0 15px 20px; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/FrancisGalton.jpg" alt="Francis Galton" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">Sir Francis Galton (1822-1911)</p>
-</div>
+The name **median** is usually credited to the British scientist **Francis Galton** (1822–1911), Charles Darwin's half-cousin, who used the median and quartiles instead of the mean in his studies of human traits, such as height. He is also credited with the term **percentile** — the median is the 50th percentile.
 
-**Francis Galton** (1822–1911), the British statistician and cousin of Charles Darwin, popularized the use of the median in **studies of human traits**, such as height and intelligence.
+#### 🔹 20th Century Onward: robust statistics
 
-> Galton also developed the concept of **percentiles**, with the median being the 50th percentile.
-
-**Reference**:  
-Galton, F. (1881). *The Visions of Sane Persons*. *Fortnightly Review*, 29, 707–717.
-
-#### 🔹 20th Century Onward: Wide Use and Robust Statistics
-
-With the rise of **robust statistics**, especially from the 1960s on, the median gained great prominence as an alternative that is **resistant to extreme values**.
-
-<div style="float: left; margin: 0 20px 15px 0; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/JohnTukey.jpg" alt="John Tukey" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">John W. Tukey (1915-2000)</p>
-</div>
-
-**John Tukey** was one of the great advocates of the median and of robust statistics.
-
-**Reference**:  
-Tukey, J.W. (1960). *A survey of sampling from contaminated distributions*. In *Contributions to Probability and Statistics* (I. Olkin et al., Eds.). Stanford University Press.
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+With the rise of **robust statistics** from the 1960s on, the median gained prominence as an alternative that is **resistant to extreme values**. An influential work in this line is **John Tukey**'s survey of sampling from "contaminated" distributions (Tukey, 1960).
 
 ## 3. Mode
 
@@ -469,7 +442,7 @@ println("Mode: ", mode_colors)
 function find_modes(v)
     counts = countmap(v)  # Counts how often each value appears
     max_count = maximum(values(counts))
-    modes = [k for (k, v) in counts if v == max_count]
+    modes = sort([k for (k, v) in counts if v == max_count])  # ascending order
     return length(modes) > 1 ? modes : modes[1]
 end
 
@@ -503,21 +476,13 @@ println("mode returns (first element): ", mode(no_mode))</code></pre>
 
 #### Notes:
 - The `mode` function from the `StatsBase` package returns the first mode it finds
-- For multimodal sets, we wrote a `find_modes` function that returns every mode
-- For sets with no mode (all values unique), `mode` returns the first element
+- For multimodal sets, we wrote a `find_modes` function that returns every mode, in ascending order (`countmap` keeps no order; without the `sort`, the output could come out as `[22, 19]`)
+- For sets with no mode (all values unique), `mode` **gives no warning**: it returns the first value in the list. It's up to the analyst to check the frequencies before calling that a mode
 - For categorical data, the function works the same way as for numerical data
 
 ### Historical Context
 
-<div style="float: right; margin: 0 0 15px 20px; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/KarlPearson.jpg" alt="Karl Pearson" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">Karl Pearson (1857-1936)</p>
-</div>
-
-The concept of the mode has ancient roots, but it was formalized in the 19th century together with other measures of central tendency. Karl Pearson was one of the first to stress the importance of the mode in statistical analysis, especially for skewed distributions.
-
-**Reference**:  
-Pearson, K. (1895). *Contributions to the Mathematical Theory of Evolution. II. Skew Variation in Homogeneous Material*. Philosophical Transactions of the Royal Society of London. (A), 186, 343-414.
+The idea of the "most frequent value" is old, but the **name** *mode* was introduced by **Karl Pearson** in 1895, in a paper on skewed distributions, for the value at which the frequency curve reaches its maximum (Pearson, 1895).
 
 ### Advantages and Disadvantages
 
@@ -547,8 +512,12 @@ Pearson, K. (1895). *Contributions to the Mathematical Theory of Evolution. II. 
 
 ## References
 
-1. Laplace, P.S. (1812). *Théorie Analytique des Probabilités*. Paris.
-2. Galton, F. (1881). *The Visions of Sane Persons*. *Fortnightly Review*, 29, 707–717.
-3. Tukey, J.W. (1960). *A Survey of Sampling from Contaminated Distributions*. Stanford University Press.
-4. Hald, A. (1998). *A History of Mathematical Statistics from 1750 to 1930*. Wiley.
-5. Stigler, S.M. (1986). *The History of Statistics: The Measurement of Uncertainty before 1900*. Harvard University Press.
+1. Encyclopedia of Mathematics. *Galton, Francis*. Available at <https://encyclopediaofmath.org/wiki/Galton,_Francis>. Accessed November 23, 2026.
+2. Huygens, C.; Huygens, L. (1669). Correspondence on Graunt's mortality table (letters from August to December 1669). English translation by R. J. Pulskamp: <https://gtfp.cs.rhul.ac.uk/pulskamp/Huygens/sources/cor_mort.pdf>.
+3. Pearson, K. (1895). Contributions to the mathematical theory of evolution. II. Skew variation in homogeneous material. *Philosophical Transactions of the Royal Society of London. A*, 186, 343–414.
+4. Tukey, J. W. (1960). A survey of sampling from contaminated distributions. In: Olkin, I. et al. (Eds.), *Contributions to Probability and Statistics*. Stanford University Press.
+
+### Further reading on the history
+
+- Hald, A. (1998). *A History of Mathematical Statistics from 1750 to 1930*. Wiley.
+- Stigler, S. M. (1986). *The History of Statistics: The Measurement of Uncertainty before 1900*. Harvard University Press.

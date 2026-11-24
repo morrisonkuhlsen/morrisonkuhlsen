@@ -145,8 +145,7 @@ $\bar{x} = \frac{\sum_{i=1}^{n} x_i}{n}$
 **Significado:** Representa a **média de uma população** inteira.
 
 **Fórmula:**
-\$\mu = \frac{\sum_{i=1}^{N} x_i}{N}
-$
+$\mu = \frac{\sum_{i=1}^{N} x_i}{N}$
 
 **Onde:**
 - $\mu$: média populacional  
@@ -297,7 +296,7 @@ println("\nCálculo manual (par): ", mediana_manual(dados_par))</code></pre>
 
 <div style="border-left: 4px solid #007BFF; padding: 0.5em; background-color: #e7f1ff;">
   <strong>🔎 Definição – Robustez:</strong> Na estatística, <strong>robustez</strong> refere-se à <em>capacidade de um estimador ou medida resistir à influência de dados atípicos (outliers)</em>.<br>
-  Um método robusto continua fornecendo resultados confiáveis mesmo quando os dados contêm <strong>valores extremos</strong> ou <strong>pequenas violações das suposições</strong>, a <strong>mediana</strong>, por exemplo, é considerada uma medida robusta porque não é afetada por valores muito altos ou muito baixos.
+  Um método robusto continua fornecendo resultados confiáveis mesmo quando os dados contêm <strong>valores extremos</strong> ou <strong>pequenas violações das suposições</strong>, a <strong>mediana</strong>, por exemplo, é considerada uma medida robusta porque é pouco afetada por valores muito altos ou muito baixos.
 </div>
 <br>
 
@@ -307,7 +306,9 @@ Em situações com **valores distorcidos ou assimétricos**, a mediana é **mais
 
 #### Mediana na Estatística Robusta
 
-A mediana possui um **ponto de ruptura de 50%**, o que significa que **até metade dos dados pode estar contaminada** (com erros ou valores extremos) sem que a mediana seja afetada significativamente.
+A mediana possui um **ponto de ruptura de 50%**: **menos da metade dos dados** pode estar contaminada (com erros ou valores extremos, por maiores que sejam) sem que a mediana seja arrastada para longe. A média tem ponto de ruptura zero — basta **um** valor absurdo para levá-la a qualquer lugar.
+
+Um exemplo: em $\{2, 3, 4, 5, 6\}$, a média é $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ e a mediana é 4. Trocando o 6 por 600 (um erro de digitação), a média vira $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122{,}8$, e a mediana continua 4.
 
 Isso torna a mediana essencial em áreas como:
 - Análise de renda (ex: evitar distorções por bilionários)
@@ -329,76 +330,45 @@ Isso torna a mediana essencial em áreas como:
 
 ### 📜 História da Mediana
 
-A **mediana** é uma medida estatística que representa o valor central de um conjunto ordenado de dados. Apesar de seu uso generalizado hoje, sua origem e formalização ocorreram ao longo de séculos.
+A ideia de um "valor do meio" é antiga, mas a mediana demorou a ganhar nome e lugar na estatística.
 
-#### 🔹 Origem Antiga
+#### 🔹 Século XVII: média ou mediana do tempo de vida?
 
-A ideia de um "valor do meio" em um conjunto de dados aparece de forma implícita desde a Antiguidade, em contextos ligados à justiça, divisão proporcional e decisões imparciais. Contudo, **não havia uma formulação matemática clara da mediana** nesse período.
+Em 1669, os irmãos **Christiaan** e **Lodewijk Huygens** trocaram cartas sobre a tábua de mortalidade de Londres publicada por John Graunt em 1662. Querendo saber quanto tempo ainda vive, em média, uma pessoa de certa idade, os dois chegaram a respostas diferentes: um calculou a **média** do tempo de vida restante, e o outro, a idade até a qual **metade** das pessoas já morreu — isto é, a **mediana**. As duas medidas são usadas até hoje nas tábuas de vida, e a diferença entre elas é exatamente a diferença entre média e mediana numa distribuição assimétrica.
 
-#### 🔹 Século XVII: Primeiros Passos Formais
+#### 🔹 Uma propriedade que explica a robustez
 
-A primeira menção mais próxima ao conceito moderno da mediana aparece nos escritos do **astrônomo e matemático Christiaan Huygens** (1629–1695). Ele considerou a ideia de um ponto central como uma alternativa à média em situações envolvendo **observações ruidosas**.
-
-#### 🔹 Século XVIII: Desenvolvimento com Laplace
-
-Foi **Pierre-Simon Laplace** (1749–1827), matemático francês, quem formalizou a ideia da mediana como uma ferramenta estatística robusta. Laplace utilizou a mediana como uma alternativa à média aritmética quando os dados continham **erros extremos**, como no problema de estimação da posição verdadeira de um astro a partir de várias observações imprecisas.
-
-> Laplace mostrou que a mediana minimiza a soma dos desvios absolutos:
+A mediana tem uma propriedade que ajuda a entender por que ela resiste a valores extremos: ela é o valor $m$ que **minimiza a soma das distâncias absolutas** até os dados,
 
 $$
 \text{Mediana} = \underset{m}{\arg\min} \sum_{i=1}^{n} \left| x_i - m \right|
 $$
 
 - $x_i$ são os valores dos dados,
-- $m$ é o valor candidato à mediana,
-- $\arg\min$ indica o valor de $m$ que minimiza a soma,
-- $
-\sum \left| x_i - m \right|
-$ é a soma das distâncias absolutas entre os dados e $m$.
+- $m$ é o valor candidato,
+- $\arg\min$ indica o valor de $m$ que torna a soma a menor possível,
+- $\sum \left| x_i - m \right|$ é a soma das distâncias absolutas entre os dados e $m$.
 
-Essa definição mostra por que a mediana é **resistente a outliers**: ela minimiza as distâncias absolutas, ao contrário da média que minimiza os quadrados dos desvios.
+Já a média é o valor que minimiza a soma dos **quadrados** das distâncias, $\sum (x_i - m)^2$. Elevar ao quadrado dá peso enorme a uma distância grande; o valor absoluto, não — por isso um valor extremo puxa a média muito mais do que a mediana.
 
+**Exemplo com os dados $\{1, 2, 10\}$**, cuja mediana é 2 e cuja média é $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4{,}33$:
 
-**Referência**:  
-Laplace, P.S. (1812). *Théorie Analytique des Probabilités*. Paris.
+| Candidato $m$ | $\lvert 1 - m \rvert + \lvert 2 - m \rvert + \lvert 10 - m \rvert$ | Soma |
+|---|---|---:|
+| 1 | $0 + 1 + 9$ | 10 |
+| 2 (mediana) | $1 + 0 + 8$ | **9** |
+| 3 | $2 + 1 + 7$ | 10 |
+| 4,33 (média) | $3{,}33 + 2{,}33 + 5{,}67$ | 11,33 |
 
-#### 🔹 Século XIX: Consolidação da Mediana como Medida Estatística
+A menor soma, 9, acontece em $m = 2$, a mediana.
 
-Durante o século XIX, a mediana começou a ser reconhecida como uma **medida de tendência central** distinta da média e da moda. Foi estudada principalmente em contextos onde **a média era distorcida por outliers**.
+#### 🔹 Século XIX: o nome
 
-<div style="float: right; margin: 0 0 15px 20px; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/FrancisGalton.jpg" alt="Francis Galton" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">Sir Francis Galton (1822-1911)</p>
-</div>
+O nome **mediana** (*median*, em inglês) costuma ser atribuído ao britânico **Francis Galton** (1822–1911), meio-primo de Charles Darwin, que usava a mediana e os quartis em vez da média nos seus estudos de características humanas, como a altura. Também é a ele que se atribui o termo **percentil** — a mediana é o percentil 50.
 
-**Francis Galton** (1822–1911), estatístico britânico e primo de Charles Darwin, popularizou o uso da mediana em **estudos de características humanas**, como altura e inteligência.
+#### 🔹 Século XX em diante: estatística robusta
 
-> Galton também desenvolveu o conceito de **percentis**, com a mediana sendo o percentil 50.
-
-**Referência**:  
-Galton, F. (1881). *The Visions of Sane Persons*. *Fortnightly Review*, 29, 707–717.
-
-#### 🔹 Século XX em diante: Uso Amplo e Estatística Robusta
-
-Com o avanço da **estatística robusta**, especialmente a partir da década de 1960, a mediana ganhou grande destaque como uma alternativa **resistente a valores extremos**.
-
-<div style="float: left; margin: 0 20px 15px 0; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/JohnTukey.jpg" alt="John Tukey" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">John W. Tukey (1915-2000)</p>
-</div>
-
-**John Tukey** foi um dos grandes defensores da mediana e da estatística robusta.
-
-**Referência**:  
-Tukey, J.W. (1960). *A survey of sampling from contaminated distributions*. In *Contributions to Probability and Statistics* (I. Olkin et al., Eds.). Stanford University Press.
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
+Com o avanço da **estatística robusta**, a partir dos anos 1960, a mediana ganhou destaque como alternativa **resistente a valores extremos**. Um trabalho influente nessa linha é o levantamento de **John Tukey** sobre amostragem de distribuições "contaminadas" (Tukey, 1960).
 
 ## 3. Moda
 
@@ -472,7 +442,7 @@ println("Moda: ", moda_cores)
 function encontrar_modas(v)
     contagem = countmap(v)  # Conta a frequência de cada valor
     max_contagem = maximum(values(contagem))
-    modas = [k for (k, v) in contagem if v == max_contagem]
+    modas = sort([k for (k, v) in contagem if v == max_contagem])  # ordem crescente
     return length(modas) > 1 ? modas : modas[1]
 end
 
@@ -506,21 +476,13 @@ println("Função mode retorna (primeiro elemento): ", mode(sem_moda))</code></p
 
 #### Observações:
 - A função `mode` do pacote `StatsBase` retorna a primeira moda encontrada
-- Para conjuntos multimodais, implementamos uma função `encontrar_modas` que retorna todas as modas
-- Em conjuntos sem moda (todos os valores são únicos), a função `mode` retorna o primeiro elemento
+- Para conjuntos multimodais, implementamos uma função `encontrar_modas` que retorna todas as modas, em ordem crescente (o `countmap` não guarda ordem; sem o `sort`, a saída poderia vir como `[22, 19]`)
+- Em conjuntos sem moda (todos os valores são únicos), a função `mode` **não avisa**: retorna o primeiro valor da lista. Cabe a quem analisa conferir as frequências antes de chamar isso de moda
 - Para dados categóricos, a função funciona da mesma forma que para dados numéricos
 
 ### Contexto Histórico
 
-<div style="float: right; margin: 0 0 15px 20px; text-align: center;">
-  <img src="{{ site.baseurl }}/assets/images/KarlPearson.jpg" alt="Karl Pearson" style="max-width: 200px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"/>
-  <p style="font-size: 0.8em; margin-top: 5px; color: #666;">Karl Pearson (1857-1936)</p>
-</div>
-
-O conceito de moda tem raízes antigas, mas foi formalizado no século XIX juntamente com outras medidas de tendência central. Karl Pearson foi um dos primeiros a destacar a importância da moda na análise estatística, especialmente para distribuições assimétricas.
-
-**Referência**:  
-Pearson, K. (1895). *Contributions to the Mathematical Theory of Evolution. II. Skew Variation in Homogeneous Material*. Philosophical Transactions of the Royal Society of London. (A), 186, 343-414.
+A ideia de "valor mais frequente" é antiga, mas o **nome** *mode* (moda) foi introduzido por **Karl Pearson** em 1895, num artigo sobre distribuições assimétricas, para designar o valor em que a curva de frequências atinge o máximo (Pearson, 1895).
 
 ### Vantagens e Desvantagens
 
@@ -550,10 +512,12 @@ Pearson, K. (1895). *Contributions to the Mathematical Theory of Evolution. II. 
 
 ## Referências Bibliográficas
 
-1. Laplace, P.S. (1812). *Théorie Analytique des Probabilités*. Paris.
-2. Galton, F. (1881). *The Visions of Sane Persons*. *Fortnightly Review*, 29, 707–717.
-3. Tukey, J.W. (1960). *A Survey of Sampling from Contaminated Distributions*. Stanford University Press.
-4. Hald, A. (1998). *A History of Mathematical Statistics from 1750 to 1930*. Wiley.
-5. Stigler, S.M. (1986). *The History of Statistics: The Measurement of Uncertainty before 1900*. Harvard University Press.
+1. Encyclopedia of Mathematics. *Galton, Francis*. Disponível em: <https://encyclopediaofmath.org/wiki/Galton,_Francis>. Acesso em: 23 nov. 2026.
+2. Huygens, C.; Huygens, L. (1669). Correspondência sobre a tábua de mortalidade de Graunt (cartas de agosto a dezembro de 1669). Tradução inglesa de R. J. Pulskamp: <https://gtfp.cs.rhul.ac.uk/pulskamp/Huygens/sources/cor_mort.pdf>.
+3. Pearson, K. (1895). Contributions to the mathematical theory of evolution. II. Skew variation in homogeneous material. *Philosophical Transactions of the Royal Society of London. A*, 186, 343–414.
+4. Tukey, J. W. (1960). A survey of sampling from contaminated distributions. In: Olkin, I. et al. (Eds.). *Contributions to Probability and Statistics*. Stanford University Press.
 
+### Para saber mais sobre a história
 
+- Hald, A. (1998). *A History of Mathematical Statistics from 1750 to 1930*. Wiley.
+- Stigler, S. M. (1986). *The History of Statistics: The Measurement of Uncertainty before 1900*. Harvard University Press.
