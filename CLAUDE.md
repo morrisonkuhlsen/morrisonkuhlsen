@@ -266,6 +266,17 @@ iniciante não tem como desconfiar.
 - MathJax: `$...$` inline e `$$...$$` em bloco. **Dentro de um bloco HTML**
   (`<div>`), `$$...$$` vira fórmula centrada em linha própria; para fórmula
   dentro da frase, use `$...$`.
+- **Notação que conflita com a vírgula decimal** (em PT): pares, coordenadas e
+  listas de decimais usam ponto e vírgula — (1,5; 2), {0,2; 0,5; 0,3}. Em EN,
+  vírgula normal — (1.5, 2).
+- **Intervalos**: [a, b] fechado, (a, b) aberto, [a, b) semiaberto, nas duas
+  línguas (não usar ]a, b[). Em PT, com decimais: [1,5; 2,5].
+- **Unidades** do SI, com espaço entre número e unidade (10 mm, 25 °C, 3 h);
+  exceção: % e ° de ângulo colados (50%, 90°). Moeda: R$ 7.316,00 em PT;
+  em EN, R$ 7,316.00 (a moeda continua sendo o real).
+- **Grafias fixas**: "desvio padrão" (sem hífen), "p-valor", "teste t de
+  Student", "qui-quadrado", "fórmula quadrática" (nunca "Bhaskara"). A lista
+  completa PT ↔ EN está no §14.
 - Caixas (`border-left`), cards e tabelas existentes seguem o padrão visual da
   página; não inventar um estilo novo numa página só.
 - Numeração de seções, figuras e tabelas sequencial e sem repetição; legenda
@@ -304,13 +315,14 @@ iniciante não tem como desconfiar.
   cabeçalho próprio e JS de cálculo. A lógica nova é testada em Node contra
   força bruta antes do navegador. Página nova entra em `_data/standalone.yml`
   (busca), no índice da seção e na paginação dos vizinhos.
+  As regras de cálculo dessas páginas estão no §13.
 
 ---
 
 ## 9. Fluxo de trabalho
 
 1. Leia a página inteira antes de mexer.
-2. Revise contra este arquivo (§1–§7); verifique contas e código executando
+2. Revise contra este arquivo (§1–§7 e §11–§17); verifique contas e código executando
    e, quando couber, prove em Lean (§1.2–§1.3).
 3. `bundle exec jekyll build` sem erros; confira a página renderizada
    (captura de tela no Chromium headless do Playwright, em
@@ -324,7 +336,237 @@ iniciante não tem como desconfiar.
 
 ---
 
-## 10. Checklist antes de publicar
+## 10. Honestidade sobre o que não foi verificado
+
+- Diga sempre, na resposta ao usuário, **o que não foi verificado** e por quê:
+  conta não refeita, código não rodado, citação não encontrada na fonte,
+  imagem não vista, tema escuro não conferido, página não aberta no
+  navegador.
+- Nunca apresentar como verificado o que foi só lido ou suposto. "Conferi"
+  quer dizer: refiz, rodei, abri ou achei na fonte.
+- Na dúvida sobre um fato, uma conta ou uma atribuição, **não publique**:
+  pergunte, deixe pendente ou suavize o texto até o que se sabe com certeza.
+- Quando um erro meu for descoberto depois, diga qual foi, corrija nas duas
+  línguas e registre no commit.
+
+---
+
+## 11. Dados reais e números do mundo real
+
+- **Nunca inventar dado apresentado como real.** Número que descreve o mundo
+  (participação de mercado, população, taxa de doença, preço, resultado de
+  eleição, recorde) precisa de fonte conferida, citada junto do número.
+- **Exemplo ilustrativo é marcado como tal** ("números ilustrativos", "um
+  exemplo inventado para a conta ficar simples"). Exemplo fictício nunca
+  usa nome de empresa, produto, pessoa ou lugar real como se fossem dados
+  deles. Hoje há casos a corrigir: o "Android 70%, iOS 28% em 2023" de
+  Gráficos Estatísticos não tem fonte.
+- **Dados de bases públicas** (DATASUS, IBGE, INEP, Banco Central, IPEA…):
+  citar a base, a tabela/sistema exato, o período, os filtros e a **data de
+  acesso**; dizer se os dados são preliminares; citar a licença quando houver.
+- **Reprodutibilidade**: todo número tirado de dados reais vem de um script
+  que está no post (ou no repositório) e que reproduz o número do zero a partir
+  da fonte. Quem rodar o script chega ao mesmo número publicado.
+- Taxas e proporções declaram numerador, denominador e base (por 1.000
+  nascidos vivos, por 100 mil habitantes). Comparações entre lugares ou anos
+  dizem se a definição ou a coleta mudou no meio.
+- Dados pessoais nunca: só dados agregados e anonimizados, como as bases
+  públicas já os publicam.
+- Números que envelhecem (preço da aposta, população, recorde) trazem a data:
+  "em novembro de 2026", não "hoje".
+
+---
+
+## 12. Direitos autorais e plágio
+
+- **Texto**: nunca copiar texto de livro, artigo ou site, nem traduzido. Toda
+  explicação é escrita com palavras próprias; citação literal é curta, entre
+  aspas, com fonte (§5).
+- **Exercícios de livros** (ex.: "Questões de Livros Famosos"): enunciado
+  reproduzido só se for curto e com referência completa (autor, obra, edição,
+  capítulo, número do exercício); de preferência, parafraseado ("adaptado de
+  …"). A resolução é sempre própria. Nunca reproduzir a solução do livro ou do
+  manual de soluções.
+- **Imagens**: só imagens com licença conhecida e compatível — próprias,
+  geradas por código do site, domínio público ou licença livre (Creative
+  Commons, Wikimedia Commons) com o crédito que a licença exige (autor,
+  licença, link). Fotos de pessoas (Tukey, Galton, Pearson, Tufte…) precisam
+  de origem e licença registradas; sem isso, a imagem sai.
+- Registrar origem e licença de imagem de terceiros num comentário HTML ao
+  lado da imagem ou na legenda.
+- Ilustrações geradas por IA (capas): não imitam estilo de artista vivo
+  identificável nem trazem marca, logotipo ou pessoa real.
+
+---
+
+## 13. Páginas interativas (JavaScript)
+
+- **Ponto flutuante**: em JS, 0,1 + 0,2 = 0,30000000000000004. Todo valor
+  exibido passa por arredondamento controlado (no número de casas declarado);
+  comparações usam tolerância, não `===` entre decimais; quando a conta é
+  com inteiros ou frações, faça a conta exata (inteiros, `BigInt` ou
+  numerador/denominador) e só converta para decimal no fim.
+- **Entradas**: toda entrada é validada. Campo vazio, texto, negativo onde não
+  cabe, zero em denominador, n fora do domínio, probabilidade fora de [0, 1],
+  número enorme: a página mostra uma mensagem clara e não um `NaN`,
+  `Infinity` ou um resultado silenciosamente errado.
+- **Casos de borda testados**: 0, 1, valores mínimos e máximos dos controles,
+  empates, listas com um só elemento, denominador perto de zero.
+- **O passo a passo exibido é gerado pelos mesmos números** que produzem o
+  resultado: cada passo mostrado bate com o valor final (nada de passo
+  "decorativo" com contas próprias).
+- **Validação contra referência**: lógica nova é testada em Node contra força
+  bruta ou contra Julia antes do navegador. Para distribuições (normal, t, F,
+  qui-quadrado e outras), use o validador existente:
+  `julia scripts/validacao/gera-referencia.jl` e
+  `node scripts/validacao/compara.js` (já achou sete valores errados na
+  tabela Z). Distribuição nova entra no validador.
+- **Acessibilidade**: controles com `<label>` ou `aria-label`; resultado em
+  região `aria-live`; tudo usável pelo teclado; contraste suficiente nos dois
+  temas; nada que dependa só de cor.
+- Estado na URL (quando a página já usa esse padrão) para que o link
+  compartilhado reabra a mesma conta.
+
+---
+
+## 14. Glossário PT ↔ EN (termos padronizados)
+
+Um termo, uma tradução, em todo o site. Os verbetes ficam em
+`_data/glossario.yml` (só `pt:` por enquanto); termo novo entra lá e nesta
+tabela. Se um termo precisar mudar, mude em todo o site de uma vez.
+
+| Português | Inglês |
+|---|---|
+| média aritmética | arithmetic mean |
+| mediana | median |
+| moda | mode |
+| amplitude | range |
+| variância | variance |
+| desvio padrão | standard deviation |
+| coeficiente de variação | coefficient of variation |
+| intervalo interquartil (IQR) | interquartile range (IQR) |
+| quartil / decil / percentil | quartile / decile / percentile |
+| assimetria / curtose | skewness / kurtosis |
+| valor atípico (outlier) | outlier |
+| população / amostra | population / sample |
+| amostragem | sampling |
+| espaço amostral | sample space |
+| evento / evento complementar | event / complement |
+| mutuamente exclusivos | mutually exclusive |
+| eventos independentes | independent events |
+| probabilidade condicional | conditional probability |
+| Teorema de Bayes | Bayes' Theorem |
+| variável aleatória | random variable |
+| função de probabilidade | probability mass function (PMF) |
+| função densidade de probabilidade | probability density function (PDF) |
+| função de distribuição acumulada | cumulative distribution function (CDF) |
+| esperança, valor esperado | expected value |
+| distribuição normal | normal distribution |
+| escore Z | Z-score |
+| Teorema do Limite Central (TLC) | Central Limit Theorem (CLT) |
+| estimador / estimativa | estimator / estimate |
+| viés | bias |
+| erro padrão | standard error |
+| margem de erro | margin of error |
+| intervalo de confiança | confidence interval |
+| nível de confiança | confidence level |
+| teste de hipótese | hypothesis test |
+| hipótese nula / alternativa | null / alternative hypothesis |
+| nível de significância | significance level |
+| p-valor | p-value |
+| erro tipo I / tipo II | Type I / Type II error |
+| poder do teste | statistical power |
+| graus de liberdade | degrees of freedom |
+| teste t de Student | Student's t-test |
+| qui-quadrado | chi-square |
+| análise de variância (ANOVA) | analysis of variance (ANOVA) |
+| correlação de Pearson | Pearson correlation |
+| regressão linear | linear regression |
+| mínimos quadrados | least squares |
+| resíduo | residual |
+| fórmula quadrática | quadratic formula |
+
+---
+
+## 15. Temas sensíveis
+
+- **Saúde**: exemplos de diagnóstico, doenças e testes (HIV, dengue,
+  mortalidade) usam linguagem neutra e sem estigma ("pessoa que vive com
+  HIV", não "aidético"); números de prevalência, sensibilidade e
+  especificidade são ilustrativos e marcados como tal, ou têm fonte (§11). A
+  página não dá orientação médica; quando o exemplo puder ser lido como
+  conselho, diz isso ("o resultado de um teste real deve ser interpretado por
+  um profissional de saúde").
+- **Loterias e apostas**: o conteúdo explica a matemática, não incentiva
+  apostar. Todo post sobre jogo mostra o valor esperado da aposta (negativo)
+  e desfaz as falácias comuns (números "atrasados", padrões em sorteios
+  independentes). Nada de "estratégia para ganhar". Preços e prêmios com data
+  e fonte oficial.
+- **Finanças**: risco, retorno e investimentos aparecem como exemplos de
+  conceito, nunca como recomendação de compra, venda ou alocação.
+- **Grupos sociais e política**: exemplos com sexo, raça, renda, religião ou
+  partido usam dados com fonte (§11), sem generalizar do grupo para o
+  indivíduo e sem juízo de valor.
+
+---
+
+## 16. URLs, SEO e links
+
+- **URL publicada não muda.** Slug, `permalink` e nome de arquivo de página
+  avulsa ficam como estão. Se a mudança for inevitável, crie o
+  redirecionamento no padrão do site (página com `layout: null`,
+  `sitemap: false`, `<link rel="canonical">` e `meta refresh` para a nova URL,
+  como `visualization-pib-brazil-julia-en-redirect.html`).
+- O mesmo vale para âncoras públicas: `slug` do glossário, `id` de seções
+  linkadas de fora.
+- `title` único no site, com o termo que o leitor buscaria; `description` de
+  120 a 160 caracteres, que resume a página de verdade (sem prometer o que ela
+  não tem) e é escrita para as duas línguas.
+- Post novo com capa: JPG social 1200×630 (§8).
+- **Links**: internos relativos e conferidos no build (abrir cada link novo ou
+  alterado); externos só para fontes estáveis, abertos e conferidos antes de
+  publicar. Link quebrado encontrado numa revisão é consertado na hora.
+- Página nova ou traduzida: conferir que está no `sitemap.xml` e no
+  `search.json` depois do build; pedir indexação (§9).
+
+---
+
+## 17. Voz e estrutura por tipo de conteúdo
+
+- **Posts**: primeira pessoa do singular é bem-vinda ("eu passei anos sem
+  entender…"); tom de conversa, com uma pergunta ou um caso concreto na
+  abertura. Estrutura mínima: abertura que diz o que o leitor vai entender →
+  ideia → exemplo resolvido completo (§1.5) → código quando houver → o que
+  dá errado / limites → resumo → referências.
+- **Páginas de área e tópicos**: impessoais e de referência ("a mediana é…").
+  Estrutura mínima: definição em linguagem simples → fórmula com cada símbolo
+  explicado → exemplo resolvido → interpretação → quando usar e quando não
+  usar → referências.
+- **Lições de Matemática elementar e Cálculo**: segunda pessoa ("você"),
+  frases curtas, uma ideia por seção, calculadora com passo a passo e
+  exercícios resolvidos.
+- Em qualquer tipo: o leitor sai sabendo **calcular, interpretar e reconhecer
+  quando não usar**. Página que só define não está pronta.
+
+---
+
+## 18. Processo de revisão de página existente
+
+1. Ler a página inteira, nas duas línguas quando houver.
+2. Passar por §1–§17, anotando cada problema encontrado: conta, código,
+   citação, referência, dado sem fonte, imagem sem licença, notação, link.
+3. Corrigir **nas duas línguas** no mesmo commit.
+4. O que não puder ser resolvido na sessão (fonte inacessível, imagem que
+   precisa ser refeita, decisão editorial) vira **issue** com o rótulo da
+   página, a descrição do problema e o que falta para resolver.
+5. Mensagem de commit em português listando **cada correção de conteúdo**
+   (o que estava, o que ficou e por quê). Correção de erro que o leitor pode
+   ter aprendido errado (conta, fórmula, fato) é dita com clareza.
+6. Resposta ao usuário com a mesma lista e com o que ficou pendente.
+
+---
+
+## 19. Checklist antes de publicar
 
 - [ ] Toda conta foi refeita por código, inclusive os intermediários.
 - [ ] Fórmula ou algoritmo novo testado contra força bruta ou simulação.
@@ -345,4 +587,17 @@ iniciante não tem como desconfiar.
 - [ ] Numeração de seções/figuras sequencial; legendas batem com as imagens.
 - [ ] Sem "Bhaskara".
 - [ ] PT e EN coerentes; correções feitas nas duas.
+- [ ] Notação conforme §6 (ponto e vírgula com decimais, intervalos,
+      unidades) e termos conforme o glossário do §14.
+- [ ] Todo dado do mundo real tem fonte, período e data de acesso; exemplos
+      inventados estão marcados como ilustrativos; números reproduzíveis.
+- [ ] Imagens de terceiros com origem e licença registradas; nenhum texto ou
+      solução copiados.
+- [ ] Página interativa: entradas inválidas tratadas, casos de borda testados,
+      passo a passo coerente com o resultado, validada contra referência.
+- [ ] Temas sensíveis (saúde, apostas, finanças) conforme §15.
+- [ ] Nenhuma URL publicada mudou (ou há redirecionamento); links conferidos;
+      `title` e `description` adequados.
+- [ ] Estrutura mínima do tipo de conteúdo (§17) cumprida.
 - [ ] Build sem erros e página conferida renderizada.
+- [ ] A resposta ao usuário diz o que não foi verificado (§10).
