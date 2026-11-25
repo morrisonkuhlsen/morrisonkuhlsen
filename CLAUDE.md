@@ -553,6 +553,16 @@ mesmo commit, sem esperar pedido:
 | comparações múltiplas | multiple comparisons |
 | correção de continuidade | continuity correction |
 | teste de aderência | goodness-of-fit test |
+| limite | limit |
+| limite lateral | one-sided limit |
+| forma indeterminada | indeterminate form |
+| função contínua | continuous function |
+| teorema do confronto | squeeze theorem |
+| assíntota | asymptote |
+| cancelamento catastrófico | catastrophic cancellation |
+| racionalização | rationalizing |
+| termo em evidência | common factor |
+| trinômio do 2º grau | quadratic trinomial |
 | concurso (loteria) | draw |
 | dezena (Mega-Sena) | number |
 | sena / quina / quadra | jackpot (6 hits) / five hits (quina) / four hits (quadra) |

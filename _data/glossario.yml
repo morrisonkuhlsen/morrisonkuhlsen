@@ -788,6 +788,61 @@ pt:
     veja:
       - { t: "Fórmula interativa", u: "/formulas/qui-quadrado.html" }
 
+  - termo: "Limite"
+    slug: limite
+    ordem: "limite"
+    auto: false
+    def: "Valor do qual f(x) se aproxima quando x se aproxima de um ponto a (ou cresce sem parar), sem depender do valor de f no próprio ponto. A definição formal usa épsilon e delta."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Limite lateral"
+    slug: limite-lateral
+    ordem: "limite lateral"
+    tambem: ["limites laterais"]
+    def: "Limite calculado só com x menor que o ponto (pela esquerda) ou só com x maior (pela direita). O limite bilateral existe quando os dois laterais existem e são iguais."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Forma indeterminada"
+    slug: forma-indeterminada
+    ordem: "forma indeterminada"
+    tambem: ["formas indeterminadas"]
+    def: "Expressão como 0/0 ou ∞/∞ que aparece ao substituir o ponto num limite e que, sozinha, não determina o resultado. Limites com a mesma forma podem dar valores diferentes. Outras são ∞ − ∞ e 1^∞; já 1/0 não é indeterminada."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Função contínua"
+    slug: funcao-continua
+    ordem: "funcao continua"
+    tambem: ["funções contínuas"]
+    def: "Função f em que o limite de f(x) quando x tende a a é igual a f(a). Para ela, calcular o limite é só substituir o ponto. Polinômios são contínuos em todos os pontos."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Teorema do confronto"
+    slug: teorema-do-confronto
+    ordem: "teorema do confronto"
+    tambem: ["teorema do sanduíche"]
+    def: "Se g(x) ≤ f(x) ≤ h(x) perto de um ponto e g e h têm o mesmo limite L nesse ponto, então f também tem limite L. É usado para provar que sen x / x tende a 1 quando x tende a 0."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Assíntota"
+    slug: assintota
+    ordem: "assintota"
+    tambem: ["assíntotas"]
+    def: "Reta da qual o gráfico de uma função se aproxima indefinidamente. É vertical em x = a quando f(x) vai a ±∞ com x tendendo a a, e horizontal em y = L quando f(x) tende a L com x tendendo a ±∞."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
+  - termo: "Cancelamento catastrófico"
+    slug: cancelamento-catastrofico
+    ordem: "cancelamento catastrofico"
+    def: "Perda de precisão ao subtrair dois números quase iguais no computador: os algarismos iguais se cancelam e sobra o erro de arredondamento. Reescrever a fórmula sem a subtração costuma resolver."
+    veja:
+      - { t: "Limites no Cálculo", u: "/limites/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1563,3 +1618,58 @@ en:
     def: "Checks whether observed frequencies are consistent with a theoretical distribution, such as the uniform. The most common one is the chi-square goodness-of-fit test."
     veja:
       - { t: "Interactive formula", u: "/en/formulas/chi-square-test.html" }
+
+  - termo: "Limit"
+    slug: limit
+    ordem: "limit"
+    auto: false
+    def: "The value that f(x) approaches as x approaches a point a (or grows without bound), regardless of the value of f at the point itself. The formal definition uses epsilon and delta."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "One-sided limit"
+    slug: one-sided-limit
+    ordem: "one-sided limit"
+    tambem: ["one-sided limits"]
+    def: "A limit taken only with x below the point (from the left) or only with x above it (from the right). The two-sided limit exists when both one-sided limits exist and are equal."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Indeterminate form"
+    slug: indeterminate-form
+    ordem: "indeterminate form"
+    tambem: ["indeterminate forms"]
+    def: "An expression such as 0/0 or ∞/∞ that appears when the point is substituted into a limit and does not determine the result on its own. Limits with the same form can have different values. Others are ∞ − ∞ and 1^∞; 1/0, however, is not indeterminate."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Continuous function"
+    slug: continuous-function
+    ordem: "continuous function"
+    tambem: ["continuous functions"]
+    def: "A function f for which the limit of f(x) as x tends to a equals f(a). For such a function, finding the limit is just a matter of substituting the point. Polynomials are continuous everywhere."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Squeeze theorem"
+    slug: squeeze-theorem
+    ordem: "squeeze theorem"
+    tambem: ["sandwich theorem"]
+    def: "If g(x) ≤ f(x) ≤ h(x) near a point and g and h have the same limit L there, then f also has limit L. It is used to prove that sin x / x tends to 1 as x tends to 0."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Asymptote"
+    slug: asymptote
+    ordem: "asymptote"
+    tambem: ["asymptotes"]
+    def: "A line that the graph of a function approaches indefinitely. It is vertical at x = a when f(x) goes to ±∞ as x tends to a, and horizontal at y = L when f(x) tends to L as x tends to ±∞."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Catastrophic cancellation"
+    slug: catastrophic-cancellation
+    ordem: "catastrophic cancellation"
+    def: "Loss of precision when two nearly equal numbers are subtracted on a computer: the matching digits cancel and the rounding error is what remains. Rewriting the formula without the subtraction usually fixes it."
+    veja:
+      - { t: "Limits in Calculus", u: "/limits/" }
