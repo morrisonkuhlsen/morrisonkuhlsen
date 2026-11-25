@@ -165,29 +165,110 @@
   }
 }
 
+// O balão segue a cara do site: rótulo em JetBrains Mono na cor de destaque,
+// termo em destaque, definição no corpo do texto e uma seta apontando para a
+// palavra (--arrow-x vem do script). Fica acima da palavra; sem espaço, abaixo.
 .gloss-tip {
+  --tip-bg: var(--paper);
   position: absolute;
   z-index: 50;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  max-width: min(22rem, calc(100vw - 24px));
-  padding: 0.7rem 0.85rem;
+  gap: 0.35rem;
+  width: max-content;
+  max-width: min(21rem, calc(100vw - 24px));
+  padding: 0.8rem 0.95rem 0.75rem;
   border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
   border-radius: 8px;
-  background: var(--paper);
+  background: var(--tip-bg);
   color: var(--ink-soft);
+  font-family: var(--font-body);
   font-size: var(--step--1);
-  line-height: 1.45;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  line-height: 1.5;
+  text-align: left;
+  box-shadow: 0 12px 32px rgb(20 22 28 / 16%), 0 2px 6px rgb(20 22 28 / 8%);
   pointer-events: none;
+  animation: gloss-tip-in 140ms var(--ease) both;
 
-  strong {
-    color: var(--ink);
-    font-weight: 600;
+  // Seta: um quadrado girado com as mesmas bordas do balão.
+  &::after {
+    content: "";
+    position: absolute;
+    left: var(--arrow-x, 50%);
+    bottom: -6px;
+    width: 10px;
+    height: 10px;
+    background: var(--tip-bg);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  &.is-below {
+    animation-name: gloss-tip-in-below;
+
+    &::after {
+      top: -8px;
+      bottom: auto;
+      background: var(--accent);
+      border: 0;
+    }
   }
 
   &[hidden] {
     display: none;
   }
+}
+
+.gloss-tip__label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.gloss-tip__term {
+  font-family: var(--font-display);
+  font-size: var(--step-0);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.gloss-tip__def {
+  color: var(--ink-soft);
+}
+
+.gloss-tip__more {
+  margin-top: 0.2rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+}
+
+:root[data-theme="dark"] .gloss-tip {
+  --tip-bg: var(--paper-alt);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 45%), 0 2px 6px rgb(0 0 0 / 30%);
+}
+
+@keyframes gloss-tip-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes gloss-tip-in-below {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gloss-tip { animation: none; }
+}
+
+@media print {
+  .gloss-tip { display: none; }
 }

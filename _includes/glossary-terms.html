@@ -2,11 +2,13 @@
   Termos do glossário para glossary-tips.js, que transforma a primeira
   ocorrência de cada um no artigo num link com a definição ao passar o mouse.
 
-  Cada verbete vira { s: slug, d: definição, t: [grafias] }: o termo, a sigla
-  entre parênteses, se houver ("Intervalo interquartil (IQR)" → "Intervalo
-  interquartil" e "IQR"), e as grafias de `tambem`. Ficam de fora os verbetes
-  com `auto: false` e os que o próprio artigo aprofunda — um link do glossário
-  de volta para a página em que o leitor já está não ajuda ninguém.
+  Cada verbete vira { s: slug, n: termo, d: definição, t: [grafias] }: o
+  termo, a sigla entre parênteses, se houver ("Intervalo interquartil (IQR)" →
+  "Intervalo interquartil" e "IQR"), e as grafias de `tambem`. Todos os
+  verbetes entram, porque um link escrito à mão para o glossário também mostra
+  a definição. Os que não devem ser marcados sozinhos levam "a": 0: os de
+  `auto: false` e os que o próprio artigo aprofunda (um link do glossário de
+  volta para a página em que o leitor já está não ajuda ninguém).
 {%- endcomment -%}
 {%- assign lang = page.lang | default: site.lang -%}
 {%- assign verbetes = site.data.glossario[lang] -%}
@@ -15,13 +17,11 @@
 {%- capture termos -%}[
   {%- assign primeiro = true -%}
   {%- for v in verbetes -%}
-    {%- if v.auto == false -%}{%- continue -%}{%- endif -%}
     {%- assign proprio = false -%}
     {%- for ref in v.veja -%}
       {%- assign alvo = ref.u | remove: ".html" | split: "/" | join: "/" -%}
       {%- if alvo == aqui -%}{%- assign proprio = true -%}{%- endif -%}
     {%- endfor -%}
-    {%- if proprio -%}{%- continue -%}{%- endif -%}
     {%- assign grafias = "" | split: "" -%}
     {%- if v.termo contains " (" -%}
       {%- assign partes = v.termo | split: " (" -%}
@@ -33,11 +33,13 @@
     {%- for t in v.tambem -%}{%- assign grafias = grafias | push: t -%}{%- endfor -%}
     {%- unless primeiro -%},{%- endunless -%}
     {%- assign primeiro = false -%}
-    {"s":{{ v.slug | jsonify }},"n":{{ v.termo | jsonify }},"d":{{ v.def | jsonify }},"t":{{ grafias | jsonify }}}
+    {"s":{{ v.slug | jsonify }},"n":{{ v.termo | jsonify }},"d":{{ v.def | jsonify }},"t":{{ grafias | jsonify }}{% if v.auto == false or proprio %},"a":0{% endif %}}
   {%- endfor -%}
 ]{%- endcapture -%}
 {%- assign pagina_glossario = site.pages | where: "ref", "glossario" | where: "lang", lang | first -%}
 <script type="application/json" id="glossary-terms"
-        data-base="{{ pagina_glossario.url | relative_url }}">{{ termos }}</script>
+        data-base="{{ pagina_glossario.url | relative_url }}"
+        data-label="{% if lang == 'en' %}Glossary{% else %}Glossário{% endif %}"
+        data-more="{% if lang == 'en' %}Click to open in the glossary{% else %}Clique para abrir no glossário{% endif %}">{{ termos }}</script>
 <script src="{{ '/assets/js/glossary-tips.js' | relative_url }}" defer></script>
 {%- endif -%}
