@@ -66,7 +66,7 @@ onde $x_i \geq 0$ representa a quantidade de objetos colocados na caixa $i$.
 
 Representamos os $r$ objetos como $r$ estrelas: $\star\star\cdots\star$.
 
-Para separar esses objetos em $n$ grupos (um por caixa), precisamos de $n - 1$ separadores $|$.
+Para separar esses objetos em $n$ grupos (um por caixa), precisamos de $n - 1$ separadores $\vert$.
 
 Por exemplo, com $r = 5$ objetos e $n = 3$ caixas, a distribuição $(2, 0, 3)$ corresponde a:
 

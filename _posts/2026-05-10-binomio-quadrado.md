@@ -422,7 +422,7 @@ $$
 1^3 = 1 \cdot 1 \cdot 1 = 1.
 $$
 
-Calculamos $-3\!\left(-\dfrac{1}{2}\right)$. Negativo vezes negativo dá positivo:
+Calculamos $-3\\!\left(-\dfrac{1}{2}\right)$. Negativo vezes negativo dá positivo:
 
 $$
 -3 \cdot \left(-\frac{1}{2}\right) = \frac{3}{2}.

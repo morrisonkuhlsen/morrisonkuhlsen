@@ -561,7 +561,7 @@ Conforme demonstrado na Seção 4, $\bar{X}$ é suficiente para $\mu$ pela fator
 
 ### 6.6 Completude
 
-A família $\{\mathcal{N}(\mu, \sigma^2) : \mu \in \mathbb{R}\}$ com $\sigma^2$ conhecido pertence à classe das **famílias exponenciais completas**. Nesse contexto, a estatística suficiente $T(\mathbf{X}) = \sum X_i$ é também **completa**:
+A família $\\{\mathcal{N}(\mu, \sigma^2) : \mu \in \mathbb{R}\\}$ com $\sigma^2$ conhecido pertence à classe das **famílias exponenciais completas**. Nesse contexto, a estatística suficiente $T(\mathbf{X}) = \sum X_i$ é também **completa**:
 
 $$
 \mathbb{E}_\mu\!\left[g(T(\mathbf{X}))\right] = 0 \;\;\forall\, \mu

@@ -110,7 +110,7 @@ $$
 P_i = 2\,\overline{\Phi}\big(|X_i|\big), \qquad \overline{\Phi} = 1 - \Phi,
 $$
 
-onde $\Phi$ é a função de distribuição da normal padrão. O detalhe crucial está no **módulo** $|X_i|$:
+onde $\Phi$ é a função de distribuição da normal padrão. O detalhe crucial está no **módulo** $\lvert X_i\rvert$:
 
 $$
 \{P_i \le t\} \;=\; \{X_i \ge c\}\ \cup\ \{X_i \le -c\}.

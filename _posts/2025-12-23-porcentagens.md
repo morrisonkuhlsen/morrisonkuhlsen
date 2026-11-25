@@ -717,7 +717,7 @@ Marcos vende $p_M = 40$, então:
 
 $$x_M = 100 \cdot e^{\ln(40) - \ln(65)}$$
 
-Pela identidade $\ln(a) - \ln(b) = \ln\!\left(\dfrac{a}{b}\right)$:
+Pela identidade $\ln(a) - \ln(b) = \ln\\!\left(\dfrac{a}{b}\right)$:
 
 $$\ln(40) - \ln(65) = \ln\!\left(\frac{40}{65}\right)$$
 

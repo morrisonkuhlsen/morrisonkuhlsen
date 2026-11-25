@@ -259,7 +259,7 @@ $$
 
 (2) Argumento por independência (produto)
 
-Seja $C_i=\{\text{cara no lançamento }i\}$. Então:
+Seja $C_i=\\{\text{cara no lançamento }i\\}$. Então:
 
 $$
 P(\text{todas caras})

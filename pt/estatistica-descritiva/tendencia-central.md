@@ -198,7 +198,7 @@ A **mediana** é o valor central de um conjunto ordenado. Ela divide o conjunto 
 
 #### Definição
 
-Seja um conjunto de dados ordenado $\{x_1, x_2, ..., x_n\}$:
+Seja um conjunto de dados ordenado $\\{x_1, x_2, ..., x_n\\}$:
 
 - Se $n$ (número de observações) é **ímpar**, a mediana é o valor do meio:
   $\text{Mediana} = x_{\frac{n+1}{2}}$
@@ -213,7 +213,7 @@ Seja um conjunto de dados ordenado $\{x_1, x_2, ..., x_n\}$:
 ##### 🔹 Exemplo 1: Número ímpar de elementos
 
 Conjunto de dados:  
-$\{1,\, 3,\, 3,\, 6,\, 7,\, 8,\, 9\}$
+$\\{1,\, 3,\, 3,\, 6,\, 7,\, 8,\, 9\\}$
 
 Número de elementos: $n = 7$ (ímpar)  
 Valor central: 4ª posição → **6**
@@ -225,7 +225,7 @@ Valor central: 4ª posição → **6**
 ##### 🔹 Exemplo 2: Número par de elementos
 
 Conjunto de dados:  
-$\{3,\, 5,\, 7,\, 9\}$
+$\\{3,\, 5,\, 7,\, 9\\}$
 
 Número de elementos: $n = 4$ (par)  
 Valores centrais: 2ª e 3ª posições → 5 e 7  
@@ -308,7 +308,7 @@ Em situações com **valores distorcidos ou assimétricos**, a mediana é **mais
 
 A mediana possui um **ponto de ruptura de 50%**: **menos da metade dos dados** pode estar contaminada (com erros ou valores extremos, por maiores que sejam) sem que a mediana seja arrastada para longe. A média tem ponto de ruptura zero — basta **um** valor absurdo para levá-la a qualquer lugar.
 
-Um exemplo: em $\{2, 3, 4, 5, 6\}$, a média é $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ e a mediana é 4. Trocando o 6 por 600 (um erro de digitação), a média vira $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122{,}8$, e a mediana continua 4.
+Um exemplo: em $\\{2, 3, 4, 5, 6\\}$, a média é $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ e a mediana é 4. Trocando o 6 por 600 (um erro de digitação), a média vira $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122{,}8$, e a mediana continua 4.
 
 Isso torna a mediana essencial em áreas como:
 - Análise de renda (ex: evitar distorções por bilionários)
@@ -347,11 +347,11 @@ $$
 - $x_i$ são os valores dos dados,
 - $m$ é o valor candidato,
 - $\arg\min$ indica o valor de $m$ que torna a soma a menor possível,
-- $\sum \left| x_i - m \right|$ é a soma das distâncias absolutas entre os dados e $m$.
+- $\sum \left\lvert x_i - m \right\rvert$ é a soma das distâncias absolutas entre os dados e $m$.
 
 Já a média é o valor que minimiza a soma dos **quadrados** das distâncias, $\sum (x_i - m)^2$. Elevar ao quadrado dá peso enorme a uma distância grande; o valor absoluto, não — por isso um valor extremo puxa a média muito mais do que a mediana.
 
-**Exemplo com os dados $\{1, 2, 10\}$**, cuja mediana é 2 e cuja média é $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4{,}33$:
+**Exemplo com os dados $\\{1, 2, 10\\}$**, cuja mediana é 2 e cuja média é $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4{,}33$:
 
 | Candidato $m$ | $\lvert 1 - m \rvert + \lvert 2 - m \rvert + \lvert 10 - m \rvert$ | Soma |
 |---|---|---:|
@@ -376,7 +376,7 @@ A **moda** é o valor que ocorre com maior frequência em um conjunto de dados. 
 
 ### Definição Matemática
 
-Para um conjunto de dados $X = \{x_1, x_2, ..., x_n\}$, a moda é o valor $x_i$ que maximiza a função de frequência:
+Para um conjunto de dados $X = \\{x_1, x_2, ..., x_n\\}$, a moda é o valor $x_i$ que maximiza a função de frequência:
 
 $$
 \text{Moda} = \arg\max_{x} \, f(x)
@@ -395,7 +395,7 @@ onde $f(x)$ é o número de vezes que o valor $x$ aparece no conjunto de dados.
 
 #### Exemplo 1: Dados Numéricos Únicos
 
-Conjunto de dados: $\{1, 2, 2, 3, 4, 4, 4, 5\}$  
+Conjunto de dados: $\\{1, 2, 2, 3, 4, 4, 4, 5\\}$  
 **Moda = 4** (ocorre 3 vezes)
 
 #### Exemplo 2: Dados Categóricos
@@ -407,7 +407,7 @@ Vermelho, Azul, Azul, Verde, Vermelho, Preto, Preto, Preto
 #### Exemplo 3: Dados Bimodais
 
 Idades em uma turma:  
-$\{18, 19, 19, 19, 20, 21, 22, 22, 22, 23\}$  
+$\\{18, 19, 19, 19, 20, 21, 22, 22, 22, 23\\}$  
 **Modas = 19 e 22** (ambos ocorrem 3 vezes)
 
 ### 💻 Exemplo em Julia

@@ -560,7 +560,7 @@ Given that the standard deviation of these heights is approximately $11.5$ cm, i
 
 #### Step 1 — identify each person's absolute deviation
 
-The absolute differences $|x_i - \bar{x}|$ tell us, for each individual, how far above or below the mean their height is. Organized:
+The absolute differences $\lvert x_i - \bar{x}\rvert$ tell us, for each individual, how far above or below the mean their height is. Organized:
 
 <table style="width:100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.97em;">
   <thead>

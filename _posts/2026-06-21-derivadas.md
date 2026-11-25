@@ -52,7 +52,7 @@ Se esse limite existe, dizemos que $f$ é **derivável** (ou **diferenciável**)
 
 ### Diferenciabilidade implica continuidade
 
-Se $f$ é derivável em $x = a$, então $f$ é **contínua** em $a$. Mas a recíproca é **falsa**: uma função pode ser contínua num ponto sem ser derivável ali (exemplo clássico: $f(x) = |x|$ em $x = 0$).
+Se $f$ é derivável em $x = a$, então $f$ é **contínua** em $a$. Mas a recíproca é **falsa**: uma função pode ser contínua num ponto sem ser derivável ali (exemplo clássico: $f(x) = \lvert x\rvert$ em $x = 0$).
 
 ---
 
@@ -133,7 +133,7 @@ f'(x) &= \lim_{h \to 0} \frac{1}{\sqrt{x+h} + \sqrt{x}} = \frac{1}{2\sqrt{x}}.
 $$
 
 ### Exemplo 5
-Calcule $f'(0)$ para $f(x) = x\,|x|$ usando a definição.
+Calcule $f'(0)$ para $f(x) = x\,\lvert x\rvert$ usando a definição.
 
 $$
 \begin{aligned}
@@ -144,7 +144,7 @@ f'(0) &= \lim_{h \to 0} \frac{f(0+h) - f(0)}{h}
 \end{aligned}
 $$
 
-A derivada existe e vale $0$ em $x=0$, embora $|x|$ sozinha não fosse derivável ali.
+A derivada existe e vale $0$ em $x=0$, embora $\lvert x\rvert$ sozinha não fosse derivável ali.
 
 ---
 

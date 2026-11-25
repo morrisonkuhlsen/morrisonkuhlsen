@@ -560,7 +560,7 @@ Sabendo que o desvio padrão dessas alturas é aproximadamente $11{,}5$ cm, inte
 
 #### Passo 1 — Identificar os desvios absolutos de cada pessoa
 
-As diferenças absolutas $|x_i - \bar{x}|$ informam, para cada indivíduo, o quanto sua altura está acima ou abaixo da média. Organizando:
+As diferenças absolutas $\lvert x_i - \bar{x}\rvert$ informam, para cada indivíduo, o quanto sua altura está acima ou abaixo da média. Organizando:
 
 <table style="width:100%; border-collapse: collapse; margin: 1.5em 0; font-size: 0.97em;">
   <thead>

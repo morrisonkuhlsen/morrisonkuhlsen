@@ -51,7 +51,7 @@ Um teste de hipótese segue uma estrutura sistemática:
 
 4. **Região Crítica**
    - Valores que levam à rejeição de $H_0$, determinada por $\alpha$
-   - $\mathcal{RC} = \{|t| > t_{\alpha/2}\}$ (bilateral) ou $\{t > t_\alpha\}$ (unilateral direito)
+   - $\mathcal{RC} = \\{\lvert t \rvert > t_{\alpha/2}\\}$ (bilateral) ou $\\{t > t_\alpha\\}$ (unilateral direito)
 
 5. **Cálculo do p-valor**
    - Probabilidade de observar resultado tão ou mais extremo que o observado, sob $H_0$

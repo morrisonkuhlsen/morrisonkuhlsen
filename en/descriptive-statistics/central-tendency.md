@@ -198,7 +198,7 @@ The **median** is the central value of a sorted set. It splits the set into two 
 
 #### Definition
 
-Let $\{x_1, x_2, ..., x_n\}$ be a sorted data set:
+Let $\\{x_1, x_2, ..., x_n\\}$ be a sorted data set:
 
 - If $n$ (the number of observations) is **odd**, the median is the middle value:
   $\text{Median} = x_{\frac{n+1}{2}}$
@@ -213,7 +213,7 @@ Let $\{x_1, x_2, ..., x_n\}$ be a sorted data set:
 ##### 🔹 Example 1: odd number of elements
 
 Data set:  
-$\{1,\, 3,\, 3,\, 6,\, 7,\, 8,\, 9\}$
+$\\{1,\, 3,\, 3,\, 6,\, 7,\, 8,\, 9\\}$
 
 Number of elements: $n = 7$ (odd)  
 Middle value: 4th position → **6**
@@ -225,7 +225,7 @@ Middle value: 4th position → **6**
 ##### 🔹 Example 2: even number of elements
 
 Data set:  
-$\{3,\, 5,\, 7,\, 9\}$
+$\\{3,\, 5,\, 7,\, 9\\}$
 
 Number of elements: $n = 4$ (even)  
 Middle values: 2nd and 3rd positions → 5 and 7  
@@ -308,7 +308,7 @@ With **distorted or skewed values**, the median is **more representative** than 
 
 The median has a **50% breakdown point**: **less than half of the data** can be contaminated (with errors or extreme values, however large) without the median being dragged far away. The mean has a breakdown point of zero — **a single** absurd value can take it anywhere.
 
-An example: in $\{2, 3, 4, 5, 6\}$, the mean is $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ and the median is 4. Replacing the 6 with 600 (a typo), the mean becomes $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122.8$, while the median stays at 4.
+An example: in $\\{2, 3, 4, 5, 6\\}$, the mean is $\frac{2 + 3 + 4 + 5 + 6}{5} = \frac{20}{5} = 4$ and the median is 4. Replacing the 6 with 600 (a typo), the mean becomes $\frac{2 + 3 + 4 + 5 + 600}{5} = \frac{614}{5} = 122.8$, while the median stays at 4.
 
 That makes the median essential in areas such as:
 - Income analysis (e.g. avoiding distortion by billionaires)
@@ -347,11 +347,11 @@ $$
 - $x_i$ are the data values,
 - $m$ is the candidate value,
 - $\arg\min$ indicates the value of $m$ that makes the sum as small as possible,
-- $\sum \left| x_i - m \right|$ is the sum of the absolute distances between the data and $m$.
+- $\sum \left\lvert x_i - m \right\rvert$ is the sum of the absolute distances between the data and $m$.
 
 The mean, by contrast, is the value that minimizes the sum of the **squared** distances, $\sum (x_i - m)^2$. Squaring gives huge weight to a large distance; the absolute value does not — which is why an extreme value pulls the mean much more than the median.
 
-**Example with the data $\{1, 2, 10\}$**, whose median is 2 and whose mean is $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4.33$:
+**Example with the data $\\{1, 2, 10\\}$**, whose median is 2 and whose mean is $\frac{1 + 2 + 10}{3} = \frac{13}{3} \approx 4.33$:
 
 | Candidate $m$ | $\lvert 1 - m \rvert + \lvert 2 - m \rvert + \lvert 10 - m \rvert$ | Sum |
 |---|---|---:|
@@ -376,7 +376,7 @@ The **mode** is the value that occurs most frequently in a data set. Unlike the 
 
 ### Mathematical Definition
 
-For a data set $X = \{x_1, x_2, ..., x_n\}$, the mode is the value $x_i$ that maximizes the frequency function:
+For a data set $X = \\{x_1, x_2, ..., x_n\\}$, the mode is the value $x_i$ that maximizes the frequency function:
 
 $$
 \text{Mode} = \arg\max_{x} \, f(x)
@@ -395,7 +395,7 @@ where $f(x)$ is the number of times the value $x$ appears in the data set.
 
 #### Example 1: Single-mode numerical data
 
-Data set: $\{1, 2, 2, 3, 4, 4, 4, 5\}$  
+Data set: $\\{1, 2, 2, 3, 4, 4, 4, 5\\}$  
 **Mode = 4** (occurs 3 times)
 
 #### Example 2: Categorical data
@@ -407,7 +407,7 @@ Red, Blue, Blue, Green, Red, Black, Black, Black
 #### Example 3: Bimodal data
 
 Ages in a class:  
-$\{18, 19, 19, 19, 20, 21, 22, 22, 22, 23\}$  
+$\\{18, 19, 19, 19, 20, 21, 22, 22, 22, 23\\}$  
 **Modes = 19 and 22** (both occur 3 times)
 
 ### 💻 Example in Julia

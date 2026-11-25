@@ -113,7 +113,7 @@ E(T) &= \sum_{t=1}^{\infty} t\,P(T = t) \\
 \end{aligned}
 $$
 
-Sabemos que, para $|q| < 1$,
+Sabemos que, para $\lvert q\rvert < 1$,
 
 $$
 \sum_{t=1}^{\infty} t\,q^{\,t-1} = \frac{1}{(1-q)^2}.
