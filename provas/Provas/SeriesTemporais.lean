@@ -56,6 +56,70 @@ theorem autocorrelacao_limitada (u : ℕ → ℝ) (n k : ℕ) (hk : k ≤ n) :
         mul_le_mul hA hB hB0 hS0
     _ = (∑ t ∈ range n, u t ^ 2) ^ 2 := by ring
 
+/-- Medidas de erro (seção 8.1): a REQM nunca é menor que o EAM,
+√(Σeₜ²/n) ≥ Σ|eₜ|/n, pela desigualdade de Cauchy–Schwarz. -/
+theorem reqm_maior_que_eam {ι : Type*} (s : Finset ι) (hs : s.Nonempty) (e : ι → ℝ) :
+    (∑ t ∈ s, |e t|) / s.card ≤ Real.sqrt ((∑ t ∈ s, e t ^ 2) / s.card) := by
+  have hn : (0 : ℝ) < s.card := by exact_mod_cast hs.card_pos
+  apply Real.le_sqrt_of_sq_le
+  have cs := sum_mul_sq_le_sq_mul_sq s (fun _ ↦ (1 : ℝ)) (fun t ↦ |e t|)
+  simp only [one_mul, one_pow, sum_const, nsmul_eq_mul, mul_one, sq_abs] at cs
+  rw [div_pow, div_le_div_iff₀ (by positivity) hn]
+  nlinarith [cs]
+
+/-- Média de longo prazo do AR(1) (seção 7.4): se a média μ não muda com o tempo,
+μ = c + φμ, e então μ = c/(1 − φ) (com φ ≠ 1). -/
+theorem ar1_media (c φ μ : ℝ) (hφ : φ ≠ 1) (h : μ = c + φ * μ) : μ = c / (1 - φ) := by
+  have : (1 - φ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hφ)
+  field_simp
+  linarith
+
+/-- Variância do erro do AR(1) a h passos (seção 7.4): σ²(1 + φ² + … + φ^(2(h−1)))
+= σ²(1 − φ^(2h))/(1 − φ²), que cresce com h e tende a σ²/(1 − φ²) quando |φ| < 1. -/
+theorem ar1_variancia (σ φ : ℝ) (hφ : φ ^ 2 ≠ 1) (h : ℕ) :
+    σ ^ 2 * ∑ j ∈ range h, φ ^ (2 * j) = σ ^ 2 * (1 - φ ^ (2 * h)) / (1 - φ ^ 2) := by
+  have hq : (φ ^ 2) ≠ 1 := hφ
+  have g := geom_sum_eq hq h
+  simp only [← pow_mul] at g
+  rw [g, mul_div_assoc]
+  congr 1
+  rw [div_eq_div_iff (sub_ne_zero.mpr hq) (sub_ne_zero.mpr (Ne.symm hq))]
+  ring
+
+theorem ar1_variancia_limite (σ φ : ℝ) (hφ : |φ| < 1) :
+    Filter.Tendsto (fun h : ℕ ↦ σ ^ 2 * (1 - φ ^ (2 * h)) / (1 - φ ^ 2)) Filter.atTop
+      (nhds (σ ^ 2 / (1 - φ ^ 2))) := by
+  have h2 : |φ ^ 2| < 1 := by rw [abs_pow]; nlinarith [abs_nonneg φ]
+  have t := tendsto_pow_atTop_nhds_zero_of_abs_lt_one h2
+  have t' : Filter.Tendsto (fun h : ℕ ↦ φ ^ (2 * h)) Filter.atTop (nhds 0) := by
+    simpa only [← pow_mul] using t
+  have := ((t'.const_sub 1).const_mul (σ ^ 2)).div_const (1 - φ ^ 2)
+  simpa using this
+
+/-- Contas das seções 6 a 8 (suavização simples, passo do Holt-Winters, AR(1) à mão,
+medidas de erro), em aritmética exata. -/
+theorem contas_novas :
+    -- suavização simples, α = 3/10
+    ((3 / 10 : ℚ) * 34 + 7 / 10 * 30) = 31.2 ∧ ((3 / 10 : ℚ) * 31 + 7 / 10 * 31.2) = 31.14 ∧
+    ((3 / 10 : ℚ) * 37 + 7 / 10 * 34.709214) = 35.3964498 ∧
+    (4 ^ 2 + (-0.2) ^ 2 + 3.86 ^ 2 + 0.702 ^ 2 + 5.4914 ^ 2 + 1.84398 ^ 2 + 2.290786 ^ 2 : ℚ)
+      = 70.235840698196 ∧
+    -- Holt-Winters, passo t = 5
+    ((40 + 52 + 46 + 70) / 4 : ℚ) = 52 ∧ (((44 + 56 + 50 + 76) / 4 - 52) / 4 : ℚ) = 1.125 ∧
+    ((0.5 : ℚ) * (44 - (-12)) + 0.5 * (52 + 1.125)) = 54.5625 ∧
+    ((0.3 : ℚ) * (54.5625 - 52) + 0.7 * 1.125) = 1.55625 ∧
+    ((0.3 : ℚ) * (44 - 52 - 1.125) + 0.7 * (-12)) = -11.1375 ∧
+    -- AR(1) na diferença sazonal
+    ((4 + 4 + 4 + 6 + 4 + 5 + 4) / 7 : ℚ) = 31 / 7 ∧
+    ((4 + 4 + 6 + 4 + 5 + 4 + 5) / 7 : ℚ) = 32 / 7 ∧
+    ((-12 / 7 : ℚ) / (26 / 7)) = -6 / 13 ∧ ((32 / 7 : ℚ) - (-6 / 13) * (31 / 7)) = 86 / 13 ∧
+    ((86 / 13 : ℚ) / (1 - (-6 / 13))) = 86 / 19 ∧ ((86 / 13 : ℚ) + (-6 / 13) * 5) = 56 / 13 ∧
+    -- medidas de erro da validação
+    ((48 - 1373 / 28 : ℚ)) = -29 / 28 ∧ ((61 - 3413 / 56 : ℚ)) = 3 / 56 ∧
+    ((54 - 775 / 14 : ℚ)) = -19 / 14 ∧ ((81 - 4453 / 56 : ℚ)) = 83 / 56 ∧
+    ((29 / 28 + 3 / 56 + 19 / 14 + 83 / 56) / 4 : ℚ) = 55 / 56 := by
+  norm_num
+
 /-- Contas do exemplo das vendas trimestrais (seções 4.2 a 4.7), em aritmética exata. -/
 theorem contas :
     -- médias móveis 2×4, t = 3 a 10

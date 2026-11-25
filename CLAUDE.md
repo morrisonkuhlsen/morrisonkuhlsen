@@ -187,6 +187,41 @@ resumo, `description` do front matter e versão na outra língua.
 - Blocos usam o markup do site (`code-container`, `code-header`, botão
   "Copiar"/"Copy", `code-output` para saídas).
 
+### 4.1 Três linguagens: Julia, R e Python
+
+- **Todo bloco de código tem três versões equivalentes: Julia, R e Python**,
+  agrupadas num seletor de linguagem (`code-tabs`, ver abaixo). O leitor
+  escolhe a linguagem no cabeçalho do bloco; a escolha vale para a página
+  inteira e fica salva para as próximas visitas.
+- As três versões fazem **a mesma conta, com os mesmos dados e na mesma
+  ordem**, e cada uma tem a **sua** saída, copiada da execução real naquela
+  linguagem. As saídas precisam bater entre si (a menos da formatação) e com a
+  conta à mão; se uma biblioteca usar outro método ou outra parametrização
+  (quartil tipo 7 do R × outro padrão, `ddof` do NumPy, escala × taxa na
+  exponencial, ordem dos parâmetros de uma distribuição), o código chama a
+  função de modo a dar o mesmo resultado, ou o texto explica a diferença.
+- Cada versão é idiomática na sua linguagem (vetorização no R e no NumPy,
+  `data.frame`/`pandas` onde couber) e usa bibliotecas estabelecidas:
+  - **R**: base R e `stats` primeiro; `ggplot2` para gráficos quando ajudar.
+  - **Python**: `numpy`, `pandas`, `scipy.stats`, `statsmodels`, `matplotlib`.
+  - Simulações fixam a semente em cada linguagem (`set.seed(123)`,
+    `np.random.default_rng(123)`); os números sorteados diferem entre
+    linguagens, e o texto diz isso quando citar um resultado simulado.
+- Gráficos: a figura publicada pode vir de uma das três; as outras versões
+  geram um gráfico equivalente (mesmo conteúdo, título, eixos e legenda no
+  idioma da página).
+- **Todas as três são executadas antes de publicar.** Julia está em
+  `~/.julia`; R pelo `Rscript` do sistema; Python no ambiente virtual
+  `~/.venvs/morrisonkuhlsen` (rodar com `~/.venvs/morrisonkuhlsen/bin/python`;
+  tem numpy, pandas, scipy, statsmodels e matplotlib; o Python do sistema não
+  tem numpy).
+- Markup: um `<div class="code-tabs">` com um `<div class="code-tab"
+  data-lang="julia|r|python">` por linguagem, cada um com o seu
+  `code-container` e o seu `code-output`. O script `assets/js/code-tabs.js`
+  monta o seletor; sem JavaScript, as três versões aparecem uma embaixo da
+  outra.
+- Páginas antigas ganham as versões em R e Python quando forem revisadas.
+
 ---
 
 ## 5. Referências bibliográficas e citações
