@@ -5,7 +5,7 @@ lang: pt
 ref: probabilidade
 order: 2
 mathjax: true
-description: "Fundamentos da teoria da probabilidade, desde eventos básicos até distribuições e variáveis aleatórias."
+description: "O que é probabilidade: espaço amostral, eventos, regras da adição e da multiplicação, condicional, Bayes, variáveis aleatórias e distribuições, com exemplos."
 ---
 
 <style>
@@ -185,6 +185,18 @@ A Probabilidade responde perguntas como:
   medida numérica, permitindo raciocinar melhor sobre fenômenos aleatórios.
 </div>
 
+### Páginas desta seção
+
+Esta página dá a visão geral. Cada assunto tem uma página própria, com exemplos resolvidos, código e exercícios:
+
+- [Eventos e Espaço Amostral]({{ '/pt/probabilidade/eventos-espaco-amostral' | relative_url }}): espaço amostral, eventos, união, interseção, complemento e contagem.
+- [Probabilidade Condicional]({{ '/pt/probabilidade/probabilidade-condicional' | relative_url }}): regra da multiplicação, lei da probabilidade total e Teorema de Bayes.
+- [Eventos Independentes e a Regra do Produto]({{ '/pt/probabilidade/eventos-independentes' | relative_url }}): quando dá para multiplicar probabilidades, e o que quer dizer "1 em N".
+- [Variáveis Aleatórias]({{ '/pt/probabilidade/variaveis-aleatorias' | relative_url }}): variáveis discretas e contínuas, esperança e variância.
+- [Distribuições de Probabilidade]({{ '/pt/probabilidade/distribuicoes' | relative_url }}): Bernoulli, binomial, Poisson, uniforme, exponencial e normal.
+- [Teorema do Limite Central]({{ '/pt/probabilidade/teorema-limite-central' | relative_url }}): por que a média de muitas observações tende à normal.
+- [Questões]({{ '/pt/probabilidade/questions' | relative_url }}): seis problemas resolvidos passo a passo.
+
 ---
 
 ## Experimento aleatório, espaço amostral e evento
@@ -247,7 +259,7 @@ Nesse caso, o evento $$A$$ é um subconjunto do espaço amostral $$\Omega$$.
 
 ## Definição clássica de probabilidade
 
-Quando todos os resultados são igualmente prováveis, podemos calcular a probabilidade de um evento pela razão:
+Quando o espaço amostral é **finito** e todos os resultados são **igualmente prováveis** (como num dado honesto), podemos calcular a probabilidade de um evento pela razão:
 
 <div class="mk-formula">
 
@@ -285,6 +297,8 @@ $$
 
 </div>
 
+Isso não quer dizer que, em 10 lançamentos, sairão exatamente 5 pares. Quer dizer que, em muitos lançamentos, a proporção de pares tende a ficar perto de metade. A fórmula também não vale quando os resultados não são igualmente prováveis (um dado viciado, por exemplo).
+
 ---
 
 ## Valores possíveis de uma probabilidade
@@ -310,19 +324,26 @@ Isso significa que:
   </thead>
   <tbody>
     <tr>
-      <td>$$P(A)=0$$</td>
-      <td>O evento é impossível.</td>
+      <td>$P(A)=0$</td>
+      <td>O evento impossível ($\emptyset$) tem probabilidade 0.</td>
     </tr>
     <tr>
-      <td>$$P(A)=1$$</td>
-      <td>O evento é certo.</td>
+      <td>$P(A)=1$</td>
+      <td>O evento certo ($\Omega$) tem probabilidade 1.</td>
     </tr>
     <tr>
-      <td>$$0 < P(A) < 1$$</td>
+      <td>$0 < P(A) < 1$</td>
       <td>O evento é possível, mas incerto.</td>
     </tr>
   </tbody>
 </table>
+
+<div class="mk-note">
+  <strong>Cuidado com o caso contínuo:</strong> num espaço amostral finito, como o do dado,
+  probabilidade 0 é o mesmo que impossível. Num espaço contínuo, não: se um número é sorteado
+  ao acaso no intervalo [0, 1], a chance de sair <em>exatamente</em> 0,5 é 0, e mesmo assim
+  0,5 pode sair. Do mesmo jeito, probabilidade 1 nem sempre quer dizer "certo".
+</div>
 
 ---
 
@@ -403,17 +424,17 @@ Na Probabilidade, frequentemente estudamos a relação entre dois ou mais evento
   <tbody>
     <tr>
       <td>União</td>
-      <td>$$A \cup B$$</td>
+      <td>$A \cup B$</td>
       <td>Ocorre o evento A, ou o evento B, ou ambos.</td>
     </tr>
     <tr>
       <td>Interseção</td>
-      <td>$$A \cap B$$</td>
+      <td>$A \cap B$</td>
       <td>Ocorrem A e B ao mesmo tempo.</td>
     </tr>
     <tr>
       <td>Complementar</td>
-      <td>$$A^c$$</td>
+      <td>$A^c$</td>
       <td>O evento A não ocorre.</td>
     </tr>
   </tbody>
@@ -520,9 +541,17 @@ Essa regra é muito útil quando queremos calcular a probabilidade de dois event
 
 ## Eventos independentes
 
-Dois eventos são independentes quando a ocorrência de um não altera a probabilidade do outro.
+Dois eventos são independentes quando a ocorrência de um não altera a probabilidade do outro. A definição é:
 
-Se $$A$$ e $$B$$ são independentes, então:
+<div class="mk-formula">
+
+$$
+P(A \cap B) = P(A) \cdot P(B)
+$$
+
+</div>
+
+Quando $$P(B) > 0$$, isso é o mesmo que:
 
 <div class="mk-formula">
 
@@ -532,15 +561,7 @@ $$
 
 </div>
 
-e também:
-
-<div class="mk-formula">
-
-$$
-P(A \cap B) = P(A) \cdot P(B)
-$$
-
-</div>
+Independente não é o mesmo que mutuamente exclusivo: dois eventos mutuamente exclusivos, cada um com probabilidade positiva, nunca são independentes, porque saber que um ocorreu garante que o outro não ocorreu.
 
 ### Exemplo
 
@@ -578,7 +599,7 @@ $$
 
 O Teorema de Bayes é uma das ideias mais importantes da Probabilidade.
 
-Ele permite atualizar uma probabilidade quando recebemos uma nova informação.
+Ele permite atualizar uma probabilidade quando recebemos uma nova informação. Para $$P(B) > 0$$:
 
 <div class="mk-formula">
 
@@ -598,6 +619,9 @@ Onde:
 <div class="mk-note">
   O Teorema de Bayes é muito usado em diagnósticos médicos, filtros de spam,
   aprendizado de máquina, análise de risco e inferência estatística.
+  Um erro comum é trocar $P(A \mid B)$ por $P(B \mid A)$: "99% dos doentes testam positivo"
+  não quer dizer "99% dos positivos estão doentes". Exemplos resolvidos estão em
+  <a href="{{ '/pt/probabilidade/probabilidade-condicional' | relative_url }}">Probabilidade Condicional</a>.
 </div>
 
 ---
@@ -606,7 +630,7 @@ Onde:
 
 Uma variável aleatória é uma função que associa valores numéricos aos resultados de um experimento aleatório.
 
-Por exemplo, ao lançar duas moedas, podemos definir:
+Por exemplo, ao lançar duas moedas honestas, podemos definir:
 
 > X = número de caras obtidas.
 
@@ -640,20 +664,24 @@ $$
     <tr>
       <th>Resultado</th>
       <th>Valor de X</th>
+      <th>Probabilidade</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>$$KK$$</td>
+      <td>$KK$</td>
       <td>0 caras</td>
+      <td>$P(X=0) = \frac{1}{4}$</td>
     </tr>
     <tr>
-      <td>$$CK$$ ou $$KC$$</td>
+      <td>$CK$ ou $KC$</td>
       <td>1 cara</td>
+      <td>$P(X=1) = \frac{2}{4} = \frac{1}{2}$</td>
     </tr>
     <tr>
-      <td>$$CC$$</td>
+      <td>$CC$</td>
       <td>2 caras</td>
+      <td>$P(X=2) = \frac{1}{4}$</td>
     </tr>
   </tbody>
 </table>
@@ -676,6 +704,22 @@ $$
 
 Ele não precisa ser um valor que aparece diretamente no experimento.  
 Ele representa o comportamento médio esperado no longo prazo.
+
+**Exemplo:** no número de caras em duas moedas (tabela acima), cada valor é multiplicado pela sua probabilidade:
+
+<div class="mk-formula">
+
+$$
+E(X) = 0 \cdot \frac{1}{4} + 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{4}
+$$
+
+$$
+E(X) = 0 + \frac{1}{2} + \frac{1}{2} = 1
+$$
+
+</div>
+
+Em média, saem 1 cara a cada dois lançamentos de moeda, como a intuição sugere.
 
 ---
 
@@ -710,6 +754,26 @@ $$
 $$
 
 </div>
+
+**Exemplo:** no mesmo $$X$$ (número de caras em duas moedas), com $$E(X) = 1$$:
+
+<div class="mk-formula">
+
+$$
+E(X^2) = 0^2 \cdot \frac{1}{4} + 1^2 \cdot \frac{1}{2} + 2^2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + 1 = \frac{3}{2}
+$$
+
+$$
+Var(X) = \frac{3}{2} - 1^2 = \frac{1}{2} = 0{,}5
+$$
+
+$$
+\sigma = \sqrt{0{,}5} \approx 0{,}7071
+$$
+
+</div>
+
+Pela outra fórmula dá o mesmo: $$E[(X-1)^2] = 1 \cdot \frac{1}{4} + 0 \cdot \frac{1}{2} + 1 \cdot \frac{1}{4} = \frac{1}{2}$$. O número de caras costuma ficar a cerca de 0,71 cara do valor esperado 1.
 
 ---
 
@@ -768,7 +832,7 @@ Se $$X$$ segue uma Bernoulli com parâmetro $$p$$, escrevemos:
 <div class="mk-formula">
 
 $$
-X \sim Bernoulli(p)
+X \sim \text{Bernoulli}(p)
 $$
 
 </div>
@@ -809,7 +873,7 @@ Se $$X$$ segue uma binomial, escrevemos:
 <div class="mk-formula">
 
 $$
-X \sim Binomial(n,p)
+X \sim \text{Binomial}(n,p)
 $$
 
 </div>
@@ -848,7 +912,7 @@ Se $$X$$ segue uma Poisson com parâmetro $$\lambda$$, escrevemos:
 <div class="mk-formula">
 
 $$
-X \sim Poisson(\lambda)
+X \sim \text{Poisson}(\lambda)
 $$
 
 </div>
@@ -865,7 +929,7 @@ $$
 
 onde:
 
-- $$\lambda$$ representa a taxa média de ocorrência;
+- $$\lambda$$ representa o número médio de ocorrências no intervalo considerado;
 - $$k$$ representa o número de ocorrências.
 
 ---
@@ -874,7 +938,7 @@ onde:
 
 A distribuição normal é uma das distribuições mais importantes da Estatística.
 
-Ela possui formato de sino, é simétrica em torno da média e aparece em diversos fenômenos naturais, sociais e econômicos.
+Ela possui formato de sino e é simétrica em torno da média. Serve de boa aproximação para muitas medidas (alturas, erros de medição) e, pelo [Teorema do Limite Central]({{ '/pt/probabilidade/teorema-limite-central' | relative_url }}), para médias de muitas observações. Nem todo fenômeno é normal: rendas e tempos de espera, por exemplo, costumam ser assimétricos.
 
 Se $$X$$ segue uma normal, escrevemos:
 
@@ -1037,7 +1101,7 @@ $$
   <tbody>
     <tr>
       <td>0%</td>
-      <td>O evento não ocorre.</td>
+      <td>O evento não ocorre (num espaço finito; no contínuo, ver a nota acima).</td>
     </tr>
     <tr>
       <td>25%</td>
@@ -1053,7 +1117,7 @@ $$
     </tr>
     <tr>
       <td>100%</td>
-      <td>O evento ocorre com certeza.</td>
+      <td>O evento ocorre com certeza (num espaço finito).</td>
     </tr>
   </tbody>
 </table>
@@ -1156,5 +1220,11 @@ A Probabilidade aparece em muitas áreas:
   decisões mais conscientes diante de situações em que o resultado não é garantido.
 </div>
 
-> “A teoria das probabilidades é, no fundo, apenas o bom senso reduzido ao cálculo.”  
-> — Pierre-Simon Laplace
+> “A teoria das probabilidades não é, no fundo, mais do que o bom senso reduzido ao cálculo.”  
+> — Pierre-Simon Laplace, *Essai philosophique sur les probabilités*, último parágrafo (em tradução livre; no original: “la théorie des probabilités n'est au fond, que le bon sens réduit au calcul”)
+
+## Referências
+
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+2. Laplace, P.-S. (1840). *Essai philosophique sur les probabilités*. 6. ed. Paris: Bachelier. (1. ed., 1814.) Texto em [Wikisource](https://fr.wikisource.org/wiki/Essai_philosophique_sur_les_probabilit%C3%A9s).
+3. Ross, S. M. (2012). *A First Course in Probability*. 9th ed. Pearson.

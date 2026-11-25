@@ -4,6 +4,9 @@ import Mathlib
 # Probabilidade
 
 Páginas: /pt/probabilidade/ e os tópicos da área (e as versões em /en/probability/).
+
+A regra da multiplicação, a independência (P(A ∩ B) = P(A)P(B) ⇔ P(A | B) = P(A) quando
+P(B) > 0) e o Teorema de Bayes da página principal estão em `Provas/Condicional.lean`.
 -/
 
 namespace Provas.Probabilidade
@@ -58,5 +61,29 @@ theorem exemplo_carrapatos (x : ℚ) (h : x = 0.10 * (0.26 - x)) :
   have hx : x = 13 / 550 := by linarith
   subst hx
   norm_num
+
+/-- Toda probabilidade está entre 0 e 1. Página: /pt/probabilidade/ ("Valores possíveis"). -/
+theorem entre_zero_e_um (A : Set Ω) : 0 ≤ P.real A ∧ P.real A ≤ 1 :=
+  ⟨measureReal_nonneg, measureReal_le_one⟩
+
+/-- Probabilidade 0 não quer dizer impossível: no sorteio uniforme em [0, 1], o evento
+{1/2} não é vazio, mas tem probabilidade 0. Página: /pt/probabilidade/ (nota "Cuidado com o
+caso contínuo"). -/
+theorem zero_nao_e_impossivel :
+    ({1/2} : Set ℝ).Nonempty ∧ (volume.restrict (Set.Icc (0 : ℝ) 1)) {1/2} = 0 :=
+  ⟨Set.singleton_nonempty _, le_antisymm
+    ((Measure.restrict_apply_le _ _).trans_eq Real.volume_singleton) (by simp)⟩
+
+/-- Contas da página principal: dado (par: 3/6 = 1/2; maior que 4: 2/6 = 1/3), duas moedas
+(cara e cara: 1/4), três moedas (exatamente 2 caras: 3·(1/2)²·(1/2) = 3/8) e o número X de
+caras em duas moedas (E(X) = 1, E(X²) = 3/2, Var(X) = 1/2 pelas duas fórmulas). -/
+theorem contas :
+    (3 : ℚ) / 6 = 1/2 ∧ (2 : ℚ) / 6 = 1/3 ∧ (1/2 : ℚ) * (1/2) = 1/4 ∧
+    (Nat.choose 3 2 : ℚ) * (1/2) ^ 2 * (1/2) = 3/8 ∧
+    (0 : ℚ) * (1/4) + 1 * (1/2) + 2 * (1/4) = 1 ∧
+    (0 : ℚ) ^ 2 * (1/4) + 1 ^ 2 * (1/2) + 2 ^ 2 * (1/4) = 3/2 ∧
+    (3/2 : ℚ) - 1 ^ 2 = 1/2 ∧
+    (0 - 1 : ℚ) ^ 2 * (1/4) + (1 - 1) ^ 2 * (1/2) + (2 - 1) ^ 2 * (1/4) = 1/2 := by
+  norm_num [Nat.choose]
 
 end Provas.Probabilidade

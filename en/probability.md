@@ -6,7 +6,7 @@ ref: probabilidade
 permalink: /en/probability/
 order: 2
 mathjax: true
-description: "The foundations of probability theory, from basic events to distributions and random variables."
+description: "What probability is: sample space, events, the addition and multiplication rules, conditional probability, Bayes, random variables and distributions."
 ---
 
 <style>
@@ -186,6 +186,18 @@ Probability answers questions such as:
   number, so we can reason better about random phenomena.
 </div>
 
+### Pages in this section
+
+This page gives the overview. Each topic has its own page, with worked examples, code and exercises:
+
+- [Sample Space and Events]({{ '/en/probability/sample-space-events' | relative_url }}): sample space, events, union, intersection, complement and counting.
+- [Conditional Probability]({{ '/en/probability/conditional-probability' | relative_url }}): the multiplication rule, the law of total probability and Bayes' Theorem.
+- [Independent Events and the Product Rule]({{ '/en/probability/independent-events' | relative_url }}): when you can multiply probabilities, and what "1 in N" means.
+- [Random Variables]({{ '/en/probability/random-variables' | relative_url }}): discrete and continuous variables, expected value and variance.
+- [Probability Distributions]({{ '/en/probability/distributions' | relative_url }}): Bernoulli, binomial, Poisson, uniform, exponential and normal.
+- [Central Limit Theorem]({{ '/en/probability/central-limit-theorem' | relative_url }}): why the mean of many observations tends to the normal.
+- [Practice Questions]({{ '/en/probability/questions' | relative_url }}): six problems solved step by step.
+
 ---
 
 ## Random experiment, sample space and event
@@ -248,7 +260,7 @@ Here the event $$A$$ is a subset of the sample space $$\Omega$$.
 
 ## The classical definition of probability
 
-When all outcomes are equally likely, we can compute the probability of an event as the ratio:
+When the sample space is **finite** and all outcomes are **equally likely** (as with a fair die), we can compute the probability of an event as the ratio:
 
 <div class="mk-formula">
 
@@ -286,6 +298,8 @@ $$
 
 </div>
 
+This does not mean that 10 rolls will give exactly 5 even numbers. It means that, over many rolls, the share of even numbers tends to stay close to one half. The formula also does not apply when the outcomes are not equally likely (a loaded die, for example).
+
 ---
 
 ## The possible values of a probability
@@ -311,19 +325,26 @@ This means that:
   </thead>
   <tbody>
     <tr>
-      <td>$$P(A)=0$$</td>
-      <td>The event is impossible.</td>
+      <td>$P(A)=0$</td>
+      <td>The impossible event ($\emptyset$) has probability 0.</td>
     </tr>
     <tr>
-      <td>$$P(A)=1$$</td>
-      <td>The event is certain.</td>
+      <td>$P(A)=1$</td>
+      <td>The certain event ($\Omega$) has probability 1.</td>
     </tr>
     <tr>
-      <td>$$0 < P(A) < 1$$</td>
+      <td>$0 < P(A) < 1$</td>
       <td>The event is possible, but uncertain.</td>
     </tr>
   </tbody>
 </table>
+
+<div class="mk-note">
+  <strong>Careful with the continuous case:</strong> in a finite sample space, like a die's,
+  probability 0 is the same as impossible. In a continuous space it is not: if a number is
+  picked at random in the interval [0, 1], the chance of getting <em>exactly</em> 0.5 is 0,
+  and yet 0.5 can come up. In the same way, probability 1 does not always mean "certain".
+</div>
 
 ---
 
@@ -404,17 +425,17 @@ In Probability we often study how two or more events relate to each other.
   <tbody>
     <tr>
       <td>Union</td>
-      <td>$$A \cup B$$</td>
+      <td>$A \cup B$</td>
       <td>Event A happens, or event B, or both.</td>
     </tr>
     <tr>
       <td>Intersection</td>
-      <td>$$A \cap B$$</td>
+      <td>$A \cap B$</td>
       <td>A and B happen at the same time.</td>
     </tr>
     <tr>
       <td>Complement</td>
-      <td>$$A^c$$</td>
+      <td>$A^c$</td>
       <td>Event A does not happen.</td>
     </tr>
   </tbody>
@@ -521,9 +542,17 @@ This rule is very useful when we want the probability that two events happen tog
 
 ## Independent events
 
-Two events are independent when one happening does not change the probability of the other.
+Two events are independent when one happening does not change the probability of the other. The definition is:
 
-If $$A$$ and $$B$$ are independent, then:
+<div class="mk-formula">
+
+$$
+P(A \cap B) = P(A) \cdot P(B)
+$$
+
+</div>
+
+When $$P(B) > 0$$, this is the same as:
 
 <div class="mk-formula">
 
@@ -533,15 +562,7 @@ $$
 
 </div>
 
-and also:
-
-<div class="mk-formula">
-
-$$
-P(A \cap B) = P(A) \cdot P(B)
-$$
-
-</div>
+Independent is not the same as mutually exclusive: two mutually exclusive events, each with positive probability, are never independent, because knowing that one occurred guarantees that the other did not.
 
 ### Example
 
@@ -579,7 +600,7 @@ $$
 
 Bayes' Theorem is one of the most important ideas in Probability.
 
-It lets us update a probability when we receive new information.
+It lets us update a probability when we receive new information. For $$P(B) > 0$$:
 
 <div class="mk-formula">
 
@@ -599,6 +620,9 @@ Where:
 <div class="mk-note">
   Bayes' Theorem is widely used in medical diagnosis, spam filters,
   machine learning, risk analysis and statistical inference.
+  A common mistake is swapping $P(A \mid B)$ for $P(B \mid A)$: "99% of the people who are ill test positive"
+  does not mean "99% of the positives are ill". Worked examples are in
+  <a href="{{ '/en/probability/conditional-probability' | relative_url }}">Conditional Probability</a>.
 </div>
 
 ---
@@ -607,7 +631,7 @@ Where:
 
 A random variable is a function that assigns numbers to the outcomes of a random experiment.
 
-For example, when tossing two coins, we can define:
+For example, when tossing two fair coins, we can define:
 
 > X = the number of heads obtained.
 
@@ -641,20 +665,24 @@ $$
     <tr>
       <th>Outcome</th>
       <th>Value of X</th>
+      <th>Probability</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td>$$TT$$</td>
+      <td>$TT$</td>
       <td>0 heads</td>
+      <td>$P(X=0) = \frac{1}{4}$</td>
     </tr>
     <tr>
-      <td>$$HT$$ or $$TH$$</td>
+      <td>$HT$ or $TH$</td>
       <td>1 head</td>
+      <td>$P(X=1) = \frac{2}{4} = \frac{1}{2}$</td>
     </tr>
     <tr>
-      <td>$$HH$$</td>
+      <td>$HH$</td>
       <td>2 heads</td>
+      <td>$P(X=2) = \frac{1}{4}$</td>
     </tr>
   </tbody>
 </table>
@@ -677,6 +705,22 @@ $$
 
 It does not have to be a value that actually shows up in the experiment.  
 It represents the average behavior we expect in the long run.
+
+**Example:** for the number of heads in two coins (table above), each value is multiplied by its probability:
+
+<div class="mk-formula">
+
+$$
+E(X) = 0 \cdot \frac{1}{4} + 1 \cdot \frac{1}{2} + 2 \cdot \frac{1}{4}
+$$
+
+$$
+E(X) = 0 + \frac{1}{2} + \frac{1}{2} = 1
+$$
+
+</div>
+
+On average, 1 head comes up for every two coin tosses, as intuition suggests.
 
 ---
 
@@ -711,6 +755,26 @@ $$
 $$
 
 </div>
+
+**Example:** for the same $$X$$ (the number of heads in two coins), with $$E(X) = 1$$:
+
+<div class="mk-formula">
+
+$$
+E(X^2) = 0^2 \cdot \frac{1}{4} + 1^2 \cdot \frac{1}{2} + 2^2 \cdot \frac{1}{4} = 0 + \frac{1}{2} + 1 = \frac{3}{2}
+$$
+
+$$
+Var(X) = \frac{3}{2} - 1^2 = \frac{1}{2} = 0.5
+$$
+
+$$
+\sigma = \sqrt{0.5} \approx 0.7071
+$$
+
+</div>
+
+The other formula gives the same: $$E[(X-1)^2] = 1 \cdot \frac{1}{4} + 0 \cdot \frac{1}{2} + 1 \cdot \frac{1}{4} = \frac{1}{2}$$. The number of heads typically lies about 0.71 heads away from the expected value of 1.
 
 ---
 
@@ -769,7 +833,7 @@ If $$X$$ follows a Bernoulli distribution with parameter $$p$$, we write:
 <div class="mk-formula">
 
 $$
-X \sim Bernoulli(p)
+X \sim \text{Bernoulli}(p)
 $$
 
 </div>
@@ -810,7 +874,7 @@ If $$X$$ follows a binomial distribution, we write:
 <div class="mk-formula">
 
 $$
-X \sim Binomial(n,p)
+X \sim \text{Binomial}(n,p)
 $$
 
 </div>
@@ -849,7 +913,7 @@ If $$X$$ follows a Poisson distribution with parameter $$\lambda$$, we write:
 <div class="mk-formula">
 
 $$
-X \sim Poisson(\lambda)
+X \sim \text{Poisson}(\lambda)
 $$
 
 </div>
@@ -866,7 +930,7 @@ $$
 
 where:
 
-- $$\lambda$$ is the average rate of occurrence;
+- $$\lambda$$ is the mean number of occurrences in the interval considered;
 - $$k$$ is the number of occurrences.
 
 ---
@@ -875,7 +939,7 @@ where:
 
 The normal distribution is one of the most important distributions in Statistics.
 
-It is bell-shaped, symmetric around the mean, and shows up in many natural, social and economic phenomena.
+It is bell-shaped and symmetric around the mean. It is a good approximation for many measurements (heights, measurement errors) and, by the [Central Limit Theorem]({{ '/en/probability/central-limit-theorem' | relative_url }}), for means of many observations. Not everything is normal: incomes and waiting times, for example, are usually skewed.
 
 If $$X$$ follows a normal distribution, we write:
 
@@ -1038,7 +1102,7 @@ $$
   <tbody>
     <tr>
       <td>0%</td>
-      <td>The event does not happen.</td>
+      <td>The event does not happen (in a finite space; for the continuous case, see the note above).</td>
     </tr>
     <tr>
       <td>25%</td>
@@ -1054,7 +1118,7 @@ $$
     </tr>
     <tr>
       <td>100%</td>
-      <td>The event happens for certain.</td>
+      <td>The event happens for certain (in a finite space).</td>
     </tr>
   </tbody>
 </table>
@@ -1157,5 +1221,11 @@ Probability shows up in many fields:
   better-informed decisions when the outcome is not guaranteed.
 </div>
 
-> “Probability theory is nothing but common sense reduced to calculation.”  
-> — Pierre-Simon Laplace
+> “The theory of probabilities is at bottom nothing but common sense reduced to calculus.”  
+> — Pierre-Simon Laplace, *Essai philosophique sur les probabilités*, last paragraph (our translation; in the original French: “la théorie des probabilités n'est au fond, que le bon sens réduit au calcul”)
+
+## References
+
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10th ed. Saraiva Uni. (in Portuguese)
+2. Laplace, P.-S. (1840). *Essai philosophique sur les probabilités*. 6th ed. Paris: Bachelier. (1st ed., 1814; in French.) Text on [Wikisource](https://fr.wikisource.org/wiki/Essai_philosophique_sur_les_probabilit%C3%A9s).
+3. Ross, S. M. (2012). *A First Course in Probability*. 9th ed. Pearson.
