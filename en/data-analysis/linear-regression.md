@@ -420,7 +420,7 @@ The calculator uses the formulas from section 3, with the sums of deviations com
 - **extrapolating**: in the example, the line predicts for 25 hours $\hat{y} = 5.30838 + 0.24245 \times 25 \approx 11.37$, an impossible grade on a 0-to-10 exam;
 - **there are outliers or influential points**: a single point far from the others can change the line a lot. Fit with and without it and compare;
 - **the spread of the residuals changes with $X$** (funnel shape): the standard errors and intervals become wrong;
-- **the observations are not independent** (repeated measurements of the same person, data over time): see [Time Series]({{ '/pt/analise-de-dados/series-temporais' | relative_url }}) (in Portuguese);
+- **the observations are not independent** (repeated measurements of the same person, data over time): see [Time Series]({{ '/en/data-analysis/time-series' | relative_url }});
 - **the goal is to prove cause** with observational data: regression shows association, as correlation does.
 
 ---
