@@ -54,8 +54,8 @@ description: "O que é Estatística Descritiva: média, mediana, moda, amplitude
   .mk-card {
     padding: 1.25rem;
     border-radius: 18px;
-    background: #ffffff;
-    border: 1px solid rgba(11, 31, 53, 0.08);
+    background: var(--mk-surface);
+    border: 1px solid var(--mk-border);
     box-shadow: 0 8px 22px rgba(11, 31, 53, 0.06);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
@@ -67,29 +67,29 @@ description: "O que é Estatística Descritiva: média, mediana, moda, amplitude
 
   .mk-card h3 {
     margin-top: 0;
-    color: #0b1f35;
+    color: var(--mk-ink);
   }
 
   .mk-card p {
-    color: #4a5568;
+    color: var(--mk-ink-soft);
     line-height: 1.65;
   }
 
   .mk-note {
     padding: 1.2rem 1.4rem;
     border-left: 5px solid #c47a2c;
-    background: #fff7ed;
+    background: var(--mk-tint-warn);
     border-radius: 12px;
     margin: 1.5rem 0;
-    color: #3f2a14;
+    color: var(--mk-ink);
   }
 
   .mk-formula {
     padding: 1.2rem;
     margin: 1.2rem 0;
     border-radius: 16px;
-    background: #f8fafc;
-    border: 1px solid rgba(11, 31, 53, 0.08);
+    background: var(--mk-surface-2);
+    border: 1px solid var(--mk-border);
     overflow-x: auto;
   }
 
@@ -111,8 +111,9 @@ description: "O que é Estatística Descritiva: média, mediana, moda, amplitude
 
   .mk-table td {
     padding: 0.85rem;
-    border-bottom: 1px solid #e5e7eb;
-    background: #ffffff;
+    border-bottom: 1px solid var(--mk-border);
+    background: var(--mk-surface);
+    color: var(--mk-ink);
   }
 
   .mk-table tr:last-child td {
