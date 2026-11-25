@@ -38,7 +38,9 @@ jobs:
 
       # Só links internos: os externos caem e voltam sozinhos e deixariam a
       # checagem vermelha sem ninguém ter mudado nada. As âncoras (#…) ficam
-      # de fora porque o catálogo de testes as cria em JavaScript.
+      # de fora porque o catálogo de testes as cria em JavaScript. O TabNet do
+      # DATASUS não abre por HTTPS (a conexão expira), então os links para ele
+      # ficam em http e só esse domínio sai da exigência de HTTPS.
       - name: Check links
         run: >-
           htmlproofer _site
@@ -46,6 +48,7 @@ jobs:
           --no-check-internal-hash
           --checks Links,Images,Scripts
           --ignore-files "/google420a39717b8e1fc8\.html/"
+          --ignore-urls "/^http:\/\/tabnet\.datasus\.gov\.br\//"
 
   dns:
     name: Subdomínios pendurados
