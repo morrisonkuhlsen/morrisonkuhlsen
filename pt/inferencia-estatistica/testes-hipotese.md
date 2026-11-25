@@ -7,71 +7,49 @@ parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/testes-hipotese
 order: 1
 mathjax: true
-description: "Procedimentos estatísticos para tomar decisões sobre hipóteses com base em dados amostrais."
+description: "Testes de hipótese: H₀ e H₁, erros tipo I e II, p-valor, poder, testes t, Z, qui-quadrado e de proporção, com exemplos resolvidos e código em Julia."
 ---
 
-<img src="{{ site.baseurl }}/assets/images/testedehipotese.avif" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
+<img src="{{ site.baseurl }}/assets/images/testedehipotese.avif" alt="Ilustração de uma pessoa diante de um computador que mostra duas curvas normais sobrepostas" style="max-width: 600px; display: block; margin: 1em auto;">
 
-Os **Testes de Hipótese** são procedimentos estatísticos que nos permitem tomar decisões sobre parâmetros populacionais com base em dados amostrais. São ferramentas fundamentais para a inferência estatística e tomada de decisões baseadas em evidências.
+Um **teste de hipótese** é um procedimento para decidir, a partir de uma amostra, se os dados são compatíveis com uma afirmação sobre a população. Exemplo: uma empresa diz que o atendimento dura, em média, 10 minutos; numa amostra de 36 atendimentos, a média foi 11,2 minutos. A diferença de 1,2 minuto pode ser só acaso da amostra, ou é sinal de que a média verdadeira não é 10? O teste responde a essa pergunta com uma regra explícita e com uma taxa de erro conhecida.
 
-O arcabouço moderno foi desenvolvido principalmente por **Jerzy Neyman e Egon Pearson** nas décadas de 1920–1930, formalizando a distinção entre $H_0$ e $H_1$ e o conceito de região crítica. Ronald Fisher, de forma independente, desenvolveu a abordagem via p-valor. Ambas as perspectivas coexistem e se complementam na prática estatística contemporânea.
+A lógica é parecida com uma prova por contradição, mas probabilística: supõe-se, provisoriamente, que a afirmação (a **hipótese nula**) é verdadeira e calcula-se quão surpreendentes os dados seriam nesse caso. Se forem surpreendentes demais, a hipótese nula é rejeitada.
 
-A lógica central é a **prova por contradição probabilística**: assume-se provisoriamente que $H_0$ é verdadeira e verifica-se se os dados observados são compatíveis com essa suposição. Se a probabilidade de observar resultados tão ou mais extremos sob $H_0$ for menor que $\alpha$, rejeita-se $H_0$ em favor de $H_1$.
+Na prática atual convivem duas tradições: a de Ronald Fisher, centrada no p-valor como medida de evidência, e a de Jerzy Neyman e Egon Pearson, que acrescentou a hipótese alternativa e os dois tipos de erro. Lehmann (1993) discute as diferenças entre elas e como se combinam.
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
-  <strong>🎯 Estrutura formal (Neyman–Pearson):</strong><br><br>
-  Um teste de hipótese especifica:
+  <strong>🎯 Os ingredientes de um teste:</strong>
   <ul>
-    <li>A <strong>hipótese nula</strong> ($H_0$): afirmação inicial que assume ausência de efeito ou diferença</li>
-    <li>A <strong>hipótese alternativa</strong> ($H_1$): o que se deseja detectar; contradiz $H_0$</li>
-    <li>Uma <strong>estatística de teste</strong> $T(\mathbf{X})$ com distribuição conhecida sob $H_0$</li>
-    <li>Uma <strong>região crítica</strong> $\mathcal{RC}$ tal que $P(T \in \mathcal{RC} \mid H_0) = \alpha$</li>
+    <li>a <strong>hipótese nula</strong> $H_0$: a afirmação testada, em geral "não há efeito" ou "não há diferença";</li>
+    <li>a <strong>hipótese alternativa</strong> $H_1$: o que se quer detectar, que contradiz $H_0$;</li>
+    <li>uma <strong>estatística de teste</strong> $T$, calculada a partir dos dados, cuja distribuição é conhecida quando $H_0$ é verdadeira;</li>
+    <li>uma <strong>região crítica</strong>: os valores de $T$ que levam a rejeitar $H_0$, escolhidos de modo que $P(T \text{ na região crítica} \mid H_0) = \alpha$ (ou no máximo $\alpha$, em distribuições discretas).</li>
   </ul>
-  <strong>Regra de decisão:</strong> Rejeitar $H_0$ se e somente se $T(\mathbf{x}_{\text{obs}}) \in \mathcal{RC}$.
+  <strong>Regra de decisão:</strong> rejeitar $H_0$ se e somente se o valor observado de $T$ cair na região crítica.
 </div>
 
 ## 1. Conceitos Fundamentais
 
-### 1.1 Estrutura Básica
+### 1.1 As etapas
 
-Um teste de hipótese segue uma estrutura sistemática:
+1. **Formular as hipóteses** $H_0$ e $H_1$, **antes** de ver os dados.
+2. **Escolher o nível de significância** $\alpha$: a probabilidade de rejeitar $H_0$ quando ela é verdadeira (o erro tipo I). Os valores mais usados são 5% e 1%.
+3. **Calcular a estatística de teste** com os dados.
+4. **Comparar com a região crítica**, ou calcular o **p-valor**: a probabilidade, supondo $H_0$ verdadeira, de obter um resultado tão extremo quanto o observado, ou mais.
+5. **Decidir e interpretar**: rejeitar $H_0$ se p-valor $\leq \alpha$ (o que é o mesmo que a estatística cair na região crítica). **Não rejeitar $H_0$ não prova $H_0$**: quer dizer só que os dados não trouxeram evidência suficiente contra ela.
 
-1. **Formulação das Hipóteses**
-   - Hipótese nula ($H_0$)
+### 1.2 Bilateral ou unilateral
 
-   - Hipótese alternativa ($$H_1$$)
-
-2. **Nível de Significância ($$\alpha$$)**
-   - Probabilidade de erro tipo I
-   - Geralmente 5% ou 1%
-
-3. **Estatística de Teste**
-   - Medida calculada a partir dos dados
-   - Base para a decisão
-
-4. **Região Crítica**
-   - Valores que levam à rejeição de $H_0$, determinada por $\alpha$
-   - $\mathcal{RC} = \\{\lvert t \rvert > t_{\alpha/2}\\}$ (bilateral) ou $\\{t > t_\alpha\\}$ (unilateral direito)
-
-5. **Cálculo do p-valor**
-   - Probabilidade de observar resultado tão ou mais extremo que o observado, sob $H_0$
-   - Escala contínua de evidência contra $H_0$
-
-6. **Conclusão e interpretação**
-   - Rejeitar $H_0$ se p-valor $\leq \alpha$ (equivalente a $t_{\text{obs}} \in \mathcal{RC}$)
-   - Não rejeitar **não** significa "aceitar $H_0$" — significa apenas falta de evidência suficiente
-
-### 1.3 Tipos de Teste: Bilateral e Unilateral
-
-A escolha entre bilateral e unilateral depende da hipótese alternativa formulada **antes** da coleta dos dados.
+A escolha depende da hipótese alternativa, definida **antes** da coleta. Na tabela, $\theta$ é o parâmetro testado, $\theta_0$ o valor de $H_0$, $t$ a estatística observada e $t_{\alpha}$ o valor que deixa área $\alpha$ à sua direita.
 
 <div style="overflow-x:auto; margin: 1em 0;">
 <table style="border-collapse: collapse; margin: 0 auto; min-width: 580px;">
   <thead style="background: #e3f2fd;">
     <tr>
       <th style="border: 1px solid #bbb; padding: 8px;">Tipo</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Hipóteses</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Região crítica</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Hipótese alternativa</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Rejeita $H_0$ se</th>
       <th style="border: 1px solid #bbb; padding: 8px;">p-valor</th>
       <th style="border: 1px solid #bbb; padding: 8px;">Quando usar</th>
     </tr>
@@ -81,471 +59,67 @@ A escolha entre bilateral e unilateral depende da hipótese alternativa formulad
       <td style="border: 1px solid #bbb; padding: 8px;"><strong>Bilateral</strong></td>
       <td style="border: 1px solid #bbb; padding: 8px;">$H_1: \theta \neq \theta_0$</td>
       <td style="border: 1px solid #bbb; padding: 8px;">$|t| > t_{\alpha/2}$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$2P(T > |t_{\text{obs}}|)$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Qualquer desvio é relevante</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$2P(T > |t|)$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">Desvios nos dois sentidos importam</td>
     </tr>
     <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Unilateral direito</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Unilateral à direita</strong></td>
       <td style="border: 1px solid #bbb; padding: 8px;">$H_1: \theta > \theta_0$</td>
       <td style="border: 1px solid #bbb; padding: 8px;">$t > t_{\alpha}$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$P(T > t_{\text{obs}})$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$P(T > t)$</td>
       <td style="border: 1px solid #bbb; padding: 8px;">Só interessa desvio para cima</td>
     </tr>
     <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Unilateral esquerdo</strong></td>
+      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Unilateral à esquerda</strong></td>
       <td style="border: 1px solid #bbb; padding: 8px;">$H_1: \theta < \theta_0$</td>
       <td style="border: 1px solid #bbb; padding: 8px;">$t < -t_{\alpha}$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$P(T < t_{\text{obs}})$</td>
+      <td style="border: 1px solid #bbb; padding: 8px;">$P(T < t)$</td>
       <td style="border: 1px solid #bbb; padding: 8px;">Só interessa desvio para baixo</td>
     </tr>
   </tbody>
 </table>
 </div>
 
+(A coluna "p-valor" da linha bilateral vale para estatísticas de distribuição simétrica, como Z e t.)
+
 <div style="border-left: 4px solid #e53935; padding: 0.5em 1em; background-color: #ffebee; margin: 1em 0;">
-<strong>Cuidado — p-hacking de direção:</strong> Um teste unilateral tem maior poder para detectar desvios na direção especificada, mas <em>não detecta</em> desvios na direção oposta. A escolha do tipo deve ser justificada pelo contexto <em>antes</em> de ver os dados — escolher o tipo <em>após</em> observar a direção dos dados é uma forma de p-hacking.
+<strong>Cuidado:</strong> um teste unilateral detecta melhor um desvio no sentido escolhido, mas não detecta desvios no sentido oposto. Escolher o sentido <em>depois</em> de ver para que lado os dados foram dobra, na prática, a chance de um falso positivo. O sentido tem de vir do problema, antes dos dados.
 </div>
 
-### 1.2 Tipos de Erro
+### 1.3 Os dois tipos de erro
+
+Toda decisão pode errar de dois jeitos:
 
 <div style="overflow-x:auto; margin: 1em 0;">
   <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
     <thead style="background: #e3f2fd;">
       <tr>
-        <th style="border: 1px solid #bbb; padding: 8px;">Decisão vs. Realidade</th>
-        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> Verdadeira</th>
-        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> Falsa</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">Decisão \ Realidade</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> verdadeira</th>
+        <th style="border: 1px solid #bbb; padding: 8px;">H<sub>0</sub> falsa</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td style="border: 1px solid #bbb; padding: 8px;">Rejeitar H<sub>0</sub></td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo I (&alpha;)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Decisão Correta</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">🔴 Erro tipo I (probabilidade &alpha;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">✅ Decisão correta (probabilidade 1 − &beta;, o <strong>poder</strong>)</td>
       </tr>
       <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Não Rejeitar H<sub>0</sub></td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Decisão Correta</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo II (&beta;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">Não rejeitar H<sub>0</sub></td>
+        <td style="border: 1px solid #bbb; padding: 8px;">✅ Decisão correta (probabilidade 1 − &alpha;)</td>
+        <td style="border: 1px solid #bbb; padding: 8px;">🔵 Erro tipo II (probabilidade &beta;)</td>
       </tr>
     </tbody>
   </table>
 </div>
 
+- **Erro tipo I (falso positivo):** rejeitar $H_0$ quando ela é verdadeira. Exemplo: um remédio novo não é melhor que o antigo, mas o teste conclui que é. A probabilidade desse erro é o nível $\alpha$, fixado por quem faz o teste.
+- **Erro tipo II (falso negativo):** não rejeitar $H_0$ quando ela é falsa. Exemplo: o remédio novo é melhor, mas o teste não detecta a diferença. A probabilidade é $\beta$, e $1 - \beta$ é o **poder do teste**: a chance de detectar um efeito que existe.
 
-### 🔴 Erro Tipo I (α)
+$\beta$ não é fixado diretamente: depende de quão grande é o efeito verdadeiro, do tamanho da amostra e da variabilidade dos dados. Com os mesmos dados, diminuir $\alpha$ aumenta $\beta$; para reduzir os dois ao mesmo tempo, é preciso uma amostra maior.
 
-- **O que é:** Rejeitamos $H_0$ mesmo ela sendo verdadeira.
-- **Exemplo:** Suponha que um novo medicamento **não** seja mais eficaz que o atual (ou seja, $H_0$ é verdadeira), mas ao aplicar o teste, os dados indicam falsamente que ele **é mais eficaz**, levando à rejeição de $H_0$.
-- **Consequência:** Assumimos que existe um efeito ou diferença quando na realidade não há.
-- **Probabilidade:** Representada por **α**, geralmente fixada em 5% (0,05).
-
----
-
-### ✅ Decisão Correta (quando H₀ é verdadeira e não a rejeitamos)
-
-- **O que é:** Não rejeitamos $H_0$ e ela realmente é verdadeira.
-- **Exemplo:** Um medicamento realmente não é melhor que o outro, e o teste estatístico confirma isso.
-- **Consequência:** Decisão correta, sem erro cometido.
-
----
-
-### ✅ Decisão Correta (quando H₀ é falsa e a rejeitamos)
-
-- **O que é:** Rejeitamos $H_0$ e ela de fato é falsa.
-- **Exemplo:** Um novo tratamento realmente é mais eficaz, e o teste estatístico detecta essa diferença.
-- **Consequência:** Decisão correta, identificando corretamente o efeito.
-
----
-
-### 🔵 Erro Tipo II (β)
-
-- **O que é:** Não rejeitamos $H_0$, mesmo ela sendo falsa.
-- **Exemplo:** Um novo método é realmente melhor que o atual, mas o teste não encontra evidências suficientes e $H_0$ não é rejeitada.
-- **Consequência:** Perdemos a chance de reconhecer uma melhoria ou efeito real.
-- **Probabilidade:** Representada por **β**. Quanto menor o β, maior o **poder do teste** (capacidade de detectar um efeito real).
-
----
-
-<br>
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using Plots
-using Distributions
-
-# Distribuições
-μ0 = 0
-μ1 = 1.5
-σ = 1
-α = 0.05
-
-dist_H0 = Normal(μ0, σ)
-dist_H1 = Normal(μ1, σ)
-
-# Valor crítico para teste unilateral (cauda direita)
-z_crit = quantile(dist_H0, 1 - α)
-
-# Cálculo do erro tipo II (β) e poder do teste
-β = cdf(dist_H1, z_crit)
-poder = 1 - β
-
-# Curvas
-x = -3:0.01:5
-y_H0 = pdf.(dist_H0, x)
-y_H1 = pdf.(dist_H1, x)
-
-# Inicia o gráfico com H0 e H1
-plot(x, y_H0, label="H₀: N(0,1)", lw=2, color=:steelblue, legend=:topright)
-plot!(x, y_H1, label="H₁: N(1.5,1)", lw=2, color=:crimson)
-
-# Área de erro tipo I (α)
-fill_x1 = x[x .>= z_crit]
-fill_y1 = pdf.(dist_H0, fill_x1)
-plot!(fill_x1, fill_y1, fillrange=0, fillalpha=0.4, label="Erro Tipo I (α)", color=:steelblue)
-
-# Área de erro tipo II (β)
-fill_x2 = x[x .<= z_crit]
-fill_y2 = pdf.(dist_H1, fill_x2)
-plot!(fill_x2, fill_y2, fillrange=0, fillalpha=0.4, label="Erro Tipo II (β)", color=:crimson)
-
-# Linha de corte
-vline!([z_crit], label="Valor crítico", lw=2, linestyle=:dash, color=:black)
-
-# Anotações
-annotate!(z_crit + 0.5, 0.05, text("Área α", :black, 10))
-annotate!(z_crit - 1.0, 0.08, text("Área β", :black, 10))
-annotate!(μ0, 0.4, text("H₀", :black, 12, :center))
-annotate!(μ1, 0.3, text("H₁", :black, 12, :center))
-
-# Adiciona os resultados como curvas invisíveis só para aparecer no legend
-plot!([NaN], [NaN], label="Valor crítico: $(round(z_crit, digits=4))")
-plot!([NaN], [NaN], label="Erro Tipo II (β): $(round(β, digits=4))")
-plot!([NaN], [NaN], label="Poder do teste: $(round(poder, digits=4))")
-
-# Eixos e título
-xlabel!("Estatística de teste")
-ylabel!("Densidade")
-title!("Visualização dos Erros Tipo I (α) e Tipo II (β)")</code></pre>
-  </div>
-</div>
-
-<img src="{{ site.baseurl }}/assets/images/erro_tipo_I_II.png" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
-
----
-
-### 📌 1. Valor crítico (zₐ = 1.6449)
-Esse é o ponto de corte da curva da hipótese nula (H₀) para rejeitar ou não rejeitar a hipótese.
-
-Como o teste é unilateral à direita e o nível de significância é α = 0.05, usamos:
-
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  <div>z_crit = quantile(Normal(0,1), 1 - α) = quantile(Normal(0,1), 0.95) ≈ 1.6449</div>
-</div>
-
-**Em termos práticos:**
-Se sua estatística de teste (z-calculado) for maior que 1.6449, você rejeita H₀.
-
----
-
-### 📌 2. Erro Tipo II (β = 0.5576)
-Esse valor representa a probabilidade de não rejeitar H₀ quando H₁ é verdadeira.
-
-Em outras palavras, é o risco de falhar em detectar um efeito real (ou seja, perder uma descoberta importante).
-
-**Aqui:**
-Existe uma probabilidade de **55,76%** de você não detectar a diferença real entre H₀ e H₁ (com μ₀ = 0 e μ₁ = 1.5).
-
----
-
-### 📌 3. Poder do teste (1 - β = 0.4424)
-O poder do teste representa a capacidade de detectar corretamente um efeito verdadeiro.
-
-**Aqui:**
-O teste tem **44,24%** de chance de detectar corretamente que H₁ é verdadeira quando ela realmente é.
-
-<div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
-Em geral, deseja-se um poder ≥ 80% (ou seja, β ≤ 0.20), então:
-
-⚠️ Esse teste está com poder baixo, o que significa que ele não é muito eficaz para detectar a diferença especificada entre μ₀ e μ₁.</div>
-
----
-
-### 🔎 Conclusão interpretativa
-
-<div style="overflow-x:auto; margin: 1em 0;">
-  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto; border: 1px solid #ccc;">
-    <thead style="background: #e3f2fd;">
-      <tr>
-        <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Valor</th>
-        <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Interpretação</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="border: 1px solid #ccc; padding: 8px;">z_crit = 1.6449</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">Limite a partir do qual rejeitamos H₀</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #ccc; padding: 8px;">β = 0.5576</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">Alta chance de errar ao não rejeitar H₀ quando H₁ é verdadeira</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #ccc; padding: 8px;">Poder = 0.4424</td>
-        <td style="border: 1px solid #ccc; padding: 8px;">Baixa chance de detectar a verdade (poder fraco)</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-
-<div style="border-left: 4px solid orange; padding: 0.5em; background-color: #fff3cd;">
-💡 O que fazer se o poder está baixo?
-</div>
-
-Você pode:
-- Aumentar o tamanho da amostra
-- Aumentar a diferença entre μ₀ e μ₁
-- Reduzir a variabilidade (σ)
-- Aceitar um nível de significância α maior (com cuidado)
-
----
-
-<img src="{{ site.baseurl }}/assets/images/teste_erros.avif" alt="Ilustração de Teste de Hipótese" style="max-width: 600px; display: block; margin: 1em auto;">
-  <strong>A imagem acima ilustra, de forma didática e bem-humorada, os quatro possíveis resultados de um teste diagnóstico ou de hipótese, usando o exemplo de um teste de gravidez. Essa estrutura é chamada de matriz de decisão ou matriz de confusão, muito usada em Estatística, Machine Learning e Testes de Hipóteses.</strong>
-
-  <h4 style="margin-top:1em; color:#4361ee;">🧠 Matriz de Decisão (Confusão)</h4>
-  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
-    <thead style="background: #e3f2fd;">
-      <tr>
-        <th style="border: 1px solid #bbb; padding: 8px;">Condição Real</th>
-        <th style="border: 1px solid #bbb; padding: 8px;">Grávida</th>
-        <th style="border: 1px solid #bbb; padding: 8px;">Não Grávida</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Teste diz grávida</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">✅ Verdadeiro Positivo (VP)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">❌ Falso Positivo (FP) - Erro Tipo I</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Teste diz não grávida</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">❌ Falso Negativo (FN) - Erro Tipo II</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">✅ Verdadeiro Negativo (VN)</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <ul style="margin-top:1em;">
-    <li><b>🟢 Verdadeiro Positivo (VP):</b> Pessoa está grávida e o teste detecta corretamente.<br><i>Exemplo: Mulher grávida, médico diz: “Você está grávida”. Decisão correta.</i></li>
-    <li><b>🟢 Verdadeiro Negativo (VN):</b> Pessoa não está grávida e o teste confirma isso.<br><i>Exemplo: Homem idoso, médico diz: “Você não está grávida”. Decisão correta.</i></li>
-    <li><b>🔴 Falso Positivo (FP) – Erro Tipo I:</b> Pessoa não está grávida, mas o teste diz que está.<br><i>Exemplo: Homem idoso, médico diz: “Você está grávida”.<br>Erro tipo I: Rejeita a hipótese nula quando ela é verdadeira.<br>No contexto de testes de hipótese: Concluímos que há efeito quando não há.</i></li>
-    <li><b>🔴 Falso Negativo (FN) – Erro Tipo II:</b> Pessoa está grávida, mas o teste não detecta.<br><i>Exemplo: Mulher grávida, médico diz: “Você não está grávida”.<br>Erro tipo II: Não rejeita a hipótese nula quando ela é falsa.<br>No contexto de testes de hipótese: Deixa de detectar um efeito que existe.</i></li>
-  </ul>
-
-  <h4 style="margin-top:1.5em; color:#4361ee;">📊 Relação com Testes de Hipótese</h4>
-  <table style="min-width: 380px; border-collapse: collapse; margin: 0 auto;">
-    <thead style="background: #e3f2fd;">
-      <tr>
-        <th style="border: 1px solid #bbb; padding: 8px;">Termo Estatístico</th>
-        <th style="border: 1px solid #bbb; padding: 8px;">Interpretação</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Hipótese Nula (H₀)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Ex: “A pessoa não está grávida”</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Hipótese Alternativa (H₁)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Ex: “A pessoa está grávida”</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo I (&alpha;)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Rejeitar H₀ quando H₀ é verdadeira (falso positivo)</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Erro Tipo II (&beta;)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Não rejeitar H₀ quando H₀ é falsa (falso negativo)</td>
-      </tr>
-      <tr>
-        <td style="border: 1px solid #bbb; padding: 8px;">Poder do Teste (1 - &beta;)</td>
-        <td style="border: 1px solid #bbb; padding: 8px;">Capacidade de detectar corretamente um verdadeiro efeito</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div style="margin-top:1.5em;">
-    <b>✅ Conclusão:</b> <br>
-    A imagem usa um exemplo extremo e bem-humorado (testar gravidez em um homem idoso) para ilustrar a importância de considerar os erros possíveis em qualquer teste, seja diagnóstico, médico ou estatístico. A matriz de decisão nos ajuda a visualizar os acertos (VP e VN) e os erros (FP e FN), essenciais para avaliar a qualidade e validade de qualquer processo decisório baseado em testes.
-  </div>
-<br>
-## 2. Etapas do Teste de Hipótese
-
-### 2.1 Formulação das Hipóteses
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using HypothesisTests
-
-# Exemplo: Teste para média populacional
-function exemplo_teste_media()
-    # Dados simulados
-    dados = randn(100) .+ 0.5  # Amostra normal com média 0.5
-    
-    # Teste t de uma amostra
-    teste = OneSampleTTest(dados)
-    
-    println("Teste t para média populacional")
-    println("-------------------------------")
-    println("H₀: μ = 0")
-    println("H₁: μ ≠ 0")
-    println("Estatística t = ", round(test_statistic(teste), digits=4))
-    println("Valor-p = ", round(pvalue(teste), digits=4))
-end
-
-exemplo_teste_media()</code></pre>
-  </div>
-</div>
-
-### 2.2 Escolha do Nível de Significância
-
-O **nível de significância** $\alpha$ é a probabilidade máxima tolerada de cometer um Erro Tipo I — a taxa de falsos positivos que o pesquisador aceita correr. Formalmente:
-
-$$
-\alpha = P(\text{Rejeitar } H_0 \mid H_0 \text{ verdadeira})
-$$
-
-Há um **tradeoff fundamental** entre $\alpha$ e $\beta$: reduzir $\alpha$ (tornando o teste mais conservador) aumenta $\beta$ para uma mesma amostra — a menos que $n$ seja aumentado. Isso reflete que não é possível minimizar simultaneamente os dois tipos de erro com dados fixos.
-
-<div style="overflow-x:auto; margin: 1em 0;">
-<table style="border-collapse: collapse; margin: 0 auto; min-width: 550px;">
-  <thead style="background: #e3f2fd;">
-    <tr>
-      <th style="border: 1px solid #bbb; padding: 8px;">Nível $\alpha$</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Contexto típico</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Justificativa</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">0,10 (10%)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Estudos exploratórios, pesquisa preliminar</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Maior poder; custo de perder efeito real é alto</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">0,05 (5%)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Ciências sociais, pesquisa aplicada</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Convenção histórica (Fisher, 1925)</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">0,01 (1%)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Medicina, engenharia de segurança</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Alto custo de um falso positivo</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">0,001 (0,1%)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Física de partículas (critério "5 sigma")</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Custo extremíssimo de erro; exige evidência fortíssima</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-> **Importante:** O valor $\alpha = 0{,}05$ não é uma lei da natureza — é uma convenção. A escolha deve ser guiada pelo **custo relativo** de cometer Erro Tipo I versus Tipo II no contexto específico.
-
-### 2.3 Cálculo da Estatística de Teste
-
-A estatística de teste é uma **função dos dados** que, sob $H_0$, segue uma distribuição de probabilidade conhecida. Esse "pivô" transforma a pergunta "os dados são compatíveis com $H_0$?" em "esse valor é típico ou extremo nessa distribuição?"
-
-**1. Teste Z** — para médias com $\sigma$ conhecido ou $n \geq 30$
-
-$$Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}} \overset{H_0}{\sim} \mathcal{N}(0,1)$$
-
-<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
-<strong>Por que \(\mathcal{N}(0,1)\)?</strong> O numerador mede a distância entre a estimativa e o valor hipotético; o denominador normaliza essa distância pela variabilidade esperada de \(\bar{X}\). Sob \(H_0\), \(\mathbb{E}[\bar{X}] = \mu_0\), então o desvio esperado é zero. Como \(\bar{X} \sim \mathcal{N}(\mu_0, \sigma^2/n)\) exatamente, o resultado padronizado é \(\mathcal{N}(0,1)\).
-</div>
-
-**2. Teste t de Student** — para médias com $\sigma$ desconhecido
-
-$$t = \frac{\bar{X} - \mu_0}{s/\sqrt{n}} \overset{H_0}{\sim} t_{n-1}$$
-
-<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
-<strong>Por que \(t_{n-1}\) e não \(\mathcal{N}(0,1)\)?</strong> Substituir \(\sigma\) por \(s\) (estimado dos dados) introduz variabilidade adicional: \(s\) é ela própria uma variável aleatória com distribuição \(\chi^2_{n-1}/(n-1)\). A distribuição \(t\) de Student tem caudas mais pesadas que a Normal para compensar essa incerteza extra. À medida que \(n \to \infty\), \(s \to \sigma\) e \(t_{n-1} \to \mathcal{N}(0,1)\).
-</div>
-
-**3. Teste Qui-quadrado** — para frequências observadas vs. esperadas
-
-$$\chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i} \overset{H_0}{\sim} \chi^2_{k-1}$$
-
-<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
-<strong>Por que \(\chi^2_{k-1}\)?</strong> Cada parcela \((O_i - E_i)/\sqrt{E_i}\) é aproximadamente normal padronizada; o quadrado de uma normal padrão segue \(\chi^2_1\); a soma de \(k\) desses quadrados é \(\chi^2_k\). Perde-se 1 grau de liberdade pela restrição \(\sum O_i = \sum E_i = n\).
-</div>
-
-**4. Teste F** — para comparação de variâncias e ANOVA
-
-$$F = \frac{s_1^2}{s_2^2} \overset{H_0}{\sim} F_{n_1-1,\,n_2-1}$$
-
-<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
-<strong>Por que \(F\)?</strong> A distribuição \(F\) é a razão de dois \(\chi^2\) independentes, cada um dividido pelos seus graus de liberdade. Sob \(H_0: \sigma_1^2 = \sigma_2^2\), a razão das variâncias amostrais tem exatamente essa distribuição.
-</div>
-
-## 3. Valor-p e Tomada de Decisão
-
-### 3.1 Interpretação do Valor-p
-
-![Interpretação do valor-p]({{ site.baseurl }}/assets/images/valor-p.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Representação gráfica do valor-p em uma distribuição normal</div>
-
-O **p-valor** é formalmente definido como a probabilidade, sob $H_0$, de observar uma estatística de teste tão ou mais extrema que a observada:
-
-$$
-\text{p-valor} = P\!\left(T \geq t_{\text{obs}} \mid H_0\right) \quad \text{(unilateral direito)}
-$$
-
-$$
-\text{p-valor} = 2 \cdot P\!\left(T \geq |t_{\text{obs}}| \mid H_0\right) \quad \text{(bilateral)}
-$$
-
-**Regra de decisão:**
-- Se p-valor $\leq \alpha$: rejeita-se $H_0$ — evidência suficiente contra ela
-- Se p-valor $> \alpha$: não se rejeita $H_0$ — evidência insuficiente
-
-<div style="border-left: 4px solid #e53935; padding: 0.5em 1em; background-color: #ffebee; margin: 1em 0;">
-<strong>Equívocos frequentes sobre o p-valor (ASA Statement, 2016):</strong>
-<ol>
-  <li><strong>❌ "p-valor = probabilidade de H₀ ser verdadeira"</strong><br>
-  ✅ O p-valor é calculado <em>assumindo</em> H₀ verdadeira — não quantifica a probabilidade de H₀ ser correta (isso requer abordagem Bayesiana).</li>
-  <li><strong>❌ "p < 0,05 indica resultado importante"</strong><br>
-  ✅ Significância estatística ≠ significância prática. Com $n$ muito grande, diferenças triviais tornam-se "significativas". Sempre reporte o <strong>tamanho do efeito</strong>.</li>
-  <li><strong>❌ "p = 0,049 é muito diferente de p = 0,051"</strong><br>
-  ✅ O limiar $\alpha$ é arbitrário; o p-valor é uma escala contínua de evidência, não um interruptor binário.</li>
-  <li><strong>❌ "não rejeitar H₀ = aceitar H₀"</strong><br>
-  ✅ Significa apenas que não há evidência suficiente para rejeitar com o $\alpha$ escolhido. A ausência de evidência não é evidência de ausência.</li>
-  <li><strong>❌ "p-valor informa a probabilidade de os resultados serem reproduzidos"</strong><br>
-  ✅ O p-valor não é uma medida de reprodutibilidade; estudos com p = 0,001 podem falhar em réplicas.</li>
-</ol>
-</div>
-
-### 3.2 Poder do Teste
-
-O poder do teste ($$1-\beta$$) é a probabilidade de rejeitar $$H_0$$ quando ela é falsa:
+A figura mostra um teste Z unilateral à direita com $\alpha = 0{,}05$. Sob $H_0$, a estatística tem distribuição $N(0, 1)$; supomos que, sob $H_1$, ela tenha distribuição $N(1{,}5;\ 1)$. O código abaixo calcula os três números da figura. (A figura foi gerada por `scripts/figuras-testes-hipotese.jl`, com os mesmos números.)
 
 <div class="code-container">
   <div class="code-header">
@@ -558,224 +132,593 @@ O poder do teste ($$1-\beta$$) é a probabilidade de rejeitar $$H_0$$ quando ela
   <div class="code-content">
     <pre><code>using Distributions
 
-function calcular_poder_teste()
-    # Parâmetros
-    n = 30  # Tamanho da amostra
-    α = 0.05  # Nível de significância
-    μ₀ = 0  # Média sob H₀
-    μₐ = 0.5  # Média sob H₁
-    σ = 1  # Desvio padrão
-    
-    # Valor crítico
-    z_crit = quantile(Normal(), 1-α/2)
-    
-    # Poder do teste
-    β = cdf(Normal(), z_crit - (μₐ-μ₀)/(σ/√n)) - 
-        cdf(Normal(), -z_crit - (μₐ-μ₀)/(σ/√n))
-    poder = 1 - β
-    
-    println("Análise do Poder do Teste")
-    println("-------------------------")
-    println("Tamanho da amostra = ", n)
-    println("Nível de significância = ", α)
-    println("Poder do teste = ", round(poder, digits=4))
-end
+# Teste Z unilateral à direita: sob H₀ a estatística é N(0, 1); sob H₁, N(1,5; 1)
+α = 0.05
+H0 = Normal(0, 1)
+H1 = Normal(1.5, 1)
 
-calcular_poder_teste()</code></pre>
+z_crit = quantile(H0, 1 - α)   # rejeita H₀ se z &gt; z_crit
+β = cdf(H1, z_crit)            # P(não rejeitar H₀ | H₁ verdadeira)
+poder = 1 - β
+
+println("Valor crítico   = ", round(z_crit, digits=4))
+println("Erro tipo II β  = ", round(β, digits=4))
+println("Poder 1 − β     = ", round(poder, digits=4))</code></pre>
   </div>
 </div>
 
-## 4. Tipos de Testes de Hipótese
-
-### 4.1 Testes Paramétricos
-
-1. **Teste Z**
-   - Para médias com σ conhecido
-   - Amostras grandes (n ≥ 30)
-
-2. **Teste t**
-   - Para médias com σ desconhecido
-   - Uma ou duas amostras
-   - Amostras pareadas
-
-3. **Teste F**
-   - Comparação de variâncias
-   - ANOVA
-
-### 4.2 Testes Não-Paramétricos
-
-1. **Teste de Wilcoxon**
-   - Alternativa ao teste t
-   - Não assume normalidade
-
-2. **Teste de Mann-Whitney**
-   - Comparação de duas populações
-   - Dados ordinais
-
-3. **Teste Qui-quadrado**
-   - Independência
-   - Aderência
-
-## 5. Exercícios Resolvidos
-
-### 5.1 Teste para Média Populacional
-
-![Exemplo de teste de hipótese]({{ site.baseurl }}/assets/images/teste-media.png){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Distribuição amostral e regiões críticas</div>
-
-> **Problema**: Uma empresa afirma que o tempo médio de atendimento ao cliente é de 10 minutos. Um analista coletou uma amostra de 36 atendimentos e encontrou uma média de 11,2 minutos com desvio padrão de 2,4 minutos. Ao nível de significância de 5%, há evidências para rejeitar a afirmação da empresa?
-
-**Dados**:
-- $$H_0: \mu = 10$$ minutos
-- $$H_1: \mu \neq 10$$ minutos
-- $$\bar{x} = 11,2$$ minutos
-- $$s = 2,4$$ minutos
-- $$n = 36$$
-- $$\alpha = 0,05$$
-
-**Solução passo a passo:**
-
-**Passo 1 — Calcular o erro padrão amostral:**
-
-$$\text{SE} = \frac{s}{\sqrt{n}} = \frac{2{,}4}{\sqrt{36}} = \frac{2{,}4}{6} = 0{,}400 \text{ min}$$
-
-**Passo 2 — Calcular a estatística de teste:**
-
-$$t_{\text{obs}} = \frac{\bar{x} - \mu_0}{\text{SE}} = \frac{11{,}2 - 10{,}0}{0{,}400} = \frac{1{,}2}{0{,}400} = 3{,}00$$
-
-> O valor $t = 3$ significa que a média amostral está **3 erros padrão** acima do valor hipotético — muito distante do centro da distribuição de $H_0$.
-
-**Passo 3 — Determinar o valor crítico** (teste bilateral, $\alpha = 0{,}05$, $\nu = n-1 = 35$ g.l.):
-
-$$t_{0{,}025;\,35} = \pm 2{,}0301$$
-
-> Usa-se $\alpha/2 = 0{,}025$ em cada cauda pois o teste é bilateral: qualquer desvio (acima ou abaixo de 10 min) é relevante.
-
-**Passo 4 — Calcular o p-valor:**
-
-$$\text{p-valor} = 2 \cdot P(t_{35} > 3{,}00) \approx 2 \times 0{,}0024 = 0{,}0048$$
-
-**Passo 5 — Comparar e decidir:**
-
-$$|t_{\text{obs}}| = 3{,}00 > t_{\text{crítico}} = 2{,}0301 \quad\Longrightarrow\quad \textbf{Rejeitar } H_0$$
-
-Equivalentemente: p-valor $= 0{,}0048 < \alpha = 0{,}05$ — mesma conclusão.
-
-**Passo 6 — Conclusão formal:**
-
-> Com $t(35) = 3{,}00$ e $p = 0{,}005$, rejeitamos $H_0$ ao nível de 5%. Há evidência estatística significativa de que o tempo médio de atendimento difere de 10 minutos. A estimativa pontual $\bar{x} = 11{,}2$ min sugere que o atendimento é sistematicamente mais lento que o declarado.
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>function teste_tempo_atendimento()
-    # Dados
-    x̄ = 11.2  # Média amostral
-    μ₀ = 10.0  # Média sob H₀
-    s = 2.4    # Desvio padrão amostral
-    n = 36     # Tamanho da amostra
-    α = 0.05   # Nível de significância
-    
-    # Estatística t
-    t_stat = (x̄ - μ₀)/(s/√n)
-    
-    # Valor crítico
-    t_crit = quantile(TDist(n-1), 1-α/2)
-    
-    # Valor-p
-    p_valor = 2 * (1 - cdf(TDist(n-1), abs(t_stat)))
-    
-    println("Teste t para Tempo de Atendimento")
-    println("--------------------------------")
-    println("Estatística t = ", round(t_stat, digits=4))
-    println("Valor crítico = ±", round(t_crit, digits=4))
-    println("Valor-p = ", round(p_valor, digits=4))
-end
-
-teste_tempo_atendimento()</code></pre>
-  </div>
-</div>
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Teste t para Tempo de Atendimento<br>
-  --------------------------------<br>
-  Estatística t = 3.0<br>
-  Valor crítico = ±2.0301<br>
-  Valor-p = 0.0048
+  <div>Valor crítico &nbsp; = 1.6449</div>
+  <div>Erro tipo II β &nbsp;= 0.5576</div>
+  <div>Poder 1 − β &nbsp; &nbsp; = 0.4424</div>
 </div>
 
-### 5.2 Teste de Independência
+![Duas curvas normais: H₀ centrada em 0, em azul, e H₁ centrada em 1,5, em vermelho; uma linha tracejada em 1,6449 separa a área azul à direita (erro tipo I, 0,05) da área vermelha à esquerda (erro tipo II, 0,5576)]({{ site.baseurl }}/assets/images/erro_tipo_I_II.png)
+<div class="image-caption">Figura 1: A área azul, à direita do valor crítico sob H₀, é a probabilidade do erro tipo I (α = 0,05). A área vermelha, à esquerda do valor crítico sob H₁, é a do erro tipo II (β ≈ 0,5576).</div>
 
-> **Problema**: Em um estudo sobre a relação entre gênero e preferência por tipo de exercício físico, foram coletados os seguintes dados:
+**Interpretação:**
 
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Musculação</th>
-<th>Cardio</th>
-<th>Yoga</th>
-</tr>
+- **Valor crítico 1,6449:** é o valor que deixa 5% da curva de $H_0$ à direita. Se a estatística observada passar de 1,6449, rejeita-se $H_0$.
+- **β ≈ 0,5576:** se $H_1$ for verdadeira, em cerca de 56% das amostras a estatística fica abaixo de 1,6449 e o efeito passa despercebido.
+- **Poder ≈ 0,4424:** a chance de detectar o efeito é de só 44%. Um alvo comum no planejamento de estudos é poder de pelo menos 80%; este teste está bem abaixo disso.
+
+Para aumentar o poder: aumentar o tamanho da amostra (o caminho usual), reduzir a variabilidade das medidas ou aceitar um $\alpha$ maior (o que aumenta os falsos positivos). Um efeito verdadeiro maior também é mais fácil de detectar, mas esse não depende de quem faz o teste.
+
+<img src="{{ site.baseurl }}/assets/images/teste_erros.avif" alt="Quatro quadrinhos com um médico e um paciente: verdadeiro positivo (mulher grávida, 'Você está grávida'), verdadeiro negativo (homem idoso, 'Você não está grávida'), falso positivo (homem idoso, 'Você está grávida') e falso negativo (mulher grávida, 'Você não está grávida')" style="max-width: 600px; display: block; margin: 1em auto;">
+<div class="image-caption">Figura 2: Os quatro resultados de um teste, num exemplo exagerado de propósito. Com H₀ = "a pessoa não está grávida", dizer "você está grávida" a um homem idoso é um erro tipo I (falso positivo), e dizer "você não está grávida" a uma gestante é um erro tipo II (falso negativo).</div>
+
+## 2. Nível de Significância e Estatística de Teste
+
+### 2.1 Escolha do nível de significância
+
+O **nível de significância** $\alpha$ é a probabilidade de erro tipo I que se aceita correr:
+
+$$\alpha = P(\text{rejeitar } H_0 \mid H_0 \text{ verdadeira})$$
+
+O valor 0,05 é uma **convenção**, não uma lei. A escolha deveria pesar o custo de cada erro no problema: quando um falso positivo é caro (aprovar um tratamento que não funciona), usa-se um $\alpha$ menor, como 0,01; em estudos exploratórios, em que perder um efeito real é o erro mais caro, às vezes se usa 0,10.
+
+Um caso extremo é o critério "5 sigma" da física de partículas: exige-se que o resultado esteja a 5 desvios padrão do esperado sob $H_0$, o que corresponde a uma probabilidade de cerca de $2{,}9 \times 10^{-7}$ (uma chance em 3,5 milhões) numa cauda da normal.
+
+### 2.2 Estatísticas de teste mais usadas
+
+A estatística de teste é uma função dos dados que, sob $H_0$, tem distribuição conhecida. Cada uma vale sob condições que precisam ser conferidas.
+
+**1. Teste Z para a média** (variância da população $\sigma^2$ conhecida):
+
+$$Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}}$$
+
+Se a população é normal, $Z$ tem distribuição $N(0, 1)$ exatamente quando $H_0: \mu = \mu_0$ é verdadeira. Se não é normal, a distribuição é só aproximadamente $N(0, 1)$, pelo [Teorema do Limite Central]({{ '/pt/probabilidade/teorema-limite-central' | relative_url }}), e a aproximação melhora com $n$ maior. O "n ≥ 30" que aparece em muitos livros é uma regra de bolso, não um teorema: com dados muito assimétricos, pode ser pouco.
+
+**2. Teste t de Student para a média** ($\sigma$ desconhecido, estimado pelo desvio padrão amostral $s$):
+
+$$t = \frac{\bar{X} - \mu_0}{s/\sqrt{n}}$$
+
+Se a população é normal, $t$ tem distribuição t de Student com $n - 1$ graus de liberdade sob $H_0$. Ela tem caudas mais pesadas que a normal porque $s$ também varia de amostra para amostra (para dados normais, $(n-1)s^2/\sigma^2$ tem distribuição qui-quadrado com $n - 1$ graus de liberdade). Com $n$ grande, a t fica muito parecida com a normal padrão.
+
+**3. Teste qui-quadrado** para frequências observadas ($O_i$) e esperadas ($E_i$) em $k$ categorias:
+
+$$\chi^2 = \sum_{i=1}^{k} \frac{(O_i - E_i)^2}{E_i}$$
+
+Sob $H_0$, e com amostra grande, $\chi^2$ tem distribuição **aproximadamente** qui-quadrado. Os graus de liberdade são $k - 1$ no teste de aderência com proporções totalmente especificadas, e $(r-1)(c-1)$ no teste de independência de uma tabela com $r$ linhas e $c$ colunas. A regra de bolso usual para a aproximação valer é que as frequências esperadas sejam pelo menos 5.
+
+**4. Teste F** para comparar duas variâncias:
+
+$$F = \frac{s_1^2}{s_2^2}$$
+
+Se as duas populações são normais e independentes, sob $H_0: \sigma_1^2 = \sigma_2^2$ a razão tem distribuição F com $n_1 - 1$ e $n_2 - 1$ graus de liberdade. Esse teste é muito sensível à falta de normalidade. A mesma distribuição F aparece na [Análise de Variância]({{ '/pt/inferencia-estatistica/analise-variancia' | relative_url }}).
+
+O código abaixo aplica um teste t a 100 valores simulados de uma normal com média 0,5, testando $H_0: \mu = 0$ contra $H_1: \mu \neq 0$:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using HypothesisTests, Random, Statistics
+
+Random.seed!(123)
+dados = randn(100) .+ 0.5     # 100 valores simulados de uma normal com média 0,5
+
+# H₀: μ = 0  contra  H₁: μ ≠ 0
+teste = OneSampleTTest(dados, 0)
+
+println("Média amostral = ", round(mean(dados), digits=4))
+println("Estatística t  = ", round(teste.t, digits=4))
+println("p-valor        = ", round(pvalue(teste), sigdigits=3))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Média amostral = 0.4517</div>
+  <div>Estatística t &nbsp;= 4.8554</div>
+  <div>p-valor &nbsp; &nbsp; &nbsp; &nbsp;= 4.49e-6</div>
+</div>
+
+Como os dados foram gerados com média 0,5, $H_0$ é falsa, e o teste a rejeita com folga: o p-valor é muito pequeno.
+
+## 3. O p-valor
+
+### 3.1 Definição e interpretação
+
+![Curva normal padrão com as duas caudas além de −2,1 e 2,1 pintadas de laranja, cada uma marcada p/2; título "Valor-p bilateral: P(|Z| ≥ 2,1) = 0,036"]({{ site.baseurl }}/assets/images/valor-p.png){:style="max-width: 500px; display: block; margin: 0 auto;"}
+<div class="image-caption">Figura 3: Num teste bilateral com z observado = 2,1, o p-valor é a área das duas caudas além de ±2,1 (cerca de 0,036).</div>
+
+O **p-valor** é a probabilidade, calculada supondo $H_0$ verdadeira, de obter uma estatística de teste tão extrema quanto a observada, ou mais:
+
+$$\text{p-valor} = P(T \geq t_{\text{obs}} \mid H_0) \quad \text{(unilateral à direita)}$$
+
+$$\text{p-valor} = 2 \cdot P(T \geq |t_{\text{obs}}| \mid H_0) \quad \text{(bilateral, distribuição simétrica)}$$
+
+**Regra de decisão:** se p-valor $\leq \alpha$, rejeita-se $H_0$; se p-valor $> \alpha$, não se rejeita.
+
+<div style="border-left: 4px solid #e53935; padding: 0.5em 1em; background-color: #ffebee; margin: 1em 0;">
+<strong>O que o p-valor não é.</strong> A declaração da American Statistical Association sobre p-valores (Wasserstein e Lazar, 2016) lista seis princípios; vários deles desfazem os erros mais comuns:
+<ol>
+  <li><strong>Não é a probabilidade de H₀ ser verdadeira.</strong> O p-valor é calculado <em>supondo</em> H₀ verdadeira; ele mede quão incompatíveis os dados são com H₀, não a chance de H₀ estar certa.</li>
+  <li><strong>Não mede o tamanho nem a importância do efeito.</strong> Com amostras muito grandes, diferenças pequenas demais para importar dão p-valores minúsculos. Reporte sempre a estimativa do efeito, com seu intervalo de confiança.</li>
+  <li><strong>Uma decisão não deveria depender só de o p-valor passar de um limite.</strong> p = 0,049 e p = 0,051 trazem praticamente a mesma evidência.</li>
+  <li><strong>Sozinho, não é uma boa medida de evidência</strong> sobre um modelo ou hipótese; ele depende do desenho do estudo, da qualidade das medidas e do que mais se sabe.</li>
+</ol>
+E, como já dito: <strong>não rejeitar H₀ não é o mesmo que aceitar H₀</strong>. Ausência de evidência não é evidência de ausência.
+</div>
+
+### 3.2 Poder do teste
+
+O **poder** é a probabilidade de rejeitar $H_0$ quando ela é falsa: $1 - \beta$. Ele depende do efeito verdadeiro, então só pode ser calculado supondo um valor para ele.
+
+**Exemplo.** Um teste Z bilateral para a média, com $\alpha = 0{,}05$, $n = 30$, $\sigma = 1$, $H_0: \mu = 0$. Qual é o poder se a média verdadeira for $\mu_1 = 0{,}5$?
+
+**Passo 1, o efeito em erros padrão.** O erro padrão da média é $\sigma/\sqrt{n} = 1/\sqrt{30} \approx 0{,}1826$, e a média verdadeira está a
+
+$$\delta = \frac{\mu_1 - \mu_0}{\sigma/\sqrt{n}} = \frac{0{,}5}{0{,}1826} \approx 2{,}7386$$
+
+erros padrão de $\mu_0$. Sob $H_1$, a estatística $Z$ tem distribuição $N(\delta, 1)$.
+
+**Passo 2, β.** O teste não rejeita quando $-1{,}96 < Z < 1{,}96$ (valor crítico bilateral de 5%, 1,9600 com quatro casas). Então:
+
+$$\beta = \Phi(1{,}96 - \delta) - \Phi(-1{,}96 - \delta) = \Phi(-0{,}7786) - \Phi(-4{,}6986) \approx 0{,}2181 - 0{,}0000 = 0{,}2181$$
+
+onde $\Phi$ é a função de distribuição acumulada da normal padrão.
+
+**Resultado:** poder $= 1 - 0{,}2181 = 0{,}7819$, cerca de 78%.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Poder de um teste Z bilateral para a média
+n = 30          # tamanho da amostra
+α = 0.05        # nível de significância
+μ₀ = 0          # média sob H₀
+μ₁ = 0.5        # média verdadeira suposta (sob H₁)
+σ = 1           # desvio padrão (conhecido)
+
+z_crit = quantile(Normal(), 1 - α/2)
+δ = (μ₁ - μ₀) / (σ / √n)      # quantos erros padrão separam μ₁ de μ₀
+
+# Sob H₁, Z ~ N(δ, 1); β = P(−z_crit &lt; Z &lt; z_crit)
+β = cdf(Normal(), z_crit - δ) - cdf(Normal(), -z_crit - δ)
+
+println("δ     = ", round(δ, digits=4))
+println("β     = ", round(β, digits=4))
+println("Poder = ", round(1 - β, digits=4))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>δ &nbsp; &nbsp; = 2.7386</div>
+  <div>β &nbsp; &nbsp; = 0.2181</div>
+  <div>Poder = 0.7819</div>
+</div>
+
+**Interpretação:** se a média verdadeira for 0,5, um estudo com 30 observações detecta a diferença em cerca de 78% das vezes. Para chegar a 80%, seria preciso um $n$ um pouco maior.
+
+## 4. Exercícios Resolvidos
+
+### 4.1 Teste t para a média
+
+![Curva t com 35 graus de liberdade, regiões de rejeição pintadas além de ±2,0301 e uma linha azul em t = 3,00, dentro da região de rejeição da direita]({{ site.baseurl }}/assets/images/teste-media.png){:style="max-width: 500px; display: block; margin: 0 auto;"}
+<div class="image-caption">Figura 4: Distribuição t com 35 graus de liberdade sob H₀. O t observado, 3,00, cai na região de rejeição da direita.</div>
+
+> **Problema** (números ilustrativos): uma empresa afirma que o tempo médio de atendimento é de 10 minutos. Numa amostra aleatória de 36 atendimentos, a média foi de 11,2 minutos, com desvio padrão de 2,4 minutos. Ao nível de 5%, os dados contradizem a afirmação?
+
+**Dados:**
+
+- $H_0: \mu = 10$ minutos e $H_1: \mu \neq 10$ minutos (bilateral: interessa desvio nos dois sentidos);
+- $\bar{x} = 11{,}2$ minutos, $s = 2{,}4$ minutos, $n = 36$, $\alpha = 0{,}05$.
+
+**Condições.** O desvio padrão da população não é conhecido, então o teste é o t. Ele supõe atendimentos independentes e uma população aproximadamente normal; com $n = 36$ e sem assimetria forte, o TLC torna o teste razoável mesmo sem normalidade exata.
+
+**Passo 1, erro padrão:**
+
+$$\text{EP} = \frac{s}{\sqrt{n}} = \frac{2{,}4}{\sqrt{36}} = \frac{2{,}4}{6} = 0{,}4 \text{ minuto}$$
+
+**Passo 2, estatística de teste:**
+
+$$t_{\text{obs}} = \frac{\bar{x} - \mu_0}{\text{EP}} = \frac{11{,}2 - 10}{0{,}4} = \frac{1{,}2}{0{,}4} = 3{,}00$$
+
+A média amostral está 3 erros padrão acima de 10.
+
+**Passo 3, valor crítico.** Com $n - 1 = 35$ graus de liberdade e $\alpha/2 = 0{,}025$ em cada cauda (função `quantile(TDist(35), 0.975)` do Julia, ou tabela t): $t_{0{,}025;\,35} = 2{,}0301$.
+
+**Passo 4, p-valor.** $P(t_{35} > 3{,}00) = 0{,}002474$, e no teste bilateral multiplica-se por 2:
+
+$$\text{p-valor} = 2 \times 0{,}002474 = 0{,}004949 \approx 0{,}0049$$
+
+**Passo 5, decisão.** $\lvert t_{\text{obs}}\rvert = 3{,}00 > 2{,}0301$, ou, do mesmo jeito, p-valor $= 0{,}0049 < 0{,}05$: **rejeita-se $H_0$**.
+
+**Interpretação:** se a média verdadeira fosse 10 minutos, uma média amostral tão longe de 10 quanto 11,2 (para cima ou para baixo) aconteceria em só cerca de 0,5% das amostras de 36 atendimentos. Os dados são evidência de que o tempo médio não é 10 minutos; a estimativa, 11,2 minutos, sugere que o atendimento é mais lento que o anunciado. O teste não diz se 1,2 minuto a mais importa para a empresa: isso é uma questão prática, não estatística.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+x̄ = 11.2      # média amostral (minutos)
+μ₀ = 10.0     # média sob H₀
+s = 2.4       # desvio padrão amostral
+n = 36
+α = 0.05
+
+ep = s / √n                          # erro padrão
+t_obs = (x̄ - μ₀) / ep
+t_crit = quantile(TDist(n - 1), 1 - α/2)
+p_valor = 2 * ccdf(TDist(n - 1), abs(t_obs))
+
+println("Erro padrão   = ", round(ep, digits=4))
+println("t observado   = ", round(t_obs, digits=4))
+println("Valor crítico = ±", round(t_crit, digits=4))
+println("p-valor       = ", round(p_valor, digits=4))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Erro padrão &nbsp; = 0.4</div>
+  <div>t observado &nbsp; = 3.0</div>
+  <div>Valor crítico = ±2.0301</div>
+  <div>p-valor &nbsp; &nbsp; &nbsp; = 0.0049</div>
+</div>
+
+### 4.2 Teste qui-quadrado de independência
+
+> **Problema** (números ilustrativos): numa pesquisa com 110 pessoas, perguntou-se a atividade física preferida. A tabela cruza a resposta com o grupo da pessoa (grupo 1 ou grupo 2). Ao nível de 5%, a preferência é independente do grupo?
+
+<div style="overflow-x:auto; margin: 0.5em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; text-align: center;">
+  <thead style="background: #e8f5e9;">
+    <tr><th style="border:1px solid #bbb;padding:6px;"></th><th style="border:1px solid #bbb;padding:6px;">Musculação</th><th style="border:1px solid #bbb;padding:6px;">Corrida</th><th style="border:1px solid #bbb;padding:6px;">Ioga</th><th style="border:1px solid #bbb;padding:6px;">Total</th></tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Grupo 1</strong></td><td style="border:1px solid #bbb;padding:6px;">30</td><td style="border:1px solid #bbb;padding:6px;">15</td><td style="border:1px solid #bbb;padding:6px;">5</td><td style="border:1px solid #bbb;padding:6px;">50</td></tr>
+    <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Grupo 2</strong></td><td style="border:1px solid #bbb;padding:6px;">20</td><td style="border:1px solid #bbb;padding:6px;">25</td><td style="border:1px solid #bbb;padding:6px;">15</td><td style="border:1px solid #bbb;padding:6px;">60</td></tr>
+    <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Total</strong></td><td style="border:1px solid #bbb;padding:6px;">50</td><td style="border:1px solid #bbb;padding:6px;">40</td><td style="border:1px solid #bbb;padding:6px;">20</td><td style="border:1px solid #bbb;padding:6px;">110</td></tr>
+  </tbody>
+</table>
+</div>
+
+**Hipóteses:** $H_0$: preferência e grupo são independentes; $H_1$: há associação entre eles.
+
+**Passo 1, frequências esperadas.** Se fossem independentes, cada casela teria $E = \frac{\text{total da linha} \times \text{total da coluna}}{\text{total geral}}$:
+
+<div style="overflow-x:auto; margin: 0.5em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; text-align: center;">
+  <thead style="background: #e8f5e9;">
+    <tr><th style="border:1px solid #bbb;padding:6px;">Esperado</th><th style="border:1px solid #bbb;padding:6px;">Musculação</th><th style="border:1px solid #bbb;padding:6px;">Corrida</th><th style="border:1px solid #bbb;padding:6px;">Ioga</th></tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Grupo 1</strong></td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \cdot 50}{110} \approx 22{,}73$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \cdot 40}{110} \approx 18{,}18$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \cdot 20}{110} \approx 9{,}09$</td></tr>
+    <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Grupo 2</strong></td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \cdot 50}{110} \approx 27{,}27$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \cdot 40}{110} \approx 21{,}82$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \cdot 20}{110} \approx 10{,}91$</td></tr>
+  </tbody>
+</table>
+</div>
+
+Todas as esperadas passam de 5, então a aproximação qui-quadrado é razoável.
+
+**Passo 2, as parcelas** $\frac{(O - E)^2}{E}$, com os esperados sem arredondar:
+
+| Casela | $O$ | $E$ | $\frac{(O-E)^2}{E}$ |
+|---|---|---|---|
+| Grupo 1, musculação | 30 | 22,7273 | 2,3273 |
+| Grupo 1, corrida | 15 | 18,1818 | 0,5568 |
+| Grupo 1, ioga | 5 | 9,0909 | 1,8409 |
+| Grupo 2, musculação | 20 | 27,2727 | 1,9394 |
+| Grupo 2, corrida | 25 | 21,8182 | 0,4640 |
+| Grupo 2, ioga | 15 | 10,9091 | 1,5341 |
+| **Soma** | | | **8,6625** |
+
+(Em frações exatas, $\chi^2 = \frac{693}{80} = 8{,}6625$. Arredondar os esperados para duas casas antes de calcular dá 8,6566, um pouco diferente; por isso a conta usa os valores completos.)
+
+**Passo 3, graus de liberdade:** $(r - 1)(c - 1) = (2 - 1)(3 - 1) = 2$.
+
+**Passo 4, valor crítico e p-valor.** Da tabela qui-quadrado com 2 graus de liberdade, $\chi^2_{0{,}05;\,2} = 5{,}9915$; o p-valor é $P(\chi^2_2 > 8{,}6625) \approx 0{,}0132$.
+
+**Passo 5, decisão:** $8{,}6625 > 5{,}9915$ (p-valor $0{,}0132 < 0{,}05$): **rejeita-se $H_0$**.
+
+**Interpretação:** nestes dados, a preferência não parece independente do grupo: o grupo 1 prefere musculação mais do que se esperaria sob independência (30 contra 22,7), e o grupo 2 prefere corrida e ioga. O teste diz que há associação, não qual é a causa, nem que toda pessoa de um grupo prefere a mesma coisa.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions, HypothesisTests
+
+O = [30 15 5;     # linha 1
+     20 25 15]    # linha 2
+
+n = sum(O)
+E = sum(O, dims=2) * sum(O, dims=1) / n     # esperados: total da linha × total da coluna / n
+χ² = sum((O .- E).^2 ./ E)
+gl = (size(O, 1) - 1) * (size(O, 2) - 1)
+
+println("Esperados = ", round.(E, digits=2))
+println("χ²        = ", round(χ², digits=4))
+println("Crítico   = ", round(quantile(Chisq(gl), 0.95), digits=4))
+println("p-valor   = ", round(ccdf(Chisq(gl), χ²), digits=4))
+println("Conferência (ChisqTest): p = ", round(pvalue(ChisqTest(O)), digits=4))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Esperados = [22.73 18.18 9.09; 27.27 21.82 10.91]</div>
+  <div>χ² &nbsp; &nbsp; &nbsp; &nbsp;= 8.6625</div>
+  <div>Crítico &nbsp; = 5.9915</div>
+  <div>p-valor &nbsp; = 0.0132</div>
+  <div>Conferência (ChisqTest): p = 0.0132</div>
+</div>
+
+### 4.3 Teste para uma proporção
+
+> **Problema** (números ilustrativos): uma empresa afirma que a taxa de conversão de seus e-mails é de 15%. Numa amostra de 200 e-mails, 40 resultaram em conversão. Ao nível de 5%, os dados contradizem a afirmação?
+
+**Dados:** $H_0: p = 0{,}15$, $H_1: p \neq 0{,}15$; $n = 200$, $x = 40$, então $\hat{p} = \frac{40}{200} = 0{,}20$.
+
+**Condições.** O teste Z para proporção usa a aproximação normal da binomial. A regra de bolso é $n p_0 \geq 5$ e $n(1 - p_0) \geq 5$: aqui, $200 \cdot 0{,}15 = 30$ e $200 \cdot 0{,}85 = 170$. Sem correção de continuidade.
+
+**Passo 1, erro padrão sob $H_0$:**
+
+$$\text{EP} = \sqrt{\frac{p_0(1-p_0)}{n}} = \sqrt{\frac{0{,}15 \cdot 0{,}85}{200}} = \sqrt{\frac{0{,}1275}{200}} = \sqrt{0{,}0006375} \approx 0{,}02525$$
+
+**Passo 2, estatística:**
+
+$$Z = \frac{\hat{p} - p_0}{\text{EP}} = \frac{0{,}20 - 0{,}15}{0{,}02525} = \frac{0{,}05}{0{,}02525} \approx 1{,}9803$$
+
+**Passo 3, p-valor:** $2 \cdot P(Z > 1{,}9803) \approx 2 \times 0{,}02384 = 0{,}0477$.
+
+**Passo 4, decisão:** $0{,}0477 < 0{,}05$, e $\lvert Z\rvert = 1{,}9803 > 1{,}96$: **rejeita-se $H_0$**, mas por pouco.
+
+**Interpretação:** a taxa observada, 20%, é evidência (fraca) de que a conversão não é 15%. O p-valor está muito perto de 0,05: com uma conversão a menos (39 em 200), a conclusão já mudaria. Um resultado assim pede cautela, e de preferência mais dados, antes de qualquer decisão.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+n = 200; x = 40; p₀ = 0.15
+p̂ = x / n
+ep = sqrt(p₀ * (1 - p₀) / n)      # erro padrão sob H₀
+z = (p̂ - p₀) / ep
+p_valor = 2 * ccdf(Normal(), abs(z))
+
+println("n·p₀ = ", n * p₀, "   n·(1 − p₀) = ", n * (1 - p₀))
+println("p̂ = ", p̂, "   erro padrão = ", round(ep, digits=5))
+println("z = ", round(z, digits=4), "   p-valor = ", round(p_valor, digits=4))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>n·p₀ = 30.0 &nbsp; n·(1 − p₀) = 170.0</div>
+  <div>p̂ = 0.2 &nbsp; erro padrão = 0.02525</div>
+  <div>z = 1.9803 &nbsp; p-valor = 0.0477</div>
+</div>
+
+### 4.4 Teste para a correlação
+
+> **Problema** (números ilustrativos): para 10 estudantes, anotaram-se as horas de estudo e a nota na prova. Há correlação linear entre as duas, ao nível de 5%?
+
+| Horas | 2 | 3 | 4 | 3 | 5 | 6 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **Nota** | 65 | 70 | 75 | 68 | 80 | 85 | 72 | 78 | 88 | 90 |
+
+**Hipóteses:** $H_0: \rho = 0$ (sem correlação linear na população) e $H_1: \rho \neq 0$. O teste supõe pares independentes e, para o resultado ser exato, normalidade bivariada.
+
+**Passo 1, correlação amostral:** $r \approx 0{,}9837$ (calculada pelo código; a conta à mão está em [Coeficiente de Pearson]({{ '/formulas/coeficiente-pearson.html' | relative_url }})).
+
+**Passo 2, estatística:**
+
+$$t = r\sqrt{\frac{n - 2}{1 - r^2}} = 0{,}9837 \cdot \sqrt{\frac{8}{1 - 0{,}9677}} \approx 15{,}48$$
+
+com $n - 2 = 8$ graus de liberdade.
+
+**Passo 3, decisão:** o valor crítico é $t_{0{,}025;\,8} = 2{,}3060$; como $15{,}48 > 2{,}3060$ (p-valor $\approx 3 \times 10^{-7}$), **rejeita-se $H_0$**.
+
+**Interpretação:** nestes dados há uma associação linear forte e positiva entre horas de estudo e nota. Isso não mostra que estudar mais **causa** notas maiores (outras variáveis podem influir nas duas), e 10 estudantes de um exemplo não permitem generalizar.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions, Statistics
+
+horas = [2, 3, 4, 3, 5, 6, 4, 5, 6, 7]
+notas = [65, 70, 75, 68, 80, 85, 72, 78, 88, 90]
+
+n = length(horas)
+r = cor(horas, notas)
+t = r * sqrt((n - 2) / (1 - r^2))
+p_valor = 2 * ccdf(TDist(n - 2), abs(t))
+
+println("r = ", round(r, digits=4))
+println("t = ", round(t, digits=4), "   (", n - 2, " graus de liberdade)")
+println("p-valor = ", round(p_valor, sigdigits=3))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>r = 0.9837</div>
+  <div>t = 15.4761 &nbsp; (8 graus de liberdade)</div>
+  <div>p-valor = 3.02e-7</div>
+</div>
+
+## 5. Relação com Intervalos de Confiança
+
+Num teste bilateral para a média, rejeitar $H_0: \mu = \mu_0$ ao nível $\alpha$ é o mesmo que $\mu_0$ ficar **fora** do intervalo de confiança de nível $1 - \alpha$:
+
+$$\text{IC}_{1-\alpha} = \bar{x} \pm t_{\alpha/2;\,n-1} \cdot \frac{s}{\sqrt{n}}$$
+
+Isso porque $\lvert t_{\text{obs}} \rvert \leq t_{\alpha/2;\,n-1}$ equivale a $\bar{x} - t_{\alpha/2;\,n-1}\frac{s}{\sqrt{n}} \leq \mu_0 \leq \bar{x} + t_{\alpha/2;\,n-1}\frac{s}{\sqrt{n}}$.
+
+No exercício 4.1: $11{,}2 \pm 2{,}0301 \times 0{,}4 = 11{,}2 \pm 0{,}8120$, ou seja, $[10{,}388;\ 12{,}012]$ minutos. O valor 10 está fora do intervalo, e o teste rejeitou $H_0: \mu = 10$, como previsto. O intervalo diz mais que o teste: mostra a faixa de médias compatíveis com os dados.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Intervalo de 95% para a média, com os dados do exercício 4.1
+x̄, s, n = 11.2, 2.4, 36
+t_crit = quantile(TDist(n - 1), 0.975)
+margem = t_crit * s / √n
+
+println("IC 95% = [", round(x̄ - margem, digits=4), "; ", round(x̄ + margem, digits=4), "]")
+println("10 está no intervalo? ", x̄ - margem &lt;= 10 &lt;= x̄ + margem)</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>IC 95% = [10.388; 12.012]</div>
+  <div>10 está no intervalo? false</div>
+</div>
+
+Mais sobre intervalos em [Intervalos de Confiança]({{ '/pt/inferencia-estatistica/intervalos-confianca' | relative_url }}).
+
+## 6. Muitos Testes ao Mesmo Tempo
+
+Se cada teste tem probabilidade $\alpha$ de dar um falso positivo, fazer muitos testes aumenta a chance de pelo menos um. Com $m$ testes **independentes**, todos com $H_0$ verdadeira:
+
+$$P(\text{pelo menos 1 falso positivo}) = 1 - (1 - \alpha)^m$$
+
+Com $m = 20$ e $\alpha = 0{,}05$: $1 - 0{,}95^{20} \approx 1 - 0{,}3585 = 0{,}6415$. Em 20 testes sem nenhum efeito real, a chance de pelo menos um "achado" é de cerca de 64%.
+
+Duas correções comuns:
+
+- **Bonferroni:** usar $\alpha/m$ em cada teste (com $m = 20$, $0{,}05/20 = 0{,}0025$). Pela desigualdade da união, a probabilidade de pelo menos um falso positivo fica no máximo em $\alpha$, mesmo sem independência. É simples, mas perde muito poder quando $m$ é grande.
+- **Benjamini–Hochberg (1995):** controla a **taxa de falsas descobertas** (a proporção esperada de falsos positivos entre as rejeições), em vez da chance de qualquer falso positivo. Ordenam-se os p-valores, $p_{(1)} \leq \cdots \leq p_{(m)}$, acha-se o maior $k$ com $p_{(k)} \leq \frac{k}{m}\,\alpha$ e rejeitam-se as hipóteses dos $k$ menores p-valores. A garantia do artigo original vale para testes independentes.
+
+**Exemplo** com 10 p-valores ilustrativos (0,001; 0,008; 0,012; 0,024; 0,039; 0,041; 0,21; 0,35; 0,62; 0,90) e $\alpha = 0{,}05$: Bonferroni exige $p \leq 0{,}005$ e rejeita só 1 hipótese. No BH, os limites são $\frac{k}{10} \cdot 0{,}05$ = 0,005; 0,010; 0,015; 0,020; …; os três primeiros p-valores ficam abaixo dos seus limites (0,001 ≤ 0,005; 0,008 ≤ 0,010; 0,012 ≤ 0,015) e o quarto não (0,024 > 0,020), nem nenhum depois dele; então $k^* = 3$, e o BH rejeita 3.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Benjamini–Hochberg à mão, com 10 p-valores ilustrativos
+p = [0.001, 0.008, 0.012, 0.024, 0.039, 0.041, 0.21, 0.35, 0.62, 0.90]
+m, α = length(p), 0.05
+
+ordem = sortperm(p)
+limites = (1:m) ./ m .* α                 # k/m · α
+abaixo = p[ordem] .&lt;= limites
+k = findlast(abaixo)                       # maior k com p₍ₖ₎ ≤ k/m · α
+k = k === nothing ? 0 : k
+
+println("P(pelo menos 1 falso positivo em 20 testes) = ", round(1 - 0.95^20, digits=4))
+println("Bonferroni: α/m = ", α / m, " → hipóteses rejeitadas: ", count(p .&lt;= α / m))
+println("BH: k* = ", k, " → hipóteses rejeitadas: ", k)</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>P(pelo menos 1 falso positivo em 20 testes) = 0.6415</div>
+  <div>Bonferroni: α/m = 0.005 → hipóteses rejeitadas: 1</div>
+  <div>BH: k* = 3 → hipóteses rejeitadas: 3</div>
+</div>
+
+## 7. Como Escolher o Teste
+
+A [árvore de decisão interativa]({{ site.baseurl }}/testes-estatisticos/arvore/) leva, em poucas perguntas (o objetivo, o tipo de dado e o delineamento), a um dos testes do [catálogo]({{ site.baseurl }}/testes-estatisticos/). A tabela resume os casos mais comuns:
+
+<div style="overflow-x:auto; margin: 1em 0;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 580px;">
+<thead style="background: #e3f2fd;">
+<tr><th style="border:1px solid #bbb;padding:8px;">Objetivo</th><th style="border:1px solid #bbb;padding:8px;">Paramétrico (supõe normalidade)</th><th style="border:1px solid #bbb;padding:8px;">Não paramétrico</th></tr>
 </thead>
 <tbody>
-<tr>
-<td>Masculino</td>
-<td>30</td>
-<td>15</td>
-<td>5</td>
-</tr>
-<tr>
-<td>Feminino</td>
-<td>20</td>
-<td>25</td>
-<td>15</td>
-</tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Média de um grupo contra um valor</td><td style="border:1px solid #bbb;padding:8px;">Teste t de uma amostra</td><td style="border:1px solid #bbb;padding:8px;">Wilcoxon (postos sinalizados)</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Dois grupos independentes</td><td style="border:1px solid #bbb;padding:8px;">Teste t de Welch (ou t com variâncias iguais)</td><td style="border:1px solid #bbb;padding:8px;">Mann-Whitney</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Dois grupos pareados (antes e depois)</td><td style="border:1px solid #bbb;padding:8px;">Teste t pareado</td><td style="border:1px solid #bbb;padding:8px;">Wilcoxon (postos sinalizados)</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Três ou mais grupos independentes</td><td style="border:1px solid #bbb;padding:8px;">ANOVA</td><td style="border:1px solid #bbb;padding:8px;">Kruskal-Wallis</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Três ou mais medidas no mesmo grupo</td><td style="border:1px solid #bbb;padding:8px;">ANOVA de medidas repetidas</td><td style="border:1px solid #bbb;padding:8px;">Friedman</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Associação entre duas variáveis categóricas</td><td colspan="2" style="border:1px solid #bbb;padding:8px;">Qui-quadrado de independência; teste exato de Fisher quando há esperados pequenos</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Relação entre duas variáveis numéricas</td><td style="border:1px solid #bbb;padding:8px;">Correlação de Pearson (relação linear)</td><td style="border:1px solid #bbb;padding:8px;">Correlação de Spearman (relação monótona)</td></tr>
+<tr><td style="border:1px solid #bbb;padding:8px;">Uma proporção contra um valor</td><td style="border:1px solid #bbb;padding:8px;">Teste Z para proporção (n grande)</td><td style="border:1px solid #bbb;padding:8px;">Teste binomial exato</td></tr>
 </tbody>
 </table>
+</div>
 
-Teste se há independência entre gênero e preferência por exercício ao nível de 5% de significância.
+**Paramétrico ou não paramétrico?** Os testes paramétricos supõem uma forma para a distribuição (em geral, normal); quando ela vale, eles têm mais poder. Os não paramétricos supõem menos sobre a forma, toleram melhor valores atípicos e servem para dados ordinais, mas testam hipóteses um pouco diferentes (o Mann-Whitney, por exemplo, não compara médias, e sim se os valores de um grupo tendem a ser maiores que os do outro). Com amostras pequenas e dados muito assimétricos, o não paramétrico costuma ser a escolha mais segura.
 
-**Solução**:
-
-1. Hipóteses:
-   - $$H_0$$: Gênero e preferência são independentes
-   - $$H_1$$: Existe associação entre gênero e preferência
-
-2. **Cálculo das frequências esperadas** $E_{ij} = \dfrac{(\text{total linha}\,i) \times (\text{total col.}\,j)}{n_{\text{total}}}$:
-
-   Totais de linha: Masc = 50, Fem = 60. Totais de coluna: Musculação = 50, Cardio = 40, Yoga = 20. Total geral = 110.
-
-   <div style="overflow-x:auto; margin: 0.5em 0;">
-   <table style="border-collapse: collapse; margin: 0 auto; text-align: center;">
-     <thead style="background: #e8f5e9;">
-       <tr><th style="border:1px solid #bbb;padding:6px;"></th><th style="border:1px solid #bbb;padding:6px;">Musculação</th><th style="border:1px solid #bbb;padding:6px;">Cardio</th><th style="border:1px solid #bbb;padding:6px;">Yoga</th><th style="border:1px solid #bbb;padding:6px;">Total</th></tr>
-     </thead>
-     <tbody>
-       <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Masc (obs)</strong></td><td style="border:1px solid #bbb;padding:6px;">30</td><td style="border:1px solid #bbb;padding:6px;">15</td><td style="border:1px solid #bbb;padding:6px;">5</td><td style="border:1px solid #bbb;padding:6px;">50</td></tr>
-       <tr style="background:#f9fbe7;"><td style="border:1px solid #bbb;padding:6px;"><strong>Masc (esp)</strong></td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \times 50}{110}=22{,}73$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \times 40}{110}=18{,}18$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{50 \times 20}{110}=9{,}09$</td><td style="border:1px solid #bbb;padding:6px;">50</td></tr>
-       <tr><td style="border:1px solid #bbb;padding:6px;"><strong>Fem (obs)</strong></td><td style="border:1px solid #bbb;padding:6px;">20</td><td style="border:1px solid #bbb;padding:6px;">25</td><td style="border:1px solid #bbb;padding:6px;">15</td><td style="border:1px solid #bbb;padding:6px;">60</td></tr>
-       <tr style="background:#f9fbe7;"><td style="border:1px solid #bbb;padding:6px;"><strong>Fem (esp)</strong></td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \times 50}{110}=27{,}27$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \times 40}{110}=21{,}82$</td><td style="border:1px solid #bbb;padding:6px;">$\frac{60 \times 20}{110}=10{,}91$</td><td style="border:1px solid #bbb;padding:6px;">60</td></tr>
-     </tbody>
-   </table>
-   </div>
-
-3. **Estatística qui-quadrado** (calculando cada parcela $\frac{(O-E)^2}{E}$):
-
-   $$\chi^2 = \frac{(30-22{,}73)^2}{22{,}73} + \frac{(15-18{,}18)^2}{18{,}18} + \frac{(5-9{,}09)^2}{9{,}09} + \frac{(20-27{,}27)^2}{27{,}27} + \frac{(25-21{,}82)^2}{21{,}82} + \frac{(15-10{,}91)^2}{10{,}91}$$
-
-   $$= 2{,}327 + 0{,}556 + 1{,}840 + 1{,}939 + 0{,}463 + 1{,}533 = 8{,}658$$
-
-4. **Graus de liberdade:** $\nu = (r-1)(c-1) = (2-1)(3-1) = 2$
-
-5. **Valor crítico:** $\chi^2_{0{,}05;\,2} = 5{,}991$
-
-6. **Decisão:** $8{,}658 > 5{,}991 \Longrightarrow$ **Rejeitar $H_0$**. Há associação significativa entre gênero e preferência de exercício.
+O código compara os dois num exemplo com dados assimétricos (exponenciais com médias 1,0 e 1,5, 20 valores em cada grupo):
 
 <div class="code-container">
   <div class="code-header">
@@ -786,775 +729,53 @@ Teste se há independência entre gênero e preferência por exercício ao níve
     </button>
   </div>
   <div class="code-content">
-    <pre><code>function teste_independencia()
-    # Dados observados
-    O = [30 15 5;
-         20 25 15]
-    
-    # Totais
-    n = sum(O)
-    r_tot = sum(O, dims=2)
-    c_tot = sum(O, dims=1)
-    
-    # Frequências esperadas
-    E = (r_tot * c_tot) / n
-    
-    # Estatística qui-quadrado
-    χ² = sum((O .- E).^2 ./ E)
-    
-    # Graus de liberdade
-    gl = (size(O,1)-1) * (size(O,2)-1)
-    
-    # Valor-p
-    p_valor = 1 - cdf(Chisq(gl), χ²)
-    
-    println("Teste Qui-quadrado de Independência")
-    println("---------------------------------")
-    println("Estatística χ² = ", round(χ², digits=4))
-    println("Graus de liberdade = ", gl)
-    println("Valor-p = ", round(p_valor, digits=4))
-end
+    <pre><code>using Distributions, HypothesisTests, Random
 
-teste_independencia()</code></pre>
+Random.seed!(123)
+grupo1 = rand(Exponential(1.0), 20)    # dados assimétricos: médias 1,0 e 1,5
+grupo2 = rand(Exponential(1.5), 20)
+
+teste_t = UnequalVarianceTTest(grupo1, grupo2)    # teste t de Welch
+teste_mw = MannWhitneyUTest(grupo1, grupo2)
+
+println("Welch:        p = ", round(pvalue(teste_t), digits=4))
+println("Mann-Whitney: p = ", round(pvalue(teste_mw), digits=4))</code></pre>
   </div>
 </div>
 
-## 6. Considerações Práticas
-
-### 6.1 Pressupostos
-
-1. **Normalidade**
-   - Teste de Shapiro-Wilk
-   - QQ-plot
-
-2. **Independência**
-   - Aleatoriedade da amostra
-   - Ausência de autocorrelação
-
-3. **Homocedasticidade**
-   - Teste de Levene
-   - Teste F
-
-### 6.2 Tamanho da Amostra
-
-O tamanho da amostra afeta:
-- Poder do teste
-- Precisão das estimativas
-- Validade dos pressupostos
-
-## 7. Intervalos de Confiança e Testes de Hipótese
-
-### 7.1 Relação com Intervalos de Confiança
-
-Os intervalos de confiança e testes de hipótese são complementares:
-- Um intervalo de confiança de (1-α)% corresponde a todos os valores de μ₀ que não seriam rejeitados em um teste de nível α
-- O intervalo fornece mais informação que o teste, pois indica a faixa de valores plausíveis para o parâmetro
-
-### 7.2 Construção de Intervalos
-
-Para uma média populacional:
-
-$$IC_{1-\alpha} = \bar{x} \pm t_{\alpha/2, n-1} \frac{s}{\sqrt{n}}$$
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>function calcular_ic_media()
-    # Dados
-    dados = randn(30) .+ 2  # Amostra com média ≈ 2
-    α = 0.05
-    
-    # Estatísticas
-    x̄ = mean(dados)
-    s = std(dados)
-    n = length(dados)
-    
-    # Valor crítico t
-    t_crit = quantile(TDist(n-1), 1-α/2)
-    
-    # Intervalo de confiança
-    margem_erro = t_crit * (s/√n)
-    ic_inf = x̄ - margem_erro
-    ic_sup = x̄ + margem_erro
-    
-    println("Intervalo de Confiança (95%)")
-    println("----------------------------")
-    println("Limite inferior: ", round(ic_inf, digits=4))
-    println("Limite superior: ", round(ic_sup, digits=4))
-end
-
-calcular_ic_media()</code></pre>
-  </div>
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Welch: &nbsp; &nbsp; &nbsp; &nbsp;p = 0.0412</div>
+  <div>Mann-Whitney: p = 0.1344</div>
 </div>
 
-## 8. Exemplos Práticos Adicionais
+Nesta amostra, o teste de Welch rejeita a igualdade ao nível de 5% e o Mann-Whitney não. Isso não quer dizer que um sempre tenha mais poder que o outro: com outra semente, o resultado pode se inverter. O exemplo mostra que testes diferentes, que testam hipóteses diferentes, podem discordar perto do limite, e que a escolha do teste tem de ser feita **antes** de ver o resultado.
 
-### 8.1 Teste para Proporção
+## 8. Erros Comuns e Boas Práticas
 
-> **Problema**: Uma empresa de marketing digital afirma que sua nova estratégia de e-mail marketing tem taxa de conversão de 15%. Em uma amostra de 200 e-mails enviados, 40 resultaram em conversão. Teste esta afirmação ao nível de 5% de significância.
+- **Definir as hipóteses, o teste e o α depois de ver os dados.** Tudo isso vem antes; escolher depois é uma forma de "p-hacking".
+- **Ler "não rejeitar" como "provar $H_0$".** Sem poder suficiente, não rejeitar é o resultado esperado mesmo que haja um efeito.
+- **Confundir significância estatística com importância prática.** Reporte o tamanho do efeito e o intervalo de confiança, não só o p-valor.
+- **Fazer muitos testes sem correção** (seção 6).
+- **Ignorar as condições do teste:** independência das observações, normalidade quando o teste a supõe (verificável com um gráfico QQ ou o teste de Shapiro-Wilk), variâncias parecidas quando o teste supõe variâncias iguais.
+- **Planejar sem calcular o poder:** decida o tamanho da amostra antes, para o efeito que importa detectar.
 
-**Solução**:
-
-1. Hipóteses:
-   - H₀: p = 0,15
-   - H₁: p ≠ 0,15
-
-2. Estatística de teste:
-   $$Z = \frac{\hat{p} - p_0}{\sqrt{\frac{p_0(1-p_0)}{n}}}$$
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>function teste_proporcao()
-    # Dados
-    n = 200        # Tamanho da amostra
-    x = 40         # Sucessos
-    p₀ = 0.15      # Proporção sob H₀
-    α = 0.05       # Nível de significância
-    
-    # Proporção amostral
-    p̂ = x/n
-    
-    # Estatística Z
-    z_stat = (p̂ - p₀)/√(p₀*(1-p₀)/n)
-    
-    # Valor-p
-    p_valor = 2 * (1 - cdf(Normal(), abs(z_stat)))
-    
-    println("Teste Z para Proporção")
-    println("---------------------")
-    println("Proporção amostral = ", round(p̂, digits=4))
-    println("Estatística Z = ", round(z_stat, digits=4))
-    println("Valor-p = ", round(p_valor, digits=4))
-end
-
-teste_proporcao()</code></pre>
-  </div>
-</div>
-
-### 8.2 Teste de Correlação
-
-> **Problema**: Queremos verificar se existe correlação significativa entre as horas de estudo e as notas dos alunos.
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>function teste_correlacao()
-    # Dados simulados
-    horas = [2, 3, 4, 3, 5, 6, 4, 5, 6, 7]
-    notas = [65, 70, 75, 68, 80, 85, 72, 78, 88, 90]
-    
-    # Coeficiente de correlação
-    r = cor(horas, notas)
-    
-    # Estatística t
-    n = length(horas)
-    t_stat = r * √((n-2)/(1-r^2))
-    
-    # Valor-p
-    p_valor = 2 * (1 - cdf(TDist(n-2), abs(t_stat)))
-    
-    println("Teste de Correlação")
-    println("------------------")
-    println("Correlação = ", round(r, digits=4))
-    println("Estatística t = ", round(t_stat, digits=4))
-    println("Valor-p = ", round(p_valor, digits=4))
-end
-
-teste_correlacao()</code></pre>
-  </div>
-</div>
-
-## 9. Erros Comuns e Boas Práticas
-
-### 9.1 Erros Comuns
-
-1. **Interpretação Incorreta do Valor-p**
-   - O valor-p NÃO é a probabilidade de H₀ ser verdadeira
-   - O valor-p é a probabilidade de obter dados tão ou mais extremos que os observados, assumindo H₀ verdadeira
-
-2. **Confusão entre Significância Estatística e Prática**
-   - Significância estatística não implica relevância prática
-   - Com amostras muito grandes, diferenças pequenas podem ser estatisticamente significativas
-
-3. **Múltiplos Testes sem Correção (Problema da Multiplicidade)**
-
-   Ao realizar $m$ testes independentes, cada um com nível $\alpha$, a probabilidade de cometer **pelo menos um** Erro Tipo I é:
-
-   $$P(\text{pelo menos 1 falso positivo}) = 1 - (1-\alpha)^m$$
-
-   Para $m = 20$ testes com $\alpha = 0{,}05$: $1 - (0{,}95)^{20} \approx 0{,}64$ — 64% de chance de pelo menos um falso positivo.
-
-   **Correção de Bonferroni** (conservadora): ajustar o nível individual para $\alpha^* = \alpha/m$:
-
-   $$\alpha^* = \frac{\alpha}{m} \quad\text{(ex: }m=20,\; \alpha=0{,}05 \Rightarrow \alpha^* = 0{,}0025\text{)}$$
-
-   **Taxa de Falsas Descobertas (FDR — Benjamini–Hochberg):** menos conservador. Ordena os $m$ p-valores $p_{(1)} \leq p_{(2)} \leq \cdots \leq p_{(m)}$ e define:
-
-   $$k^* = \max\!\left\{k : p_{(k)} \leq \frac{k}{m}\cdot\alpha\right\}$$
-
-   Rejeita-se $H_0$ para todos os $k \leq k^*$. O FDR controla a **proporção esperada** de falsas descobertas entre as rejeições, sendo mais poderoso que Bonferroni em estudos com muitos testes (genômica, neuroimagem, etc.).
-
-### 9.2 Boas Práticas
-
-1. **Planejamento do Estudo**
-   - Defina hipóteses antes da coleta de dados
-   - Calcule o tamanho da amostra necessário
-   - Estabeleça critérios de significância prática
-
-2. **Análise de Dados**
-   - Verifique pressupostos antes do teste
-   - Use visualizações para complementar a análise
-   - Reporte intervalos de confiança junto com valores-p
-
-3. **Comunicação dos Resultados**
-   - Apresente estatísticas descritivas
-   - Reporte tamanhos de efeito
-   - Discuta limitações do estudo
-
-## 10. Recursos Adicionais
-
-### 10.1 Ferramentas Online
-
-1. [Calculadora de Poder Estatístico](https://www.powerandsamplesize.com/)
-2. [Seletor de Teste Estatístico](https://stats.idre.ucla.edu/other/mult-pkg/whatstat/)
-3. [Visualizador de Distribuições](https://seeing-theory.brown.edu/probability-distributions/index.html)
-
-### 10.2 Pacotes Estatísticos
-
-1. **R**
-   - stats
-   - pwr
-   - coin
-
-2. **Python**
-   - scipy.stats
-   - statsmodels
-   - pingouin
-
-3. **Julia**
-   - HypothesisTests.jl
-   - StatisticalTests.jl
-   - Power.jl
-
-## 11. Guia para Escolha do Teste Estatístico
-
-### 11.1 Árvore de Decisão
-
-A [árvore de decisão interativa]({{ site.baseurl }}/testes-estatisticos/arvore/) leva, em poucas perguntas — o que você quer fazer, o tipo de dado e o delineamento —, a um dos testes do [catálogo]({{ site.baseurl }}/testes-estatisticos/).
-
-### 11.2 Critérios de Seleção
-
-1. **Tipo de Variável**
-   
-   <table>
-   <thead>
-   <tr>
-   <th>Tipo de Variável</th>
-   <th>Exemplos</th>
-   <th>Testes Apropriados</th>
-   </tr>
-   </thead>
-   <tbody>
-   <tr>
-   <td>Nominal</td>
-   <td>Gênero, Cor</td>
-   <td>Qui-quadrado, Teste exato de Fisher</td>
-   </tr>
-   <tr>
-   <td>Ordinal</td>
-   <td>Escala Likert</td>
-   <td>Mann-Whitney, Kruskal-Wallis</td>
-   </tr>
-   <tr>
-   <td>Intervalar/Razão</td>
-   <td>Altura, Peso</td>
-   <td>Teste t, ANOVA</td>
-   </tr>
-   </tbody>
-   </table>
-
-2. **Número de Grupos**
-   
-   <table>
-   <thead>
-   <tr>
-   <th>Número de Grupos</th>
-   <th>Paramétrico</th>
-   <th>Não-Paramétrico</th>
-   </tr>
-   </thead>
-   <tbody>
-   <tr>
-   <td>2 grupos independentes</td>
-   <td>Teste t independente</td>
-   <td>Mann-Whitney</td>
-   </tr>
-   <tr>
-   <td>2 grupos pareados</td>
-   <td>Teste t pareado</td>
-   <td>Wilcoxon</td>
-   </tr>
-   <tr>
-   <td>> 2 grupos independentes</td>
-   <td>ANOVA</td>
-   <td>Kruskal-Wallis</td>
-   </tr>
-   <tr>
-   <td>> 2 grupos pareados</td>
-   <td>ANOVA medidas repetidas</td>
-   <td>Friedman</td>
-   </tr>
-   </tbody>
-   </table>
-
-3. **Pressupostos dos Testes**
-
-   <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
-   <strong>🔍 Verificação de Pressupostos:</strong>
-   
-   - Normalidade: Shapiro-Wilk ou Kolmogorov-Smirnov
-   - Homocedasticidade: Levene ou Bartlett
-   - Independência: Durbin-Watson
-   </div>
-
-### 11.3 Fluxograma de Decisão por Objetivo
-
-#### 11.3.1 Comparação de Médias/Medianas
-
-```mermaid
-graph TD
-    A[Dados Numéricos] --> B{Normal?}
-    B -->|Sim| C{Quantos grupos?}
-    B -->|Não| D{Quantos grupos?}
-    C -->|2 grupos| E{Pareado?}
-    C -->|>2 grupos| F{Pareado?}
-    D -->|2 grupos| G{Pareado?}
-    D -->|>2 grupos| H{Pareado?}
-    E -->|Sim| I[Teste t pareado]
-    E -->|Não| J[Teste t independente]
-    F -->|Sim| K[ANOVA medidas repetidas]
-    F -->|Não| L[ANOVA one-way]
-    G -->|Sim| M[Wilcoxon]
-    G -->|Não| N[Mann-Whitney]
-    H -->|Sim| O[Friedman]
-    H -->|Não| P[Kruskal-Wallis]
-```
-
-#### 11.3.2 Análise de Relações
-
-```mermaid
-graph TD
-    A[Tipo de Relação] --> B{Variáveis Numéricas?}
-    B -->|Ambas| C{Normal?}
-    B -->|Uma Categórica| D[Análise de Grupos]
-    B -->|Ambas Categóricas| E[Qui-quadrado/Fisher]
-    C -->|Sim| F[Correlação de Pearson]
-    C -->|Não| G[Correlação de Spearman]
-    D --> H{Normal?}
-    H -->|Sim| I[Teste t/ANOVA]
-    H -->|Não| J[Mann-Whitney/Kruskal-Wallis]
-```
-
-### 11.4 Tabela de Decisão Rápida
-
-<table>
-<thead>
-<tr>
-<th>Objetivo</th>
-<th>Condições</th>
-<th>Teste Recomendado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Comparar média com valor de referência</td>
-<td>Normal</td>
-<td>Teste t uma amostra</td>
-</tr>
-<tr>
-<td>Comparar média com valor de referência</td>
-<td>Não normal</td>
-<td>Wilcoxon uma amostra</td>
-</tr>
-<tr>
-<td>Comparar duas médias (independentes)</td>
-<td>Normal + Variâncias iguais</td>
-<td>Teste t independente</td>
-</tr>
-<tr>
-<td>Comparar duas médias (independentes)</td>
-<td>Normal + Variâncias diferentes</td>
-<td>Welch t-test</td>
-</tr>
-<tr>
-<td>Comparar duas médias (pareadas)</td>
-<td>Normal</td>
-<td>Teste t pareado</td>
-</tr>
-<tr>
-<td>Comparar > 2 médias</td>
-<td>Normal + Homocedástico</td>
-<td>ANOVA</td>
-</tr>
-<tr>
-<td>Comparar proporções</td>
-<td>n grande</td>
-<td>Teste Z proporções</td>
-</tr>
-<tr>
-<td>Comparar proporções</td>
-<td>n pequeno</td>
-<td>Teste exato de Fisher</td>
-</tr>
-<tr>
-<td>Verificar independência</td>
-<td>Categóricas</td>
-<td>Qui-quadrado</td>
-</tr>
-<tr>
-<td>Avaliar correlação</td>
-<td>Normal bivariada</td>
-<td>Pearson</td>
-</tr>
-<tr>
-<td>Avaliar correlação</td>
-<td>Não normal</td>
-<td>Spearman</td>
-</tr>
-</tbody>
-</table>
-
-### 11.5 Exemplos Práticos de Seleção
-
-1. **Exemplo: Eficácia de Medicamento**
-   - Variável: Pressão arterial (numérica)
-   - Grupos: Antes e depois (pareado)
-   - Distribuição: Normal
-   - **Teste escolhido**: Teste t pareado
-
-2. **Exemplo: Preferência por Marca**
-   - Variável: Escolha de marca (categórica)
-   - Grupos: Múltiplas marcas
-   - **Teste escolhido**: Qui-quadrado
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using HypothesisTests
-
-function exemplo_selecao_teste()
-    # Exemplo 1: Teste t pareado
-    antes = [120, 122, 118, 125, 124]
-    depois = [115, 118, 112, 120, 119]
-    
-    # Teste de normalidade primeiro
-    println("Teste de Normalidade (diferenças):")
-    dif = depois .- antes
-    normal_test = ShapiroWilkTest(dif)
-    println("p-valor = ", round(pvalue(normal_test), digits=4))
-    
-    # Se normal, proceder com teste t pareado
-    if pvalue(normal_test) > 0.05
-        paired_test = OneSampleTTest(dif)
-        println("\nTeste t Pareado:")
-        println("Estatística t = ", round(test_statistic(paired_test), digits=4))
-        println("p-valor = ", round(pvalue(paired_test), digits=4))
-    else
-        # Se não normal, usar Wilcoxon
-        wilcox_test = SignedRankTest(depois, antes)
-        println("\nTeste de Wilcoxon:")
-        println("p-valor = ", round(pvalue(wilcox_test), digits=4))
-    end
-end
-
-exemplo_selecao_teste()</code></pre>
-  </div>
-</div>
-
-### 11.6 Considerações Importantes
-
-1. **Tamanho da Amostra**
-   - n < 30: Verificar normalidade é crucial
-   - n ≥ 30: Testes paramétricos são mais robustos
-
-2. **Violação de Pressupostos**
-   - Leve: Testes paramétricos ainda são robustos
-   - Severa: Optar por alternativas não-paramétricas
-
-3. **Poder Estatístico**
-   - Testes paramétricos: Maior poder se pressupostos atendidos
-   - Testes não-paramétricos: Mais seguros se dúvida sobre pressupostos
-
-4. **Interpretabilidade**
-   - Considerar a facilidade de interpretação
-   - Balancear rigor estatístico com praticidade
-
-## 12. Testes Paramétricos vs. Não Paramétricos
-
-### 12.1 Testes Paramétricos
-
-Os testes paramétricos são procedimentos estatísticos que assumem que os dados seguem uma distribuição de probabilidade específica (geralmente a distribuição normal) e fazem inferências sobre os parâmetros dessa distribuição.
-
-#### 12.1.1 Características Principais
-
-1. **Pressupostos**
-   - Normalidade dos dados
-   - Homogeneidade das variâncias (homocedasticidade)
-   - Independência das observações
-   - Variáveis contínuas ou intervalares
-
-2. **Vantagens**
-   - Maior poder estatístico quando os pressupostos são atendidos
-   - Estimativas mais precisas
-   - Capacidade de fazer inferências sobre parâmetros populacionais
-
-3. **Exemplos de Testes Paramétricos**
-
-   <table>
-   <thead>
-   <tr>
-   <th>Teste</th>
-   <th>Uso</th>
-   <th>Pressuposto Principal</th>
-   </tr>
-   </thead>
-   <tbody>
-   <tr>
-   <td>Teste t</td>
-   <td>Comparação de médias</td>
-   <td>Normalidade</td>
-   </tr>
-   <tr>
-   <td>ANOVA</td>
-   <td>Comparação de múltiplas médias</td>
-   <td>Normalidade e homocedasticidade</td>
-   </tr>
-   <tr>
-   <td>Correlação de Pearson</td>
-   <td>Associação linear</td>
-   <td>Normalidade bivariada</td>
-   </tr>
-   <tr>
-   <td>Regressão Linear</td>
-   <td>Relação entre variáveis</td>
-   <td>Normalidade dos resíduos</td>
-   </tr>
-   </tbody>
-   </table>
-
-#### 12.1.2 Verificação de Pressupostos
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using HypothesisTests
-using Statistics
-
-function verificar_pressupostos()
-    # Dados simulados
-    dados = randn(30) .* 2 .+ 1
-    
-    # 1. Teste de Normalidade
-    normalidade = ShapiroWilkTest(dados)
-    
-    # 2. Teste de Homocedasticidade (entre dois grupos)
-    grupo1 = randn(20) .* 2
-    grupo2 = randn(20) .* 2
-    homog = VarianceFTest(grupo1, grupo2)
-    
-    println("Verificação de Pressupostos")
-    println("---------------------------")
-    println("Teste de Normalidade:")
-    println("Estatística W = ", round(test_statistic(normalidade), digits=4))
-    println("p-valor = ", round(pvalue(normalidade), digits=4))
-    println("\nTeste de Homocedasticidade:")
-    println("Estatística F = ", round(test_statistic(homog), digits=4))
-    println("p-valor = ", round(pvalue(homog), digits=4))
-end
-
-verificar_pressupostos()</code></pre>
-  </div>
-</div>
-
-### 12.2 Testes Não Paramétricos
-
-Os testes não paramétricos são procedimentos estatísticos que não exigem pressupostos sobre a distribuição dos dados. São também conhecidos como "testes livres de distribuição".
-
-#### 12.2.1 Características Principais
-
-1. **Vantagens**
-   - Mais flexíveis quanto à distribuição dos dados
-   - Robustos a outliers
-   - Aplicáveis a dados ordinais
-   - Úteis para amostras pequenas
-
-2. **Limitações**
-   - Menor poder estatístico que testes paramétricos
-   - Não fazem inferências sobre parâmetros específicos
-   - Podem perder informação ao usar ranks
-
-3. **Exemplos de Testes Não Paramétricos**
-
-   | Teste Não Paramétrico | Equivalente Paramétrico | Uso |
-   |----------------------|------------------------|-----|
-   | Mann-Whitney U | Teste t independente | Comparar dois grupos |
-   | Wilcoxon | Teste t pareado | Comparar medidas repetidas |
-   | Kruskal-Wallis | ANOVA one-way | Comparar múltiplos grupos |
-   | Spearman | Correlação de Pearson | Correlação por ranks |
-
-#### 12.2.2 Exemplo Comparativo
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>function comparar_testes()
-    # Dados não normais (distribuição exponencial)
-    grupo1 = rand(Exponential(1), 20)
-    grupo2 = rand(Exponential(1.5), 20)
-    
-    # Teste paramétrico (t)
-    teste_t = UnequalVarianceTTest(grupo1, grupo2)
-    
-    # Teste não paramétrico (Mann-Whitney)
-    teste_mw = MannWhitneyUTest(grupo1, grupo2)
-    
-    println("Comparação entre Testes")
-    println("----------------------")
-    println("Teste t:")
-    println("Estatística t = ", round(test_statistic(teste_t), digits=4))
-    println("p-valor = ", round(pvalue(teste_t), digits=4))
-    println("\nTeste de Mann-Whitney:")
-    println("Estatística U = ", round(test_statistic(teste_mw), digits=4))
-    println("p-valor = ", round(pvalue(teste_mw), digits=4))
-end
-
-comparar_testes()</code></pre>
-  </div>
-</div>
-
-### 12.3 Quando Usar Cada Tipo de Teste?
-
-#### 12.3.1 Use Testes Paramétricos Quando:
-
-1. **Dados Atendem aos Pressupostos**
-   - Distribuição normal ou aproximadamente normal
-   - Variâncias homogêneas
-   - Tamanho amostral adequado (n ≥ 30)
-
-2. **Precisão é Crucial**
-   - Necessidade de estimativas precisas
-   - Inferências sobre parâmetros populacionais
-   - Poder estatístico é prioridade
-
-#### 12.3.2 Use Testes Não Paramétricos Quando:
-
-1. **Violação de Pressupostos**
-   - Dados não normais
-   - Heteroscedasticidade
-   - Presença de outliers significativos
-
-2. **Características dos Dados**
-   - Amostra pequena (n < 30)
-   - Dados ordinais ou rankings
-   - Distribuição muito assimétrica
-
-<div style="border-left: 4px solid #FFA500; padding: 0.5em; background-color: #FFF3E0;">
-  <strong>⚠️ Dica Importante:</strong><br>
-  Em caso de dúvida entre teste paramétrico e não paramétrico:
-  1. Verifique os pressupostos rigorosamente
-  2. Se houver violação moderada, o teste paramétrico ainda pode ser usado
-  3. Se houver violação severa, opte pelo teste não paramétrico
-  4. Considere reportar ambos os resultados se forem divergentes
-</div>
-
-### 12.4 Tabela Comparativa Detalhada
-
-| Aspecto | Testes Paramétricos | Testes Não Paramétricos |
-|---------|-------------------|------------------------|
-| Pressupostos | Mais rigorosos | Mais flexíveis |
-| Poder Estatístico | Maior (quando pressupostos atendidos) | Menor |
-| Robustez | Menor | Maior |
-| Interpretação | Mais direta | Menos intuitiva |
-| Tamanho Amostral | Preferível n ≥ 30 | Funciona bem com n < 30 |
-| Tipo de Dados | Intervalares/Razão | Qualquer tipo |
-| Outliers | Sensível | Robusto |
-| Precisão | Maior | Menor |
-
-### 12.5 Exemplos de Aplicação
-
-1. **Cenário: Dados Normais, n = 50**
-   - Escolha: Teste paramétrico
-   - Razão: Pressupostos atendidos, maior poder
-
-2. **Cenário: Dados Assimétricos, n = 15**
-   - Escolha: Teste não paramétrico
-   - Razão: Amostra pequena, não normalidade
-
-3. **Cenário: Escala Likert**
-   - Escolha: Teste não paramétrico
-   - Razão: Dados ordinais
-
-4. **Cenário: Medidas Físicas, n = 100**
-   - Escolha: Teste paramétrico
-   - Razão: Dados contínuos, amostra grande
-
----
-
-## Quiz Interativo: Teste seus conhecimentos!
+## Quiz Interativo
 
 <div style="border: 2px solid #4CAF50; border-radius: 8px; padding: 16px; background: #f9f9f9; margin-top: 32px; margin-bottom: 32px;">
-  <strong>🎮 Experimente o quiz sobre Testes de Hipótese:</strong>
+  <strong>🎮 Teste seus conhecimentos sobre testes de hipótese:</strong>
   <br><br>
-  <iframe src="/quiz/" width="100%" height="700" style="border:none; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></iframe>
+  <iframe src="{{ site.baseurl }}/quiz/" title="Quiz de testes estatísticos" width="100%" height="700" style="border:none; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);"></iframe>
   <br>
-  <span style="font-size: 0.95em; color: #555;">Se o quiz não carregar, <a href="/quiz/" target="_blank">clique aqui para abrir em nova aba</a>.</span>
+  <span style="font-size: 0.95em; color: #555;">Se o quiz não carregar, <a href="{{ site.baseurl }}/quiz/" target="_blank">abra em nova aba</a>.</span>
 </div>
 
-## Referências Adicionais
+## Referências
 
-6. Wasserman, L. **All of Statistics: A Concise Course in Statistical Inference**. Springer, 2004. — [Springer Link](https://link.springer.com/book/10.1007/978-0-387-21736-9)
-7. Lehmann, E. L.; Romano, J. P. **Testing Statistical Hypotheses**. 3ª ed. Springer, 2005. — [Springer Link](https://link.springer.com/book/10.1007/0-387-27605-X)
-8. Rice, J. A. **Mathematical Statistics and Data Analysis**. 3ª ed. Thomson Brooks/Cole, 2007.
-9. Efron, B.; Hastie, T. **Computer Age Statistical Inference**. Cambridge University Press, 2016. — [PDF gratuito (Stanford)](https://web.stanford.edu/~hastie/CASI_files/PDF/casi.pdf)
-10. Good, P. I.; Hardin, J. W. **Common Errors in Statistics (and How to Avoid Them)**. 4ª ed. Wiley, 2012.
-11. Wasserstein, R. L.; Lazar, N. A. (2016). **The ASA Statement on p-Values: Context, Process, and Purpose**. *The American Statistician*, 70(2), 129–133. — [DOI](https://doi.org/10.1080/00031305.2016.1154108)
-12. Cohen, J. (1988). **Statistical Power Analysis for the Behavioral Sciences** (2nd ed.). Lawrence Erlbaum Associates. — Referência clássica para tamanho de efeito e poder.
-13. Benjamini, Y.; Hochberg, Y. (1995). **Controlling the False Discovery Rate**. *JRSS-B*, 57(1), 289–300. — [JSTOR](https://www.jstor.org/stable/2346101)
-14. Documentação `HypothesisTests.jl` (Julia): [https://juliastats.org/HypothesisTests.jl/stable/](https://juliastats.org/HypothesisTests.jl/stable/)
+1. Benjamini, Y.; Hochberg, Y. (1995). Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing. *Journal of the Royal Statistical Society: Series B (Methodological)*, 57(1), 289–300. DOI: [10.1111/j.2517-6161.1995.tb02031.x](https://doi.org/10.1111/j.2517-6161.1995.tb02031.x).
+2. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+3. Lehmann, E. L. (1993). The Fisher, Neyman-Pearson Theories of Testing Hypotheses: One Theory or Two? *Journal of the American Statistical Association*, 88(424), 1242–1249. DOI: [10.1080/01621459.1993.10476404](https://doi.org/10.1080/01621459.1993.10476404).
+4. Lehmann, E. L.; Romano, J. P. (2005). *Testing Statistical Hypotheses*. 3rd ed. Springer.
+5. Wasserman, L. (2004). *All of Statistics: A Concise Course in Statistical Inference*. Springer.
+6. Wasserstein, R. L.; Lazar, N. A. (2016). The ASA's Statement on p-Values: Context, Process, and Purpose. *The American Statistician*, 70(2), 129–133. DOI: [10.1080/00031305.2016.1154108](https://doi.org/10.1080/00031305.2016.1154108).
