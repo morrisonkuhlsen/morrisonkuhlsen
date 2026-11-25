@@ -14,3 +14,4 @@ import Provas.Intervalos
 import Provas.Amostragem
 import Provas.Estimadores
 import Provas.Anova
+import Provas.Inferencia
