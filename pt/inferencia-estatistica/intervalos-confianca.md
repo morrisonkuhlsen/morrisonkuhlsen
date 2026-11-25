@@ -7,122 +7,32 @@ parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/intervalos-confianca
 order: 2
 mathjax: true
-description: "Intervalos que estimam, com um dado nível de confiança, a localização de um parâmetro populacional."
+description: "Intervalo de confiança para média e proporção: o que 95% quer dizer, exemplo resolvido passo a passo, tamanho da amostra e código em Julia."
 ---
 
 ## Introdução
 
-Um intervalo de confiança é uma estimativa de um parâmetro populacional baseada em uma amostra, fornecendo um intervalo de valores prováveis com um determinado nível de confiança. Em vez de estimar o parâmetro por um único valor (estimativa pontual), o intervalo de confiança fornece um intervalo de valores plausíveis.
+Uma amostra dá uma **estimativa pontual** do parâmetro da população: a média de 12 tintas testadas, por exemplo, estima a média de todas as tintas daquele tipo. Mas outra amostra daria outro número. O **intervalo de confiança** acrescenta à estimativa uma margem que leva em conta essa variação de amostra para amostra, e diz com que frequência o método acerta.
 
-![Conceito de Intervalos de Confiança]({{ site.baseurl }}/assets/images/concept.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Assim como a luz do sol que incide sobre a parede revela uma faixa de tonalidade entre sombras e claridade, o intervalo de confiança delimita a região onde, com certo grau de certeza, acreditamos que o verdadeiro valor de um parâmetro populacional se encontra.</div>
+![Uma lata de tinta no chão de madeira, diante de uma parede iluminada pelo sol]({{ site.baseurl }}/assets/images/concept.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
+<div class="image-caption" style="text-align: center;">Figura 1: O exemplo resolvido desta página estima o tempo médio que uma tinta resiste ao sol (ilustração).</div>
 
----
+<div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9;">
+  <strong>🎯 A forma geral:</strong>
+  $$\text{estimativa} \pm \underbrace{\text{valor crítico} \times \text{erro padrão}}_{\text{margem de erro}}$$
+  O <strong>erro padrão</strong> mede quanto a estimativa varia de amostra para amostra; o <strong>valor crítico</strong> vem da distribuição da estimativa (normal ou t) e do nível de confiança escolhido.
+</div>
 
-## Exemplo Prático Detalhado: Intervalo de Confiança para a Média de Resistência de Tintas
+## 1. O que "95% de confiança" quer dizer
 
-### Enunciado
+O nível de confiança é uma propriedade do **método**, não de um intervalo específico. Se o mesmo procedimento fosse repetido com muitas amostras diferentes, cerca de 95% dos intervalos calculados conteriam o valor verdadeiro do parâmetro, e cerca de 5% não.
 
-Uma empresa de tintas deseja garantir que a resistência de sua tinta, medida em horas até o desbotamento sob luz solar intensa, atenda ao padrão mínimo de qualidade. Para isso, foram testadas 12 amostras, resultando nos seguintes tempos (em horas):
+A figura mostra isso numa simulação: 50 amostras de 12 valores, tiradas de uma população cuja média verdadeira é $\mu = 125$ (conhecida aqui só para podermos conferir). Cada amostra dá um intervalo de 95%.
 
-`[120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]`
+![50 segmentos verticais, um por amostra, em torno de uma linha tracejada em 125; 44 segmentos azuis cruzam a linha e 6 vermelhos ficam inteiramente acima ou abaixo dela]({{ site.baseurl }}/assets/images/cobertura_intervalos.png)
+<div class="image-caption">Figura 2: 50 intervalos de 95% calculados com 50 amostras diferentes. Os azuis contêm a média verdadeira, 125; os vermelhos não. Nesta simulação, 44 de 50 acertaram.</div>
 
-Calcule um intervalo de confiança de 95% para a média do tempo de resistência da tinta.
-
----
-
-### 1. Fórmula do Intervalo de Confiança para a Média (σ desconhecido)
-
-Quando o desvio padrão populacional é desconhecido, usamos a distribuição t de Student:
-
-$$
-IC = \bar{x} \pm t_{\alpha/2, n-1} \cdot \frac{s}{\sqrt{n}}
-$$
-
-Onde:
-- $\bar{x}$ = média amostral
-- $t_{\alpha/2, n-1}$ = valor crítico da t de Student com $n-1$ graus de liberdade
-- $s$ = desvio padrão amostral
-- $n$ = tamanho da amostra
-
-#### Avisos Importantes
-- **O intervalo de confiança não garante que a média populacional está dentro do intervalo calculado para esta amostra específica.** Ele indica que, se repetíssemos o experimento muitas vezes, cerca de 95% dos intervalos calculados conteriam a verdadeira média populacional.
-- **A distribuição t é usada porque o desvio padrão populacional é desconhecido e o tamanho da amostra é pequeno ($n < 30$).**
-- **Os dados devem ser aproximadamente simétricos (sem outliers extremos) para a validade do método.**
-
----
-
-### 2. Resolução Manual Passo a Passo
-
-**Dados:**
-- $n = 12$
-- Dados: $[120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]$
-
-#### a) Média amostral ($\bar{x}$):
-
-$$
-\bar{x} = \frac{120 + 130 + 125 + 128 + 122 + 127 + 126 + 124 + 129 + 123 + 128 + 125}{12} = \frac{1507}{12} = 125,5833
-$$
-
-#### b) Desvio padrão amostral ($s$):
-
-Calculando cada termo $(x_i - \bar{x})^2$:
-
-- $(120 - 125,5833)^2 = 31,195$
-- $(130 - 125,5833)^2 = 19,493$
-- $(125 - 125,5833)^2 = 0,340$
-- $(128 - 125,5833)^2 = 5,844$
-- $(122 - 125,5833)^2 = 12,841$
-- $(127 - 125,5833)^2 = 2,008$
-- $(126 - 125,5833)^2 = 0,173$
-- $(124 - 125,5833)^2 = 2,507$
-- $(129 - 125,5833)^2 = 11,687$
-- $(123 - 125,5833)^2 = 6,673$
-- $(128 - 125,5833)^2 = 5,844$
-- $(125 - 125,5833)^2 = 0,340$
-
-Somando:
-$$
-\sum (x_i - \bar{x})^2 = 98,945
-$$
-
-$$
-s = \sqrt{\frac{98,945}{11}} = \sqrt{8,9941} = 2,999
-$$
-
-#### c) Valor crítico t
-
-Graus de liberdade: $n-1 = 11$
-
-Para 95% de confiança: $t_{0,025, 11} = 2,200985$ (valor exato)
-
-#### d) Erro padrão da média (SE):
-
-$$
-SE = \frac{2,999}{\sqrt{12}} = \frac{2,999}{3,4641} = 0,8657
-$$
-
-#### e) Margem de erro (ME):
-
-$$
-ME = 2,200985 \times 0,8657 = 1,904
-$$
-
-#### f) Intervalo de confiança
-
-$$
-IC = 125,5833 \pm 1,904
-$$
-
-$$
-IC = [123,68,\ 127,49]
-$$
-
-**Interpretação:** Com 95% de confiança, a média do tempo de resistência da tinta está entre 123,68 e 127,49 horas.
-
----
-
-### 3. Exemplo em Julia
+Em 50 intervalos, o número de acertos varia: aqui foram 44 (88%), um pouco abaixo dos 47 ou 48 esperados, por acaso. Com muitas repetições, a proporção fica perto de 95%; o código abaixo repete o procedimento 10.000 vezes:
 
 <div class="code-container">
   <div class="code-header">
@@ -133,130 +43,90 @@ $$
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Statistics, Distributions, Plots
-theme(:bright)
+    <pre><code>using Statistics, Distributions, Random
 
-dados = [120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]
-n = length(dados)
-x̄ = mean(dados)
-s = std(dados, corrected=true)
-α = 0.05
-t = quantile(TDist(n-1), 1 - α/2)
-SE = s / sqrt(n)
-ME = t * SE
-IC_lower = x̄ - ME
-IC_upper = x̄ + ME
+# 10.000 amostras de tamanho 12 de uma população N(125, 3²), cuja média μ = 125
+# é conhecida aqui só para podermos conferir quantos intervalos acertam.
+Random.seed!(123)
+μ, σ, n, repeticoes = 125, 3, 12, 10_000
+t = quantile(TDist(n - 1), 0.975)
 
-println("IC 95%: [", round(IC_lower, digits=2), ", ", round(IC_upper, digits=2), "]")
+function contem_μ(amostra)
+    me = t * std(amostra) / sqrt(n)
+    return mean(amostra) - me &lt;= μ &lt;= mean(amostra) + me
+end
 
-# Plot melhorado
-plot(1:n, dados, seriestype=:scatter, label="Dados", color=:steelblue,
-    xlabel="Amostra", ylabel="Resistência (horas)",
-    title="Intervalo de Confiança 95% para Resistência da Tinta",
-    legend=:bottomright, markersize=6)
-
-# Média e intervalo de confiança
-hline!([x̄], label="Média ($(round(x̄, digits=2)))", color=:darkred, linestyle=:solid, linewidth=2)
-
-# Área do intervalo de confiança (preenchimento)
-plot!([1, n], [x̄, x̄], fillrange=[IC_upper, IC_upper], 
-    fillalpha=0.1, color=:grey, label="", linewidth=0)
-plot!([1, n], [x̄, x̄], fillrange=[IC_lower, IC_lower],
-    fillalpha=0.1, color=:grey, label="IC 95%", linewidth=0)
-
-# Linhas dos limites do IC
-hline!([IC_lower, IC_upper], label="", color=:grey, linestyle=:dash, linewidth=1.5)
-
-# Margem de erro (setas + anotação)
-annotate!(n/2, x̄, text("ME: ±$(round(ME, digits=2))", 9, :center, :black))
-plot!([n/2, n/2], [x̄, IC_upper], arrow=true, color=:grey, label="", linewidth=1.5)
-plot!([n/2, n/2], [x̄, IC_lower], arrow=true, color=:grey, label="", linewidth=1.5)
-
-# Anotações extras
-annotate!(n/2, IC_upper + 0.5, text("Limite Superior: $(round(IC_upper, digits=2))", 8, :center))
-annotate!(n/2, IC_lower - 0.5, text("Limite Inferior: $(round(IC_lower, digits=2))", 8, :center))
-
-# Melhorias visuais
-plot!(grid=true, minorgrid=true, size=(800, 500), ylims=(minimum(dados)-1, maximum(dados)+1))
-</code></pre>
+acertos = count(_ -&gt; contem_μ(rand(Normal(μ, σ), n)), 1:repeticoes)
+println("Proporção de intervalos que contêm μ: ", acertos / repeticoes)</code></pre>
   </div>
 </div>
 
 #### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  IC 95%: [123.68, 127.49]
+  <div>Proporção de intervalos que contêm μ: 0.9468</div>
 </div>
 
-![Exemplo de plot do intervalo de confiança]({{ site.baseurl }}/assets/images/intervalo_confianca_resistencia_tinta.png){:style="max-width: 800px; display: block; margin: 0 auto;"}
+O que isso **não** quer dizer:
 
-O gráfico mostra os valores individuais, a média amostral (linha vermelha tracejada) e os limites inferior e superior do intervalo de confiança (linhas verdes pontilhadas).
+- **Não** é "95% de chance de $\mu$ estar neste intervalo". Depois de calculado, o intervalo é fixo, e $\mu$ também: ou ele contém $\mu$, ou não. Os 95% descrevem o método antes de a amostra ser sorteada. (A pergunta "qual a probabilidade de $\mu$ estar aqui?" é respondida por outro tipo de intervalo, o intervalo de credibilidade da estatística bayesiana.)
+- **Não** é "95% dos dados estão no intervalo". O intervalo é para a **média**, não para os valores individuais; ele fica mais estreito à medida que a amostra cresce, enquanto os dados continuam espalhados (veja a figura 3).
+- **Não** cobre erros que não são de amostragem: uma amostra que não é aleatória, medições com viés ou perguntas mal formuladas podem deixar o intervalo inteiro longe do valor verdadeiro.
 
----
+## 2. Exemplo Resolvido: Resistência de uma Tinta
 
-## Contribuição Histórica de Jerzy Neyman
+> **Problema** (números ilustrativos): uma fábrica testou 12 latas de uma tinta e mediu, em horas, quanto tempo cada uma resistiu ao sol intenso até desbotar: 120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125. Calcule um intervalo de 95% de confiança para o tempo médio de resistência dessa tinta.
 
-Jerzy Neyman (1894-1981) foi um matemático e estatístico polonês que revolucionou a teoria da inferência estatística com sua formulação dos intervalos de confiança em 1934. Sua contribuição representa um marco fundamental na transição da estatística clássica para a moderna teoria estatística.
+**Fórmula.** O desvio padrão da população não é conhecido, então ele é estimado pelo desvio padrão amostral $s$ e o valor crítico vem da distribuição t de Student:
 
-![Jerzy Neyman]({{ site.baseurl }}/assets/images/Jerzy_Neyman.jpg){:style="max-width: 300px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Jerzy Neyman (1894-1981), pioneiro da teoria dos intervalos de confiança</div>
+$$\text{IC} = \bar{x} \pm t_{\alpha/2;\,n-1} \cdot \frac{s}{\sqrt{n}}$$
 
-### Principais Contribuições
+onde $\bar{x}$ é a média amostral, $s$ o desvio padrão amostral, $n$ o tamanho da amostra e $t_{\alpha/2;\,n-1}$ o valor que deixa área $\alpha/2$ à direita na distribuição t com $n - 1$ graus de liberdade (para 95%, $\alpha = 0{,}05$).
 
-1. **Fundamentação Teórica**: Neyman desenvolveu a teoria matemática rigorosa dos intervalos de confiança, estabelecendo uma base sólida para a inferência estatística frequentista.
+**Condições.** O intervalo t supõe observações independentes, de uma população aproximadamente normal. O t é usado porque $\sigma$ é desconhecido, e não por causa do tamanho da amostra: com $\sigma$ desconhecido, o certo é o t mesmo com $n$ grande (os dois só ficam parecidos). Com $n = 12$, a normalidade importa; estes dados não têm assimetria forte nem valores atípicos.
 
-2. **Interpretação Frequentista**: Introduziu a interpretação frequentista dos intervalos de confiança, explicando que o nível de confiança se refere à frequência com que o intervalo contém o verdadeiro parâmetro em repetições hipotéticas do experimento.
+**Passo 1, média:**
 
-3. **Metodologia Objetiva**: Criou uma abordagem objetiva para quantificar a incerteza em estimativas estatísticas, substituindo métodos mais subjetivos anteriores.
+$$\bar{x} = \frac{120 + 130 + 125 + 128 + 122 + 127 + 126 + 124 + 129 + 123 + 128 + 125}{12} = \frac{1507}{12} \approx 125{,}5833 \text{ horas}$$
 
-### Legado
+**Passo 2, desvio padrão.** Cada desvio $x_i - \bar{x}$ ao quadrado, com a média completa ($\frac{1507}{12}$):
 
-A formulação de Neyman dos intervalos de confiança continua sendo fundamental para:
-- Pesquisa científica moderna
-- Controle de qualidade industrial
-- Tomada de decisões baseada em dados
-- Desenvolvimento de novos métodos estatísticos
+| $x_i$ | $x_i - \bar{x}$ | $(x_i - \bar{x})^2$ |
+|---|---|---|
+| 120 | −5,5833 | 31,1736 |
+| 130 | 4,4167 | 19,5069 |
+| 125 | −0,5833 | 0,3403 |
+| 128 | 2,4167 | 5,8403 |
+| 122 | −3,5833 | 12,8403 |
+| 127 | 1,4167 | 2,0069 |
+| 126 | 0,4167 | 0,1736 |
+| 124 | −1,5833 | 2,5069 |
+| 129 | 3,4167 | 11,6736 |
+| 123 | −2,5833 | 6,6736 |
+| 128 | 2,4167 | 5,8403 |
+| 125 | −0,5833 | 0,3403 |
+| **Soma** | **0** | **98,9167** |
 
-Sua abordagem rigorosa e matemática estabeleceu os fundamentos para muito do que hoje consideramos estatística moderna, incluindo a teoria da estimação e testes de hipóteses.
+(Em fração exata, a soma é $\frac{1187}{12}$.)
 
----
+$$s^2 = \frac{98{,}9167}{12 - 1} = \frac{98{,}9167}{11} \approx 8{,}9924 \qquad s = \sqrt{8{,}9924} \approx 2{,}9987 \text{ horas}$$
 
-## Conceitos Fundamentais
+**Passo 3, valor crítico.** Com $n - 1 = 11$ graus de liberdade e 2,5% em cada cauda (tabela t, ou `quantile(TDist(11), 0.975)` no Julia): $t_{0{,}025;\,11} = 2{,}2010$.
 
-### Nível de Confiança
+**Passo 4, erro padrão:**
 
-O nível de confiança (geralmente representado por $$1-\alpha$$) indica a probabilidade de que o intervalo calculado contenha o verdadeiro parâmetro populacional. Os níveis mais comuns são:
-- 90% ($$\alpha = 0,10$$)
-- 95% ($$\alpha = 0,05$$)
-- 99% ($$\alpha = 0,01$$)
+$$\text{EP} = \frac{s}{\sqrt{n}} = \frac{2{,}9987}{\sqrt{12}} = \frac{2{,}9987}{3{,}4641} \approx 0{,}8657 \text{ hora}$$
 
-### Margem de Erro
+**Passo 5, margem de erro:**
 
-A margem de erro (ME) representa a distância máxima entre a estimativa amostral e o parâmetro populacional:
+$$\text{ME} = 2{,}2010 \times 0{,}8657 \approx 1{,}9053 \text{ hora}$$
 
-$$ ME = \text{valor crítico} \times \text{erro padrão} $$
+**Passo 6, intervalo:**
 
-## Fórmula Geral
+$$\text{IC}_{95\%} = 125{,}5833 \pm 1{,}9053 = [123{,}68;\ 127{,}49] \text{ horas}$$
 
-Para uma distribuição aproximadamente normal, o intervalo de confiança tem a forma geral:
+**Interpretação:** o tempo médio de resistência dessa tinta foi estimado em 125,6 horas, com margem de erro de cerca de 1,9 hora. O intervalo [123,68; 127,49] foi obtido por um método que, em 95% das amostras, produz um intervalo que contém a média verdadeira. Se o padrão de qualidade exigisse uma média de pelo menos 123 horas, todo o intervalo estaria acima disso; se exigisse 125 horas, o intervalo não permitiria afirmar que a tinta cumpre o padrão.
 
-$$ IC = \text{Estimativa} \pm (\text{Valor crítico} \times \text{Erro padrão}) $$
-
-## Tipos de Intervalos de Confiança
-
-### 1. Intervalo de Confiança para a Média (σ conhecido)
-
-Quando o desvio padrão populacional ($$\sigma$$) é conhecido:
-
-$$ IC = \bar{x} \pm z_{\alpha/2} \frac{\sigma}{\sqrt{n}} $$
-
-Onde:
-- $$\bar{x}$$ = média amostral
-- $$z_{\alpha/2}$$ = valor crítico da distribuição normal
-- $$\sigma$$ = desvio padrão populacional
-- $$n$$ = tamanho da amostra
-
-#### Exemplo em Julia:
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -268,84 +138,43 @@ Onde:
   <div class="code-content">
     <pre><code>using Statistics, Distributions
 
-# Dados
-x̄ = 170    # média amostral
-σ = 5       # desvio padrão populacional
-n = 100     # tamanho da amostra
-α = 0.05    # nível de significância
-
-# Valor crítico z_(α/2)
-z = quantile(Normal(), 1 - α/2)
-
-# Erro padrão
-SE = σ / sqrt(n)
-
-# Margem de erro
-ME = z * SE
-
-# Intervalo de confiança
-IC_lower = x̄ - ME
-IC_upper = x̄ + ME
-
-println("IC 95%: [$IC_lower, $IC_upper]")</code></pre>
-  </div>
-</div>
-
-### 2. Intervalo de Confiança para a Média (σ desconhecido)
-
-Quando o desvio padrão populacional é desconhecido:
-
-$$ IC = \bar{x} \pm t_{\alpha/2, n-1} \frac{s}{\sqrt{n}} $$
-
-Onde:
-- $$s$$ = desvio padrão amostral
-- $$t_{\alpha/2, n-1}$$ = valor crítico da distribuição t de Student
-- $$n-1$$ = graus de liberdade
-
-#### Exemplo em Julia:
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using Statistics, Distributions
-
-# Dados amostrais
-dados = [172, 168, 170, 171, 169, 167, 173, 170, 171, 168]
+dados = [120, 130, 125, 128, 122, 127, 126, 124, 129, 123, 128, 125]   # horas
 n = length(dados)
 x̄ = mean(dados)
-s = std(dados, corrected=true)  # desvio padrão amostral
-α = 0.05
+s = std(dados)                         # desvio padrão amostral (divide por n − 1)
+t = quantile(TDist(n - 1), 0.975)      # valor crítico para 95%
+ep = s / sqrt(n)                       # erro padrão da média
+me = t * ep                            # margem de erro
 
-# Valor crítico t_(α/2)
-t = quantile(TDist(n-1), 1 - α/2)
-
-# Erro padrão
-SE = s / sqrt(n)
-
-# Intervalo de confiança
-IC_lower = x̄ - t * SE
-IC_upper = x̄ + t * SE
-
-println("IC 95%: [$IC_lower, $IC_upper]")</code></pre>
+println("x̄ = ", round(x̄, digits=4), "   s = ", round(s, digits=4))
+println("t = ", round(t, digits=4), "   EP = ", round(ep, digits=4), "   ME = ", round(me, digits=4))
+println("IC 95% = [", round(x̄ - me, digits=2), "; ", round(x̄ + me, digits=2), "]")</code></pre>
   </div>
 </div>
 
-### 3. Intervalo de Confiança para Proporção
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>x̄ = 125.5833 &nbsp; s = 2.9987</div>
+  <div>t = 2.201 &nbsp; EP = 0.8657 &nbsp; ME = 1.9053</div>
+  <div>IC 95% = [123.68; 127.49]</div>
+</div>
 
-Para uma proporção populacional:
+![Os 12 tempos como pontos pretos espalhados entre 120 e 130 horas, uma linha azul na média 125,58 e uma faixa azul clara de 123,68 a 127,49, o intervalo de 95% para a média]({{ site.baseurl }}/assets/images/intervalo_confianca_resistencia_tinta.png)
+<div class="image-caption">Figura 3: Os 12 tempos medidos, a média (linha) e o intervalo de 95% para a média (faixa). Sete dos 12 tempos individuais ficam fora da faixa, e está tudo certo: o intervalo estima onde está a média, não onde caem as latas individuais. A figura foi gerada por scripts/figuras-intervalos-confianca.jl.</div>
 
-$$ IC = \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}} $$
+## 3. Outros Intervalos
 
-Onde:
-- $$\hat{p}$$ = proporção amostral
-- $$n$$ = tamanho da amostra
+### 3.1 Média com $\sigma$ conhecido
 
-#### Exemplo em Julia:
+Quando o desvio padrão da população é conhecido (situação rara, por exemplo um instrumento de medição com precisão bem estabelecida), o valor crítico vem da normal padrão:
+
+$$\text{IC} = \bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$$
+
+Para 95%, $z_{0{,}025} = 1{,}96$. O intervalo é exato se a população é normal, e aproximado (pelo [Teorema do Limite Central]({{ '/pt/probabilidade/teorema-limite-central' | relative_url }})) se não é.
+
+**Exemplo** (números ilustrativos): numa amostra de $n = 100$ medidas de altura, $\bar{x} = 170$ cm, com $\sigma = 5$ cm conhecido. Então $\text{ME} = 1{,}96 \cdot \frac{5}{\sqrt{100}} = 1{,}96 \cdot 0{,}5 = 0{,}98$ cm, e o intervalo de 95% é $[169{,}02;\ 170{,}98]$ cm.
+
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -355,51 +184,91 @@ Onde:
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Statistics, Distributions
+    <pre><code>using Distributions
 
-# Dados
-sucessos = 45    # número de sucessos
-n = 100          # tamanho da amostra
-α = 0.05         # nível de significância
+x̄ = 170      # média amostral (cm)
+σ = 5        # desvio padrão da população, suposto conhecido (cm)
+n = 100
+z = quantile(Normal(), 0.975)    # 1,96 para 95%
 
-# Proporção amostral
+me = z * σ / sqrt(n)
+println("z = ", round(z, digits=4), "   ME = ", round(me, digits=4))
+println("IC 95% = [", round(x̄ - me, digits=2), "; ", round(x̄ + me, digits=2), "]")</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>z = 1.96 &nbsp; ME = 0.98</div>
+  <div>IC 95% = [169.02; 170.98]</div>
+</div>
+
+### 3.2 Proporção
+
+Para uma proporção, a estimativa é a proporção amostral $\hat{p} = \frac{x}{n}$ (sucessos divididos pelo tamanho da amostra), e o intervalo aproximado é:
+
+$$\text{IC} = \hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$$
+
+Ele usa a aproximação normal da binomial, que só é boa com amostra grande e $\hat{p}$ longe de 0 e de 1; a regra de bolso é $n\hat{p} \geq 5$ e $n(1 - \hat{p}) \geq 5$ (alguns livros pedem 10). Fora disso, há intervalos melhores para proporção.
+
+**Exemplo** (números ilustrativos): 45 de 100 pessoas entrevistadas aprovam uma proposta. Então $\hat{p} = 0{,}45$, $n\hat{p} = 45$ e $n(1 - \hat{p}) = 55$ (a condição vale), e:
+
+$$\text{EP} = \sqrt{\frac{0{,}45 \cdot 0{,}55}{100}} = \sqrt{0{,}002475} \approx 0{,}0497 \qquad \text{ME} = 1{,}96 \cdot 0{,}0497 \approx 0{,}0975$$
+
+$$\text{IC}_{95\%} = 0{,}45 \pm 0{,}0975 = [0{,}3525;\ 0{,}5475]$$
+
+**Interpretação:** a aprovação está estimada em 45%, com margem de erro de cerca de 10 pontos percentuais. O intervalo vai de 35% a 55%: com esta amostra, não dá para dizer se a maioria aprova ou desaprova.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+sucessos, n = 45, 100
 p̂ = sucessos / n
+z = quantile(Normal(), 0.975)
+ep = sqrt(p̂ * (1 - p̂) / n)
 
-# Valor crítico
-z = quantile(Normal(), 1 - α/2)
-
-# Erro padrão
-SE = sqrt((p̂ * (1 - p̂)) / n)
-
-# Intervalo de confiança
-IC_lower = p̂ - z * SE
-IC_upper = p̂ + z * SE
-
-println("IC 95%: [$IC_lower, $IC_upper]")</code></pre>
+println("n·p̂ = ", n * p̂, "   n·(1 − p̂) = ", round(n * (1 - p̂), digits=2))
+println("EP = ", round(ep, digits=4), "   ME = ", round(z * ep, digits=4))
+println("IC 95% = [", round(p̂ - z * ep, digits=4), "; ", round(p̂ + z * ep, digits=4), "]")</code></pre>
   </div>
 </div>
 
-## Interpretação Matemática
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>n·p̂ = 45.0 &nbsp; n·(1 − p̂) = 55.0</div>
+  <div>EP = 0.0497 &nbsp; ME = 0.0975</div>
+  <div>IC 95% = [0.3525; 0.5475]</div>
+</div>
 
-A interpretação formal do intervalo de confiança de $$(1-\alpha)100\%$$ é:
+## 4. Tamanho da Amostra
 
-$$ P(\text{IC contém } \mu) = 1-\alpha $$
+Para que a margem de erro seja no máximo $E$, basta isolar $n$ na fórmula da margem.
 
-Ou mais especificamente para a média:
+**Média** ($\sigma$ conhecido ou estimado de um estudo anterior):
 
-$$ P(\bar{x} - ME \leq \mu \leq \bar{x} + ME) = 1-\alpha $$
+$$z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \leq E \quad\Longleftrightarrow\quad n \geq \left(\frac{z_{\alpha/2}\,\sigma}{E}\right)^2$$
 
-## Tamanho da Amostra Necessário
+**Proporção**, com $p^{\ast}$ uma estimativa prévia da proporção:
 
-Para determinar o tamanho da amostra necessário para um determinado erro máximo $$E$$:
+$$n \geq \frac{z_{\alpha/2}^2\, p^{\ast}(1-p^{\ast})}{E^2}$$
 
-Para média ($$\sigma$$ conhecido):
-$$ n = \left(\frac{z_{\alpha/2}\sigma}{E}\right)^2 $$
+Sem estimativa prévia, usa-se $p^{\ast} = 0{,}5$, que dá o maior valor possível de $p^{\ast}(1 - p^{\ast})$ (0,25) e, por isso, um $n$ que serve para qualquer proporção verdadeira. O resultado é sempre arredondado **para cima**.
 
-Para proporção:
-$$ n = \frac{z_{\alpha/2}^2\hat{p}(1-\hat{p})}{E^2} $$
+**Exemplos:**
 
-#### Exemplo em Julia para Cálculo do Tamanho da Amostra:
+- Proporção com margem de 5 pontos percentuais e 95% de confiança: $n \geq \frac{1{,}96^2 \cdot 0{,}25}{0{,}05^2} = \frac{3{,}8415 \cdot 0{,}25}{0{,}0025} \approx 384{,}15$, ou seja, **385** pessoas.
+- Média com $\sigma = 5$ cm e margem de 1 cm: $n \geq \left(\frac{1{,}96 \cdot 5}{1}\right)^2 = 9{,}8^2 \approx 96{,}04$, ou seja, **97** medidas.
+
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -409,46 +278,58 @@ $$ n = \frac{z_{\alpha/2}^2\hat{p}(1-\hat{p})}{E^2} $$
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Statistics, Distributions
+    <pre><code>using Distributions
 
-# Parâmetros
-E = 0.05         # erro máximo desejado
-α = 0.05         # nível de significância
-p̂ = 0.5          # proporção estimada (mais conservador)
-z = quantile(Normal(), 1 - α/2)
+z = quantile(Normal(), 0.975)
 
-# Cálculo do tamanho da amostra para proporção
-n = ceil(Int, (z^2 * p̂ * (1-p̂)) / E^2)
+# Proporção: margem E = 0,05 (5 pontos percentuais), sem estimativa prévia de p (usa 0,5)
+E = 0.05
+n_prop = z^2 * 0.5 * 0.5 / E^2
+println("Proporção: n = ", round(n_prop, digits=2), " → ", ceil(Int, n_prop))
 
-println("Tamanho mínimo da amostra necessário: $n")</code></pre>
+# Média: σ = 5 cm, margem E = 1 cm
+σ, E = 5, 1
+n_media = (z * σ / E)^2
+println("Média: n = ", round(n_media, digits=2), " → ", ceil(Int, n_media))</code></pre>
   </div>
 </div>
 
-## Fatores que Afetam a Amplitude do Intervalo
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Proporção: n = 384.15 → 385</div>
+  <div>Média: n = 96.04 → 97</div>
+</div>
 
-1. **Nível de confiança**: $$\uparrow$$ confiança $$\rightarrow \uparrow$$ amplitude
-2. **Tamanho da amostra**: $$\uparrow n \rightarrow \downarrow$$ amplitude
-3. **Variabilidade dos dados**: $$\uparrow \sigma \text{ ou } s \rightarrow \uparrow$$ amplitude
+Essas fórmulas supõem amostragem aleatória simples de uma população grande; o planejamento de amostras mais complexas está em [Amostragem]({{ '/pt/inferencia-estatistica/amostragem' | relative_url }}).
 
-## Aplicações
+## 5. O que Muda a Largura do Intervalo
 
-Os intervalos de confiança são amplamente utilizados em:
-- Pesquisas de opinião
-- Estudos médicos
-- Controle de qualidade
-- Pesquisas de mercado
-- Estudos científicos em geral
+A margem de erro é $\text{valor crítico} \times \frac{s}{\sqrt{n}}$, então:
 
-## Considerações Importantes
+- **Nível de confiança maior → intervalo mais largo.** No exemplo da tinta: 90% dá $[124{,}03;\ 127{,}14]$ (margem 1,55); 95% dá $[123{,}68;\ 127{,}49]$ (margem 1,91); 99% dá $[122{,}89;\ 128{,}27]$ (margem 2,69). Mais confiança custa precisão.
+- **Amostra maior → intervalo mais estreito**, mas devagar: a margem cai com $\sqrt{n}$. Para cortar a margem pela metade, é preciso **quadruplicar** a amostra.
+- **Mais variabilidade nos dados → intervalo mais largo.**
 
-1. O intervalo de confiança não indica a probabilidade do parâmetro populacional estar no intervalo.
-2. A interpretação correta é que, se o processo for repetido muitas vezes, a proporção de intervalos que contêm o verdadeiro parâmetro será aproximadamente igual ao nível de confiança.
-3. Aumentar o nível de confiança resulta em intervalos mais amplos.
-4. Para reduzir a margem de erro mantendo o mesmo nível de confiança, é necessário aumentar o tamanho da amostra.
+## 6. Relação com Testes de Hipótese
 
-## Referências Bibliográficas
+Um intervalo de $(1 - \alpha)$ de confiança para a média contém exatamente os valores $\mu_0$ que **não** seriam rejeitados por um teste t bilateral de nível $\alpha$. No exemplo da tinta, um teste de $H_0: \mu = 125$ ao nível de 5% não rejeitaria (125 está dentro de $[123{,}68;\ 127{,}49]$), e um teste de $H_0: \mu = 128$ rejeitaria. O intervalo dá mais informação que o teste: mostra todos os valores compatíveis com os dados de uma vez. Mais em [Testes de Hipótese]({{ '/pt/inferencia-estatistica/testes-hipotese' | relative_url }}).
 
-1. Montgomery, D. C., & Runger, G. C. (2010). Applied Statistics and Probability for Engineers.
-2. Morettin, P. A., & Bussab, W. O. (2017). Estatística Básica.
-3. Triola, M. F. (2017). Introdução à Estatística.
-4. Bezanson, J., Edelman, A., Karpinski, S., & Shah, V. B. (2017). Julia: A fresh approach to numerical computing. SIAM review.
+## 7. Um Pouco de História
+
+O intervalo de confiança foi proposto por Jerzy Neyman, primeiro num apêndice de um trabalho sobre amostragem apresentado à Royal Statistical Society em 1934, e depois desenvolvido num artigo de 1937 sobre a teoria da estimação. A interpretação pela frequência de acertos em repetições do procedimento, descrita na seção 1, segue a formulação de Neyman.
+
+## 8. Cuidados
+
+- O intervalo só leva em conta o **erro de amostragem**. Amostras não aleatórias, não resposta e medidas com viés não entram na margem de erro.
+- As fórmulas supõem **observações independentes**. Dados agrupados (alunos da mesma turma, medidas repetidas na mesma pessoa) pedem outros métodos.
+- Com **amostras pequenas** e dados assimétricos ou com valores atípicos, o intervalo t pode ter cobertura bem diferente de 95%.
+- Com **proporções perto de 0 ou de 1**, ou amostras pequenas, o intervalo da seção 3.2 funciona mal.
+- Calcular muitos intervalos e destacar só os "interessantes" faz a cobertura real cair, pelo mesmo motivo que os [testes múltiplos]({{ '/pt/inferencia-estatistica/testes-hipotese' | relative_url }}) aumentam os falsos positivos.
+
+## Referências
+
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+2. Neyman, J. (1934). On the Two Different Aspects of the Representative Method: The Method of Stratified Sampling and the Method of Purposive Selection. *Journal of the Royal Statistical Society*, 97(4), 558–625.
+3. Neyman, J. (1937). Outline of a Theory of Statistical Estimation Based on the Classical Theory of Probability. *Philosophical Transactions of the Royal Society of London. Series A*, 236(767), 333–380. DOI: [10.1098/rsta.1937.0005](https://doi.org/10.1098/rsta.1937.0005).
+4. Triola, M. F. (2024). *Introdução à Estatística*. 14. ed. LTC.

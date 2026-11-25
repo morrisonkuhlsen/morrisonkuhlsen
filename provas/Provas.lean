@@ -10,3 +10,4 @@ import Provas.Independencia
 import Provas.Condicional
 import Provas.Questoes
 import Provas.Testes
+import Provas.Intervalos
