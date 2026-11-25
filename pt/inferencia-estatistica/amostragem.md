@@ -7,78 +7,51 @@ parent: inferencia-estatistica
 permalink: /pt/inferencia-estatistica/amostragem
 order: 3
 mathjax: true
-description: "Métodos para selecionar subconjuntos representativos de uma população para análise estatística."
+description: "Amostragem aleatória simples, sistemática, estratificada e por conglomerados, viés, tamanho da amostra e alocação, com simulações e código em Julia."
 ---
 
-A amostragem é o processo de selecionar um subconjunto representativo de uma população para realizar inferências estatísticas sobre toda a população. Uma amostra bem escolhida permite estimar parâmetros populacionais com precisão e eficiência, reduzindo custos e tempo em relação ao censo completo.
+**Amostragem** é a escolha de uma parte da população (a **amostra**) para, a partir dela, tirar conclusões sobre a população inteira. Uma amostra bem escolhida permite estimar médias, proporções e outras quantidades com precisão conhecida, gastando muito menos que um censo. Uma amostra mal escolhida dá respostas erradas, e aumentar o seu tamanho não resolve.
 
-Para que a inferência seja **válida**, três condições fundamentais devem ser satisfeitas:
+Para que a inferência a partir da amostra seja válida, três coisas importam:
 
-1. **Representatividade** — a composição da amostra deve refletir as características relevantes da população-alvo. Amostras enviesadas distorcem as estimativas independentemente do tamanho.
-2. **Aleatoriedade controlada** (nos métodos probabilísticos) — cada elemento deve ter probabilidade conhecida e não nula de ser selecionado, garantindo que as propriedades estatísticas das estimativas sejam matematicamente justificáveis.
-3. **Tamanho adequado** — a precisão cresce com a raiz quadrada de \(n\): para reduzir o erro padrão à metade, é preciso quadruplicar \(n\).
+1. **Representatividade:** a amostra precisa refletir a população nas características que importam para o estudo. Uma amostra com viés distorce as estimativas, qualquer que seja o seu tamanho (seção 4).
+2. **Sorteio com probabilidades conhecidas** (nos métodos probabilísticos): cada elemento da população tem uma probabilidade conhecida e maior que zero de entrar na amostra. É isso que permite calcular margens de erro.
+3. **Tamanho adequado:** o erro padrão da média é $\sigma/\sqrt{n}$, então a precisão cresce com a raiz quadrada de $n$. Com $n = 100$, o erro padrão é $\sigma/10$; com $n = 400$, é $\sigma/20$. Quadruplicar a amostra corta o erro padrão pela metade.
 
-<div style="border-left: 4px solid #1565C0; padding: 0.5em 1em; background-color: #e3f2fd; margin: 0.75em 0;">
-<strong>Lei dos rendimentos decrescentes:</strong> O erro padrão da média é \(\text{SE}(\bar{X}) = \sigma/\sqrt{n}\). Com \(n = 100\): \(\text{SE} = \sigma/10\). Com \(n = 400\): \(\text{SE} = \sigma/20\). Quadruplicar a amostra <em>dobra</em> a precisão — mas nunca a elimina por completo.
-</div>
+![Ilustração com a palavra "Sampling": doze bonecos num retângulo rotulado "Population", uma seta e cinco bonecos num círculo rotulado "Sample"]({{ site.baseurl }}/assets/images/amostragem.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
+<div class="image-caption" style="text-align: center;">Figura 1: Da população (population) à amostra (sample).</div>
 
-![Amostragem]({{ site.baseurl }}/assets/images/amostragem.avif){:style="max-width: 400px; display: block; margin: 0 auto;"}
-<div class="image-caption" style="text-align: center;">Figura: Exemplo visual de amostragem em uma população.</div>
+## 1. Por que Amostrar?
 
----
+- **Custo e tempo:** um censo costuma ser caro e lento demais.
+- **Testes destrutivos:** quando medir destrói o item (resistência de materiais, vida útil de um produto), não dá para testar tudo.
+- **Populações grandes:** com milhões de elementos, a amostra é o único caminho viável.
+- **Controle de qualidade:** em vez de inspecionar toda a produção, usam-se planos de amostragem padronizados; no Brasil, a norma ABNT NBR 5426 (1985) traz planos para inspeção por atributos.
+- **Qualidade dos dados:** com menos elementos, dá para medir mais coisas e com mais cuidado em cada um.
 
-## Por que Amostrar?
+## 2. Conceitos Fundamentais
 
-- **Reduz custos e tempo** — um censo completo é frequentemente inviável em termos de logística e tempo de análise
-- **Permite análises destrutivas** — quando o teste destrói o item (resistência de materiais, prazo de validade de produtos, etc.)
-- **Torna viável o estudo de populações grandes** — populações de milhões de elementos só podem ser estudadas via amostra
-- **Facilita o controle de qualidade** — inspeção de 100% da produção é substituída por planos de amostragem padronizados (ex.: ABNT NBR 5426)
-- **Permite maior profundidade** — com uma amostra menor, é possível coletar mais variáveis por elemento e com melhor qualidade de dados
+- **População** (tamanho $N$): o conjunto completo de elementos de interesse.
+- **Amostra** (tamanho $n$): a parte da população que é efetivamente observada.
+- **Parâmetro:** um número que descreve a população, como a média $\mu$, o desvio padrão $\sigma$ ou a proporção $p$. Em geral é desconhecido.
+- **Estatística:** um número calculado na amostra, como a média amostral $\bar{x}$, o desvio padrão amostral $s$ ou a proporção amostral $\hat{p}$. É usado para estimar o parâmetro.
+- **Cadastro amostral** (em inglês, *sampling frame*): a lista de elementos da qual a amostra é sorteada. Se o cadastro deixa de fora parte da população, a amostra herda esse **viés de cobertura**, mesmo com sorteio perfeito.
+- **Erro amostral:** a diferença entre a estatística e o parâmetro que acontece só porque se observou uma parte da população. Para a média de uma amostra aleatória simples, $\bar{X}$ acerta $\mu$ em média ($E[\bar{X}] = \mu$): o erro amostral não tem direção, e diminui com $n$ maior.
+- **Fração amostral:** $f = n/N$, a fração da população que entra na amostra. Quando $f$ é pequena (a regra de bolso usual é $f < 0{,}05$), a população pode ser tratada como infinita nas fórmulas.
+- **Viés:** um erro sistemático, que empurra as estimativas sempre para o mesmo lado. Ao contrário do erro amostral, **não diminui** com $n$ maior: só se corrige no desenho da pesquisa.
 
----
+## 3. Métodos de Amostragem
 
-## Conceitos Fundamentais
+Os métodos **probabilísticos** (3.1 a 3.4) sorteiam os elementos com probabilidades conhecidas e permitem calcular margens de erro. Os **não probabilísticos** (3.5 a 3.8) não fazem isso: servem para estudos exploratórios, mas não dão base para margem de erro.
 
-- **População** ($N$): Conjunto completo de elementos ou observações de interesse.
-  - *Origem*: Do latim "populatio", referente ao conjunto de pessoas ou coisas.
-- **Amostra** ($n$): Subconjunto da população, selecionado para análise.
-  - *Origem*: Do latim "amostra", porção retirada para representar o todo.
-- **Parâmetro** ($\mu$, $\sigma$, $p$): Medida numérica que descreve uma característica da população (ex: média $\mu$, desvio padrão $\sigma$, proporção $p$).
-  - *Origem*: Do grego "parámetros", aquilo que serve de referência.
-- **Estatística** ($\bar{x}$, $s$, $\hat{p}$): Medida numérica que descreve uma característica da amostra (ex: média amostral $\bar{x}$, desvio padrão amostral $s$, proporção amostral $\hat{p}$).
-  - *Origem*: Do latim "statisticum", relativo ao Estado, e do italiano "statistica", ciência dos dados do Estado.
-- **Cadastro Amostral** (*sampling frame*): Lista ou registro dos elementos elegíveis da população, a partir do qual a amostra é efetivamente selecionada. Um cadastro incompleto ou desatualizado gera **viés de cobertura** mesmo em amostras probabilísticas perfeitas.
-- **Erro Amostral** ($\varepsilon$): Diferença inevitável entre a estatística amostral e o parâmetro populacional ($\varepsilon = \bar{x} - \mu$). Em amostras probabilísticas, $\mathbb{E}[\varepsilon] = 0$ — o erro é aleatório, sem direção sistemática, e reduzível com $n$ maior.
-- **Fração Amostral** ($f = n/N$): Proporção da população incluída na amostra. Quando $f < 0{,}05$, a correção para população finita é geralmente dispensada — a população pode ser tratada como infinita para fins de cálculo.
-- **Viés** (*bias*): Erro sistemático que desloca as estimativas consistentemente em uma direção. Diferentemente do erro amostral, **não é reduzido** aumentando $n$ — exige correção no próprio desenho da pesquisa.
+### 3.1 Amostragem aleatória simples (AAS)
 
----
+**Como funciona:** todo subconjunto de $n$ elementos da população tem a mesma chance de ser a amostra; em particular, cada elemento tem a mesma probabilidade $n/N$ de ser escolhido. O sorteio é feito com uma lista completa e números aleatórios.
 
-## Tipos de Amostragem: Conceitos, Prós, Contras e Exemplos
+**Vantagens:** simples de entender e de analisar; é a referência para as fórmulas de margem de erro. **Desvantagens:** exige a lista completa da população, e pode ficar cara se os elementos estiverem espalhados.
 
-### 1. Amostragem Aleatória Simples
+**Exemplo:** uma turma tem 10 alunos (A a J) e queremos sortear 3. Numeramos os alunos de 1 a 10 e sorteamos 3 números diferentes; se saírem 2, 7 e 9, a amostra é B, G e I. No computador, com a semente fixa abaixo, o sorteio dá F, G e J:
 
-**Conceito:**
-Cada elemento da população tem a mesma probabilidade de ser selecionado. A seleção é feita de forma totalmente aleatória, geralmente por sorteio ou uso de geradores de números aleatórios.
-
-**Prós:**
-- Simples de entender e aplicar
-- Resultados facilmente generalizáveis se a amostra for realmente aleatória
-
-**Contras:**
-- Requer lista completa da população
-- Pode ser inviável para populações muito grandes
-
-**Exemplo prático manual (passo a passo):**
-
-Uma escola tem 10 alunos (A, B, C, D, E, F, G, H, I, J). Queremos sortear 3 para uma pesquisa.
-
-1. Liste todos os alunos: A, B, C, D, E, F, G, H, I, J
-2. Atribua um número a cada aluno: 1 a 10
-3. Sorteie 3 números aleatórios entre 1 e 10 (ex: 2, 7, 9)
-4. Os alunos selecionados são: B, G, I
-
-**Exemplo em Julia:**
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -88,43 +61,29 @@ Uma escola tem 10 alunos (A, B, C, D, E, F, G, H, I, J). Queremos sortear 3 para
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Random
+    <pre><code>using Random, StatsBase
+
 alunos = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-Random.seed!(123) # para reprodutibilidade
-amostra = sample(alunos, 3; replace=false)
-println("Amostra selecionada: ", amostra)
-</code></pre>
+Random.seed!(123)                                # semente fixa: o sorteio se repete
+amostra = sample(alunos, 3; replace=false)      # 3 alunos, sem reposição
+println("Amostra selecionada: ", amostra)</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Amostra selecionada: ["B", "G", "I"]
+  <div>Amostra selecionada: ["F", "G", "J"]</div>
 </div>
 
----
+### 3.2 Amostragem sistemática
 
-### 2. Amostragem Sistemática
+**Como funciona:** com a população numa lista, calcula-se o intervalo $k = N/n$, sorteia-se um ponto de partida entre 1 e $k$ e escolhe-se um elemento a cada $k$.
 
-**Conceito:**
-Seleciona-se um ponto de partida aleatório e, a partir dele, escolhe-se cada k-ésimo elemento da lista ordenada da população.
+**Vantagens:** mais simples de executar que a AAS, sobretudo em listas longas ou em linha de produção. **Desvantagens:** se a lista tiver um padrão que se repete com período parecido com $k$ (por exemplo, uma escala de turnos), a amostra pode cair sempre no mesmo tipo de elemento.
 
-**Prós:**
-- Mais simples e rápida que a aleatória simples
-- Útil para populações grandes e listas ordenadas
+**Exemplo:** 20 funcionários, amostra de 5. O intervalo é $k = 20/5 = 4$; sorteando o início 3, escolhem-se as posições 3, 7, 11, 15 e 19.
 
-**Contras:**
-- Pode introduzir viés se houver periodicidade na lista
-- Requer lista ordenada
-
-**Exemplo prático manual (passo a passo):**
-
-População de 20 funcionários, queremos amostra de 5.
-
-1. Calcule o intervalo k: $k = N/n = 20/5 = 4$
-2. Sorteie um número inicial entre 1 e 4 (ex: 3)
-3. Selecione os funcionários nas posições: 3, 7, 11, 15, 19
-
-**Exemplo em Julia:**
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -135,45 +94,30 @@ População de 20 funcionários, queremos amostra de 5.
   </div>
   <div class="code-content">
     <pre><code>using Random
-N = 20; n = 5
-k = div(N, n)
+
+N, n = 20, 5
+k = N ÷ n                     # intervalo de seleção: 20 ÷ 5 = 4
 Random.seed!(42)
-inicio = rand(1:k)
-posicoes = [inicio + (i-1)*k for i in 1:n]
-println("Posições selecionadas: ", posicoes)
-</code></pre>
+inicio = rand(1:k)            # ponto de partida sorteado entre 1 e k
+posicoes = inicio .+ k .* (0:n-1)
+println("Início = ", inicio, "   posições: ", collect(posicoes))</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Posições selecionadas: [3, 7, 11, 15, 19]
+  <div>Início = 3 &nbsp; posições: [3, 7, 11, 15, 19]</div>
 </div>
 
----
+### 3.3 Amostragem estratificada
 
-### 3. Amostragem Estratificada
+**Como funciona:** a população é dividida em **estratos**, grupos que não se sobrepõem e que são, de preferência, homogêneos por dentro (curso, região, faixa de renda). Sorteia-se uma amostra aleatória dentro de cada estrato. O número de elementos por estrato pode ser proporcional ao tamanho do estrato ou seguir outra regra (seção 6).
 
-**Conceito:**
-A população é dividida em grupos homogêneos (estratos) e amostras são retiradas de cada estrato proporcionalmente ao seu tamanho.
+**Vantagens:** garante que todos os estratos apareçam na amostra e, quando os estratos são diferentes entre si, dá estimativas mais precisas que a AAS com o mesmo $n$. **Desvantagens:** exige saber, de antemão, a que estrato pertence cada elemento.
 
-**Prós:**
-- Garante representatividade de todos os grupos
-- Reduz variabilidade da amostra
+**Exemplo:** 100 alunos, 60 do curso A e 40 do curso B; amostra de 10. Com alocação proporcional: $10 \cdot \frac{60}{100} = 6$ alunos do curso A e $10 \cdot \frac{40}{100} = 4$ do curso B, sorteados dentro de cada curso.
 
-**Contras:**
-- Requer conhecimento prévio dos estratos
-- Mais trabalhosa para organizar
-
-**Exemplo prático manual (passo a passo):**
-
-População: 100 alunos (60 do curso A, 40 do curso B). Queremos amostra de 10.
-
-1. Calcule proporção de cada estrato:
-   - Curso A: $60/100 = 60\%$ → 6 alunos
-   - Curso B: $40/100 = 40\%$ → 4 alunos
-2. Sorteie 6 alunos do curso A e 4 do curso B aleatoriamente
-
-**Exemplo em Julia:**
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -183,46 +127,31 @@ População: 100 alunos (60 do curso A, 40 do curso B). Queremos amostra de 10.
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Random
-alunos_A = ["A"*string(i) for i in 1:60]
-alunos_B = ["B"*string(i) for i in 1:40]
+    <pre><code>using Random, StatsBase
+
+curso_A = ["A$i" for i in 1:60]
+curso_B = ["B$i" for i in 1:40]
 Random.seed!(7)
-amostra_A = sample(alunos_A, 6; replace=false)
-amostra_B = sample(alunos_B, 4; replace=false)
-amostra = vcat(amostra_A, amostra_B)
-println("Amostra estratificada: ", amostra)
-</code></pre>
+amostra = vcat(sample(curso_A, 6; replace=false),    # 60% de 10
+               sample(curso_B, 4; replace=false))    # 40% de 10
+println("Amostra estratificada: ", amostra)</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Amostra estratificada: ["A2", "A14", "A23", "A36", "A41", "A59", "B3", "B7", "B19", "B32"]
+  <div>Amostra estratificada: ["A15", "A44", "A50", "A30", "A57", "A9", "B36", "B34", "B16", "B11"]</div>
 </div>
 
----
+### 3.4 Amostragem por conglomerados
 
-### 4. Amostragem por Conglomerados
+**Como funciona:** a população já está dividida em grupos naturais, os **conglomerados** (bairros, escolas, lotes). Sorteiam-se alguns conglomerados e observam-se todos os elementos deles (ou uma amostra dentro deles, na amostragem em dois estágios).
 
-**Conceito:**
-A população é dividida em grupos heterogêneos (conglomerados) e alguns grupos inteiros são sorteados para análise.
+**Vantagens:** barata quando a população está espalhada, e não exige uma lista de todos os elementos, só a dos conglomerados. **Desvantagens:** os elementos de um mesmo conglomerado costumam ser parecidos entre si, então, para o mesmo $n$, a precisão em geral é menor que a da AAS. O ideal é que cada conglomerado seja variado por dentro, como uma miniatura da população.
 
-**Prós:**
-- Reduz custos e tempo
-- Útil quando não há lista completa da população
+**Exemplo:** 5 bairros com 100 casas cada; sorteiam-se 2 bairros e entrevistam-se as 100 casas de cada um.
 
-**Contras:**
-- Menor precisão se os conglomerados forem muito diferentes entre si
-- Pode introduzir viés se os conglomerados não forem representativos
-
-**Exemplo prático manual (passo a passo):**
-
-População: 5 bairros, cada um com 100 casas. Queremos amostrar 2 bairros e entrevistar todas as casas desses bairros.
-
-1. Liste os bairros: B1, B2, B3, B4, B5
-2. Sorteie 2 bairros (ex: B2, B4)
-3. Entrevistar todas as 100 casas de B2 e todas as 100 casas de B4
-
-**Exemplo em Julia:**
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -232,381 +161,155 @@ População: 5 bairros, cada um com 100 casas. Queremos amostrar 2 bairros e ent
     </button>
   </div>
   <div class="code-content">
-    <pre><code>using Random
+    <pre><code>using Random, StatsBase
+
 bairros = ["B1", "B2", "B3", "B4", "B5"]
 Random.seed!(21)
-conglomerados = sample(bairros, 2; replace=false)
-println("Bairros sorteados: ", conglomerados)
-</code></pre>
+sorteados = sample(bairros, 2; replace=false)
+println("Bairros sorteados: ", sorteados, " → entrevistar as 100 casas de cada um")</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Bairros sorteados: ["B2", "B4"]
+  <div>Bairros sorteados: ["B1", "B3"] → entrevistar as 100 casas de cada um</div>
 </div>
 
----
+### 3.5 Amostragem por conveniência
 
-### 5. Amostragem Casual ou por Conveniência
+Formada por quem está mais fácil de alcançar: as 10 primeiras pessoas que passam num shopping, os alunos da turma do próprio pesquisador. É rápida e barata, útil para testar um questionário, mas quem está acessível costuma ser diferente do resto da população, e não há como medir esse viés.
 
-**Conceito:**
-Amostra formada por elementos de fácil acesso ao pesquisador.
+### 3.6 Amostragem por cotas
 
-**Prós:**
-- Rápida e barata
-- Útil para estudos exploratórios
+O pesquisador recebe cotas a cumprir (por exemplo, tantas mulheres e tantos homens, em tais faixas de idade) e entrevista quem encontrar até completá-las. As cotas fazem a composição da amostra lembrar a da população nas variáveis escolhidas, mas a escolha dentro de cada cota não é sorteada, e pode haver viés em tudo o que não foi controlado.
 
-**Contras:**
-- Alto risco de viés
-- Não representa a população
+### 3.7 Amostragem intencional (por julgamento)
 
-**Exemplo prático manual (passo a passo):**
+Um especialista escolhe os elementos que considera mais adequados, como as 5 empresas líderes de um setor para um estudo de caso. É útil quando o interesse está justamente nesses casos, mas os resultados não se generalizam para a população.
 
-Um pesquisador entrevista as 10 primeiras pessoas que encontra em um shopping.
+### 3.8 Amostragem bola de neve
 
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>pessoas = ["P"*string(i) for i in 1:100]
-amostra = pessoas[1:10]
-println("Amostra casual: ", amostra)
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Amostra casual: ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]
-</div>
+Os primeiros participantes indicam outros, que indicam outros, e assim por diante. Serve para alcançar populações difíceis de listar (grupos pequenos ou pouco visíveis), mas a amostra tende a se concentrar nas redes de contato dos primeiros participantes.
 
----
-
-### 6. Amostragem por Quotas
-
-**Conceito:**
-Amostra formada por cotas preestabelecidas de acordo com características da população (ex: sexo, idade, renda).
-
-**Prós:**
-- Garante representatividade de subgrupos
-- Útil quando não há lista completa da população
-
-**Contras:**
-- Não é aleatória
-- Pode introduzir viés do pesquisador
-
-**Exemplo prático manual (passo a passo):**
-
-Uma pesquisa exige 5 homens e 5 mulheres. O pesquisador entrevista até atingir essas cotas.
-
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>pessoas = [("M", i) for i in 1:50]  # homens
-pessoas = vcat(pessoas, [("F", i) for i in 1:50])  # mulheres
-amostra_homens = filter(x -> x[1] == "M", pessoas)[1:5]
-amostra_mulheres = filter(x -> x[1] == "F", pessoas)[1:5]
-amostra = vcat(amostra_homens, amostra_mulheres)
-println("Amostra por quotas: ", amostra)
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Amostra por quotas: [("M", 1), ("M", 2), ("M", 3), ("M", 4), ("M", 5), ("F", 1), ("F", 2), ("F", 3), ("F", 4), ("F", 5)]
-</div>
-
----
-
-### 7. Amostragem Intencional (ou por Julgamento)
-
-**Conceito:**
-O pesquisador seleciona intencionalmente elementos que considera mais representativos.
-
-**Prós:**
-- Útil para estudos de casos especiais
-- Pode ser eficiente em situações específicas
-
-**Contras:**
-- Altamente subjetiva
-- Não generalizável
-
-**Exemplo prático manual (passo a passo):**
-
-Um especialista escolhe 5 empresas líderes do setor para um estudo de benchmarking.
-
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>empresas = ["EmpresaA", "EmpresaB", "EmpresaC", "EmpresaD", "EmpresaE", "EmpresaF", "EmpresaG"]
-amostra = empresas[[1, 2, 3, 4, 5]]  # escolhidas pelo especialista
-println("Amostra intencional: ", amostra)
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Amostra intencional: ["EmpresaA", "EmpresaB", "EmpresaC", "EmpresaD", "EmpresaE"]
-</div>
-
----
-
-### 8. Amostragem Bola de Neve
-
-**Conceito:**
-Os primeiros participantes indicam novos participantes, formando uma cadeia de indicações.
-
-**Prós:**
-- Útil para populações de difícil acesso
-- Permite alcançar grupos ocultos
-
-**Contras:**
-- Não aleatória
-- Pode gerar amostra enviesada
-
-**Exemplo prático manual (passo a passo):**
-
-Um pesquisador entrevista um usuário de um grupo restrito, que indica outro, e assim por diante, até atingir o tamanho desejado.
-
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>pessoas = ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]
-indicacoes = Dict("P1"=>"P3", "P3"=>"P7", "P7"=>"P10", "P10"=>"P5")
-# Começa com P1 e segue as indicações
-amostra = ["P1"]
-while haskey(indicacoes, amostra[end])
-    push!(amostra, indicacoes[amostra[end]])
-end
-println("Amostra bola de neve: ", amostra)
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Amostra bola de neve: ["P1", "P3", "P7", "P10", "P5"]
-</div>
-
----
-
-## Comparação dos Métodos de Amostragem
+### 3.9 Comparação
 
 <div style="overflow-x:auto; margin: 1em 0;">
-<table style="border-collapse: collapse; margin: 0 auto; min-width: 750px;">
+<table style="border-collapse: collapse; margin: 0 auto; min-width: 700px;">
   <thead style="background: #e3f2fd;">
     <tr>
       <th style="border: 1px solid #bbb; padding: 8px; text-align:left;">Método</th>
       <th style="border: 1px solid #bbb; padding: 8px;">Tipo</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Cadastro</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Precisão</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Custo</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Precisa de lista de todos?</th>
       <th style="border: 1px solid #bbb; padding: 8px; text-align:left;">Melhor uso</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória Simples</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Alta</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderado</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Populações pequenas e homogêneas</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo (ordenado)</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Alta ⚠</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Listas sem periodicidade oculta</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Completo</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Alta</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderado</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Pop. heterogêneas com estratos conhecidos</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Parcial</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderada</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Pop. dispersas geograficamente</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conveniência</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixa</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Estudos exploratórios e piloto</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Por Quotas</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Moderada</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Pesquisas de mercado e opinião</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Intencional</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Variável</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Estudos de caso e benchmarking</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Bola de Neve</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não-probabilístico</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Baixa</td>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Muito Baixo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Populações ocultas ou de difícil acesso</td>
-    </tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória simples</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Sim</td><td style="border: 1px solid #bbb; padding: 8px;">Referência; populações acessíveis e com lista</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Sim (ordenada)</td><td style="border: 1px solid #bbb; padding: 8px;">Listas longas sem padrões periódicos</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Sim, com o estrato de cada um</td><td style="border: 1px solid #bbb; padding: 8px;">Populações com grupos diferentes entre si</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Só dos conglomerados</td><td style="border: 1px solid #bbb; padding: 8px;">Populações espalhadas geograficamente</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Conveniência</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td><td style="border: 1px solid #bbb; padding: 8px;">Testes de questionário, estudos piloto</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Cotas</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td><td style="border: 1px solid #bbb; padding: 8px;">Pesquisas rápidas de mercado e opinião</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Intencional</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td><td style="border: 1px solid #bbb; padding: 8px;">Estudos de caso</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Bola de neve</strong></td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não probabilístico</td><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">Não</td><td style="border: 1px solid #bbb; padding: 8px;">Populações difíceis de alcançar</td></tr>
   </tbody>
 </table>
 </div>
 
-⚠ Precisão da sistemática pode ser inferior à AAS na presença de periodicidade oculta na lista ordenada.
+## 4. Erros em Pesquisas por Amostra
 
----
+Todo resultado de pesquisa por amostra está sujeito a dois tipos de erro, de natureza bem diferente.
 
-## Erros em Pesquisas por Amostra
+**Erro amostral:** a variação que existe porque cada amostra é uma parte diferente da população. Nas amostras probabilísticas, ele é **medido** pela margem de erro e **diminui** com $n$ maior.
 
-Todo resultado de uma pesquisa por amostra está sujeito a dois tipos fundamentalmente distintos de erro:
-
-### Erro Amostral
-
-Variação natural e esperada entre amostras diferentes extraídas da mesma população. Resulta do uso de parte, e não todos, os elementos. É **quantificável** pela margem de erro e **reduzível** aumentando $n$:
-
-$$\varepsilon = \bar{x} - \mu \qquad \text{com } \mathbb{E}[\varepsilon] = 0 \text{ (amostras probabilísticas)}$$
-
-### Erros Não-Amostrais (Sistemáticos)
-
-São erros que **não diminuem** com amostras maiores — são mais perigosos porque frequentemente passam despercebidos:
+**Erros não amostrais:** não diminuem com $n$ maior, e por isso são os mais perigosos:
 
 <div style="overflow-x:auto; margin: 1em 0;">
 <table style="border-collapse: collapse; margin: 0 auto; min-width: 620px;">
   <thead style="background: #ffebee;">
     <tr>
       <th style="border: 1px solid #bbb; padding: 8px;">Tipo</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Descrição</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Como mitigar</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">O que é</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Como reduzir</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Cobertura</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Cadastro incompleto exclui parte da população alvo</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Atualizar cadastro; usar múltiplas fontes</td>
-    </tr>
-    <tr style="background:#fff3f3;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Não-resposta</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Elementos selecionados recusam ou não participam</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Múltiplas tentativas; analisar perfil dos ausentes</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Mensuração</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Instrumento mal elaborado ou entrevistador induz respostas</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Pré-teste do questionário; treinamento padronizado</td>
-    </tr>
-    <tr style="background:#fff3f3;">
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Processamento</strong></td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Erros na digitação, codificação ou análise dos dados</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Dupla digitação; validação automática</td>
-    </tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Cobertura</strong></td><td style="border: 1px solid #bbb; padding: 8px;">O cadastro deixa de fora parte da população</td><td style="border: 1px solid #bbb; padding: 8px;">Atualizar o cadastro; combinar fontes</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Não resposta</strong></td><td style="border: 1px solid #bbb; padding: 8px;">Parte dos sorteados não responde, e quem não responde é diferente de quem responde</td><td style="border: 1px solid #bbb; padding: 8px;">Novas tentativas de contato; comparar o perfil de quem respondeu com o da população</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Mensuração</strong></td><td style="border: 1px solid #bbb; padding: 8px;">Pergunta mal formulada, instrumento descalibrado, entrevistador que induz a resposta</td><td style="border: 1px solid #bbb; padding: 8px;">Testar o questionário antes; treinar entrevistadores</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px;"><strong>Processamento</strong></td><td style="border: 1px solid #bbb; padding: 8px;">Erros de digitação, codificação ou análise</td><td style="border: 1px solid #bbb; padding: 8px;">Validação automática; conferência dupla</td></tr>
   </tbody>
 </table>
+</div>
+
+**Simulação: o viés não diminui com $n$.** Numa população ilustrativa de 100.000 pessoas, a proporção que apoia uma proposta é cerca de 0,46. Um sorteio na população inteira acerta perto disso com qualquer $n$. Um sorteio feito num cadastro que tem todo o grupo mais favorável à proposta, mas só 20% do outro grupo, erra sempre para o mesmo lado, perto de 0,61, com $n$ = 100, 1.000 ou 10.000:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random, Statistics, StatsBase
+
+# População ilustrativa de 100.000 pessoas: grupo 1 (40%) com 70% de apoio a uma
+# proposta, grupo 2 (60%) com 30% de apoio. Proporção verdadeira: 0,4·0,7 + 0,6·0,3 = 0,46.
+Random.seed!(123)
+grupo = vcat(fill(1, 40_000), fill(2, 60_000))
+apoia = [g == 1 ? rand() &lt; 0.7 : rand() &lt; 0.3 for g in grupo]
+println("Proporção verdadeira: ", round(mean(apoia), digits=4))
+
+# Cadastro com viés: contém todo o grupo 1 e só 20% do grupo 2
+no_cadastro = [g == 1 || rand() &lt; 0.2 for g in grupo]
+cadastro = findall(no_cadastro)
+
+for n in (100, 1_000, 10_000)
+    boa = mean(apoia[sample(1:length(apoia), n; replace=false)])   # sorteio na população inteira
+    ruim = mean(apoia[sample(cadastro, n; replace=false)])         # sorteio no cadastro com viés
+    println("n = ", rpad(n, 6), "  AAS da população: ", round(boa, digits=3),
+            "   AAS do cadastro com viés: ", round(ruim, digits=3))
+end</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Proporção verdadeira: 0.4597</div>
+  <div>n = 100 &nbsp; &nbsp; AAS da população: 0.46 &nbsp; AAS do cadastro com viés: 0.61</div>
+  <div>n = 1000 &nbsp; &nbsp;AAS da população: 0.462 &nbsp; AAS do cadastro com viés: 0.617</div>
+  <div>n = 10000 &nbsp; AAS da população: 0.458 &nbsp; AAS do cadastro com viés: 0.61</div>
 </div>
 
 <div style="border-left: 4px solid #e53935; padding: 0.5em 1em; background-color: #ffebee; margin: 0.75em 0;">
-<strong>Caso histórico — Literary Digest (1936):</strong> A maior pesquisa eleitoral da história até então, com 2,4 milhões de respostas, previu erroneamente a derrota de Roosevelt. O erro não foi o tamanho da amostra, mas o <strong>viés de cobertura</strong>: o cadastro (assinantes de revista, proprietários de telefone e automóvel) excluía sistematicamente as classes mais baixas, que votaram majoritariamente em Roosevelt.
+<strong>Caso histórico, o Literary Digest (1936):</strong> a revista enviou cédulas a milhões de pessoas, recebeu milhões de respostas e previu a derrota de Franklin Roosevelt na eleição presidencial americana, que ele venceu com folga. O tamanho da amostra não salvou a previsão. A explicação clássica é o viés de cobertura (as listas usadas favoreciam eleitores mais ricos); Squire (1988), com dados de uma pesquisa de 1937, concluiu que a não resposta também pesou: quem devolveu a cédula era diferente de quem não devolveu.
 </div>
 
----
+## 5. Tamanho da Amostra
 
-## Avisos Importantes
+As fórmulas desta seção supõem **amostragem aleatória simples**; a dedução delas está em [Intervalos de Confiança]({{ '/pt/inferencia-estatistica/intervalos-confianca' | relative_url }}). Em todas, $z_{\alpha/2}$ é o valor crítico da normal padrão (1,96 para 95% de confiança) e $E$ é a margem de erro máxima desejada. O resultado é sempre arredondado **para cima**.
 
-- **Amostragem mal planejada introduz vieses que nem amostras enormes conseguem corrigir.** A qualidade do desenho amostral supera a quantidade de dados.
-- **A aleatoriedade é insubstituível em estudos probabilísticos.** Sem ela, intervalos de confiança e testes de hipótese perdem sua fundamentação matemática.
-- **O tamanho da amostra determina a precisão, não a representatividade.** Uma amostra pequena e bem desenhada supera uma grande e enviesada.
-- **Métodos não-probabilísticos** (conveniência, quotas, bola de neve) **não permitem inferência formal** — resultados não devem ser generalizados com margem de erro calculada por fórmulas probabilísticas.
-- **Aplique a correção para população finita quando $f = n/N > 0{,}05$** para evitar superestimação do tamanho amostral necessário.
+### 5.1 Proporção
 
----
+$$n = \frac{z_{\alpha/2}^2\; p^{\ast}(1-p^{\ast})}{E^2}$$
 
-## Fórmulas Básicas
+onde $p^{\ast}$ é uma estimativa prévia da proporção (de uma pesquisa anterior, por exemplo). Sem estimativa, use $p^{\ast} = 0{,}5$, que dá o maior $n$ possível.
 
-### Tamanho da Amostra para Proporção
+**Exemplo 1** (números ilustrativos): uma fábrica quer estimar a proporção de peças defeituosas com margem de 3 pontos percentuais e 95% de confiança; de lotes anteriores, espera cerca de 10% de defeitos.
 
-$$
-n = \frac{z_{\alpha/2}^2\; \hat{p}(1-\hat{p})}{E^2}
-$$
+$$n = \frac{1{,}96^2 \cdot 0{,}10 \cdot 0{,}90}{0{,}03^2} = \frac{3{,}8416 \cdot 0{,}09}{0{,}0009} = \frac{0{,}345744}{0{,}0009} \approx 384{,}16$$
 
-Onde:
-- $z_{\alpha/2}$ = valor crítico da distribuição normal padrão (ex.: 1,96 para 95% de confiança)
-- $\hat{p}$ = proporção estimada (use $\hat{p} = 0{,}5$ quando desconhecida — resulta no maior $n$ possível)
-- $E$ = margem de erro máxima tolerável (ex.: 0,05 para ±5 pontos percentuais)
+Arredondando para cima: **385 peças**. (Com o valor crítico sem arredondar, 1,959964, dá 384,15, e a resposta é a mesma.)
 
-> **Margem de erro:** $E = z_{\alpha/2}\sqrt{\hat{p}(1-\hat{p})/n}$ — a semilargura do intervalo de confiança para a proporção.
+**Exemplo 2** (números ilustrativos): uma pesquisa eleitoral quer margem de 2 pontos percentuais e 95% de confiança; pesquisas anteriores indicam intenção de voto perto de 40% para o candidato.
 
----
+$$n = \frac{1{,}96^2 \cdot 0{,}40 \cdot 0{,}60}{0{,}02^2} = \frac{3{,}8416 \cdot 0{,}24}{0{,}0004} = \frac{0{,}921984}{0{,}0004} = 2304{,}96$$
 
-### Tamanho da Amostra para Média — $\sigma$ conhecido
-
-$$
-n = \left(\frac{z_{\alpha/2}\;\sigma}{E}\right)^2
-$$
-
-Onde:
-- $\sigma$ = desvio padrão populacional (conhecido ou estimado por estudo piloto)
-- $E$ = diferença máxima tolerável entre $\bar{x}$ e $\mu$
-
----
-
-### Tamanho da Amostra para Média — $\sigma$ desconhecido (distribuição t)
-
-Quando $\sigma$ não é conhecido e precisa ser estimado por $s$, substitui-se $z_{\alpha/2}$ pelo quantil $t_{\alpha/2;\,n-1}$, que depende do próprio $n$. A solução é iterativa:
-
-$$
-n^{(k+1)} = \left(\frac{t_{\alpha/2;\;n^{(k)}-1}\cdot s}{E}\right)^2
-$$
-
-**Procedimento:**
-1. Parta de $n^{(0)}$ calculado com $z_{\alpha/2}$ (fórmula acima usando $s$ no lugar de $\sigma$)
-2. Use $t_{\alpha/2;\,n^{(0)}-1}$ para obter $n^{(1)}$
-3. Repita até convergir (geralmente 2–3 iterações)
+Arredondando: **2.305 eleitores**. Repare no custo da precisão: passar de 3 para 2 pontos de margem multiplica o $n$ por $(3/2)^2 = 2{,}25$ (para o mesmo $p^{\ast}$).
 
 <div class="code-container">
   <div class="code-header">
@@ -619,383 +322,93 @@ $$
   <div class="code-content">
     <pre><code>using Distributions
 
-# n para média com σ desconhecido (iterativo)
-function n_media_t(s, E; alpha=0.05, max_iter=10)
-    z = quantile(Normal(), 1 - alpha/2)
-    n = ceil(Int, (z * s / E)^2)          # ponto de partida com z
-    for _ in 1:max_iter
-        t = quantile(TDist(n - 1), 1 - alpha/2)
-        n_novo = ceil(Int, (t * s / E)^2)
-        n_novo == n && break
-        n = n_novo
+z = quantile(Normal(), 0.975)            # 95% de confiança
+
+n_amostra(p, E) = z^2 * p * (1 - p) / E^2
+
+for (nome, p, E) in (("Peças defeituosas", 0.10, 0.03), ("Intenção de voto", 0.40, 0.02))
+    n = n_amostra(p, E)
+    println(rpad(nome, 18), " n = ", round(n, digits=2), " → ", ceil(Int, n))
+end</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Peças defeituosas &nbsp;n = 384.15 → 385</div>
+  <div>Intenção de voto &nbsp; n = 2304.88 → 2305</div>
+</div>
+
+### 5.2 Média
+
+Com $\sigma$ conhecido (ou estimado com segurança de um estudo anterior):
+
+$$n = \left(\frac{z_{\alpha/2}\;\sigma}{E}\right)^2$$
+
+Quando $\sigma$ só é conhecido por uma estimativa $s$ de um estudo piloto, o valor crítico passa a ser o da t de Student, $t_{\alpha/2;\,n-1}$, que depende do próprio $n$. Procura-se então o **menor $n$** que satisfaz
+
+$$\left(\frac{t_{\alpha/2;\,n-1}\cdot s}{E}\right)^2 \leq n$$
+
+Não adianta só repetir a conta "até convergir": no exemplo abaixo ($s = 2{,}4$, $E = 0{,}8$, 95%), a repetição fica alternando entre 37 e 38 para sempre. Testando os dois valores: com $n = 37$, $t_{0{,}025;\,36} = 2{,}0281$ e $(2{,}0281 \cdot 2{,}4/0{,}8)^2 \approx 37{,}02$, que passa de 37, então 37 não basta; com $n = 38$, $t_{0{,}025;\,37} = 2{,}0262$ e $(2{,}0262 \cdot 3)^2 \approx 36{,}95 \leq 38$. A resposta é **$n = 38$**.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# n para a média com σ desconhecido: o valor crítico t depende do próprio n.
+# Procura o menor n tal que t(n−1) · s / √n ≤ E, isto é, (t · s / E)² ≤ n.
+function n_media_t(s, E; α=0.05)
+    n = 2
+    while (quantile(TDist(n - 1), 1 - α/2) * s / E)^2 &gt; n
+        n += 1
     end
-    println("n necessário (t iterativo) = $n")
     return n
 end
 
-# Exemplo: s=2.4, erro=0.8, confiança 95%
-n_media_t(2.4, 0.8; alpha=0.05)
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  n necessário (t iterativo) = 38
-</div>
-
----
-
-### Resumo das Fórmulas de Tamanho Amostral
-
-<div style="overflow-x:auto; margin: 1em 0;">
-<table style="border-collapse: collapse; margin: 0 auto; min-width: 600px;">
-  <thead style="background: #e8f5e9;">
-    <tr>
-      <th style="border: 1px solid #bbb; padding: 8px;">Situação</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Fórmula</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Observação</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">Proporção (pop. infinita)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$n = z_{\alpha/2}^2\hat{p}(1-\hat{p})/E^2$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Use $\hat{p}=0{,}5$ se desconhecida</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;">Proporção (pop. finita)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Cochran com correção $n_0/(1+(n_0-1)/N)$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Usar quando $f > 0{,}05$</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px;">Média, $\sigma$ conhecido</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$n = (z_{\alpha/2}\sigma/E)^2$</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Solução direta</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px;">Média, $\sigma$ desconhecido</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">$n = (t_{\alpha/2;\,n-1}\cdot s/E)^2$ (iterativo)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Exige estudo piloto para $s$</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
----
-
-## Exemplo Prático
-
-Uma fábrica deseja estimar a proporção de peças defeituosas em sua produção diária. Deseja-se um erro máximo de 3% e um nível de confiança de 95%. Supondo proporção estimada de 0,10, qual o tamanho mínimo da amostra?
-
-### Resolução
-
-$$
-z = 1,96\ (95\%\ de\ confiança)\qquad \hat{p} = 0,10\qquad E = 0,03
-$$
-
-$$
-n = \frac{1,96^2 \times 0,10 \times 0,90}{0,03^2} = \frac{3,8416 \times 0,09}{0,0009} = \frac{0,3457}{0,0009} \approx 384,11
-$$
-
-Arredondando para cima:
-
-$$
-n = 385
-$$
-
-**Portanto, a amostra deve ter pelo menos 385 peças.**
-
-### Exemplo em Julia
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using Distributions
-
-# Parâmetros
-z = quantile(Normal(), 1 - 0.05/2)  # 95% de confiança
-p̂ = 0.10                            # proporção estimada
-erro = 0.03                         # erro máximo tolerável
-
-# Cálculo do tamanho da amostra
-n = ceil(Int, (z^2 * p̂ * (1 - p̂)) / erro^2)
-
-println("Tamanho mínimo da amostra: $n")
-</code></pre>
-  </div>
-</div>
-
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Tamanho mínimo da amostra: 385
-</div>
-
----
-
-## Exemplo Prático: Pesquisa de Intenção de Voto para Presidente
-
-Uma empresa de pesquisas deseja estimar a proporção de eleitores que pretendem votar em um determinado candidato à presidência. Para garantir um nível de confiança de 95% e um erro máximo de 2%, qual deve ser o tamanho mínimo da amostra, supondo que a proporção estimada de intenção de voto seja de 40%?
-
-### Resolução Manual Passo a Passo
-
-**Dados:**
-- Nível de confiança: 95% ($\alpha = 0,05$)
-- Proporção estimada ($\hat{p}$): 0,40
-- Erro máximo tolerável ($E$): 0,02
-
-**O que é a proporção estimada ($\hat{p}$)?**
-
-A proporção estimada ($\hat{p}$) representa a melhor estimativa, antes da pesquisa, da fração da população que possui a característica de interesse. No contexto de uma pesquisa eleitoral, é a estimativa inicial da porcentagem de eleitores que pretendem votar no candidato analisado. Essa estimativa pode ser baseada em pesquisas anteriores, dados históricos ou, na ausência de informações, pode-se usar o valor mais conservador ($\hat{p} = 0,5$), que resulta no maior tamanho de amostra possível.
-
-#### 1. Valor crítico $z_{\alpha/2}$
-
-Para 95% de confiança:
-$$
-z_{\alpha/2} = 1,96
-$$
-
-#### 2. Aplicando a fórmula do tamanho da amostra para proporção
-
-$$
-n = \frac{z_{\alpha/2}^2 \hat{p}(1-\hat{p})}{E^2}
-$$
-
-Substituindo os valores:
-$$
-n = \frac{1,96^2 \times 0,40 \times 0,60}{0,02^2}
-$$
-
-Calculando passo a passo:
-- $1,96^2 = 3,8416$
-- $0,40 \times 0,60 = 0,24$
-- $0,02^2 = 0,0004$
-
-$$
-n = \frac{3,8416 \times 0,24}{0,0004} = \frac{0,921984}{0,0004} = 2304,96
-$$
-
-Arredondando para cima:
-$$
-n = 2305
-$$
-
-**Portanto, a amostra deve ter pelo menos 2.305 eleitores para garantir o erro máximo de 2% com 95% de confiança.**
-
----
-
-### Exemplo em Julia
-
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using Distributions
-
-# Parâmetros
-z = quantile(Normal(), 1 - 0.05/2)  # 95% de confiança
-p̂ = 0.40                            # proporção estimada
-erro = 0.02                         # erro máximo tolerável
-
-# Cálculo do tamanho da amostra
-n = ceil(Int, (z^2 * p̂ * (1 - p̂)) / erro^2)
-
-println("Tamanho mínimo da amostra: $n")
-</code></pre>
-  </div>
-</div>
-
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Tamanho mínimo da amostra: 2305
-</div>
-
----
-
-## Fórmulas Adicionais para Tamanho de Amostra
-
-### Fórmula de Cochran com Correção para População Finita
-
-A fórmula de Cochran é usada para calcular o tamanho da amostra quando a população é grande ou desconhecida. Quando a população é finita ($N$), uma correção é aplicada para ajustar o tamanho da amostra, resultando em um número menor e mais eficiente.
-
-**Fórmula:**
-
-$$
-n = \frac{n_0}{1 + \frac{n_0 - 1}{N}} \quad \text{onde} \quad n_0 = \frac{Z^2 \cdot p \cdot (1-p)}{E^2}
-$$
-
-Isso é algebricamente equivalente a:
-
-$$
-n = \frac{N \cdot Z^2 \cdot p \cdot (1-p)}{E^2 \cdot (N-1) + Z^2 \cdot p \cdot (1-p)}
-$$
-
-**Exemplo prático manual (passo a passo):**
-
-Calcular o tamanho da amostra para uma população de **N = 5000**, com 95% de confiança ($Z = 1,96$), margem de erro de 5% ($E = 0,05$) e proporção estimada $p = 0,5$.
-
-1.  **Calcular o numerador:** $N \cdot Z^2 \cdot p \cdot (1-p)$
-
-$$5000 \cdot 1,96^2 \cdot 0,5 \cdot 0,5 = 5000 \cdot 3,8416 \cdot 0,25 = 4802$$
-
-2.  **Calcular o denominador:** $E^2 \cdot (N-1) + Z^2 \cdot p \cdot (1-p)$
-
-$$0,05^2 \cdot (4999) + 1,96^2 \cdot 0,5 \cdot 0,5$$
-
-$$0,0025 \cdot 4999 + 0,9604 = 12,4975 + 0,9604 = 13,4579$$
-
-3.  **Dividir:**
-
-$$n = \frac{4802}{13,4579} \approx 356,9$$
-
-Arredondando para cima, **n = 357**.
-
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code>using Distributions
-
-# Parâmetros
-N = 5000                            # Tamanho da população
-z = quantile(Normal(), 1 - 0.05/2)  # 95% de confiança
-p̂ = 0.5                             # proporção estimada (mais conservador)
-erro = 0.05                         # erro máximo tolerável
-
-# Cálculo do tamanho da amostra com correção
-numerador = N * z^2 * p̂ * (1 - p̂)
-denominador = erro^2 * (N - 1) + z^2 * p̂ * (1 - p̂)
-n = ceil(Int, numerador / denominador)
-
-println("Tamanho mínimo da amostra (população finita): $n")
-</code></pre>
-  </div>
-</div>
-<div class="code-output">
-  <div class="code-output-header"># Saída</div>
-  Tamanho mínimo da amostra (população finita): 357
-</div>
-
----
-
-### Alocação de Amostra Estratificada
-
-Após calcular o tamanho total da amostra ($n$), é preciso distribuí-lo entre os diferentes estratos. As duas abordagens mais comuns são a alocação proporcional e a alocação de Neyman.
-
-#### 1. Alocação Proporcional
-
-Distribui o tamanho da amostra proporcionalmente ao tamanho de cada estrato na população.
-
-**Fórmula:**
-
-$$
-n_h = n \cdot \frac{N_h}{N}
-$$
-
-Onde:
-- $n_h$ = tamanho da amostra do estrato $h$
-- $n$ = tamanho total da amostra
-- $N_h$ = tamanho da população do estrato $h$
-- $N$ = tamanho total da população
-
-**Exemplo prático manual (passo a passo):**
-
-Uma universidade tem 10.000 alunos ($N=10000$). O tamanho total da amostra calculado foi de $n=400$. Os alunos estão divididos em dois estratos:
-- **Estrato A (Exatas):** 6.000 alunos ($N_A = 6000$)
-- **Estrato B (Humanas):** 4.000 alunos ($N_B = 4000$)
-
-1.  **Alocação para Estrato A:**
-
-$$n_A = 400 \cdot \frac{6000}{10000} = 400 \cdot 0,6 = 240$$
-
-2.  **Alocação para Estrato B:**
-
-$$n_B = 400 \cdot \frac{4000}{10000} = 400 \cdot 0,4 = 160$$
-
-A amostra será composta por **240 alunos de Exatas** e **160 de Humanas**.
-
-**Exemplo em Julia:**
-<div class="code-container">
-  <div class="code-header">
-    <div class="code-lang">julia</div>
-    <div style="flex-grow: 1;"></div>
-    <button class="copy-button" onclick="copyCode(this)">
-      <i class="bi bi-clipboard"></i>Copiar
-    </button>
-  </div>
-  <div class="code-content">
-    <pre><code># Parâmetros
-n_total = 400
-N_total = 10000
-N_estratos = Dict("Exatas" => 6000, "Humanas" => 4000)
-n_alocada = Dict()
-
-for (estrato, N_h) in N_estratos
-    n_h = n_total * (N_h / N_total)
-    n_alocada[estrato] = ceil(Int, n_h)
+s, E = 2.4, 0.8
+n = n_media_t(s, E)
+for m in (n - 1, n)
+    t = quantile(TDist(m - 1), 0.975)
+    println("n = ", m, ": t = ", round(t, digits=4), "   (t·s/E)² = ", round((t * s / E)^2, digits=2))
 end
-
-println("Alocação Proporcional: ", n_alocada)
-</code></pre>
+println("n necessário = ", n)</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Alocação Proporcional: Dict("Humanas" => 160, "Exatas" => 240)
+  <div>n = 37: t = 2.0281 &nbsp; (t·s/E)² = 37.02</div>
+  <div>n = 38: t = 2.0262 &nbsp; (t·s/E)² = 36.95</div>
+  <div>n necessário = 38</div>
 </div>
 
----
+### 5.3 População finita
 
-#### 2. Alocação de Neyman (Ótima)
+Quando a amostra é uma fração considerável da população, a correção para população finita reduz o $n$ necessário:
 
-Considera tanto o tamanho do estrato quanto sua variabilidade (desvio padrão). Estratos com maior variabilidade recebem uma amostra maior para aumentar a precisão geral.
+$$n = \frac{n_0}{1 + \dfrac{n_0 - 1}{N}}, \qquad n_0 = \frac{z_{\alpha/2}^2\, p^{\ast}(1-p^{\ast})}{E^2}$$
 
-**Fórmula:**
+Multiplicando em cima e embaixo por $N E^2$, a mesma fórmula fica:
 
-$$
-n_h = n \cdot \frac{N_h \cdot \sigma_h}{\sum (N_i \cdot \sigma_i)}
-$$
+$$n = \frac{N\, z_{\alpha/2}^2\, p^{\ast}(1-p^{\ast})}{E^2 (N-1) + z_{\alpha/2}^2\, p^{\ast}(1-p^{\ast})}$$
 
-Onde:
-- $\sigma_h$ = desvio padrão do estrato $h$
+**Exemplo:** $N = 5.000$, 95% de confiança, $E = 0{,}05$, $p^{\ast} = 0{,}5$.
 
-**Exemplo prático manual (passo a passo):**
+1. Numerador: $5000 \cdot 1{,}96^2 \cdot 0{,}5 \cdot 0{,}5 = 5000 \cdot 3{,}8416 \cdot 0{,}25 = 4802$.
+2. Denominador: $0{,}05^2 \cdot 4999 + 3{,}8416 \cdot 0{,}25 = 0{,}0025 \cdot 4999 + 0{,}9604 = 12{,}4975 + 0{,}9604 = 13{,}4579$.
+3. Divisão: $n = \frac{4802}{13{,}4579} \approx 356{,}82$.
 
-Usando o mesmo exemplo da universidade ($n=400, N_A=6000, N_B=4000$), suponha que um estudo piloto revelou os seguintes desvios padrão para as notas dos alunos:
-- **Estrato A (Exatas):** $\sigma_A = 10$ (notas mais homogêneas)
-- **Estrato B (Humanas):** $\sigma_B = 20$ (notas mais heterogêneas)
+Arredondando: **357**, contra 385 sem a correção.
 
-1.  **Calcular o denominador $\sum (N_i \cdot \sigma_i)$:**
-
-$$(N_A \cdot \sigma_A) + (N_B \cdot \sigma_B) = (6000 \cdot 10) + (4000 \cdot 20) = 60000 + 80000 = 140000$$
-
-2.  **Alocação para Estrato A:**
-
-$$n_A = 400 \cdot \frac{6000 \cdot 10}{140000} = 400 \cdot \frac{60000}{140000} \approx 400 \cdot 0,4286 \approx 171,4$$
-
-3.  **Alocação para Estrato B:**
-
-$$n_B = 400 \cdot \frac{4000 \cdot 20}{140000} = 400 \cdot \frac{80000}{140000} \approx 400 \cdot 0,5714 \approx 228,6$$
-
-Arredondando, a amostra será de **171 alunos de Exatas** e **229 de Humanas**. Note como o estrato com maior variabilidade (Humanas) recebeu uma amostra maior, mesmo tendo uma população menor.
-
-**Exemplo em Julia:**
 <div class="code-container">
   <div class="code-header">
     <div class="code-lang">julia</div>
@@ -1005,37 +418,123 @@ Arredondando, a amostra será de **171 alunos de Exatas** e **229 de Humanas**. 
     </button>
   </div>
   <div class="code-content">
-    <pre><code># Parâmetros
-n_total = 400
-estratos = Dict(
-    "Exatas"  => (N_h=6000, σ_h=10),
-    "Humanas" => (N_h=4000, σ_h=20)
-)
-n_alocada_neyman = Dict()
+    <pre><code>using Distributions
 
-# Calcular denominador
-denominador_neyman = sum(v.N_h * v.σ_h for (k, v) in estratos)
+N = 5000                         # tamanho da população
+z = quantile(Normal(), 0.975)
+p, E = 0.5, 0.05
 
-for (estrato, pars) in estratos
-    numerador = pars.N_h * pars.σ_h
-    n_h = n_total * (numerador / denominador_neyman)
-    n_alocada_neyman[estrato] = round(Int, n_h)
-end
+n0 = z^2 * p * (1 - p) / E^2     # população infinita
+n = n0 / (1 + (n0 - 1) / N)      # correção para população finita
 
-println("Alocação de Neyman: ", n_alocada_neyman)
-</code></pre>
+println("n0 = ", round(n0, digits=2), "   n corrigido = ", round(n, digits=2), " → ", ceil(Int, n))</code></pre>
   </div>
 </div>
+
+#### Saída esperada:
 <div class="code-output">
   <div class="code-output-header"># Saída</div>
-  Alocação de Neyman: Dict("Humanas" => 229, "Exatas" => 171)
+  <div>n0 = 384.15 &nbsp; n corrigido = 356.8 → 357</div>
 </div>
 
----
+## 6. Alocação na Amostra Estratificada
 
-## Guia de Escolha do Método de Amostragem
+Com o tamanho total $n$ decidido, é preciso dividi-lo entre os estratos. Seja $N_h$ o tamanho do estrato $h$ na população e $n_h$ o número de elementos sorteados nele.
 
-A escolha do método depende de cinco critérios práticos. Responda às perguntas abaixo em ordem:
+**Alocação proporcional:** cada estrato recebe uma parte de $n$ proporcional ao seu tamanho,
+
+$$n_h = n \cdot \frac{N_h}{N}$$
+
+**Alocação de Neyman (ótima):** leva em conta também o desvio padrão $\sigma_h$ de cada estrato, e dá mais amostra aos estratos mais variáveis,
+
+$$n_h = n \cdot \frac{N_h\, \sigma_h}{\sum_i N_i\, \sigma_i}$$
+
+Para um $n$ fixo e custo igual por elemento, é a alocação que torna mínima a variância da média estratificada.
+
+**Exemplo** (números ilustrativos): uma universidade com 10.000 alunos, 6.000 de Exatas e 4.000 de Humanas; amostra de $n = 400$. Um estudo piloto indicou desvio padrão das notas de 10 em Exatas e 20 em Humanas.
+
+- **Proporcional:** $n_A = 400 \cdot \frac{6000}{10000} = 240$ e $n_B = 400 \cdot \frac{4000}{10000} = 160$.
+- **Neyman:** o denominador é $6000 \cdot 10 + 4000 \cdot 20 = 60.000 + 80.000 = 140.000$; então $n_A = 400 \cdot \frac{60.000}{140.000} \approx 171{,}43$ e $n_B = 400 \cdot \frac{80.000}{140.000} \approx 228{,}57$, arredondados para **171 e 229** (somando 400). Humanas, mais variável, recebe mais amostra mesmo sendo o estrato menor.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>n = 400
+N = [6000, 4000]                 # tamanhos dos estratos (Exatas, Humanas)
+σ = [10, 20]                     # desvios padrão de um estudo piloto
+
+proporcional = n .* N ./ sum(N)
+neyman = n .* (N .* σ) ./ sum(N .* σ)
+
+println("Proporcional: ", proporcional)
+println("Neyman:       ", round.(neyman, digits=2), " → ", round.(Int, neyman))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Proporcional: [240.0, 160.0]</div>
+  <div>Neyman: &nbsp; &nbsp; &nbsp; [171.43, 228.57] → [171, 229]</div>
+</div>
+
+**Simulação: quanto a estratificação ganha.** Numa população ilustrativa com esses dois estratos (médias 50 e 80, desvios padrão 10 e 20), sorteamos 5.000 amostras de 400 com cada método e medimos o desvio padrão das 5.000 estimativas da média:
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random, Statistics, StatsBase
+
+# População ilustrativa: estrato A com 6.000 notas (média 50, desvio padrão 10)
+# e estrato B com 4.000 notas (média 80, desvio padrão 20)
+Random.seed!(123)
+A = 50 .+ 10 .* randn(6000)
+B = 80 .+ 20 .* randn(4000)
+pop = vcat(A, B)
+μ = mean(pop)
+
+# Estimador estratificado: média de cada estrato, ponderada pelo tamanho do estrato
+estrat(nA, nB) = (6000 * mean(sample(A, nA; replace=false)) +
+                  4000 * mean(sample(B, nB; replace=false))) / 10_000
+
+repeticoes = 5_000
+aas = [mean(sample(pop, 400; replace=false)) for _ in 1:repeticoes]
+prop = [estrat(240, 160) for _ in 1:repeticoes]       # alocação proporcional
+neyman = [estrat(171, 229) for _ in 1:repeticoes]     # alocação de Neyman
+
+println("Média da população = ", round(μ, digits=3))
+println("Desvio padrão da estimativa, n = 400:")
+println("  aleatória simples      ", round(std(aas), digits=3))
+println("  estratificada (prop.)  ", round(std(prop), digits=3))
+println("  estratificada (Neyman) ", round(std(neyman), digits=3))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>Média da população = 61.955</div>
+  <div>Desvio padrão da estimativa, n = 400:</div>
+  <div> &nbsp;aleatória simples &nbsp; &nbsp; &nbsp;1.02</div>
+  <div> &nbsp;estratificada (prop.) &nbsp;0.722</div>
+  <div> &nbsp;estratificada (Neyman) 0.684</div>
+</div>
+
+A estratificada proporcional erra cerca de 30% menos que a AAS (0,722 contra 1,020), e a de Neyman um pouco menos ainda (0,684). O ganho vem de os estratos terem médias bem diferentes (50 e 80): a AAS ainda varia na proporção de cada curso que sorteia, e a estratificada não.
+
+## 7. Como Escolher o Método
 
 <div style="overflow-x:auto; margin: 1em 0;">
 <table style="border-collapse: collapse; margin: 0 auto; min-width: 680px;">
@@ -1043,71 +542,37 @@ A escolha do método depende de cinco critérios práticos. Responda às pergunt
     <tr>
       <th style="border: 1px solid #bbb; padding: 8px;">#</th>
       <th style="border: 1px solid #bbb; padding: 8px;">Pergunta</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Se SIM</th>
-      <th style="border: 1px solid #bbb; padding: 8px;">Se NÃO</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Se sim</th>
+      <th style="border: 1px solid #bbb; padding: 8px;">Se não</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">1</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Existe cadastro completo e atualizado da população?</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Vá para 2</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Conglomerados, Quotas ou Bola de Neve</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">2</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">A população é heterogênea com subgrupos identificáveis?</td>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong> (máxima precisão)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Vá para 3</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">3</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">O cadastro está ordenado sem periodicidade oculta?</td>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong> (operacionalmente simples)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória Simples</strong> (referência padrão)</td>
-    </tr>
-    <tr style="background:#f9fbe7;">
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">4</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">O orçamento é restrito e a população é geograficamente dispersa?</td>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong> (reduz deslocamento)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Manter método probabilístico anterior</td>
-    </tr>
-    <tr>
-      <td style="border: 1px solid #bbb; padding: 8px; text-align:center;">5</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">O objetivo é apenas exploratório ou piloto?</td>
-      <td style="border: 1px solid #bbb; padding: 8px;"><strong>Conveniência</strong> (rápido, sem inferência formal)</td>
-      <td style="border: 1px solid #bbb; padding: 8px;">Retornar ao passo 1 com rigor probabilístico</td>
-    </tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">1</td><td style="border: 1px solid #bbb; padding: 8px;">O objetivo é só explorar ou testar um questionário?</td><td style="border: 1px solid #bbb; padding: 8px;">Conveniência pode bastar (sem margem de erro)</td><td style="border: 1px solid #bbb; padding: 8px;">Use um método probabilístico: vá para 2</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">2</td><td style="border: 1px solid #bbb; padding: 8px;">Existe uma lista completa e atualizada da população?</td><td style="border: 1px solid #bbb; padding: 8px;">Vá para 3</td><td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong> (basta a lista dos grupos)</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">3</td><td style="border: 1px solid #bbb; padding: 8px;">A população é espalhada e visitar cada elemento é caro?</td><td style="border: 1px solid #bbb; padding: 8px;"><strong>Conglomerados</strong> (ou em dois estágios)</td><td style="border: 1px solid #bbb; padding: 8px;">Vá para 4</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">4</td><td style="border: 1px solid #bbb; padding: 8px;">Há grupos conhecidos, diferentes entre si, que importam para o estudo?</td><td style="border: 1px solid #bbb; padding: 8px;"><strong>Estratificada</strong></td><td style="border: 1px solid #bbb; padding: 8px;">Vá para 5</td></tr>
+    <tr><td style="border: 1px solid #bbb; padding: 8px; text-align:center;">5</td><td style="border: 1px solid #bbb; padding: 8px;">A lista é longa e sem padrões periódicos?</td><td style="border: 1px solid #bbb; padding: 8px;"><strong>Sistemática</strong></td><td style="border: 1px solid #bbb; padding: 8px;"><strong>Aleatória simples</strong></td></tr>
   </tbody>
 </table>
 </div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em 1em; background-color: #e8f5e9; margin: 0.75em 0;">
-<strong>Regra prática:</strong> Sempre que possível, prefira métodos <strong>probabilísticos</strong>. São os únicos que permitem calcular margens de erro e construir intervalos de confiança com garantias matemáticas.
+<strong>Em resumo:</strong> sempre que possível, use um método probabilístico; só ele permite calcular margens de erro e intervalos de confiança. Uma amostra pequena e bem sorteada vale mais que uma enorme e com viés. E as fórmulas de margem de erro desta página e de <a href="{{ '/pt/inferencia-estatistica/intervalos-confianca' | relative_url }}">Intervalos de Confiança</a> valem para a amostragem aleatória simples; desenhos estratificados ou por conglomerados têm fórmulas próprias.
 </div>
 
----
+## 🎧 Podcast: Amostragem
 
-## Referências Bibliográficas
-
-1. Montgomery, D. C.; Runger, G. C. **Applied Statistics and Probability for Engineers**. 6ª ed. Wiley, 2014.
-2. Morettin, P. A.; Bussab, W. O. **Estatística Básica**. 9ª ed. Saraiva, 2017.
-3. Triola, M. F. **Introdução à Estatística**. 12ª ed. LTC, 2017.
-4. Bolfarine, H.; Bussab, W. O. **Elementos de Amostragem**. Blucher, 2005.
-5. Cochran, W. G. **Sampling Techniques**. 3ª ed. Wiley, 1977. — Referência clássica para teoria de amostragem.
-6. Lohr, S. L. **Sampling: Design and Analysis**. 2ª ed. Brooks/Cole, 2009. — Tratamento moderno com exemplos computacionais.
-7. Groves, R. M. et al. **Survey Methodology**. 2ª ed. Wiley, 2009. — Cobre erros amostrais e não-amostrais em profundidade.
-8. Kish, L. **Survey Sampling**. Wiley, 1965. — Fundamentos matemáticos da amostragem complexa.
-
----
-
-## 🎧 Podcast: Aprofundando em Amostragem
-
-Para uma discussão mais aprofundada sobre o tema, ouça o nosso podcast. Cobrimos exemplos práticos e dicas para escolher a distribuição correta para seus dados.
+Um episódio em áudio, do próprio site, sobre os métodos de amostragem desta página:
 
 <div style="margin-top: 1em;">
-  <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2192924015&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe><div style="font-size: 10px; color: #cccccc;line-break: anywhere;word-break: normal;overflow: hidden;white-space: nowrap;text-overflow: ellipsis; font-family: Interstate,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Garuda,Verdana,Tahoma,sans-serif;font-weight: 100;"><a href="https://soundcloud.com/morrison-kuehlsen" title="Morrison Kühlsen" target="_blank" style="color: #cccccc; text-decoration: none;">Morrison Kühlsen</a> · <a href="https://soundcloud.com/morrison-kuehlsen/amostragem-do_sorteio" title="Amostragem__Do_Sorteio_à_Bola_de_Neve_–_Guia_Essencial_dos_Méto" target="_blank" style="color: #cccccc; text-decoration: none;">Amostragem__Do_Sorteio_à_Bola_de_Neve_–_Guia_Essencial_dos_Méto</a></div>
+  <iframe title="Podcast sobre amostragem" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2192924015&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
 </div>
 
----
+## Referências
 
+1. Bolfarine, H.; Bussab, W. O. (2005). *Elementos de Amostragem*. Blucher.
+2. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+3. Cochran, W. G. (1977). *Sampling Techniques*. 3rd ed. Wiley.
+4. Lohr, S. L. (2009). *Sampling: Design and Analysis*. 2nd ed. Brooks/Cole.
+5. Squire, P. (1988). Why the 1936 Literary Digest Poll Failed. *Public Opinion Quarterly*, 52(1), 125–133. DOI: [10.1086/269085](https://doi.org/10.1086/269085).
+6. Triola, M. F. (2024). *Introdução à Estatística*. 14. ed. LTC.
