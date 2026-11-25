@@ -5,7 +5,7 @@ lang: pt
 ref: analise-de-dados
 order: 4
 mathjax: true
-description: "Técnicas e métodos para analisar, modelar e interpretar conjuntos de dados."
+description: "Análise de dados passo a passo: pergunta, coleta, limpeza, exploração, outliers, gráficos, correlação, regressão e métricas para avaliar modelos."
 ---
 
 <style>
@@ -54,8 +54,8 @@ description: "Técnicas e métodos para analisar, modelar e interpretar conjunto
   .mk-card {
     padding: 1.25rem;
     border-radius: 18px;
-    background: #ffffff;
-    border: 1px solid rgba(11, 31, 53, 0.08);
+    background: var(--mk-surface);
+    border: 1px solid var(--mk-border);
     box-shadow: 0 8px 22px rgba(11, 31, 53, 0.06);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
@@ -67,29 +67,29 @@ description: "Técnicas e métodos para analisar, modelar e interpretar conjunto
 
   .mk-card h3 {
     margin-top: 0;
-    color: #0b1f35;
+    color: var(--mk-ink);
   }
 
   .mk-card p {
-    color: #4a5568;
+    color: var(--mk-ink-soft);
     line-height: 1.65;
   }
 
   .mk-note {
     padding: 1.2rem 1.4rem;
     border-left: 5px solid #c47a2c;
-    background: #fff7ed;
+    background: var(--mk-tint-warn);
     border-radius: 12px;
     margin: 1.5rem 0;
-    color: #3f2a14;
+    color: var(--mk-ink);
   }
 
   .mk-formula {
     padding: 1.2rem;
     margin: 1.2rem 0;
     border-radius: 16px;
-    background: #f8fafc;
-    border: 1px solid rgba(11, 31, 53, 0.08);
+    background: var(--mk-surface-2);
+    border: 1px solid var(--mk-border);
     overflow-x: auto;
   }
 
@@ -111,9 +111,10 @@ description: "Técnicas e métodos para analisar, modelar e interpretar conjunto
 
   .mk-table td {
     padding: 0.85rem;
-    border-bottom: 1px solid #e5e7eb;
-    background: #ffffff;
+    border-bottom: 1px solid var(--mk-border);
+    background: var(--mk-surface);
     vertical-align: top;
+    color: var(--mk-ink);
   }
 
   .mk-table tr:last-child td {
@@ -123,7 +124,7 @@ description: "Técnicas e métodos para analisar, modelar e interpretar conjunto
   .mk-example {
     padding: 1.4rem;
     border-radius: 18px;
-    background: linear-gradient(135deg, #ffffff 0%, #fff8e8 100%);
+    background: linear-gradient(135deg, var(--mk-surface) 0%, var(--mk-tint-warn) 100%);
     border: 1px solid rgba(196, 122, 44, 0.18);
     box-shadow: 0 10px 25px rgba(11, 31, 53, 0.06);
     margin: 1.5rem 0;
@@ -131,7 +132,7 @@ description: "Técnicas e métodos para analisar, modelar e interpretar conjunto
 
   .mk-example h3 {
     margin-top: 0;
-    color: #0b1f35;
+    color: var(--mk-ink);
   }
 
   .mk-quote {
@@ -416,6 +417,9 @@ $$
 
 </div>
 
+Aqui, $$Q_1$$ e $$Q_3$$ são o primeiro e o terceiro quartis: 25% dos dados ficam abaixo de $$Q_1$$ e 75% abaixo de $$Q_3$$.
+Há vários métodos para calcular quartis, e softwares diferentes podem dar valores um pouco diferentes para os mesmos dados.
+
 Os limites inferior e superior são:
 
 <div class="mk-formula">
@@ -490,11 +494,11 @@ Algumas medidas aparecem com frequência na Análise de Dados.
     <tr>
       <td>Coeficiente de variação</td>
       <td>$$CV = \frac{s}{\bar{x}}$$</td>
-      <td>Dispersão relativa em relação à média.</td>
+      <td>Dispersão relativa em relação à média. Só faz sentido para dados positivos (média maior que zero).</td>
     </tr>
     <tr>
       <td>Correlação</td>
-      <td>Varia de -1 a 1.</td>
+      <td>Varia de −1 a 1.</td>
       <td>Força e direção da relação linear entre duas variáveis.</td>
     </tr>
   </tbody>
@@ -585,7 +589,7 @@ A interpretação geral é:
       <td>Relação linear positiva forte.</td>
     </tr>
     <tr>
-      <td>Próximo de -1</td>
+      <td>Próximo de −1</td>
       <td>Relação linear negativa forte.</td>
     </tr>
     <tr>
@@ -597,6 +601,8 @@ A interpretação geral é:
 
 <div class="mk-note">
   Correlação não implica causalidade. Duas variáveis podem se mover juntas sem que uma cause a outra.
+  Além disso, $r$ mede só a relação <strong>linear</strong>: um $r$ perto de 0 não quer dizer que não haja
+  relação, porque pode existir uma relação curva que a correlação de Pearson não capta.
 </div>
 
 ---
@@ -650,6 +656,9 @@ $$
 
 </div>
 
+Aqui, $$b_0$$ e $$b_1$$ são as estimativas de $$\beta_0$$ e $$\beta_1$$ calculadas a partir dos dados,
+e $$\hat{Y}$$ é o valor previsto pela reta.
+
 A diferença entre o valor observado e o valor previsto é chamada de resíduo:
 
 <div class="mk-formula">
@@ -664,6 +673,9 @@ $$
   Bons modelos não são aqueles que apenas “encaixam” nos dados, mas aqueles que ajudam
   a explicar ou prever com coerência.
 </div>
+
+A página de [Regressão Linear]({{ '/pt/analise-de-dados/regressao-linear' | relative_url }}) mostra como calcular
+$$b_0$$ e $$b_1$$ por mínimos quadrados, com um exemplo resolvido à mão.
 
 ---
 
@@ -742,6 +754,10 @@ R^2 = 1 - \frac{SQ_{res}}{SQ_{tot}}
 $$
 
 </div>
+
+Em todas essas fórmulas, $$y_i$$ é o valor observado, $$\hat{y}_i$$ é o valor previsto pelo modelo e $$n$$ é o número de observações.
+No $$R^2$$, $$SQ_{res} = \sum_{i=1}^{n}(y_i-\hat{y}_i)^2$$ é a soma dos quadrados dos resíduos e
+$$SQ_{tot} = \sum_{i=1}^{n}(y_i-\bar{y})^2$$ é a soma dos quadrados dos desvios em torno da média $$\bar{y}$$.
 
 ---
 
@@ -864,6 +880,8 @@ $$
 
 </div>
 
+Aqui, $$x_1, x_2, \ldots, x_n$$ são os tempos de espera registrados naquela hora e $$n$$ é quantos atendimentos houve nela.
+
 Depois, poderíamos comparar os horários em uma tabela ou gráfico de linhas.
 
 ---
@@ -898,7 +916,9 @@ $$
 
 </div>
 
-A mediana é a média entre o 3º e o 4º valores:
+Em média, cada pessoa esperou cerca de 13,33 minutos (o valor exato é 80/6 = 40/3 minutos).
+
+Os seis valores já estão em ordem crescente. Como a quantidade de valores é par, a mediana é a média entre o 3º e o 4º valores:
 
 <div class="mk-formula">
 
@@ -912,7 +932,11 @@ $$
 
 </div>
 
-Nesse caso, a média ficou maior que a mediana por causa do valor 30.
+Metade das esperas foi de até 11 minutos e a outra metade, de 11 minutos ou mais.
+
+Nesse caso, a média ficou maior que a mediana por causa do valor 30. Sem ele, a média dos cinco valores restantes
+seria $$\frac{5+8+10+12+15}{5} = \frac{50}{5} = 10$$ minutos: um único valor extremo puxou a média em mais de 3 minutos,
+enquanto a mediana mudou menos (de 11 para 10).
 
 <div class="mk-note">
   Esse exemplo mostra por que a média deve ser interpretada com cuidado quando há valores extremos.
@@ -1082,6 +1106,3 @@ Alguns cuidados importantes:
   gráficos, analisar dados é compreender um problema, investigar evidências e comunicar
   conclusões de forma clara, honesta e útil.
 </div>
-
-> “Sem dados, você é apenas mais uma pessoa com uma opinião.”  
-> — W. Edwards Deming
