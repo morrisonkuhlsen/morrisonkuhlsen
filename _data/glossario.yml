@@ -742,6 +742,52 @@ pt:
     veja:
       - { t: "Porcentagem: fórmulas e exemplos", u: "/porcentagens/" }
 
+  - termo: "Distribuição hipergeométrica"
+    slug: distribuicao-hipergeometrica
+    ordem: "distribuicao hipergeometrica"
+    tambem: ["hipergeométrica"]
+    def: "Conta quantos sucessos aparecem numa amostra tirada sem reposição de uma população finita com um número conhecido de sucessos. Dá, por exemplo, a chance de acertar 4, 5 ou 6 dezenas numa aposta da Mega-Sena."
+    veja:
+      - { t: "Mega-Sena: o que dá para concluir só com frequências", u: "/mega-sena-frequencias/" }
+
+  - termo: "Falácia do jogador"
+    slug: falacia-do-jogador
+    ordem: "falacia do jogador"
+    def: "Crença de que, em eventos independentes, um resultado fica mais provável por ter saído pouco (\"está atrasado\") ou menos provável por ter saído muito. Num sorteio justo, o passado não muda a chance do próximo resultado."
+    veja:
+      - { t: "Mega-Sena: o que dá para concluir só com frequências", u: "/mega-sena-frequencias/" }
+
+  - termo: "Método de Monte Carlo"
+    slug: metodo-de-monte-carlo
+    ordem: "metodo de monte carlo"
+    tambem: ["simulação de Monte Carlo"]
+    def: "Estima uma probabilidade ou uma média repetindo no computador um experimento aleatório muitas vezes e contando os resultados. O erro da estimativa cai na proporção de 1 sobre a raiz quadrada do número de repetições."
+    veja:
+      - { t: "Margem de erro de pesquisa eleitoral", u: "/margem-de-erro-pesquisa-eleitoral/" }
+
+  - termo: "Comparações múltiplas"
+    slug: comparacoes-multiplas
+    ordem: "comparacoes multiplas"
+    tambem: ["testes múltiplos"]
+    def: "Problema de fazer muitos testes de uma vez: mesmo sem nenhum efeito real, a chance de algum resultado sair significativo por acaso cresce com o número de testes. Correções como a de Bonferroni e o controle da taxa de falsas descobertas compensam isso."
+    veja:
+      - { t: "Um contraexemplo ao método BH", u: "/bh-fdr-contraexemplo/" }
+
+  - termo: "Correção de continuidade"
+    slug: correcao-de-continuidade
+    ordem: "correcao de continuidade"
+    def: "Ajuste de meia unidade feito ao aproximar uma distribuição discreta, como a binomial, por uma contínua, como a normal. Por exemplo, P(X ≥ 290) vira P(X ≥ 289,5) na normal."
+    veja:
+      - { t: "Mega-Sena: o que dá para concluir só com frequências", u: "/mega-sena-frequencias/" }
+
+  - termo: "Teste de aderência"
+    slug: teste-de-aderencia
+    ordem: "teste de aderencia"
+    tambem: ["teste qui-quadrado de aderência", "testes de aderência"]
+    def: "Verifica se frequências observadas são compatíveis com uma distribuição teórica, como a uniforme. O mais usado é o teste qui-quadrado de aderência."
+    veja:
+      - { t: "Fórmula interativa", u: "/formulas/qui-quadrado.html" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -827,7 +873,7 @@ en:
     def: "A selection in which order does not matter. Choosing 6 numbers out of 60 is a combination, which is why the order of the draw does not change the probability of a ticket."
     veja:
       - { t: "Binomial coefficient", u: "/en/formulas/binomial-coefficient.html" }
-      - { t: "Mega-Sena lottery (in Portuguese)", u: "/mega-sena-frequencias/" }
+      - { t: "Mega-Sena lottery", u: "/mega-sena-frequencies/" }
 
   - termo: "Finite population correction"
     slug: finite-population-correction
@@ -1472,3 +1518,48 @@ en:
     def: "The part of a jointly owned property that belongs to each co-owner, expressed as a fraction or percentage of the whole, without corresponding to a marked-out area. In Brazil, fração ideal."
     veja:
       - { t: "Percentages: formulas and examples", u: "/percentages/" }
+
+  - termo: "Hypergeometric distribution"
+    slug: hypergeometric-distribution
+    ordem: "hypergeometric distribution"
+    def: "Counts how many successes appear in a sample drawn without replacement from a finite population with a known number of successes. It gives, for example, the chance of matching 4, 5 or 6 numbers in a Mega-Sena bet."
+    veja:
+      - { t: "Mega-Sena: what frequencies can tell you", u: "/mega-sena-frequencies/" }
+
+  - termo: "Gambler's fallacy"
+    slug: gamblers-fallacy
+    ordem: "gambler's fallacy"
+    def: "The belief that, in independent events, an outcome becomes more likely because it has come up rarely (\"it is overdue\") or less likely because it has come up often. In a fair draw, the past does not change the chance of the next outcome."
+    veja:
+      - { t: "Mega-Sena: what frequencies can tell you", u: "/mega-sena-frequencies/" }
+
+  - termo: "Monte Carlo method"
+    slug: monte-carlo-method
+    ordem: "monte carlo method"
+    tambem: ["Monte Carlo simulation"]
+    def: "Estimates a probability or a mean by repeating a random experiment on a computer many times and counting the outcomes. The error of the estimate shrinks in proportion to 1 over the square root of the number of repetitions."
+    veja:
+      - { t: "Polling margin of error", u: "/polling-margin-of-error/" }
+
+  - termo: "Multiple comparisons"
+    slug: multiple-comparisons
+    ordem: "multiple comparisons"
+    tambem: ["multiple testing"]
+    def: "The problem of running many tests at once: even with no real effect, the chance that some result comes out significant by chance grows with the number of tests. Corrections such as Bonferroni's and control of the false discovery rate make up for it."
+    veja:
+      - { t: "A counterexample to the BH procedure (in Portuguese)", u: "/bh-fdr-contraexemplo/" }
+
+  - termo: "Continuity correction"
+    slug: continuity-correction
+    ordem: "continuity correction"
+    def: "A half-unit adjustment made when a discrete distribution, such as the binomial, is approximated by a continuous one, such as the normal. For example, P(X ≥ 290) becomes P(X ≥ 289.5) under the normal."
+    veja:
+      - { t: "Mega-Sena: what frequencies can tell you", u: "/mega-sena-frequencies/" }
+
+  - termo: "Goodness-of-fit test"
+    slug: goodness-of-fit-test
+    ordem: "goodness-of-fit test"
+    tambem: ["goodness-of-fit tests"]
+    def: "Checks whether observed frequencies are consistent with a theoretical distribution, such as the uniform. The most common one is the chi-square goodness-of-fit test."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/chi-square-test.html" }

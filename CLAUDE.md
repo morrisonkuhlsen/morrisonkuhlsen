@@ -547,6 +547,16 @@ mesmo commit, sem esperar pedido:
 | variação percentual | percentage change |
 | fração ideal | undivided share |
 | DOI (Declaração sobre Operações Imobiliárias) | DOI (real estate transactions declaration) |
+| distribuição hipergeométrica | hypergeometric distribution |
+| falácia do jogador | gambler's fallacy |
+| método de Monte Carlo | Monte Carlo method |
+| comparações múltiplas | multiple comparisons |
+| correção de continuidade | continuity correction |
+| teste de aderência | goodness-of-fit test |
+| concurso (loteria) | draw |
+| dezena (Mega-Sena) | number |
+| sena / quina / quadra | jackpot (6 hits) / five hits (quina) / four hits (quadra) |
+| bolão | lottery pool |
 | qui-quadrado | chi-square |
 | análise de variância (ANOVA) | analysis of variance (ANOVA) |
 | correlação de Pearson | Pearson correlation |
