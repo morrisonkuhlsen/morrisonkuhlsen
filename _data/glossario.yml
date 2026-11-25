@@ -763,7 +763,7 @@ pt:
     tambem: ["simulação de Monte Carlo"]
     def: "Estima uma probabilidade ou uma média repetindo no computador um experimento aleatório muitas vezes e contando os resultados. O erro da estimativa cai na proporção de 1 sobre a raiz quadrada do número de repetições."
     veja:
-      - { t: "Margem de erro de pesquisa eleitoral", u: "/margem-de-erro-pesquisa-eleitoral/" }
+      - { t: "Margem de erro de pesquisa eleitoral", u: "/margem-de-erro-pesquisa-eleitoral-amostragem/" }
 
   - termo: "Comparações múltiplas"
     slug: comparacoes-multiplas
@@ -1610,7 +1610,7 @@ en:
     tambem: ["Monte Carlo simulation"]
     def: "Estimates a probability or a mean by repeating a random experiment on a computer many times and counting the outcomes. The error of the estimate shrinks in proportion to 1 over the square root of the number of repetitions."
     veja:
-      - { t: "Polling margin of error", u: "/polling-margin-of-error/" }
+      - { t: "Polling margin of error", u: "/polling-margin-of-error-sampling/" }
 
   - termo: "Multiple comparisons"
     slug: multiple-comparisons
