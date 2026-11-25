@@ -718,6 +718,30 @@ pt:
     veja:
       - { t: "Internações por dengue em Pernambuco", u: "/visualizacao-mapa-dengue/" }
 
+  - termo: "Ponto percentual"
+    slug: ponto-percentual
+    ordem: "ponto percentual"
+    tambem: ["pontos percentuais"]
+    def: "Diferença entre duas porcentagens. Uma taxa que vai de 5% para 8% sobe 3 pontos percentuais, o que corresponde a uma variação percentual de 60%."
+    veja:
+      - { t: "Porcentagem: fórmulas e exemplos", u: "/porcentagens/" }
+
+  - termo: "Variação percentual"
+    slug: variacao-percentual
+    ordem: "variacao percentual"
+    tambem: ["variações percentuais"]
+    def: "Quanto um valor mudou em relação ao valor inicial, em porcentagem: (final − inicial) / inicial × 100. De 500 para 650, a variação é de 30%."
+    veja:
+      - { t: "Porcentagem: fórmulas e exemplos", u: "/porcentagens/" }
+
+  - termo: "Fração ideal"
+    slug: fracao-ideal
+    ordem: "fracao ideal"
+    tambem: ["frações ideais"]
+    def: "Parte de um imóvel em condomínio que pertence a cada coproprietário, expressa como fração ou porcentagem do todo, sem corresponder a uma área demarcada."
+    veja:
+      - { t: "Porcentagem: fórmulas e exemplos", u: "/porcentagens/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1424,3 +1448,27 @@ en:
     def: "The number of new cases of a disease in a population during a period, divided by the size of the population, usually per 100,000 inhabitants. Hospital admissions and cases are different things: not every case is admitted."
     veja:
       - { t: "Dengue hospital admissions in Pernambuco", u: "/dengue-map-visualization/" }
+
+  - termo: "Percentage point"
+    slug: percentage-point
+    ordem: "percentage point"
+    tambem: ["percentage points"]
+    def: "The difference between two percentages. A rate that goes from 5% to 8% rises 3 percentage points, which is a percentage change of 60%."
+    veja:
+      - { t: "Percentages: formulas and examples", u: "/percentages/" }
+
+  - termo: "Percentage change"
+    slug: percentage-change
+    ordem: "percentage change"
+    tambem: ["percentage changes"]
+    def: "How much a value changed relative to its initial value, as a percentage: (final − initial) / initial × 100. From 500 to 650, the change is 30%."
+    veja:
+      - { t: "Percentages: formulas and examples", u: "/percentages/" }
+
+  - termo: "Undivided share"
+    slug: undivided-share
+    ordem: "undivided share"
+    tambem: ["undivided shares"]
+    def: "The part of a jointly owned property that belongs to each co-owner, expressed as a fraction or percentage of the whole, without corresponding to a marked-out area. In Brazil, fração ideal."
+    veja:
+      - { t: "Percentages: formulas and examples", u: "/percentages/" }

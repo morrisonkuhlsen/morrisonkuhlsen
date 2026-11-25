@@ -543,6 +543,10 @@ mesmo commit, sem esperar pedido:
 | mapa coroplético | choropleth map |
 | taxa de incidência | incidence rate |
 | internação (SIH/SUS) | hospital admission |
+| ponto percentual | percentage point |
+| variação percentual | percentage change |
+| fração ideal | undivided share |
+| DOI (Declaração sobre Operações Imobiliárias) | DOI (real estate transactions declaration) |
 | qui-quadrado | chi-square |
 | análise de variância (ANOVA) | analysis of variance (ANOVA) |
 | correlação de Pearson | Pearson correlation |
