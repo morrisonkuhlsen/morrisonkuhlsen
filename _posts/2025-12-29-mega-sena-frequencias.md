@@ -5,7 +5,7 @@ title: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequênci
 categories: [PROBABILIDADE, ESTATÍSTICA]
 lang: pt
 tags: [Probabilidade]
-ref: porcentagens
+ref: mega-sena-frequencias
 author: dante-bertuzzi
 description: "Mega-Sena: o que dá para concluir (e o que não dá) só com frequências"
 mathjax: true
