@@ -7,190 +7,242 @@ parent: probabilidade
 permalink: /en/probability/questions
 order: 7
 mathjax: true
-description: "Solved probability questions, step by step: binomial, exponential, Poisson, normal, geometric and negative binomial distributions."
+description: "Probability questions solved step by step: binomial, exponential, Poisson, normal, geometric and negative binomial distributions, with Julia code."
 ---
 
 ## Solved Practice Questions
 
+Six questions, one for each distribution covered in [Probability Distributions]({{ '/en/probability/distributions' | relative_url }}). Each solution says why the distribution fits, does the arithmetic one step at a time, interprets the result and checks everything with Julia code. The problems and numbers are **illustrative**, made up to keep the arithmetic simple; they do not describe any real village, company or person.
+
 <div style="border-left: 4px solid #f44336; padding: 1em; background-color: #ffebee; margin: 1em 0; border-radius: 4px;">
   <img src="{{ site.baseurl }}/assets/images/lampiao.avif" alt="Kerosene lamp" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
-  <h4 style="margin-top: 0;">🎲 Probability Question: Lamps in a Village</h4>
+  <h4 style="margin-top: 0;">🎲 Question 1: Lamps in a Village (Binomial Distribution)</h4>
   <p><strong>Problem:</strong></p>
-  <p>In a village where the power supply is unreliable, every resident has a kerosene lamp. Studies show that, on average, 1 in every 5 lamps fails to light because of impurities in the fuel.</p>
-  <p>During a blackout one night, 6 residents try to light their lamps independently.</p>
+  <p>In a village where the power often goes out, every resident has a kerosene lamp. Because of impurities in the fuel, 1 in every 5 lamps fails to light.</p>
+  <p>During a blackout one night, 6 residents try to light their lamps, each one independently of the others.</p>
   <p><strong>Questions:</strong></p>
   <ol>
-    <li>What is the probability that <strong>exactly 2</strong> lamps fail to light?</li>
-    <li>What is the probability that <strong>at least 1</strong> lamp works properly?</li>
-    <li>If a resident replaces the kerosene with a filtered fuel that cuts the chance of failure to 10%, what is the new probability that <strong>no lamp fails</strong> among the 6?</li>
+    <li>What is the probability that <strong>exactly 2</strong> lamps fail?</li>
+    <li>What is the probability that <strong>at least 1</strong> lamp lights?</li>
+    <li>If all 6 residents switch from kerosene to a filtered fuel that cuts the chance of failure to 10%, what is the probability that <strong>no lamp fails</strong>?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-The problem can be modeled with the **binomial distribution**, since we have a fixed number of independent trials ($n=6$), each with two possible outcomes (failure or success) and a constant probability of failure ($p=1/5=0.2$).
+**Why binomial.** There is a fixed number of trials ($n = 6$ lamps); each has two outcomes (fails or lights); the trials are independent (the problem says so); and the probability of failure is the same for all of them, $p = \frac{1}{5} = 0.2$. These are exactly the conditions for the binomial distribution.
 
-Let $X$ be the number of lamps that fail. Then $X \sim \text{Binomial}(n=6, p=0.2)$.
+Let $X$ be the number of lamps that fail out of the 6. Then $X \sim \text{Binomial}(n = 6,\ p = 0.2)$, with probability mass function:
 
-#### 1. Probability that exactly 2 lamps fail
+$$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}, \qquad k = 0, 1, \ldots, n$$
 
-We use the binomial probability mass function:
+where $\binom{n}{k} = \frac{n!}{k!\,(n-k)!}$ is the number of ways to choose which $k$ of the $n$ trials fail.
 
-$$ P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} $$
+#### 1. Exactly 2 lamps fail
 
-For $k=2$, $n=6$ and $p=0.2$:
+**Substitution** ($n = 6$, $k = 2$, $p = 0.2$, $1 - p = 0.8$):
 
-$$ P(X=2) = \binom{6}{2} (0.2)^2 (0.8)^4 $$
+$$P(X = 2) = \binom{6}{2} \cdot (0.2)^2 \cdot (0.8)^4$$
 
-Computing each term separately:
+**Arithmetic**, one term at a time:
 
-$$ \binom{6}{2} = \frac{6!}{2!(6-2)!} = \frac{6 \cdot 5}{2 \cdot 1} = 15 $$
+$$\binom{6}{2} = \frac{6!}{2! \cdot 4!} = \frac{6 \cdot 5}{2 \cdot 1} = \frac{30}{2} = 15$$
 
-$$ (0.2)^2 = 0.04 $$
+$$(0.2)^2 = 0.04$$
 
-$$ (0.8)^4 = 0.4096 $$
+$$(0.8)^4 = 0.8 \cdot 0.8 \cdot 0.8 \cdot 0.8 = 0.4096$$
 
-Putting the results together:
+$$P(X = 2) = 15 \cdot 0.04 \cdot 0.4096 = 0.6 \cdot 0.4096 = 0.24576$$
 
-$$ P(X=2) = 15 \cdot 0.04 \cdot 0.4096 $$
+**Result:** $P(X = 2) = 0.24576$, or about **24.58%**.
 
-$$ P(X=2) = 0.24576 $$
+**Interpretation:** on about 1 in 4 blackout nights with 6 lamps, exactly 2 of them fail. For comparison, the **expected** number of failures is $n \cdot p = 6 \cdot 0.2 = 1.2$ per night.
 
-The probability that exactly 2 lamps fail is **24.58%**.
+#### 2. At least 1 lamp lights
 
-#### 2. Probability that at least 1 lamp works properly
+"At least 1 lights" is the complement of "none lights", that is, of "all 6 fail" ($X = 6$). By the complement rule:
 
-"At least 1 works" is the complement of "none works", that is, "all 6 fail".
-$$ P(\text{at least 1 works}) = 1 - P(\text{all 6 fail}) $$
-The probability that all 6 fail is $P(X=6)$:
+$$P(\text{at least 1 lights}) = 1 - P(X = 6)$$
 
-$$ P(X=6) = \binom{6}{6} (0.2)^6 (0.8)^0 $$
+$$P(X = 6) = \binom{6}{6} \cdot (0.2)^6 \cdot (0.8)^0 = 1 \cdot 0.000064 \cdot 1 = 0.000064$$
 
-$$ P(X=6) = 1 \cdot (0.2)^6 \cdot 1 $$
+$$P(\text{at least 1 lights}) = 1 - 0.000064 = 0.999936$$
 
-$$ P(X=6) = 0.000064 $$
+**Result:** $0.999936$, or **99.9936%**.
 
-Now we compute the complementary probability:
+**Interpretation:** all 6 failing at once happens, on average, on 64 out of every 1,000,000 nights (1 in 15,625). It is almost certain that someone in the village will have light. This number relies on independence: if the failures come from the same batch of bad kerosene, they are no longer independent, and "all fail" becomes much more likely.
 
-$$ P(\text{at least 1 works}) = 1 - 0.000064 $$
+#### 3. No lamp fails with the filtered fuel
 
-$$ P(\text{at least 1 works}) = 0.999936 $$
+With the new fuel, the probability of failure becomes $p' = 0.1$, and the probability of lighting, $1 - p' = 0.9$. Let $X'$ be the new number of failures, $X' \sim \text{Binomial}(6,\ 0.1)$:
 
-The probability is **99.99%**: it is almost certain that at least one lamp will light.
+$$P(X' = 0) = \binom{6}{0} \cdot (0.1)^0 \cdot (0.9)^6 = 1 \cdot 1 \cdot (0.9)^6$$
 
-#### 3. The new probability with filtered fuel
+$$(0.9)^6 = 0.81 \cdot 0.81 \cdot 0.81 = 0.531441$$
 
-With the new fuel, the probability of failure is $p' = 0.1$. The probability that a lamp works is $1 - p' = 0.9$.
+**Result:** $P(X' = 0) = 0.531441$, or about **53.14%**.
 
-The question asks for the probability that **no lamp fails**, which is $P(X=0)$ with the new probability $p'=0.1$.
+**Interpretation:** with the old fuel, the chance that none fails was $(0.8)^6 = 0.262144$, about 26.21%. The filtered fuel roughly doubles that chance, but even so, on almost half of the nights at least one lamp fails.
 
-$$ P(X=0) = \binom{6}{0} (0.1)^0 (0.9)^6 $$
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
 
-$$ P(X=0) = 1 \cdot 1 \cdot (0.9)^6 $$
+X = Binomial(6, 0.2)          # X = number of lamps that fail, out of 6
+println("P(X = 2)             = ", round(pdf(X, 2), digits=5))
+println("P(at least 1 lights) = 1 − P(X = 6) = ", round(1 - pdf(X, 6), digits=6))
 
-$$ P(X=0) = 0.531441 $$
+X_filtered = Binomial(6, 0.1) # 10% failure with the filtered fuel
+println("P(no failure), p = 0.1: ", round(pdf(X_filtered, 0), digits=6))
+println("P(no failure), p = 0.2: ", round(pdf(X, 0), digits=6))</code></pre>
+  </div>
+</div>
 
-With the filtered fuel, the probability that no lamp fails is **53.14%**.
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>P(X = 2) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0.24576</div>
+  <div>P(at least 1 lights) = 1 − P(X = 6) = 0.999936</div>
+  <div>P(no failure), p = 0.1: 0.531441</div>
+  <div>P(no failure), p = 0.2: 0.262144</div>
+</div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
-  <strong>Summary of the Results:</strong>
+  <strong>Summary of Results (Question 1):</strong>
   <ul>
-    <li>Probability of exactly 2 failures: <strong>24.58%</strong></li>
-    <li>Probability that at least 1 works: <strong>99.99%</strong></li>
-    <li>Probability of no failures (new fuel): <strong>53.14%</strong></li>
+    <li>Exactly 2 failures: <strong>24.58%</strong></li>
+    <li>At least 1 lights: <strong>99.9936%</strong></li>
+    <li>No failure with the filtered fuel: <strong>53.14%</strong></li>
   </ul>
 </div>
 
 <div style="border-left: 4px solid #2196F3; padding: 1em; background-color: #e3f2fd; margin: 1em 0; border-radius: 4px;">
   <img src="{{ site.baseurl }}/assets/images/lampiao.avif" alt="Kerosene lamp" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
-  <h4 style="margin-top: 0;">🎲 Question 2: How Long the Lamps Last (Exponential Distribution)</h4>
+  <h4 style="margin-top: 0;">🎲 Question 2: How Long the Lamp Stays Lit (Exponential Distribution)</h4>
   <p><strong>Problem:</strong></p>
-  <p>The lifetime (in hours) of a citronella lamp is known to follow an <strong>exponential distribution</strong> with a mean of 6 hours (that is, rate parameter $\lambda = 1/6$).</p>
+  <p>Suppose that the time, in hours, a lamp stays lit until it goes out follows an <strong>exponential distribution</strong> with a mean of 6 hours.</p>
   <p><strong>Questions:</strong></p>
   <ol>
-    <li>What is the probability that a lamp lasts <strong>more than 8 hours</strong>?</li>
-    <li>If a resident has 4 identical lamps, what is the probability that <strong>at least one</strong> of them lasts more than 8 hours?</li>
-    <li>Find the <strong>median</strong> of the distribution (the time by which half of the lamps have gone out).</li>
-    <li>If a lamp has already been lit for 6 hours, what is the probability that it stays lit for <strong>at least 4 more hours</strong>? (Hint: use the "memoryless" property.)</li>
+    <li>What is the probability that a lamp stays lit for <strong>more than 8 hours</strong>?</li>
+    <li>A resident lights 4 identical lamps, which work independently. What is the probability that <strong>at least one</strong> of them stays lit for more than 8 hours?</li>
+    <li>What is the <strong>median</strong> time lit (the time by which half of the lamps have gone out)?</li>
+    <li>A lamp has already been lit for 6 hours. What is the probability that it stays lit for <strong>at least 4 more hours</strong>?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-A lamp's lifetime $T$ follows an Exponential distribution with mean $E[T] = 6$ hours. The rate parameter $\lambda$ is the inverse of the mean, so $\lambda = 1/6$.
+The exponential is a **model** chosen for the exercise: it assumes that the lamp does not "age", that is, that the chance of going out in the next hour is the same at the start and at the end of the night. In practice, the kerosene runs out, and a real lamp does not behave quite like that. Item 4 shows the consequence of this assumption.
 
-The survival function of the exponential distribution is 
+Let $T$ be the time lit, in hours. The exponential has one parameter, the **rate** $\lambda$, and its mean is $E[T] = \frac{1}{\lambda}$. With a mean of 6 hours:
 
-$$P(T > t) = e^{-\lambda t}$$
+$$\lambda = \frac{1}{E[T]} = \frac{1}{6} \text{ per hour}$$
 
-#### 1. Probability that a lamp lasts more than 8 hours
+The probability that the lamp lasts more than $t$ hours (the **survival function**) is:
 
-We use the survival function with $t=8$:
+$$P(T > t) = e^{-\lambda t}, \qquad t \geq 0$$
 
-$$ P(T > 8) = e^{-\lambda \cdot 8} $$
+#### 1. Staying lit for more than 8 hours
 
-$$ P(T > 8) = e^{-(1/6) \cdot 8} = e^{-8/6} \approx e^{-1.333} $$
+$$P(T > 8) = e^{-\lambda \cdot 8} = e^{-\frac{1}{6} \cdot 8} = e^{-\frac{4}{3}}$$
 
-$$ P(T > 8) \approx 0.2636 $$
+$$-\frac{4}{3} \approx -1.3333 \qquad e^{-1.3333} \approx 0.2636$$
 
-The probability that a lamp lasts more than 8 hours is **26.36%**.
+**Result:** $P(T > 8) \approx 0.2636$, or about **26.36%**.
 
-#### 2. Probability that at least 1 of 4 lamps lasts more than 8 hours
+**Interpretation:** a little over 1 in 4 lamps stays lit for more than 8 hours, even though the mean is 6 hours.
 
-This is the complement of "none of the 4 lamps lasts more than 8 hours".
-Let $p = P(T > 8) \approx 0.2636$. The probability that a lamp does NOT last more than 8 hours is $1-p$.
+#### 2. At least 1 of 4 stays lit for more than 8 hours
 
-$$ P(\text{at least 1 > 8h}) = 1 - P(\text{none > 8h}) $$
+Let $p = P(T > 8) \approx 0.2636$. "At least 1 goes past 8 hours" is the complement of "none goes past". Since the 4 lamps are independent, the probability that none goes past is the product of 4 probabilities, each equal to $1 - p$:
 
-$$ P(\text{at least 1 > 8h}) = 1 - (1 - p)^4 $$
+$$P(\text{at least 1} > 8\text{ h}) = 1 - (1 - p)^4$$
 
-$$ P(\text{at least 1 > 8h}) = 1 - (1 - 0.2636)^4 = 1 - (0.7364)^4 $$
+$$1 - p \approx 1 - 0.2636 = 0.7364$$
 
-$$ P(\text{at least 1 > 8h}) \approx 1 - 0.2941 \approx 0.7059 $$
+$$(0.7364)^4 \approx 0.2941$$
 
-The probability that at least one of the four lamps lasts more than 8 hours is **70.59%**.
+$$P(\text{at least 1} > 8\text{ h}) \approx 1 - 0.2941 = 0.7059$$
 
-#### 3. The median of the distribution
+**Result:** about **70.59%**. (With $p$ unrounded, the value is 0.705922…, which also rounds to 70.59%.)
 
-The median $m$ is the time $t$ for which $P(T > m) = 0.5$.
+#### 3. Median
 
-$$ e^{-\lambda m} = 0.5 $$
+The median $m$ is the time at which half of the lamps are still lit: $P(T > m) = 0.5$.
 
-Solving for $m$:
+$$e^{-\lambda m} = 0.5$$
 
-$$ -\lambda m = \ln(0.5) = -\ln(2) $$
+Taking the natural logarithm of both sides:
 
-$$ m = \frac{\ln(2)}{\lambda} = \ln(2) \cdot 6 $$
+$$-\lambda m = \ln(0.5) = -\ln 2$$
 
-$$ m \approx 0.6931 \cdot 6 \approx 4.1586 \text{ hours} $$
+$$m = \frac{\ln 2}{\lambda} = 6 \cdot \ln 2 \approx 6 \cdot 0.693147 \approx 4.1589 \text{ hours}$$
 
-The median lifetime is about **4.16 hours**. Half of the lamps will have gone out before then.
+**Result:** $m \approx 4.16$ hours (about 4 h 10 min).
 
-#### 4. Conditional probability (the Memoryless Property)
+**Interpretation:** half of the lamps go out before 4.16 hours, even though the mean is 6 hours. In the exponential, the mean lies above the median because a few lamps last much longer than is typical and pull the mean up.
 
-The exponential distribution has the "memoryless" property, which says:
+#### 4. Staying lit 4 more hours, given that it has been lit for 6
 
-$$ P(T > s+t \mid T > s) = P(T > t) $$
+By the definition of conditional probability, since "lasting more than 10 hours" is contained in "lasting more than 6 hours":
 
-We want the probability that the lamp lasts 4 more hours, given that it has already lasted 6 hours. That is, $s=6$ and $t=4$.
+$$P(T > 10 \mid T > 6) = \frac{P(T > 10)}{P(T > 6)} = \frac{e^{-\lambda \cdot 10}}{e^{-\lambda \cdot 6}} = e^{-\lambda \cdot 4} = P(T > 4)$$
 
-$$ P(T > 6+4 \mid T > 6) = P(T > 4) $$
+This is a case of the exponential's **memoryless property**: for any $s, t \geq 0$, $P(T > s + t \mid T > s) = P(T > t)$. Now the arithmetic:
 
-We compute $P(T > 4)$:
+$$P(T > 4) = e^{-\frac{1}{6} \cdot 4} = e^{-\frac{2}{3}} \approx e^{-0.6667} \approx 0.5134$$
 
-$$ P(T > 4) = e^{-\lambda \cdot 4} = e^{-(1/6) \cdot 4} = e^{-4/6} \approx e^{-0.667} $$
+**Result:** about **51.34%**.
 
-$$ P(T > 4) \approx 0.5134 $$
+**Interpretation:** under the exponential model, a lamp that has already been lit for 6 hours has the same chance of lasting 4 more hours as a freshly lit lamp. That is what "memoryless" means, and it is also the model's weak point for real lamps, whose fuel keeps running down.
 
-The probability that the lamp lasts at least 4 more hours is **51.34%**, regardless of the fact that it has already been lit for 6 hours.
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Careful: Julia's Exponential(θ) takes the SCALE θ = mean = 1/λ
+T = Exponential(6)            # mean of 6 hours, rate λ = 1/6 per hour
+
+p = ccdf(T, 8)                # ccdf(T, t) = P(T &gt; t)
+println("P(T &gt; 8)                = ", round(p, digits=4))
+println("P(at least 1 of 4 &gt; 8)  = ", round(1 - (1 - p)^4, digits=4))
+println("Median                  = ", round(median(T), digits=4), " hours")
+println("P(T &gt; 10 | T &gt; 6)       = ", round(ccdf(T, 10) / ccdf(T, 6), digits=4))
+println("P(T &gt; 4)                = ", round(ccdf(T, 4), digits=4))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>P(T &gt; 8) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 0.2636</div>
+  <div>P(at least 1 of 4 &gt; 8) &nbsp;= 0.7059</div>
+  <div>Median &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 4.1589 hours</div>
+  <div>P(T &gt; 10 | T &gt; 6) &nbsp; &nbsp; &nbsp; = 0.5134</div>
+  <div>P(T &gt; 4) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 0.5134</div>
+</div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
-  <strong>Summary of the Results (Question 2):</strong>
+  <strong>Summary of Results (Question 2):</strong>
   <ul>
-    <li>Probability of lasting > 8h: <strong>26.36%</strong></li>
-    <li>Probability that at least 1 of 4 lasts > 8h: <strong>70.59%</strong></li>
-    <li>Median lifetime: <strong>4.16 hours</strong></li>
-    <li>Probability of lasting 4 more hours (given 6h): <strong>51.34%</strong></li>
+    <li>Lit for more than 8 h: <strong>26.36%</strong></li>
+    <li>At least 1 of 4 past 8 h: <strong>70.59%</strong></li>
+    <li>Median time lit: <strong>4.16 hours</strong></li>
+    <li>4 more hours, given 6 hours lit: <strong>51.34%</strong></li>
   </ul>
 </div>
 
@@ -198,148 +250,211 @@ The probability that the lamp lasts at least 4 more hours is **51.34%**, regardl
   <img src="{{ site.baseurl }}/assets/images/telephone.avif" alt="Old telephone" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">📞 Question 3: Calls to a Call Center (Poisson Distribution)</h4>
   <p><strong>Problem:</strong></p>
-  <p>A small call center receives calls at an average rate of 12 calls per hour. The number of calls received follows a <strong>Poisson distribution</strong>.</p>
+  <p>A small call center receives, on average, 12 calls per hour. Suppose the calls arrive one at a time, independently, and at the same rate over time, so that the number of calls in an interval follows a <strong>Poisson distribution</strong>.</p>
   <p><strong>Questions:</strong></p>
   <ol>
-    <li>What is the probability that the call center receives <strong>exactly 5 calls</strong> in a 30-minute period?</li>
-    <li>What is the probability that <strong>no calls</strong> come in during a 10-minute interval?</li>
-    <li>What is the probability of receiving <strong>more than 3 calls</strong> in a 20-minute period?</li>
+    <li>What is the probability of <strong>exactly 5 calls</strong> in 30 minutes?</li>
+    <li>What is the probability of <strong>no calls</strong> in 10 minutes?</li>
+    <li>What is the probability of <strong>more than 3 calls</strong> in 20 minutes?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-The number of events (calls) $X$ in a time interval follows a Poisson distribution. The Poisson probability formula is:
+Let $X$ be the number of calls in an interval. The Poisson probability mass function is:
 
-$$ P(X=k) = \frac{e^{-\lambda} \lambda^k}{k!} $$
+$$P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \qquad k = 0, 1, 2, \ldots$$
 
-In this formula, the parameter $\lambda$ (lambda) is the average number of occurrences **in the specific time interval** we are analyzing. The base rate in the problem is 12 calls per hour, and we must adjust it for each part.
+where $\lambda$ is the **mean number of calls in the interval being considered**. With a constant rate, that number is proportional to the length of the interval:
 
-#### 1. Probability of exactly 5 calls in 30 minutes
+$$\lambda = 12 \text{ calls/hour} \times \text{length of the interval in hours}$$
 
-First, we adjust the rate to the time interval.
-- Interval: $30 \text{ minutes} = 0.5 \text{ hours}$.
-- Average number in the interval ($\lambda$): $12 \text{ calls/hour} \times 0.5 \text{ hours} = 6$.
+#### 1. Exactly 5 calls in 30 minutes
 
-Now we compute $P(X=5)$ for $\lambda=6$:
+**Data:** 30 minutes $= 0.5$ hour, so $\lambda = 12 \cdot 0.5 = 6$ calls; $k = 5$.
 
-$$ P(X=5) = \frac{e^{-6} \cdot 6^5}{5!} $$
+$$P(X = 5) = \frac{e^{-6} \cdot 6^5}{5!}$$
 
-$$ P(X=5) = \frac{0.002479 \cdot 7776}{120} \approx \frac{19.28}{120} \approx 0.1606 $$
+$$e^{-6} \approx 0.0024788 \qquad 6^5 = 7{,}776 \qquad 5! = 120$$
 
-The probability of receiving exactly 5 calls in 30 minutes is **16.06%**.
+$$P(X = 5) \approx \frac{0.0024788 \cdot 7{,}776}{120} \approx \frac{19.2748}{120} \approx 0.1606$$
 
-#### 2. Probability of no calls in 10 minutes
+**Result:** about **16.06%**.
 
-We adjust the rate to the new interval.
-- Interval: $10 \text{ minutes} = 1/6 \text{ hours}$.
-- Average number in the interval ($\lambda$): $12 \times (1/6) = 2$.
+**Interpretation:** the mean over 30 minutes is 6 calls, but getting exactly 5 happens in only about 1 out of every 6 half hours: the number of calls varies quite a lot around the mean.
 
-We compute $P(X=0)$ for $\lambda=2$:
+#### 2. No calls in 10 minutes
 
-$$ P(X=0) = \frac{e^{-2} \cdot 2^0}{0!} = e^{-2} \approx 0.1353 $$
+**Data:** 10 minutes $= \frac{1}{6}$ hour, so $\lambda = 12 \cdot \frac{1}{6} = 2$ calls; $k = 0$. Since $2^0 = 1$ and $0! = 1$:
 
-The probability of receiving no calls in 10 minutes is **13.53%**.
+$$P(X = 0) = \frac{e^{-2} \cdot 2^0}{0!} = e^{-2} \approx 0.1353$$
 
-#### 3. Probability of more than 3 calls in 20 minutes
+**Result:** about **13.53%**.
 
-"More than 3 calls" is the complement of "3 calls or fewer".
+**Interpretation:** in about 1 out of every 7 ten-minute intervals, nobody calls.
 
-$$ P(X > 3) = 1 - P(X \le 3) = 1 - [P(X=0) + P(X=1) + P(X=2) + P(X=3)] $$
+#### 3. More than 3 calls in 20 minutes
 
-We adjust the rate to the interval.
-- Interval: $20 \text{ minutes} = 1/3 \text{ hours}$.
-- Average number in the interval ($\lambda$): $12 \times (1/3) = 4$.
+**Data:** 20 minutes $= \frac{1}{3}$ hour, so $\lambda = 12 \cdot \frac{1}{3} = 4$ calls.
 
-We compute the probabilities for $k=0, 1, 2, 3$ with $\lambda=4$:
-- $P(X=0) = \frac{e^{-4} 4^0}{0!} \approx 0.0183$
-- $P(X=1) = \frac{e^{-4} 4^1}{1!} \approx 0.0733$
-- $P(X=2) = \frac{e^{-4} 4^2}{2!} \approx 0.1465$
-- $P(X=3) = \frac{e^{-4} 4^3}{3!} \approx 0.1954$
+"More than 3" is the complement of "3 or fewer". By the complement rule:
 
-Adding them up:
+$$P(X > 3) = 1 - P(X \leq 3) = 1 - [P(X = 0) + P(X = 1) + P(X = 2) + P(X = 3)]$$
 
-$$ P(X \le 3) \approx 0.0183 + 0.0733 + 0.1465 + 0.1954 = 0.4335 $$
+With $e^{-4} \approx 0.018316$, each term is:
 
-Finally, we take the complement:
+| $k$ | $\frac{e^{-4}\,4^k}{k!}$ | $P(X = k)$ |
+|---|---|---|
+| 0 | $e^{-4} \cdot \frac{1}{1}$ | 0.0183 |
+| 1 | $e^{-4} \cdot \frac{4}{1}$ | 0.0733 |
+| 2 | $e^{-4} \cdot \frac{16}{2}$ | 0.1465 |
+| 3 | $e^{-4} \cdot \frac{64}{6}$ | 0.1954 |
+| **Sum** | | **0.4335** |
 
-$$ P(X > 3) = 1 - 0.4335 = 0.5665 $$
+$$P(X > 3) = 1 - 0.4335 = 0.5665$$
 
-The probability of receiving more than 3 calls in 20 minutes is **56.65%**.
+**Result:** about **56.65%**. (The terms in the table are rounded; adding the full values, $P(X \leq 3) = 0.433470\ldots$, and the rounded result is the same.)
+
+**Interpretation:** in a little over half of the 20-minute intervals, 4 or more calls come in. If the center can only handle 3 calls every 20 minutes, a queue will often build up.
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+rate = 12                     # calls per hour
+for (minutes, k) in ((30, 5), (10, 0))
+    λ = rate * minutes / 60   # mean number of calls in the interval
+    println("λ = ", λ, " in ", minutes, " min:  P(X = ", k, ") = ", round(pdf(Poisson(λ), k), digits=4))
+end
+
+X = Poisson(rate * 20 / 60)   # λ = 4 in 20 minutes
+println("P(X ≤ 3) = ", round(cdf(X, 3), digits=4), "   P(X &gt; 3) = ", round(ccdf(X, 3), digits=4))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>λ = 6.0 in 30 min: &nbsp;P(X = 5) = 0.1606</div>
+  <div>λ = 2.0 in 10 min: &nbsp;P(X = 0) = 0.1353</div>
+  <div>P(X ≤ 3) = 0.4335 &nbsp; P(X &gt; 3) = 0.5665</div>
+</div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
-  <strong>Summary of the Results (Question 3):</strong>
+  <strong>Summary of Results (Question 3):</strong>
   <ul>
-    <li>Probability of 5 calls in 30 min: <strong>16.06%</strong></li>
-    <li>Probability of 0 calls in 10 min: <strong>13.53%</strong></li>
-    <li>Probability of >3 calls in 20 min: <strong>56.65%</strong></li>
+    <li>Exactly 5 calls in 30 min: <strong>16.06%</strong></li>
+    <li>No calls in 10 min: <strong>13.53%</strong></li>
+    <li>More than 3 calls in 20 min: <strong>56.65%</strong></li>
   </ul>
 </div>
 
 <div style="border-left: 4px solid #FF9800; padding: 1em; background-color: #fff3e0; margin: 1em 0; border-radius: 4px;">
   <img src="{{ site.baseurl }}/assets/images/telephone.avif" alt="Old telephone" style="float: right; width: 320px; margin-left: 1em; margin-bottom: 1em;">
-  <h4 style="margin-top: 0;">📞 Question 4: How Long Calls Last (Normal Distribution)</h4>
+  <h4 style="margin-top: 0;">📞 Question 4: Call Duration (Normal Distribution)</h4>
   <p><strong>Problem:</strong></p>
-  <p>The length of technical support calls at a call center follows a <strong>Normal distribution</strong> with a mean ($\mu$) of 10 minutes and a standard deviation ($\sigma$) of 2 minutes.</p>
+  <p>The duration of technical support calls at a call center follows a <strong>normal distribution</strong> with mean $\mu = 10$ minutes and standard deviation $\sigma = 2$ minutes.</p>
   <p><strong>Questions:</strong></p>
   <ol>
     <li>What is the probability that a call lasts <strong>less than 7 minutes</strong>?</li>
     <li>What is the probability that a call lasts <strong>between 9 and 12 minutes</strong>?</li>
-    <li>What is the minimum length of the <strong>longest 5% of calls</strong>?</li>
+    <li>From how many minutes on are the <strong>5% longest calls</strong>?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-The call length $X$ follows a Normal distribution, $X \sim N(\mu=10, \sigma=2)$. To solve it, we standardize the values of $X$ to the Standard Normal distribution ($Z$) using the Z-score formula:
+Let $X$ be the duration of a call, in minutes: $X \sim N(\mu = 10,\ \sigma^2 = 2^2)$. (In the notation $N(\mu, \sigma^2)$, the second parameter is the **variance**, $\sigma^2 = 4$; the standard deviation is $\sigma = 2$.)
 
-$$ Z = \frac{X - \mu}{\sigma} $$
+A duration cannot be negative, and the normal allows any real value. Here that does no harm: $P(X < 0)$ is about 0.0000003, because 0 is 5 standard deviations below the mean.
 
-#### 1. Probability that a call lasts less than 7 minutes
+To use the standard normal table, we turn each value into a **Z-score**, which says how many standard deviations the value lies from the mean:
 
-We want $P(X < 7)$. First, we compute the Z-score for $X=7$:
+$$Z = \frac{X - \mu}{\sigma}$$
 
-$$ Z = \frac{7 - 10}{2} = \frac{-3}{2} = -1.5 $$
+If $X$ is normal, $Z$ has the standard normal distribution, $N(0,\ 1)$.
 
-Now we look up $P(Z < -1.5)$ in a Z table or with a calculator.
+#### 1. Less than 7 minutes
 
-$$ P(Z < -1.5) \approx 0.0668 $$
+$$Z = \frac{7 - 10}{2} = \frac{-3}{2} = -1.5$$
 
-The probability that a call lasts less than 7 minutes is **6.68%**.
+From the Z table: $P(Z < -1.5) = 0.0668$.
 
-#### 2. Probability that a call lasts between 9 and 12 minutes
+**Result:** $P(X < 7) \approx 0.0668$, or about **6.68%**.
 
-We want $P(9 < X < 12)$. We compute the Z-scores for $X=9$ and $X=12$:
-- For $X=9$: $Z_1 = \frac{9 - 10}{2} = -0.5$
-- For $X=12$: $Z_2 = \frac{12 - 10}{2} = 1.0$
+**Interpretation:** about 7 out of every 100 calls end in less than 7 minutes.
 
-The probability is the area between those two Z-scores: $P(-0.5 < Z < 1.0) = P(Z < 1.0) - P(Z < -0.5)$.
-- $P(Z < 1.0) \approx 0.8413$
-- $P(Z < -0.5) \approx 0.3085$
+#### 2. Between 9 and 12 minutes
 
-$$ P(9 < X < 12) \approx 0.8413 - 0.3085 = 0.5328 $$
+$$Z_1 = \frac{9 - 10}{2} = -0.5 \qquad Z_2 = \frac{12 - 10}{2} = 1$$
 
-The probability that a call lasts between 9 and 12 minutes is **53.28%**.
+The probability is the area between the two scores:
 
-#### 3. Minimum length of the longest 5% of calls
+$$P(9 < X < 12) = P(-0.5 < Z < 1) = P(Z < 1) - P(Z < -0.5)$$
 
-We want the value $x$ such that $P(X > x) = 0.05$. That is the same as finding a Z-score $z$ such that $P(Z > z) = 0.05$, which means $P(Z < z) = 0.95$.
-From an inverse Z table, the Z-score with an area of 0.95 to its left is about $z \approx 1.645$.
+From the Z table: $P(Z < 1) = 0.8413$ and $P(Z < -0.5) = 0.3085$.
 
-Now we convert that Z-score back to minutes using the rearranged formula $X = \mu + Z \cdot \sigma$.
+$$P(9 < X < 12) = 0.8413 - 0.3085 = 0.5328$$
 
-$$ x = 10 + (1.645 \cdot 2) $$
+**Result:** about **53.28%**.
 
-$$ x = 10 + 3.29 = 13.29 \text{ minutes} $$
+**Interpretation:** a little over half of the calls last between 9 and 12 minutes. The interval is not symmetric around the mean (it goes from 1 minute below to 2 above), so the answer is not the one for "mean ± 1 standard deviation".
 
-The longest 5% of calls last at least **13.29 minutes**.
+#### 3. The 5% longest
+
+We want the value $x$ with $P(X > x) = 0.05$, which is the same as $P(X < x) = 0.95$: $x$ is the **95th percentile** of the duration.
+
+From the Z table, the score with an area of 0.95 to its left is $z \approx 1.645$ (to more places, 1.6449). Back in minutes, with $X = \mu + Z \cdot \sigma$:
+
+$$x = 10 + 1.645 \cdot 2 = 10 + 3.29 = 13.29 \text{ minutes}$$
+
+**Result:** the 5% longest calls last **13.29 minutes or more**.
+
+**Interpretation:** only 1 in every 20 calls goes past about 13 minutes and 17 seconds. A value like this can be used, for example, to decide when a call counts as "long".
+
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Careful: Julia's Normal(μ, σ) takes the STANDARD DEVIATION σ, not the variance
+X = Normal(10, 2)
+
+println("P(X &lt; 7)        = ", round(cdf(X, 7), digits=4))
+println("P(9 &lt; X &lt; 12)   = ", round(cdf(X, 12) - cdf(X, 9), digits=4))
+println("95% quantile    = ", round(quantile(X, 0.95), digits=2), " minutes")
+println("P(X &lt; 0)        = ", round(cdf(X, 0), sigdigits=2), "  (negative duration: negligible)")</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>P(X &lt; 7) &nbsp; &nbsp; &nbsp; &nbsp;= 0.0668</div>
+  <div>P(9 &lt; X &lt; 12) &nbsp; = 0.5328</div>
+  <div>95% quantile &nbsp; &nbsp;= 13.29 minutes</div>
+  <div>P(X &lt; 0) &nbsp; &nbsp; &nbsp; &nbsp;= 2.9e-7 &nbsp;(negative duration: negligible)</div>
+</div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
-  <strong>Summary of the Results (Question 4):</strong>
+  <strong>Summary of Results (Question 4):</strong>
   <ul>
-    <li>Probability of a call < 7 min: <strong>6.68%</strong></li>
-    <li>Probability of a call between 9 and 12 min: <strong>53.28%</strong></li>
-    <li>Minimum length of the longest 5% of calls: <strong>13.29 minutes</strong></li>
+    <li>Less than 7 min: <strong>6.68%</strong></li>
+    <li>Between 9 and 12 min: <strong>53.28%</strong></li>
+    <li>The 5% longest: <strong>13.29 minutes or more</strong></li>
   </ul>
 </div>
 
@@ -347,123 +462,174 @@ The longest 5% of calls last at least **13.29 minutes**.
   <img src="{{ site.baseurl }}/assets/images/boxkite.avif" alt="Box kite" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
   <h4 style="margin-top: 0;">🪁 Question 5: Attempts to Fly a Kite (Geometric Distribution)</h4>
   <p><strong>Problem:</strong></p>
-  <p>A kite enthusiast knows that, because the wind keeps changing, the probability of getting the kite up on any given attempt is 40% (p=0.4). Each attempt is independent of the previous one.</p>
+  <p>Because of the wind, a person manages to get their kite airborne on 40% of their attempts ($p = 0.4$). The attempts are independent of one another.</p>
   <p><strong>Questions:</strong></p>
   <ol>
-    <li>What is the probability of getting the kite up on the <strong>first attempt</strong>?</li>
-    <li>What is the probability that it takes <strong>exactly 3 attempts</strong> to succeed?</li>
-    <li>What is the probability that it takes <strong>more than 4 attempts</strong>?</li>
+    <li>What is the probability of succeeding on the <strong>first attempt</strong>?</li>
+    <li>What is the probability of needing <strong>exactly 3 attempts</strong>?</li>
+    <li>What is the probability of needing <strong>more than 4 attempts</strong>?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-This problem describes a series of independent Bernoulli trials, where we care about the number of attempts until the first success. That is modeled by the **Geometric Distribution**.
+**Why geometric.** The attempts are independent, each one is a success or a failure, and the probability of success is always $p = 0.4$. The question is **when** the first success comes.
 
-Let $X$ be the number of attempts until the first success. The probability of success is $p=0.4$. The geometric distribution formula is:
+Let $X$ be the **number of the attempt** on which the first success comes ($X = 1, 2, 3, \ldots$). For $X = k$, the first $k - 1$ attempts fail and the $k$-th succeeds; by independence, the probabilities multiply:
 
-$$ P(X = k) = (1-p)^{k-1} p $$
+$$P(X = k) = (1 - p)^{k-1} \, p, \qquad k = 1, 2, 3, \ldots$$
 
-#### 1. Probability of success on the first attempt
+(There is another convention, which counts the number of **failures** before the first success, starting at 0. It gives the same probabilities with the index shifted by 1; it is the one Julia uses, as the code below shows.)
 
-We want $P(X=1)$. Using the formula with $k=1$:
+#### 1. Success on the first attempt
 
-$$ P(X=1) = (1-0.4)^{1-1} \cdot 0.4 $$
+$$P(X = 1) = (0.6)^{0} \cdot 0.4 = 1 \cdot 0.4 = 0.4$$
 
-$$ P(X=1) = (0.6)^0 \cdot 0.4 = 1 \cdot 0.4 = 0.4 $$
+**Result:** **40%**.
 
-The probability of success on the first attempt is **40%**.
+#### 2. Exactly 3 attempts
 
-#### 2. Probability of success on the third attempt
+Two failures and then a success:
 
-We want $P(X=3)$. That means two failures followed by a success.
+$$P(X = 3) = (0.6)^{2} \cdot 0.4 = 0.36 \cdot 0.4 = 0.144$$
 
-$$ P(X=3) = (1-0.4)^{3-1} \cdot 0.4 $$
+**Result:** **14.4%**.
 
-$$ P(X=3) = (0.6)^2 \cdot 0.4 = 0.36 \cdot 0.4 = 0.144 $$
+#### 3. More than 4 attempts
 
-The probability that it takes exactly 3 attempts is **14.4%**.
+Needing more than 4 attempts is the same as the first 4 failing. By independence:
 
-#### 3. Probability of needing more than 4 attempts
+$$P(X > 4) = (1 - p)^4 = (0.6)^4 = 0.36 \cdot 0.36 = 0.1296$$
 
-We want $P(X > 4)$. That means the first 4 attempts must all fail. The probability of a single failure is $(1-p) = 0.6$.
+**Result:** about **12.96%**.
 
-$$ P(X > 4) = P(\text{fail on 1st}) \cdot P(\text{fail on 2nd}) \cdot P(\text{fail on 3rd}) \cdot P(\text{fail on 4th}) $$
+**Interpretation:** on average, the person needs $E[X] = \frac{1}{p} = \frac{1}{0.4} = 2.5$ attempts, but about 13% of the time they need 5 or more. Earlier failures do not "raise the chance" of the next attempt: each one still has 40%, no matter how many attempts have already failed.
 
-$$ P(X > 4) = (1-p)^4 = (0.6)^4 $$
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
 
-$$ P(X > 4) = 0.1296 $$
+# Careful: Julia's Geometric(p) counts the FAILURES before the 1st success (0, 1, 2, …).
+# Here X = the number of the trial with the 1st success, so X = failures + 1.
+F = Geometric(0.4)
 
-The probability of needing more than 4 attempts to get the kite up is **12.96%**.
+println("P(X = 1) = ", round(pdf(F, 0), digits=4))
+println("P(X = 3) = ", round(pdf(F, 2), digits=4))
+println("P(X &gt; 4) = ", round(ccdf(F, 3), digits=4))   # more than 3 failures
+println("E[X]     = ", round(mean(F) + 1, digits=4))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>P(X = 1) = 0.4</div>
+  <div>P(X = 3) = 0.144</div>
+  <div>P(X &gt; 4) = 0.1296</div>
+  <div>E[X] &nbsp; &nbsp; = 2.5</div>
+</div>
 
 <div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
-  <strong>Summary of the Results (Question 5):</strong>
+  <strong>Summary of Results (Question 5):</strong>
   <ul>
-    <li>Probability of success on the 1st attempt: <strong>40%</strong></li>
-    <li>Probability of success on the 3rd attempt: <strong>14.4%</strong></li>
-    <li>Probability of needing > 4 attempts: <strong>12.96%</strong></li>
+    <li>Success on the 1st attempt: <strong>40%</strong></li>
+    <li>Exactly 3 attempts: <strong>14.4%</strong></li>
+    <li>More than 4 attempts: <strong>12.96%</strong></li>
   </ul>
 </div>
 
 <div style="border-left: 4px solid #009688; padding: 1em; background-color: #e0f2f1; margin: 1em 0; border-radius: 4px;">
   <img src="{{ site.baseurl }}/assets/images/boxkite.avif" alt="Box kite" style="float: right; width: 350px; margin-left: 1em; margin-bottom: 1em;">
-  <h4 style="margin-top: 0;">🪁 Question 6: Several Successes with the Kite (Negative Binomial)</h4>
+  <h4 style="margin-top: 0;">🪁 Question 6: Three Successes with the Kite (Negative Binomial)</h4>
   <p><strong>Problem:</strong></p>
-  <p>The same kite enthusiast, with a 40% chance of success on each attempt, now wants to get the kite up 3 times in total to practice a maneuver. The attempts are independent.</p>
+  <p>The same person, still with a 40% chance of success on each independent attempt, wants to get the kite airborne 3 times to practice a maneuver.</p>
   <p><strong>Questions:</strong></p>
   <ol>
     <li>What is the probability that the <strong>third success</strong> comes exactly on the <strong>fifth attempt</strong>?</li>
-    <li>What is the <strong>expected number of attempts</strong> needed to reach 3 successes?</li>
+    <li>What is the <strong>expected number of attempts</strong> to reach the 3 successes?</li>
   </ol>
 </div>
 
 ### Detailed Solution
 
-This problem asks for the number of attempts needed to reach a fixed number of successes ($r$). That is modeled by the **Negative Binomial Distribution**.
+**Why negative binomial.** Now the question is when the $r$-th success comes, with $r = 3$. Let $X$ be the **number of the attempt** on which the 3rd success comes ($X = 3, 4, 5, \ldots$). (The negative binomial has several definitions; this one counts attempts. Julia counts the failures before the $r$-th success, as the code shows.)
 
-Let $X$ be the attempt on which the $r$-th success happens. The formula is:
+For the $r$-th success to come on attempt $k$, attempt $k$ must be a success, and the $k - 1$ attempts before it must contain exactly $r - 1$ successes, in any order:
 
-$$ P(X = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r} $$
+$$P(X = k) = \binom{k-1}{r-1} p^r (1-p)^{k-r}, \qquad k = r, r+1, \ldots$$
 
-Where $r=3$ (successes), $p=0.4$ (probability of success), and $k$ is the total number of attempts.
+#### 1. Third success on the fifth attempt
 
-#### 1. Probability of the 3rd success on the 5th attempt
+**Substitution** ($r = 3$, $k = 5$, $p = 0.4$, $1 - p = 0.6$):
 
-Here, $r=3$ and $k=5$. For the 3rd success to come on the 5th attempt, we need exactly $r-1=2$ successes in the $k-1=4$ previous attempts, and the 5th attempt must be a success.
+$$P(X = 5) = \binom{4}{2} \cdot (0.4)^3 \cdot (0.6)^2$$
 
-$$ P(X=5) = \binom{5-1}{3-1} (0.4)^3 (1-0.4)^{5-3} $$
+**Arithmetic:**
 
-$$ P(X=5) = \binom{4}{2} (0.4)^3 (0.6)^2 $$
+$$\binom{4}{2} = \frac{4!}{2! \cdot 2!} = \frac{24}{4} = 6 \qquad (0.4)^3 = 0.064 \qquad (0.6)^2 = 0.36$$
 
-Computing the terms:
-- $\binom{4}{2} = \frac{4!}{2!2!} = 6$
-- $(0.4)^3 = 0.064$
-- $(0.6)^2 = 0.36$
+$$P(X = 5) = 6 \cdot 0.064 \cdot 0.36 = 0.384 \cdot 0.36 = 0.13824$$
 
-Putting the results together:
+**Result:** about **13.82%**.
 
-$$ P(X=5) = 6 \cdot 0.064 \cdot 0.36 = 0.13824 $$
-
-The probability that the third success comes on the fifth attempt is **13.82%**.
+**Interpretation:** the $\binom{4}{2} = 6$ counts the possible orders of the 2 successes in the first 4 attempts (for example, SSFF, SFSF, …); each order, followed by the success on the 5th, has probability $(0.4)^3 \cdot (0.6)^2 = 0.02304$.
 
 #### 2. Expected number of attempts
 
-For the negative binomial distribution, the expected value (mean) of the number of attempts ($X$) needed to reach $r$ successes is:
+Waiting for 3 successes means waiting for the 1st success, then waiting for the 2nd from there, then the 3rd. Each wait is a geometric with mean $\frac{1}{p}$ (Question 5), and the expected value of a sum is the sum of the expected values. That is why:
 
-$$ E[X] = \frac{r}{p} $$
+$$E[X] = \frac{r}{p} = \frac{3}{0.4} = 7.5 \text{ attempts}$$
 
-With $r=3$ and $p=0.4$:
+**Result:** **7.5 attempts**, on average.
 
-$$ E[X] = \frac{3}{0.4} = 7.5 $$
+**Interpretation:** 7.5 is a long-run average: if the person repeats the practice many times, the average number of attempts will be close to 7.5. On any particular occasion, the number is always a whole number and can be much smaller (3, if the first 3 attempts succeed) or much larger.
 
-The expected number of attempts to get the kite up 3 times is **7.5**.
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Distributions
+
+# Careful: Julia's NegativeBinomial(r, p) counts the FAILURES before the r-th success.
+# Here X = the number of the trial with the 3rd success, so X = failures + 3.
+r, p = 3, 0.4
+F = NegativeBinomial(r, p)
+
+println("P(X = 5) = ", round(pdf(F, 5 - r), digits=5))
+println("E[X]     = ", round(mean(F) + r, digits=4))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>P(X = 5) = 0.13824</div>
+  <div>E[X] &nbsp; &nbsp; = 7.5</div>
+</div>
+
+<div style="border-left: 4px solid #4CAF50; padding: 0.5em; background-color: #e8f5e9; margin: 1em 0;">
+  <strong>Summary of Results (Question 6):</strong>
+  <ul>
+    <li>3rd success on the 5th attempt: <strong>13.82%</strong></li>
+    <li>Expected number of attempts: <strong>7.5</strong></li>
+  </ul>
+</div>
 
 ---
 
 ## References
 
-1. Ross, S. M. **Introduction to Probability Models**. 12th ed. Academic Press, 2019.
-2. Papoulis, A.; Pillai, S. U. **Probability, Random Variables and Stochastic Processes**. 4th ed. McGraw-Hill, 2002.
-3. Feller, W. **An Introduction to Probability Theory and Its Applications**. Vol. 1, 3rd ed. Wiley, 1968.
-4. DeGroot, M. H.; Schervish, M. J. **Probability and Statistics**. 4th ed. Pearson, 2012.
-5. Mood, A. M.; Graybill, F. A.; Boes, D. C. **Introduction to the Theory of Statistics**. 3rd ed. McGraw-Hill, 1974.
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10th ed. Saraiva Uni. (in Portuguese)
+2. Ross, S. M. (2012). *A First Course in Probability*. 9th ed. Pearson.

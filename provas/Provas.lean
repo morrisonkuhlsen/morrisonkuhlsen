@@ -8,3 +8,4 @@ import Provas.LimiteCentral
 import Provas.Eventos
 import Provas.Independencia
 import Provas.Condicional
+import Provas.Questoes
