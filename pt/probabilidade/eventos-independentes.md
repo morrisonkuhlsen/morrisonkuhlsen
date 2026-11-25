@@ -7,7 +7,7 @@ parent: probabilidade
 permalink: /pt/probabilidade/eventos-independentes
 order: 5
 mathjax: true
-description: "Quando dá para multiplicar probabilidades, o que quer dizer \"1 em N\", por que arredondar antes de multiplicar muda o resultado e quando a regra do produto não vale — com um exemplo resolvido e código em Julia."
+description: "Quando multiplicar probabilidades, o que quer dizer \"1 em N\", por que arredondar antes muda o resultado e quando a regra do produto falha, com código em Julia."
 ---
 
 Muita conta de probabilidade do dia a dia é uma multiplicação: a chance de
@@ -191,20 +191,41 @@ costuma subestimar a chance de todos acontecerem ao mesmo tempo.
 Para não arredondar nada no caminho, dá para usar frações exatas, com o
 operador `//`:
 
-```julia
-alternativas = [3, 3, 4, 4, 5, 5, 6, 7]
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>alternativas = [3, 3, 4, 4, 5, 5, 6, 7]
 
-# frações exatas: nada é arredondado no caminho
-p = prod(1 .// alternativas)          # 1//151200
-N = 1 / p                             # 151200//1
+# Frações exatas: nada é arredondado no caminho
+p = prod(1 .// alternativas)
+N = 1 / p
+println("p = ", p, "   N = ", N)
 
-# o mesmo produto com cada fator arredondado para 2 casas
+# O mesmo produto com cada fator arredondado para 2 casas
 p2 = prod(round.(1 ./ alternativas, digits = 2))
-N2 = 1 / p2                           # ≈ 154332
+N2 = 1 / p2
+println("Com 2 casas: N ≈ ", round(N2, digits = 1),
+        "   erro no N: ", round(100 * (N2 / N - 1), digits = 1), "%")
 
-# chance de acertar ao menos uma vez em N tentativas
-pelo_menos_uma = 1 - (1 - Float64(p))^Float64(N)   # ≈ 0,632
-```
+# Chance de acertar ao menos uma vez em N tentativas independentes
+pelo_menos_uma = 1 - (1 - Float64(p))^Float64(N)
+println("P(pelo menos uma em N tentativas) = ", round(pelo_menos_uma, digits = 4))</code></pre>
+  </div>
+</div>
+
+#### Saída esperada:
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <div>p = 1//151200   N = 151200//1</div>
+  <div>Com 2 casas: N ≈ 154331.7   erro no N: 2.1%</div>
+  <div>P(pelo menos uma em N tentativas) = 0.6321</div>
+</div>
 
 Quando os valores vêm em decimal e não há frações por trás, a recomendação
 é a mesma: guarde os números com todas as casas que tiver e só arredonde o
@@ -222,3 +243,8 @@ que for mostrar.
 - Arredondar os fatores antes de multiplicar acumula erros relativos.
   Arredonde só no fim.
 - Se os eventos não são independentes, use $P(A) \cdot P(B \mid A)$.
+
+## Referências
+
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10. ed. Saraiva Uni.
+2. Ross, S. M. (2012). *A First Course in Probability*. 9th ed. Pearson.

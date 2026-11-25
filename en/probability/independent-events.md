@@ -7,7 +7,7 @@ parent: probabilidade
 permalink: /en/probability/independent-events
 order: 5
 mathjax: true
-description: "When you can multiply probabilities, what \"1 in N\" means, why rounding before multiplying changes the result and when the product rule fails — with a worked example and Julia code."
+description: "When you can multiply probabilities, what \"1 in N\" means, why rounding first changes the result and when the product rule fails, with Julia code."
 ---
 
 A lot of everyday probability is a multiplication: the chance of getting
@@ -189,20 +189,41 @@ usually underestimates the chance that they all happen at once.
 To avoid rounding anything along the way, you can use exact fractions, with
 the `//` operator:
 
-```julia
-options = [3, 3, 4, 4, 5, 5, 6, 7]
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copy
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>options = [3, 3, 4, 4, 5, 5, 6, 7]
 
-# exact fractions: nothing gets rounded along the way
-p = prod(1 .// options)               # 1//151200
-N = 1 / p                             # 151200//1
+# Exact fractions: nothing gets rounded along the way
+p = prod(1 .// options)
+N = 1 / p
+println("p = ", p, "   N = ", N)
 
-# the same product with each factor rounded to 2 places
+# The same product with each factor rounded to 2 places
 p2 = prod(round.(1 ./ options, digits = 2))
-N2 = 1 / p2                           # ≈ 154332
+N2 = 1 / p2
+println("With 2 places: N ≈ ", round(N2, digits = 1),
+        "   error in N: ", round(100 * (N2 / N - 1), digits = 1), "%")
 
-# chance of at least one success in N attempts
-at_least_one = 1 - (1 - Float64(p))^Float64(N)   # ≈ 0.632
-```
+# Chance of at least one success in N independent attempts
+at_least_one = 1 - (1 - Float64(p))^Float64(N)
+println("P(at least one in N attempts) = ", round(at_least_one, digits = 4))</code></pre>
+  </div>
+</div>
+
+#### Expected output:
+<div class="code-output">
+  <div class="code-output-header"># Output</div>
+  <div>p = 1//151200   N = 151200//1</div>
+  <div>With 2 places: N ≈ 154331.7   error in N: 2.1%</div>
+  <div>P(at least one in N attempts) = 0.6321</div>
+</div>
 
 When the values come as decimals and there are no fractions behind them,
 the advice is the same: keep the numbers with every decimal place you have
@@ -220,3 +241,8 @@ and only round what you display.
 - Rounding the factors before multiplying piles up relative errors. Round
   only at the end.
 - If the events are not independent, use $P(A) \cdot P(B \mid A)$.
+
+## References
+
+1. Bussab, W. O.; Morettin, P. A. (2023). *Estatística Básica*. 10th ed. Saraiva Uni. (in Portuguese)
+2. Ross, S. M. (2012). *A First Course in Probability*. 9th ed. Pearson.
