@@ -86,7 +86,7 @@ which can be done in $\binom{K}{k}$ ways, and fill the rest with $n - k$ of the
 $N - K = 61{,}400$ others, in $\binom{N-K}{n-k}$ ways. Every choice from the
 first group pairs with any choice from the second, so the counts multiply. It is
 the same calculation as matching $k$ numbers in the Brazilian
-[Lotofácil lottery](/lotofacil-probabilidade/) (post in Portuguese), with
+[Lotofácil lottery](/lotofacil-probability/), with
 voters in place of balls.
 
 The most likely value is $y = 386$, exactly $nP$, and even that comes up in only

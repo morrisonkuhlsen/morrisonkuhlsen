@@ -843,6 +843,22 @@ pt:
     veja:
       - { t: "Limites no Cálculo", u: "/limites/" }
 
+  - termo: "Eventos mutuamente exclusivos"
+    slug: eventos-mutuamente-exclusivos
+    ordem: "eventos mutuamente exclusivos"
+    tambem: ["mutuamente exclusivos", "eventos disjuntos"]
+    def: "Eventos que não podem acontecer ao mesmo tempo. Para eles, a probabilidade de que algum aconteça é a soma das probabilidades de cada um."
+    veja:
+      - { t: "Lotofácil: 16 apostas de 15 números ou 1 de 16", u: "/lotofacil-probabilidade/" }
+
+  - termo: "Linearidade da esperança"
+    slug: linearidade-da-esperanca
+    ordem: "linearidade da esperanca"
+    tambem: ["linearidade do valor esperado"]
+    def: "A esperança de uma soma de variáveis aleatórias é a soma das esperanças, mesmo que as variáveis sejam dependentes. Por isso, o número médio de prêmios de vários jogos não depende de como eles se sobrepõem."
+    veja:
+      - { t: "Lotofácil: 16 apostas de 15 números ou 1 de 16", u: "/lotofacil-probabilidade/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1673,3 +1689,18 @@ en:
     def: "Loss of precision when two nearly equal numbers are subtracted on a computer: the matching digits cancel and the rounding error is what remains. Rewriting the formula without the subtraction usually fixes it."
     veja:
       - { t: "Limits in Calculus", u: "/limits/" }
+
+  - termo: "Mutually exclusive events"
+    slug: mutually-exclusive-events
+    ordem: "mutually exclusive events"
+    tambem: ["mutually exclusive", "disjoint events"]
+    def: "Events that cannot happen at the same time. For them, the probability that one of them happens is the sum of their individual probabilities."
+    veja:
+      - { t: "Lotofácil: 16 bets of 15 numbers or 1 of 16", u: "/lotofacil-probability/" }
+
+  - termo: "Linearity of expectation"
+    slug: linearity-of-expectation
+    ordem: "linearity of expectation"
+    def: "The expectation of a sum of random variables is the sum of their expectations, even when the variables are dependent. That is why the average number of prizes from several games does not depend on how they overlap."
+    veja:
+      - { t: "Lotofácil: 16 bets of 15 numbers or 1 of 16", u: "/lotofacil-probability/" }

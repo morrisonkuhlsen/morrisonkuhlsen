@@ -563,6 +563,13 @@ mesmo commit, sem esperar pedido:
 | racionalização | rationalizing |
 | termo em evidência | common factor |
 | trinômio do 2º grau | quadratic trinomial |
+| eventos mutuamente exclusivos | mutually exclusive events |
+| linearidade da esperança | linearity of expectation |
+| aposta simples (loteria) | single bet |
+| volante (loteria) | betting slip |
+| faixa de premiação | prize tier |
+| arrecadação (loteria) | ticket sales |
+| prêmio bruto | gross prize pool |
 | concurso (loteria) | draw |
 | dezena (Mega-Sena) | number |
 | sena / quina / quadra | jackpot (6 hits) / five hits (quina) / four hits (quadra) |

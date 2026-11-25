@@ -35,7 +35,9 @@
   const bySpelling = new Map();
   terms.filter(t => t.a !== 0)
     .forEach(t => t.t.forEach(s => bySpelling.set(s.toLocaleLowerCase("pt-BR"), t)));
-  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+  // O kramdown troca o apóstrofo reto pelo curvo ("Bayes’ theorem"): a regex
+  // aceita os dois, e a busca no mapa usa sempre o reto.
+  const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+").replace(/'/g, "['’]");
   const alts = [...bySpelling.keys()].sort((a, b) => b.length - a.length).map(esc);
   const re = alts.length
     ? new RegExp(`(?<![\\p{L}\\p{N}-])(?:${alts.join("|")})(?![\\p{L}\\p{N}-])`, "giu")
@@ -74,7 +76,7 @@
         re.lastIndex = 0;
         let m;
         while ((m = re.exec(node.data)) && auto < MAX) {
-          const term = bySpelling.get(m[0].replace(/\s+/g, " ").toLocaleLowerCase("pt-BR"));
+          const term = bySpelling.get(m[0].replace(/\s+/g, " ").replace(/’/g, "'").toLocaleLowerCase("pt-BR"));
           if (!term || used.has(term.s)) continue;
           used.add(term.s);
           auto++;
