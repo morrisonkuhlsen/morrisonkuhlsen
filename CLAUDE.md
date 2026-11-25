@@ -470,6 +470,23 @@ Um termo, uma tradução, em todo o site. Os verbetes ficam em
 `_data/glossario.yml` (blocos `pt:` e `en:`, cada um com os próprios slugs); termo novo entra lá e nesta
 tabela. Se um termo precisar mudar, mude em todo o site de uma vez.
 
+**Termo novo vira verbete na hora.** Sempre que um texto em trabalho (página
+nova, revisão ou tradução) usar um termo técnico que ainda não está no
+glossário e que o leitor iniciante precisaria consultar, o verbete é criado no
+mesmo commit, sem esperar pedido:
+
+- entra nos **dois** blocos (`pt:` e `en:`), com `termo`, `slug`, `ordem`
+  (minúsculas e sem acento), `def` de uma ou duas frases (a primeira com até 30
+  palavras, porque é ela que aparece na dica e no card da home) e `veja`
+  apontando para a página que o usou e, se houver, para a página que o
+  aprofunda;
+- a definição passa pelas mesmas regras de conta e de rigor (§1–§3) de
+  qualquer texto do site;
+- o par PT ↔ EN entra também na tabela abaixo;
+- termo genérico demais para virar dica automática nos posts (como "amostra"
+  ou "evento") ganha `auto: false`;
+- a resposta ao usuário lista os verbetes criados.
+
 | Português | Inglês |
 |---|---|
 | média aritmética | arithmetic mean |
@@ -520,6 +537,13 @@ tabela. Se um termo precisar mudar, mude em todo o site de uma vez.
 | mínimos quadrados | least squares |
 | resíduo | residual |
 | fórmula quadrática | quadratic formula |
+| frequência acumulada | cumulative frequency |
+| estatística de ordem | order statistic |
+| ponto de ruptura | breakdown point |
+| robustez | robustness |
+| distribuição exponencial | exponential distribution |
+| distribuição log-normal | log-normal distribution |
+| distribuição de Cauchy | Cauchy distribution |
 
 ---
 

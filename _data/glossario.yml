@@ -549,6 +549,60 @@ pt:
       - { t: "Fórmula interativa", u: "/formulas/z-score.html" }
       - { t: "Tabela Z", u: "/ztable.html" }
 
+  - termo: "Frequência acumulada"
+    slug: frequencia-acumulada
+    ordem: "frequencia acumulada"
+    def: "O número (ou a proporção) de observações até uma categoria ou classe, somando as frequências das anteriores. É a lista ordenada resumida: com ela se acham a mediana e os quartis numa tabela."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Ponto de ruptura"
+    slug: ponto-de-ruptura
+    ordem: "ponto de ruptura"
+    tambem: ["breakdown point"]
+    def: "A fração de dados contaminados que um estimador suporta antes de poder ser levado arbitrariamente longe. O da média é um único valor; o da mediana, quase metade dos dados."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Estatística de ordem"
+    slug: estatistica-de-ordem
+    ordem: "estatistica de ordem"
+    tambem: ["estatísticas de ordem"]
+    def: "O valor que ocupa a posição k nos dados em ordem crescente, escrito x₍ₖ₎: x₍₁₎ é o mínimo e x₍ₙ₎ é o máximo. Mediana, quartis e amplitude são calculados a partir delas."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Distribuição exponencial"
+    slug: distribuicao-exponencial
+    ordem: "distribuicao exponencial"
+    def: "Modela o tempo até um evento que ocorre a uma taxa constante λ, como o intervalo entre chegadas num processo de Poisson. A média é 1/λ e a mediana, ln 2/λ, fica abaixo dela."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+      - { t: "Distribuição de Poisson", u: "/formulas/distribuicao-poisson.html" }
+
+  - termo: "Distribuição log-normal"
+    slug: distribuicao-log-normal
+    ordem: "distribuicao log-normal"
+    tambem: ["log-normal"]
+    def: "A distribuição de uma variável positiva cujo logaritmo segue a normal. É assimétrica à direita, com a mediana abaixo da média, e costuma servir de modelo para rendas e preços."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Distribuição de Cauchy"
+    slug: distribuicao-de-cauchy
+    ordem: "distribuicao de cauchy"
+    def: "Distribuição simétrica com caudas tão pesadas que não tem média nem variância. A média de n observações tem a mesma distribuição de uma só, então juntar dados não a melhora; a mediana, sim."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
+  - termo: "Robustez"
+    slug: robustez
+    ordem: "robustez"
+    tambem: ["estatística robusta", "robusta", "robusto"]
+    def: "Um método é robusto quando alguns valores atípicos ou pequenas violações das hipóteses mudam pouco o resultado. A mediana é robusta para estimar o centro dos dados; a média, não."
+    veja:
+      - { t: "Entendendo a mediana", u: "/mediana/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1085,3 +1139,56 @@ en:
     veja:
       - { t: "Interactive formula", u: "/en/formulas/z-score.html" }
       - { t: "Z table", u: "/ztable.html" }
+
+  - termo: "Cumulative frequency"
+    slug: cumulative-frequency
+    ordem: "cumulative frequency"
+    def: "The number (or proportion) of observations up to a category or class, adding the frequencies of the previous ones. It is the sorted list in summary form: with it you find the median and quartiles in a table."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Breakdown point"
+    slug: breakdown-point
+    ordem: "breakdown point"
+    def: "The fraction of contaminated data an estimator withstands before it can be pushed arbitrarily far. For the mean it is a single value; for the median, almost half of the data."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Order statistic"
+    slug: order-statistic
+    ordem: "order statistic"
+    tambem: ["order statistics"]
+    def: "The value in position k of the data sorted in increasing order, written x₍ₖ₎: x₍₁₎ is the minimum and x₍ₙ₎ is the maximum. The median, quartiles and range are computed from them."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Exponential distribution"
+    slug: exponential-distribution
+    ordem: "exponential distribution"
+    def: "Models the time until an event that occurs at a constant rate λ, such as the gap between arrivals in a Poisson process. The mean is 1/λ and the median, ln 2/λ, lies below it."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+      - { t: "Poisson distribution", u: "/en/formulas/poisson-distribution.html" }
+
+  - termo: "Log-normal distribution"
+    slug: log-normal-distribution
+    ordem: "log-normal distribution"
+    tambem: ["lognormal distribution"]
+    def: "The distribution of a positive variable whose logarithm follows the normal. It is right-skewed, with the median below the mean, and is often used as a model for incomes and prices."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Cauchy distribution"
+    slug: cauchy-distribution
+    ordem: "cauchy distribution"
+    def: "A symmetric distribution with tails so heavy that it has no mean and no variance. The mean of n observations has the same distribution as a single one, so more data do not improve it; the median does improve."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Robustness"
+    slug: robustness
+    ordem: "robustness"
+    tambem: ["robust statistics", "robust"]
+    def: "A method is robust when a few outliers or small violations of its assumptions change the result little. The median is robust for estimating the center of the data; the mean is not."
+    veja:
+      - { t: "Understanding the median", u: "/median/" }
