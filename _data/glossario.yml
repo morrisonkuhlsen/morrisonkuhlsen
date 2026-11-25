@@ -603,6 +603,54 @@ pt:
     veja:
       - { t: "Entendendo a mediana", u: "/mediana/" }
 
+  - termo: "Média ponderada"
+    slug: media-ponderada
+    ordem: "media ponderada"
+    def: "A média em que cada valor conta segundo um peso: a soma de cada valor vezes o seu peso, dividida pela soma dos pesos. A média de uma tabela de frequências é uma média ponderada pelas frequências."
+    veja:
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+      - { t: "Fórmula interativa", u: "/formulas/media-ponderada.html" }
+
+  - termo: "Média geométrica"
+    slug: media-geometrica
+    ordem: "media geometrica"
+    def: "A raiz n-ésima do produto de n valores positivos. É a média certa para fatores de crescimento: uma alta de 50% seguida de uma queda de 50% dá fator médio de 0,866, uma queda de 13,4% por período."
+    veja:
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+      - { t: "Fórmula interativa", u: "/formulas/media-geometrica.html" }
+
+  - termo: "Média quadrática (RMS)"
+    slug: media-quadratica-rms
+    ordem: "media quadratica (rms)"
+    def: "A raiz quadrada da média dos quadrados dos valores. Mede o tamanho dos valores sem olhar o sinal: para −3, 3, −3, 3, a média aritmética é 0 e a quadrática é 3."
+    veja:
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+
+  - termo: "Média móvel"
+    slug: media-movel
+    ordem: "media movel"
+    tambem: ["médias móveis"]
+    def: "A média dos últimos k valores de uma série no tempo, recalculada a cada passo. Suaviza as oscilações, mas fica atrás da série quando ela tem tendência."
+    veja:
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+      - { t: "Fórmula interativa", u: "/formulas/media-movel.html" }
+      - { t: "Séries temporais", u: "/pt/analise-de-dados/series-temporais" }
+
+  - termo: "Média aparada"
+    slug: media-aparada
+    ordem: "media aparada"
+    def: "A média calculada depois de descartar uma fração dos menores e dos maiores valores. Resiste a valores extremos sem jogar fora a maior parte dos dados, ficando entre a média e a mediana."
+    veja:
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+
+  - termo: "Mínimos quadrados"
+    slug: minimos-quadrados
+    ordem: "minimos quadrados"
+    def: "Método que escolhe os parâmetros de um modelo tornando mínima a soma dos quadrados dos resíduos. Quando o modelo é uma constante só, a resposta é a média dos dados."
+    veja:
+      - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
+      - { t: "Entendendo a média aritmética", u: "/media/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -926,7 +974,7 @@ en:
     ordem: "arithmetic mean"
     def: "The sum of the values divided by how many there are. It summarizes symmetric distributions well and misleads with skewed distributions or outliers."
     veja:
-      - { t: "Understanding the mean (in Portuguese)", u: "/media/" }
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
       - { t: "Measures of central tendency", u: "/en/descriptive-statistics/central-tendency" }
 
   - termo: "Harmonic mean"
@@ -941,7 +989,7 @@ en:
     ordem: "median"
     def: "The value that splits the sorted data into two halves. It does not move when an extreme value moves further out, which makes it the preferable summary for skewed data."
     veja:
-      - { t: "Understanding the median (in Portuguese)", u: "/mediana/" }
+      - { t: "Understanding the median", u: "/median/" }
 
   - termo: "Mode"
     slug: mode
@@ -1192,3 +1240,53 @@ en:
     def: "A method is robust when a few outliers or small violations of its assumptions change the result little. The median is robust for estimating the center of the data; the mean is not."
     veja:
       - { t: "Understanding the median", u: "/median/" }
+
+  - termo: "Weighted mean"
+    slug: weighted-mean
+    ordem: "weighted mean"
+    tambem: ["weighted average"]
+    def: "The mean in which each value counts according to a weight: the sum of each value times its weight, divided by the sum of the weights. The mean of a frequency table is a mean weighted by the frequencies."
+    veja:
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+      - { t: "Interactive formula", u: "/en/formulas/weighted-mean.html" }
+
+  - termo: "Geometric mean"
+    slug: geometric-mean
+    ordem: "geometric mean"
+    def: "The n-th root of the product of n positive values. It is the right mean for growth factors: a 50% rise followed by a 50% fall gives a mean factor of 0.866, a drop of 13.4% per period."
+    veja:
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+      - { t: "Interactive formula", u: "/en/formulas/geometric-mean.html" }
+
+  - termo: "Quadratic mean (RMS)"
+    slug: quadratic-mean-rms
+    ordem: "quadratic mean (rms)"
+    tambem: ["root mean square"]
+    def: "The square root of the mean of the squared values. It measures the size of the values regardless of sign: for −3, 3, −3, 3, the arithmetic mean is 0 and the quadratic mean is 3."
+    veja:
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+
+  - termo: "Moving average"
+    slug: moving-average
+    ordem: "moving average"
+    tambem: ["moving averages"]
+    def: "The mean of the last k values of a series over time, recomputed at each step. It smooths out fluctuations, but lags behind the series when it has a trend."
+    veja:
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+      - { t: "Interactive formula", u: "/en/formulas/moving-average.html" }
+      - { t: "Time series", u: "/en/data-analysis/time-series" }
+
+  - termo: "Trimmed mean"
+    slug: trimmed-mean
+    ordem: "trimmed mean"
+    def: "The mean computed after dropping a fraction of the smallest and largest values. It resists extreme values without throwing away most of the data, landing between the mean and the median."
+    veja:
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+
+  - termo: "Least squares"
+    slug: least-squares
+    ordem: "least squares"
+    def: "A method that chooses a model's parameters by minimizing the sum of squared residuals. When the model is a single constant, the answer is the mean of the data."
+    veja:
+      - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
+      - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }

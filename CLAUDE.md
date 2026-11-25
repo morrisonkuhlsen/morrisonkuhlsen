@@ -490,6 +490,11 @@ mesmo commit, sem esperar pedido:
 | Português | Inglês |
 |---|---|
 | média aritmética | arithmetic mean |
+| média ponderada | weighted mean |
+| média geométrica | geometric mean |
+| média quadrática (RMS) | quadratic mean (RMS) |
+| média móvel | moving average |
+| média aparada | trimmed mean |
 | mediana | median |
 | moda | mode |
 | amplitude | range |
