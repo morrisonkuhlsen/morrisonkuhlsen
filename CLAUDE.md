@@ -535,6 +535,11 @@ mesmo commit, sem esperar pedido:
 | poder do teste | statistical power |
 | graus de liberdade | degrees of freedom |
 | teste t de Student | Student's t-test |
+| distribuição t de Student | Student's t distribution |
+| estatística de teste | test statistic |
+| valor crítico | critical value |
+| região de rejeição | rejection region |
+| teste bilateral / unilateral | two-sided / one-sided test |
 | qui-quadrado | chi-square |
 | análise de variância (ANOVA) | analysis of variance (ANOVA) |
 | correlação de Pearson | Pearson correlation |

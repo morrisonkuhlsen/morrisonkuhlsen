@@ -651,6 +651,58 @@ pt:
       - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
       - { t: "Entendendo a média aritmética", u: "/media/" }
 
+  - termo: "Distribuição t de Student"
+    slug: distribuicao-t-de-student
+    ordem: "distribuicao t de student"
+    tambem: ["distribuição t"]
+    def: "A distribuição da estatística t quando a população é normal e o desvio padrão é estimado pela amostra. Tem caudas mais pesadas que a normal e se aproxima dela à medida que os graus de liberdade crescem."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+      - { t: "Fórmula interativa", u: "/formulas/t-student.html" }
+      - { t: "Tabela t", u: "/ttable.html" }
+
+  - termo: "Estatística de teste"
+    slug: estatistica-de-teste
+    ordem: "estatistica de teste"
+    def: "O número calculado com os dados que um teste de hipótese compara com a distribuição sob a hipótese nula, como o z ou o t. Quanto mais longe do esperado sob H₀, menor o p-valor."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+
+  - termo: "Valor crítico"
+    slug: valor-critico
+    ordem: "valor critico"
+    tambem: ["valores críticos"]
+    def: "O limite a partir do qual a estatística de teste leva à rejeição da hipótese nula. Num teste z bilateral a 5%, é 1,96; num teste t, depende dos graus de liberdade."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+      - { t: "Tabela Z", u: "/ztable.html" }
+
+  - termo: "Região de rejeição"
+    slug: regiao-de-rejeicao
+    ordem: "regiao de rejeicao"
+    tambem: ["região crítica", "regiões de rejeição"]
+    def: "O conjunto de valores da estatística de teste que leva à rejeição da hipótese nula. Sua probabilidade, quando H₀ é verdadeira, é o nível de significância."
+    veja:
+      - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+
+  - termo: "Teste bilateral"
+    slug: teste-bilateral
+    ordem: "teste bilateral"
+    tambem: ["teste bicaudal"]
+    def: "Teste em que a hipótese alternativa admite diferença nos dois sentidos (μ ≠ μ₀), com o nível de significância dividido entre as duas caudas."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+
+  - termo: "Teste unilateral"
+    slug: teste-unilateral
+    ordem: "teste unilateral"
+    tambem: ["teste unicaudal"]
+    def: "Teste em que a hipótese alternativa aponta um só sentido (μ > μ₀ ou μ < μ₀), com todo o nível de significância numa cauda. O sentido precisa ser escolhido antes de ver os dados."
+    veja:
+      - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1148,7 +1200,7 @@ en:
     tambem: ["t-test"]
     def: "Compares means when the population standard deviation is unknown and has to be estimated from the sample, using the t distribution, whose tails are heavier than the normal's. With a small sample, it assumes data from an approximately normal distribution."
     veja:
-      - { t: "Z-test or t-test? (in Portuguese)", u: "/testez-ou-testt/" }
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
       - { t: "t table", u: "/ttable.html" }
 
   - termo: "Z-test"
@@ -1156,7 +1208,7 @@ en:
     ordem: "z-test"
     def: "Compares means or proportions when the population standard deviation is known, or when the sample is large enough for the normal approximation to hold."
     veja:
-      - { t: "Z-test or t-test? (in Portuguese)", u: "/testez-ou-testt/" }
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
       - { t: "Z table", u: "/ztable.html" }
 
   - termo: "Variance"
@@ -1290,3 +1342,55 @@ en:
     veja:
       - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
       - { t: "Understanding the arithmetic mean", u: "/arithmetic-mean/" }
+
+  - termo: "Student's t distribution"
+    slug: students-t-distribution
+    ordem: "students t distribution"
+    tambem: ["t distribution", "t-distribution"]
+    def: "The distribution of the t statistic when the population is normal and the standard deviation is estimated from the sample. It has heavier tails than the normal and approaches it as the degrees of freedom grow."
+    veja:
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
+      - { t: "Interactive formula", u: "/en/formulas/students-t-test.html" }
+      - { t: "t table", u: "/ttable.html" }
+
+  - termo: "Test statistic"
+    slug: test-statistic
+    ordem: "test statistic"
+    def: "The number computed from the data that a hypothesis test compares with its distribution under the null hypothesis, such as z or t. The farther it is from what H₀ predicts, the smaller the p-value."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
+
+  - termo: "Critical value"
+    slug: critical-value
+    ordem: "critical value"
+    tambem: ["critical values"]
+    def: "The threshold beyond which the test statistic leads to rejecting the null hypothesis. In a two-sided z-test at 5%, it is 1.96; in a t-test, it depends on the degrees of freedom."
+    veja:
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
+      - { t: "Z table", u: "/ztable.html" }
+
+  - termo: "Rejection region"
+    slug: rejection-region
+    ordem: "rejection region"
+    tambem: ["critical region", "rejection regions"]
+    def: "The set of values of the test statistic that leads to rejecting the null hypothesis. Its probability, when H₀ is true, is the significance level."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
+
+  - termo: "Two-sided test"
+    slug: two-sided-test
+    ordem: "two-sided test"
+    tambem: ["two-tailed test"]
+    def: "A test in which the alternative hypothesis allows a difference in either direction (μ ≠ μ₀), with the significance level split between the two tails."
+    veja:
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
+
+  - termo: "One-sided test"
+    slug: one-sided-test
+    ordem: "one-sided test"
+    tambem: ["one-tailed test"]
+    def: "A test in which the alternative hypothesis points in a single direction (μ > μ₀ or μ < μ₀), with the whole significance level in one tail. The direction must be chosen before seeing the data."
+    veja:
+      - { t: "Z-test or t-test?", u: "/z-test-or-t-test/" }
