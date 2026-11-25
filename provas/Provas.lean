@@ -15,3 +15,4 @@ import Provas.Amostragem
 import Provas.Estimadores
 import Provas.Anova
 import Provas.Inferencia
+import Provas.Regressao
