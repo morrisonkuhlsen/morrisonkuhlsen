@@ -540,6 +540,9 @@ mesmo commit, sem esperar pedido:
 | valor crítico | critical value |
 | região de rejeição | rejection region |
 | teste bilateral / unilateral | two-sided / one-sided test |
+| mapa coroplético | choropleth map |
+| taxa de incidência | incidence rate |
+| internação (SIH/SUS) | hospital admission |
 | qui-quadrado | chi-square |
 | análise de variância (ANOVA) | analysis of variance (ANOVA) |
 | correlação de Pearson | Pearson correlation |
