@@ -11,7 +11,9 @@
 # entre parênteses e as grafias de `tambem`. `auto: false` tira do automático
 # os termos comuns demais na língua corrente ("moda", "evento", "amostra").
 #
-# A estrutura já nasce por idioma para o dia em que houver a versão em inglês.
+# Um bloco por idioma (pt e en). Os slugs do inglês são próprios (âncoras de
+# /en/glossary), e os links de `veja` apontam para a versão em inglês quando
+# ela existe; senão, para a portuguesa, com "(in Portuguese)" no texto.
 
 pt:
   - termo: "Alocação de Neyman"
@@ -63,14 +65,14 @@ pt:
   - termo: "Assimetria"
     slug: assimetria
     ordem: "assimetria"
-    def: "Mede o quanto uma distribuição pende para um dos lados. Com assimetria à direita, a média é puxada acima da mediana — motivo pelo qual renda quase nunca deve ser resumida pela média."
+    def: "Mede o quanto uma distribuição pende para um dos lados. Com assimetria à direita (cauda longa nos valores altos), a média costuma ficar acima da mediana, e por isso a renda costuma ser resumida pela mediana. A regra tem exceções."
     veja:
       - { t: "Medidas de tendência central", u: "/pt/estatistica-descritiva/tendencia-central" }
 
   - termo: "Boxplot"
     slug: boxplot
     ordem: "boxplot"
-    def: "Resumo gráfico de cinco números: mínimo, primeiro quartil, mediana, terceiro quartil e máximo, com os pontos além de 1,5 × IQR marcados à parte. Mostra dispersão e assimetria de uma vez."
+    def: "Gráfico que resume a distribuição numa caixa, do primeiro ao terceiro quartil, com a mediana marcada dentro. Os bigodes vão até os valores mais extremos a no máximo 1,5 × IQR da caixa, e os pontos além disso aparecem à parte. Mostra dispersão e assimetria de uma vez."
     veja:
       - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
 
@@ -85,7 +87,7 @@ pt:
   - termo: "Coeficiente de variação"
     slug: coeficiente-de-variacao
     ordem: "coeficiente de variacao"
-    def: "Desvio padrão dividido pela média, em geral em porcentagem. Permite comparar a dispersão de conjuntos em unidades ou escalas diferentes."
+    def: "Desvio padrão dividido pela média, em geral em porcentagem. Permite comparar a dispersão de conjuntos em unidades ou escalas diferentes, mas só faz sentido para variáveis positivas (média maior que zero)."
     veja:
       - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
 
@@ -132,14 +134,14 @@ pt:
     slug: desigualdade-de-chebyshev
     ordem: "desigualdade de chebyshev"
     tambem: ["teorema de Chebyshev"]
-    def: "Garante que pelo menos 1 − 1/k² das observações ficam a k desvios padrão da média, seja qual for a distribuição. É um limite frouxo, mas que não exige suposição nenhuma."
+    def: "Garante que, para k > 1, pelo menos 1 − 1/k² das observações ficam a menos de k desvios padrão da média, seja qual for a distribuição. É um limite frouxo, mas exige só que a variância seja finita."
     veja:
       - { t: "Fórmula interativa", u: "/formulas/teorema-chebyshev.html" }
 
   - termo: "Desvio padrão"
     slug: desvio-padrao
     ordem: "desvio padrao"
-    def: "Raiz quadrada da variância: a dispersão dos dados na mesma unidade da variável. Diz o quanto, em média, as observações se afastam da média."
+    def: "Raiz quadrada da variância: a dispersão dos dados na mesma unidade da variável. Indica o afastamento típico das observações em relação à média, mas não é a média desses afastamentos (essa é o desvio médio absoluto)."
     veja:
       - { t: "Desvio padrão explicado", u: "/desvio-padrao/" }
       - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
@@ -177,14 +179,14 @@ pt:
   - termo: "Erro padrão"
     slug: erro-padrao
     ordem: "erro padrao"
-    def: "Desvio padrão da distribuição de uma estatística ao longo de amostras repetidas. Mede a incerteza da estimativa, não a variabilidade dos dados — confundir os dois é o erro mais comum da área."
+    def: "Desvio padrão da distribuição de uma estatística ao longo de amostras repetidas. Mede a incerteza da estimativa, não a variabilidade dos dados — confundir os dois é um erro comum."
     veja:
       - { t: "Desvio padrão x erro padrão", u: "/desvio-padrao-x-erro-padrao-qual-a-diferenca/" }
 
   - termo: "Erro tipo I"
     slug: erro-tipo-i
     ordem: "erro tipo i"
-    def: "Rejeitar a hipótese nula quando ela é verdadeira: um falso positivo. Sua probabilidade é o nível de significância α, fixado antes do teste."
+    def: "Rejeitar a hipótese nula quando ela é verdadeira: um falso positivo. Sua probabilidade é controlada pelo nível de significância α, fixado antes do teste."
     veja:
       - { t: "Testes de hipótese", u: "/pt/inferencia-estatistica/testes-hipotese" }
 
@@ -198,7 +200,7 @@ pt:
   - termo: "Espaço amostral"
     slug: espaco-amostral
     ordem: "espaco amostral"
-    def: "O conjunto de todos os resultados possíveis de um experimento aleatório. Definir bem o espaço amostral costuma resolver metade dos problemas de probabilidade."
+    def: "O conjunto de todos os resultados possíveis de um experimento aleatório. Definir bem o espaço amostral resolve boa parte dos problemas de probabilidade."
     veja:
       - { t: "Eventos e espaço amostral", u: "/pt/probabilidade/eventos-espaco-amostral" }
 
@@ -340,7 +342,7 @@ pt:
   - termo: "Média harmônica"
     slug: media-harmonica
     ordem: "media harmonica"
-    def: "Recíproca da média das recíprocas. É a média correta para taxas e velocidades — a média de dois trechos percorridos a velocidades diferentes, por exemplo."
+    def: "Recíproca da média das recíprocas. É a média certa para taxas quando o denominador é fixo: dois trechos de mesma distância a 60 km/h e a 40 km/h dão velocidade média de 48 km/h, não 50."
     veja:
       - { t: "Fórmula interativa", u: "/formulas/media-harmonica.html" }
 
@@ -393,7 +395,7 @@ pt:
   - termo: "Percentil"
     slug: percentil
     ordem: "percentil"
-    def: "Valor abaixo do qual cai determinada porcentagem das observações. O percentil 50 é a mediana; os percentis 25 e 75 são os quartis."
+    def: "Valor abaixo do qual cai determinada porcentagem das observações. O percentil 50 é a mediana; os percentis 25 e 75 são o primeiro e o terceiro quartis."
     veja:
       - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
 
@@ -444,7 +446,7 @@ pt:
   - termo: "Regressão linear"
     slug: regressao-linear
     ordem: "regressao linear"
-    def: "Ajusta uma reta que descreve como a variável resposta muda com uma ou mais variáveis explicativas, minimizando a soma dos quadrados dos resíduos."
+    def: "Ajusta uma reta (ou, com várias variáveis explicativas, um plano) que descreve como a variável resposta muda com as explicativas, minimizando a soma dos quadrados dos resíduos."
     veja:
       - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
       - { t: "Fórmula interativa", u: "/formulas/regressao-linear.html" }
@@ -452,7 +454,7 @@ pt:
   - termo: "Resíduo"
     slug: residuo
     ordem: "residuo"
-    def: "Diferença entre o valor observado e o previsto pelo modelo. Analisar resíduos é como se verifica se o modelo está adequado — quase sempre mais informativo que o R²."
+    def: "Diferença entre o valor observado e o previsto pelo modelo. Analisar resíduos é como se verifica se o modelo está adequado, e costuma dizer mais que o R²."
     veja:
       - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
 
@@ -473,14 +475,15 @@ pt:
   - termo: "Taxa de falsas descobertas (FDR)"
     slug: taxa-de-falsas-descobertas-fdr
     ordem: "taxa de falsas descobertas (fdr)"
-    def: "Proporção esperada de falsos positivos entre as hipóteses rejeitadas. O procedimento de Benjamini-Hochberg a controla em testes múltiplos, sendo menos conservador que Bonferroni."
+    def: "Proporção esperada de falsos positivos entre as hipóteses rejeitadas. O procedimento de Benjamini-Hochberg a controla em testes múltiplos independentes (ou com certas formas de dependência positiva), sendo menos conservador que Bonferroni."
     veja:
       - { t: "Um contraexemplo ao método BH", u: "/bh-fdr-contraexemplo/" }
 
-  - termo: "Teorema central do limite"
+  - termo: "Teorema do limite central (TLC)"
     slug: teorema-central-do-limite
-    ordem: "teorema central do limite"
-    def: "A média de muitas variáveis independentes de mesma distribuição e variância finita tende à normal, qualquer que seja a distribuição de origem. É o que sustenta boa parte da inferência clássica."
+    ordem: "teorema do limite central (tlc)"
+    tambem: ["teorema central do limite"]
+    def: "A distribuição da média de muitas variáveis independentes, de mesma distribuição e variância finita, se aproxima da normal, qualquer que seja a distribuição de origem. É o que sustenta boa parte da inferência clássica."
     veja:
       - { t: "Teorema do limite central", u: "/pt/probabilidade/teorema-limite-central" }
       - { t: "Fórmula interativa", u: "/formulas/teorema-central-limite.html" }
@@ -504,7 +507,7 @@ pt:
     slug: teste-t-de-student
     ordem: "teste t de student"
     tambem: ["teste t"]
-    def: "Compara médias quando o desvio padrão da população é desconhecido e a amostra é pequena, usando a distribuição t, de caudas mais pesadas que a normal."
+    def: "Compara médias quando o desvio padrão da população é desconhecido e precisa ser estimado pela amostra, usando a distribuição t, de caudas mais pesadas que a normal. Com amostra pequena, supõe dados de distribuição aproximadamente normal."
     veja:
       - { t: "Teste z ou teste t?", u: "/testez-ou-testt/" }
       - { t: "Tabela t", u: "/ttable.html" }
@@ -520,7 +523,7 @@ pt:
   - termo: "Variância"
     slug: variancia
     ordem: "variancia"
-    def: "Média dos quadrados dos desvios em relação à média. Por estar em unidade ao quadrado, costuma ser reportada como desvio padrão."
+    def: "Média dos quadrados dos desvios em relação à média; na amostra, a soma dos quadrados é dividida por n − 1, não por n. Por estar em unidade ao quadrado, costuma ser reportada como desvio padrão."
     veja:
       - { t: "Medidas de dispersão", u: "/pt/estatistica-descritiva/dispersao" }
 
@@ -545,3 +548,540 @@ pt:
     veja:
       - { t: "Fórmula interativa", u: "/formulas/z-score.html" }
       - { t: "Tabela Z", u: "/ztable.html" }
+
+en:
+  - termo: "Neyman allocation"
+    slug: neyman-allocation
+    ordem: "neyman allocation"
+    def: "Splits the sample size among the strata according to the size and variability of each one: a more heterogeneous stratum gets more units. It minimizes the variance of the estimate for a fixed cost."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/neyman-allocation.html" }
+      - { t: "Sampling", u: "/en/statistical-inference/sampling" }
+
+  - termo: "Sample"
+    slug: sample
+    ordem: "sample"
+    auto: false
+    def: "The subset of the population that is actually observed. All of statistical inference consists of saying something about the population from it, which is only honest when the sample was drawn by a known random process."
+    veja:
+      - { t: "Sampling", u: "/en/statistical-inference/sampling" }
+
+  - termo: "Stratified sampling"
+    slug: stratified-sampling
+    ordem: "stratified sampling"
+    def: "Divides the population into homogeneous strata and draws at random within each one. It gives more precise estimates than simple random sampling when the strata differ from each other."
+    veja:
+      - { t: "Sampling", u: "/en/statistical-inference/sampling" }
+      - { t: "Neyman allocation", u: "/en/formulas/neyman-allocation.html" }
+
+  - termo: "Range"
+    slug: range
+    ordem: "range"
+    auto: false
+    def: "The difference between the largest and the smallest value in the data set. It is the simplest measure of spread and the most fragile: two outliers are enough to determine it entirely."
+    veja:
+      - { t: "Measures of dispersion", u: "/en/descriptive-statistics/dispersion" }
+
+  - termo: "Analysis of variance (ANOVA)"
+    slug: analysis-of-variance-anova
+    ordem: "analysis of variance (anova)"
+    def: "Tests whether the means of three or more groups differ, by comparing the variation between groups with the variation within them. Rejecting the null hypothesis says that some mean differs, not which one."
+    veja:
+      - { t: "Analysis of Variance", u: "/en/statistical-inference/analysis-of-variance" }
+
+  - termo: "Exploratory data analysis"
+    slug: exploratory-data-analysis
+    ordem: "exploratory data analysis"
+    def: "The stage in which you look at the data before modeling them (distributions, missing values, outliers, relationships) to find out what they have to say and which assumptions are defensible."
+    veja:
+      - { t: "Exploratory Data Analysis", u: "/en/descriptive-statistics/exploratory-analysis" }
+      - { t: "Anscombe's quartet (in Portuguese)", u: "/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/" }
+
+  - termo: "Skewness"
+    slug: skewness
+    ordem: "skewness"
+    def: "Measures how much a distribution leans to one side. With right skew (a long tail of high values), the mean usually lies above the median, which is why income is usually summarized by the median. The rule has exceptions."
+    veja:
+      - { t: "Measures of central tendency", u: "/en/descriptive-statistics/central-tendency" }
+
+  - termo: "Boxplot"
+    slug: boxplot
+    ordem: "boxplot"
+    tambem: ["box plot"]
+    def: "A chart that summarizes the distribution with a box from the first to the third quartile, with the median marked inside. The whiskers reach the most extreme values within 1.5 × IQR of the box, and points beyond that are shown separately. It shows spread and skewness at once."
+    veja:
+      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Binomial coefficient"
+    slug: binomial-coefficient
+    ordem: "binomial coefficient"
+    def: "The number of ways to choose k elements out of n, regardless of order. It is also each entry of Pascal's triangle."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/binomial-coefficient.html" }
+      - { t: "Pascal's triangle (in Portuguese)", u: "/triangulo-de-pascal/" }
+
+  - termo: "Coefficient of variation"
+    slug: coefficient-of-variation
+    ordem: "coefficient of variation"
+    def: "The standard deviation divided by the mean, usually as a percentage. It lets you compare the spread of data sets in different units or scales, but it only makes sense for positive variables (mean greater than zero)."
+    veja:
+      - { t: "Measures of dispersion", u: "/en/descriptive-statistics/dispersion" }
+
+  - termo: "Combination"
+    slug: combination
+    ordem: "combination"
+    auto: false
+    def: "A selection in which order does not matter. Choosing 6 numbers out of 60 is a combination, which is why the order of the draw does not change the probability of a ticket."
+    veja:
+      - { t: "Binomial coefficient", u: "/en/formulas/binomial-coefficient.html" }
+      - { t: "Mega-Sena lottery (in Portuguese)", u: "/mega-sena-frequencias/" }
+
+  - termo: "Finite population correction"
+    slug: finite-population-correction
+    ordem: "finite population correction"
+    tambem: ["finite population correction factor"]
+    def: "A factor that reduces the standard error when the sample is a large share of the population. Without it, the uncertainty of an almost complete census would come out exaggerated."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/finite-population-correction.html" }
+
+  - termo: "Correlation"
+    slug: correlation
+    ordem: "correlation"
+    def: "Measures the strength and direction of the linear association between two variables, between −1 and 1. High correlation does not establish causation, and zero correlation does not rule out a nonlinear relationship."
+    veja:
+      - { t: "Pearson correlation", u: "/en/formulas/pearson-correlation.html" }
+      - { t: "Anscombe's quartet (in Portuguese)", u: "/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/" }
+
+  - termo: "Covariance"
+    slug: covariance
+    ordem: "covariance"
+    def: "Measures whether two variables move away from their means together. The sign gives the direction, but the magnitude depends on the units; standardizing it gives the correlation."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/covariance.html" }
+
+  - termo: "Kurtosis"
+    slug: kurtosis
+    ordem: "kurtosis"
+    def: "Describes how heavy the tails of a distribution are compared with the normal. Heavy tails mean that extreme values are less rare than the normal would predict."
+    veja:
+      - { t: "Normal distribution", u: "/normal-distribution/" }
+
+  - termo: "Chebyshev's inequality"
+    slug: chebyshevs-inequality
+    ordem: "chebyshevs inequality"
+    tambem: ["Chebyshev's theorem"]
+    def: "Guarantees that, for k > 1, at least 1 − 1/k² of the observations lie less than k standard deviations from the mean, whatever the distribution. It is a loose bound, but it only requires the variance to be finite."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/chebyshev-theorem.html" }
+
+  - termo: "Standard deviation"
+    slug: standard-deviation
+    ordem: "standard deviation"
+    def: "The square root of the variance: the spread of the data in the same unit as the variable. It indicates the typical distance of the observations from the mean, but it is not the average of those distances (that is the mean absolute deviation)."
+    veja:
+      - { t: "Standard deviation explained", u: "/standard-deviation/" }
+      - { t: "Measures of dispersion", u: "/en/descriptive-statistics/dispersion" }
+
+  - termo: "Binomial distribution"
+    slug: binomial-distribution
+    ordem: "binomial distribution"
+    def: "Describes the number of successes in n independent trials with the same probability p. It is the sum of n Bernoulli trials."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/binomial-distribution.html" }
+      - { t: "Heads or tails (in Portuguese)", u: "/cara-ou-coroa/" }
+
+  - termo: "Bernoulli distribution"
+    slug: bernoulli-distribution
+    ordem: "bernoulli distribution"
+    def: "The distribution of a single trial with two possible outcomes, success with probability p and failure with probability 1 − p. It is the building block of the binomial."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/bernoulli-distribution.html" }
+
+  - termo: "Poisson distribution"
+    slug: poisson-distribution
+    ordem: "poisson distribution"
+    def: "Models the count of rare events in a fixed interval of time or space, when they occur independently and at a constant average rate."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/poisson-distribution.html" }
+
+  - termo: "Normal distribution"
+    slug: normal-distribution
+    ordem: "normal distribution"
+    def: "The bell-shaped distribution, symmetric around the mean and described only by the mean and the standard deviation. It shows up often because sums of many independent effects tend toward it."
+    veja:
+      - { t: "Normal Distribution", u: "/normal-distribution/" }
+      - { t: "Z table", u: "/ztable.html" }
+
+  - termo: "Standard error"
+    slug: standard-error
+    ordem: "standard error"
+    def: "The standard deviation of the distribution of a statistic over repeated samples. It measures the uncertainty of the estimate, not the variability of the data; mixing the two up is a common mistake."
+    veja:
+      - { t: "Standard deviation vs. standard error (in Portuguese)", u: "/desvio-padrao-x-erro-padrao-qual-a-diferenca/" }
+
+  - termo: "Type I error"
+    slug: type-i-error
+    ordem: "type i error"
+    def: "Rejecting the null hypothesis when it is true: a false positive. Its probability is controlled by the significance level α, set before the test."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Type II error"
+    slug: type-ii-error
+    ordem: "type ii error"
+    def: "Failing to reject the null hypothesis when it is false: a false negative. Its probability is β, and 1 − β is the power of the test."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Sample space"
+    slug: sample-space
+    ordem: "sample space"
+    def: "The set of all possible outcomes of a random experiment. Defining the sample space well solves a good part of probability problems."
+    veja:
+      - { t: "Sample space and events", u: "/en/probability/sample-space-events" }
+
+  - termo: "Expected value"
+    slug: expected-value
+    ordem: "expected value"
+    def: "The long-run average value of a random variable, weighting each outcome by its probability. Also called the expectation or the population mean."
+    veja:
+      - { t: "Random variables", u: "/en/probability/random-variables" }
+
+  - termo: "Estimator"
+    slug: estimator
+    ordem: "estimator"
+    def: "A calculation rule applied to the sample to estimate a population parameter. The value it produces for a specific sample is the estimate."
+    veja:
+      - { t: "Estimators", u: "/en/statistical-inference/estimators" }
+
+  - termo: "Event"
+    slug: event
+    ordem: "event"
+    auto: false
+    def: "Any subset of the sample space: the set of outcomes under which we say that something happened."
+    veja:
+      - { t: "Sample space and events", u: "/en/probability/sample-space-events" }
+
+  - termo: "Cochran's formula"
+    slug: cochrans-formula
+    ordem: "cochrans formula"
+    def: "Computes how many individuals the sample needs to reach a given margin of error and confidence level when estimating a proportion."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/cochran-formula.html" }
+
+  - termo: "Relative frequency"
+    slug: relative-frequency
+    ordem: "relative frequency"
+    def: "The proportion of the observations that fall in each category or range. It is the basis of the histogram and the empirical bridge to the notion of probability."
+    veja:
+      - { t: "Statistical charts", u: "/en/descriptive-statistics/charts" }
+
+  - termo: "Probability density function (PDF)"
+    slug: probability-density-function-pdf
+    ordem: "probability density function (pdf)"
+    def: "For a continuous variable, the curve whose area over an interval gives the probability that the variable falls in it. The value of the function at a point is not a probability."
+    veja:
+      - { t: "Random variables", u: "/en/probability/random-variables" }
+
+  - termo: "Degrees of freedom"
+    slug: degrees-of-freedom
+    ordem: "degrees of freedom"
+    def: "How many values in a calculation can still vary freely once the constraints are imposed. For the sample variance there are n − 1, because the mean has already used up one piece of information."
+    veja:
+      - { t: "Student's t distribution", u: "/en/formulas/students-t-test.html" }
+
+  - termo: "Heteroscedasticity"
+    slug: heteroscedasticity
+    ordem: "heteroscedasticity"
+    tambem: ["heteroskedasticity"]
+    def: "When the variance of the residuals changes along the predicted values. It does not bias the regression coefficients, but it spoils the standard errors, and with them the tests and intervals."
+    veja:
+      - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
+
+  - termo: "Alternative hypothesis"
+    slug: alternative-hypothesis
+    ordem: "alternative hypothesis"
+    def: "The statement favored if the null hypothesis is rejected. It carries the claim that the study wants to support."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Null hypothesis"
+    slug: null-hypothesis
+    ordem: "null hypothesis"
+    tambem: ["H₀"]
+    def: "The hypothesis of no effect or no difference, taken as true as long as the data do not contradict it. A test never proves it: it either rejects it or fails to reject it."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Histogram"
+    slug: histogram
+    ordem: "histogram"
+    def: "A chart of adjacent bars showing how the observations are distributed across ranges of values. The width of the ranges changes the reading, so it is worth trying more than one."
+    veja:
+      - { t: "Statistical charts", u: "/en/descriptive-statistics/charts" }
+
+  - termo: "Independence"
+    slug: independence
+    ordem: "independence"
+    auto: false
+    def: "Two events are independent when the occurrence of one does not change the probability of the other, that is, when P(A ∩ B) = P(A) · P(B)."
+    veja:
+      - { t: "Independent events and the product rule", u: "/en/probability/independent-events" }
+      - { t: "Conditional probability", u: "/en/probability/conditional-probability" }
+
+  - termo: "Bayesian inference"
+    slug: bayesian-inference
+    ordem: "bayesian inference"
+    def: "An approach that treats the parameter as uncertain and describes it with a distribution, updated by the data through Bayes' theorem: the prior becomes the posterior."
+    veja:
+      - { t: "Frequentist vs. Bayesian (in Portuguese)", u: "/frequentista-vs-bayesiano-duas-formas-de-pensar-a-incerteza/" }
+      - { t: "Bayes' theorem", u: "/en/formulas/bayes-theorem.html" }
+
+  - termo: "Confidence interval"
+    slug: confidence-interval
+    ordem: "confidence interval"
+    tambem: ["confidence intervals"]
+    def: "A range of values for a parameter that are compatible with the data. The 95% confidence is a property of the method over repeated samples, not the probability that the parameter lies in that interval."
+    veja:
+      - { t: "Confidence intervals", u: "/en/statistical-inference/confidence-intervals" }
+      - { t: "Interactive formula", u: "/en/formulas/confidence-interval.html" }
+
+  - termo: "Interquartile range (IQR)"
+    slug: interquartile-range-iqr
+    ordem: "interquartile range (iqr)"
+    def: "The distance between the first and the third quartile, that is, the range of the middle 50%. Because it ignores the tails, it resists outliers."
+    veja:
+      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Kaplan-Meier"
+    slug: kaplan-meier
+    ordem: "kaplan-meier"
+    def: "A nonparametric estimator of the survival curve that also makes use of censored observations: those whose outcome had not yet occurred when the study ended."
+    veja:
+      - { t: "Orca demography", u: "/southern-resident-killer-whales-demography-julia-kaplan-meier/" }
+
+  - termo: "Law of large numbers"
+    slug: law-of-large-numbers
+    ordem: "law of large numbers"
+    def: "With many repetitions, the observed average approaches the expected value. It is what makes the long-run frequency converge, and it guarantees nothing about the next play."
+    veja:
+      - { t: "Heads or tails (in Portuguese)", u: "/cara-ou-coroa/" }
+
+  - termo: "Arithmetic mean"
+    slug: arithmetic-mean
+    ordem: "arithmetic mean"
+    def: "The sum of the values divided by how many there are. It summarizes symmetric distributions well and misleads with skewed distributions or outliers."
+    veja:
+      - { t: "Understanding the mean (in Portuguese)", u: "/media/" }
+      - { t: "Measures of central tendency", u: "/en/descriptive-statistics/central-tendency" }
+
+  - termo: "Harmonic mean"
+    slug: harmonic-mean
+    ordem: "harmonic mean"
+    def: "The reciprocal of the mean of the reciprocals. It is the right average for rates when the denominator is fixed: two legs of the same distance at 60 km/h and 40 km/h give an average speed of 48 km/h, not 50."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/harmonic-mean.html" }
+
+  - termo: "Median"
+    slug: median
+    ordem: "median"
+    def: "The value that splits the sorted data into two halves. It does not move when an extreme value moves further out, which makes it the preferable summary for skewed data."
+    veja:
+      - { t: "Understanding the median (in Portuguese)", u: "/mediana/" }
+
+  - termo: "Mode"
+    slug: mode
+    ordem: "mode"
+    auto: false
+    def: "The most frequent value. It is the only measure of central tendency that applies to purely categorical variables, and a data set can have more than one."
+    veja:
+      - { t: "Measures of central tendency", u: "/en/descriptive-statistics/central-tendency" }
+
+  - termo: "Significance level"
+    slug: significance-level
+    ordem: "significance level"
+    def: "The limit α, chosen before the test, for the probability of a Type I error. The value 0.05 is an inherited convention, not a property of nature."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Outlier"
+    slug: outlier
+    ordem: "outlier"
+    tambem: ["outliers"]
+    def: "An observation very far from the others. It may be a recording error or the most informative data point in the set; what is not acceptable is discarding it without investigating."
+    veja:
+      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "p-value"
+    slug: p-value
+    ordem: "p-value"
+    tambem: ["p-values"]
+    def: "The probability of observing a result at least as extreme as the one obtained, assuming the null hypothesis is true. It is not the probability that the null hypothesis is true, nor does it measure the size of the effect."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Parameter"
+    slug: parameter
+    ordem: "parameter"
+    auto: false
+    def: "A numerical characteristic of the population, such as μ or σ: fixed and usually unknown. What is computed from the sample is a statistic, which estimates it."
+    veja:
+      - { t: "Estimators", u: "/en/statistical-inference/estimators" }
+
+  - termo: "Percentile"
+    slug: percentile
+    ordem: "percentile"
+    def: "The value below which a given percentage of the observations falls. The 50th percentile is the median; the 25th and 75th percentiles are the first and third quartiles."
+    veja:
+      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Permutation"
+    slug: permutation
+    ordem: "permutation"
+    def: "An arrangement of elements in which order matters. Changing the order produces a new permutation, unlike a combination."
+    veja:
+      - { t: "Pascal's triangle (in Portuguese)", u: "/triangulo-de-pascal/" }
+
+  - termo: "Statistical power"
+    slug: statistical-power
+    ordem: "statistical power"
+    tambem: ["power of the test"]
+    def: "The probability of detecting an effect that really exists, equal to 1 − β. Studies that are too small fail to find real effects and, when they do find them, overestimate their size."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "Population"
+    slug: population
+    ordem: "population"
+    auto: false
+    def: "The complete set of units about which you want to conclude something. Defining it precisely is what determines to whom the conclusions apply."
+    veja:
+      - { t: "Sampling", u: "/en/statistical-inference/sampling" }
+
+  - termo: "Conditional probability"
+    slug: conditional-probability
+    ordem: "conditional probability"
+    def: "The probability of an event given that another one has occurred, written P(A|B). Ignoring the conditioning is the source of many of the field's paradoxes."
+    veja:
+      - { t: "Conditional probability", u: "/en/probability/conditional-probability" }
+      - { t: "Interactive formula", u: "/en/formulas/conditional-probability.html" }
+
+  - termo: "Quartile"
+    slug: quartile
+    ordem: "quartile"
+    def: "Each of the three values that split the sorted data into four equal parts. The second quartile is the median."
+    veja:
+      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Chi-square"
+    slug: chi-square
+    ordem: "chi-square"
+    tambem: ["chi-squared"]
+    def: "A distribution and a family of tests used to compare observed frequencies with expected ones, in goodness-of-fit tests and tests of independence between categorical variables."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/chi-square-test.html" }
+
+  - termo: "Linear regression"
+    slug: linear-regression
+    ordem: "linear regression"
+    def: "Fits a line (or, with several explanatory variables, a plane) that describes how the response variable changes with the explanatory ones, by minimizing the sum of squared residuals."
+    veja:
+      - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
+      - { t: "Interactive formula", u: "/en/formulas/linear-regression.html" }
+
+  - termo: "Residual"
+    slug: residual
+    ordem: "residual"
+    def: "The difference between the observed value and the value predicted by the model. Analyzing residuals is how you check whether the model is adequate, and it usually tells more than R²."
+    veja:
+      - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
+
+  - termo: "Time series"
+    slug: time-series
+    ordem: "time series"
+    def: "A sequence of observations ordered in time, in which nearby values are usually correlated. This dependence invalidates methods that assume independent observations."
+    veja:
+      - { t: "Time series", u: "/en/data-analysis/time-series" }
+
+  - termo: "Statistical significance"
+    slug: statistical-significance
+    ordem: "statistical significance"
+    def: "A result whose p-value fell below the chosen level. It says that the effect is unlikely to come from chance alone, not that it is large or that it matters in practice."
+    veja:
+      - { t: "Hypothesis testing", u: "/en/statistical-inference/hypothesis-testing" }
+
+  - termo: "False discovery rate (FDR)"
+    slug: false-discovery-rate-fdr
+    ordem: "false discovery rate (fdr)"
+    def: "The expected proportion of false positives among the rejected hypotheses. The Benjamini-Hochberg procedure controls it in multiple testing when the tests are independent (or have certain forms of positive dependence), and it is less conservative than Bonferroni."
+    veja:
+      - { t: "A counterexample to the BH method (in Portuguese)", u: "/bh-fdr-contraexemplo/" }
+
+  - termo: "Central Limit Theorem (CLT)"
+    slug: central-limit-theorem-clt
+    ordem: "central limit theorem (clt)"
+    def: "The distribution of the mean of many independent variables, with the same distribution and finite variance, approaches the normal, whatever the original distribution. It underpins much of classical inference."
+    veja:
+      - { t: "Central Limit Theorem", u: "/en/probability/central-limit-theorem" }
+      - { t: "Interactive formula", u: "/en/formulas/central-limit-theorem.html" }
+
+  - termo: "Law of total probability"
+    slug: law-of-total-probability
+    ordem: "law of total probability"
+    def: "Breaks the probability of an event into a sum of its conditional probabilities over each part of a partition of the sample space."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/law-of-total-probability.html" }
+
+  - termo: "Bayes' theorem"
+    slug: bayes-theorem
+    ordem: "bayes theorem"
+    def: "Reverses the conditioning: it turns P(B|A) into P(A|B), weighting by the prior probability. It explains why a very accurate test still produces many false positives when the condition is rare."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/bayes-theorem.html" }
+      - { t: "Frequentist vs. Bayesian (in Portuguese)", u: "/frequentista-vs-bayesiano-duas-formas-de-pensar-a-incerteza/" }
+
+  - termo: "Student's t-test"
+    slug: students-t-test
+    ordem: "students t-test"
+    tambem: ["t-test"]
+    def: "Compares means when the population standard deviation is unknown and has to be estimated from the sample, using the t distribution, whose tails are heavier than the normal's. With a small sample, it assumes data from an approximately normal distribution."
+    veja:
+      - { t: "Z-test or t-test? (in Portuguese)", u: "/testez-ou-testt/" }
+      - { t: "t table", u: "/ttable.html" }
+
+  - termo: "Z-test"
+    slug: z-test
+    ordem: "z-test"
+    def: "Compares means or proportions when the population standard deviation is known, or when the sample is large enough for the normal approximation to hold."
+    veja:
+      - { t: "Z-test or t-test? (in Portuguese)", u: "/testez-ou-testt/" }
+      - { t: "Z table", u: "/ztable.html" }
+
+  - termo: "Variance"
+    slug: variance
+    ordem: "variance"
+    def: "The mean of the squared deviations from the mean; for a sample, the sum of squares is divided by n − 1, not by n. Because it is in squared units, it is usually reported as the standard deviation."
+    veja:
+      - { t: "Measures of dispersion", u: "/en/descriptive-statistics/dispersion" }
+
+  - termo: "Random variable"
+    slug: random-variable
+    ordem: "random variable"
+    def: "A function that assigns a number to each outcome of the experiment. It is discrete when it takes countable values and continuous when it can take any value in an interval."
+    veja:
+      - { t: "Random variables", u: "/en/probability/random-variables" }
+
+  - termo: "Bias"
+    slug: bias
+    ordem: "bias"
+    def: "A systematic error that shifts the estimates always in the same direction. It does not shrink with a larger sample, only with a change in the collection process or in the estimator."
+    veja:
+      - { t: "Sampling", u: "/en/statistical-inference/sampling" }
+
+  - termo: "Z-score"
+    slug: z-score
+    ordem: "z-score"
+    def: "How many standard deviations a value is from the mean, given by (x − μ)/σ. It standardizes different scales and lets you compare values from different distributions."
+    veja:
+      - { t: "Interactive formula", u: "/en/formulas/z-score.html" }
+      - { t: "Z table", u: "/ztable.html" }

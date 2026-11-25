@@ -34,7 +34,8 @@
     {%- assign day = site.time | date: "%j" | plus: 0 -%}
     {%- assign idx = day | modulo: terms.size -%}
     {%- assign term = terms[idx] -%}
-    <a class="home-aside__card" href="{{ '/pt/glossario' | relative_url }}#{{ term.slug }}">
+    {%- assign pagina_glossario = site.pages | where: "ref", "glossario" | where: "lang", lang | first -%}
+    <a class="home-aside__card" href="{{ pagina_glossario.url | relative_url }}#{{ term.slug }}">
       <span class="home-aside__kicker">{% if lang == 'en' %}From the glossary{% else %}Do glossário{% endif %}</span>
       <strong class="home-aside__term">{{ term.termo }}</strong>
       {%- comment -%}

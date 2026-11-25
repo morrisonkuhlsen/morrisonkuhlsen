@@ -36,7 +36,8 @@
     {"s":{{ v.slug | jsonify }},"n":{{ v.termo | jsonify }},"d":{{ v.def | jsonify }},"t":{{ grafias | jsonify }}}
   {%- endfor -%}
 ]{%- endcapture -%}
+{%- assign pagina_glossario = site.pages | where: "ref", "glossario" | where: "lang", lang | first -%}
 <script type="application/json" id="glossary-terms"
-        data-base="{{ '/' | append: lang | append: '/glossario' | relative_url }}">{{ termos }}</script>
+        data-base="{{ pagina_glossario.url | relative_url }}">{{ termos }}</script>
 <script src="{{ '/assets/js/glossary-tips.js' | relative_url }}" defer></script>
 {%- endif -%}

@@ -467,7 +467,7 @@ iniciante não tem como desconfiar.
 ## 14. Glossário PT ↔ EN (termos padronizados)
 
 Um termo, uma tradução, em todo o site. Os verbetes ficam em
-`_data/glossario.yml` (só `pt:` por enquanto); termo novo entra lá e nesta
+`_data/glossario.yml` (blocos `pt:` e `en:`, cada um com os próprios slugs); termo novo entra lá e nesta
 tabela. Se um termo precisar mudar, mude em todo o site de uma vez.
 
 | Português | Inglês |
