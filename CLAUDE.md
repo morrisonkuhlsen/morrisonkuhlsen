@@ -593,6 +593,7 @@ mesmo commit, sem esperar pedido:
 | prova formal | formal proof |
 | tática de prova | proof tactic |
 | indução matemática | mathematical induction |
+| regressão à média | regression to the mean |
 | distribuição exponencial | exponential distribution |
 | distribuição log-normal | log-normal distribution |
 | distribuição de Cauchy | Cauchy distribution |

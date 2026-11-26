@@ -22,3 +22,4 @@ import Provas.Sobrevivencia
 import Provas.Riemann
 import Provas.Boxplot
 import Provas.PostLean
+import Provas.RegressaoMedia

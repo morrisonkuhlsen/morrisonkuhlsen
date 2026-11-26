@@ -1051,6 +1051,14 @@ pt:
     veja:
       - { t: "Lean: o computador confere a prova", u: "/lean-linguagem-computador-confere-prova/" }
 
+  - termo: "Regressão à média"
+    slug: regressao-a-media
+    ordem: "regressao a media"
+    def: "Quem foi escolhido por um resultado extremo tende a ter um resultado menos extremo na medida seguinte, porque parte do extremo era acaso. Não é uma força e não faz a variância encolher."
+    veja:
+      - { t: "Regressão à média", u: "/regressao-a-media-castigo-elogio-galton/" }
+      - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -2087,3 +2095,11 @@ en:
     def: "A way to prove something for every natural number: show that it holds for the first case and that, if it holds for k, it holds for k + 1."
     veja:
       - { t: "Lean: the computer checks your proof", u: "/lean-language-computer-checks-your-proof/" }
+
+  - termo: "Regression to the mean"
+    slug: regression-to-the-mean
+    ordem: "regression to the mean"
+    def: "Those selected for an extreme result tend to get a less extreme result on the next measurement, because part of the extreme was chance. It is not a force, and it does not make the variance shrink."
+    veja:
+      - { t: "Regression to the mean", u: "/regression-to-the-mean-galton/" }
+      - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
