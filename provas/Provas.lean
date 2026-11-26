@@ -21,3 +21,4 @@ import Provas.Preditivos
 import Provas.Sobrevivencia
 import Provas.Riemann
 import Provas.Boxplot
+import Provas.PostLean

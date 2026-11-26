@@ -589,6 +589,10 @@ mesmo commit, sem esperar pedido:
 | bigode do boxplot | boxplot whisker |
 | hinges de Tukey | Tukey's hinges |
 | gráfico de violino | violin plot |
+| assistente de provas | proof assistant |
+| prova formal | formal proof |
+| tática de prova | proof tactic |
+| indução matemática | mathematical induction |
 | distribuição exponencial | exponential distribution |
 | distribuição log-normal | log-normal distribution |
 | distribuição de Cauchy | Cauchy distribution |

@@ -1019,6 +1019,38 @@ pt:
     veja:
       - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
 
+  - termo: "Assistente de provas"
+    slug: assistente-de-provas
+    ordem: "assistente de provas"
+    tambem: ["assistentes de provas", "proof assistant"]
+    def: "Programa que confere demonstrações matemáticas escritas num formato que o computador entende, aceitando a prova só se cada passo seguir das regras. O Lean é um exemplo."
+    veja:
+      - { t: "Lean: o computador confere a prova", u: "/lean-linguagem-computador-confere-prova/" }
+
+  - termo: "Prova formal"
+    slug: prova-formal
+    ordem: "prova formal"
+    tambem: ["provas formais", "demonstração formal"]
+    def: "Demonstração escrita com todos os passos explícitos, de modo que um programa possa conferi-la. Garante o enunciado formal, mas não que ele diga o mesmo que o texto."
+    veja:
+      - { t: "Lean: o computador confere a prova", u: "/lean-linguagem-computador-confere-prova/" }
+
+  - termo: "Tática de prova"
+    slug: tatica-de-prova
+    ordem: "tatica de prova"
+    tambem: ["tática", "táticas"]
+    def: "Num assistente de provas como o Lean, um comando que constrói parte da demonstração, como ring para identidades algébricas. O resultado é conferido pelo núcleo do programa."
+    veja:
+      - { t: "Lean: o computador confere a prova", u: "/lean-linguagem-computador-confere-prova/" }
+
+  - termo: "Indução matemática"
+    slug: inducao-matematica
+    ordem: "inducao matematica"
+    tambem: ["indução", "prova por indução"]
+    def: "Forma de provar algo para todo número natural: mostra-se que vale para o primeiro caso e que, se vale para k, vale para k + 1."
+    veja:
+      - { t: "Lean: o computador confere a prova", u: "/lean-linguagem-computador-confere-prova/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -2023,3 +2055,35 @@ en:
     def: "A chart that draws the estimated density of the data mirrored on both sides of an axis. It shows the shape of the distribution, including peaks that a boxplot hides."
     veja:
       - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
+
+  - termo: "Proof assistant"
+    slug: proof-assistant
+    ordem: "proof assistant"
+    tambem: ["proof assistants"]
+    def: "A program that checks mathematical proofs written in a form the computer understands, accepting a proof only if every step follows from the rules. Lean is an example."
+    veja:
+      - { t: "Lean: the computer checks your proof", u: "/lean-language-computer-checks-your-proof/" }
+
+  - termo: "Formal proof"
+    slug: formal-proof
+    ordem: "formal proof"
+    tambem: ["formal proofs"]
+    def: "A proof written with every step explicit, so that a program can check it. It guarantees the formal statement, not that this statement says the same as the text."
+    veja:
+      - { t: "Lean: the computer checks your proof", u: "/lean-language-computer-checks-your-proof/" }
+
+  - termo: "Proof tactic"
+    slug: proof-tactic
+    ordem: "proof tactic"
+    tambem: ["tactic", "tactics"]
+    def: "In a proof assistant such as Lean, a command that builds part of a proof, such as ring for algebraic identities. Its result is checked by the program's kernel."
+    veja:
+      - { t: "Lean: the computer checks your proof", u: "/lean-language-computer-checks-your-proof/" }
+
+  - termo: "Mathematical induction"
+    slug: mathematical-induction
+    ordem: "mathematical induction"
+    tambem: ["induction", "proof by induction"]
+    def: "A way to prove something for every natural number: show that it holds for the first case and that, if it holds for k, it holds for k + 1."
+    veja:
+      - { t: "Lean: the computer checks your proof", u: "/lean-language-computer-checks-your-proof/" }

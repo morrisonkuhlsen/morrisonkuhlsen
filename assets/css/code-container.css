@@ -250,6 +250,9 @@
 .code-tabs--ativo > .code-tab[hidden] { display: none; }
 
 /* Sem JavaScript: cada versão aparece com seu rótulo normal */
+/* Blocos de Lean: um ponto neutro no lugar das três cores do Julia */
+.code-lang--lean::before { background: #8b8a85; box-shadow: none; transform: translate(0, 0); }
+
 .code-lang--tabs { gap: 2px; }
 .code-lang--tabs::before { display: none; }
 
