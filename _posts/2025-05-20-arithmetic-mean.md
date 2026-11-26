@@ -944,7 +944,7 @@ EMA: [10.0, 11.0, 12.5, 14.25, 16.125, 18.0625]</pre>
 ## When the mean misleads
 
 - **Skewed data**, such as income and prices: the tail pulls the mean away from the typical value. Use the [median](/median/), or show both.
-- **Extreme values or typos:** a single value changes everything. Look at the data (a [boxplot](/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/), in Portuguese, helps) before summarizing.
+- **Extreme values or typos:** a single value changes everything. Look at the data (a [boxplot](/boxplot-anatomy-elements-calculation-reading/) helps) before summarizing.
 - **Distributions with two peaks:** the mean can fall on a value that almost nobody has.
 - **Means of groups of different sizes:** the mean of the means only works if the groups are the same size; otherwise, weight them.
 - **Rates and ratios:** growth calls for the geometric mean of the factors; speeds over equal distances, for the harmonic mean.

@@ -259,7 +259,7 @@ A standard deviation from an old study, from another population or from another 
 2. **Is $$\sigma$$ known from an external, reliable source?** If so, Z-test. If $$\sigma$$ is estimated from the sample, t-test.
 3. **Is the population approximately normal?** Both tests are exact for a normal population. If it is not, they hold approximately when the sample is large enough, by the [central limit theorem](/en/probability/central-limit-theorem). With a small sample **and** strongly skewed data or extreme values, consider a transformation (such as the logarithm), the bootstrap or a nonparametric test, such as the Wilcoxon signed-rank test, which tests something else (the median, under symmetry).
 
-Before step 3, look at the data: a histogram or a [boxplot](/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/) (in Portuguese) shows skewness and extreme values that no single number reveals.
+Before step 3, look at the data: a histogram or a [boxplot](/boxplot-anatomy-elements-calculation-reading/) shows skewness and extreme values that no single number reveals.
 
 ## Example: the mean height of first-year students
 

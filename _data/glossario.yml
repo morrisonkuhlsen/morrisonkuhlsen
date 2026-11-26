@@ -987,6 +987,38 @@ pt:
     veja:
       - { t: "A hipótese de Riemann, contada nos primos", u: "/hipotese-de-riemann-zeros-primos-julia/" }
 
+  - termo: "Cerca do boxplot"
+    slug: cerca-do-boxplot
+    ordem: "cerca do boxplot"
+    tambem: ["cercas"]
+    def: "Limite calculado a 1,5 vez o IQR além de cada quartil: Q1 − 1,5·IQR e Q3 + 1,5·IQR. Os dados fora das cercas aparecem no boxplot como pontos soltos."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Bigode do boxplot"
+    slug: bigode-do-boxplot
+    ordem: "bigode do boxplot"
+    tambem: ["bigode", "bigodes"]
+    def: "Linha que sai da caixa do boxplot e para no dado mais extremo que ainda está dentro da cerca. Quando há outliers, não é o mínimo nem o máximo, e nunca é um desvio padrão."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Hinges de Tukey"
+    slug: hinges-de-tukey
+    ordem: "hinges de tukey"
+    tambem: ["hinges", "hinge"]
+    def: "Versão dos quartis usada no boxplot original de Tukey: a mediana de cada metade da amostra ordenada. Pode diferir um pouco do quartil que o software calcula."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
+  - termo: "Gráfico de violino"
+    slug: grafico-de-violino
+    ordem: "grafico de violino"
+    tambem: ["violino", "violin plot"]
+    def: "Gráfico que desenha a densidade estimada dos dados espelhada dos dois lados de um eixo. Mostra a forma da distribuição, inclusive os picos que o boxplot esconde."
+    veja:
+      - { t: "Boxplot: anatomia", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1048,7 +1080,7 @@ en:
     tambem: ["box plot"]
     def: "A chart that summarizes the distribution with a box from the first to the third quartile, with the median marked inside. The whiskers reach the most extreme values within 1.5 × IQR of the box, and points beyond that are shown separately. It shows spread and skewness at once."
     veja:
-      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
 
   - termo: "Binomial coefficient"
     slug: binomial-coefficient
@@ -1289,7 +1321,7 @@ en:
     ordem: "interquartile range (iqr)"
     def: "The distance between the first and the third quartile, that is, the range of the middle 50%. Because it ignores the tails, it resists outliers."
     veja:
-      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
 
   - termo: "Kaplan-Meier"
     slug: kaplan-meier
@@ -1348,7 +1380,7 @@ en:
     tambem: ["outliers"]
     def: "An observation very far from the others. It may be a recording error or the most informative data point in the set; what is not acceptable is discarding it without investigating."
     veja:
-      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
 
   - termo: "p-value"
     slug: p-value
@@ -1371,7 +1403,7 @@ en:
     ordem: "percentile"
     def: "The value below which a given percentage of the observations falls. The 50th percentile is the median; the 25th and 75th percentiles are the first and third quartiles."
     veja:
-      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
 
   - termo: "Permutation"
     slug: permutation
@@ -1409,7 +1441,7 @@ en:
     ordem: "quartile"
     def: "Each of the three values that split the sorted data into four equal parts. The second quartile is the median."
     veja:
-      - { t: "Boxplot anatomy (in Portuguese)", u: "/boxplot-o-que-e-cada-elemento-como-se-calcula-e-como-interpretar/" }
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
 
   - termo: "Chi-square"
     slug: chi-square
@@ -1959,3 +1991,35 @@ en:
     def: "The 1896 result saying that the number of primes up to x, π(x), is ever better approximated by x/ln x, and better still by the logarithmic integral li(x): the ratio between them tends to 1."
     veja:
       - { t: "The Riemann hypothesis, told through the primes", u: "/riemann-hypothesis-zeros-primes-julia/" }
+
+  - termo: "Boxplot fence"
+    slug: boxplot-fence
+    ordem: "boxplot fence"
+    tambem: ["fences"]
+    def: "A limit set 1.5 times the IQR beyond each quartile: Q1 − 1.5·IQR and Q3 + 1.5·IQR. Data outside the fences appear on the boxplot as stray points."
+    veja:
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
+
+  - termo: "Boxplot whisker"
+    slug: boxplot-whisker
+    ordem: "boxplot whisker"
+    tambem: ["whisker", "whiskers"]
+    def: "The line that leaves the box of a boxplot and stops at the most extreme data point still inside the fence. When there are outliers it is not the minimum or maximum, and it is never a standard deviation."
+    veja:
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
+
+  - termo: "Tukey's hinges"
+    slug: tukeys-hinges
+    ordem: "tukey's hinges"
+    tambem: ["hinges", "hinge"]
+    def: "The version of the quartiles used in Tukey's original boxplot: the median of each half of the sorted sample. It can differ slightly from the quartile your software computes."
+    veja:
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }
+
+  - termo: "Violin plot"
+    slug: violin-plot
+    ordem: "violin plot"
+    tambem: ["violin plots", "violin"]
+    def: "A chart that draws the estimated density of the data mirrored on both sides of an axis. It shows the shape of the distribution, including peaks that a boxplot hides."
+    veja:
+      - { t: "Boxplot anatomy", u: "/boxplot-anatomy-elements-calculation-reading/" }

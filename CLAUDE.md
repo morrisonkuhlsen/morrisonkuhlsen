@@ -585,6 +585,10 @@ mesmo commit, sem esperar pedido:
 | estatística de ordem | order statistic |
 | ponto de ruptura | breakdown point |
 | robustez | robustness |
+| cerca do boxplot | boxplot fence |
+| bigode do boxplot | boxplot whisker |
+| hinges de Tukey | Tukey's hinges |
+| gráfico de violino | violin plot |
 | distribuição exponencial | exponential distribution |
 | distribuição log-normal | log-normal distribution |
 | distribuição de Cauchy | Cauchy distribution |
