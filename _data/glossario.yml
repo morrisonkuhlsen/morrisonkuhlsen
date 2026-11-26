@@ -859,6 +859,98 @@ pt:
     veja:
       - { t: "Lotofácil: 16 apostas de 15 números ou 1 de 16", u: "/lotofacil-probabilidade/" }
 
+  - termo: "Sobreajuste"
+    slug: sobreajuste
+    ordem: "sobreajuste"
+    tambem: ["overfitting"]
+    def: "Quando um modelo se ajusta tão bem aos dados de treino que passa a seguir o ruído deles: erra pouco no treino e muito em dados novos. Detecta-se comparando o erro no treino com o erro no teste ou na validação cruzada."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Validação cruzada"
+    slug: validacao-cruzada
+    ordem: "validacao cruzada"
+    tambem: ["validação cruzada com k partes"]
+    def: "Divide os dados em k partes, ajusta o modelo com k − 1 delas e mede o erro na que ficou de fora, repetindo para cada parte. Estima o erro de previsão em dados novos sem gastar dados só com teste."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Conjunto de teste"
+    slug: conjunto-de-teste
+    ordem: "conjunto de teste"
+    tambem: ["conjunto de treino", "dados de teste"]
+    def: "Parte dos dados guardada fora do ajuste do modelo e usada só para medir o erro de previsão. O restante, usado para ajustar, é o conjunto de treino."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Linha de base"
+    slug: linha-de-base
+    ordem: "linha de base"
+    auto: false
+    def: "Previsão simples usada como termo de comparação, como prever sempre a média ou a classe mais comum. Um modelo que não erra menos que a linha de base não serve para prever."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Erro absoluto médio (EAM)"
+    slug: erro-absoluto-medio
+    ordem: "erro absoluto medio"
+    def: "Média dos valores absolutos dos erros de previsão, na unidade da resposta. Mede o tamanho típico do erro."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Raiz do erro quadrático médio (REQM)"
+    slug: raiz-do-erro-quadratico-medio
+    ordem: "raiz do erro quadratico medio"
+    def: "Raiz quadrada da média dos erros de previsão ao quadrado, na unidade da resposta. Pesa mais os erros grandes e é sempre maior ou igual ao erro absoluto médio."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Regressão logística"
+    slug: regressao-logistica
+    ordem: "regressao logistica"
+    def: "Modelo para resposta sim/não que dá a probabilidade de \"sim\" pela função logística, sempre entre 0 e 1. É linear na escala do logaritmo da chance e é ajustado por máxima verossimilhança."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Matriz de confusão"
+    slug: matriz-de-confusao
+    ordem: "matriz de confusao"
+    def: "Tabela que cruza as classes previstas por um classificador com as classes reais, contando verdadeiros positivos, falsos positivos, falsos negativos e verdadeiros negativos."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Sensibilidade"
+    slug: sensibilidade
+    ordem: "sensibilidade"
+    tambem: ["recall", "taxa de verdadeiros positivos"]
+    def: "Fração dos casos realmente positivos que o classificador ou teste aponta como positivos: VP/(VP + FN). Também chamada de recall."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Especificidade"
+    slug: especificidade
+    ordem: "especificidade"
+    def: "Fração dos casos realmente negativos que o classificador ou teste aponta como negativos: VN/(VN + FP)."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Precisão (classificação)"
+    slug: precisao-classificacao
+    ordem: "precisao classificacao"
+    auto: false
+    tambem: ["valor preditivo positivo"]
+    def: "Fração dos casos apontados como positivos por um classificador que são de fato positivos: VP/(VP + FP). Também chamada de valor preditivo positivo; não confundir com o sentido comum de exatidão."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
+  - termo: "Acurácia"
+    slug: acuracia
+    ordem: "acuracia"
+    auto: false
+    def: "Fração de acertos de um classificador: (VP + VN)/n. Engana quando uma classe é muito mais comum que a outra; compare com a acurácia de prever sempre a classe mais comum."
+    veja:
+      - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1704,3 +1796,94 @@ en:
     def: "The expectation of a sum of random variables is the sum of their expectations, even when the variables are dependent. That is why the average number of prizes from several games does not depend on how they overlap."
     veja:
       - { t: "Lotofácil: 16 bets of 15 numbers or 1 of 16", u: "/lotofacil-probability/" }
+
+  - termo: "Overfitting"
+    slug: overfitting
+    ordem: "overfitting"
+    def: "When a model fits the training data so closely that it follows their noise: it makes small errors on the training data and large errors on new data. It is detected by comparing the training error with the test or cross-validation error."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Cross-validation"
+    slug: cross-validation
+    ordem: "cross-validation"
+    tambem: ["k-fold cross-validation"]
+    def: "Splits the data into k folds, fits the model on k − 1 of them and measures the error on the one left out, repeating for each fold. It estimates the prediction error on new data without setting data aside only for testing."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Test set"
+    slug: test-set
+    ordem: "test set"
+    tambem: ["training set", "test data"]
+    def: "The part of the data kept out of model fitting and used only to measure the prediction error. The rest, used for fitting, is the training set."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Baseline"
+    slug: baseline
+    ordem: "baseline"
+    auto: false
+    def: "A simple prediction used for comparison, such as always predicting the mean or the most common class. A model that does not beat the baseline is useless for prediction."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Mean absolute error (MAE)"
+    slug: mean-absolute-error
+    ordem: "mean absolute error"
+    def: "The mean of the absolute values of the prediction errors, in the units of the response. It measures the typical size of the error."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Root mean squared error (RMSE)"
+    slug: root-mean-squared-error
+    ordem: "root mean squared error"
+    def: "The square root of the mean of the squared prediction errors, in the units of the response. Large errors weigh more, and it is always greater than or equal to the mean absolute error."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Logistic regression"
+    slug: logistic-regression
+    ordem: "logistic regression"
+    def: "A model for a yes/no response that gives the probability of \"yes\" through the logistic function, always between 0 and 1. It is linear on the log-odds scale and fitted by maximum likelihood."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Confusion matrix"
+    slug: confusion-matrix
+    ordem: "confusion matrix"
+    def: "A table that crosses the classes predicted by a classifier with the actual classes, counting true positives, false positives, false negatives and true negatives."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Sensitivity"
+    slug: sensitivity
+    ordem: "sensitivity"
+    tambem: ["recall", "true positive rate"]
+    def: "The fraction of actual positive cases that the classifier or test flags as positive: TP/(TP + FN). Also called recall."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Specificity"
+    slug: specificity
+    ordem: "specificity"
+    def: "The fraction of actual negative cases that the classifier or test flags as negative: TN/(TN + FP)."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Precision (classification)"
+    slug: precision-classification
+    ordem: "precision classification"
+    auto: false
+    tambem: ["positive predictive value"]
+    def: "The fraction of cases flagged as positive by a classifier that really are positive: TP/(TP + FP). Also called positive predictive value; not to be confused with the everyday meaning of exactness."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Accuracy"
+    slug: accuracy
+    ordem: "accuracy"
+    auto: false
+    def: "The fraction of correct answers of a classifier: (TP + TN)/n. It is misleading when one class is much more common than the other; compare it with the accuracy of always predicting the most common class."
+    veja:
+      - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }

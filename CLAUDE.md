@@ -588,6 +588,19 @@ mesmo commit, sem esperar pedido:
 | distribuição exponencial | exponential distribution |
 | distribuição log-normal | log-normal distribution |
 | distribuição de Cauchy | Cauchy distribution |
+| sobreajuste | overfitting |
+| validação cruzada | cross-validation |
+| conjunto de treino / de teste | training set / test set |
+| linha de base | baseline |
+| erro absoluto médio (EAM) | mean absolute error (MAE) |
+| raiz do erro quadrático médio (REQM) | root mean squared error (RMSE) |
+| erro percentual absoluto médio (EPAM) | mean absolute percentage error (MAPE) |
+| regressão logística | logistic regression |
+| matriz de confusão | confusion matrix |
+| sensibilidade / especificidade | sensitivity / specificity |
+| precisão (classificação) | precision |
+| acurácia | accuracy |
+| limiar (classificação) | threshold |
 
 ---
 
