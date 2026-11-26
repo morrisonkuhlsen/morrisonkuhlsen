@@ -174,6 +174,90 @@
   flex-shrink: 0;
 }
 
+/* Ao passar o cursor, um círculo na cor oposta nasce no "o" do "Mor", cresce
+   e sai pela borda do círculo da logo, como uma onda: logo atrás da frente
+   invertida vem uma segunda frente que devolve as cores normais, e as duas
+   terminam exatamente na borda.
+
+   Medidas no viewBox do #i-logo (3736 × 1266), com um círculo ajustado às
+   curvas do contorno (desvio máximo de 0,6 unidade): centro (660,0; 633,0),
+   raio r = 576,9; miolo do "o" em (948,5; 670,4).
+
+   Sem fio na borda: se a cópia desenhasse a borda do círculo por cima da
+   borda da original, as duas suavizações somadas deixariam um contorno
+   claro. Por isso as camadas vão 30 unidades (pouco mais de 1 px no header)
+   além do círculo, com fundo opaco, e cobrem a borda original inteira; a
+   borda que se vê durante a onda é desenhada uma vez só. O "r" que fica fora
+   do círculo começa a 588 unidades do centro, dentro dessa faixa, e por isso
+   é redesenhado por cima nas duas camadas.
+   - __ripple-in (invertida): fundo na cor do fundo, disco na cor da logo até
+     0,95 r (recuado ~1 px da borda, para a borda dele não somar com a do
+     disco da logo), e por cima o disco da logo (#i-logo-disc) na cor do fundo — as
+     letras vazadas mostram o disco escuro — e o texto (#i-logo-text) normal;
+   - __ripple-out (normal): fundo na cor do fundo e a logo inteira por cima.
+   Raio da camada R = r + 30 = 606,9; diâmetro 1213,8. A distância do "o" ao
+   ponto mais longe da camada é 290,9 + 606,9 = 897,8, ou 74,0% do
+   diâmetro; as frentes vão até 75%.
+
+   O site.js põe .is-rippling na entrada do cursor e só tira no fim da
+   animação, então ela termina inteira mesmo se o cursor sair no meio. */
+.brand {
+  position: relative;
+  --brand-opposite: var(--paper);
+}
+
+.site-footer .brand { --brand-opposite: var(--footer-bg); }
+
+.brand__ripple {
+  position: absolute;
+  left: 1.42%;                 /* (660,0 − 606,9) / 3736 */
+  top: 2.06%;                  /* (633,0 − 606,9) / 1266 */
+  width: 32.49%;               /* 1213,8 / 3736 */
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.brand__ripple-in,
+.brand__ripple-out {
+  position: absolute;
+  inset: 0;
+  clip-path: circle(0% at 73.76% 53.08%); /* (948,5 − 53,1) / 1213,8; (670,4 − 26,1) / 1213,8 */
+}
+
+/* A cópia da logo, posta de modo que caia em cima da original. */
+.brand__ripple svg {
+  position: absolute;
+  left: -4.38%;                /* −53,1 / 1213,8 */
+  top: -2.15%;                 /* −26,1 / 1213,8 */
+  width: 307.79%;              /* 3736 / 1213,8 */
+  height: 104.3%;              /* 1266 / 1213,8 */
+  max-width: none;             /* o reset limita svg a 100% da caixa */
+}
+
+.brand__ripple-in {
+  background:
+    radial-gradient(closest-side, currentColor 90.3%, transparent 90.3%),  /* 0,95 r / R */
+    var(--brand-opposite);
+}
+.brand__ripple-disc { color: var(--brand-opposite); }
+.brand__ripple-out  { background: var(--brand-opposite); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .brand.is-rippling .brand__ripple-in {
+    animation: brand-ripple 0.75s cubic-bezier(0.3, 0.5, 0.4, 1) both;
+  }
+  .brand.is-rippling .brand__ripple-out {
+    animation: brand-ripple 0.75s cubic-bezier(0.45, 0.2, 0.4, 1) 0.28s both;
+  }
+}
+
+@keyframes brand-ripple {
+  from { clip-path: circle(0% at 73.76% 53.08%); }
+  to   { clip-path: circle(75% at 73.76% 53.08%); }
+}
+
 /* ─── Navegação ───────────────────────────────────────────────────────────── */
 
 .site-nav {

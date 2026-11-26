@@ -774,8 +774,27 @@
     });
   }
 
+  /* ── Logo: onda a partir do "o" ao passar o cursor ───────────────────────
+     A animação é do CSS (.brand__ripple, em _header.scss). Aqui só se liga e
+     desliga a classe: ela entra com o cursor (ou o foco do teclado) e sai no
+     fim da segunda frente, então a onda nunca é cortada no meio e não
+     recomeça enquanto ainda corre. */
+  function initBrandRipple() {
+    document.querySelectorAll('.brand').forEach(function (brand) {
+      var last = brand.querySelector('.brand__ripple-out');
+      if (!last) return;
+      function start() { brand.classList.add('is-rippling'); }
+      brand.addEventListener('pointerenter', start);
+      brand.addEventListener('focus', start);
+      last.addEventListener('animationend', function () {
+        brand.classList.remove('is-rippling');
+      });
+    });
+  }
+
   function init() {
     initHeader();
+    initBrandRipple();
     initMegaMenu();
     initDrawer();
     initToc();

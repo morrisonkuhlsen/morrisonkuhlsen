@@ -41,6 +41,10 @@
   <div class="site-header__inner">
     <a class="brand" href="{{ '/' | relative_url }}">
       <svg class="brand__logo" role="img" aria-label="MorrisonKühlsen"><use href="#i-logo"></use></svg>
+      <span class="brand__ripple" aria-hidden="true">
+        <span class="brand__ripple-in"><svg><use class="brand__ripple-disc" href="#i-logo-disc"></use><use href="#i-logo-text"></use></svg></span>
+        <span class="brand__ripple-out"><svg><use href="#i-logo"></use></svg></span>
+      </span>
     </a>
 
     <nav class="site-nav" aria-label="{{ ui.menu[lang] }}">
