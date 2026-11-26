@@ -19,3 +19,4 @@ import Provas.Regressao
 import Provas.SeriesTemporais
 import Provas.Preditivos
 import Provas.Sobrevivencia
+import Provas.Riemann

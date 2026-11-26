@@ -965,6 +965,28 @@ pt:
     veja:
       - { t: "Os aviões que voltaram", u: "/vies-de-sobrevivencia-avioes-abraham-wald/" }
 
+  - termo: "Hipótese de Riemann"
+    slug: hipotese-de-riemann
+    ordem: "hipotese de riemann"
+    def: "Afirmação de que todos os zeros não triviais da função zeta de Riemann têm parte real igual a 1/2. Equivale a dizer que a contagem dos primos se afasta da integral logarítmica no máximo por algo da ordem de √x vezes ln x."
+    veja:
+      - { t: "A hipótese de Riemann, contada nos primos", u: "/hipotese-de-riemann-zeros-primos-julia/" }
+
+  - termo: "Função zeta de Riemann"
+    slug: funcao-zeta-de-riemann
+    ordem: "funcao zeta de riemann"
+    tambem: ["função zeta"]
+    def: "A soma ζ(s) = 1 + 1/2ˢ + 1/3ˢ + ⋯, estendida a todo o plano complexo exceto s = 1. Pelo produto de Euler, guarda informação sobre os números primos."
+    veja:
+      - { t: "A hipótese de Riemann, contada nos primos", u: "/hipotese-de-riemann-zeros-primos-julia/" }
+
+  - termo: "Teorema dos números primos"
+    slug: teorema-dos-numeros-primos
+    ordem: "teorema dos numeros primos"
+    def: "Resultado de 1896 que diz que a quantidade de primos até x, π(x), é cada vez mais bem aproximada por x/ln x, ou melhor ainda pela integral logarítmica li(x): a razão entre elas tende a 1."
+    veja:
+      - { t: "A hipótese de Riemann, contada nos primos", u: "/hipotese-de-riemann-zeros-primos-julia/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1915,3 +1937,25 @@ en:
     def: "A distortion that appears when the process deciding who gets into the data depends on the very thing you want to measure. A bigger sample doesn't fix it: you have to change the data collection or model the selection."
     veja:
       - { t: "The planes that came back", u: "/survivorship-bias-planes-abraham-wald/" }
+
+  - termo: "Riemann hypothesis"
+    slug: riemann-hypothesis
+    ordem: "riemann hypothesis"
+    def: "The claim that all nontrivial zeros of the Riemann zeta function have real part 1/2. It is equivalent to saying that the prime count strays from the logarithmic integral by at most something of the order of √x times ln x."
+    veja:
+      - { t: "The Riemann hypothesis, told through the primes", u: "/riemann-hypothesis-zeros-primes-julia/" }
+
+  - termo: "Riemann zeta function"
+    slug: riemann-zeta-function
+    ordem: "riemann zeta function"
+    tambem: ["zeta function"]
+    def: "The sum ζ(s) = 1 + 1/2ˢ + 1/3ˢ + ⋯, extended to the whole complex plane except s = 1. Through the Euler product, it holds information about the prime numbers."
+    veja:
+      - { t: "The Riemann hypothesis, told through the primes", u: "/riemann-hypothesis-zeros-primes-julia/" }
+
+  - termo: "Prime number theorem"
+    slug: prime-number-theorem
+    ordem: "prime number theorem"
+    def: "The 1896 result saying that the number of primes up to x, π(x), is ever better approximated by x/ln x, and better still by the logarithmic integral li(x): the ratio between them tends to 1."
+    veja:
+      - { t: "The Riemann hypothesis, told through the primes", u: "/riemann-hypothesis-zeros-primes-julia/" }

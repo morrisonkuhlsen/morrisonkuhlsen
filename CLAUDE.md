@@ -603,6 +603,10 @@ mesmo commit, sem esperar pedido:
 | limiar (classificação) | threshold |
 | viés de sobrevivência | survivorship bias |
 | viés de seleção | selection bias |
+| hipótese de Riemann | Riemann hypothesis |
+| função zeta de Riemann | Riemann zeta function |
+| teorema dos números primos | prime number theorem |
+| integral logarítmica | logarithmic integral |
 
 ---
 
