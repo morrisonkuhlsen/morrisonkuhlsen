@@ -601,6 +601,8 @@ mesmo commit, sem esperar pedido:
 | precisão (classificação) | precision |
 | acurácia | accuracy |
 | limiar (classificação) | threshold |
+| viés de sobrevivência | survivorship bias |
+| viés de seleção | selection bias |
 
 ---
 

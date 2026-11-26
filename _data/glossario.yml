@@ -951,6 +951,20 @@ pt:
     veja:
       - { t: "Modelos Preditivos", u: "/pt/analise-de-dados/modelos-preditivos" }
 
+  - termo: "Viés de sobrevivência"
+    slug: vies-de-sobrevivencia
+    ordem: "vies de sobrevivencia"
+    def: "Erro de tirar conclusões só dos casos que passaram por algum filtro (os aviões que voltaram, os fundos que não fecharam), esquecendo os que ficaram pelo caminho. É um tipo de viés de seleção."
+    veja:
+      - { t: "Os aviões que voltaram", u: "/vies-de-sobrevivencia-avioes-abraham-wald/" }
+
+  - termo: "Viés de seleção"
+    slug: vies-de-selecao
+    ordem: "vies de selecao"
+    def: "Distorção que aparece quando o processo que decide quem entra nos dados depende da própria coisa que se quer medir. Aumentar a amostra não corrige: é preciso mudar a coleta ou modelar a seleção."
+    veja:
+      - { t: "Os aviões que voltaram", u: "/vies-de-sobrevivencia-avioes-abraham-wald/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -1887,3 +1901,17 @@ en:
     def: "The fraction of correct answers of a classifier: (TP + TN)/n. It is misleading when one class is much more common than the other; compare it with the accuracy of always predicting the most common class."
     veja:
       - { t: "Predictive Models", u: "/en/data-analysis/predictive-models" }
+
+  - termo: "Survivorship bias"
+    slug: survivorship-bias
+    ordem: "survivorship bias"
+    def: "The mistake of drawing conclusions only from the cases that passed some filter (the planes that came back, the funds that didn't close), forgetting the ones left along the way. It is a kind of selection bias."
+    veja:
+      - { t: "The planes that came back", u: "/survivorship-bias-planes-abraham-wald/" }
+
+  - termo: "Selection bias"
+    slug: selection-bias
+    ordem: "selection bias"
+    def: "A distortion that appears when the process deciding who gets into the data depends on the very thing you want to measure. A bigger sample doesn't fix it: you have to change the data collection or model the selection."
+    veja:
+      - { t: "The planes that came back", u: "/survivorship-bias-planes-abraham-wald/" }

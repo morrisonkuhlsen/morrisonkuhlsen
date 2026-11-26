@@ -18,3 +18,4 @@ import Provas.Inferencia
 import Provas.Regressao
 import Provas.SeriesTemporais
 import Provas.Preditivos
+import Provas.Sobrevivencia
