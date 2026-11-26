@@ -15,5 +15,6 @@
 @use "search";
 @use "glossary";
 @use "footer";
+@use "natal";   // tema de dezembro: só tokens e enfeites, por cima do resto
 @use "type";    // fontes por elemento: depois dos componentes
 @use "print";   // por último: vence as anteriores sem !important

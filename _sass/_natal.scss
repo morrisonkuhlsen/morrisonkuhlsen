@@ -1,0 +1,83 @@
+/* Tema de Natal. Liga sozinho em dezembro: o script inline de head.html põe
+   data-season="natal" no <html> antes da primeira pintura (para conferir fora
+   de época: ?tema=natal). Como o tema escuro, ele só troca tokens e acrescenta
+   enfeites; nenhum componente precisa saber dele.
+
+   - Cores: o azul de ação vira vermelho e o roxo de destaque vira verde.
+     Contraste (WCAG) de cada par, conferido: vermelho #b4232c sobre o papel
+     6,53:1; #8f1b22 8,94:1; verde #1d7a46 5,35:1. No escuro, #ff8f8f sobre
+     #14161c 8,25:1; #ffb0b0 10,41:1; #6fd39a 9,87:1. Botão do hero: branco
+     sobre #c0262f 5,90:1 e sobre #9c1d25 8,03:1. Todos acima de 4,5:1.
+   - Gorro sobre o círculo da logo (#i-gorro em icons.html).
+   - Neve no hero, desenhada por natal.js. */
+
+:root[data-season="natal"] {
+  --accent:         #b4232c;
+  --accent-dark:    #8f1b22;
+  --accent-ink:     #ffffff;
+  --highlight:      #1d7a46;
+  --hero-cta:       #c0262f;
+  --hero-cta-hover: #9c1d25;
+  --toc-active:     #b4232c;
+}
+
+:root[data-season="natal"][data-theme="dark"] {
+  --accent:      #ff8f8f;
+  --accent-dark: #ffb0b0;
+  --accent-ink:  #11131a;
+  --highlight:   #6fd39a;
+  --toc-active:  #ff8f8f;
+}
+
+
+/* ─── Gorro na logo ───────────────────────────────────────────────────────── */
+
+/* Fora de dezembro o gorro nem ocupa espaço. Em dezembro ele fica preso ao
+   alto do círculo da logo, inclinado, e acima da onda do hover. As medidas
+   são frações da caixa da logo, então valem no header e no rodapé. */
+.brand__gorro { display: none; }
+
+:root[data-season="natal"] .brand__gorro {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  left: 3%;
+  top: -17%;
+  width: 18%;
+  aspect-ratio: 120 / 100;
+  max-width: none;
+  height: auto;
+  transform: rotate(-16deg);
+  transform-origin: 40% 80%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :root[data-season="natal"] .brand__gorro {
+    transition: transform 0.35s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+  :root[data-season="natal"] .brand:hover .brand__gorro {
+    transform: rotate(-24deg) translateY(-6%);
+  }
+}
+
+
+/* ─── Neve no hero ────────────────────────────────────────────────────────── */
+
+/* O canvas fica acima da foto e do véu escuro (senão a neve sumia no
+   degradê de baixo) e abaixo do texto. Flocos pequenos e translúcidos, para
+   não atrapalhar a leitura do título. natal.js só cria o canvas quando o
+   visitante não pediu menos movimento. */
+.hero__neve {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+:root[data-season="natal"] .hero__body {
+  position: relative;
+  z-index: 1;
+}

@@ -73,6 +73,20 @@
     if (t) document.documentElement.dataset.theme = t;
     if (t === 'dark') document.documentElement.classList.add('dark-mode');
   } catch (e) {}
+  /* Tema de Natal: liga sozinho de 1º a 31 de dezembro, pela data do
+     visitante. Para conferir fora de época: ?tema=natal (ou ?tema=normal
+     para desligar em dezembro). O resto do tema está em _natal.scss e em
+     natal.js, que só é baixado quando o tema está ligado. */
+  (function () {
+    var forcado = /[?&]tema=(natal|normal)\b/.exec(location.search);
+    var natal = forcado ? forcado[1] === 'natal' : new Date().getMonth() === 11;
+    if (!natal) return;
+    document.documentElement.dataset.season = 'natal';
+    var js = document.createElement('script');
+    js.src = '{{ "/assets/js/natal.js" | relative_url }}';
+    js.async = true;
+    document.head.appendChild(js);
+  })();
 </script>
 
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">

@@ -399,7 +399,11 @@
   inset: auto 0 0 0;
   z-index: var(--z-overlay);
   padding: 1.25rem var(--gutter);
-  background: var(--ink);
+  /* --footer-bg, e não --ink: o texto é claro nos dois temas, e --ink
+     clareia no tema escuro (o aviso ficava ilegível, claro sobre claro). No
+     escuro o fundo é o mesmo da página, então o filete de cima o separa. */
+  background: var(--footer-bg);
+  border-top: 1px solid var(--line);
   color: var(--on-dark-soft);
   box-shadow: 0 -4px 24px rgb(0 0 0 / 25%);
 }
