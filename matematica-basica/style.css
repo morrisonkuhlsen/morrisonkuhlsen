@@ -462,6 +462,11 @@
 
 .rule-tex {
   display: block;
+  /* Quando é filho direto do .card (flex), sem min-width: 0 e max-width: 100%
+     a caixa fica do tamanho da fórmula e a página estoura em telas de 360px;
+     com eles, a fórmula rola por dentro. */
+  min-width: 0;
+  max-width: 100%;
   margin: .9rem 0 .7rem;
   overflow-x: auto;
   overflow-y: hidden;

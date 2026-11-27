@@ -171,6 +171,7 @@
 /* Derivar e integrar: a escada de degraus e a tabela unificada. */
 .ladder-row {
   display: flex;
+  flex-wrap: wrap;            /* no celular os botões descem de linha */
   align-items: center;
   justify-content: center;
   gap: .6rem;

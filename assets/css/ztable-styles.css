@@ -688,6 +688,15 @@ body.ttable [role="tooltip"] {
         display: flex;
         flex-direction: column;
         max-width: 1200px;
+        /* O align-items: start da grade, herdado aqui, deixava cada item com a
+           largura do próprio conteúdo: no celular a tabela passava de 600px e
+           a página inteira estourava. Esticados, a tabela rola por dentro. */
+        align-items: stretch;
+    }
+
+    .ztable-layout > * {
+        min-width: 0;
+        max-width: 100%;
     }
 
     .ztable-side {
@@ -712,6 +721,9 @@ body.ttable [role="tooltip"] {
     border: 1px solid var(--zt-card-border);
     border-radius: 8px;
     padding: 18px 20px 20px;
+    /* A tabela de valores críticos rola dentro do cartão no celular. */
+    min-width: 0;
+    overflow-x: auto;
 }
 
 .calc__head {

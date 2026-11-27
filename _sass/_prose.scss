@@ -151,8 +151,25 @@
 
 .post-layout__main {
   min-width: 0;
+  /* width: 100% é obrigatório. Com margin-inline: auto, o item da grade deixa
+     de esticar e passa a ter a largura do conteúdo, limitada só pelo
+     max-width: um bloco de código ou uma tabela larga deixava a coluna com
+     52rem (832px) no celular, e a página inteira estourava a tela. */
+  width: 100%;
   max-width: var(--post-measure);
   margin-inline: auto;
+}
+
+/* Palavras sem espaço (URLs e DOIs escritos como texto nas referências, nomes
+   de arquivo, código na linha) quebram em vez de alargar a página. */
+.prose { overflow-wrap: break-word; }
+.prose a,
+.prose :not(pre) > code { overflow-wrap: anywhere; }
+
+/* Imagens com max-width fixo no atributo style (ex.: 600px) passavam da tela
+   no celular; em telas estreitas, a coluna manda. */
+@media (max-width: 52rem) {
+  .prose img { max-width: 100% !important; height: auto; }
 }
 
 /* O .prose tem a sua própria trava de 68ch; aqui quem manda é a coluna. */
@@ -325,9 +342,19 @@
 
 /* Fórmulas em bloco rolam no celular em vez de estourar a página. */
 mjx-container[display="true"] {
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   padding-block: 0.5rem;
+}
+
+/* Fórmulas na linha que não cabem na largura: rolam dentro da própria caixa. */
+.prose mjx-container:not([display="true"]) {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
 }
 
 

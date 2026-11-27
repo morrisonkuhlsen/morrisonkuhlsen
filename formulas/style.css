@@ -472,6 +472,18 @@ body {
   color: var(--text-muted);
 }
 
+/* O resultado também traz contas longas (KaTeX não quebra linha): rola na
+   horizontal em vez de alargar a página no celular. */
+.calc-result {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* Os passos ficam numa grade; sem min-width: 0, cada item cresce até o
+   tamanho da conta e a página estoura no celular. Com ele, a conta rola
+   dentro do .calc-math. */
+.calc-steps > li { min-width: 0; }
+
 .calc-math {
   display: block;
   margin-top: .35rem;

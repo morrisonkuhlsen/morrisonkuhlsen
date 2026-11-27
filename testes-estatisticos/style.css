@@ -376,6 +376,10 @@ a {
 /* ---------------------------------------------------------------- tabela */
 
 .pt-scroll {
+  /* position: relative prende aqui dentro os rótulos .visually-hidden
+     (position: absolute) das colunas; sem isso eles escapavam da rolagem e
+     alargavam a página inteira no celular. */
+  position: relative;
   overflow-x: auto;
   padding-bottom: .5rem;
 }
