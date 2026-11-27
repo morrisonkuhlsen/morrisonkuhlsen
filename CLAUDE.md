@@ -194,7 +194,7 @@ resumo, `description` do front matter e versão na outra língua.
   `julia`, `R`, `Python`, `bash` ou `Lean` (com `class="code-lang
   code-lang--lean"`). O código vai dentro do `<pre><code>` só com o texto
   escapado (`&lt;`, `&gt;`, `&amp;`), sem `<span>` à mão: bloco que já traz
-  spans é deixado como está. Saídas ficam em `code-output`, sem cores.
+  spans é deixado como está. Saídas ficam em `<div class="code-output">` (com `<div class="code-output-header">` e o `<pre>`), logo abaixo do bloco: ganham a caixa escura com faixa lateral e cores leves automáticas (números, valores lógicos, `error`/`warning` e o `⊢` do Lean), pelo mesmo script.
   Linguagem nova entra em `LINGUAGENS` e `APELIDOS` no script, e todo
   ajuste no realce é testado em Node contra todos os blocos do site
   construído: o texto depois de colorido tem de ser idêntico ao original, e

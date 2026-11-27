@@ -226,6 +226,38 @@
     });
   }
 
-  if (typeof window !== "undefined") window.mkRealcarPagina = realcarPagina;
-  if (typeof module !== "undefined") module.exports = { realcar: realcar, LINGUAGENS: LINGUAGENS };
+  // Saídas (.code-output pre): cores leves, iguais para qualquer linguagem.
+  // Números, valores lógicos, erros/avisos e o objetivo do Lean (⊢).
+  var SAIDA = /(\b(?:error|erro|Error|ERROR)\b)|(\b(?:warning|aviso|Warning|WARNING)\b)|(\b(?:true|false|TRUE|FALSE|True|False|nothing|None|NULL|NA|NaN|Inf|missing)\b)|((?:^|(?<=[^\w.]))[-−]?(?:\d[\d_]*\.?\d*|\.\d+)(?:[eE][+-]?\d+)?%?(?![\w]))|(⊢)/g;
+  var CLASSE_SAIDA = [null, "code-error", "code-warning", "code-builtin", "code-number", "code-function"];
+
+  function realcarSaida(fonte) {
+    var saida = [], ultimo = 0, m;
+    SAIDA.lastIndex = 0;
+    while ((m = SAIDA.exec(fonte))) {
+      if (m[0] === "") { SAIDA.lastIndex++; continue; }
+      saida.push(escapar(fonte.slice(ultimo, m.index)));
+      var grupo = 1;
+      while (m[grupo] === undefined) grupo++;
+      saida.push(trecho(m[0], CLASSE_SAIDA[grupo]));
+      ultimo = m.index + m[0].length;
+    }
+    saida.push(escapar(fonte.slice(ultimo)));
+    return saida.join("");
+  }
+
+  function realcarSaidas() {
+    document.querySelectorAll(".code-output pre").forEach(function (pre) {
+      if (pre.dataset.hlReady === "true" || pre.querySelector("span")) return;
+      pre.innerHTML = realcarSaida(pre.textContent);
+      pre.dataset.hlReady = "true";
+    });
+  }
+
+  if (typeof window !== "undefined") {
+    window.mkRealcarPagina = function () { realcarPagina(); realcarSaidas(); };
+  }
+  if (typeof module !== "undefined") {
+    module.exports = { realcar: realcar, realcarSaida: realcarSaida, LINGUAGENS: LINGUAGENS };
+  }
 })();

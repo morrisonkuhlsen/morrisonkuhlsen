@@ -232,6 +232,54 @@
   color: #d6deeb;
 }
 
+/* Saídas: erros e avisos */
+.code-error {
+  color: #ff7b72;
+  font-weight: 700;
+}
+
+.code-warning {
+  color: #e3b341;
+  font-weight: 700;
+}
+
+/* =========================
+   SAÍDA DO CÓDIGO (.code-output)
+   Mesma família visual do bloco de código, um tom mais escuro e com uma
+   faixa à esquerda, igual nos dois temas. As cores dos números, valores
+   lógicos e erros vêm do code-highlight.js.
+   ========================= */
+
+.code-output {
+  background: #16171b;
+  border-left: 3px solid #5eead4;
+  border-radius: 4px;
+  margin: -0.6em 0 1.6em;
+  overflow: hidden;
+  font-family: 'Fira Code', 'Consolas', 'Monaco', monospace;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.code-output-header {
+  color: #8b949e;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.55em 1em 0;
+}
+
+.code-output pre {
+  background: transparent !important;
+  color: #d6deeb;
+  margin: 0;
+  padding: 0.5em 1em 0.9em;
+  border: none;
+  box-shadow: none;
+  overflow-x: auto;
+  line-height: 1.55;
+}
+
 /* HTML */
 .code-tag {
   color: #f2c97d;
