@@ -84,6 +84,8 @@ function copyCode(button) {
 
 // Carrega tudo quando a página abrir
 document.addEventListener("DOMContentLoaded", function () {
+  // Cores da sintaxe primeiro (assets/js/code-highlight.js), numeração depois
+  if (window.mkRealcarPagina) window.mkRealcarPagina();
   addCodeLineNumbers();
 
   document.querySelectorAll(".copy-button").forEach(function (button) {

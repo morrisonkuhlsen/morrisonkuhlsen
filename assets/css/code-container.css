@@ -189,9 +189,11 @@
    CORES DA SINTAXE
    ========================= */
 
+/* Usadas pelo realce automático (assets/js/code-highlight.js) e pelos blocos
+   coloridos à mão. Contraste sobre o fundo #1d1e22: todas acima de 5:1. */
 .code-comment {
-  color: #6b7280;
-  font-style: normal;
+  color: #8b949e;
+  font-style: italic;
 }
 
 .code-keyword {

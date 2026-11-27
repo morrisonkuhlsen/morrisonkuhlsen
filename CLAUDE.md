@@ -186,6 +186,22 @@ resumo, `description` do front matter e versão na outra língua.
   ou gere de novo.
 - Blocos usam o markup do site (`code-container`, `code-header`, botão
   "Copiar"/"Copy", `code-output` para saídas).
+- **Cores da sintaxe em todo bloco de código.** O realce é automático
+  (`assets/js/code-highlight.js`, carregado pelo `_layouts/base.html` antes do
+  `code-copy.js`), sem biblioteca externa, e vale para Julia, R, Python,
+  Bash e Lean. Para funcionar, o bloco precisa dizer a linguagem: o
+  `data-lang` da aba (`code-tabs`) ou o rótulo `<div class="code-lang">` com
+  `julia`, `R`, `Python`, `bash` ou `Lean` (com `class="code-lang
+  code-lang--lean"`). O código vai dentro do `<pre><code>` só com o texto
+  escapado (`&lt;`, `&gt;`, `&amp;`), sem `<span>` à mão: bloco que já traz
+  spans é deixado como está. Saídas ficam em `code-output`, sem cores.
+  Linguagem nova entra em `LINGUAGENS` e `APELIDOS` no script, e todo
+  ajuste no realce é testado em Node contra todos os blocos do site
+  construído: o texto depois de colorido tem de ser idêntico ao original, e
+  nenhum `<span>` pode atravessar uma quebra de linha (a numeração das linhas
+  divide o HTML por `\n`). As cores ficam em `assets/css/code-container.css`
+  (classes `code-keyword`, `code-string`, `code-comment` etc.), todas com
+  contraste de pelo menos 4,5:1 sobre o fundo do bloco.
 
 ### 4.1 Três linguagens: Julia, R e Python
 
