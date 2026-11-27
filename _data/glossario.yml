@@ -1059,6 +1059,30 @@ pt:
       - { t: "Regressão à média", u: "/regressao-a-media-castigo-elogio-galton/" }
       - { t: "Regressão linear", u: "/pt/analise-de-dados/regressao-linear" }
 
+  - termo: "Dados faltantes"
+    slug: dados-faltantes
+    ordem: "dados faltantes"
+    tambem: ["MCAR", "MAR", "MNAR"]
+    def: "Valores que deveriam estar na base e não estão. O tratamento depende de por que faltam: ao acaso (MCAR), por algo observado (MAR) ou pelo próprio valor ausente (MNAR)."
+    veja:
+      - { t: "Ciclo de vida da análise de dados", u: "/ciclo-de-vida-da-analise-de-dados/" }
+
+  - termo: "Imputação"
+    slug: imputacao
+    ordem: "imputacao"
+    tambem: ["imputar", "imputada"]
+    def: "Preencher um valor faltante com uma estimativa, como a média do grupo. Só corrige o viés se usar as variáveis que explicam a ausência, e o valor imputado deve ficar marcado."
+    veja:
+      - { t: "Ciclo de vida da análise de dados", u: "/ciclo-de-vida-da-analise-de-dados/" }
+
+  - termo: "Vazamento de informação"
+    slug: vazamento-de-informacao
+    ordem: "vazamento de informacao"
+    tambem: ["data leakage"]
+    def: "Quando informação do conjunto de teste ou do futuro entra no ajuste do modelo, por exemplo ao padronizar antes de dividir os dados. Produz métricas otimistas que não se repetem em produção."
+    veja:
+      - { t: "Ciclo de vida da análise de dados", u: "/ciclo-de-vida-da-analise-de-dados/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -2103,3 +2127,27 @@ en:
     veja:
       - { t: "Regression to the mean", u: "/regression-to-the-mean-galton/" }
       - { t: "Linear regression", u: "/en/data-analysis/linear-regression" }
+
+  - termo: "Missing data"
+    slug: missing-data
+    ordem: "missing data"
+    tambem: ["MCAR", "MAR", "MNAR"]
+    def: "Values that should be in the data set and are not. How to treat them depends on why they are missing: at random (MCAR), because of something observed (MAR) or because of the missing value itself (MNAR)."
+    veja:
+      - { t: "The data analysis life cycle", u: "/data-analysis-life-cycle/" }
+
+  - termo: "Imputation"
+    slug: imputation
+    ordem: "imputation"
+    tambem: ["impute", "imputed"]
+    def: "Filling in a missing value with an estimate, such as the group mean. It only corrects bias if it uses the variables that explain the missingness, and imputed values should stay flagged."
+    veja:
+      - { t: "The data analysis life cycle", u: "/data-analysis-life-cycle/" }
+
+  - termo: "Data leakage"
+    slug: data-leakage
+    ordem: "data leakage"
+    tambem: ["leakage"]
+    def: "When information from the test set or from the future enters model fitting, for example by standardizing before splitting the data. It produces optimistic metrics that do not hold in production."
+    veja:
+      - { t: "The data analysis life cycle", u: "/data-analysis-life-cycle/" }

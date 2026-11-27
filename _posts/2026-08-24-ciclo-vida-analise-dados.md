@@ -4,10 +4,10 @@ image: /assets/images/capa-ciclo-vida-dados.avif
 title: "O ciclo de vida da análise de dados: da pergunta de negócio ao monitoramento em produção"
 categories: [ANÁLISE DE DADOS, ESTATÍSTICA, GUIA]
 lang: pt
-tags: [Análise de dados, Estatística]
+tags: [Análise de dados, Estatística, Julia, R, Python, Lean]
 ref: ciclo-vida-analise-dados
 author: dante-bertuzzi
-description: "As oito etapas do ciclo de vida da análise de dados — definição do problema, coleta, preparação, exploração, modelagem, validação, comunicação e monitoramento — com os erros típicos de cada uma, os critérios para dar uma etapa por concluída e como CRISP-DM, KDD, SEMMA e OSEMN se correspondem."
+description: "As oito etapas do ciclo de vida da análise de dados, do problema ao monitoramento: o erro típico de cada uma, quando encerrá-la e os frameworks clássicos."
 slug: ciclo-de-vida-da-analise-de-dados
 ---
 
@@ -62,17 +62,17 @@ O ciclo de vida organiza o trabalho analítico em etapas com entradas, saídas e
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2.5em 0 2em 0;">
   <img src="/assets/images/ciclo-vida-analise-dados.png" alt="Diagrama circular com as oito etapas do ciclo de vida da análise de dados — definição do problema, coleta de dados, preparação e limpeza, análise exploratória, modelagem e inferência, validação e interpretação, comunicação dos resultados, implantação e monitoramento — ligadas por setas contínuas no sentido do fluxo principal e por setas tracejadas indicando os retornos frequentes a etapas anteriores" style="max-width: 780px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.07);" />
   <figcaption class="img-caption-contrast">
-    <strong>Figura 1:</strong> as oito etapas do ciclo. As setas contínuas são o fluxo principal; as tracejadas são os retornos que acontecem em praticamente todo projeto real — a exploração redefinindo a pergunta, a validação exigindo nova preparação, o monitoramento abrindo a próxima iteração.
+    <strong>Figura 1:</strong> as oito etapas do ciclo. As setas contínuas são o fluxo principal; as tracejadas são os retornos que acontecem em praticamente todo projeto real — a exploração redefinindo a pergunta, a validação exigindo nova preparação, o monitoramento abrindo a próxima iteração. Diagrama gerado em Julia (CairoMakie) para este post.
   </figcaption>
 </figure>
 
 As três setas tracejadas não são enfeite nem sinal de projeto malfeito. São o comportamento normal do trabalho analítico: descobertas feitas na exploração reformulam a pergunta original, e o que se observa em produção alimenta a iteração seguinte.
 
 <div class="ciclo-box" markdown="1">
-<span class="ciclo-box-title">Regra prática de esforço</span>
-Em projetos reais, a distribuição típica de tempo é aproximadamente: **10%** definição do problema, **15%** coleta, **40–50%** preparação e limpeza, **10%** exploração, **10%** modelagem e **15%** comunicação e implantação.
+<span class="ciclo-box-title">Onde vai o tempo</span>
+Em muitos projetos, a preparação e a limpeza dos dados tomam mais tempo que qualquer outra etapa. Não há um número universal para essa fração: ela depende da qualidade dos dados de origem e do quanto a coleta foi pensada para a pergunta.
 
-A etapa mais cara é a menos glamourosa — e é ela que determina a qualidade de todo o resto.
+A etapa mais cara costuma ser a menos glamourosa — e é ela que determina a qualidade de todo o resto.
 </div>
 
 ---
@@ -157,7 +157,7 @@ A etapa mais longa, e por larga margem. Dados brutos praticamente nunca estão e
 
 ### MCAR, MAR, MNAR: por que o mecanismo decide tudo
 
-A primeira linha da tabela merece um parágrafo próprio, porque é o item que mais silenciosamente invalida análises. As três siglas são a tipologia de **Donald Rubin (1976)** para mecanismos de dados faltantes, e a ideia central é que o que importa não é *quanto* falta — é **por que falta**.
+A primeira linha da tabela merece um parágrafo próprio, porque é o item que mais silenciosamente invalida análises. A classificação dos mecanismos de dados faltantes nessas três siglas costuma ser atribuída ao trabalho de **Donald Rubin (1976)**, e a ideia central é que o que importa não é *quanto* falta — é **por que falta**.
 
 <div class="ciclo-box" markdown="1">
 <span class="ciclo-box-title">Os três mecanismos</span>
@@ -184,18 +184,18 @@ A consequência prática de cada um é diferente, e é aqui que a escolha do tra
       <td><strong>MCAR</strong></td>
       <td>Sim — perde-se poder, não validade</td>
       <td>Desnecessária, mas recupera poder</td>
-      <td>Parcialmente (teste de Little)</td>
+      <td>Em parte: dá para rejeitar MCAR (por exemplo, com o teste de Little, 1988), não para confirmá-lo</td>
     </tr>
     <tr>
       <td><strong>MAR</strong></td>
-      <td>Não — enviesa</td>
+      <td>Em geral não — pode enviesar (depende do que se estima)</td>
       <td>Sim, <em>se</em> o modelo de imputação incluir as variáveis que explicam a ausência</td>
       <td><strong>Não</strong></td>
     </tr>
     <tr>
       <td><strong>MNAR</strong></td>
-      <td>Não — enviesa</td>
-      <td>Não</td>
+      <td>Em geral não — pode enviesar</td>
+      <td>Não com os métodos usuais</td>
       <td><strong>Não</strong></td>
     </tr>
   </tbody>
@@ -212,6 +212,166 @@ Não existe teste. Por definição, distinguir os dois exigiria conhecer os valo
 
 Ou seja: **MAR é sempre uma suposição, nunca uma constatação.** É por isso que a tabela diz "diagnosticar o mecanismo *antes* de decidir": o diagnóstico é substantivo, não estatístico. Ele vem de entender como o dado foi coletado — quem respondeu, quem desistiu, o que o sistema deixou de gravar e por quê. É a mesma lógica de representatividade da etapa anterior: o mecanismo que gerou os dados também decide quem *não* está neles.
 </div>
+
+### Um exemplo com números
+
+Para ver as três situações acontecendo, o código abaixo inventa a renda mensal de 100 mil pessoas (em R\$ mil; números ilustrativos), com a renda crescendo com a idade, e apaga valores de três jeitos:
+
+- **MCAR:** 30% dos valores somem, sem depender de nada.
+- **MAR:** somem 50% das rendas de quem tem menos de 30 anos e 15% das demais. A ausência depende só da idade, que está registrada.
+- **MNAR:** somem 50% das rendas acima do percentil 70 e 15% das demais. A ausência depende da própria renda.
+
+Em cada caso, o código calcula a média de duas formas: só com os casos completos e depois de imputar cada valor faltante com a média observada da faixa etária (faixas de 10 anos).
+
+<div class="code-tabs">
+  <div class="code-tab" data-lang="julia">
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">Julia</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>using Random, Statistics, Printf
+
+# Renda mensal (R$ mil) de 100 mil pessoas: números inventados, só para ilustrar.
+# A renda cresce com a idade, de modo que jovens ganham menos em média.
+Random.seed!(123)
+n = 100_000
+idade = rand(18:70, n)
+renda = 1.0 .+ 0.08 .* idade .+ randn(n)
+
+faixa = div.(idade, 10)                          # faixas de 10 anos: 1 = 18–19, 2 = 20–29, …
+falta_mcar = rand(n) .&lt; 0.30                     # falta 30%, sem depender de nada
+falta_mar  = rand(n) .&lt; ifelse.(idade .&lt; 30, 0.50, 0.15)                     # depende da idade
+falta_mnar = rand(n) .&lt; ifelse.(renda .&gt; quantile(renda, 0.70), 0.50, 0.15)  # depende da renda
+
+# Imputação simples: cada valor faltante recebe a média observada da sua faixa etária
+function imputa_por_faixa(renda, falta, faixa)
+    completa = copy(renda)
+    for f in unique(faixa)
+        grupo = faixa .== f
+        completa[grupo .&amp; falta] .= mean(renda[grupo .&amp; .!falta])
+    end
+    completa
+end
+
+@printf("média verdadeira:            %.3f\n", mean(renda))
+for (nome, falta) in (("MCAR", falta_mcar), ("MAR", falta_mar), ("MNAR", falta_mnar))
+    @printf("%-4s  faltam %4.1f%%   só completos %.3f   imputada por faixa %.3f\n", nome,
+            100 * mean(falta), mean(renda[.!falta]), mean(imputa_por_faixa(renda, falta, faixa)))
+end</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <pre style="overflow-x: auto; font-size: 0.9em;">média verdadeira:            4.519
+MCAR  faltam 29.9%   só completos 4.518   imputada por faixa 4.521
+MAR   faltam 22.9%   só completos 4.689   imputada por faixa 4.522
+MNAR  faltam 25.5%   só completos 4.256   imputada por faixa 4.406</pre>
+</div>
+  </div>
+  <div class="code-tab" data-lang="r">
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">R</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code># Renda mensal (R$ mil) de 100 mil pessoas: números inventados, só para ilustrar.
+# A renda cresce com a idade, de modo que jovens ganham menos em média.
+set.seed(123)
+n &lt;- 100000
+idade &lt;- sample(18:70, n, replace = TRUE)
+renda &lt;- 1 + 0.08 * idade + rnorm(n)
+
+faixa &lt;- idade %/% 10                            # faixas de 10 anos: 1 = 18–19, 2 = 20–29, …
+falta_mcar &lt;- runif(n) &lt; 0.30                    # falta 30%, sem depender de nada
+falta_mar  &lt;- runif(n) &lt; ifelse(idade &lt; 30, 0.50, 0.15)                     # depende da idade
+falta_mnar &lt;- runif(n) &lt; ifelse(renda &gt; quantile(renda, 0.70), 0.50, 0.15)  # depende da renda
+
+# Imputação simples: cada valor faltante recebe a média observada da sua faixa etária
+imputa_por_faixa &lt;- function(renda, falta, faixa) {
+  medias &lt;- tapply(renda[!falta], faixa[!falta], mean)
+  completa &lt;- renda
+  completa[falta] &lt;- medias[as.character(faixa[falta])]
+  completa
+}
+
+cat(sprintf("média verdadeira:            %.3f\n", mean(renda)))
+for (nome in c("MCAR", "MAR", "MNAR")) {
+  falta &lt;- list(MCAR = falta_mcar, MAR = falta_mar, MNAR = falta_mnar)[[nome]]
+  cat(sprintf("%-4s  faltam %4.1f%%   só completos %.3f   imputada por faixa %.3f\n", nome,
+              100 * mean(falta), mean(renda[!falta]), mean(imputa_por_faixa(renda, falta, faixa))))
+}</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <pre style="overflow-x: auto; font-size: 0.9em;">média verdadeira:            4.513
+MCAR  faltam 30.1%   só completos 4.516   imputada por faixa 4.514
+MAR   faltam 23.0%   só completos 4.684   imputada por faixa 4.511
+MNAR  faltam 25.8%   só completos 4.249   imputada por faixa 4.399</pre>
+</div>
+  </div>
+  <div class="code-tab" data-lang="python">
+<div class="code-container">
+  <div class="code-header">
+    <div class="code-lang">Python</div>
+    <div style="flex-grow: 1;"></div>
+    <button class="copy-button" onclick="copyCode(this)">
+      <i class="bi bi-clipboard"></i>Copiar
+    </button>
+  </div>
+  <div class="code-content">
+    <pre><code>import numpy as np
+import pandas as pd
+
+# Renda mensal (R$ mil) de 100 mil pessoas: números inventados, só para ilustrar.
+# A renda cresce com a idade, de modo que jovens ganham menos em média.
+rng = np.random.default_rng(123)
+n = 100_000
+idade = rng.integers(18, 71, n)
+renda = 1.0 + 0.08 * idade + rng.normal(size=n)
+
+faixa = idade // 10                              # faixas de 10 anos: 1 = 18–19, 2 = 20–29, …
+falta = {
+    "MCAR": rng.random(n) &lt; 0.30,                                            # sem depender de nada
+    "MAR": rng.random(n) &lt; np.where(idade &lt; 30, 0.50, 0.15),                 # depende da idade
+    "MNAR": rng.random(n) &lt; np.where(renda &gt; np.quantile(renda, 0.70), 0.50, 0.15),  # da renda
+}
+
+def imputa_por_faixa(renda, falta, faixa):
+    """Cada valor faltante recebe a média observada da sua faixa etária."""
+    s = pd.Series(np.where(falta, np.nan, renda))
+    return s.fillna(s.groupby(faixa).transform("mean")).to_numpy()
+
+print(f"média verdadeira:            {renda.mean():.3f}")
+for nome, f in falta.items():
+    print(f"{nome:&lt;4}  faltam {100 * f.mean():4.1f}%   só completos {renda[~f].mean():.3f}   "
+          f"imputada por faixa {imputa_por_faixa(renda, f, faixa).mean():.3f}")</code></pre>
+  </div>
+</div>
+<div class="code-output">
+  <div class="code-output-header"># Saída</div>
+  <pre style="overflow-x: auto; font-size: 0.9em;">média verdadeira:            4.518
+MCAR  faltam 29.9%   só completos 4.518   imputada por faixa 4.519
+MAR   faltam 22.8%   só completos 4.682   imputada por faixa 4.513
+MNAR  faltam 25.6%   só completos 4.251   imputada por faixa 4.401</pre>
+</div>
+  </div>
+</div>
+
+Na versão em Julia, a média verdadeira é 4,519. As três linguagens sorteiam números diferentes, mas contam a mesma história:
+
+- **MCAR:** só os completos dão 4,518. Descartar não criou viés, só diminuiu a amostra. Isso vale sempre que a ausência é independente da variável, e está provado em Lean (`provas/Provas/CicloVida.lean`).
+- **MAR:** só os completos dão 4,689. Como faltam mais jovens, que ganham menos, a média sobe. A conta exata dá o mesmo valor: com idades de 18 a 70 igualmente prováveis, a média esperada dos completos é 4,689 e a fração que falta é 22,9%. Imputar pela faixa etária, a variável que explica a ausência, recupera 4,522.
+- **MNAR:** só os completos dão 4,256, e a imputação por faixa etária só chega a 4,406. Nenhuma correção feita com o que foi observado traz de volta o que sumiu justamente por ser alto.
 
 Daí vem a segunda frase daquela célula — *nunca imputar sem registrar o que foi imputado*. Um valor imputado carrega incerteza que um valor medido não carrega. Se ele circula sem marcação, a validação (etapa 6) vai medir precisão sobre números inventados, e não terá como saber disso.
 
@@ -232,7 +392,7 @@ Antes de modelar, é preciso conhecer os dados. A EDA é deliberadamente aberta:
 - **Bivariada:** correlações, tabelas cruzadas, comparações entre grupos, gráficos de dispersão.
 - **Multivariada:** interações, redução de dimensionalidade, agrupamentos, estrutura temporal e espacial.
 
-Visualização não é enfeite: é o instrumento principal desta etapa. O [quarteto de Anscombe](/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/) e o *Datasaurus Dozen* mostram conjuntos com médias, variâncias e correlações idênticas e formatos radicalmente diferentes. **Resumos numéricos escondem; gráficos revelam.**
+Visualização não é enfeite: é o instrumento principal desta etapa. O [quarteto de Anscombe](/quarteto-de-anscombe-por-que-graficos-sao-indispensaveis-na-estatistica/) e os conjuntos de Matejka e Fitzmaurice (2017), conhecidos como *Datasaurus Dozen*, mostram dados com médias, variâncias e correlações praticamente iguais e formatos radicalmente diferentes. **Resumos numéricos escondem; gráficos revelam.**
 
 **Armadilha típica:** *p-hacking* por exploração — testar dezenas de relações e reportar apenas as significativas. A EDA **gera** hipóteses; ela não as confirma. Confirmação exige dados que não foram usados para formulá-las.
 
@@ -292,7 +452,7 @@ Etapa de contraprova. Um resultado só vale se sobrevive a tentativas honestas d
 - **Validação estatística:** verificação de pressupostos, análise de resíduos, validação cruzada, avaliação em conjunto de teste intocado e — quando há dimensão temporal — validação *out-of-time*.
 - **Análise de sensibilidade:** os resultados mudam sob outras escolhas razoáveis de limpeza, especificação ou período?
 - **Métricas adequadas ao problema:** acurácia é enganosa em bases desbalanceadas; a escolha entre precisão, revocação, AUC, calibração ou custo esperado deve refletir o custo real dos erros.
-- **Significância prática:** um efeito estatisticamente significativo pode ser irrelevante em magnitude. Reporte o **tamanho do efeito**, não apenas o valor-*p*.
+- **Significância prática:** um efeito estatisticamente significativo pode ser irrelevante em magnitude. Reporte o **tamanho do efeito**, não apenas o p-valor.
 - **Equidade e viés:** o desempenho se mantém entre subgrupos? Modelos treinados em dados históricos herdam desigualdades históricas.
 
 ---
@@ -396,10 +556,12 @@ Diferentes tradições nomeiam as mesmas etapas de formas distintas. Vale conhec
 </table>
 </div>
 
-- **CRISP-DM** (1999) permanece o mais usado na indústria por ser explicitamente iterativo e por começar no negócio, não nos dados.
-- **KDD** é o mais antigo e enfatiza a descoberta de conhecimento.
-- **SEMMA**, de origem SAS, foca no ciclo técnico de modelagem e omite tanto o enquadramento do problema quanto a implantação.
-- **OSEMN** é um mnemônico prático, popular em ciência de dados.
+- **CRISP-DM** tem seis fases (entendimento do negócio, entendimento dos dados, preparação dos dados, modelagem, avaliação e implantação), é explicitamente iterativo e começa no negócio, não nos dados.
+- **KDD** (*knowledge discovery in databases*) enfatiza a descoberta de conhecimento; na versão mais citada, suas etapas são seleção, pré-processamento, transformação, mineração de dados e interpretação/avaliação.
+- **SEMMA** (*Sample, Explore, Modify, Model, Assess*) vem da SAS e cobre o ciclo técnico da modelagem; não tem etapa para o enquadramento do problema nem para a implantação. A própria SAS o apresenta como uma organização das ferramentas do seu software, e não como uma metodologia geral.
+- **OSEMN** é um mnemônico (*Obtain, Scrub, Explore, Model, iNterpret*).
+
+A correspondência da tabela é aproximada e é uma leitura deste post: cada framework divide o trabalho do seu jeito.
 
 Nenhum deles substitui o julgamento: **são mapas, não trilhos.** Repare nos travessões da tabela — as lacunas dizem mais sobre cada framework do que os preenchimentos.
 
@@ -434,6 +596,26 @@ Tratar essas voltas como fracasso leva a escondê-las. Tratá-las como parte do 
 
 ---
 
-> *"Todos os modelos estão errados; alguns são úteis."* — George E. P. Box
+> *"Todos os modelos estão errados, mas alguns são úteis."*
+> — George E. P. Box, título de uma seção de "Robustness in the Strategy of Scientific Model Building" (1979), p. 202 (em tradução livre; no original: "All models are wrong but some are useful")
 
 O ciclo existe para maximizar a segunda parte da frase.
+
+---
+
+## Resumo
+
+- A análise de dados é um ciclo de oito etapas, e três voltas (exploração → problema, validação → preparação, monitoramento → novo ciclo) são esperadas, não acidentes.
+- A pergunta vem antes dos dados: sem a decisão que o resultado vai informar, nenhuma técnica salva o projeto.
+- Na preparação, o que decide o tratamento dos faltantes é *por que* eles faltam. Sob MCAR, descartar não enviesa; sob MAR, só a imputação que usa a variável responsável pela ausência corrige; sob MNAR, os dados observados não bastam, e resta a análise de sensibilidade.
+- Predição não é causalidade, significância não é importância, e todo modelo precisa vencer uma linha de base simples.
+- O ciclo não termina na entrega: o que acontece em produção é a entrada da próxima iteração.
+
+---
+
+## Referências
+
+- Rubin, D. B. (1976). Inference and missing data. *Biometrika*, 63(3), 581–592. DOI: [10.1093/biomet/63.3.581](https://doi.org/10.1093/biomet/63.3.581). (Não consultado diretamente.)
+- Little, R. J. A. (1988). A test of missing completely at random for multivariate data with missing values. *Journal of the American Statistical Association*, 83(404), 1198–1202. DOI: [10.1080/01621459.1988.10478722](https://doi.org/10.1080/01621459.1988.10478722).
+- Matejka, J.; Fitzmaurice, G. (2017). Same stats, different graphs. In: *Proceedings of the 2017 CHI Conference on Human Factors in Computing Systems*, p. 1290–1294. DOI: [10.1145/3025453.3025912](https://doi.org/10.1145/3025453.3025912). (Não consultado diretamente.)
+- Box, G. E. P. (1979). Robustness in the strategy of scientific model building. In: Launer, R. L.; Wilkinson, G. N. (Eds.). *Robustness in Statistics*. Academic Press, p. 201–236.

@@ -610,6 +610,9 @@ mesmo commit, sem esperar pedido:
 | tática de prova | proof tactic |
 | indução matemática | mathematical induction |
 | regressão à média | regression to the mean |
+| dados faltantes | missing data |
+| imputação | imputation |
+| vazamento de informação | data leakage |
 | distribuição exponencial | exponential distribution |
 | distribuição log-normal | log-normal distribution |
 | distribuição de Cauchy | Cauchy distribution |

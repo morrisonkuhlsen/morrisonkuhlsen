@@ -23,3 +23,4 @@ import Provas.Riemann
 import Provas.Boxplot
 import Provas.PostLean
 import Provas.RegressaoMedia
+import Provas.CicloVida
