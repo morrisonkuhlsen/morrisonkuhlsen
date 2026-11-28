@@ -24,3 +24,4 @@ import Provas.Boxplot
 import Provas.PostLean
 import Provas.RegressaoMedia
 import Provas.CicloVida
+import Provas.Euler

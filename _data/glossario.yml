@@ -1083,6 +1083,66 @@ pt:
     veja:
       - { t: "Ciclo de vida da análise de dados", u: "/ciclo-de-vida-da-analise-de-dados/" }
 
+  - termo: "Unidade imaginária"
+    slug: unidade-imaginaria
+    ordem: "unidade imaginaria"
+    def: "O número i, definido por i² = −1. Nenhum número real tem quadrado negativo, por isso i foi chamado de imaginário; com ele se constroem os números complexos."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Número complexo"
+    slug: numero-complexo
+    ordem: "numero complexo"
+    tambem: ["números complexos"]
+    def: "Número da forma a + bi, em que a e b são reais e i² = −1. O a é a parte real e o b é a parte imaginária."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Plano complexo"
+    slug: plano-complexo
+    ordem: "plano complexo"
+    def: "Plano em que o número complexo a + bi é desenhado como o ponto (a; b): parte real no eixo horizontal, parte imaginária no vertical. Nele, multiplicar por i gira 90°."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Radiano"
+    slug: radiano
+    ordem: "radiano"
+    tambem: ["radianos"]
+    auto: false
+    def: "Unidade de ângulo: o ângulo que, num círculo de raio 1, enxerga um arco de comprimento 1. Meia volta mede π radianos, ou 180°."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Fórmula de Euler"
+    slug: formula-de-euler
+    ordem: "formula de euler"
+    def: "A igualdade e^(ix) = cos x + i sen x, válida para todo x real (em radianos). Diz que e^(ix) é o ponto do círculo de raio 1 no ângulo x."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Identidade de Euler"
+    slug: identidade-de-euler
+    ordem: "identidade de euler"
+    def: "A igualdade e^(iπ) + 1 = 0, caso x = π da fórmula de Euler: meia volta no círculo de raio 1 leva o ponto 1 ao ponto −1."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Série de Taylor"
+    slug: serie-de-taylor
+    ordem: "serie de taylor"
+    def: "Escrita de uma função como soma infinita de potências, como e^z = 1 + z + z²/2! + z³/3! + ⋯. É ela que dá sentido a e elevado a um número complexo."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+
+  - termo: "Função característica"
+    slug: funcao-caracteristica
+    ordem: "funcao caracteristica"
+    def: "A média φ(t) = E[e^(itX)] de uma variável aleatória X, para cada t real. Existe para qualquer variável aleatória, porque |e^(itX)| = 1, e é usada para demonstrar o Teorema do Limite Central."
+    veja:
+      - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
+      - { t: "Teorema do Limite Central", u: "/pt/probabilidade/teorema-limite-central" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -2151,3 +2211,63 @@ en:
     def: "When information from the test set or from the future enters model fitting, for example by standardizing before splitting the data. It produces optimistic metrics that do not hold in production."
     veja:
       - { t: "The data analysis life cycle", u: "/data-analysis-life-cycle/" }
+
+  - termo: "Imaginary unit"
+    slug: imaginary-unit
+    ordem: "imaginary unit"
+    def: "The number i, defined by i² = −1. No real number has a negative square, which is why i was called imaginary; complex numbers are built from it."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Complex number"
+    slug: complex-number
+    ordem: "complex number"
+    tambem: ["complex numbers"]
+    def: "A number of the form a + bi, where a and b are real and i² = −1. a is the real part and b is the imaginary part."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Complex plane"
+    slug: complex-plane
+    ordem: "complex plane"
+    def: "The plane in which the complex number a + bi is drawn as the point (a, b): real part on the horizontal axis, imaginary part on the vertical one. In it, multiplying by i rotates by 90°."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Radian"
+    slug: radian
+    ordem: "radian"
+    tambem: ["radians"]
+    auto: false
+    def: "A unit of angle: the angle that, in a circle of radius 1, spans an arc of length 1. Half a turn is π radians, or 180°."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Euler's formula"
+    slug: eulers-formula
+    ordem: "euler's formula"
+    def: "The equality e^(ix) = cos x + i sin x, valid for every real x (in radians). It says that e^(ix) is the point on the circle of radius 1 at angle x."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Euler's identity"
+    slug: eulers-identity
+    ordem: "euler's identity"
+    def: "The equality e^(iπ) + 1 = 0, the case x = π of Euler's formula: half a turn on the circle of radius 1 takes the point 1 to the point −1."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Taylor series"
+    slug: taylor-series
+    ordem: "taylor series"
+    def: "Writing a function as an infinite sum of powers, such as e^z = 1 + z + z²/2! + z³/3! + ⋯. It is what gives meaning to e raised to a complex number."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+
+  - termo: "Characteristic function"
+    slug: characteristic-function
+    ordem: "characteristic function"
+    def: "The mean φ(t) = E[e^(itX)] of a random variable X, for each real t. It exists for every random variable, because |e^(itX)| = 1, and is used to prove the Central Limit Theorem."
+    veja:
+      - { t: "Euler's formula", u: "/euler-formula-identity/" }
+      - { t: "Central Limit Theorem", u: "/en/probability/central-limit-theorem" }

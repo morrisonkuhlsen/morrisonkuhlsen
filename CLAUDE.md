@@ -635,6 +635,15 @@ mesmo commit, sem esperar pedido:
 | função zeta de Riemann | Riemann zeta function |
 | teorema dos números primos | prime number theorem |
 | integral logarítmica | logarithmic integral |
+| unidade imaginária | imaginary unit |
+| número complexo | complex number |
+| plano complexo | complex plane |
+| parte real / parte imaginária | real part / imaginary part |
+| radiano | radian |
+| fórmula de Euler | Euler's formula |
+| identidade de Euler | Euler's identity |
+| série de Taylor | Taylor series |
+| função característica | characteristic function |
 
 ---
 
