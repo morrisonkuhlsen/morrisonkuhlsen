@@ -332,30 +332,30 @@
 
 .code-lang-btn:focus-visible { outline: 2px solid #8ba4ff; outline-offset: 1px; }
 
-/* Ícone de cada linguagem, nas cores oficiais */
+/* Logotipo de cada linguagem. Ícones do Devicon 2.18.0 (licença MIT), em
+   assets/images/linguagens/, com a licença em LICENSE-devicon.txt. */
 .code-lang-btn::before {
   content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
+  background: center / contain no-repeat;
 }
 
-.code-lang-btn[data-lang="julia"]::before {
-  background: #cb3c33;
-  box-shadow: -5px 6px 0 #389826, 5px 6px 0 #9558b2;
-  transform: translate(4px, -3px);
-  margin-right: 6px;
+.code-lang-btn[data-lang="julia"]::before { background-image: url("/assets/images/linguagens/julia.svg"); }
+.code-lang-btn[data-lang="r"]::before { background-image: url("/assets/images/linguagens/r.svg"); }
+.code-lang-btn[data-lang="python"]::before { background-image: url("/assets/images/linguagens/python.svg"); }
+
+/* Rótulo fixo (sem JS) das abas: o mesmo logotipo no lugar dos pontos do Julia */
+.code-tab .code-lang:not(.code-lang--tabs)::before {
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  margin-right: 0;
+  background: center / contain no-repeat;
 }
-
-.code-lang-btn[data-lang="r"]::before { background: #276dc3; }
-
-.code-lang-btn[data-lang="python"]::before {
-  background: #3776ab;
-  box-shadow: 5px 0 0 #ffd43b;
-  margin-right: 5px;
-}
-
-/* Rótulo fixo (sem JS) de R e Python, para não mostrar o símbolo do Julia */
-.code-tab[data-lang="r"] .code-lang:not(.code-lang--tabs)::before { background: #276dc3; box-shadow: none; transform: none; }
-.code-tab[data-lang="python"] .code-lang:not(.code-lang--tabs)::before { background: #3776ab; box-shadow: 5px 0 0 #ffd43b; transform: none; }
+.code-tab[data-lang="julia"] .code-lang:not(.code-lang--tabs)::before { background-image: url("/assets/images/linguagens/julia.svg"); }
+.code-tab[data-lang="r"] .code-lang:not(.code-lang--tabs)::before { background-image: url("/assets/images/linguagens/r.svg"); }
+.code-tab[data-lang="python"] .code-lang:not(.code-lang--tabs)::before { background-image: url("/assets/images/linguagens/python.svg"); }
