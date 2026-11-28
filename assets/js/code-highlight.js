@@ -228,7 +228,9 @@
 
   // Saídas (.code-output pre): cores leves, iguais para qualquer linguagem.
   // Números, valores lógicos, erros/avisos e o objetivo do Lean (⊢).
-  var SAIDA = /(\b(?:error|erro|Error|ERROR)\b)|(\b(?:warning|aviso|Warning|WARNING)\b)|(\b(?:true|false|TRUE|FALSE|True|False|nothing|None|NULL|NA|NaN|Inf|missing)\b)|((?:^|(?<=[^\w.]))[-−]?(?:\d[\d_]*\.?\d*|\.\d+)(?:[eE][+-]?\d+)?%?(?![\w]))|(⊢)/g;
+  // Número pode terminar em unidade imaginária (0.8660i, 1.0im, 2j), e nunca
+  // casa só o começo de outro (o "0" de "0.8660i"): por isso o (?!\.\d).
+  var SAIDA = /(\b(?:error|erro|Error|ERROR)\b)|(\b(?:warning|aviso|Warning|WARNING)\b)|(\b(?:true|false|TRUE|FALSE|True|False|nothing|None|NULL|NA|NaN|Inf|missing)\b)|((?:^|(?<=[^\w.]))[-−]?(?:\d[\d_]*\.?\d*|\.\d+)(?:[eE][+-]?\d+)?(?:%|im|i|j)?(?![\w]|\.\d))|(⊢)/g;
   var CLASSE_SAIDA = [null, "code-error", "code-warning", "code-builtin", "code-number", "code-function"];
 
   function realcarSaida(fonte) {

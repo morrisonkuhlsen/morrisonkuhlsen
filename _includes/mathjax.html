@@ -16,7 +16,28 @@
       ignoreHtmlClass: 'tex2jax_ignore',
       processHtmlClass: 'tex2jax_process'
     },
-    loader: { load: ['[tex]/noerrors'] }
+    loader: { load: ['[tex]/noerrors'] },
+    startup: {
+      pageReady: function () {
+        return MathJax.startup.defaultPageReady().then(marcaFormulasLargas);
+      }
+    }
   };
+
+  /* Fórmula na linha mais larga que a coluna ganha .mjx-larga e rola dentro da
+     própria caixa (regra em _sass/_prose.scss). As outras ficam como o MathJax
+     as desenha, sem barra de rolagem. Refeito quando a largura da tela muda. */
+  function marcaFormulasLargas() {
+    document.querySelectorAll('.prose mjx-container:not([display="true"])').forEach(function (formula) {
+      formula.classList.remove('mjx-larga');
+      var coluna = formula.closest('.prose').clientWidth;
+      if (formula.getBoundingClientRect().width > coluna) formula.classList.add('mjx-larga');
+    });
+  }
+  var esperaRedimensionar;
+  window.addEventListener('resize', function () {
+    clearTimeout(esperaRedimensionar);
+    esperaRedimensionar = setTimeout(marcaFormulasLargas, 200);
+  });
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>

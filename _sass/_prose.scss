@@ -348,8 +348,11 @@ mjx-container[display="true"] {
   padding-block: 0.5rem;
 }
 
-/* Fórmulas na linha que não cabem na largura: rolam dentro da própria caixa. */
-.prose mjx-container:not([display="true"]) {
+/* Fórmulas na linha que não cabem na largura: rolam dentro da própria caixa.
+   Só as marcadas com .mjx-larga (_includes/mathjax.html mede cada uma contra a
+   largura da coluna). Aplicar a regra a todas punha barra de rolagem em quase
+   toda fórmula, porque os glifos do MathJax passam 1 a 6 px da própria caixa. */
+.prose mjx-container.mjx-larga:not([display="true"]) {
   display: inline-block;
   max-width: 100%;
   overflow-x: auto;
