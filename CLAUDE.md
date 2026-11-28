@@ -644,6 +644,10 @@ mesmo commit, sem esperar pedido:
 | identidade de Euler | Euler's identity |
 | série de Taylor | Taylor series |
 | função característica | characteristic function |
+| equação de Drake | Drake equation |
+| paradoxo de Fermi | Fermi paradox |
+| distribuição log-uniforme | log-uniform distribution |
+| estado estacionário | steady state |
 
 ---
 

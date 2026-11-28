@@ -1143,6 +1143,35 @@ pt:
       - { t: "A fórmula de Euler", u: "/formula-de-euler-e-elevado-a-i-pi/" }
       - { t: "Teorema do Limite Central", u: "/pt/probabilidade/teorema-limite-central" }
 
+  - termo: "Equação de Drake"
+    slug: equacao-de-drake
+    ordem: "equacao de drake"
+    def: "Estimativa do número N de civilizações detectáveis na Via Láctea como produto de sete fatores: N = R* · fp · ne · fl · fi · fc · L. Proposta por Frank Drake em 1961."
+    veja:
+      - { t: "A equação de Drake", u: "/equacao-de-drake-quantas-civilizacoes/" }
+
+  - termo: "Paradoxo de Fermi"
+    slug: paradoxo-de-fermi
+    ordem: "paradoxo de fermi"
+    def: "A tensão entre estimativas de que haveria muitas civilizações na galáxia e a ausência de qualquer sinal delas. Com a incerteza dos fatores levada em conta, um céu silencioso deixa de ser surpresa."
+    veja:
+      - { t: "A equação de Drake", u: "/equacao-de-drake-quantas-civilizacoes/" }
+
+  - termo: "Distribuição log-uniforme"
+    slug: distribuicao-log-uniforme
+    ordem: "distribuicao log-uniforme"
+    tambem: ["log-uniforme"]
+    def: "Distribuição em que o logaritmo da variável é uniforme: cada ordem de grandeza da faixa tem a mesma chance. Entre a e b, a média é (b − a)/ln(b/a)."
+    veja:
+      - { t: "A equação de Drake", u: "/equacao-de-drake-quantas-civilizacoes/" }
+
+  - termo: "Estado estacionário"
+    slug: estado-estacionario
+    ordem: "estado estacionario"
+    def: "Situação em que entradas e saídas se equilibram e o total para de mudar. Se surgem r itens por ano e cada um dura L anos, há r · L ao mesmo tempo."
+    veja:
+      - { t: "A equação de Drake", u: "/equacao-de-drake-quantas-civilizacoes/" }
+
 en:
   - termo: "Neyman allocation"
     slug: neyman-allocation
@@ -2271,3 +2300,32 @@ en:
     veja:
       - { t: "Euler's formula", u: "/euler-formula-identity/" }
       - { t: "Central Limit Theorem", u: "/en/probability/central-limit-theorem" }
+
+  - termo: "Drake equation"
+    slug: drake-equation
+    ordem: "drake equation"
+    def: "An estimate of the number N of detectable civilizations in the Milky Way as a product of seven factors: N = R* · fp · ne · fl · fi · fc · L. Proposed by Frank Drake in 1961."
+    veja:
+      - { t: "The Drake equation", u: "/drake-equation-how-many-civilizations/" }
+
+  - termo: "Fermi paradox"
+    slug: fermi-paradox
+    ordem: "fermi paradox"
+    def: "The tension between estimates that there should be many civilizations in the galaxy and the absence of any sign of them. Once the uncertainty of the factors is taken into account, a silent sky is no longer a surprise."
+    veja:
+      - { t: "The Drake equation", u: "/drake-equation-how-many-civilizations/" }
+
+  - termo: "Log-uniform distribution"
+    slug: log-uniform-distribution
+    ordem: "log-uniform distribution"
+    tambem: ["log-uniform"]
+    def: "A distribution in which the logarithm of the variable is uniform: every order of magnitude in the range is equally likely. Between a and b, the mean is (b − a)/ln(b/a)."
+    veja:
+      - { t: "The Drake equation", u: "/drake-equation-how-many-civilizations/" }
+
+  - termo: "Steady state"
+    slug: steady-state
+    ordem: "steady state"
+    def: "A situation in which inflows and outflows balance and the total stops changing. If r items arise per year and each lasts L years, there are r · L at any one time."
+    veja:
+      - { t: "The Drake equation", u: "/drake-equation-how-many-civilizations/" }
